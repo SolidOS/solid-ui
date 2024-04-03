@@ -39,7 +39,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AccessController]] class
  * @packageDocumentation
@@ -88,7 +88,7 @@ var AccessController = exports.AccessController = /*#__PURE__*/function () {
       this.defaultsDiffer = !(0, _acl.sameACL)(this.mainCombo.aclMap, this.defaultsCombo.aclMap);
     }
   }
-  (0, _createClass2["default"])(AccessController, [{
+  return (0, _createClass2["default"])(AccessController, [{
     key: "isEditable",
     get: function get() {
       return !this.isUsingDefaults;
@@ -408,7 +408,6 @@ var AccessController = exports.AccessController = /*#__PURE__*/function () {
       });
     }
   }]);
-  return AccessController;
 }();
 //# sourceMappingURL=access-controller.js.map
 
@@ -443,7 +442,7 @@ var _addAgentButtons = __webpack_require__(/*! ./add-agent-buttons */ "./lib/acl
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AccessGroups]]
  * and [[AccessGroupsOptions]] classes
@@ -506,7 +505,7 @@ var AccessGroups = exports.AccessGroups = /*#__PURE__*/function () {
     this.rootElement = this.controller.dom.createElement('div');
     this.rootElement.setAttribute('style', style.accessGroupList);
   }
-  (0, _createClass2["default"])(AccessGroups, [{
+  return (0, _createClass2["default"])(AccessGroups, [{
     key: "store",
     get: function get() {
       return this._store;
@@ -838,7 +837,6 @@ var AccessGroups = exports.AccessGroups = /*#__PURE__*/function () {
       }
     }
   }]);
-  return AccessGroups;
 }();
 function kToCombo(k) {
   var y = ['Read', 'Append', 'Write', 'Control'];
@@ -961,7 +959,7 @@ var _accessController = __webpack_require__(/*! ./access-controller */ "./lib/ac
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _debug = __webpack_require__(/*! ../debug */ "./lib/debug.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Functions for rendering the ACL User Interface.
  * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
@@ -1221,7 +1219,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Non-UI functions for access control.
  * See https://github.com/solidos/web-access-control-spec
@@ -1736,7 +1734,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[AddAgentButtons]] class
  * @packageDocumentation
@@ -1755,7 +1753,7 @@ var AddAgentButtons = exports.AddAgentButtons = /*#__PURE__*/function () {
     this.rootElement = groupList.controller.dom.createElement('div');
     this.barElement = groupList.controller.dom.createElement('div');
   }
-  (0, _createClass2["default"])(AddAgentButtons, [{
+  return (0, _createClass2["default"])(AddAgentButtons, [{
     key: "render",
     value: function render() {
       this.rootElement.innerHTML = '';
@@ -2148,7 +2146,6 @@ var AddAgentButtons = exports.AddAgentButtons = /*#__PURE__*/function () {
       this.isExpanded = !this.isExpanded;
     }
   }]);
-  return AddAgentButtons;
 }();
 //# sourceMappingURL=add-agent-buttons.js.map
 
@@ -2234,13 +2231,11 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./l
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var _login = __webpack_require__(/*! ../login/login */ "./lib/login/login.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Functions related to chat and bookmarks
  * @packageDocumentation
  */
-
-/* global alert confirm */
 
 // pull in first avoid cross-refs
 
@@ -2259,40 +2254,6 @@ var BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#');
 var BOOKMARK_ICON = 'noun_45961.svg';
 var label = utils.label;
 var dom = window.document || null;
-
-/** Create a resource if it really does not exist
- *  Be absolutely sure something does not exist before creating a new empty file
- * as otherwise existing could  be deleted.
- * @param doc {NamedNode} - The resource
- */
-function createIfNotExists(doc) {
-  return new Promise(function (resolve, reject) {
-    _solidLogic.store.fetcher.load(doc).then(function (response) {
-      debug.log('createIfNotExists doc exists, all good ' + doc);
-      // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
-      resolve(response);
-    }, function (err) {
-      if (err.response.status === 404) {
-        debug.log('createIfNotExists doc does NOT exist, will create... ' + doc);
-        _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
-          data: '',
-          contentType: 'text/turtle'
-        }).then(function (response) {
-          // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-          delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
-          debug.log('createIfNotExists doc created ok ' + doc);
-          resolve(response);
-        }, function (err) {
-          debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err);
-          reject(err);
-        });
-      } else {
-        debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err);
-        reject(err);
-      }
-    });
-  });
-}
 
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise(del, ins) {
@@ -2334,7 +2295,8 @@ function _findBookmarkDocument() {
           }
           userContext.bookmarkDocument = userContext.instances[0];
           if (userContext.instances.length > 1) {
-            alert('More than one bookmark file! ' + userContext.instances);
+            debug.warn('More than one bookmark file! ' + userContext.instances); // @@ todo - deal with > 1
+            // Note: should pick up community bookmarks as well
           }
           _context.next = 28;
           break;
@@ -2348,14 +2310,14 @@ function _findBookmarkDocument() {
           _context.prev = 12;
           debug.log('Creating new bookmark file ' + newBookmarkFile);
           _context.next = 16;
-          return createIfNotExists(newBookmarkFile);
+          return _solidLogic.store.fetcher.createIfNotExists(newBookmarkFile);
         case 16:
           _context.next = 22;
           break;
         case 18:
           _context.prev = 18;
           _context.t0 = _context["catch"](12);
-          alert.error("Can't make fresh bookmark file:" + _context.t0);
+          debug.warn("Can't make fresh bookmark file:" + _context.t0);
           return _context.abrupt("return", userContext);
         case 22:
           _context.next = 24;
@@ -2365,7 +2327,7 @@ function _findBookmarkDocument() {
           _context.next = 28;
           break;
         case 27:
-          alert('You seem to have no bookmark file and not even a profile file.');
+          debug.warn('You seem to have no bookmark file, nor even a profile file!');
         case 28:
           return _context.abrupt("return", userContext);
         case 29:
@@ -2420,7 +2382,7 @@ function _addBookmark() {
           _context2.prev = 14;
           _context2.t0 = _context2["catch"](9);
           msg = 'Making bookmark: ' + _context2.t0;
-          alert.error(msg);
+          debug.warn(msg);
           return _context2.abrupt("return", null);
         case 19:
           return _context2.abrupt("return", bookmark);
@@ -2473,7 +2435,7 @@ function _toggleBookmark() {
           _context3.prev = 15;
           _context3.t0 = _context3["catch"](8);
           debug.error('Cant delete bookmark:' + _context3.t0);
-          alert('Cant delete bookmark:' + _context3.t0);
+          debug.warn('Cannot delete bookmark:' + _context3.t0);
         case 19:
           i++;
           _context3.next = 7;
@@ -2567,7 +2529,7 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.ChatChannel = void 0;
-exports._createIfNotExists = _createIfNotExists;
+exports.allVersions = allVersions;
 exports.isDeleted = isDeleted;
 exports.isHidden = isHidden;
 exports.isReplaced = isReplaced;
@@ -2587,7 +2549,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[ChatChannel]] class and logic for Solid Chat
  * @packageDocumentation
@@ -2615,7 +2577,7 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
 
   /* Store a new message in the web,
   */
-  (0, _createClass2["default"])(ChatChannel, [{
+  return (0, _createClass2["default"])(ChatChannel, [{
     key: "createMessage",
     value: (function () {
       var _createMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(text) {
@@ -2646,8 +2608,9 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
         var _this = this;
         var oldMsg = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : null;
         var deleteIt = arguments.length > 2 ? arguments[2] : undefined;
+        var thread = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : null;
         return /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
-          var sts, now, timestamp, dateStamp, chatDocument, message, me, msg, oldMsgMaker, errMsg, privateKey, sig, _errMsg;
+          var sts, now, timestamp, dateStamp, chatDocument, message, me, msg, oldMsgMaker, oldMsgMostRecentVersion, oldMsgThread, errMsg, privateKey, sig, _errMsg;
           return _regenerator["default"].wrap(function _callee2$(_context2) {
             while (1) switch (_context2.prev = _context2.next) {
               case 0:
@@ -2661,73 +2624,88 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
                 msg = (0, _signature.getBlankMsg)();
                 msg.id = message.uri;
                 if (!oldMsg) {
-                  _context2.next = 22;
+                  _context2.next = 27;
                   break;
                 }
                 // edit message replaces old one
                 oldMsgMaker = _solidLogic.store.any(oldMsg, ns.foaf('maker')); // may not be needed here, but needed on READ
                 if (!(oldMsgMaker.uri === me.uri)) {
-                  _context2.next = 16;
+                  _context2.next = 21;
                   break;
                 }
-                sts.push($rdf.st(mostRecentVersion(oldMsg), ns.dct('isReplacedBy'), message, chatDocument));
+                _context2.next = 14;
+                return mostRecentVersion(oldMsg);
+              case 14:
+                oldMsgMostRecentVersion = _context2.sent;
+                sts.push($rdf.st(oldMsgMostRecentVersion, ns.dct('isReplacedBy'), message, chatDocument));
+                // if oldMsg has_reply => add has_reply to message
+                oldMsgThread = _solidLogic.store.any(oldMsgMostRecentVersion, ns.sioc('has_reply'));
+                if (oldMsgThread) {
+                  sts.push($rdf.st(message, ns.sioc('has_reply'), oldMsgThread, chatDocument));
+                }
                 if (deleteIt) {
                   // we need to add a specific signature, else anyone can delete a msg ?
                   sts.push($rdf.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
                 }
-                _context2.next = 20;
+                _context2.next = 25;
                 break;
-              case 16:
+              case 21:
                 errMsg = 'Error you cannot delete/edit a message from someone else : \n' + oldMsgMaker.uri;
                 debug.warn(errMsg);
                 alert(errMsg);
                 throw new Error(errMsg);
-              case 20:
-                _context2.next = 23;
+              case 25:
+                _context2.next = 28;
                 break;
-              case 22:
+              case 27:
                 // link new message to channel
                 sts.push($rdf.st(_this.channel, ns.wf('message'), message, chatDocument));
-              case 23:
+              case 28:
                 sts.push($rdf.st(message, ns.sioc('content'), _solidLogic.store.literal(text), chatDocument));
                 msg.content = text;
                 sts.push($rdf.st(message, ns.dct('created'), dateStamp, chatDocument));
                 msg.created = dateStamp.value;
                 if (!me) {
-                  _context2.next = 35;
+                  _context2.next = 40;
                   break;
                 }
                 sts.push($rdf.st(message, ns.foaf('maker'), me, chatDocument));
                 msg.maker = me.uri;
                 // privateKey the cached private key of me, cached in store
-                _context2.next = 32;
+                _context2.next = 37;
                 return (0, _keys.getPrivateKey)(me);
-              case 32:
+              case 37:
                 privateKey = _context2.sent;
                 // me.uri)
                 sig = (0, _signature.signMsg)(msg, privateKey);
                 sts.push($rdf.st(message, $rdf.sym("".concat(_signature.SEC, "proofValue")), $rdf.lit(sig), chatDocument));
-              case 35:
-                _context2.prev = 35;
-                _context2.next = 38;
-                return _solidLogic.store.updater.update([], sts);
-              case 38:
-                _context2.next = 46;
-                break;
               case 40:
-                _context2.prev = 40;
-                _context2.t0 = _context2["catch"](35);
+                if (thread) {
+                  sts.push($rdf.st(thread, ns.sioc('has_member'), message, chatDocument));
+                  if (!thread.doc().sameTerm(message.doc())) {
+                    sts.push($rdf.st(thread, ns.sioc('has_member'), message, thread.doc()));
+                  }
+                }
+                _context2.prev = 41;
+                _context2.next = 44;
+                return _solidLogic.store.updater.updateMany([], sts);
+              case 44:
+                _context2.next = 52;
+                break;
+              case 46:
+                _context2.prev = 46;
+                _context2.t0 = _context2["catch"](41);
                 _errMsg = 'Error saving chat message: ' + _context2.t0;
                 debug.warn(_errMsg);
                 alert(_errMsg);
                 throw new Error(_errMsg);
-              case 46:
+              case 52:
                 return _context2.abrupt("return", message);
-              case 47:
+              case 53:
               case "end":
                 return _context2.stop();
             }
-          }, _callee2, null, [[35, 40]]);
+          }, _callee2, null, [[41, 46]]);
         })();
       });
       function updateMessage(_x2) {
@@ -2758,25 +2736,186 @@ var ChatChannel = exports.ChatChannel = /*#__PURE__*/function () {
         return _deleteMessage.apply(this, arguments);
       }
       return deleteMessage;
-    }())
+    }() // Create a new thread of replies to the thread root message
+    //  or return one which already exists
+    )
+  }, {
+    key: "createThread",
+    value: function () {
+      var _createThread = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(threadRoot) {
+        var already, thread, insert;
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
+            case 0:
+              already = _solidLogic.store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc()).filter(function (thread) {
+                return _solidLogic.store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc());
+              });
+              if (!(already.length > 0)) {
+                _context4.next = 3;
+                break;
+              }
+              return _context4.abrupt("return", already[0]);
+            case 3:
+              thread = $rdf.sym(threadRoot.uri + '-thread');
+              insert = [$rdf.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()), $rdf.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())];
+              _context4.next = 7;
+              return _solidLogic.store.updater.update([], insert);
+            case 7:
+              return _context4.abrupt("return", thread);
+            case 8:
+            case "end":
+              return _context4.stop();
+          }
+        }, _callee4);
+      }));
+      function createThread(_x4) {
+        return _createThread.apply(this, arguments);
+      }
+      return createThread;
+    }()
   }]);
-  return ChatChannel;
 }(); // class ChatChannel
-function originalVersion(message) {
-  var msg = message;
-  while (msg) {
-    message = msg;
-    msg = _solidLogic.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
-  }
-  return message;
+// ////////// Utility functions
+// Have to not loop forever if fed loops
+function allVersions(_x5) {
+  return _allVersions.apply(this, arguments);
 }
-function mostRecentVersion(message) {
-  var msg = message;
-  while (msg) {
-    message = msg;
-    msg = _solidLogic.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
-  }
-  return message;
+function _allVersions() {
+  _allVersions = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(message) {
+    var versions, done, m, prev, next;
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          versions = [message];
+          done = {};
+          done[message.uri] = true;
+          m = message;
+        case 4:
+          if (false) {}
+          // earlier?
+          prev = _solidLogic.store.any(null, ns.dct('isReplacedBy'), m, m.doc());
+          if (!(!prev || done[prev.uri])) {
+            _context5.next = 8;
+            break;
+          }
+          return _context5.abrupt("break", 15);
+        case 8:
+          _context5.next = 10;
+          return _solidLogic.store.fetcher.load(prev);
+        case 10:
+          versions.unshift(prev);
+          done[prev.uri] = true;
+          m = prev;
+          _context5.next = 4;
+          break;
+        case 15:
+          m = message;
+        case 16:
+          if (false) {}
+          // later?
+          next = _solidLogic.store.any(m, ns.dct('isReplacedBy'), null, m.doc());
+          if (!(!next || done[next.uri])) {
+            _context5.next = 20;
+            break;
+          }
+          return _context5.abrupt("break", 25);
+        case 20:
+          versions.push(next);
+          done[next.uri] = true;
+          m = next;
+          _context5.next = 16;
+          break;
+        case 25:
+          return _context5.abrupt("return", versions);
+        case 26:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+  return _allVersions.apply(this, arguments);
+}
+function originalVersion(_x6) {
+  return _originalVersion.apply(this, arguments);
+}
+function _originalVersion() {
+  _originalVersion = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(message) {
+    var msg, done;
+    return _regenerator["default"].wrap(function _callee6$(_context6) {
+      while (1) switch (_context6.prev = _context6.next) {
+        case 0:
+          msg = message;
+          done = {}; // done[message.uri] = true
+        case 2:
+          if (!msg) {
+            _context6.next = 13;
+            break;
+          }
+          if (!done[msg.uri]) {
+            _context6.next = 6;
+            break;
+          }
+          debug.error('originalVersion: verion loop' + message);
+          return _context6.abrupt("return", message);
+        case 6:
+          done[msg.uri] = true;
+          message = msg;
+          _context6.next = 10;
+          return _solidLogic.store.fetcher.load(message);
+        case 10:
+          msg = _solidLogic.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
+          _context6.next = 2;
+          break;
+        case 13:
+          return _context6.abrupt("return", message);
+        case 14:
+        case "end":
+          return _context6.stop();
+      }
+    }, _callee6);
+  }));
+  return _originalVersion.apply(this, arguments);
+}
+function mostRecentVersion(_x7) {
+  return _mostRecentVersion.apply(this, arguments);
+}
+function _mostRecentVersion() {
+  _mostRecentVersion = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(message) {
+    var msg, done;
+    return _regenerator["default"].wrap(function _callee7$(_context7) {
+      while (1) switch (_context7.prev = _context7.next) {
+        case 0:
+          msg = message;
+          done = {};
+        case 2:
+          if (!msg) {
+            _context7.next = 13;
+            break;
+          }
+          if (!done[msg.uri]) {
+            _context7.next = 6;
+            break;
+          }
+          debug.error('mostRecentVersion: verion loop' + message);
+          return _context7.abrupt("return", message);
+        case 6:
+          done[msg.uri] = true;
+          message = msg;
+          _context7.next = 10;
+          return _solidLogic.store.fetcher.load(message);
+        case 10:
+          msg = _solidLogic.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
+          _context7.next = 2;
+          break;
+        case 13:
+          return _context7.abrupt("return", message);
+        case 14:
+        case "end":
+          return _context7.stop();
+      }
+    }, _callee7);
+  }));
+  return _mostRecentVersion.apply(this, arguments);
 }
 function isDeleted(message) {
   return _solidLogic.store.holds(message, ns.schema('dateDeleted'), null, message.doc());
@@ -2795,66 +2934,7 @@ function nick(person) {
   if (s) return '' + s.value;
   return '' + utils.label(person);
 }
-function _createIfNotExists(_x4) {
-  return _createIfNotExists2.apply(this, arguments);
-} // ends
-function _createIfNotExists2() {
-  _createIfNotExists2 = (0, _asyncToGenerator2["default"])(function (doc) {
-    var contentType = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : 'text/turtle';
-    var data = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : '';
-    return /*#__PURE__*/_regenerator["default"].mark(function _callee4() {
-      var response;
-      return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.prev = 0;
-            _context4.next = 3;
-            return _solidLogic.store.fetcher.load(doc);
-          case 3:
-            response = _context4.sent;
-            _context4.next = 26;
-            break;
-          case 6:
-            _context4.prev = 6;
-            _context4.t0 = _context4["catch"](0);
-            if (!(_context4.t0.response.status === 404)) {
-              _context4.next = 24;
-              break;
-            }
-            debug.log('createIfNotExists: doc does NOT exist, will create... ' + doc);
-            _context4.prev = 10;
-            _context4.next = 13;
-            return _solidLogic.store.fetcher.webOperation('PUT', doc.uri, {
-              data: data,
-              contentType: contentType
-            });
-          case 13:
-            response = _context4.sent;
-            _context4.next = 20;
-            break;
-          case 16:
-            _context4.prev = 16;
-            _context4.t1 = _context4["catch"](10);
-            debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + _context4.t1);
-            throw _context4.t1;
-          case 20:
-            delete _solidLogic.store.fetcher.requested[doc.uri]; // delete cached 404 error
-            // debug.log('createIfNotExists doc created ok ' + doc)
-            return _context4.abrupt("return", response);
-          case 24:
-            debug.log('createIfNotExists doc load error NOT 404:  ' + doc + ': ' + _context4.t0);
-            throw _context4.t0;
-          case 26:
-            return _context4.abrupt("return", response);
-          case 27:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4, null, [[0, 6], [10, 16]]);
-    })();
-  });
-  return _createIfNotExists2.apply(this, arguments);
-}
+// ends
 //# sourceMappingURL=chatLogic.js.map
 
 /***/ }),
@@ -2874,25 +2954,46 @@ Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
 exports.DateFolder = void 0;
+exports.emptyLeaf = emptyLeaf;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Contains the [[DateFolder]] class
  * This tracks data stored in dated folders and sub-folders
  *
  */
 // pull in first avoid cross-refs
+function emptyLeaf(_x) {
+  return _emptyLeaf.apply(this, arguments);
+}
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
+function _emptyLeaf() {
+  _emptyLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(leafDocument) {
+    return _regenerator["default"].wrap(function _callee5$(_context5) {
+      while (1) switch (_context5.prev = _context5.next) {
+        case 0:
+          _context5.next = 2;
+          return _solidLogic.store.fetcher.load(leafDocument);
+        case 2:
+          return _context5.abrupt("return", !(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0));
+        case 3:
+        case "end":
+          return _context5.stop();
+      }
+    }, _callee5);
+  }));
+  return _emptyLeaf.apply(this, arguments);
+}
 var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
   function DateFolder(rootThing, leafFileName, membershipProperty) {
     (0, _classCallCheck2["default"])(this, DateFolder);
@@ -2905,7 +3006,7 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
   /* Generate the leaf document (rdf object) from date
    * @returns: <NamedNode> - document
    */
-  (0, _createClass2["default"])(DateFolder, [{
+  return (0, _createClass2["default"])(DateFolder, [{
     key: "leafDocumentFromDate",
     value: function leafDocumentFromDate(date) {
       // debug.log('incoming date: ' + date)
@@ -2925,67 +3026,28 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
       // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
       var date = new Date(str); // not explicitly UTC but is assumed so in spec
       // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
-      debug.log('Date for ' + doc + ':' + date.toISOString());
+      // debug.log('Date for ' + doc + ':' + date.toISOString())
       return date;
     }
   }, {
     key: "loadPrevious",
     value: function () {
-      var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(date, backwards) {
-        var thisDateFolder, previousPeriod, _previousPeriod, folder, found, doc;
-        return _regenerator["default"].wrap(function _callee3$(_context3) {
-          while (1) switch (_context3.prev = _context3.next) {
+      var _loadPrevious = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(date, backwards) {
+        var previousPeriod, _previousPeriod, folder, found, leafDocument, nextDate;
+        return _regenerator["default"].wrap(function _callee2$(_context2) {
+          while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _previousPeriod = function _previousPeriod3() {
-                _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(file, level) {
-                  var younger, suitable, lastNonEmpty, _lastNonEmpty, parent, siblings, _folder, uncle, cousins, result;
-                  return _regenerator["default"].wrap(function _callee2$(_context2) {
-                    while (1) switch (_context2.prev = _context2.next) {
+                _previousPeriod = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(file, level) {
+                  var younger, suitable, lastOrFirst, parent, siblings, _folder, uncle, cousins, result;
+                  return _regenerator["default"].wrap(function _callee$(_context) {
+                    while (1) switch (_context.prev = _context.next) {
                       case 0:
-                        _lastNonEmpty = function _lastNonEmpty3() {
-                          _lastNonEmpty = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(siblings) {
-                            var _folder2, leafDocument;
-                            return _regenerator["default"].wrap(function _callee$(_context) {
-                              while (1) switch (_context.prev = _context.next) {
-                                case 0:
-                                  siblings = siblings.filter(suitable);
-                                  siblings.sort(); // chronological order
-                                  if (!backwards) siblings.reverse();
-                                  if (!(level !== 3)) {
-                                    _context.next = 5;
-                                    break;
-                                  }
-                                  return _context.abrupt("return", siblings.pop());
-                                case 5:
-                                  if (!siblings.length) {
-                                    _context.next = 14;
-                                    break;
-                                  }
-                                  _folder2 = siblings.pop();
-                                  leafDocument = _solidLogic.store.sym(_folder2.uri + thisDateFolder.leafFileName);
-                                  _context.next = 10;
-                                  return _solidLogic.store.fetcher.load(leafDocument);
-                                case 10:
-                                  if (!(_solidLogic.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0)) {
-                                    _context.next = 12;
-                                    break;
-                                  }
-                                  return _context.abrupt("return", _folder2);
-                                case 12:
-                                  _context.next = 5;
-                                  break;
-                                case 14:
-                                  return _context.abrupt("return", null);
-                                case 15:
-                                case "end":
-                                  return _context.stop();
-                              }
-                            }, _callee);
-                          }));
-                          return _lastNonEmpty.apply(this, arguments);
-                        };
-                        lastNonEmpty = function _lastNonEmpty2(_x5) {
-                          return _lastNonEmpty.apply(this, arguments);
+                        lastOrFirst = function _lastOrFirst(siblings) {
+                          siblings = siblings.filter(suitable);
+                          siblings.sort(); // chronological order
+                          if (!backwards) siblings.reverse();
+                          return siblings.pop(); // date folder
                         };
                         suitable = function _suitable(x) {
                           var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
@@ -2995,98 +3057,114 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
                         younger = function _younger(x) {
                           if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false; // later than we want or same -- looking for different
                           return true;
-                        }; // debug.log('  previousPeriod level' + level + ' file ' + file)
+                        };
+                        // debug.log('  previousPeriod level' + level + ' file ' + file)
                         parent = file.dir();
-                        _context2.prev = 5;
-                        _context2.next = 8;
+                        _context.prev = 4;
+                        _context.next = 7;
                         return _solidLogic.store.fetcher.load(parent);
-                      case 8:
+                      case 7:
                         siblings = _solidLogic.store.each(parent, ns.ldp('contains'));
                         siblings = siblings.filter(younger);
-                        _context2.next = 12;
-                        return lastNonEmpty(siblings);
-                      case 12:
-                        _folder = _context2.sent;
+                        _folder = lastOrFirst(siblings);
                         if (!_folder) {
-                          _context2.next = 15;
+                          _context.next = 12;
                           break;
                         }
-                        return _context2.abrupt("return", _folder);
-                      case 15:
-                        _context2.next = 25;
+                        return _context.abrupt("return", _folder);
+                      case 12:
+                        _context.next = 22;
                         break;
-                      case 17:
-                        _context2.prev = 17;
-                        _context2.t0 = _context2["catch"](5);
-                        if (!(_context2.t0.response && _context2.t0.response.status && _context2.t0.response.status === 404)) {
-                          _context2.next = 23;
+                      case 14:
+                        _context.prev = 14;
+                        _context.t0 = _context["catch"](4);
+                        if (!(_context.t0.response && _context.t0.response.status && _context.t0.response.status === 404)) {
+                          _context.next = 20;
                           break;
                         }
                         debug.log('Error 404 for chat parent file ' + parent);
-                        _context2.next = 25;
+                        _context.next = 22;
                         break;
-                      case 23:
+                      case 20:
                         debug.log('*** Error NON 404 for chat parent file ' + parent);
                         // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
-                        throw new Error("*** ".concat(_context2.t0.message, " for chat folder ").concat(parent));
-                      case 25:
+                        throw new Error("*** ".concat(_context.t0.message, " for chat folder ").concat(parent));
+                      case 22:
                         if (!(level === 0)) {
-                          _context2.next = 27;
+                          _context.next = 24;
                           break;
                         }
-                        return _context2.abrupt("return", null);
-                      case 27:
-                        _context2.next = 29;
+                        return _context.abrupt("return", null);
+                      case 24:
+                        _context.next = 26;
                         return previousPeriod(parent, level - 1);
-                      case 29:
-                        uncle = _context2.sent;
+                      case 26:
+                        uncle = _context.sent;
                         if (uncle) {
-                          _context2.next = 32;
+                          _context.next = 29;
                           break;
                         }
-                        return _context2.abrupt("return", null);
-                      case 32:
-                        _context2.next = 34;
+                        return _context.abrupt("return", null);
+                      case 29:
+                        _context.next = 31;
                         return _solidLogic.store.fetcher.load(uncle);
-                      case 34:
+                      case 31:
                         cousins = _solidLogic.store.each(uncle, ns.ldp('contains'));
-                        _context2.next = 37;
-                        return lastNonEmpty(cousins);
-                      case 37:
-                        result = _context2.sent;
-                        return _context2.abrupt("return", result);
-                      case 39:
+                        result = lastOrFirst(cousins); // debug.log('   previousPeriod: returning cousins at level ' + level, cousins)
+                        // debug.log('   previousPeriod: returning result at level ' + level, result)
+                        return _context.abrupt("return", result);
+                      case 34:
                       case "end":
-                        return _context2.stop();
+                        return _context.stop();
                     }
-                  }, _callee2, null, [[5, 17]]);
+                  }, _callee, null, [[4, 14]]);
                 }));
                 return _previousPeriod.apply(this, arguments);
               };
-              previousPeriod = function _previousPeriod2(_x3, _x4) {
+              previousPeriod = function _previousPeriod2(_x4, _x5) {
                 return _previousPeriod.apply(this, arguments);
-              };
-              thisDateFolder = this; // previousPeriod
+              }; // previousPeriod
               folder = this.leafDocumentFromDate(date).dir();
-              _context3.next = 6;
+            case 3:
+              if (false) {}
+              _context2.next = 6;
               return previousPeriod(folder, 3);
             case 6:
-              found = _context3.sent;
+              found = _context2.sent;
               if (!found) {
-                _context3.next = 10;
+                _context2.next = 20;
                 break;
               }
-              doc = _solidLogic.store.sym(found.uri + this.leafFileName);
-              return _context3.abrupt("return", this.dateFromLeafDocument(doc));
-            case 10:
-              return _context3.abrupt("return", null);
-            case 11:
+              leafDocument = _solidLogic.store.sym(found.uri + this.leafFileName);
+              nextDate = this.dateFromLeafDocument(leafDocument);
+              _context2.next = 12;
+              return emptyLeaf(leafDocument);
+            case 12:
+              if (_context2.sent) {
+                _context2.next = 16;
+                break;
+              }
+              return _context2.abrupt("return", nextDate);
+            case 16:
+              // debug.log('  loadPrevious: skipping empty ' + leafDocument)
+              date = nextDate;
+              folder = this.leafDocumentFromDate(date).dir();
+              // debug.log('    loadPrevious: moved back to ' + folder)
+            case 18:
+              _context2.next = 21;
+              break;
+            case 20:
+              return _context2.abrupt("return", null);
+            case 21:
+              _context2.next = 3;
+              break;
+            case 23:
             case "end":
-              return _context3.stop();
+              return _context2.stop();
           }
-        }, _callee3, this);
+        }, _callee2, this);
       }));
-      function loadPrevious(_x, _x2) {
+      function loadPrevious(_x2, _x3) {
         return _loadPrevious.apply(this, arguments);
       }
       return loadPrevious;
@@ -3094,49 +3172,49 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
   }, {
     key: "firstLeaf",
     value: function () {
-      var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
+      var _firstLeaf = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(backwards) {
         var folderStore, folderFetcher, earliestSubfolder, _earliestSubfolder, y, month, d, leafDocument, leafObjects, msg, sortMe;
-        return _regenerator["default"].wrap(function _callee5$(_context5) {
-          while (1) switch (_context5.prev = _context5.next) {
+        return _regenerator["default"].wrap(function _callee4$(_context4) {
+          while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _earliestSubfolder = function _earliestSubfolder3() {
-                _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(parent) {
+                _earliestSubfolder = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(parent) {
                   var suitable, kids;
-                  return _regenerator["default"].wrap(function _callee4$(_context4) {
-                    while (1) switch (_context4.prev = _context4.next) {
+                  return _regenerator["default"].wrap(function _callee3$(_context3) {
+                    while (1) switch (_context3.prev = _context3.next) {
                       case 0:
                         suitable = function _suitable2(x) {
                           var tail = x.uri.slice(0, -1).split('/').slice(-1)[0];
                           if (!'0123456789'.includes(tail[0])) return false; // not numeric
                           return true;
                         };
-                        debug.log('            parent ' + parent);
+                        // debug.log('            parent ' + parent)
                         delete folderFetcher.requested[parent.uri];
                         // try {
-                        _context4.next = 5;
+                        _context3.next = 4;
                         return folderFetcher.load(parent, {
                           force: true
                         });
-                      case 5:
+                      case 4:
                         // Force fetch as will have changed
                         // }catch (err) {
                         // }
                         kids = folderStore.each(parent, ns.ldp('contains'));
                         kids = kids.filter(suitable);
                         if (!(kids.length === 0)) {
-                          _context4.next = 9;
+                          _context3.next = 8;
                           break;
                         }
                         throw new Error(' @@@  No children to         parent2 ' + parent);
-                      case 9:
+                      case 8:
                         kids.sort();
                         if (backwards) kids.reverse();
-                        return _context4.abrupt("return", kids[0]);
-                      case 12:
+                        return _context3.abrupt("return", kids[0]);
+                      case 11:
                       case "end":
-                        return _context4.stop();
+                        return _context3.stop();
                     }
-                  }, _callee4);
+                  }, _callee3);
                 }));
                 return _earliestSubfolder.apply(this, arguments);
               };
@@ -3146,25 +3224,25 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
               // backwards -> last leafObject
               folderStore = $rdf.graph();
               folderFetcher = new $rdf.Fetcher(folderStore);
-              _context5.next = 6;
+              _context4.next = 6;
               return earliestSubfolder(this.root.dir());
             case 6:
-              y = _context5.sent;
-              _context5.next = 9;
+              y = _context4.sent;
+              _context4.next = 9;
               return earliestSubfolder(y);
             case 9:
-              month = _context5.sent;
-              _context5.next = 12;
+              month = _context4.sent;
+              _context4.next = 12;
               return earliestSubfolder(month);
             case 12:
-              d = _context5.sent;
+              d = _context4.sent;
               leafDocument = $rdf.sym(d.uri + 'chat.ttl');
-              _context5.next = 16;
+              _context4.next = 16;
               return folderFetcher.load(leafDocument);
             case 16:
               leafObjects = folderStore.each(this.root, this.membershipProperty, null, leafDocument);
               if (!(leafObjects.length === 0)) {
-                _context5.next = 21;
+                _context4.next = 21;
                 break;
               }
               msg = '  INCONSISTENCY -- no chat leafObject in file ' + leafDocument;
@@ -3176,13 +3254,15 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
               });
               sortMe.sort();
               if (backwards) sortMe.reverse();
-              debug.log((backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]);
-              return _context5.abrupt("return", sortMe[0][1]);
-            case 26:
+              /* debug.log(
+                (backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]
+              ) */
+              return _context4.abrupt("return", sortMe[0][1]);
+            case 25:
             case "end":
-              return _context5.stop();
+              return _context4.stop();
           }
-        }, _callee5, this);
+        }, _callee4, this);
       }));
       function firstLeaf(_x6) {
         return _firstLeaf.apply(this, arguments);
@@ -3190,7 +3270,6 @@ var DateFolder = exports.DateFolder = /*#__PURE__*/function () {
       return firstLeaf;
     }() // firstleafObject
   }]);
-  return DateFolder;
 }(); // class
 //# sourceMappingURL=dateFolder.js.map
 
@@ -3224,20 +3303,18 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./l
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-/**
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**
  * Contains the [[infiniteMessageArea]] class
  * @packageDocumentation
- */
-// import { findBookmarkDocument } from './bookmarks'
+ */ // import { findBookmarkDocument } from './bookmarks'
 // pull in first avoid cross-refs
-
 // import * as style from '../style'
 // import * as utils from '../utils'
-
 // import * as pad from '../pad'
 // import { DateFolder } from './dateFolder'
-
 // const UI = { authn, icons, ns, media, pad, $rdf, store, style, utils, widgets }
 
 function desktopNotification(str) {
@@ -3265,34 +3342,9 @@ function desktopNotification(str) {
 /**
  * Renders a chat message inside a `messageTable`
  */
-function insertMessageIntoTable(channelObject, messageTable, message, fresh, options, userContext) {
-  var messageRow = (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext);
-
-  // const message = messageRow.AJAR_subject
-  if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
-    messageRow.style.backgroundColor = 'yellow';
-    options.selectedElement = messageRow;
-    messageTable.selectedElement = messageRow;
-  }
-  var done = false;
-  for (var ele = messageTable.firstChild;; ele = ele.nextSibling) {
-    if (!ele) {
-      // empty
-      break;
-    }
-    var newestFirst = options.newestfirst === true;
-    var dateString = messageRow.AJAR_date;
-    if (dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst) {
-      messageTable.insertBefore(messageRow, ele);
-      done = true;
-      break;
-    }
-  }
-  if (!done) {
-    messageTable.appendChild(messageRow);
-  }
+function insertMessageIntoTable(_x, _x2, _x3, _x4, _x5, _x6) {
+  return _insertMessageIntoTable.apply(this, arguments);
 }
-
 /**
  * Common code for a chat (discussion area of messages about something)
  * This version runs over a series of files for different time periods
@@ -3315,20 +3367,70 @@ function insertMessageIntoTable(channelObject, messageTable, message, fresh, opt
  - inlineImageHeightEms: The height (in ems) of images expaned from their URIs in the chat.
 
  */
-function infiniteMessageArea(_x, _x2, _x3, _x4) {
+function _insertMessageIntoTable() {
+  _insertMessageIntoTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(channelObject, messageTable, message, fresh, options, userContext) {
+    var messageRow, done, ele, newestFirst, dateString;
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return (0, _message.renderMessageRow)(channelObject, message, fresh, options, userContext);
+        case 2:
+          messageRow = _context.sent;
+          // const message = messageRow.AJAR_subject
+          if (options.selectedMessage && options.selectedMessage.sameTerm(message)) {
+            messageRow.style.backgroundColor = 'yellow';
+            options.selectedElement = messageRow;
+            messageTable.selectedElement = messageRow;
+          }
+          done = false;
+          ele = messageTable.firstChild;
+        case 6:
+          if (ele) {
+            _context.next = 8;
+            break;
+          }
+          return _context.abrupt("break", 17);
+        case 8:
+          newestFirst = options.newestfirst === true;
+          dateString = messageRow.AJAR_date;
+          if (!(dateString > ele.AJAR_date && newestFirst || dateString < ele.AJAR_date && !newestFirst)) {
+            _context.next = 14;
+            break;
+          }
+          messageTable.insertBefore(messageRow, ele);
+          done = true;
+          return _context.abrupt("break", 17);
+        case 14:
+          ele = ele.nextSibling;
+          _context.next = 6;
+          break;
+        case 17:
+          if (!done) {
+            messageTable.appendChild(messageRow);
+          }
+        case 18:
+        case "end":
+          return _context.stop();
+      }
+    }, _callee);
+  }));
+  return _insertMessageIntoTable.apply(this, arguments);
+}
+function infiniteMessageArea(_x7, _x8, _x9, _x10) {
   return _infiniteMessageArea.apply(this, arguments);
 }
 function _infiniteMessageArea() {
-  _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12(dom, wasStore, chatChannel, options) {
-    var syncMessages, addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, earliest, latest, lock;
-    return _regenerator["default"].wrap(function _callee12$(_context12) {
-      while (1) switch (_context12.prev = _context12.next) {
+  _infiniteMessageArea = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee15(dom, wasStore, chatChannel, options) {
+    var syncMessages, _syncMessages, addMessage, _addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, _renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, threadRootMessage, earliest, latest, thread, threadTime, lock;
+    return _regenerator["default"].wrap(function _callee15$(_context15) {
+      while (1) switch (_context15.prev = _context15.next) {
         case 0:
           _loadInitialContent = function _loadInitialContent3() {
-            _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
-              var yank, fixScroll, live, selectedDocument, now, todayDocument, selectedMessageTable, selectedDate;
-              return _regenerator["default"].wrap(function _callee11$(_context11) {
-                while (1) switch (_context11.prev = _context11.next) {
+            _loadInitialContent = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee14() {
+              var yank, fixScroll, live, selectedDocument, threadRootDocument, initialDocment, now, todayDocument, selectedMessageTable, selectedDate;
+              return _regenerator["default"].wrap(function _callee14$(_context14) {
+                while (1) switch (_context14.prev = _context14.next) {
                   case 0:
                     fixScroll = function _fixScroll() {
                       if (options.selectedElement) {
@@ -3342,51 +3444,59 @@ function _infiniteMessageArea() {
                       }
                     };
                     yank = function _yank() {
-                      selectedMessageTable.selectedElement.scrollIntoView({
-                        block: 'center'
-                      });
+                      if (selectedMessageTable && selectedMessageTable.selectedElement) {
+                        selectedMessageTable.selectedElement.scrollIntoView({
+                          block: 'center'
+                        });
+                      }
                     }; // During initial load ONLY keep scroll to selected thing or bottom
                     if (options.selectedMessage) {
                       selectedDocument = options.selectedMessage.doc();
+                    }
+                    if (threadRootMessage) {
+                      threadRootDocument = threadRootMessage.doc();
+                    }
+                    initialDocment = selectedDocument || threadRootDocument;
+                    if (initialDocment) {
                       now = new Date();
                       todayDocument = dateFolder.leafDocumentFromDate(now);
-                      live = todayDocument.sameTerm(selectedDocument);
+                      live = todayDocument.sameTerm(initialDocment);
                     }
-                    if (!(options.selectedMessage && !live)) {
-                      _context11.next = 15;
+                    if (!(initialDocment && !live)) {
+                      _context14.next = 18;
                       break;
                     }
-                    selectedDate = dateFolder.dateFromLeafDocument(selectedDocument);
-                    _context11.next = 7;
+                    selectedDate = dateFolder.dateFromLeafDocument(initialDocment);
+                    _context14.next = 10;
                     return createMessageTable(selectedDate, live);
-                  case 7:
-                    selectedMessageTable = _context11.sent;
+                  case 10:
+                    selectedMessageTable = _context14.sent;
                     div.appendChild(selectedMessageTable);
                     earliest.messageTable = selectedMessageTable;
                     latest.messageTable = selectedMessageTable;
                     yank();
                     setTimeout(yank, 1000); // @@ kludge - restore position distubed by other cHANGES
-                    _context11.next = 19;
+                    _context14.next = 22;
                     break;
-                  case 15:
-                    _context11.next = 17;
+                  case 18:
+                    _context14.next = 20;
                     return appendCurrentMessages();
-                  case 17:
+                  case 20:
                     earliest.messageTable = liveMessageTable;
                     latest.messageTable = liveMessageTable;
-                  case 19:
-                    _context11.next = 21;
+                  case 22:
+                    _context14.next = 24;
                     return loadMoreWhereNeeded(null, fixScroll);
-                  case 21:
+                  case 24:
                     div.addEventListener('scroll', loadMoreWhereNeeded);
                     if (options.solo) {
                       document.body.addEventListener('scroll', loadMoreWhereNeeded);
                     }
-                  case 23:
+                  case 26:
                   case "end":
-                    return _context11.stop();
+                    return _context14.stop();
                 }
-              }, _callee11);
+              }, _callee14);
             }));
             return _loadInitialContent.apply(this, arguments);
           };
@@ -3394,16 +3504,16 @@ function _infiniteMessageArea() {
             return _loadInitialContent.apply(this, arguments);
           };
           _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
-            _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(event, fixScroll) {
+            _loadMoreWhereNeeded = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee13(event, fixScroll) {
               var freeze, magicZone, done, scrollBottom, scrollTop;
-              return _regenerator["default"].wrap(function _callee10$(_context10) {
-                while (1) switch (_context10.prev = _context10.next) {
+              return _regenerator["default"].wrap(function _callee13$(_context13) {
+                while (1) switch (_context13.prev = _context13.next) {
                   case 0:
                     if (!lock) {
-                      _context10.next = 2;
+                      _context13.next = 2;
                       break;
                     }
-                    return _context10.abrupt("return");
+                    return _context13.abrupt("return");
                   case 2:
                     lock = true;
                     freeze = !fixScroll;
@@ -3411,38 +3521,37 @@ function _infiniteMessageArea() {
                     // const bottom = div.scrollHeight - top - div.clientHeight
                   case 5:
                     if (!(div.scrollTop < magicZone && earliest.messageTable && !earliest.messageTable.initial && earliest.messageTable.extendBackwards)) {
-                      _context10.next = 21;
+                      _context13.next = 20;
                       break;
                     }
                     if (!(div.scrollHeight === 0)) {
-                      _context10.next = 10;
+                      _context13.next = 10;
                       break;
                     }
-                    // console.log('    chat/loadMoreWhereNeeded: trying later...')
+                    // debug.log('    chat/loadMoreWhereNeeded: trying later...')
                     setTimeout(loadMoreWhereNeeded, 2000); // couple be less
                     lock = false;
-                    return _context10.abrupt("return");
+                    return _context13.abrupt("return");
                   case 10:
-                    // console.log('    chat/loadMoreWhereNeeded: Going now')
-                    scrollBottom = div.scrollHeight - div.scrollTop;
-                    debug.log('infinite scroll: adding above: top ' + div.scrollTop);
-                    _context10.next = 14;
+                    // debug.log('    chat/loadMoreWhereNeeded: Going now')
+                    scrollBottom = div.scrollHeight - div.scrollTop; // debug.log('infinite scroll: adding above: top ' + div.scrollTop)
+                    _context13.next = 13;
                     return earliest.messageTable.extendBackwards();
-                  case 14:
-                    done = _context10.sent;
+                  case 13:
+                    done = _context13.sent;
                     if (freeze) {
                       div.scrollTop = div.scrollHeight - scrollBottom;
                     }
                     if (fixScroll) fixScroll();
                     if (!done) {
-                      _context10.next = 19;
+                      _context13.next = 18;
                       break;
                     }
-                    return _context10.abrupt("break", 21);
-                  case 19:
-                    _context10.next = 5;
+                    return _context13.abrupt("break", 20);
+                  case 18:
+                    _context13.next = 5;
                     break;
-                  case 21:
+                  case 20:
                     if (!(options.selectedMessage &&
                     // we started in the middle not at the bottom
                     div.scrollHeight - div.scrollTop - div.clientHeight < magicZone &&
@@ -3450,78 +3559,84 @@ function _infiniteMessageArea() {
                     latest.messageTable && !latest.messageTable["final"] &&
                     // there is more data to come
                     latest.messageTable.extendForwards)) {
-                      _context10.next = 33;
+                      _context13.next = 31;
                       break;
                     }
                     scrollTop = div.scrollTop;
-                    debug.log('infinite scroll: adding below: bottom: ' + (div.scrollHeight - div.scrollTop - div.clientHeight));
-                    _context10.next = 26;
+                    /* debug.log(
+                      'infinite scroll: adding below: bottom: ' +
+                      (div.scrollHeight - div.scrollTop - div.clientHeight)
+                    ) */
+                    _context13.next = 24;
                     return latest.messageTable.extendForwards();
-                  case 26:
-                    done = _context10.sent;
+                  case 24:
+                    done = _context13.sent;
                     // then add more data on the bottom
                     if (freeze) {
                       div.scrollTop = scrollTop; // while adding below keep same things in view
                     }
                     if (fixScroll) fixScroll();
                     if (!done) {
-                      _context10.next = 31;
+                      _context13.next = 29;
                       break;
                     }
-                    return _context10.abrupt("break", 33);
-                  case 31:
-                    _context10.next = 21;
+                    return _context13.abrupt("break", 31);
+                  case 29:
+                    _context13.next = 20;
                     break;
-                  case 33:
+                  case 31:
                     lock = false;
-                  case 34:
+                  case 32:
                   case "end":
-                    return _context10.stop();
+                    return _context13.stop();
                 }
-              }, _callee10);
+              }, _callee13);
             }));
             return _loadMoreWhereNeeded.apply(this, arguments);
           };
-          loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x10, _x11) {
+          loadMoreWhereNeeded = function _loadMoreWhereNeeded2(_x20, _x21) {
             return _loadMoreWhereNeeded.apply(this, arguments);
           };
           _appendCurrentMessages = function _appendCurrentMessage2() {
-            _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9() {
+            _appendCurrentMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee12() {
               var now, chatDocument, messageTable;
-              return _regenerator["default"].wrap(function _callee9$(_context9) {
-                while (1) switch (_context9.prev = _context9.next) {
+              return _regenerator["default"].wrap(function _callee12$(_context12) {
+                while (1) switch (_context12.prev = _context12.next) {
                   case 0:
                     now = new Date();
                     chatDocument = dateFolder.leafDocumentFromDate(now); /// ///////////////////////////////////////////////////////////
-                    _context9.next = 4;
+                    _context12.next = 4;
                     return createMessageTable(now, true);
                   case 4:
-                    messageTable = _context9.sent;
+                    messageTable = _context12.sent;
                     div.appendChild(messageTable);
-                    div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
-                      return _regenerator["default"].wrap(function _callee8$(_context8) {
-                        while (1) switch (_context8.prev = _context8.next) {
+                    div.refresh = /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee11() {
+                      return _regenerator["default"].wrap(function _callee11$(_context11) {
+                        while (1) switch (_context11.prev = _context11.next) {
                           case 0:
-                            _context8.next = 2;
+                            _context11.next = 2;
                             return addNewChatDocumentIfNewDay(new Date());
                           case 2:
-                            syncMessages(chatChannel, messageTable); // @@ livemessagetable??
-                            desktopNotification(chatChannel);
+                            _context11.next = 4;
+                            return syncMessages(chatChannel, messageTable);
                           case 4:
+                            // @@ livemessagetable??
+                            desktopNotification(chatChannel);
+                          case 5:
                           case "end":
-                            return _context8.stop();
+                            return _context11.stop();
                         }
-                      }, _callee8);
+                      }, _callee11);
                     })); // The short chat version the live update listening is done in the pane but we do it in the widget @@
                     _solidLogic.store.updater.addDownstreamChangeListener(chatDocument, div.refresh); // Live update
                     liveMessageTable = messageTable;
                     latest.messageTable = liveMessageTable;
-                    return _context9.abrupt("return", messageTable);
+                    return _context12.abrupt("return", messageTable);
                   case 11:
                   case "end":
-                    return _context9.stop();
+                    return _context12.stop();
                 }
-              }, _callee9);
+              }, _callee12);
             }));
             return _appendCurrentMessages.apply(this, arguments);
           };
@@ -3529,15 +3644,15 @@ function _infiniteMessageArea() {
             return _appendCurrentMessages.apply(this, arguments);
           };
           _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
-            _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+            _addNewChatDocumentIfNewDay = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10() {
               var newChatDocument, oldChatDocument, sts;
-              return _regenerator["default"].wrap(function _callee7$(_context7) {
-                while (1) switch (_context7.prev = _context7.next) {
+              return _regenerator["default"].wrap(function _callee10$(_context10) {
+                while (1) switch (_context10.prev = _context10.next) {
                   case 0:
                     // @@ Remove listener from previous table as it is now static
                     newChatDocument = dateFolder.leafDocumentFromDate(new Date());
                     if (newChatDocument.sameTerm(latest.messageTable.chatDocument)) {
-                      _context7.next = 7;
+                      _context10.next = 7;
                       break;
                     }
                     // It is a new day
@@ -3546,7 +3661,7 @@ function _infiniteMessageArea() {
                       delete liveMessageTable.inputRow;
                     }
                     oldChatDocument = latest.messageTable.chatDocument;
-                    _context7.next = 6;
+                    _context10.next = 6;
                     return appendCurrentMessages();
                   case 6:
                     // Adding a link in the document will ping listeners to add the new block too
@@ -3560,284 +3675,318 @@ function _infiniteMessageArea() {
                     }
                   case 7:
                   case "end":
-                    return _context7.stop();
+                    return _context10.stop();
                 }
-              }, _callee7);
+              }, _callee10);
             }));
             return _addNewChatDocumentIfNewDay.apply(this, arguments);
           };
           addNewChatDocumentIfNewDay = function _addNewChatDocumentIf() {
             return _addNewChatDocumentIfNewDay.apply(this, arguments);
           };
-          renderMessageTable = function _renderMessageTable(date, live) {
-            var scrollBackbutton;
-            var scrollForwardButton;
-
-            /// /////////////////   Scroll down adding more above
-            function extendBackwards() {
-              return _extendBackwards.apply(this, arguments);
-            }
-            function _extendBackwards() {
-              _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee() {
-                var done;
-                return _regenerator["default"].wrap(function _callee$(_context) {
-                  while (1) switch (_context.prev = _context.next) {
-                    case 0:
-                      _context.next = 2;
-                      return insertPreviousMessages(true);
-                    case 2:
-                      done = _context.sent;
-                      if (done) {
-                        if (scrollBackbutton) {
-                          scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
-                          scrollBackbutton.disabled = true;
-                        }
-                        messageTable.initial = true;
-                      } else {
-                        messageTable.extendedBack = true;
-                      }
-                      setScrollBackbuttonIcon();
-                      return _context.abrupt("return", done);
-                    case 6:
-                    case "end":
-                      return _context.stop();
-                  }
-                }, _callee);
-              }));
-              return _extendBackwards.apply(this, arguments);
-            }
-            function setScrollBackbuttonIcon() {
-              if (!scrollBackbutton) {
-                return;
-              }
-              var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
-              var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
-              scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
-              function getScrollbackIcon(sense) {
-                return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-              }
-            }
-            function scrollBackbuttonHandler(_x8) {
-              return _scrollBackbuttonHandler.apply(this, arguments);
-            } /// ////////////// Scroll up adding more below
-            function _scrollBackbuttonHandler() {
-              _scrollBackbuttonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(_event) {
-                return _regenerator["default"].wrap(function _callee2$(_context2) {
-                  while (1) switch (_context2.prev = _context2.next) {
-                    case 0:
-                      if (!messageTable.extendedBack) {
-                        _context2.next = 6;
-                        break;
-                      }
-                      removePreviousMessages(true, messageTable);
-                      messageTable.extendedBack = false;
-                      setScrollBackbuttonIcon();
-                      _context2.next = 8;
-                      break;
-                    case 6:
-                      _context2.next = 8;
-                      return extendBackwards();
-                    case 8:
-                    case "end":
-                      return _context2.stop();
-                  }
-                }, _callee2);
-              }));
-              return _scrollBackbuttonHandler.apply(this, arguments);
-            }
-            function extendForwards() {
-              return _extendForwards.apply(this, arguments);
-            }
-            function _extendForwards() {
-              _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3() {
-                var done;
-                return _regenerator["default"].wrap(function _callee3$(_context3) {
-                  while (1) switch (_context3.prev = _context3.next) {
-                    case 0:
-                      _context3.next = 2;
-                      return insertPreviousMessages(false);
-                    case 2:
-                      done = _context3.sent;
-                      if (done) {
-                        scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg');
-                        scrollForwardButton.disabled = true;
-                        messageTable["final"] = true;
-                      } else {
-                        messageTable.extendedForwards = true;
-                      }
-                      setScrollForwardButtonIcon();
-                      return _context3.abrupt("return", done);
-                    case 6:
-                    case "end":
-                      return _context3.stop();
-                  }
-                }, _callee3);
-              }));
-              return _extendForwards.apply(this, arguments);
-            }
-            function setScrollForwardButtonIcon() {
-              var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
-              var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
-              scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
-              function getScrollForwardButtonIcon(sense) {
-                return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
-              }
-            }
-            function scrollForwardButtonHandler(_x9) {
-              return _scrollForwardButtonHandler.apply(this, arguments);
-            } /// ///////////////////////
-            /*
-            options = options || {}
-            options.authorDateOnLeft = true
-            const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
-            const channelObject = new ChatChannel(chatChannel, options)
-            const dateFolder = channelObject.dateFolder
-             const div = dom.createElement('div')
-            const statusArea = div.appendChild(dom.createElement('div'))
-            const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
-            */
-            function _scrollForwardButtonHandler() {
-              _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
-                return _regenerator["default"].wrap(function _callee4$(_context4) {
-                  while (1) switch (_context4.prev = _context4.next) {
-                    case 0:
-                      if (!messageTable.extendedForwards) {
-                        _context4.next = 6;
-                        break;
-                      }
-                      removePreviousMessages(false, messageTable);
-                      messageTable.extendedForwards = false;
-                      setScrollForwardButtonIcon();
-                      _context4.next = 9;
-                      break;
-                    case 6:
-                      _context4.next = 8;
-                      return extendForwards();
-                    case 8:
-                      // async
-                      latest.messageTable.scrollIntoView(newestFirst);
-                    case 9:
-                    case "end":
-                      return _context4.stop();
-                  }
-                }, _callee4);
-              }));
-              return _scrollForwardButtonHandler.apply(this, arguments);
-            }
-            var messageTable = dom.createElement('table');
-            messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
-            messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
-
-            messageTable.date = date;
-            var chatDocument = dateFolder.leafDocumentFromDate(date);
-            messageTable.chatDocument = chatDocument;
-            messageTable.fresh = false;
-            messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
-            if (live) {
-              messageTable["final"] = true;
-              liveMessageTable = messageTable;
-              latest.messageTable = messageTable;
-              var tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
-              if (newestFirst) {
-                messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
-              } else {
-                messageTable.appendChild(tr); // not newestFirst
-              }
-              messageTable.inputRow = tr;
-            }
-
-            /// ///// Infinite scroll
-            //
-            // @@ listen for swipe past end event not just button
-            if (options.infinite) {
-              var scrollBackbuttonTR = dom.createElement('tr');
-              var scrollBackbuttonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              // up traingles: noun_1369237.svg
-              // down triangles: noun_1369241.svg
-              var scrollBackIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-              scrollBackbutton = widgets.button(dom, _iconBase.icons.iconBase + scrollBackIcon, 'Previous messages ...');
-              scrollBackbuttonCell.style = 'width:3em; height:3em;';
-              scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false);
-              messageTable.extendedBack = false;
-              scrollBackbuttonCell.appendChild(scrollBackbutton);
-              setScrollBackbuttonIcon();
-              var dateCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
-              dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
-
-              // @@@@@@@@@@@ todo move this button to other end of  message cell, o
-              var scrollForwardButtonCell = scrollBackbuttonTR.appendChild(dom.createElement('td'));
-              var scrollForwardIcon = newestFirst ? 'noun_1369241.svg' : 'noun_1369237.svg'; // down and up arrows respoctively
-              scrollForwardButton = widgets.button(dom, _iconBase.icons.iconBase + scrollForwardIcon, 'Later messages ...');
-              scrollForwardButtonCell.appendChild(scrollForwardButton);
-              scrollForwardButtonCell.style = 'width:3em; height:3em;';
-              scrollForwardButton.addEventListener('click', scrollForwardButtonHandler, false);
-              messageTable.extendedForward = false;
-              setScrollForwardButtonIcon();
-              messageTable.extendedForwards = false;
-              if (!newestFirst) {
-                // opposite end from the entry field
-                messageTable.insertBefore(scrollBackbuttonTR, messageTable.firstChild); // If not newestFirst
-              } else {
-                messageTable.appendChild(scrollBackbuttonTR); //  newestFirst
-              }
-            }
-            var sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
-            if (!live && sts.length === 0) {
-              // not todays
-              // no need buttomns at the moment
-              // messageTable.style.visibility = 'collapse' // Hide files with no messages
-            }
-            sts.forEach(function (st) {
-              addMessage(st.object, messageTable);
-            });
-            messageTable.fresh = true;
-
-            // loadMessageTable(messageTable, chatDocument)
-            messageTable.fresh = false;
-            return messageTable;
-          };
-          _createMessageTable = function _createMessageTable3() {
-            _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(date, live) {
-              var chatDocument, messageTable, statusTR;
-              return _regenerator["default"].wrap(function _callee6$(_context6) {
-                while (1) switch (_context6.prev = _context6.next) {
+          _renderMessageTable = function _renderMessageTable3() {
+            _renderMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(date, live) {
+              var scrollBackbutton, scrollForwardButton, extendBackwards, _extendBackwards, setScrollBackbuttonIcon, extendForwards, _extendForwards, setScrollForwardButtonIcon, scrollForwardButtonHandler, _scrollForwardButtonHandler, messageTable, chatDocument, tr, test, titleTR, scrollBackbuttonCell, dateCell, scrollForwardButtonCell, sts, _iterator2, _step2, st;
+              return _regenerator["default"].wrap(function _callee9$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
                   case 0:
-                    debug.log('   createMessageTable for  ' + date);
-                    chatDocument = dateFolder.leafDocumentFromDate(date);
-                    _context6.prev = 2;
-                    _context6.next = 5;
-                    return _solidLogic.store.fetcher.load(chatDocument);
-                  case 5:
-                    _context6.next = 19;
-                    break;
-                  case 7:
-                    _context6.prev = 7;
-                    _context6.t0 = _context6["catch"](2);
+                    _scrollForwardButtonHandler = function _scrollForwardButtonH2() {
+                      _scrollForwardButtonHandler = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_event) {
+                        return _regenerator["default"].wrap(function _callee8$(_context8) {
+                          while (1) switch (_context8.prev = _context8.next) {
+                            case 0:
+                              if (!messageTable.extendedForwards) {
+                                _context8.next = 6;
+                                break;
+                              }
+                              removePreviousMessages(false, messageTable);
+                              messageTable.extendedForwards = false;
+                              setScrollForwardButtonIcon();
+                              _context8.next = 9;
+                              break;
+                            case 6:
+                              _context8.next = 8;
+                              return extendForwards();
+                            case 8:
+                              // async
+                              latest.messageTable.scrollIntoView(newestFirst);
+                            case 9:
+                            case "end":
+                              return _context8.stop();
+                          }
+                        }, _callee8);
+                      }));
+                      return _scrollForwardButtonHandler.apply(this, arguments);
+                    };
+                    scrollForwardButtonHandler = function _scrollForwardButtonH(_x22) {
+                      return _scrollForwardButtonHandler.apply(this, arguments);
+                    };
+                    setScrollForwardButtonIcon = function _setScrollForwardButt() {
+                      if (!scrollForwardButton) return;
+                      var sense = messageTable.extendedForwards ? !newestFirst : newestFirst; // noun_T-Block_1114657_000000.svg
+                      var scrollForwardIcon = messageTable["final"] ? 'noun_T-Block_1114657_000000.svg' : getScrollForwardButtonIcon(sense);
+                      scrollForwardButton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollForwardIcon);
+                      function getScrollForwardButtonIcon(sense) {
+                        return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+                      }
+                    };
+                    _extendForwards = function _extendForwards3() {
+                      _extendForwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7() {
+                        var done;
+                        return _regenerator["default"].wrap(function _callee7$(_context7) {
+                          while (1) switch (_context7.prev = _context7.next) {
+                            case 0:
+                              _context7.next = 2;
+                              return insertPreviousMessages(false);
+                            case 2:
+                              done = _context7.sent;
+                              return _context7.abrupt("return", done);
+                            case 4:
+                            case "end":
+                              return _context7.stop();
+                          }
+                        }, _callee7);
+                      }));
+                      return _extendForwards.apply(this, arguments);
+                    };
+                    extendForwards = function _extendForwards2() {
+                      return _extendForwards.apply(this, arguments);
+                    };
+                    setScrollBackbuttonIcon = function _setScrollBackbuttonI() {
+                      if (!scrollBackbutton) {
+                        return;
+                      }
+                      var sense = messageTable.extendedBack ? !newestFirst : newestFirst;
+                      var scrollBackIcon = messageTable.initial ? 'noun_T-Block_1114655_000000.svg' : getScrollbackIcon(sense);
+                      scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + scrollBackIcon);
+                      function getScrollbackIcon(sense) {
+                        return sense ? 'noun_1369241.svg' : 'noun_1369237.svg';
+                      }
+                    };
+                    _extendBackwards = function _extendBackwards3() {
+                      _extendBackwards = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
+                        var done;
+                        return _regenerator["default"].wrap(function _callee6$(_context6) {
+                          while (1) switch (_context6.prev = _context6.next) {
+                            case 0:
+                              _context6.next = 2;
+                              return insertPreviousMessages(true);
+                            case 2:
+                              done = _context6.sent;
+                              if (done) {
+                                if (scrollBackbutton) {
+                                  scrollBackbutton.firstChild.setAttribute('src', _iconBase.icons.iconBase + 'noun_T-Block_1114655_000000.svg'); // T
+                                  scrollBackbutton.disabled = true;
+                                }
+                                messageTable.initial = true;
+                              } else {
+                                messageTable.extendedBack = true;
+                              }
+                              setScrollBackbuttonIcon();
+                              return _context6.abrupt("return", done);
+                            case 6:
+                            case "end":
+                              return _context6.stop();
+                          }
+                        }, _callee6);
+                      }));
+                      return _extendBackwards.apply(this, arguments);
+                    };
+                    extendBackwards = function _extendBackwards2() {
+                      return _extendBackwards.apply(this, arguments);
+                    };
+                    scrollBackbutton = null; // was let
+                    scrollForwardButton = null; // was let
+                    /// /////////////////   Scroll down adding more above
+                    /// ////////////// Scroll up adding more below
+                    /// ///////////////////////
+                    /*
+                    options = options || {}
+                    options.authorDateOnLeft = true
+                    const newestFirst = options.newestFirst === '1' || options.newestFirst === true // hack for now
+                    const channelObject = new ChatChannel(chatChannel, options)
+                    const dateFolder = channelObject.dateFolder
+                     const div = dom.createElement('div')
+                    const statusArea = div.appendChild(dom.createElement('div'))
+                    const userContext = { dom, statusArea, div: statusArea } // logged on state, pointers to user's stuff
+                    */
+                    // debug.log('Options for called message Area', options)
                     messageTable = dom.createElement('table');
-                    statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
-                    if (!(_context6.t0.response && _context6.t0.response.status && _context6.t0.response.status === 404)) {
-                      _context6.next = 16;
+                    messageTable.style.width = '100%'; // fill the pane div
+                    messageTable.extendBackwards = extendBackwards; // Make function available to scroll stuff
+                    messageTable.extendForwards = extendForwards; // Make function available to scroll stuff
+
+                    messageTable.date = date;
+                    chatDocument = dateFolder.leafDocumentFromDate(date);
+                    messageTable.chatDocument = chatDocument;
+                    messageTable.fresh = false;
+                    messageTable.setAttribute('style', 'width: 100%;'); // fill that div!
+                    if (live) {
+                      messageTable["final"] = true;
+                      liveMessageTable = messageTable;
+                      latest.messageTable = messageTable;
+                      tr = (0, _message.renderMessageEditor)(channelObject, messageTable, userContext, options);
+                      if (newestFirst) {
+                        messageTable.insertBefore(tr, messageTable.firstChild); // If newestFirst
+                      } else {
+                        messageTable.appendChild(tr); // not newestFirst
+                      }
+                      messageTable.inputRow = tr;
+                    }
+
+                    /// ///// Infinite scroll
+                    //
+                    // @@ listen for swipe past end event not just button
+                    test = true;
+                    if (test) {
+                      // ws options.infinite but need for non-infinite
+                      titleTR = dom.createElement('tr');
+                      scrollBackbuttonCell = titleTR.appendChild(dom.createElement('td')); // up traingles: noun_1369237.svg
+                      // down triangles: noun_1369241.svg
+                      /*
+                      const scrollBackIcon = newestFirst
+                        ? 'noun_1369241.svg'
+                        : 'noun_1369237.svg' // down and up arrows respoctively
+                      scrollBackbutton = widgets.button(
+                        dom,
+                        icons.iconBase + scrollBackIcon,
+                        'Previous messages ...'
+                      )
+                      scrollBackbuttonCell.style = 'width:3em; height:3em;'
+                      scrollBackbutton.addEventListener('click', scrollBackbuttonHandler, false)
+                      messageTable.extendedBack = false
+                      scrollBackbuttonCell.appendChild(scrollBackbutton)
+                      setScrollBackbuttonIcon()
+                      */
+                      dateCell = titleTR.appendChild(dom.createElement('td'));
+                      dateCell.style = 'text-align: center; vertical-align: middle; color: #888; font-style: italic;';
+                      dateCell.textContent = widgets.shortDate(date.toISOString(), true); // no time, only date
+
+                      // @@@@@@@@@@@ todo move this button to other end of  message cell, o
+                      scrollForwardButtonCell = titleTR.appendChild(dom.createElement('td'));
+                      if (options.includeRemoveButton) {
+                        scrollForwardButtonCell.appendChild(widgets.cancelButton(dom, function (_e) {
+                          div.parentNode.removeChild(div);
+                        }));
+                      }
+                      /*
+                      const scrollForwardIcon = newestFirst
+                        ? 'noun_1369241.svg'
+                        : 'noun_1369237.svg' // down and up arrows respoctively
+                      scrollForwardButton = widgets.button(
+                        dom,
+                        icons.iconBase + scrollForwardIcon,
+                        'Later messages ...'
+                      )
+                      scrollForwardButtonCell.appendChild(scrollForwardButton)
+                      scrollForwardButtonCell.style = 'width:3em; height:3em;'
+                      scrollForwardButton.addEventListener(
+                        'click',
+                        scrollForwardButtonHandler,
+                        false
+                      )
+                      messageTable.extendedForward = false
+                      setScrollForwardButtonIcon()
+                      */
+                      messageTable.extendedForwards = false;
+                      if (!newestFirst) {
+                        // opposite end from the entry field
+                        messageTable.insertBefore(titleTR, messageTable.firstChild); // If not newestFirst
+                      } else {
+                        messageTable.appendChild(titleTR); //  newestFirst
+                      }
+                    }
+                    sts = _solidLogic.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
+                    if (!live && sts.length === 0) {
+                      // not todays
+                      // no need buttomns at the moment
+                      // messageTable.style.visibility = 'collapse' // Hide files with no messages
+                    }
+                    _iterator2 = _createForOfIteratorHelper(sts);
+                    _context9.prev = 25;
+                    _iterator2.s();
+                  case 27:
+                    if ((_step2 = _iterator2.n()).done) {
+                      _context9.next = 33;
                       break;
                     }
-                    debug.log('Error 404 for chat file ' + chatDocument);
-                    return _context6.abrupt("return", renderMessageTable(date, live));
+                    st = _step2.value;
+                    _context9.next = 31;
+                    return addMessage(st.object, messageTable);
+                  case 31:
+                    _context9.next = 27;
+                    break;
+                  case 33:
+                    _context9.next = 38;
+                    break;
+                  case 35:
+                    _context9.prev = 35;
+                    _context9.t0 = _context9["catch"](25);
+                    _iterator2.e(_context9.t0);
+                  case 38:
+                    _context9.prev = 38;
+                    _iterator2.f();
+                    return _context9.finish(38);
+                  case 41:
+                    messageTable.fresh = true; // message table updated with insertMessageIntoTable()
+                    return _context9.abrupt("return", messageTable);
+                  case 43:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee9, null, [[25, 35, 38, 41]]);
+            }));
+            return _renderMessageTable.apply(this, arguments);
+          };
+          renderMessageTable = function _renderMessageTable2(_x18, _x19) {
+            return _renderMessageTable.apply(this, arguments);
+          };
+          _createMessageTable = function _createMessageTable3() {
+            _createMessageTable = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(date, live) {
+              var chatDocument, messageTable, statusTR;
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    // debug.log('   createMessageTable for  ' + date)
+                    chatDocument = dateFolder.leafDocumentFromDate(date);
+                    _context5.prev = 1;
+                    _context5.next = 4;
+                    return _solidLogic.store.fetcher.createIfNotExists(chatDocument);
+                  case 4:
+                    _context5.next = 19;
+                    break;
+                  case 6:
+                    _context5.prev = 6;
+                    _context5.t0 = _context5["catch"](1);
+                    messageTable = dom.createElement('table');
+                    statusTR = messageTable.appendChild(dom.createElement('tr')); // ### find status in exception
+                    if (!(_context5.t0.response && _context5.t0.response.status && _context5.t0.response.status === 404)) {
+                      _context5.next = 16;
+                      break;
+                    }
+                    _context5.next = 13;
+                    return renderMessageTable(date, live);
+                  case 13:
+                    return _context5.abrupt("return", _context5.sent);
                   case 16:
                     debug.log('*** Error NON 404 for chat file ' + chatDocument);
-                    statusTR.appendChild(widgets.errorMessageBlock(dom, _context6.t0, 'pink'));
+                    statusTR.appendChild(widgets.errorMessageBlock(dom, _context5.t0, 'pink'));
                   case 18:
-                    return _context6.abrupt("return", statusTR);
+                    return _context5.abrupt("return", statusTR);
                   case 19:
-                    return _context6.abrupt("return", renderMessageTable(date, live));
-                  case 20:
+                    _context5.next = 21;
+                    return renderMessageTable(date, live);
+                  case 21:
+                    return _context5.abrupt("return", _context5.sent);
+                  case 22:
                   case "end":
-                    return _context6.stop();
+                    return _context5.stop();
                 }
-              }, _callee6, null, [[2, 7]]);
+              }, _callee5, null, [[1, 6]]);
             }));
             return _createMessageTable.apply(this, arguments);
           };
-          createMessageTable = function _createMessageTable2(_x6, _x7) {
+          createMessageTable = function _createMessageTable2(_x16, _x17) {
             return _createMessageTable.apply(this, arguments);
           };
           removePreviousMessages = function _removePreviousMessag(backwards, messageTable) {
@@ -3856,32 +4005,44 @@ function _infiniteMessageArea() {
             extr.messageTable = messageTable;
           };
           _insertPreviousMessages = function _insertPreviousMessag2() {
-            _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(backwards) {
+            _insertPreviousMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(backwards) {
               var extremity, date, live, todayDoc, doc, newMessageTable;
-              return _regenerator["default"].wrap(function _callee5$(_context5) {
-                while (1) switch (_context5.prev = _context5.next) {
+              return _regenerator["default"].wrap(function _callee4$(_context4) {
+                while (1) switch (_context4.prev = _context4.next) {
                   case 0:
                     extremity = backwards ? earliest : latest;
                     date = extremity.messageTable.date; // day in mssecs
-                    _context5.next = 4;
-                    return dateFolder.loadPrevious(date, backwards);
-                  case 4:
-                    date = _context5.sent;
-                    // backwards
-                    debug.log("insertPreviousMessages: from ".concat(backwards ? 'backwards' : 'forwards', " loadPrevious: ").concat(date));
-                    if (!(!date && !backwards && !liveMessageTable)) {
-                      _context5.next = 9;
+                    // Are we at the top of a thread?
+                    if (!(backwards && earliest.limit && date <= earliest.limit)) {
+                      _context4.next = 7;
                       break;
                     }
-                    _context5.next = 9;
+                    if (liveMessageTable) {
+                      _context4.next = 6;
+                      break;
+                    }
+                    _context4.next = 6;
                     return appendCurrentMessages();
+                  case 6:
+                    return _context4.abrupt("return", true);
+                  case 7:
+                    _context4.next = 9;
+                    return dateFolder.loadPrevious(date, backwards);
                   case 9:
-                    if (date) {
-                      _context5.next = 11;
+                    date = _context4.sent;
+                    if (!(!date && !backwards && !liveMessageTable)) {
+                      _context4.next = 13;
                       break;
                     }
-                    return _context5.abrupt("return", true);
-                  case 11:
+                    _context4.next = 13;
+                    return appendCurrentMessages();
+                  case 13:
+                    if (date) {
+                      _context4.next = 15;
+                      break;
+                    }
+                    return _context4.abrupt("return", true);
+                  case 15:
                     // done
                     live = false;
                     if (!backwards) {
@@ -3889,10 +4050,10 @@ function _infiniteMessageArea() {
                       doc = dateFolder.leafDocumentFromDate(date);
                       live = doc.sameTerm(todayDoc); // Is this todays?
                     }
-                    _context5.next = 15;
+                    _context4.next = 19;
                     return createMessageTable(date, live);
-                  case 15:
-                    newMessageTable = _context5.sent;
+                  case 19:
+                    newMessageTable = _context4.sent;
                     extremity.messageTable = newMessageTable; // move pointer to earliest
                     if (backwards ? newestFirst : !newestFirst) {
                       // put on bottom or top
@@ -3901,64 +4062,158 @@ function _infiniteMessageArea() {
                       // put on top as we scroll back
                       div.insertBefore(newMessageTable, div.firstChild);
                     }
-                    return _context5.abrupt("return", live);
-                  case 19:
+                    return _context4.abrupt("return", live);
+                  case 23:
                   case "end":
-                    return _context5.stop();
+                    return _context4.stop();
                 }
-              }, _callee5);
+              }, _callee4);
             }));
             return _insertPreviousMessages.apply(this, arguments);
           };
-          insertPreviousMessages = function _insertPreviousMessag(_x5) {
+          insertPreviousMessages = function _insertPreviousMessag(_x15) {
             return _insertPreviousMessages.apply(this, arguments);
           };
-          addMessage = function _addMessage(message, messageTable) {
-            var latest = (0, _chatLogic.mostRecentVersion)(message);
-            // const content = store.any(latest, ns.sioc('content'))
-            if ((0, _chatLogic.isDeleted)(latest) && !options.showDeletedMessages) {
-              return; // ignore deleted messaged -- @@ could also leave a placeholder
-            }
-            insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext); // fresh from elsewhere
+          _addMessage = function _addMessage3() {
+            _addMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(message, messageTable) {
+              var thread, id;
+              return _regenerator["default"].wrap(function _callee3$(_context3) {
+                while (1) switch (_context3.prev = _context3.next) {
+                  case 0:
+                    if (!((0, _chatLogic.isDeleted)(message) && !options.showDeletedMessages)) {
+                      _context3.next = 2;
+                      break;
+                    }
+                    return _context3.abrupt("return");
+                  case 2:
+                    /* if (isReplaced(message)) { //
+                      return // this is old version
+                    } */
+                    thread = _solidLogic.store.any(null, ns.sioc('has_member'), message, message.doc());
+                    id = _solidLogic.store.any(message, ns.sioc('id'), null, message.doc());
+                    if (id && !thread) {
+                      thread = _solidLogic.store.any(null, ns.sioc('has_member'), id, message.doc());
+                    }
+                    if (!options.thread) {
+                      _context3.next = 15;
+                      break;
+                    }
+                    if (!_solidLogic.store.holds(message, ns.sioc('has_reply'), options.thread)) {
+                      _context3.next = 9;
+                      break;
+                    }
+                    _context3.next = 13;
+                    break;
+                  case 9:
+                    if (!(thread && thread.sameTerm(options.thread))) {
+                      _context3.next = 12;
+                      break;
+                    }
+                    _context3.next = 13;
+                    break;
+                  case 12:
+                    return _context3.abrupt("return");
+                  case 13:
+                    _context3.next = 19;
+                    break;
+                  case 15:
+                    if (!thread) {
+                      _context3.next = 19;
+                      break;
+                    }
+                    return _context3.abrupt("return");
+                  case 19:
+                    if (messageTable.fresh) {
+                      _context3.next = 22;
+                      break;
+                    }
+                    _context3.next = 22;
+                    return insertMessageIntoTable(channelObject, messageTable, message, messageTable.fresh, options, userContext);
+                  case 22:
+                  case "end":
+                    return _context3.stop();
+                }
+              }, _callee3);
+            }));
+            return _addMessage.apply(this, arguments);
           };
-          syncMessages = function _syncMessages(about, messageTable) {
-            var displayed = {};
-            var ele, ele2;
-            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-              if (ele.AJAR_subject) {
-                displayed[ele.AJAR_subject.uri] = true;
-              }
-            }
-            var messages = _solidLogic.store.statementsMatching(about, ns.wf('message'), null, messageTable.chatDocument).map(function (st) {
-              return st.object;
-            });
-            var stored = {};
-            messages.forEach(function (m) {
-              stored[m.uri] = true;
-              if (!displayed[m.uri]) {
-                addMessage(m, messageTable);
-              }
-            });
-
-            // eslint-disable-next-line space-in-parens
-            for (ele = messageTable.firstChild; ele;) {
-              ele2 = ele.nextSibling;
-              if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
-                messageTable.removeChild(ele);
-              }
-              ele = ele2;
-            }
-            for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
-              if (ele.AJAR_subject) {
-                // Refresh thumbs up etc
-                widgets.refreshTree(ele); // Things inside may have changed too
-              }
-            }
+          addMessage = function _addMessage2(_x13, _x14) {
+            return _addMessage.apply(this, arguments);
+          };
+          _syncMessages = function _syncMessages3() {
+            _syncMessages = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(chatChannel, messageTable) {
+              var displayed, ele, ele2, messages, stored, _iterator, _step, m;
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    displayed = {};
+                    for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+                      if (ele.AJAR_subject) {
+                        displayed[ele.AJAR_subject.uri] = true;
+                      }
+                    }
+                    messages = _solidLogic.store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument);
+                    stored = {};
+                    _iterator = _createForOfIteratorHelper(messages);
+                    _context2.prev = 5;
+                    _iterator.s();
+                  case 7:
+                    if ((_step = _iterator.n()).done) {
+                      _context2.next = 15;
+                      break;
+                    }
+                    m = _step.value;
+                    stored[m.uri] = true;
+                    if (displayed[m.uri]) {
+                      _context2.next = 13;
+                      break;
+                    }
+                    _context2.next = 13;
+                    return addMessage(m, messageTable);
+                  case 13:
+                    _context2.next = 7;
+                    break;
+                  case 15:
+                    _context2.next = 20;
+                    break;
+                  case 17:
+                    _context2.prev = 17;
+                    _context2.t0 = _context2["catch"](5);
+                    _iterator.e(_context2.t0);
+                  case 20:
+                    _context2.prev = 20;
+                    _iterator.f();
+                    return _context2.finish(20);
+                  case 23:
+                    // eslint-disable-next-line space-in-parens
+                    for (ele = messageTable.firstChild; ele;) {
+                      ele2 = ele.nextSibling;
+                      if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
+                        messageTable.removeChild(ele);
+                      }
+                      ele = ele2;
+                    }
+                    for (ele = messageTable.firstChild; ele; ele = ele.nextSibling) {
+                      if (ele.AJAR_subject) {
+                        // Refresh thumbs up etc
+                        widgets.refreshTree(ele); // Things inside may have changed too
+                      }
+                    }
+                  case 25:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2, null, [[5, 17, 20, 23]]);
+            }));
+            return _syncMessages.apply(this, arguments);
+          };
+          syncMessages = function _syncMessages2(_x11, _x12) {
+            return _syncMessages.apply(this, arguments);
           }; // ///////////////////////////////////////////////////////////////////////
           // syncMessages
           // Called once per original message displayed
           /* Add a new messageTable at the top/bottom
-           */
+            */
           /* Remove message tables earlier than this one
            */
           /* Load and render message table
@@ -3992,23 +4247,33 @@ function _infiniteMessageArea() {
             statusArea: statusArea,
             div: statusArea
           }; // logged on state, pointers to user's stuff
-          // const messageTable = dom.createElement('table') // @@ check does this go in renderMessageTable
           earliest = {
             messageTable: null
           }; // Stuff about each end of the loaded days
           latest = {
             messageTable: null
           };
+          if (options.thread) {
+            thread = options.thread;
+            threadRootMessage = _solidLogic.store.any(null, ns.sioc('has_reply'), thread, thread.doc());
+            if (threadRootMessage) {
+              threadTime = _solidLogic.store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc());
+              if (threadTime) {
+                earliest.limit = new Date(threadTime.value);
+                // debug.log(' infinite: thread start at ' + earliest.limit)
+              }
+            }
+          }
           lock = false;
-          _context12.next = 30;
+          _context15.next = 34;
           return loadInitialContent();
-        case 30:
-          return _context12.abrupt("return", div);
-        case 31:
+        case 34:
+          return _context15.abrupt("return", div);
+        case 35:
         case "end":
-          return _context12.stop();
+          return _context15.stop();
       }
-    }, _callee12);
+    }, _callee15);
   }));
   return _infiniteMessageArea.apply(this, arguments);
 }
@@ -4045,7 +4310,7 @@ var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_mod
 var _accessData = __webpack_require__(/*! ../utils/keyHelpers/accessData */ "./lib/utils/keyHelpers/accessData.js");
 var _acl = __webpack_require__(/*! ../utils/keyHelpers/acl */ "./lib/utils/keyHelpers/acl.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function generatePrivateKey() {
   return (0, _utils.bytesToHex)(_secp256k.schnorr.utils.randomPrivateKey());
 }
@@ -4154,7 +4419,7 @@ function _getPrivateKey() {
           // delete invalid public key
           if (publicKey) {
             del = [$rdf.st(webId, ns.solid('publicKey'), $rdf.lit(publicKey), _solidLogic.store.sym(publicKeyDoc))];
-            debug.log(del);
+            debug.log('delete invalid publicKey ' + del);
           }
           // update new valid key
           newPublicKey = generatePublicKey(privateKey);
@@ -4195,7 +4460,7 @@ var deleteKeyAcl = /*#__PURE__*/function () {
         case 7:
           response = _context.sent;
           // this may fail if webId is not an owner
-          debug.log('delete ' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
+          debug.log('delete keyAcl' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
           _context.next = 16;
           break;
         case 11:
@@ -4207,7 +4472,7 @@ var deleteKeyAcl = /*#__PURE__*/function () {
           }
           throw new Error(_context.t0);
         case 15:
-          debug.log('delete ' + keyAclDoc.value + ' ' + _context.t0.response.status); // should test 404 and 2xx
+          debug.log('delete keyAcl' + keyAclDoc.value + ' ' + _context.t0.response.status); // should test 404 and 2xx
         case 16:
         case "end":
           return _context.stop();
@@ -4280,6 +4545,7 @@ exports.renderMessageEditor = renderMessageEditor;
 exports.renderMessageRow = renderMessageRow;
 exports.switchToEditor = switchToEditor;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
+var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _infinite = __webpack_require__(/*! ./infinite */ "./lib/chat/infinite.js");
 var _messageTools = __webpack_require__(/*! ./messageTools */ "./lib/chat/messageTools.js");
@@ -4298,8 +4564,10 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./l
 var _signature = __webpack_require__(/*! ./signature */ "./lib/chat/signature.js");
 var _keys = __webpack_require__(/*! ./keys */ "./lib/chat/keys.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function ownKeys(e, r) { var t = Object.keys(e); if (Object.getOwnPropertySymbols) { var o = Object.getOwnPropertySymbols(e); r && (o = o.filter(function (r) { return Object.getOwnPropertyDescriptor(e, r).enumerable; })), t.push.apply(t, o); } return t; }
+function _objectSpread(e) { for (var r = 1; r < arguments.length; r++) { var t = null != arguments[r] ? arguments[r] : {}; r % 2 ? ownKeys(Object(t), !0).forEach(function (r) { (0, _defineProperty2["default"])(e, r, t[r]); }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e, Object.getOwnPropertyDescriptors(t)) : ownKeys(Object(t)).forEach(function (r) { Object.defineProperty(e, r, Object.getOwnPropertyDescriptor(t, r)); }); } return e; }
+function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /**  UI code for individual messages: display them, edit them
  *
@@ -4403,158 +4671,270 @@ function creatorAndDateHorizontal(td1, creator, date, message) {
  * @param userContext
  * @returns Message Row HTML Table Element
  */
-function renderMessageRow(channelObject, message, fresh, options, userContext) {
-  var unsignedMessage = false;
-  var colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true;
-  var creator = _solidLogic.store.any(message, ns.foaf('maker'));
-  var date = _solidLogic.store.any(message, ns.dct('created'));
-  var latestVersion = (0, _chatLogic.mostRecentVersion)(message);
-  var latestVersionCreator = _solidLogic.store.any(latestVersion, ns.foaf('maker'));
-
-  // use latest content if same owner, else use original
-  var msgId = creator.uri === latestVersionCreator.uri ? latestVersion : message;
-  var content = _solidLogic.store.any(msgId, ns.sioc('content'));
-  var signature = _solidLogic.store.any(msgId, $rdf.sym("".concat(_signature.SEC, "proofValue")));
-
-  // set message object
-  var msg = (0, _signature.getBlankMsg)();
-  msg.id = msgId.uri;
-  msg.created = _solidLogic.store.any(msgId, ns.dct('created')).value;
-  msg.content = content.value;
-  msg.maker = creator.uri;
-
-  // unsigned message
-  if (!(signature !== null && signature !== void 0 && signature.value)) {
-    unsignedMessage = true;
-    debug.warn(msgId.uri + ' is unsigned'); // TODO replace with UI (colored message ?)
-  } else {
-    // signed message, get public key and check signature
-    (0, _keys.getPublicKey)(creator).then(function (publicKey) {
-      debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey);
-      if (!publicKey) {
-        // TODO try to recreate the publicKey
-        // if(me.uri === creator.uri) await getPrivateKey(creator)
-        debug.warn('message is signed but ' + creator.uri + ' is missing publicKey');
-      }
-      // check that publicKey is a valid hex string
-      var regex = /[0-9A-Fa-f]{6}/g;
-      if (!(publicKey !== null && publicKey !== void 0 && publicKey.match(regex))) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey);
-      // verify signature
-      else if (signature !== null && signature !== void 0 && signature.value && !(0, _signature.verifySignature)(signature === null || signature === void 0 ? void 0 : signature.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id);
-    });
-  }
-  var originalMessage = (0, _chatLogic.originalVersion)(message);
-  var edited = !message.sameTerm(originalMessage);
-  var sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()); // In message
-
-  var messageRow = dom.createElement('tr');
-  if (unsignedMessage) messageRow.setAttribute('style', 'background-color: red');
-  messageRow.AJAR_date = sortDate.value;
-  messageRow.AJAR_subject = message;
-  var td1 = dom.createElement('td');
-  messageRow.appendChild(td1);
-  if (!options.authorDateOnLeft) {
-    var img = dom.createElement('img');
-    img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;');
-    widgets.setImage(img, creator);
-    td1.appendChild(img);
-  } else {
-    creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message);
-  }
-  var bothDates = widgets.shortDate(sortDate.value);
-  if (edited) {
-    bothDates += ' ... ' + widgets.shortDate(date.value);
-  }
-
-  // Render the content ot the message itself
-  var td2 = messageRow.appendChild(dom.createElement('td'));
-  if (!options.authorDateOnLeft) {
-    creatorAndDateHorizontal(td2, creator, bothDates,
-    // widgets.shortDate(dateString)
-    message);
-  }
-  var text = content.value.trim();
-  var isURI = /^https?:\/[^ <>]*$/i.test(text);
-  var para = null;
-  if (isURI) {
-    var isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text); // @@ Should use content-type not URI
-    if (isImage && options.expandImagesInline) {
-      var _img = elementForImageURI(text, options);
-      td2.appendChild(_img);
-    } else {
-      // Link but not Image
-      var anc = td2.appendChild(dom.createElement('a'));
-      para = anc.appendChild(dom.createElement('p'));
-      anc.href = text;
-      para.textContent = text;
-      td2.appendChild(anc);
-    }
-  } else {
-    // text
-    para = dom.createElement('p');
-    td2.appendChild(para);
-    para.textContent = text;
-  }
-  if (para) {
-    var bgcolor = colorizeByAuthor ? pad.lightColorHash(creator) : getBgColor(fresh);
-    para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';');
-  }
-  function getBgColor(fresh) {
-    return fresh ? '#e8ffe8' : 'white';
-  }
-
-  // Sentiment strip
-  var strip = (0, _messageTools.sentimentStripLinked)(message, message.doc());
-  if (strip.children.length) {
-    td2.appendChild(dom.createElement('br'));
-    td2.appendChild(strip);
-  }
-
-  // Message tool bar button
-  var td3 = dom.createElement('td');
-  messageRow.appendChild(td3);
-  var toolsButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', '...');
-  td3.appendChild(toolsButton);
-  toolsButton.addEventListener('click', function (_event) {
-    if (messageRow.toolTR) {
-      // already got a toolbar? Toogle
-      messageRow.parentNode.removeChild(messageRow.toolTR);
-      delete messageRow.toolTR;
-      return;
-    }
-    var toolsTR = dom.createElement('tr');
-    var tools = (0, _messageTools.messageToolbar)(message, messageRow, userContext, channelObject);
-    tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;'; // @@ fix
-    if (messageRow.nextSibling) {
-      messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling);
-    } else {
-      messageRow.parentElement.appendChild(toolsTR);
-    }
-    messageRow.toolTR = toolsTR;
-    toolsTR.appendChild(dom.createElement('td')); // left
-    var toolsTD = toolsTR.appendChild(dom.createElement('td'));
-    toolsTR.appendChild(dom.createElement('td')); // right
-    toolsTD.appendChild(tools);
-  });
-  return messageRow;
+function renderMessageRow(_x, _x2, _x3, _x4, _x5) {
+  return _renderMessageRow.apply(this, arguments);
 } // END OF RENDERMESSAGE
+function _renderMessageRow() {
+  _renderMessageRow = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(channelObject, message, fresh, options, userContext) {
+    var unsignedMessage, colorizeByAuthor, creator, date, latestVersion, latestVersionCreator, msgId, content, versions, replies, thread, straightReplies, _iterator2, _step2, reply, signature, msg, originalMessage, edited, sortDate, messageRow, td1, img, bothDates, td2, text, isURI, para, isImage, _img, anc, bgcolor, getBgColor, strip, td3, toolsButton;
+    return _regenerator["default"].wrap(function _callee9$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          getBgColor = function _getBgColor(fresh) {
+            return fresh ? '#e8ffe8' : 'white';
+          };
+          unsignedMessage = false;
+          colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true; // const id = store.any(latestVersion, ns.sioc('id'))
+          // const replies = store.each(latestVersion, ns.sioc('has_reply'))
+          creator = _solidLogic.store.any(message, ns.foaf('maker'));
+          date = _solidLogic.store.any(message, ns.dct('created'));
+          _context10.next = 7;
+          return (0, _chatLogic.mostRecentVersion)(message);
+        case 7:
+          latestVersion = _context10.sent;
+          latestVersionCreator = _solidLogic.store.any(latestVersion, ns.foaf('maker')); // use latest content if same owner, else use original
+          // this is may be too strict. Should we find latest valid version if any ?
+          msgId = creator.uri === (latestVersionCreator === null || latestVersionCreator === void 0 ? void 0 : latestVersionCreator.uri) ? latestVersion : message;
+          content = _solidLogic.store.any(msgId, ns.sioc('content'));
+          _context10.next = 13;
+          return (0, _chatLogic.allVersions)(msgId);
+        case 13:
+          versions = _context10.sent;
+          if (versions.length > 1) {
+            debug.log('renderMessageRow versions: ', versions.join(',  '));
+          }
+          // be tolerant in accepting replies on any version of a message
+          replies = versions.map(function (version) {
+            return _solidLogic.store.each(version, ns.sioc('has_reply'));
+          }).flat();
+          thread = null;
+          straightReplies = [];
+          _iterator2 = _createForOfIteratorHelper(replies);
+          try {
+            for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+              reply = _step2.value;
+              if (_solidLogic.store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
+                thread = reply;
+                debug.log('renderMessageRow: found thread: ' + thread);
+              } else {
+                straightReplies.push(reply);
+              }
+            }
+          } catch (err) {
+            _iterator2.e(err);
+          } finally {
+            _iterator2.f();
+          }
+          if (straightReplies.length > 1) {
+            debug.log('renderMessageRow: found normal replies: ', straightReplies);
+          }
+          if (!thread) {
+            // thread = store.any(message, ns.sioc('has_reply'))
+            thread = _solidLogic.store.any(null, ns.sioc('has_member'), message);
+          }
+          // debug.log('@@@@ is thread' + thread)
 
-function switchToEditor(messageRow, message, channelObject, userContext) {
-  var messageTable = messageRow.parentNode;
-  var editRow = renderMessageEditor(channelObject, messageTable, userContext, channelObject.options, (0, _chatLogic.mostRecentVersion)(message));
-  messageTable.insertBefore(editRow, messageRow);
-  editRow.originalRow = messageRow;
-  messageRow.style.visibility = 'hidden'; // Hide the original message. unhide if user cancels edit
+          // get signature
+          signature = _solidLogic.store.any(msgId, $rdf.sym("".concat(_signature.SEC, "proofValue"))); // set proof message object
+          msg = (0, _signature.getBlankMsg)();
+          msg.id = msgId.uri;
+          msg.created = _solidLogic.store.any(msgId, ns.dct('created')).value;
+          msg.content = content.value;
+          msg.maker = creator.uri;
+
+          // verify signature
+          if (!(signature !== null && signature !== void 0 && signature.value)) {
+            // unsigned message
+            unsignedMessage = true;
+            debug.warn(msgId.uri + ' is unsigned'); // TODO replace with UI (colored message ?)
+          } else {
+            // signed message, get public key and check signature
+            (0, _keys.getPublicKey)(creator).then(function (publicKey) {
+              // debug.log(creator.uri + '\n' + msg.created + '\n' + msg.id + '\n' + publicKey)
+              if (!publicKey) {
+                debug.warn('message is signed but ' + creator.uri + ' is missing publicKey');
+              }
+              // check that publicKey is a valid hex string
+              var regex = /[0-9A-Fa-f]{6}/g;
+              if (!(publicKey !== null && publicKey !== void 0 && publicKey.match(regex))) debug.warn('invalid publicKey hex string\n' + creator.uri + '\n' + publicKey);
+              // verify signature
+              else if (signature !== null && signature !== void 0 && signature.value && !(0, _signature.verifySignature)(signature === null || signature === void 0 ? void 0 : signature.value, msg, publicKey)) debug.warn('invalid signature\n' + msg.id);
+            });
+          }
+          _context10.next = 31;
+          return (0, _chatLogic.originalVersion)(message);
+        case 31:
+          originalMessage = _context10.sent;
+          edited = !message.sameTerm(originalMessage); // @@ load it first  @@   Or display the new data at the old date.
+          // @@@ kludge!
+          sortDate = _solidLogic.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) || _solidLogic.store.the(message, ns.dct('created'), null, message.doc()); // In message
+          messageRow = dom.createElement('tr');
+          if (unsignedMessage) messageRow.setAttribute('style', 'background-color: red');
+          messageRow.AJAR_date = sortDate.value;
+          messageRow.AJAR_subject = message;
+          td1 = dom.createElement('td');
+          messageRow.appendChild(td1);
+          if (!options.authorDateOnLeft) {
+            img = dom.createElement('img');
+            img.setAttribute('style', 'max-height: 2.5em; max-width: 2.5em; border-radius: 0.5em; margin: auto;');
+            widgets.setImage(img, creator);
+            td1.appendChild(img);
+          } else {
+            creatorAndDate(td1, creator, widgets.shortDate(sortDate.value), message);
+          }
+          bothDates = widgets.shortDate(sortDate.value);
+          if (edited) {
+            bothDates += ' ... ' + widgets.shortDate(date.value);
+          }
+
+          // Render the content ot the message itself
+          td2 = messageRow.appendChild(dom.createElement('td'));
+          if (!options.authorDateOnLeft) {
+            creatorAndDateHorizontal(td2, creator, bothDates,
+            // widgets.shortDate(dateString)
+            message);
+          }
+          text = content ? content.value.trim() : '??? no content?';
+          isURI = /^https?:\/[^ <>]*$/i.test(text);
+          para = null;
+          if (isURI) {
+            isImage = /\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(text); // @@ Should use content-type not URI
+            if (isImage && options.expandImagesInline) {
+              _img = elementForImageURI(text, options);
+              td2.appendChild(_img);
+            } else {
+              // Link but not Image
+              anc = td2.appendChild(dom.createElement('a'));
+              para = anc.appendChild(dom.createElement('p'));
+              anc.href = text;
+              para.textContent = text;
+              td2.appendChild(anc);
+            }
+          } else {
+            // text
+            para = dom.createElement('p');
+            td2.appendChild(para);
+            para.textContent = text;
+          }
+          if (para) {
+            bgcolor = colorizeByAuthor ? pad.lightColorHash(creator) : getBgColor(fresh);
+            para.setAttribute('style', messageBodyStyle + 'background-color: ' + bgcolor + ';');
+          }
+          _context10.next = 52;
+          return (0, _messageTools.sentimentStripLinked)(message, message.doc());
+        case 52:
+          strip = _context10.sent;
+          if (strip.children.length) {
+            td2.appendChild(dom.createElement('br'));
+            td2.appendChild(strip);
+          }
+
+          // Message tool bar button
+          td3 = dom.createElement('td');
+          messageRow.appendChild(td3);
+          toolsButton = widgets.button(dom, _iconBase.icons.iconBase + 'noun_243787.svg', '...');
+          td3.appendChild(toolsButton);
+          toolsButton.addEventListener('click', /*#__PURE__*/function () {
+            var _ref4 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8(_event) {
+              var toolsTR, tools, toolsTD;
+              return _regenerator["default"].wrap(function _callee8$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    if (!messageRow.toolTR) {
+                      _context9.next = 4;
+                      break;
+                    }
+                    // already got a toolbar? Toogle
+                    messageRow.parentNode.removeChild(messageRow.toolTR);
+                    delete messageRow.toolTR;
+                    return _context9.abrupt("return");
+                  case 4:
+                    toolsTR = dom.createElement('tr');
+                    _context9.next = 7;
+                    return (0, _messageTools.messageToolbar)(message, messageRow, _objectSpread(_objectSpread({}, userContext), {}, {
+                      chatOptions: options
+                    }), channelObject);
+                  case 7:
+                    tools = _context9.sent;
+                    tools.style = 'border: 0.05em solid #888; border-radius: 0 0 0.7em 0.7em;  border-top: 0; height:3.5em; background-color: #fff;'; // @@ fix
+                    if (messageRow.nextSibling) {
+                      messageRow.parentElement.insertBefore(toolsTR, messageRow.nextSibling);
+                    } else {
+                      messageRow.parentElement.appendChild(toolsTR);
+                    }
+                    messageRow.toolTR = toolsTR;
+                    toolsTR.appendChild(dom.createElement('td')); // left
+                    toolsTD = toolsTR.appendChild(dom.createElement('td'));
+                    toolsTR.appendChild(dom.createElement('td')); // right
+                    toolsTD.appendChild(tools);
+                  case 15:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee8);
+            }));
+            return function (_x20) {
+              return _ref4.apply(this, arguments);
+            };
+          }());
+          if (thread && options.showThread) {
+            // debug.log('  message has thread ' + thread)
+            td3.appendChild(widgets.button(dom, _iconBase.icons.iconBase + 'noun_1180164.svg',
+            // right arrow .. @@ think of stg better
+            'see thread', function (_e) {
+              // debug.log('@@@@ Calling showThread thread ' + thread)
+              options.showThread(thread, options);
+            }));
+          }
+          return _context10.abrupt("return", messageRow);
+        case 61:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee9);
+  }));
+  return _renderMessageRow.apply(this, arguments);
+}
+function switchToEditor(_x6, _x7, _x8, _x9) {
+  return _switchToEditor.apply(this, arguments);
 }
 /*       Control for a new message -- or editing an old message ***************
  *
  */
+function _switchToEditor() {
+  _switchToEditor = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(messageRow, message, channelObject, userContext) {
+    var messageTable, editRow;
+    return _regenerator["default"].wrap(function _callee10$(_context11) {
+      while (1) switch (_context11.prev = _context11.next) {
+        case 0:
+          messageTable = messageRow.parentNode;
+          _context11.t0 = renderMessageEditor;
+          _context11.t1 = channelObject;
+          _context11.t2 = messageTable;
+          _context11.t3 = userContext;
+          _context11.t4 = channelObject.options;
+          _context11.next = 8;
+          return (0, _chatLogic.mostRecentVersion)(message);
+        case 8:
+          _context11.t5 = _context11.sent;
+          editRow = (0, _context11.t0)(_context11.t1, _context11.t2, _context11.t3, _context11.t4, _context11.t5);
+          messageTable.insertBefore(editRow, messageRow);
+          editRow.originalRow = messageRow;
+          messageRow.style.visibility = 'hidden'; // Hide the original message. unhide if user cancels edit
+        case 13:
+        case "end":
+          return _context11.stop();
+      }
+    }, _callee10);
+  }));
+  return _switchToEditor.apply(this, arguments);
+}
 function renderMessageEditor(channelObject, messageTable, userContext, options, originalMessage) {
   function revertEditing(messageEditor) {
     messageEditor.originalRow.style.visibility = 'visible'; // restore read-only version
     messageEditor.parentNode.removeChild(messageEditor);
   }
-  function handleFieldInput(_x) {
+  function handleFieldInput(_x10) {
     return _handleFieldInput.apply(this, arguments);
   }
   function _handleFieldInput() {
@@ -4572,68 +4952,85 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     }));
     return _handleFieldInput.apply(this, arguments);
   }
-  function sendMessage(_x2, _x3) {
+  function sendMessage(_x11, _x12) {
     return _sendMessage.apply(this, arguments);
   } // sendMessage
   //    DRAG AND DROP
   function _sendMessage() {
-    _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(text, fromMainField) {
-      var sendComplete, message, statusArea;
-      return _regenerator["default"].wrap(function _callee6$(_context7) {
-        while (1) switch (_context7.prev = _context7.next) {
+    _sendMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(text, fromMainField) {
+      var sendComplete, _sendComplete, message, statusArea;
+      return _regenerator["default"].wrap(function _callee7$(_context8) {
+        while (1) switch (_context8.prev = _context8.next) {
           case 0:
-            sendComplete = function _sendComplete(message, _text2) {
-              (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext); // not green
+            _sendComplete = function _sendComplete3() {
+              _sendComplete = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6(message, _text2) {
+                var oldRow;
+                return _regenerator["default"].wrap(function _callee6$(_context7) {
+                  while (1) switch (_context7.prev = _context7.next) {
+                    case 0:
+                      _context7.next = 2;
+                      return (0, _infinite.insertMessageIntoTable)(channelObject, messageTable, message, false, options, userContext);
+                    case 2:
+                      // not green
 
-              if (originalMessage) {
-                // editing another message
-                var oldRow = messageEditor.originalRow;
-                // oldRow.style.display = '' // restore read-only version, re-attack
-                if (oldRow.parentNode) {
-                  oldRow.parentNode.removeChild(oldRow); // No longer needed old version
-                } else {
-                  debug.warn('No parentNode on old message ' + oldRow.textContent);
-                  oldRow.style.backgroundColor = '#fee';
-                  oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
-                }
-                messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
-              } else {
-                if (fromMainField) {
-                  field.value = ''; // clear from out for reuse
-                  field.setAttribute('style', messageBodyStyle);
-                  field.disabled = false;
-                  field.scrollIntoView(options.newestFirst); // allign bottom (top)
-                  field.focus(); // Start typing next line immediately
-                  field.select();
-                }
-              }
-              // await channelObject.div.refresh() // Add new day if nec  @@ add back
+                      if (originalMessage) {
+                        // editing another message
+                        oldRow = messageEditor.originalRow; // oldRow.style.display = '' // restore read-only version, re-attack
+                        if (oldRow.parentNode) {
+                          oldRow.parentNode.removeChild(oldRow); // No longer needed old version
+                        } else {
+                          debug.warn('No parentNode on old message ' + oldRow.textContent);
+                          oldRow.style.backgroundColor = '#fee';
+                          oldRow.style.visibility = 'hidden'; // @@ FIX THIS AND REMOVE FROM DOM INSTEAD
+                        }
+                        messageEditor.parentNode.removeChild(messageEditor); // no longer need editor
+                      } else {
+                        if (fromMainField) {
+                          field.value = ''; // clear from out for reuse
+                          field.setAttribute('style', messageBodyStyle);
+                          field.disabled = false;
+                          field.scrollIntoView(options.newestFirst); // allign bottom (top)
+                          field.focus(); // Start typing next line immediately
+                          field.select();
+                        }
+                      }
+                      // await channelObject.div.refresh() // Add new day if nec  @@ add back
+                    case 3:
+                    case "end":
+                      return _context7.stop();
+                  }
+                }, _callee6);
+              }));
+              return _sendComplete.apply(this, arguments);
             };
-            // const me = authn.currentUser() // Must be logged on or wuld have got login button
+            sendComplete = function _sendComplete2(_x18, _x19) {
+              return _sendComplete.apply(this, arguments);
+            }; // const me = authn.currentUser() // Must be logged on or wuld have got login button
             if (fromMainField) {
               field.setAttribute('style', messageBodyStyle + 'color: #bbb;'); // pendingedit
               field.disabled = true;
             }
-            _context7.prev = 2;
-            _context7.next = 5;
-            return channelObject.updateMessage(text, originalMessage);
-          case 5:
-            message = _context7.sent;
-            _context7.next = 13;
+            _context8.prev = 3;
+            _context8.next = 6;
+            return channelObject.updateMessage(text, originalMessage, null, options.thread);
+          case 6:
+            message = _context8.sent;
+            _context8.next = 14;
             break;
-          case 8:
-            _context7.prev = 8;
-            _context7.t0 = _context7["catch"](2);
+          case 9:
+            _context8.prev = 9;
+            _context8.t0 = _context8["catch"](3);
             statusArea = userContext.statusArea || messageEditor;
-            statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context7.t0));
-            return _context7.abrupt("return");
-          case 13:
-            sendComplete(message, text);
+            statusArea.appendChild(widgets.errorMessageBlock(dom, 'Error writing message: ' + _context8.t0));
+            return _context8.abrupt("return");
           case 14:
+            _context8.next = 16;
+            return sendComplete(message, text);
+          case 16:
           case "end":
-            return _context7.stop();
+            return _context8.stop();
         }
-      }, _callee6, null, [[2, 8]]);
+      }, _callee7, null, [[3, 9]]);
     }));
     return _sendMessage.apply(this, arguments);
   }
@@ -4652,7 +5049,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee);
       }));
-      return function (_x4, _x5) {
+      return function (_x13, _x14) {
         return _ref.apply(this, arguments);
       };
     }());
@@ -4696,7 +5093,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
         }
       }, _callee2, null, [[1, 11, 14, 17]]);
     }));
-    return function droppedURIHandler(_x6) {
+    return function droppedURIHandler(_x15) {
       return _ref2.apply(this, arguments);
     };
   }();
@@ -4707,7 +5104,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
       imageDoc = $rdf.sym(chatDocument.dir().uri + 'Image_' + Date.now() + '.png');
       return imageDoc;
     }
-    function tookPicture(_x7) {
+    function tookPicture(_x16) {
       return _tookPicture.apply(this, arguments);
     } // Body of turnOnInput
     function _tookPicture() {
@@ -4784,7 +5181,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
           }
         }, _callee3);
       }));
-      return function (_x8) {
+      return function (_x17) {
         return _ref3.apply(this, arguments);
       };
     }(), false);
@@ -4845,7 +5242,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     turnOnInput();
     Object.assign(context, userContext);
     (0, _bookmarks.findBookmarkDocument)(context).then(function (_context) {
-      // console.log('Bookmark file: ' + context.bookmarkDocument)
+      // debug.log('Bookmark file: ' + context.bookmarkDocument)
     });
   });
   return messageEditor;
@@ -4868,12 +5265,15 @@ var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_m
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
+exports.ActionClassFromEmoji = ActionClassFromEmoji;
+exports.emojiFromAction = emojiFromAction;
+exports.emojiFromActionClass = emojiFromActionClass;
 exports.messageToolbar = messageToolbar;
 exports.sentimentStrip = sentimentStrip;
 exports.sentimentStripLinked = sentimentStripLinked;
 var _regenerator = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/regenerator */ "./node_modules/@babel/runtime/regenerator/index.js"));
-var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
+var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ "./node_modules/@babel/runtime/helpers/asyncToGenerator.js"));
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/debug.js"));
 var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
@@ -4885,7 +5285,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var _chatLogic = __webpack_require__(/*! ./chatLogic */ "./lib/chat/chatLogic.js");
 var _message = __webpack_require__(/*! ./message */ "./lib/chat/message.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Tools for doing things with a message
  * Let us be creative here.  Allow all sorts of things to
@@ -4914,30 +5314,45 @@ var PENCIL_ICON = 'noun_253504.svg'; // edit a message
 // const SPANNER_ICON = 'noun_344563.svg' -> settings
 var THUMBS_UP_ICON = 'noun_1384132.svg';
 var THUMBS_DOWN_ICON = 'noun_1384135.svg';
+var REPLY_ICON = 'noun-reply-5506924.svg';
 /**
  * Emoji in Unicode
  */
-var emoji = {};
-emoji[ns.schema('AgreeAction')] = '👍';
-emoji[ns.schema('DisagreeAction')] = '👎';
-emoji[ns.schema('EndorseAction')] = '⭐️';
-emoji[ns.schema('LikeAction')] = '❤️';
+var emojiMap = {};
+emojiMap[ns.schema('AgreeAction')] = '👍';
+emojiMap[ns.schema('DisagreeAction')] = '👎';
+emojiMap[ns.schema('EndorseAction')] = '⭐️';
+emojiMap[ns.schema('LikeAction')] = '❤️';
+function emojiFromActionClass(action) {
+  return emojiMap[action] || null;
+}
+function ActionClassFromEmoji(emoji) {
+  for (var a in emojiMap) {
+    if (emojiMap[a] === emoji) {
+      return rdf.sym(a.slice(1, -1)); // remove < >
+    }
+  }
+  return null;
+}
+
+// Allow the action to give its own emoji as content,
+// or get the emoji from the class of action.
+function emojiFromAction(action) {
+  var content = _solidLogic.store.any(action, ns.sioc('content'), null, action.doc());
+  if (content) return content;
+  var klass = _solidLogic.store.any(action, ns.rdf('type'), null, action.doc());
+  if (klass) {
+    var em = emojiFromActionClass(klass);
+    if (em) return em;
+  }
+  return '⬜️';
+}
 
 /**
  * Create strip of sentiments expressed
  */
-function sentimentStrip(target, doc) {
-  // alain seems not used
-  var latest = (0, _chatLogic.mostRecentVersion)(target);
-  var actions = _solidLogic.store.holds(latest, ns.schema('dateDeleted').value, null, latest.doc()) ? _solidLogic.store.each(null, ns.schema('target'), target, doc) : [];
-  var sentiments = actions.map(function (a) {
-    return _solidLogic.store.any(a, ns.rdf('type'), null, doc);
-  });
-  sentiments.sort();
-  var strings = sentiments.map(function (x) {
-    return emoji[x] || '';
-  });
-  return dom.createTextNode(strings.join(' '));
+function sentimentStrip(_x, _x2) {
+  return _sentimentStrip.apply(this, arguments);
 }
 /**
  * Create strip of sentiments expressed, with hyperlinks
@@ -4945,276 +5360,441 @@ function sentimentStrip(target, doc) {
  * @param target {NamedNode} - The thing about which they are expressed
  * @param doc {NamedNode} - The document in which they are expressed
  */
-function sentimentStripLinked(target, doc) {
-  var strip = dom.createElement('span');
-  function refresh() {
-    strip.innerHTML = '';
-    var actions = (0, _chatLogic.mostRecentVersion)(target).uri !== ns.schema('dateDeleted').uri ? _solidLogic.store.each(null, ns.schema('target'), target, doc) : [];
-    var sentiments = actions.map(function (a) {
-      return [_solidLogic.store.any(a, ns.rdf('type'), null, doc), _solidLogic.store.any(a, ns.schema('agent'), null, doc)];
-    });
-    sentiments.sort();
-    sentiments.forEach(function (ss) {
-      var _ss = (0, _slicedToArray2["default"])(ss, 2),
-        theClass = _ss[0],
-        agent = _ss[1];
-      var res;
-      if (agent) {
-        res = dom.createElement('a');
-        res.setAttribute('href', agent.uri);
-      } else {
-        res = dom.createTextNode('');
+function _sentimentStrip() {
+  _sentimentStrip = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(target, doc) {
+    var versions, actions, strings;
+    return _regenerator["default"].wrap(function _callee$(_context) {
+      while (1) switch (_context.prev = _context.next) {
+        case 0:
+          _context.next = 2;
+          return (0, _chatLogic.allVersions)(target);
+        case 2:
+          versions = _context.sent;
+          // debug.log('sentimentStrip Versions for ' + target, versions)
+          actions = versions.map(function (version) {
+            return _solidLogic.store.each(null, ns.schema('target'), version, doc);
+          }).flat(); // debug.log('sentimentStrip: Actions for ' + target, actions)
+          strings = actions.map(function (action) {
+            return emojiFromAction(action) || '';
+          });
+          return _context.abrupt("return", dom.createTextNode(strings.join(' ')));
+        case 6:
+        case "end":
+          return _context.stop();
       }
-      res.textContent = emoji[theClass] || '*';
-      strip.appendChild(res);
-    });
-  }
-  refresh();
-  strip.refresh = refresh;
-  return strip;
+    }, _callee);
+  }));
+  return _sentimentStrip.apply(this, arguments);
+}
+function sentimentStripLinked(_x3, _x4) {
+  return _sentimentStripLinked.apply(this, arguments);
 }
 /**
  * Creates a message toolbar component
  */
-function messageToolbar(message, messageRow, userContext, channelObject) {
-  function deleteMessage() {
-    return _deleteMessage.apply(this, arguments);
-  }
-  function _deleteMessage() {
-    _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
-      var author, msg, area;
-      return _regenerator["default"].wrap(function _callee2$(_context2) {
-        while (1) switch (_context2.prev = _context2.next) {
-          case 0:
-            author = _solidLogic.store.any(message, ns.foaf('maker'));
-            if (me) {
-              _context2.next = 5;
-              break;
+function _sentimentStripLinked() {
+  _sentimentStripLinked = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(target, doc) {
+    var strip, refresh, _refresh;
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
+        case 0:
+          _refresh = function _refresh3() {
+            _refresh = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+              var versions, actions, sentiments;
+              return _regenerator["default"].wrap(function _callee2$(_context2) {
+                while (1) switch (_context2.prev = _context2.next) {
+                  case 0:
+                    strip.innerHTML = '';
+                    if (!(0, _chatLogic.isDeleted)(target)) {
+                      _context2.next = 3;
+                      break;
+                    }
+                    return _context2.abrupt("return", strip);
+                  case 3:
+                    _context2.next = 5;
+                    return (0, _chatLogic.allVersions)(target);
+                  case 5:
+                    versions = _context2.sent;
+                    // debug.log('sentimentStripLinked: Versions for ' + target, versions)
+                    actions = versions.map(function (version) {
+                      return _solidLogic.store.each(null, ns.schema('target'), version, doc);
+                    }).flat(); // debug.log('sentimentStripLinked: Actions for ' + target, actions)
+                    if (!(actions.length === 0)) {
+                      _context2.next = 9;
+                      break;
+                    }
+                    return _context2.abrupt("return", strip);
+                  case 9:
+                    sentiments = actions.map(function (a) {
+                      return [_solidLogic.store.any(a, ns.rdf('type'), null, doc), _solidLogic.store.any(a, ns.sioc('content'), null, doc), _solidLogic.store.any(a, ns.schema('agent'), null, doc)];
+                    }); // debug.log('  Actions sentiments ', sentiments)
+                    sentiments.sort();
+                    sentiments.forEach(function (ss) {
+                      var _ss = (0, _slicedToArray2["default"])(ss, 3),
+                        theClass = _ss[0],
+                        content = _ss[1],
+                        agent = _ss[2];
+                      var res;
+                      if (agent) {
+                        res = dom.createElement('a');
+                        res.setAttribute('href', agent.uri);
+                      } else {
+                        res = dom.createTextNode('');
+                      }
+                      res.textContent = content || emojiMap[theClass] || '⬜️';
+                      strip.appendChild(res);
+                    });
+                    // debug.log('  Actions strip ', strip)
+                  case 12:
+                  case "end":
+                    return _context2.stop();
+                }
+              }, _callee2);
+            }));
+            return _refresh.apply(this, arguments);
+          };
+          refresh = function _refresh2() {
+            return _refresh.apply(this, arguments);
+          };
+          strip = dom.createElement('span');
+          refresh().then(debug.log('sentimentStripLinked: sentimentStripLinked async refreshed'));
+          strip.refresh = refresh;
+          return _context3.abrupt("return", strip);
+        case 6:
+        case "end":
+          return _context3.stop();
+      }
+    }, _callee3);
+  }));
+  return _sentimentStripLinked.apply(this, arguments);
+}
+function messageToolbar(_x5, _x6, _x7, _x8) {
+  return _messageToolbar.apply(this, arguments);
+}
+function _messageToolbar() {
+  _messageToolbar = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee10(message, messageRow, userContext, channelObject) {
+    var deleteMessage, _deleteMessage, editMessage, _editMessage, replyInThread, _replyInThread, div, closeToolbar, deleteThingThen, _deleteThingThen, me, sentimentButton, context1, cancelButton;
+    return _regenerator["default"].wrap(function _callee10$(_context10) {
+      while (1) switch (_context10.prev = _context10.next) {
+        case 0:
+          sentimentButton = function _sentimentButton(context, target, icon, actionClass, doc, mutuallyExclusive) {
+            function setColor() {
+              button.style.backgroundColor = action ? 'yellow' : 'white';
             }
-            alert('You can\'t delete the message, you are not logged in.');
-            _context2.next = 22;
-            break;
-          case 5:
-            if (!me.sameTerm(author)) {
-              _context2.next = 21;
-              break;
+            var button = widgets.button(dom, icon, utils.label(actionClass), /*#__PURE__*/function () {
+              var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(_event) {
+                var insertMe, dirty, i, a;
+                return _regenerator["default"].wrap(function _callee4$(_context4) {
+                  while (1) switch (_context4.prev = _context4.next) {
+                    case 0:
+                      if (!action) {
+                        _context4.next = 7;
+                        break;
+                      }
+                      _context4.next = 3;
+                      return deleteThingThen(action);
+                    case 3:
+                      action = null;
+                      setColor();
+                      _context4.next = 25;
+                      break;
+                    case 7:
+                      // no action
+                      action = widgets.newThing(doc);
+                      insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
+                      _context4.next = 11;
+                      return _solidLogic.store.updater.update([], insertMe);
+                    case 11:
+                      setColor();
+                      if (!mutuallyExclusive) {
+                        _context4.next = 25;
+                        break;
+                      }
+                      // Delete incompative sentiments
+                      dirty = false;
+                      i = 0;
+                    case 15:
+                      if (!(i < mutuallyExclusive.length)) {
+                        _context4.next = 24;
+                        break;
+                      }
+                      a = existingAction(mutuallyExclusive[i]);
+                      if (!a) {
+                        _context4.next = 21;
+                        break;
+                      }
+                      _context4.next = 20;
+                      return deleteThingThen(a);
+                    case 20:
+                      // but how refresh? refreshTree the parent?
+                      dirty = true;
+                    case 21:
+                      i++;
+                      _context4.next = 15;
+                      break;
+                    case 24:
+                      if (dirty) {
+                        // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
+                        widgets.refreshTree(messageRow); // requires them all to be immediate siblings
+                      }
+                    case 25:
+                    case "end":
+                      return _context4.stop();
+                  }
+                }, _callee4);
+              }));
+              return function (_x11) {
+                return _ref.apply(this, arguments);
+              };
+            }());
+            function existingAction(actionClass) {
+              var actions = _solidLogic.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
+                return _solidLogic.store.holds(x, ns.rdf('type'), actionClass, doc);
+              }).filter(function (x) {
+                return _solidLogic.store.holds(x, ns.schema('target'), target, doc);
+              });
+              return actions.length ? actions[0] : null;
             }
-            _context2.prev = 6;
-            _context2.next = 9;
-            return channelObject.deleteMessage(message);
-          case 9:
-            _context2.next = 18;
-            break;
-          case 11:
-            _context2.prev = 11;
-            _context2.t0 = _context2["catch"](6);
-            msg = 'Error deleting messaage ' + _context2.t0;
-            debug.warn(msg);
-            alert(msg);
-            area = userContext.statusArea || messageRow.parentNode;
-            area.appendChild(widgets.errorMessageBlock(dom, msg));
-          case 18:
-            messageRow.parentNode.removeChild(messageRow);
-            _context2.next = 22;
-            break;
-          case 21:
-            alert('You can\'t delete the message, you are not logged in as the author, ' + author);
-          case 22:
-            closeToolbar();
-          case 23:
-          case "end":
-            return _context2.stop();
-        }
-      }, _callee2, null, [[6, 11]]);
-    }));
-    return _deleteMessage.apply(this, arguments);
-  }
-  function editMessage(_x) {
-    return _editMessage.apply(this, arguments);
-  } // alain TODO allow chat owner to fully delete message + sentiments and replacing messages
-  function _editMessage() {
-    _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(messageRow) {
-      return _regenerator["default"].wrap(function _callee3$(_context3) {
-        while (1) switch (_context3.prev = _context3.next) {
-          case 0:
-            if (me.value === _solidLogic.store.any(message, ns.foaf('maker')).value) {
-              closeToolbar(); // edit is a one-off action
-              (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
-            }
-          case 1:
-          case "end":
-            return _context3.stop();
-        }
-      }, _callee3);
-    }));
-    return _editMessage.apply(this, arguments);
-  }
-  var div = dom.createElement('div');
-  // is message deleted ?
-  if ((0, _chatLogic.mostRecentVersion)(message).value === ns.schema('dateDeleted').value) return div;
-  function closeToolbar() {
-    div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
-  }
-  function deleteThingThen(_x2) {
-    return _deleteThingThen.apply(this, arguments);
-  } // Things only the original author can do
-  function _deleteThingThen() {
-    _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(x) {
-      return _regenerator["default"].wrap(function _callee4$(_context4) {
-        while (1) switch (_context4.prev = _context4.next) {
-          case 0:
-            _context4.next = 2;
-            return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
-          case 2:
-          case "end":
-            return _context4.stop();
-        }
-      }, _callee4);
-    }));
-    return _deleteThingThen.apply(this, arguments);
-  }
-  var me = _solidLogic.authn.currentUser(); // If already logged on
-  if (me && _solidLogic.store.holds(message, ns.foaf('maker'), me)) {
-    // button to delete the message
-    div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage));
-    // button to edit the message
-    div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + PENCIL_ICON, 'edit', function () {
-      return editMessage(messageRow);
-    }));
-  } // if mine
-  // Things anyone can do if they have a bookmark list async
-  /*
-  var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
-  if (bookmarkButton) {
-   div.appendChild(bookmarkButton)
-  }
-  */
-  // Things anyone can do if they have a bookmark list
-
-  (0, _bookmarks.renderBookmarksButton)(userContext).then(function (bookmarkButton) {
-    if (bookmarkButton) div.appendChild(bookmarkButton);
-  });
-
-  /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
-   *
-   * @param context {Object} - Provide dom and me
-   * @param target {NamedNode} - The thing the user expresses an opnion about
-   * @param icon {uristring} - The icon to be used for the button
-   * @param actionClass {NamedNode} - The RDF class  - typically a subclass of schema:Action
-   * @param doc - {NamedNode} - the Solid document iunto which the data should be written
-   * @param mutuallyExclusive {Array<NamedNode>} - Any RDF classes of sentimentswhich are mutiually exclusive
-   */
-  function sentimentButton(context, target, icon, actionClass, doc, mutuallyExclusive) {
-    function setColor() {
-      button.style.backgroundColor = action ? 'yellow' : 'white';
-    }
-    var button = widgets.button(dom, icon, utils.label(actionClass), /*#__PURE__*/function () {
-      var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(_event) {
-        var insertMe, dirty, i, a;
-        return _regenerator["default"].wrap(function _callee$(_context) {
-          while (1) switch (_context.prev = _context.next) {
-            case 0:
-              if (!action) {
-                _context.next = 7;
-                break;
-              }
-              _context.next = 3;
-              return deleteThingThen(action);
-            case 3:
-              action = null;
+            function refresh() {
+              action = existingAction(actionClass);
               setColor();
-              _context.next = 25;
-              break;
-            case 7:
-              // no action
-              action = widgets.newThing(doc);
-              insertMe = [rdf.st(action, ns.schema('agent'), context.me, doc), rdf.st(action, ns.rdf('type'), actionClass, doc), rdf.st(action, ns.schema('target'), target, doc)];
-              _context.next = 11;
-              return _solidLogic.store.updater.update([], insertMe);
-            case 11:
-              setColor();
-              if (!mutuallyExclusive) {
-                _context.next = 25;
-                break;
-              }
-              // Delete incompative sentiments
-              dirty = false;
-              i = 0;
-            case 15:
-              if (!(i < mutuallyExclusive.length)) {
-                _context.next = 24;
-                break;
-              }
-              a = existingAction(mutuallyExclusive[i]);
-              if (!a) {
-                _context.next = 21;
-                break;
-              }
-              _context.next = 20;
-              return deleteThingThen(a);
-            case 20:
-              // but how refresh? refreshTree the parent?
-              dirty = true;
-            case 21:
-              i++;
-              _context.next = 15;
-              break;
-            case 24:
-              if (dirty) {
-                // widgets.refreshTree(button.parentNode) // requires them all to be immediate siblings
-                widgets.refreshTree(messageRow); // requires them all to be immediate siblings
-              }
-            case 25:
-            case "end":
-              return _context.stop();
+            }
+            var action;
+            button.refresh = refresh; // If the file changes, refresh live
+            refresh();
+            return button;
+          };
+          _deleteThingThen = function _deleteThingThen3() {
+            _deleteThingThen = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee9(x) {
+              return _regenerator["default"].wrap(function _callee9$(_context9) {
+                while (1) switch (_context9.prev = _context9.next) {
+                  case 0:
+                    _context9.next = 2;
+                    return _solidLogic.store.updater.update(_solidLogic.store.connectedStatements(x), []);
+                  case 2:
+                  case "end":
+                    return _context9.stop();
+                }
+              }, _callee9);
+            }));
+            return _deleteThingThen.apply(this, arguments);
+          };
+          deleteThingThen = function _deleteThingThen2(_x10) {
+            return _deleteThingThen.apply(this, arguments);
+          };
+          closeToolbar = function _closeToolbar() {
+            div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
+          };
+          _replyInThread = function _replyInThread3() {
+            _replyInThread = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee8() {
+              var thread, options;
+              return _regenerator["default"].wrap(function _callee8$(_context8) {
+                while (1) switch (_context8.prev = _context8.next) {
+                  case 0:
+                    _context8.next = 2;
+                    return channelObject.createThread(message);
+                  case 2:
+                    thread = _context8.sent;
+                    options = userContext.chatOptions;
+                    if (options) {
+                      _context8.next = 6;
+                      break;
+                    }
+                    throw new Error('replyInThread: missing options');
+                  case 6:
+                    options.showThread(thread, options);
+                    closeToolbar(); // a one-off action
+                  case 8:
+                  case "end":
+                    return _context8.stop();
+                }
+              }, _callee8);
+            }));
+            return _replyInThread.apply(this, arguments);
+          };
+          replyInThread = function _replyInThread2() {
+            return _replyInThread.apply(this, arguments);
+          };
+          _editMessage = function _editMessage3() {
+            _editMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee7(messageRow) {
+              return _regenerator["default"].wrap(function _callee7$(_context7) {
+                while (1) switch (_context7.prev = _context7.next) {
+                  case 0:
+                    if (!(me.value === _solidLogic.store.any(message, ns.foaf('maker')).value)) {
+                      _context7.next = 4;
+                      break;
+                    }
+                    closeToolbar(); // edit is a one-off action
+                    _context7.next = 4;
+                    return (0, _message.switchToEditor)(messageRow, message, channelObject, userContext);
+                  case 4:
+                  case "end":
+                    return _context7.stop();
+                }
+              }, _callee7);
+            }));
+            return _editMessage.apply(this, arguments);
+          };
+          editMessage = function _editMessage2(_x9) {
+            return _editMessage.apply(this, arguments);
+          };
+          _deleteMessage = function _deleteMessage3() {
+            _deleteMessage = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee6() {
+              var author, msg, area;
+              return _regenerator["default"].wrap(function _callee6$(_context6) {
+                while (1) switch (_context6.prev = _context6.next) {
+                  case 0:
+                    author = _solidLogic.store.any(message, ns.foaf('maker'));
+                    if (me) {
+                      _context6.next = 5;
+                      break;
+                    }
+                    alert('You can\'t delete the message, you are not logged in.');
+                    _context6.next = 22;
+                    break;
+                  case 5:
+                    if (!me.sameTerm(author)) {
+                      _context6.next = 21;
+                      break;
+                    }
+                    _context6.prev = 6;
+                    _context6.next = 9;
+                    return channelObject.deleteMessage(message);
+                  case 9:
+                    _context6.next = 18;
+                    break;
+                  case 11:
+                    _context6.prev = 11;
+                    _context6.t0 = _context6["catch"](6);
+                    msg = 'Error deleting messaage ' + _context6.t0;
+                    debug.warn(msg);
+                    alert(msg);
+                    area = userContext.statusArea || messageRow.parentNode;
+                    area.appendChild(widgets.errorMessageBlock(dom, msg));
+                  case 18:
+                    messageRow.parentNode.removeChild(messageRow);
+                    _context6.next = 22;
+                    break;
+                  case 21:
+                    alert('You can\'t delete the message, you are not logged in as the author, ' + author);
+                  case 22:
+                    closeToolbar();
+                  case 23:
+                  case "end":
+                    return _context6.stop();
+                }
+              }, _callee6, null, [[6, 11]]);
+            }));
+            return _deleteMessage.apply(this, arguments);
+          };
+          deleteMessage = function _deleteMessage2() {
+            return _deleteMessage.apply(this, arguments);
+          }; // alain: TODO allow chat owner to fully delete message + sentiments and replacing messages
+          div = dom.createElement('div'); // is message deleted ?
+          _context10.next = 13;
+          return (0, _chatLogic.mostRecentVersion)(message).value;
+        case 13:
+          _context10.t0 = _context10.sent;
+          _context10.t1 = ns.schema('dateDeleted').value;
+          if (!(_context10.t0 === _context10.t1)) {
+            _context10.next = 17;
+            break;
           }
-        }, _callee);
-      }));
-      return function (_x3) {
-        return _ref.apply(this, arguments);
-      };
-    }());
-    function existingAction(actionClass) {
-      var actions = _solidLogic.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
-        return _solidLogic.store.holds(x, ns.rdf('type'), actionClass, doc);
-      }).filter(function (x) {
-        return _solidLogic.store.holds(x, ns.schema('target'), target, doc);
-      });
-      return actions.length ? actions[0] : null;
-    }
-    function refresh() {
-      action = existingAction(actionClass);
-      setColor();
-    }
-    var action;
-    button.refresh = refresh; // If the file changes, refresh live
-    refresh();
-    return button;
-  }
+          return _context10.abrupt("return", div);
+        case 17:
+          // Things only the original author can do
+          me = _solidLogic.authn.currentUser(); // If already logged on
+          if (me && _solidLogic.store.holds(message, ns.foaf('maker'), me)) {
+            // button to delete the message
+            div.appendChild(widgets.deleteButtonWithCheck(dom, div, 'message', deleteMessage));
+            // button to edit the message
+            div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + PENCIL_ICON, 'edit', function () {
+              return editMessage(messageRow);
+            }));
+          } // if mine
+          // Things anyone can do if they have a bookmark list async
+          /*
+          var bookmarkButton = await bookmarks.renderBookmarksButton(userContext)
+          if (bookmarkButton) {
+           div.appendChild(bookmarkButton)
+          }
+          */
+          // Things anyone can do if they have a bookmark list
 
-  // THUMBS_UP_ICON
-  // https://schema.org/AgreeAction
-  me = _solidLogic.authn.currentUser(); // If already logged on
-  // debug.log('Actions 3' + mostRecentVersion(message).value + ' ' + ns.schema('dateDeleted').value + ' ' + (mostRecentVersion(message).value !== ns.schema('dateDeleted').value))
+          (0, _bookmarks.renderBookmarksButton)(userContext).then(function (bookmarkButton) {
+            if (bookmarkButton) div.appendChild(bookmarkButton);
+          });
 
-  if (me && (0, _chatLogic.mostRecentVersion)(message).value !== ns.schema('dateDeleted').value) {
-    var context1 = {
-      me: me,
-      dom: dom,
-      div: div
-    };
-    div.appendChild(sentimentButton(context1, message,
-    // @@ TODO use widgets.sentimentButton
-    _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
-    // Thumbs down
-    div.appendChild(sentimentButton(context1, message, _iconBase.icons.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
-  }
-  // X button to remove the tool UI itself
-  var cancelButton = div.appendChild(widgets.cancelButton(dom));
-  cancelButton.style["float"] = 'right';
-  cancelButton.firstChild.style.opacity = '0.3';
-  cancelButton.addEventListener('click', closeToolbar);
-  return div;
+          /**   Button to allow user to express a sentiment (like, endorse, etc) about a target
+           *
+           * @param context {Object} - Provide dom and me
+           * @param target {NamedNode} - The thing the user expresses an opnion about
+           * @param icon {uristring} - The icon to be used for the button
+           * @param actionClass {NamedNode} - The RDF class  - typically a subclass of schema:Action
+           * @param doc - {NamedNode} - the Solid document iunto which the data should be written
+           * @param mutuallyExclusive {Array<NamedNode>} - Any RDF classes of sentimentswhich are mutiually exclusive
+           */
+
+          // THUMBS_UP_ICON
+          // https://schema.org/AgreeAction
+          me = _solidLogic.authn.currentUser(); // If already logged on
+          _context10.t2 = me;
+          if (!_context10.t2) {
+            _context10.next = 28;
+            break;
+          }
+          _context10.next = 25;
+          return (0, _chatLogic.mostRecentVersion)(message).value;
+        case 25:
+          _context10.t3 = _context10.sent;
+          _context10.t4 = ns.schema('dateDeleted').value;
+          _context10.t2 = _context10.t3 !== _context10.t4;
+        case 28:
+          if (!_context10.t2) {
+            _context10.next = 32;
+            break;
+          }
+          context1 = {
+            me: me,
+            dom: dom,
+            div: div
+          };
+          div.appendChild(sentimentButton(context1, message,
+          // @@ TODO use widgets.sentimentButton
+          _iconBase.icons.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
+          // Thumbs down
+          div.appendChild(sentimentButton(context1, message, _iconBase.icons.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
+        case 32:
+          // Reply buttton
+
+          if (_solidLogic.store.any(message, ns.dct('created'))) {
+            // Looks like a messsage? Bar can be used for other things
+            div.appendChild(widgets.button(dom, _iconBase.icons.iconBase + REPLY_ICON, 'Reply in thread', /*#__PURE__*/(0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5() {
+              return _regenerator["default"].wrap(function _callee5$(_context5) {
+                while (1) switch (_context5.prev = _context5.next) {
+                  case 0:
+                    _context5.next = 2;
+                    return replyInThread();
+                  case 2:
+                  case "end":
+                    return _context5.stop();
+                }
+              }, _callee5);
+            }))));
+          }
+          // X button to remove the tool UI itself
+          cancelButton = div.appendChild(widgets.cancelButton(dom));
+          cancelButton.style["float"] = 'right';
+          cancelButton.firstChild.style.opacity = '0.3';
+          cancelButton.addEventListener('click', closeToolbar);
+          return _context10.abrupt("return", div);
+        case 38:
+        case "end":
+          return _context10.stop();
+      }
+    }, _callee10);
+  }));
+  return _messageToolbar.apply(this, arguments);
 }
 //# sourceMappingURL=messageTools.js.map
 
@@ -5362,7 +5942,7 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*   create.js     UI to craete new objects in the solid-app-set world
  **
  */
@@ -5693,7 +6273,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*
     This file was copied from mashlib/src/global/footer.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
@@ -5857,7 +6437,7 @@ var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/s
 var _emptyProfile = __webpack_require__(/*! ./empty-profile */ "./lib/header/empty-profile.js");
 var _headerFooterHelpers = __webpack_require__(/*! ../utils/headerFooterHelpers */ "./lib/utils/headerFooterHelpers.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* global EventListenerOrEventListenerObject */
 /*
     This file was copied from mashlib/src/global/header.ts file. It is modified to
@@ -6446,7 +7026,7 @@ var createTypes = _interopRequireWildcard(__webpack_require__(/*! ./create/types
 exports.createTypes = createTypes;
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // pull in first avoid cross-refs
 // @ts-ignore
 // @ts-ignore
@@ -6762,7 +7342,7 @@ var _signup = __webpack_require__(/*! ../signup/signup.js */ "./lib/signup/signu
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* eslint-disable camelcase */ /**
@@ -8017,7 +8597,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //      Build a 2D matrix of values
 //
 //  dom      AKA document
@@ -8271,7 +8851,7 @@ var _iconBase = __webpack_require__(/*! ../iconBase */ "./lib/iconBase.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //
 //   Media input widget
 //
@@ -8476,7 +9056,7 @@ var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/st
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //  Common code for a discussion are a of messages about something
 //
 
@@ -8799,7 +9379,7 @@ var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_m
 var _solidNamespace = _interopRequireDefault(__webpack_require__(/*! solid-namespace */ "./node_modules/solid-namespace/index.js"));
 var $rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // Namespaces we commonly use and have common prefixes for around Solid
 //
 
@@ -8858,10 +9438,9 @@ Object.defineProperty(exports, "renderParticipants", ({
 exports.xmlEncode = xmlEncode;
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"));
@@ -8873,9 +9452,9 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _participation = __webpack_require__(/*! ./participation */ "./lib/participation.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /** **************
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2["default"])(o), (0, _possibleConstructorReturn2["default"])(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2["default"])(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); } /** **************
  *   Notepad Widget
  */ /** @module pad
  */
@@ -8885,39 +9464,37 @@ var PAD = (0, _rdflib.Namespace)('http://www.w3.org/ns/pim/pad#');
  * @ignore
  */
 var NotepadElement = /*#__PURE__*/function (_HTMLElement) {
-  (0, _inherits2["default"])(NotepadElement, _HTMLElement);
-  var _super = _createSuper(NotepadElement);
   function NotepadElement() {
     var _this;
     (0, _classCallCheck2["default"])(this, NotepadElement);
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-    _this = _super.call.apply(_super, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "subject", void 0);
+    _this = _callSuper(this, NotepadElement, [].concat(args));
+    (0, _defineProperty2["default"])(_this, "subject", void 0);
     return _this;
   }
+  (0, _inherits2["default"])(NotepadElement, _HTMLElement);
   return (0, _createClass2["default"])(NotepadElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
  * @ignore
  */
 var NotepadPart = /*#__PURE__*/function (_HTMLElement2) {
-  (0, _inherits2["default"])(NotepadPart, _HTMLElement2);
-  var _super2 = _createSuper(NotepadPart);
   function NotepadPart() {
     var _this2;
     (0, _classCallCheck2["default"])(this, NotepadPart);
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-    _this2 = _super2.call.apply(_super2, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "subject", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "value", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "state", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "lastSent", void 0);
+    _this2 = _callSuper(this, NotepadPart, [].concat(args));
+    (0, _defineProperty2["default"])(_this2, "subject", void 0);
+    (0, _defineProperty2["default"])(_this2, "value", void 0);
+    (0, _defineProperty2["default"])(_this2, "state", void 0);
+    (0, _defineProperty2["default"])(_this2, "lastSent", void 0);
     return _this2;
   }
+  (0, _inherits2["default"])(NotepadPart, _HTMLElement2);
   return (0, _createClass2["default"])(NotepadPart);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /** Figure out a random color from my webid
@@ -9652,10 +10229,9 @@ exports.recordParticipation = recordParticipation;
 exports.renderParticipants = renderParticipants;
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _debug = _interopRequireWildcard(__webpack_require__(/*! ./debug */ "./lib/debug.js"));
@@ -9669,26 +10245,25 @@ var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/st
 var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ./styleConstants */ "./lib/styleConstants.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } } /* Manage a UI for the participation of a person in any thing
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2["default"])(o), (0, _possibleConstructorReturn2["default"])(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2["default"])(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); } /* Manage a UI for the participation of a person in any thing
 */ // import { currentUser } from './authn/authn'
 var ParticipationTableElement = /*#__PURE__*/function (_HTMLTableElement) {
-  (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
-  var _super = _createSuper(ParticipationTableElement);
   function ParticipationTableElement() {
     var _this;
     (0, _classCallCheck2["default"])(this, ParticipationTableElement);
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-    _this = _super.call.apply(_super, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "refresh", void 0);
+    _this = _callSuper(this, ParticipationTableElement, [].concat(args));
+    (0, _defineProperty2["default"])(_this, "refresh", void 0);
     return _this;
   }
+  (0, _inherits2["default"])(ParticipationTableElement, _HTMLTableElement);
   return (0, _createClass2["default"])(ParticipationTableElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLTableElement));
 var store = _solidLogic.solidLogicSingleton.store;
@@ -9892,7 +10467,7 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ./ns */ "./lib/ns.js"))
 var participation = _interopRequireWildcard(__webpack_require__(/*! ./participation */ "./lib/participation.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //                  Solid-UI preferences
 //                  =====================
 //
@@ -9931,6 +10506,10 @@ function recordSharedPreferences(subject, context) {
   return new Promise(function (resolve, reject) {
     var sharedPreferences = kb.any(subject, ns.ui('sharedPreferences'));
     if (!sharedPreferences) {
+      if (!kb.updater.editable(subject.doc())) {
+        debug.log(" Cant make shared preferences, may not change ".concat(subject.doc));
+        resolve(context);
+      }
       var sp = $rdf.sym(subject.doc().uri + '#SharedPreferences');
       var ins = [$rdf.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())];
       debug.log('Creating shared preferences ' + sp);
@@ -10531,7 +11110,7 @@ var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modu
 var utils = _interopRequireWildcard(__webpack_require__(/*! ./utils */ "./lib/utils/index.js"));
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // Table Widget: Format an array of RDF statements as an HTML table.
 //
 // This can operate in one of three modes: when the class of object is given
@@ -12111,10 +12690,9 @@ exports.tabWidget = tabWidget;
 var _slicedToArray2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ "./node_modules/@babel/runtime/helpers/slicedToArray.js"));
 var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/createClass */ "./node_modules/@babel/runtime/helpers/createClass.js"));
 var _classCallCheck2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ "./node_modules/@babel/runtime/helpers/classCallCheck.js"));
-var _assertThisInitialized2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ "./node_modules/@babel/runtime/helpers/assertThisInitialized.js"));
-var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _possibleConstructorReturn2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/possibleConstructorReturn */ "./node_modules/@babel/runtime/helpers/possibleConstructorReturn.js"));
 var _getPrototypeOf2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/getPrototypeOf */ "./node_modules/@babel/runtime/helpers/getPrototypeOf.js"));
+var _inherits2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/inherits */ "./node_modules/@babel/runtime/helpers/inherits.js"));
 var _wrapNativeSuper2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/wrapNativeSuper */ "./node_modules/@babel/runtime/helpers/wrapNativeSuper.js"));
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var _widgets = __webpack_require__(/*! ./widgets */ "./lib/widgets/index.js");
@@ -12122,61 +12700,58 @@ var _utils = __webpack_require__(/*! ./utils */ "./lib/utils/index.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ./style */ "./lib/style.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-function _createSuper(Derived) { var hasNativeReflectConstruct = _isNativeReflectConstruct(); return function _createSuperInternal() { var Super = (0, _getPrototypeOf2["default"])(Derived), result; if (hasNativeReflectConstruct) { var NewTarget = (0, _getPrototypeOf2["default"])(this).constructor; result = Reflect.construct(Super, arguments, NewTarget); } else { result = Super.apply(this, arguments); } return (0, _possibleConstructorReturn2["default"])(this, result); }; }
-function _isNativeReflectConstruct() { if (typeof Reflect === "undefined" || !Reflect.construct) return false; if (Reflect.construct.sham) return false; if (typeof Proxy === "function") return true; try { Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); return true; } catch (e) { return false; } }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _callSuper(t, o, e) { return o = (0, _getPrototypeOf2["default"])(o), (0, _possibleConstructorReturn2["default"])(t, _isNativeReflectConstruct() ? Reflect.construct(o, e || [], (0, _getPrototypeOf2["default"])(t).constructor) : o.apply(t, e)); }
+function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 /**
  * @ignore
  */
 var ContainerElement = /*#__PURE__*/function (_HTMLElement) {
-  (0, _inherits2["default"])(ContainerElement, _HTMLElement);
-  var _super = _createSuper(ContainerElement);
   function ContainerElement() {
     var _this;
     (0, _classCallCheck2["default"])(this, ContainerElement);
     for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
     }
-    _this = _super.call.apply(_super, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this), "asSettings", void 0);
+    _this = _callSuper(this, ContainerElement, [].concat(args));
+    (0, _defineProperty2["default"])(_this, "asSettings", void 0);
     return _this;
   }
+  (0, _inherits2["default"])(ContainerElement, _HTMLElement);
   return (0, _createClass2["default"])(ContainerElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 var TabWidgetElement = exports.TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
-  (0, _inherits2["default"])(TabWidgetElement, _HTMLElement2);
-  var _super2 = _createSuper(TabWidgetElement);
   function TabWidgetElement() {
     var _this2;
     (0, _classCallCheck2["default"])(this, TabWidgetElement);
     for (var _len2 = arguments.length, args = new Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
     }
-    _this2 = _super2.call.apply(_super2, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "bodyContainer", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "refresh", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this2), "tabContainer", void 0);
+    _this2 = _callSuper(this, TabWidgetElement, [].concat(args));
+    (0, _defineProperty2["default"])(_this2, "bodyContainer", void 0);
+    (0, _defineProperty2["default"])(_this2, "refresh", void 0);
+    (0, _defineProperty2["default"])(_this2, "tabContainer", void 0);
     return _this2;
   }
+  (0, _inherits2["default"])(TabWidgetElement, _HTMLElement2);
   return (0, _createClass2["default"])(TabWidgetElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
  * @ignore
  */
 var TabElement = /*#__PURE__*/function (_HTMLElement3) {
-  (0, _inherits2["default"])(TabElement, _HTMLElement3);
-  var _super3 = _createSuper(TabElement);
   function TabElement() {
     var _this3;
     (0, _classCallCheck2["default"])(this, TabElement);
     for (var _len3 = arguments.length, args = new Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
       args[_key3] = arguments[_key3];
     }
-    _this3 = _super3.call.apply(_super3, [this].concat(args));
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this3), "bodyTR", void 0);
-    (0, _defineProperty2["default"])((0, _assertThisInitialized2["default"])(_this3), "subject", void 0);
+    _this3 = _callSuper(this, TabElement, [].concat(args));
+    (0, _defineProperty2["default"])(_this3, "bodyTR", void 0);
+    (0, _defineProperty2["default"])(_this3, "subject", void 0);
     return _this3;
   }
+  (0, _inherits2["default"])(TabElement, _HTMLElement3);
   return (0, _createClass2["default"])(TabElement);
 }( /*#__PURE__*/(0, _wrapNativeSuper2["default"])(HTMLElement));
 /**
@@ -12783,7 +13358,7 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js")
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 var _label = __webpack_require__(/*! ./label */ "./lib/utils/label.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //                  Solid-UI general Utilities
 //                  ==========================
 //
@@ -13291,174 +13866,118 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
+var _otherHelpers = __webpack_require__(/*! ./otherHelpers */ "./lib/utils/keyHelpers/otherHelpers.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
-/* export const getPodRoot = async (webId: NamedNode) => {
-  const webIdURL = new URL(webId.uri)
-  // find storages in webId document
-  await store.fetcher.load(webId.uri)
-  const storages = store.each(webId, ns.space('storage'), null, webId.doc())
-  var podRoot: NamedNode | undefined
-  if (!storages?.length) {
-    // find storage recursively in webId URL
-    let path = webIdURL.pathname
-    while (path.length) {
-      path = path.substring(0, path.lastIndexOf('/'))
-      podRoot = store.sym(webIdURL.origin + path + '/')
-      const res = await store.fetcher.webOperation('HEAD', podRoot.uri)
-      if (res.headers.get('link')?.includes(ns.space('Storage').value)) break
-      if (!path) debug.warn(`Current user storage not found for\n${webId}`)
-    }
-  } else {
-    // give preference to storage in webId root
-    podRoot = storages.find((storage) => webIdURL.origin === new URL(storage.value).origin) as NamedNode
-    if (!podRoot) podRoot = storages[0] as NamedNode
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+var pubKeyUrl = exports.pubKeyUrl = function pubKeyUrl(webId) {
+  var url;
+  try {
+    var root = (0, _otherHelpers.getRootIfPreferencesExist)(webId);
+    url = "".concat(root, "/profile/keys/publicKey.ttl");
+  } catch (err) {
+    debug.error(err);
   }
-
-  return podRoot as NamedNode
-} */
-
-var pubKeyUrl = exports.pubKeyUrl = /*#__PURE__*/function () {
-  var _ref = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId) {
-    var _store$any, _parentSettings;
-    var parentSettings;
+  return url;
+};
+var privKeyUrl = exports.privKeyUrl = function privKeyUrl(webId) {
+  var url;
+  try {
+    var root = (0, _otherHelpers.getRootIfPreferencesExist)(webId);
+    url = "".concat(root, "/settings/keys/privateKey.ttl");
+  } catch (err) {
+    debug.error(err);
+  }
+  return url;
+};
+function getExistingPublicKey(_x, _x2) {
+  return _getExistingPublicKey.apply(this, arguments);
+}
+function _getExistingPublicKey() {
+  _getExistingPublicKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee(webId, publicKeyUrl) {
     return _regenerator["default"].wrap(function _callee$(_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
-          parentSettings = (_store$any = _solidLogic.store.any(webId, ns.space('preferencesFile'), null, webId.doc())) === null || _store$any === void 0 ? void 0 : _store$any.value;
-          parentSettings = (_parentSettings = parentSettings) === null || _parentSettings === void 0 ? void 0 : _parentSettings.split('/').slice(0, -2).join('/');
-          if (parentSettings) {
-            _context.next = 4;
-            break;
-          }
-          throw new Error("prefererencesFile is expected to exist in ".concat(webId.doc));
-        case 4:
-          return _context.abrupt("return", "".concat(parentSettings, "/profile/keys/publicKey.ttl"));
-        case 5:
+          _context.next = 2;
+          return getKeyIfExists(webId, publicKeyUrl, 'publicKey');
+        case 2:
+          return _context.abrupt("return", _context.sent);
+        case 3:
         case "end":
           return _context.stop();
       }
     }, _callee);
   }));
-  return function pubKeyUrl(_x) {
-    return _ref.apply(this, arguments);
-  };
-}();
-function getExistingPublicKey(_x2, _x3) {
   return _getExistingPublicKey.apply(this, arguments);
 }
-function _getExistingPublicKey() {
-  _getExistingPublicKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(webId, publicKeyUrl) {
-    return _regenerator["default"].wrap(function _callee3$(_context3) {
-      while (1) switch (_context3.prev = _context3.next) {
-        case 0:
-          _context3.next = 2;
-          return getKeyIfExists(webId, publicKeyUrl, 'publicKey');
-        case 2:
-          return _context3.abrupt("return", _context3.sent);
-        case 3:
-        case "end":
-          return _context3.stop();
-      }
-    }, _callee3);
-  }));
-  return _getExistingPublicKey.apply(this, arguments);
+function getExistingPrivateKey(_x3, _x4) {
+  return _getExistingPrivateKey.apply(this, arguments);
 }
-var privKeyUrl = exports.privKeyUrl = /*#__PURE__*/function () {
-  var _ref2 = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId) {
-    var _store$any2, _settings;
-    var settings;
+function _getExistingPrivateKey() {
+  _getExistingPrivateKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee2(webId, privateKeyUrl) {
     return _regenerator["default"].wrap(function _callee2$(_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
-          settings = (_store$any2 = _solidLogic.store.any(webId, ns.space('preferencesFile'), null, webId.doc())) === null || _store$any2 === void 0 ? void 0 : _store$any2.value;
-          settings = (_settings = settings) === null || _settings === void 0 ? void 0 : _settings.split('/').slice(0, -1).join('/');
-          if (settings) {
-            _context2.next = 4;
-            break;
-          }
-          throw new Error("prefererencesFile is expected to exist in ".concat(webId.doc));
-        case 4:
-          return _context2.abrupt("return", "".concat(settings, "/keys/privateKey.ttl"));
-        case 5:
+          _context2.next = 2;
+          return getKeyIfExists(webId, privateKeyUrl, 'privateKey');
+        case 2:
+          return _context2.abrupt("return", _context2.sent);
+        case 3:
         case "end":
           return _context2.stop();
       }
     }, _callee2);
   }));
-  return function privKeyUrl(_x4) {
-    return _ref2.apply(this, arguments);
-  };
-}();
-function getExistingPrivateKey(_x5, _x6) {
   return _getExistingPrivateKey.apply(this, arguments);
 }
-function _getExistingPrivateKey() {
-  _getExistingPrivateKey = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee4(webId, privateKeyUrl) {
-    return _regenerator["default"].wrap(function _callee4$(_context4) {
-      while (1) switch (_context4.prev = _context4.next) {
-        case 0:
-          _context4.next = 2;
-          return getKeyIfExists(webId, privateKeyUrl, 'privateKey');
-        case 2:
-          return _context4.abrupt("return", _context4.sent);
-        case 3:
-        case "end":
-          return _context4.stop();
-      }
-    }, _callee4);
-  }));
-  return _getExistingPrivateKey.apply(this, arguments);
-}
-function getKeyIfExists(_x7, _x8, _x9) {
+function getKeyIfExists(_x5, _x6, _x7) {
   return _getKeyIfExists.apply(this, arguments);
 }
 function _getKeyIfExists() {
-  _getKeyIfExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee5(webId, keyUrl, keyType) {
+  _getKeyIfExists = (0, _asyncToGenerator2["default"])( /*#__PURE__*/_regenerator["default"].mark(function _callee3(webId, keyUrl, keyType) {
     var key;
-    return _regenerator["default"].wrap(function _callee5$(_context5) {
-      while (1) switch (_context5.prev = _context5.next) {
+    return _regenerator["default"].wrap(function _callee3$(_context3) {
+      while (1) switch (_context3.prev = _context3.next) {
         case 0:
-          _context5.prev = 0;
-          _context5.next = 3;
+          _context3.prev = 0;
+          _context3.next = 3;
           return _solidLogic.store.fetcher.load(keyUrl);
         case 3:
           key = _solidLogic.store.any(webId, ns.solid(keyType)); // store.sym(CERT + keyType))
-          return _context5.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
+          return _context3.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
         case 7:
-          _context5.prev = 7;
-          _context5.t0 = _context5["catch"](0);
-          if (!(_context5.t0.response.status === 404)) {
-            _context5.next = 24;
+          _context3.prev = 7;
+          _context3.t0 = _context3["catch"](0);
+          if (!(_context3.t0.response.status === 404)) {
+            _context3.next = 24;
             break;
           }
           debug.log('createIfNotExists: doc does NOT exist, will create... ' + keyUrl);
-          _context5.prev = 11;
-          _context5.next = 14;
+          _context3.prev = 11;
+          _context3.next = 14;
           return _solidLogic.store.fetcher.webOperation('PUT', keyUrl, {
             data: '',
             contentType: 'text/turtle'
           });
         case 14:
-          _context5.next = 20;
+          _context3.next = 20;
           break;
         case 16:
-          _context5.prev = 16;
-          _context5.t1 = _context5["catch"](11);
-          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context5.t1);
-          throw _context5.t1;
+          _context3.prev = 16;
+          _context3.t1 = _context3["catch"](11);
+          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context3.t1);
+          throw _context3.t1;
         case 20:
           delete _solidLogic.store.fetcher.requested[keyUrl]; // delete cached 404 error
           // debug.log('createIfNotExists doc created ok ' + doc)
-          return _context5.abrupt("return", undefined);
+          return _context3.abrupt("return", undefined);
         case 24:
-          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context5.t0);
-          throw _context5.t0;
+          debug.log('createIfNotExists doc FAILED: ' + keyUrl + ': ' + _context3.t0);
+          throw _context3.t0;
         case 26:
         case "end":
-          return _context5.stop();
+          return _context3.stop();
       }
-    }, _callee5, null, [[0, 7], [11, 16]]);
+    }, _callee3, null, [[0, 7], [11, 16]]);
   }));
   return _getKeyIfExists.apply(this, arguments);
 }
@@ -13487,7 +14006,7 @@ var _asyncToGenerator2 = _interopRequireDefault(__webpack_require__(/*! @babel/r
 var debug = _interopRequireWildcard(__webpack_require__(/*! ../../debug */ "./lib/debug.js"));
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * set ACL
  * @param keyDoc
@@ -13511,38 +14030,38 @@ function _setAcl() {
           return _solidLogic.store.fetcher.load(keyDoc);
         case 2:
           // FIXME: check the Why value on this quad:
-          debug.log(_solidLogic.store.statementsMatching(_solidLogic.store.sym(keyDoc), _solidLogic.store.sym('http://www.iana.org/assignments/link-relations/acl')));
+          // debug.log(store.statementsMatching(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl')))
           keyAclDoc = _solidLogic.store.any(_solidLogic.store.sym(keyDoc), _solidLogic.store.sym('http://www.iana.org/assignments/link-relations/acl'));
           if (keyAclDoc) {
-            _context.next = 6;
+            _context.next = 5;
             break;
           }
           throw new Error('Key ACL doc not found!');
-        case 6:
-          _context.prev = 6;
-          _context.next = 9;
+        case 5:
+          _context.prev = 5;
+          _context.next = 8;
           return _solidLogic.store.fetcher.webOperation('PUT', keyAclDoc.value, {
             data: aclBody,
             contentType: 'text/turtle'
           });
-        case 9:
-          _context.next = 16;
+        case 8:
+          _context.next = 15;
           break;
-        case 11:
-          _context.prev = 11;
-          _context.t0 = _context["catch"](6);
+        case 10:
+          _context.prev = 10;
+          _context.t0 = _context["catch"](5);
           if (!((_context.t0 === null || _context.t0 === void 0 ? void 0 : (_err$response = _context.t0.response) === null || _err$response === void 0 ? void 0 : _err$response.status) !== 404)) {
-            _context.next = 15;
+            _context.next = 14;
             break;
           }
           throw new Error(_context.t0);
-        case 15:
+        case 14:
           debug.log('delete ' + keyAclDoc.value + ' ' + _context.t0.response.status); // should test 404 and 2xx
-        case 16:
+        case 15:
         case "end":
           return _context.stop();
       }
-    }, _callee, null, [[6, 11]]);
+    }, _callee, null, [[5, 10]]);
   }));
   return _setAcl.apply(this, arguments);
 }
@@ -13567,6 +14086,38 @@ var keyAclBody = exports.keyAclBody = function keyAclBody(keyDoc, me) {
 
 /***/ }),
 
+/***/ "./lib/utils/keyHelpers/otherHelpers.js":
+/*!**********************************************!*\
+  !*** ./lib/utils/keyHelpers/otherHelpers.js ***!
+  \**********************************************/
+/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
+
+"use strict";
+
+
+var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
+Object.defineProperty(exports, "__esModule", ({
+  value: true
+}));
+exports.getRootIfPreferencesExist = void 0;
+var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
+var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.js"));
+function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+// Will rename this file later. We will probably be using solid-logic anyway
+// moved it out so I can mock
+
+var getRootIfPreferencesExist = exports.getRootIfPreferencesExist = function getRootIfPreferencesExist(webId) {
+  var _store$any, _root;
+  var root = (_store$any = _solidLogic.store.any(webId, ns.space('preferencesFile'), null, webId.doc())) === null || _store$any === void 0 ? void 0 : _store$any.value;
+  root = (_root = root) === null || _root === void 0 ? void 0 : _root.split('/').slice(0, -2).join('/');
+  if (!root) throw new Error("prefererencesFile is expected to exist in ".concat(webId));
+  return root;
+};
+//# sourceMappingURL=otherHelpers.js.map
+
+/***/ }),
+
 /***/ "./lib/utils/label.js":
 /*!****************************!*\
   !*** ./lib/utils/label.js ***!
@@ -13586,7 +14137,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../ns */ "./lib/ns.js"));
 var rdf = _interopRequireWildcard(__webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 // pull in first avoid cross-refs
 
 var UI = {
@@ -13695,10 +14246,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = exports.versionInfo = {
-  buildTime: '2024-02-20T15:14:15Z',
-  commit: '9d930db7eba826ad9e82bf631f93ecf2ccd5e912',
+  buildTime: '2024-04-03T14:34:34Z',
+  commit: '42e66c35a105904b59fcf17b8cfb491e38f0c9f9',
   npmInfo: {
-    'solid-ui': '2.4.32',
+    'solid-ui': '2.4.33-beta4',
     npm: '8.19.4',
     node: '16.20.2',
     v8: '9.4.146.26-node.26',
@@ -13789,7 +14340,7 @@ var _error = __webpack_require__(/*! ./error */ "./lib/widgets/error.js");
 var _widgetHelpers = __webpack_require__(/*! ./widgetHelpers */ "./lib/widgets/widgetHelpers.js");
 var _iconLinks = __webpack_require__(/*! ./buttons/iconLinks */ "./lib/widgets/buttons/iconLinks.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*  Buttons
 */
 
@@ -15124,7 +15675,7 @@ var debug = _interopRequireWildcard(__webpack_require__(/*! ../debug */ "./lib/d
 var mime = _interopRequireWildcard(__webpack_require__(/*! mime-types */ "./node_modules/mime-types/index.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Drag and drop common functionality
  *
  * It is easy to make something draggable, or to make it a drag target!
@@ -15328,7 +15879,7 @@ var _widgets = __webpack_require__(/*! ../widgets */ "./lib/widgets/index.js");
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style */ "./lib/style.js"));
 var _styleConstants = _interopRequireDefault(__webpack_require__(/*! ../styleConstants */ "./lib/styleConstants.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * Create an error message block
  * @param dom The DOM on which dom.createElement will be called
@@ -15466,7 +16017,7 @@ var utils = _interopRequireWildcard(__webpack_require__(/*! ../utils */ "./lib/u
 var _multiSelect = __webpack_require__(/*! ./multiSelect */ "./lib/widgets/multiSelect.js");
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ../widgets */ "./lib/widgets/index.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e2) { throw _e2; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e3) { didErr = true; err = _e3; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /*       F O R M S
@@ -17446,7 +17997,7 @@ var widgets = _interopRequireWildcard(__webpack_require__(/*! ../../../widgets *
 var utils = _interopRequireWildcard(__webpack_require__(/*! ../../../utils */ "./lib/utils/index.js"));
 var _autocompletePicker = __webpack_require__(/*! ./autocompletePicker */ "./lib/widgets/forms/autocomplete/autocompletePicker.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* The Autocomplete Control with decorations
@@ -17728,7 +18279,7 @@ var style = _interopRequireWildcard(__webpack_require__(/*! ../../../style */ ".
 var _autocompleteBar = __webpack_require__(/*! ./autocompleteBar */ "./lib/widgets/forms/autocomplete/autocompleteBar.js");
 var _rdflib = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Form field for doing autocompleete
  */
 
@@ -17999,7 +18550,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var _publicData = __webpack_require__(/*! ./publicData */ "./lib/widgets/forms/autocomplete/publicData.js");
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 function _createForOfIteratorHelper(o, allowArrayLike) { var it = typeof Symbol !== "undefined" && o[Symbol.iterator] || o["@@iterator"]; if (!it) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = it.call(o); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i]; return arr2; } /* Autocomplete Picker: Create and edit data using public data
@@ -18446,7 +18997,7 @@ var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ ".
 var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-logic/lib/index.js");
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -18658,7 +19209,7 @@ var debug = _interopRequireWildcard(__webpack_require__(/*! ../../../debug */ ".
 var ns = _interopRequireWildcard(__webpack_require__(/*! ../../../ns */ "./lib/ns.js"));
 var _language = __webpack_require__(/*! ./language */ "./lib/widgets/forms/autocomplete/language.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /* Logic to access public data stores
 *
 * including filtering resut by natural language etc
@@ -19296,7 +19847,7 @@ var _error = __webpack_require__(/*! ../error */ "./lib/widgets/error.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var store = _solidLogic.solidLogicSingleton.store;
 
 /*  Style and create a name, value pair
@@ -19615,7 +20166,7 @@ var ns = _interopRequireWildcard(__webpack_require__(/*! ../../ns */ "./lib/ns.j
 var _style = __webpack_require__(/*! ../../style */ "./lib/style.js");
 var _fieldParams;
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /**
  * The fieldParams object defines various constants
  * for use in various form fields. Depending on the
@@ -19702,7 +20253,7 @@ var _solidLogic = __webpack_require__(/*! solid-logic */ "./node_modules/solid-l
 var _fieldParams = __webpack_require__(/*! ./fieldParams */ "./lib/widgets/forms/fieldParams.js");
 var _fieldFunction = __webpack_require__(/*! ./fieldFunction */ "./lib/widgets/forms/fieldFunction.js");
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#';
 
 /* eslint-disable no-console */
@@ -19854,7 +20405,7 @@ Object.keys(_autocompletePicker).forEach(function (key) {
 var _publicData = _interopRequireWildcard(__webpack_require__(/*! ./forms/autocomplete/publicData */ "./lib/widgets/forms/autocomplete/publicData.js"));
 exports.publicData = _publicData;
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 //# sourceMappingURL=index.js.map
 
 /***/ }),
@@ -19880,7 +20431,7 @@ var _createClass2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtim
 var _defineProperty2 = _interopRequireDefault(__webpack_require__(/*! @babel/runtime/helpers/defineProperty */ "./node_modules/@babel/runtime/helpers/defineProperty.js"));
 var style = _interopRequireWildcard(__webpack_require__(/*! ../style_multiSelect */ "./lib/style_multiSelect.js"));
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 /*
  * IconicMultiSelect v0.7.0
  * Licence:  MIT
@@ -19947,7 +20498,7 @@ var IconicMultiSelect = exports.IconicMultiSelect = /*#__PURE__*/function () {
    * Initialize the Iconic Multiselect component.
    * @public
    */
-  (0, _createClass2["default"])(IconicMultiSelect, [{
+  return (0, _createClass2["default"])(IconicMultiSelect, [{
     key: "init",
     value: function init() {
       // Timea change to use this._select instead of this._selectContainer
@@ -20523,7 +21074,6 @@ var IconicMultiSelect = exports.IconicMultiSelect = /*#__PURE__*/function () {
       }
     }
   }]);
-  return IconicMultiSelect;
 }();
 //# sourceMappingURL=multiSelect.js.map
 
@@ -20569,7 +21119,7 @@ var _templateObject;
  *
  */
 function _getRequireWildcardCache(e) { if ("function" != typeof WeakMap) return null; var r = new WeakMap(), t = new WeakMap(); return (_getRequireWildcardCache = function _getRequireWildcardCache(e) { return e ? t : r; })(e); }
-function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && Object.prototype.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
+function _interopRequireWildcard(e, r) { if (!r && e && e.__esModule) return e; if (null === e || "object" != _typeof(e) && "function" != typeof e) return { "default": e }; var t = _getRequireWildcardCache(r); if (t && t.has(e)) return t.get(e); var n = { __proto__: null }, a = Object.defineProperty && Object.getOwnPropertyDescriptor; for (var u in e) if ("default" !== u && {}.hasOwnProperty.call(e, u)) { var i = a ? Object.getOwnPropertyDescriptor(e, u) : null; i && (i.get || i.set) ? Object.defineProperty(n, u, i) : n[u] = e[u]; } return n["default"] = e, t && t.set(e, n), n; }
 var kb = _solidLogic.solidLogicSingleton.store;
 var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
   function PeoplePicker(element, typeIndex, groupPickedCb, options) {
@@ -20582,7 +21132,7 @@ var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
     this.selectedgroup = this.options.selectedgroup; // current selected group if any
     this.onSelectGroup = this.onSelectGroup.bind(this);
   }
-  (0, _createClass2["default"])(PeoplePicker, [{
+  return (0, _createClass2["default"])(PeoplePicker, [{
     key: "render",
     value: function render() {
       var _this = this;
@@ -20703,7 +21253,6 @@ var PeoplePicker = exports.PeoplePicker = /*#__PURE__*/function () {
       this.render();
     }
   }]);
-  return PeoplePicker;
 }();
 var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
   function GroupPicker(element, book, onSelectGroup) {
@@ -20712,7 +21261,7 @@ var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
     this.book = book;
     this.onSelectGroup = onSelectGroup;
   }
-  (0, _createClass2["default"])(GroupPicker, [{
+  return (0, _createClass2["default"])(GroupPicker, [{
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -20759,7 +21308,6 @@ var GroupPicker = exports.GroupPicker = /*#__PURE__*/function () {
       };
     }
   }]);
-  return GroupPicker;
 }();
 var Group = exports.Group = /*#__PURE__*/function () {
   function Group(element, group) {
@@ -20767,7 +21315,7 @@ var Group = exports.Group = /*#__PURE__*/function () {
     this.element = element;
     this.group = group;
   }
-  (0, _createClass2["default"])(Group, [{
+  return (0, _createClass2["default"])(Group, [{
     key: "render",
     value: function render() {
       var container = document.createElement('div');
@@ -20779,7 +21327,6 @@ var Group = exports.Group = /*#__PURE__*/function () {
       return this;
     }
   }]);
-  return Group;
 }();
 var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
   function GroupBuilder(element, book, group, doneBuildingCb, groupChangedCb) {
@@ -20795,7 +21342,7 @@ var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
     this.groupChangedCb = groupChangedCb;
     this.doneBuildingCb = doneBuildingCb;
   }
-  (0, _createClass2["default"])(GroupBuilder, [{
+  return (0, _createClass2["default"])(GroupBuilder, [{
     key: "refresh",
     value: function refresh() {
       // TODO: implement
@@ -20926,7 +21473,6 @@ var GroupBuilder = exports.GroupBuilder = /*#__PURE__*/function () {
       return Promise.all(updatePromises);
     }
   }]);
-  return GroupBuilder;
 }(); // @ignore exporting this only for the unit test
 // @@ TODO maybe I should move this down at end, but for
 // now I will leave it where it was
@@ -20937,7 +21483,7 @@ var Person = exports.Person = /*#__PURE__*/function () {
     this.element = element;
     this.handleRemove = handleRemove;
   }
-  (0, _createClass2["default"])(Person, [{
+  return (0, _createClass2["default"])(Person, [{
     key: "render",
     value: function render() {
       var _this9 = this;
@@ -20974,7 +21520,6 @@ var Person = exports.Person = /*#__PURE__*/function () {
       return this;
     }
   }]);
-  return Person;
 }();
 function getWithDefault(subject, predicate, defaultValue) {
   var object = kb.any(subject, predicate);
@@ -31887,13 +32432,6 @@ Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.createHasher = exports.isogenyMap = exports.hash_to_field = exports.expand_message_xof = exports.expand_message_xmd = void 0;
 const modular_js_1 = __webpack_require__(/*! ./modular.js */ "./node_modules/@noble/curves/abstract/modular.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/curves/abstract/utils.js");
-function validateDST(dst) {
-    if (dst instanceof Uint8Array)
-        return dst;
-    if (typeof dst === 'string')
-        return (0, utils_js_1.utf8ToBytes)(dst);
-    throw new Error('DST must be Uint8Array or string');
-}
 // Octet Stream to Integer. "spec" implementation of os2ip is 2.5x slower vs bytesToNumberBE.
 const os2ip = utils_js_1.bytesToNumberBE;
 // Integer to Octet Stream (numberToBytesBE)
@@ -31915,20 +32453,16 @@ function strxor(a, b) {
     }
     return arr;
 }
-function isBytes(item) {
-    if (!(item instanceof Uint8Array))
-        throw new Error('Uint8Array expected');
-}
-function isNum(item) {
+function anum(item) {
     if (!Number.isSafeInteger(item))
         throw new Error('number expected');
 }
 // Produces a uniformly random byte string using a cryptographic hash function H that outputs b bits
 // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.1
 function expand_message_xmd(msg, DST, lenInBytes, H) {
-    isBytes(msg);
-    isBytes(DST);
-    isNum(lenInBytes);
+    (0, utils_js_1.abytes)(msg);
+    (0, utils_js_1.abytes)(DST);
+    anum(lenInBytes);
     // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
     if (DST.length > 255)
         DST = H((0, utils_js_1.concatBytes)((0, utils_js_1.utf8ToBytes)('H2C-OVERSIZE-DST-'), DST));
@@ -31956,9 +32490,9 @@ exports.expand_message_xmd = expand_message_xmd;
 //    a random oracle under a reasonable cryptographic assumption.
 // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.2
 function expand_message_xof(msg, DST, lenInBytes, k, H) {
-    isBytes(msg);
-    isBytes(DST);
-    isNum(lenInBytes);
+    (0, utils_js_1.abytes)(msg);
+    (0, utils_js_1.abytes)(DST);
+    anum(lenInBytes);
     // https://www.rfc-editor.org/rfc/rfc9380#section-5.3.3
     // DST = H('H2C-OVERSIZE-DST-' || a_very_long_DST, Math.ceil((lenInBytes * k) / 8));
     if (DST.length > 255) {
@@ -31993,9 +32527,9 @@ function hash_to_field(msg, count, options) {
         hash: 'hash',
     });
     const { p, k, m, hash, expand, DST: _DST } = options;
-    isBytes(msg);
-    isNum(count);
-    const DST = validateDST(_DST);
+    (0, utils_js_1.abytes)(msg);
+    anum(count);
+    const DST = typeof _DST === 'string' ? (0, utils_js_1.utf8ToBytes)(_DST) : _DST;
     const log2p = p.toString(2).length;
     const L = Math.ceil((log2p + k) / 8); // section 5.1 of ietf draft link above
     const len_in_bytes = count * m * L;
@@ -32524,7 +33058,7 @@ exports.mapHashToField = mapHashToField;
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.validateObject = exports.createHmacDrbg = exports.bitMask = exports.bitSet = exports.bitGet = exports.bitLen = exports.utf8ToBytes = exports.equalBytes = exports.concatBytes = exports.ensureBytes = exports.numberToVarBytesBE = exports.numberToBytesLE = exports.numberToBytesBE = exports.bytesToNumberLE = exports.bytesToNumberBE = exports.hexToBytes = exports.hexToNumber = exports.numberToHexUnpadded = exports.bytesToHex = void 0;
+exports.validateObject = exports.createHmacDrbg = exports.bitMask = exports.bitSet = exports.bitGet = exports.bitLen = exports.utf8ToBytes = exports.equalBytes = exports.concatBytes = exports.ensureBytes = exports.numberToVarBytesBE = exports.numberToBytesLE = exports.numberToBytesBE = exports.bytesToNumberLE = exports.bytesToNumberBE = exports.hexToBytes = exports.hexToNumber = exports.numberToHexUnpadded = exports.bytesToHex = exports.abytes = exports.isBytes = void 0;
 /*! noble-curves - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 // 100 lines of code in the file are duplicated from noble-hashes (utils).
 // This is OK: `abstract` directory does not use noble-hashes.
@@ -32533,14 +33067,23 @@ exports.validateObject = exports.createHmacDrbg = exports.bitMask = exports.bitS
 const _0n = BigInt(0);
 const _1n = BigInt(1);
 const _2n = BigInt(2);
-const u8a = (a) => a instanceof Uint8Array;
+function isBytes(a) {
+    return (a instanceof Uint8Array ||
+        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
+}
+exports.isBytes = isBytes;
+function abytes(item) {
+    if (!isBytes(item))
+        throw new Error('Uint8Array expected');
+}
+exports.abytes = abytes;
+// Array where index 0xf0 (240) is mapped to string 'f0'
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
 /**
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
 function bytesToHex(bytes) {
-    if (!u8a(bytes))
-        throw new Error('Uint8Array expected');
+    abytes(bytes);
     // pre-caching improves the speed 6x
     let hex = '';
     for (let i = 0; i < bytes.length; i++) {
@@ -32561,23 +33104,36 @@ function hexToNumber(hex) {
     return BigInt(hex === '' ? '0' : `0x${hex}`);
 }
 exports.hexToNumber = hexToNumber;
+// We use optimized technique to convert hex string to byte array
+const asciis = { _0: 48, _9: 57, _A: 65, _F: 70, _a: 97, _f: 102 };
+function asciiToBase16(char) {
+    if (char >= asciis._0 && char <= asciis._9)
+        return char - asciis._0;
+    if (char >= asciis._A && char <= asciis._F)
+        return char - (asciis._A - 10);
+    if (char >= asciis._a && char <= asciis._f)
+        return char - (asciis._a - 10);
+    return;
+}
 /**
  * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
 function hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
-    const len = hex.length;
-    if (len % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
-    const array = new Uint8Array(len / 2);
-    for (let i = 0; i < array.length; i++) {
-        const j = i * 2;
-        const hexByte = hex.slice(j, j + 2);
-        const byte = Number.parseInt(hexByte, 16);
-        if (Number.isNaN(byte) || byte < 0)
-            throw new Error('Invalid byte sequence');
-        array[i] = byte;
+    const hl = hex.length;
+    const al = hl / 2;
+    if (hl % 2)
+        throw new Error('padded hex string expected, got unpadded hex of length ' + hl);
+    const array = new Uint8Array(al);
+    for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
+        const n1 = asciiToBase16(hex.charCodeAt(hi));
+        const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
+        if (n1 === undefined || n2 === undefined) {
+            const char = hex[hi] + hex[hi + 1];
+            throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
+        }
+        array[ai] = n1 * 16 + n2;
     }
     return array;
 }
@@ -32588,8 +33144,7 @@ function bytesToNumberBE(bytes) {
 }
 exports.bytesToNumberBE = bytesToNumberBE;
 function bytesToNumberLE(bytes) {
-    if (!u8a(bytes))
-        throw new Error('Uint8Array expected');
+    abytes(bytes);
     return hexToNumber(bytesToHex(Uint8Array.from(bytes).reverse()));
 }
 exports.bytesToNumberLE = bytesToNumberLE;
@@ -32625,7 +33180,7 @@ function ensureBytes(title, hex, expectedLength) {
             throw new Error(`${title} must be valid hex string, got "${hex}". Cause: ${e}`);
         }
     }
-    else if (u8a(hex)) {
+    else if (isBytes(hex)) {
         // Uint8Array.from() instead of hash.slice() because node.js Buffer
         // is instance of Uint8Array, and its slice() creates **mutable** copy
         res = Uint8Array.from(hex);
@@ -32643,25 +33198,29 @@ exports.ensureBytes = ensureBytes;
  * Copies several Uint8Arrays into one.
  */
 function concatBytes(...arrays) {
-    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
-    let pad = 0; // walk through each item, ensure they have proper type
-    arrays.forEach((a) => {
-        if (!u8a(a))
-            throw new Error('Uint8Array expected');
-        r.set(a, pad);
+    let sum = 0;
+    for (let i = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        abytes(a);
+        sum += a.length;
+    }
+    const res = new Uint8Array(sum);
+    for (let i = 0, pad = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        res.set(a, pad);
         pad += a.length;
-    });
-    return r;
+    }
+    return res;
 }
 exports.concatBytes = concatBytes;
-function equalBytes(b1, b2) {
-    // We don't care about timing attacks here
-    if (b1.length !== b2.length)
+// Compares 2 u8a-s in kinda constant time
+function equalBytes(a, b) {
+    if (a.length !== b.length)
         return false;
-    for (let i = 0; i < b1.length; i++)
-        if (b1[i] !== b2[i])
-            return false;
-    return true;
+    let diff = 0;
+    for (let i = 0; i < a.length; i++)
+        diff |= a[i] ^ b[i];
+    return diff === 0;
 }
 exports.equalBytes = equalBytes;
 /**
@@ -32697,9 +33256,9 @@ exports.bitGet = bitGet;
 /**
  * Sets single bit at position.
  */
-const bitSet = (n, pos, value) => {
+function bitSet(n, pos, value) {
     return n | ((value ? _1n : _0n) << BigInt(pos));
-};
+}
 exports.bitSet = bitSet;
 /**
  * Calculate mask for N bits. Not using ** operator with bigints because of old engines.
@@ -32775,7 +33334,7 @@ const validatorFns = {
     function: (val) => typeof val === 'function',
     boolean: (val) => typeof val === 'boolean',
     string: (val) => typeof val === 'string',
-    stringOrUint8Array: (val) => typeof val === 'string' || val instanceof Uint8Array,
+    stringOrUint8Array: (val) => typeof val === 'string' || isBytes(val),
     isSafeInteger: (val) => Number.isSafeInteger(val),
     array: (val) => Array.isArray(val),
     field: (val, object) => object.Fp.isValid(val),
@@ -32887,8 +33446,7 @@ exports.DER = {
         // parse DER signature
         const { Err: E } = exports.DER;
         const data = typeof hex === 'string' ? h2b(hex) : hex;
-        if (!(data instanceof Uint8Array))
-            throw new Error('ui8a expected');
+        ut.abytes(data);
         let l = data.length;
         if (l < 2 || data[0] != 0x30)
             throw new E('Invalid signature tag');
@@ -32965,7 +33523,7 @@ function weierstrassPoints(opts) {
     function normPrivateKeyToScalar(key) {
         const { allowedPrivateKeyLengths: lengths, nByteLength, wrapPrivateKey, n } = CURVE;
         if (lengths && typeof key !== 'bigint') {
-            if (key instanceof Uint8Array)
+            if (ut.isBytes(key))
                 key = ut.bytesToHex(key);
             // Normalize to hex string, pad. E.g. P521 would norm 130-132 char hex to 132-char bytes
             if (typeof key !== 'string' || !lengths.includes(key.length))
@@ -33397,7 +33955,14 @@ function weierstrass(curveDef) {
                 if (!isValidFieldElement(x))
                     throw new Error('Point is not on curve');
                 const y2 = weierstrassEquation(x); // y² = x³ + ax + b
-                let y = Fp.sqrt(y2); // y = y² ^ (p+1)/4
+                let y;
+                try {
+                    y = Fp.sqrt(y2); // y = y² ^ (p+1)/4
+                }
+                catch (sqrtError) {
+                    const suffix = sqrtError instanceof Error ? ': ' + sqrtError.message : '';
+                    throw new Error('Point is not on curve' + suffix);
+                }
                 const isYOdd = (y & _1n) === _1n;
                 // ECDSA
                 const isHeadOdd = (head & 1) === 1;
@@ -33544,7 +34109,7 @@ function weierstrass(curveDef) {
      * Quick and dirty check for item being public key. Does not validate hex, or being on-curve.
      */
     function isProbPub(item) {
-        const arr = item instanceof Uint8Array;
+        const arr = ut.isBytes(item);
         const str = typeof item === 'string';
         const len = (arr || str) && item.length;
         if (arr)
@@ -33624,7 +34189,7 @@ function weierstrass(curveDef) {
         const d = normPrivateKeyToScalar(privateKey); // validate private key, convert to bigint
         const seedArgs = [int2octets(d), int2octets(h1int)];
         // extraEntropy. RFC6979 3.6: additional k' (optional).
-        if (ent != null) {
+        if (ent != null && ent !== false) {
             // K = HMAC_K(V || 0x00 || int2octets(x) || bits2octets(h1) || k')
             const e = ent === true ? randomBytes(Fp.BYTES) : ent; // generate random bytes OR pass as-is
             seedArgs.push((0, utils_js_1.ensureBytes)('extraEntropy', e)); // check for being bytes
@@ -33705,7 +34270,7 @@ function weierstrass(curveDef) {
         let _sig = undefined;
         let P;
         try {
-            if (typeof sg === 'string' || sg instanceof Uint8Array) {
+            if (typeof sg === 'string' || ut.isBytes(sg)) {
                 // Signature can be represented in 2 ways: compact (2*nByteLength) & DER (variable-length).
                 // Since DER can also be 2*nByteLength bytes, we check for it first.
                 try {
@@ -33939,15 +34504,15 @@ function sqrtMod(y) {
 }
 const Fp = (0, modular_js_1.Field)(secp256k1P, undefined, undefined, { sqrt: sqrtMod });
 exports.secp256k1 = (0, _shortw_utils_js_1.createCurve)({
-    a: BigInt(0),
-    b: BigInt(7),
-    Fp,
-    n: secp256k1N,
+    a: BigInt(0), // equation params: a, b
+    b: BigInt(7), // Seem to be rigid: bitcointalk.org/index.php?topic=289795.msg3183975#msg3183975
+    Fp, // Field's prime: 2n**256n - 2n**32n - 2n**9n - 2n**8n - 2n**7n - 2n**6n - 2n**4n - 1n
+    n: secp256k1N, // Curve order, total count of valid points in the field
     // Base point (x, y) aka generator point
     Gx: BigInt('55066263022277343669578718895168534326250603453777594175500187360389116729240'),
     Gy: BigInt('32670510020758816978083085130507043184471273380659243275938904335757337482424'),
-    h: BigInt(1),
-    lowS: true,
+    h: BigInt(1), // Cofactor
+    lowS: true, // Allow only low-S signatures by default in sign() and verify()
     /**
      * secp256k1 belongs to Koblitz curves: it has efficiently computable endomorphism.
      * Endomorphism uses 2x less RAM, speeds up precomputation by 2x and ECDH / key recovery by 20%.
@@ -34162,29 +34727,35 @@ exports.encodeToCurve = (() => htf.encodeToCurve)();
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.output = exports.exists = exports.hash = exports.bytes = exports.bool = exports.number = void 0;
+exports.output = exports.exists = exports.hash = exports.bytes = exports.bool = exports.number = exports.isBytes = void 0;
 function number(n) {
     if (!Number.isSafeInteger(n) || n < 0)
-        throw new Error(`Wrong positive integer: ${n}`);
+        throw new Error(`positive integer expected, not ${n}`);
 }
 exports.number = number;
 function bool(b) {
     if (typeof b !== 'boolean')
-        throw new Error(`Expected boolean, not ${b}`);
+        throw new Error(`boolean expected, not ${b}`);
 }
 exports.bool = bool;
+// copied from utils
+function isBytes(a) {
+    return (a instanceof Uint8Array ||
+        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
+}
+exports.isBytes = isBytes;
 function bytes(b, ...lengths) {
-    if (!(b instanceof Uint8Array))
-        throw new Error('Expected Uint8Array');
+    if (!isBytes(b))
+        throw new Error('Uint8Array expected');
     if (lengths.length > 0 && !lengths.includes(b.length))
-        throw new Error(`Expected Uint8Array of length ${lengths}, not of length=${b.length}`);
+        throw new Error(`Uint8Array expected of length ${lengths}, not of length=${b.length}`);
 }
 exports.bytes = bytes;
-function hash(hash) {
-    if (typeof hash !== 'function' || typeof hash.create !== 'function')
+function hash(h) {
+    if (typeof h !== 'function' || typeof h.create !== 'function')
         throw new Error('Hash should be wrapped by utils.wrapConstructor');
-    number(hash.outputLen);
-    number(hash.blockLen);
+    number(h.outputLen);
+    number(h.blockLen);
 }
 exports.hash = hash;
 function exists(instance, checkFinished = true) {
@@ -34208,16 +34779,16 @@ exports["default"] = assert;
 
 /***/ }),
 
-/***/ "./node_modules/@noble/hashes/_sha2.js":
-/*!*********************************************!*\
-  !*** ./node_modules/@noble/hashes/_sha2.js ***!
-  \*********************************************/
+/***/ "./node_modules/@noble/hashes/_md.js":
+/*!*******************************************!*\
+  !*** ./node_modules/@noble/hashes/_md.js ***!
+  \*******************************************/
 /***/ ((__unused_webpack_module, exports, __webpack_require__) => {
 
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.SHA2 = void 0;
+exports.HashMD = exports.Maj = exports.Chi = void 0;
 const _assert_js_1 = __webpack_require__(/*! ./_assert.js */ "./node_modules/@noble/hashes/_assert.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
 // Polyfill for Safari 14
@@ -34233,8 +34804,17 @@ function setBigUint64(view, byteOffset, value, isLE) {
     view.setUint32(byteOffset + h, wh, isLE);
     view.setUint32(byteOffset + l, wl, isLE);
 }
-// Base SHA2 class (RFC 6234)
-class SHA2 extends utils_js_1.Hash {
+// Choice: a ? b : c
+const Chi = (a, b, c) => (a & b) ^ (~a & c);
+exports.Chi = Chi;
+// Majority function, true if any two inpust is true
+const Maj = (a, b, c) => (a & b) ^ (a & c) ^ (b & c);
+exports.Maj = Maj;
+/**
+ * Merkle-Damgard hash construction base class.
+ * Could be used to create MD5, RIPEMD, SHA1, SHA2.
+ */
+class HashMD extends utils_js_1.Hash {
     constructor(blockLen, outputLen, padOffset, isLE) {
         super();
         this.blockLen = blockLen;
@@ -34286,7 +34866,8 @@ class SHA2 extends utils_js_1.Hash {
         // append the bit '1' to the message
         buffer[pos++] = 0b10000000;
         this.buffer.subarray(pos).fill(0);
-        // we have less than padOffset left in buffer, so we cannot put length in current block, need process it and pad again
+        // we have less than padOffset left in buffer, so we cannot put length in
+        // current block, need process it and pad again
         if (this.padOffset > blockLen - pos) {
             this.process(view, 0);
             pos = 0;
@@ -34331,8 +34912,8 @@ class SHA2 extends utils_js_1.Hash {
         return to;
     }
 }
-exports.SHA2 = SHA2;
-//# sourceMappingURL=_sha2.js.map
+exports.HashMD = HashMD;
+//# sourceMappingURL=_md.js.map
 
 /***/ }),
 
@@ -34453,14 +35034,10 @@ exports.hmac.create = (hash, key) => new HMAC(hash, key);
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.sha224 = exports.sha256 = void 0;
-const _sha2_js_1 = __webpack_require__(/*! ./_sha2.js */ "./node_modules/@noble/hashes/_sha2.js");
+const _md_js_1 = __webpack_require__(/*! ./_md.js */ "./node_modules/@noble/hashes/_md.js");
 const utils_js_1 = __webpack_require__(/*! ./utils.js */ "./node_modules/@noble/hashes/utils.js");
 // SHA2-256 need to try 2^128 hashes to execute birthday attack.
 // BTC network is doing 2^67 hashes/sec as per early 2023.
-// Choice: a ? b : c
-const Chi = (a, b, c) => (a & b) ^ (~a & c);
-// Majority function, true if any two inpust is true
-const Maj = (a, b, c) => (a & b) ^ (a & c) ^ (b & c);
 // Round constants:
 // first 32 bits of the fractional parts of the cube roots of the first 64 primes 2..311)
 // prettier-ignore
@@ -34474,27 +35051,28 @@ const SHA256_K = /* @__PURE__ */ new Uint32Array([
     0x19a4c116, 0x1e376c08, 0x2748774c, 0x34b0bcb5, 0x391c0cb3, 0x4ed8aa4a, 0x5b9cca4f, 0x682e6ff3,
     0x748f82ee, 0x78a5636f, 0x84c87814, 0x8cc70208, 0x90befffa, 0xa4506ceb, 0xbef9a3f7, 0xc67178f2
 ]);
-// Initial state (first 32 bits of the fractional parts of the square roots of the first 8 primes 2..19):
+// Initial state:
+// first 32 bits of the fractional parts of the square roots of the first 8 primes 2..19
 // prettier-ignore
-const IV = /* @__PURE__ */ new Uint32Array([
+const SHA256_IV = /* @__PURE__ */ new Uint32Array([
     0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a, 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
 ]);
 // Temporary buffer, not used to store anything between runs
 // Named this way because it matches specification.
 const SHA256_W = /* @__PURE__ */ new Uint32Array(64);
-class SHA256 extends _sha2_js_1.SHA2 {
+class SHA256 extends _md_js_1.HashMD {
     constructor() {
         super(64, 32, 8, false);
         // We cannot use array here since array allows indexing by variable
         // which means optimizer/compiler cannot use registers.
-        this.A = IV[0] | 0;
-        this.B = IV[1] | 0;
-        this.C = IV[2] | 0;
-        this.D = IV[3] | 0;
-        this.E = IV[4] | 0;
-        this.F = IV[5] | 0;
-        this.G = IV[6] | 0;
-        this.H = IV[7] | 0;
+        this.A = SHA256_IV[0] | 0;
+        this.B = SHA256_IV[1] | 0;
+        this.C = SHA256_IV[2] | 0;
+        this.D = SHA256_IV[3] | 0;
+        this.E = SHA256_IV[4] | 0;
+        this.F = SHA256_IV[5] | 0;
+        this.G = SHA256_IV[6] | 0;
+        this.H = SHA256_IV[7] | 0;
     }
     get() {
         const { A, B, C, D, E, F, G, H } = this;
@@ -34526,9 +35104,9 @@ class SHA256 extends _sha2_js_1.SHA2 {
         let { A, B, C, D, E, F, G, H } = this;
         for (let i = 0; i < 64; i++) {
             const sigma1 = (0, utils_js_1.rotr)(E, 6) ^ (0, utils_js_1.rotr)(E, 11) ^ (0, utils_js_1.rotr)(E, 25);
-            const T1 = (H + sigma1 + Chi(E, F, G) + SHA256_K[i] + SHA256_W[i]) | 0;
+            const T1 = (H + sigma1 + (0, _md_js_1.Chi)(E, F, G) + SHA256_K[i] + SHA256_W[i]) | 0;
             const sigma0 = (0, utils_js_1.rotr)(A, 2) ^ (0, utils_js_1.rotr)(A, 13) ^ (0, utils_js_1.rotr)(A, 22);
-            const T2 = (sigma0 + Maj(A, B, C)) | 0;
+            const T2 = (sigma0 + (0, _md_js_1.Maj)(A, B, C)) | 0;
             H = G;
             G = F;
             F = E;
@@ -34592,15 +35170,22 @@ exports.sha224 = (0, utils_js_1.wrapConstructor)(() => new SHA224());
 
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.randomBytes = exports.wrapXOFConstructorWithOpts = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.isLE = exports.rotr = exports.createView = exports.u32 = exports.u8 = void 0;
+exports.randomBytes = exports.wrapXOFConstructorWithOpts = exports.wrapConstructorWithOpts = exports.wrapConstructor = exports.checkOpts = exports.Hash = exports.concatBytes = exports.toBytes = exports.utf8ToBytes = exports.asyncLoop = exports.nextTick = exports.hexToBytes = exports.bytesToHex = exports.byteSwap32 = exports.byteSwapIfBE = exports.byteSwap = exports.isLE = exports.rotl = exports.rotr = exports.createView = exports.u32 = exports.u8 = exports.isBytes = void 0;
 // We use WebCrypto aka globalThis.crypto, which exists in browsers and node.js 16+.
 // node.js versions earlier than v19 don't declare it in global scope.
 // For node.js, package.json#exports field mapping rewrites import
 // from `crypto` to `cryptoNode`, which imports native module.
 // Makes the utils un-importable in browsers without a bundler.
-// Once node.js 18 is deprecated, we can just drop the import.
+// Once node.js 18 is deprecated (2025-04-30), we can just drop the import.
 const crypto_1 = __webpack_require__(/*! @noble/hashes/crypto */ "./node_modules/@noble/hashes/crypto.js");
-const u8a = (a) => a instanceof Uint8Array;
+const _assert_js_1 = __webpack_require__(/*! ./_assert.js */ "./node_modules/@noble/hashes/_assert.js");
+// export { isBytes } from './_assert.js';
+// We can't reuse isBytes from _assert, because somehow this causes huge perf issues
+function isBytes(a) {
+    return (a instanceof Uint8Array ||
+        (a != null && typeof a === 'object' && a.constructor.name === 'Uint8Array'));
+}
+exports.isBytes = isBytes;
 // Cast array to different type
 const u8 = (arr) => new Uint8Array(arr.buffer, arr.byteOffset, arr.byteLength);
 exports.u8 = u8;
@@ -34612,18 +35197,32 @@ exports.createView = createView;
 // The rotate right (circular right shift) operation for uint32
 const rotr = (word, shift) => (word << (32 - shift)) | (word >>> shift);
 exports.rotr = rotr;
-// big-endian hardware is rare. Just in case someone still decides to run hashes:
-// early-throw an error because we don't support BE yet.
+// The rotate left (circular left shift) operation for uint32
+const rotl = (word, shift) => (word << shift) | ((word >>> (32 - shift)) >>> 0);
+exports.rotl = rotl;
 exports.isLE = new Uint8Array(new Uint32Array([0x11223344]).buffer)[0] === 0x44;
-if (!exports.isLE)
-    throw new Error('Non little-endian hardware is not supported');
+// The byte swap operation for uint32
+const byteSwap = (word) => ((word << 24) & 0xff000000) |
+    ((word << 8) & 0xff0000) |
+    ((word >>> 8) & 0xff00) |
+    ((word >>> 24) & 0xff);
+exports.byteSwap = byteSwap;
+// Conditionally byte swap if on a big-endian platform
+exports.byteSwapIfBE = exports.isLE ? (n) => n : (n) => (0, exports.byteSwap)(n);
+// In place byte swap for Uint32Array
+function byteSwap32(arr) {
+    for (let i = 0; i < arr.length; i++) {
+        arr[i] = (0, exports.byteSwap)(arr[i]);
+    }
+}
+exports.byteSwap32 = byteSwap32;
+// Array where index 0xf0 (240) is mapped to string 'f0'
 const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(16).padStart(2, '0'));
 /**
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
 function bytesToHex(bytes) {
-    if (!u8a(bytes))
-        throw new Error('Uint8Array expected');
+    (0, _assert_js_1.bytes)(bytes);
     // pre-caching improves the speed 6x
     let hex = '';
     for (let i = 0; i < bytes.length; i++) {
@@ -34632,23 +35231,36 @@ function bytesToHex(bytes) {
     return hex;
 }
 exports.bytesToHex = bytesToHex;
+// We use optimized technique to convert hex string to byte array
+const asciis = { _0: 48, _9: 57, _A: 65, _F: 70, _a: 97, _f: 102 };
+function asciiToBase16(char) {
+    if (char >= asciis._0 && char <= asciis._9)
+        return char - asciis._0;
+    if (char >= asciis._A && char <= asciis._F)
+        return char - (asciis._A - 10);
+    if (char >= asciis._a && char <= asciis._f)
+        return char - (asciis._a - 10);
+    return;
+}
 /**
  * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
 function hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
-    const len = hex.length;
-    if (len % 2)
-        throw new Error('padded hex string expected, got unpadded hex of length ' + len);
-    const array = new Uint8Array(len / 2);
-    for (let i = 0; i < array.length; i++) {
-        const j = i * 2;
-        const hexByte = hex.slice(j, j + 2);
-        const byte = Number.parseInt(hexByte, 16);
-        if (Number.isNaN(byte) || byte < 0)
-            throw new Error('Invalid byte sequence');
-        array[i] = byte;
+    const hl = hex.length;
+    const al = hl / 2;
+    if (hl % 2)
+        throw new Error('padded hex string expected, got unpadded hex of length ' + hl);
+    const array = new Uint8Array(al);
+    for (let ai = 0, hi = 0; ai < al; ai++, hi += 2) {
+        const n1 = asciiToBase16(hex.charCodeAt(hi));
+        const n2 = asciiToBase16(hex.charCodeAt(hi + 1));
+        if (n1 === undefined || n2 === undefined) {
+            const char = hex[hi] + hex[hi + 1];
+            throw new Error('hex string expected, got non-hex character "' + char + '" at index ' + hi);
+        }
+        array[ai] = n1 * 16 + n2;
     }
     return array;
 }
@@ -34689,8 +35301,7 @@ exports.utf8ToBytes = utf8ToBytes;
 function toBytes(data) {
     if (typeof data === 'string')
         data = utf8ToBytes(data);
-    if (!u8a(data))
-        throw new Error(`expected Uint8Array, got ${typeof data}`);
+    (0, _assert_js_1.bytes)(data);
     return data;
 }
 exports.toBytes = toBytes;
@@ -34698,15 +35309,19 @@ exports.toBytes = toBytes;
  * Copies several Uint8Arrays into one.
  */
 function concatBytes(...arrays) {
-    const r = new Uint8Array(arrays.reduce((sum, a) => sum + a.length, 0));
-    let pad = 0; // walk through each item, ensure they have proper type
-    arrays.forEach((a) => {
-        if (!u8a(a))
-            throw new Error('Uint8Array expected');
-        r.set(a, pad);
+    let sum = 0;
+    for (let i = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        (0, _assert_js_1.bytes)(a);
+        sum += a.length;
+    }
+    const res = new Uint8Array(sum);
+    for (let i = 0, pad = 0; i < arrays.length; i++) {
+        const a = arrays[i];
+        res.set(a, pad);
         pad += a.length;
-    });
-    return r;
+    }
+    return res;
 }
 exports.concatBytes = concatBytes;
 // For runtime check if class implements interface
@@ -40064,22 +40679,13 @@ var bind = __webpack_require__(/*! function-bind */ "./node_modules/function-bin
 var GetIntrinsic = __webpack_require__(/*! get-intrinsic */ "./node_modules/get-intrinsic/index.js");
 var setFunctionLength = __webpack_require__(/*! set-function-length */ "./node_modules/set-function-length/index.js");
 
-var $TypeError = GetIntrinsic('%TypeError%');
+var $TypeError = __webpack_require__(/*! es-errors/type */ "./node_modules/es-errors/type.js");
 var $apply = GetIntrinsic('%Function.prototype.apply%');
 var $call = GetIntrinsic('%Function.prototype.call%');
 var $reflectApply = GetIntrinsic('%Reflect.apply%', true) || bind.call($call, $apply);
 
-var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
+var $defineProperty = __webpack_require__(/*! es-define-property */ "./node_modules/es-define-property/index.js");
 var $max = GetIntrinsic('%Math.max%');
-
-if ($defineProperty) {
-	try {
-		$defineProperty({}, 'a', { value: 1 });
-	} catch (e) {
-		// IE 8 has a broken defineProperty
-		$defineProperty = null;
-	}
-}
 
 module.exports = function callBind(originalFunction) {
 	if (typeof originalFunction !== 'function') {
@@ -40693,8 +41299,8 @@ if ($defineProperty) {
 	}
 }
 
-var $SyntaxError = GetIntrinsic('%SyntaxError%');
-var $TypeError = GetIntrinsic('%TypeError%');
+var $SyntaxError = __webpack_require__(/*! es-errors/syntax */ "./node_modules/es-errors/syntax.js");
+var $TypeError = __webpack_require__(/*! es-errors/type */ "./node_modules/es-errors/type.js");
 
 var gopd = __webpack_require__(/*! gopd */ "./node_modules/gopd/index.js");
 
@@ -40745,6 +41351,138 @@ module.exports = function defineDataProperty(
 		throw new $SyntaxError('This environment does not support defining a property as non-configurable, non-writable, or non-enumerable.');
 	}
 };
+
+
+/***/ }),
+
+/***/ "./node_modules/es-define-property/index.js":
+/*!**************************************************!*\
+  !*** ./node_modules/es-define-property/index.js ***!
+  \**************************************************/
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
+
+"use strict";
+
+
+var GetIntrinsic = __webpack_require__(/*! get-intrinsic */ "./node_modules/get-intrinsic/index.js");
+
+/** @type {import('.')} */
+var $defineProperty = GetIntrinsic('%Object.defineProperty%', true) || false;
+if ($defineProperty) {
+	try {
+		$defineProperty({}, 'a', { value: 1 });
+	} catch (e) {
+		// IE 8 has a broken defineProperty
+		$defineProperty = false;
+	}
+}
+
+module.exports = $defineProperty;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/eval.js":
+/*!****************************************!*\
+  !*** ./node_modules/es-errors/eval.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./eval')} */
+module.exports = EvalError;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/index.js":
+/*!*****************************************!*\
+  !*** ./node_modules/es-errors/index.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('.')} */
+module.exports = Error;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/range.js":
+/*!*****************************************!*\
+  !*** ./node_modules/es-errors/range.js ***!
+  \*****************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./range')} */
+module.exports = RangeError;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/ref.js":
+/*!***************************************!*\
+  !*** ./node_modules/es-errors/ref.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./ref')} */
+module.exports = ReferenceError;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/syntax.js":
+/*!******************************************!*\
+  !*** ./node_modules/es-errors/syntax.js ***!
+  \******************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./syntax')} */
+module.exports = SyntaxError;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/type.js":
+/*!****************************************!*\
+  !*** ./node_modules/es-errors/type.js ***!
+  \****************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./type')} */
+module.exports = TypeError;
+
+
+/***/ }),
+
+/***/ "./node_modules/es-errors/uri.js":
+/*!***************************************!*\
+  !*** ./node_modules/es-errors/uri.js ***!
+  \***************************************/
+/***/ ((module) => {
+
+"use strict";
+
+
+/** @type {import('./uri')} */
+module.exports = URIError;
 
 
 /***/ }),
@@ -41468,9 +42206,15 @@ module.exports = Function.prototype.bind || implementation;
 
 var undefined;
 
-var $SyntaxError = SyntaxError;
+var $Error = __webpack_require__(/*! es-errors */ "./node_modules/es-errors/index.js");
+var $EvalError = __webpack_require__(/*! es-errors/eval */ "./node_modules/es-errors/eval.js");
+var $RangeError = __webpack_require__(/*! es-errors/range */ "./node_modules/es-errors/range.js");
+var $ReferenceError = __webpack_require__(/*! es-errors/ref */ "./node_modules/es-errors/ref.js");
+var $SyntaxError = __webpack_require__(/*! es-errors/syntax */ "./node_modules/es-errors/syntax.js");
+var $TypeError = __webpack_require__(/*! es-errors/type */ "./node_modules/es-errors/type.js");
+var $URIError = __webpack_require__(/*! es-errors/uri */ "./node_modules/es-errors/uri.js");
+
 var $Function = Function;
-var $TypeError = TypeError;
 
 // eslint-disable-next-line consistent-return
 var getEvalledConstructor = function (expressionSyntax) {
@@ -41522,6 +42266,7 @@ var needsEval = {};
 var TypedArray = typeof Uint8Array === 'undefined' || !getProto ? undefined : getProto(Uint8Array);
 
 var INTRINSICS = {
+	__proto__: null,
 	'%AggregateError%': typeof AggregateError === 'undefined' ? undefined : AggregateError,
 	'%Array%': Array,
 	'%ArrayBuffer%': typeof ArrayBuffer === 'undefined' ? undefined : ArrayBuffer,
@@ -41542,9 +42287,9 @@ var INTRINSICS = {
 	'%decodeURIComponent%': decodeURIComponent,
 	'%encodeURI%': encodeURI,
 	'%encodeURIComponent%': encodeURIComponent,
-	'%Error%': Error,
+	'%Error%': $Error,
 	'%eval%': eval, // eslint-disable-line no-eval
-	'%EvalError%': EvalError,
+	'%EvalError%': $EvalError,
 	'%Float32Array%': typeof Float32Array === 'undefined' ? undefined : Float32Array,
 	'%Float64Array%': typeof Float64Array === 'undefined' ? undefined : Float64Array,
 	'%FinalizationRegistry%': typeof FinalizationRegistry === 'undefined' ? undefined : FinalizationRegistry,
@@ -41566,8 +42311,8 @@ var INTRINSICS = {
 	'%parseInt%': parseInt,
 	'%Promise%': typeof Promise === 'undefined' ? undefined : Promise,
 	'%Proxy%': typeof Proxy === 'undefined' ? undefined : Proxy,
-	'%RangeError%': RangeError,
-	'%ReferenceError%': ReferenceError,
+	'%RangeError%': $RangeError,
+	'%ReferenceError%': $ReferenceError,
 	'%Reflect%': typeof Reflect === 'undefined' ? undefined : Reflect,
 	'%RegExp%': RegExp,
 	'%Set%': typeof Set === 'undefined' ? undefined : Set,
@@ -41584,7 +42329,7 @@ var INTRINSICS = {
 	'%Uint8ClampedArray%': typeof Uint8ClampedArray === 'undefined' ? undefined : Uint8ClampedArray,
 	'%Uint16Array%': typeof Uint16Array === 'undefined' ? undefined : Uint16Array,
 	'%Uint32Array%': typeof Uint32Array === 'undefined' ? undefined : Uint32Array,
-	'%URIError%': URIError,
+	'%URIError%': $URIError,
 	'%WeakMap%': typeof WeakMap === 'undefined' ? undefined : WeakMap,
 	'%WeakRef%': typeof WeakRef === 'undefined' ? undefined : WeakRef,
 	'%WeakSet%': typeof WeakSet === 'undefined' ? undefined : WeakSet
@@ -41626,6 +42371,7 @@ var doEval = function doEval(name) {
 };
 
 var LEGACY_ALIASES = {
+	__proto__: null,
 	'%ArrayBufferPrototype%': ['ArrayBuffer', 'prototype'],
 	'%ArrayPrototype%': ['Array', 'prototype'],
 	'%ArrayProto_entries%': ['Array', 'prototype', 'entries'],
@@ -41855,26 +42601,15 @@ module.exports = $gOPD;
 "use strict";
 
 
-var GetIntrinsic = __webpack_require__(/*! get-intrinsic */ "./node_modules/get-intrinsic/index.js");
-
-var $defineProperty = GetIntrinsic('%Object.defineProperty%', true);
+var $defineProperty = __webpack_require__(/*! es-define-property */ "./node_modules/es-define-property/index.js");
 
 var hasPropertyDescriptors = function hasPropertyDescriptors() {
-	if ($defineProperty) {
-		try {
-			$defineProperty({}, 'a', { value: 1 });
-			return true;
-		} catch (e) {
-			// IE 8 has a broken defineProperty
-			return false;
-		}
-	}
-	return false;
+	return !!$defineProperty;
 };
 
 hasPropertyDescriptors.hasArrayLengthDefineBug = function hasArrayLengthDefineBug() {
 	// node v0.6 has a bug where array lengths can be Set but not Defined
-	if (!hasPropertyDescriptors()) {
+	if (!$defineProperty) {
 		return null;
 	}
 	try {
@@ -42002,7 +42737,7 @@ var call = Function.prototype.call;
 var $hasOwn = Object.prototype.hasOwnProperty;
 var bind = __webpack_require__(/*! function-bind */ "./node_modules/function-bind/index.js");
 
-/** @type {(o: {}, p: PropertyKey) => p is keyof o} */
+/** @type {import('.')} */
 module.exports = bind.call(call, $hasOwn);
 
 
@@ -42298,7 +43033,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   unescapeQuotes: () => (/* binding */ unescapeQuotes)
 /* harmony export */ });
 /* harmony import */ var _IRIs__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./IRIs */ "./node_modules/n3/src/IRIs.js");
-/* harmony import */ var _N3Util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./N3Util */ "./node_modules/n3/src/N3Util.js");
 // N3.js implementations of the RDF/JS core data types
 // See https://github.com/rdfjs/representation-task-force/blob/master/interface-spec.md
 
@@ -42562,7 +43296,7 @@ function termToId(term, nested) {
       termToId(term.predicate, true),
       termToId(term.object, true),
     ];
-    if (!(0,_N3Util__WEBPACK_IMPORTED_MODULE_1__.isDefaultGraph)(term.graph)) {
+    if (term.graph && term.graph.termType !== 'DefaultGraph') {
       res.push(termToId(term.graph, true));
     }
     return nested ? res : JSON.stringify(res);
@@ -42702,9 +43436,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "default": () => (/* binding */ N3Lexer)
 /* harmony export */ });
-/* harmony import */ var _IRIs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IRIs */ "./node_modules/n3/src/IRIs.js");
 /* harmony import */ var queue_microtask__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! queue-microtask */ "./node_modules/queue-microtask/index.js");
 /* harmony import */ var queue_microtask__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(queue_microtask__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _IRIs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./IRIs */ "./node_modules/n3/src/IRIs.js");
 // **N3Lexer** tokenizes N3 documents.
 
 
@@ -44320,95 +45054,6 @@ function initDataFactory(parser, factory) {
   parser.QUANTIFIERS_GRAPH = namedNode('urn:n3:quantifiers');
 }
 initDataFactory(N3Parser.prototype, _N3DataFactory__WEBPACK_IMPORTED_MODULE_2__["default"]);
-
-
-/***/ }),
-
-/***/ "./node_modules/n3/src/N3Util.js":
-/*!***************************************!*\
-  !*** ./node_modules/n3/src/N3Util.js ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   inDefaultGraph: () => (/* binding */ inDefaultGraph),
-/* harmony export */   isBlankNode: () => (/* binding */ isBlankNode),
-/* harmony export */   isDefaultGraph: () => (/* binding */ isDefaultGraph),
-/* harmony export */   isLiteral: () => (/* binding */ isLiteral),
-/* harmony export */   isNamedNode: () => (/* binding */ isNamedNode),
-/* harmony export */   isVariable: () => (/* binding */ isVariable),
-/* harmony export */   prefix: () => (/* binding */ prefix),
-/* harmony export */   prefixes: () => (/* binding */ prefixes)
-/* harmony export */ });
-/* harmony import */ var _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./N3DataFactory */ "./node_modules/n3/src/N3DataFactory.js");
-// **N3Util** provides N3 utility functions.
-
-
-
-// Tests whether the given term represents an IRI
-function isNamedNode(term) {
-  return !!term && term.termType === 'NamedNode';
-}
-
-// Tests whether the given term represents a blank node
-function isBlankNode(term) {
-  return !!term && term.termType === 'BlankNode';
-}
-
-// Tests whether the given term represents a literal
-function isLiteral(term) {
-  return !!term && term.termType === 'Literal';
-}
-
-// Tests whether the given term represents a variable
-function isVariable(term) {
-  return !!term && term.termType === 'Variable';
-}
-
-// Tests whether the given term represents the default graph
-function isDefaultGraph(term) {
-  return !!term && term.termType === 'DefaultGraph';
-}
-
-// Tests whether the given quad is in the default graph
-function inDefaultGraph(quad) {
-  return isDefaultGraph(quad.graph);
-}
-
-// Creates a function that prepends the given IRI to a local name
-function prefix(iri, factory) {
-  return prefixes({ '': iri.value || iri }, factory)('');
-}
-
-// Creates a function that allows registering and expanding prefixes
-function prefixes(defaultPrefixes, factory) {
-  // Add all of the default prefixes
-  const prefixes = Object.create(null);
-  for (const prefix in defaultPrefixes)
-    processPrefix(prefix, defaultPrefixes[prefix]);
-  // Set the default factory if none was specified
-  factory = factory || _N3DataFactory__WEBPACK_IMPORTED_MODULE_0__["default"];
-
-  // Registers a new prefix (if an IRI was specified)
-  // or retrieves a function that expands an existing prefix (if no IRI was specified)
-  function processPrefix(prefix, iri) {
-    // Create a new prefix if an IRI is specified or the prefix doesn't exist
-    if (typeof iri === 'string') {
-      // Create a function that expands the prefix
-      const cache = Object.create(null);
-      prefixes[prefix] = local => {
-        return cache[local] || (cache[local] = factory.namedNode(iri + local));
-      };
-    }
-    else if (!(prefix in prefixes)) {
-      throw new Error(`Unknown prefix: ${prefix}`);
-    }
-    return prefixes[prefix];
-  }
-  return processPrefix;
-}
 
 
 /***/ }),
@@ -47461,7 +48106,7 @@ var Fetcher = /*#__PURE__*/function () {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var request = _step.value;
           var _response = kb.any(request, this.ns.link('response'), null, meta);
-          if (_response !== undefined) {
+          if (_response != undefined) {
             // ts
             var quad = kb.statementsMatching(_response, this.ns.link('outOfDate'), true, meta);
             kb.remove(quad);
@@ -48474,7 +49119,12 @@ var Fetcher = /*#__PURE__*/function () {
 
         // Before we parse new data clear old but only on 200
         if (options.clearPreviousData) {
-          kb.removeDocument(options.resource);
+          // kb.removeDocument(options.resource)
+          // only remove content, keep metatdata
+          var sts = kb.statementsMatching(undefined, undefined, undefined, options.resource).slice(); // Take a copy as this is the actual index
+          for (var i = 0; i < sts.length; i++) {
+            kb.removeStatement(sts[i]);
+          }
         }
         var isImage = contentType.includes('image/') || contentType.includes('application/pdf');
         if (contentType && isImage) {
@@ -57609,36 +58259,59 @@ var IndexedFormula = /*#__PURE__*/function (_Formula) {
     }
 
     /**
-     * Removes all statements in a doc, along with the related metadata including request/response
+     * Removes all statements in a doc, along with the related metadata including request/response/status
      * @param doc - The document / graph
      */
   }, {
     key: "removeDocument",
     value: function removeDocument(doc) {
-      var meta = this.sym('chrome://TheCurrentSession'); // or this.rdfFactory.namedNode('chrome://TheCurrentSession')
-      var linkNamespaceURI = 'http://www.w3.org/2007/ont/link#'; // alain
-      // remove request/response and metadata
-      var requests = this.statementsMatching(undefined, this.sym("".concat(linkNamespaceURI, "requestedURI")), this.rdfFactory.literal(doc.value), meta).map(function (st) {
-        return st.subject;
-      });
-      for (var r = 0; r < requests.length; r++) {
-        var request = requests[r];
-        if (request !== undefined) {
-          this.removeMatches(request, null, null, meta);
-          var response = this.any(request, this.sym("".concat(linkNamespaceURI, "response")), null, meta);
-          if (response !== undefined) {
-            // ts
-            this.removeMatches(response, null, null, meta);
-          }
-        }
-      }
-      this.removeMatches(this.sym(doc.value), null, null, meta); // content-type
-
+      this.removeMetadata(doc);
       // remove document
       var sts = this.statementsMatching(undefined, undefined, undefined, doc).slice(); // Take a copy as this is the actual index
       for (var i = 0; i < sts.length; i++) {
         this.removeStatement(sts[i]);
       }
+      this.removeMatches(doc, null, null);
+      return this;
+    }
+  }, {
+    key: "removeMetadata",
+    value: function removeMetadata(doc) {
+      var meta = this.sym('chrome://TheCurrentSession'); // or this.rdfFactory.namedNode('chrome://TheCurrentSession')
+      var linkNamespaceURI = 'http://www.w3.org/2007/ont/link#';
+      // remove status/response/request metadata
+      var requests = this.statementsMatching(undefined, this.sym("".concat(linkNamespaceURI, "requestedURI")), this.rdfFactory.literal(doc.value), meta).map(function (st) {
+        return st.subject;
+      });
+      for (var r = 0; r < requests.length; r++) {
+        var request = requests[r];
+        if (request != undefined) {
+          // removeMatches unresolved issue with collection https://github.com/linkeddata/rdflib.js/issues/631
+          var sts = void 0;
+          // status collection
+          var status = this.any(request, this.sym("".concat(linkNamespaceURI, "status")), null, meta);
+          if (status != undefined) {
+            sts = this.statementsMatching(status, this.sym("".concat(linkNamespaceURI, "status")), null, meta).slice();
+            for (var i = 0; i < sts.length; i++) {
+              this.removeStatement(sts[i]);
+            }
+          }
+          // response items list
+          var response = this.any(request, this.sym("".concat(linkNamespaceURI, "response")), null, meta);
+          if (response != undefined) {
+            sts = this.statementsMatching(response, null, null, meta).slice();
+            for (var i = 0; i < sts.length; i++) {
+              this.removeStatement(sts[i]);
+            }
+          }
+          // request triples
+          sts = this.statementsMatching(request, null, null, meta).slice();
+          for (var i = 0; i < sts.length; i++) {
+            this.removeStatement(sts[i]);
+          }
+        }
+      }
+      this.removeMatches(this.sym(doc.value), null, null, meta); // content-type
       return this;
     }
 
@@ -58157,7 +58830,7 @@ var UpdateManager = /*#__PURE__*/function () {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var request = _step.value;
           var _response = kb.any(request, this.ns.link('response'), null, meta);
-          if (_response !== undefined) {
+          if (_response != undefined) {
             // ts
             kb.add(_response, this.ns.link('outOfDate'), true, meta); // @@ Boolean is fine - fix types
           }
@@ -58707,7 +59380,7 @@ var UpdateManager = /*#__PURE__*/function () {
             }
           } else {
             control.reloading = false;
-            if (response.status === 0) {
+            if (response && response.status === 0) {
               // console.log('Network error refreshing the data. Retrying in ' +
               // retryTimeout / 1000)
               control.reloading = true;
@@ -60523,9 +61196,12 @@ var define = __webpack_require__(/*! define-data-property */ "./node_modules/def
 var hasDescriptors = __webpack_require__(/*! has-property-descriptors */ "./node_modules/has-property-descriptors/index.js")();
 var gOPD = __webpack_require__(/*! gopd */ "./node_modules/gopd/index.js");
 
-var $TypeError = GetIntrinsic('%TypeError%');
+var $TypeError = __webpack_require__(/*! es-errors/type */ "./node_modules/es-errors/type.js");
 var $floor = GetIntrinsic('%Math.floor%');
 
+/** @typedef {(...args: unknown[]) => unknown} Func */
+
+/** @type {<T extends Func = Func>(fn: T, length: number, loose?: boolean) => T} */
 module.exports = function setFunctionLength(fn, length) {
 	if (typeof fn !== 'function') {
 		throw new $TypeError('`fn` is not a function');
@@ -60550,9 +61226,9 @@ module.exports = function setFunctionLength(fn, length) {
 
 	if (functionLengthIsConfigurable || functionLengthIsWritable || !loose) {
 		if (hasDescriptors) {
-			define(fn, 'length', length, true, true);
+			define(/** @type {Parameters<define>[0]} */ (fn), 'length', length, true, true);
 		} else {
-			define(fn, 'length', length);
+			define(/** @type {Parameters<define>[0]} */ (fn), 'length', length);
 		}
 	}
 	return fn;
@@ -60574,7 +61250,7 @@ var GetIntrinsic = __webpack_require__(/*! get-intrinsic */ "./node_modules/get-
 var callBound = __webpack_require__(/*! call-bind/callBound */ "./node_modules/call-bind/callBound.js");
 var inspect = __webpack_require__(/*! object-inspect */ "./node_modules/object-inspect/index.js");
 
-var $TypeError = GetIntrinsic('%TypeError%');
+var $TypeError = __webpack_require__(/*! es-errors/type */ "./node_modules/es-errors/type.js");
 var $WeakMap = GetIntrinsic('%WeakMap%', true);
 var $Map = GetIntrinsic('%Map%', true);
 
@@ -60586,13 +61262,10 @@ var $mapSet = callBound('Map.prototype.set', true);
 var $mapHas = callBound('Map.prototype.has', true);
 
 /*
- * This function traverses the list returning the node corresponding to the
- * given key.
- *
- * That node is also moved to the head of the list, so that if it's accessed
- * again we don't need to traverse the whole list. By doing so, all the recently
- * used nodes can be accessed relatively quickly.
- */
+* This function traverses the list returning the node corresponding to the given key.
+*
+* That node is also moved to the head of the list, so that if it's accessed again we don't need to traverse the whole list. By doing so, all the recently used nodes can be accessed relatively quickly.
+*/
 var listGetNode = function (list, key) { // eslint-disable-line consistent-return
 	for (var prev = list, curr; (curr = prev.next) !== null; prev = curr) {
 		if (curr.key === key) {
@@ -60679,11 +61352,7 @@ module.exports = function getSideChannel() {
 				$mapSet($m, key, value);
 			} else {
 				if (!$o) {
-					/*
-					 * Initialize the linked list as an empty node, so that we don't have
-					 * to special-case handling of the first node: we can always refer to
-					 * it as (previous node).next, instead of something like (list).head
-					 */
+					// Initialize the linked list as an empty node, so that we don't have to special-case handling of the first node: we can always refer to it as (previous node).next, instead of something like (list).head
 					$o = { key: {}, next: null };
 				}
 				listSet($o, key, value);
@@ -61392,10 +62061,10 @@ function createChatLogic(store, profileLogic) {
      * @param createIfMissing - Whether the chat should be created, if missing
      * @returns null if missing, or a node referring to an already existing chat, or the newly created chat
      */
-    function getChat(invitee, createIfMissing) {
-        if (createIfMissing === void 0) { createIfMissing = true; }
-        return __awaiter(this, void 0, void 0, function () {
+    function getChat(invitee_1) {
+        return __awaiter(this, arguments, void 0, function (invitee, createIfMissing) {
             var _a, me, chatContainer, exists, chatThing;
+            if (createIfMissing === void 0) { createIfMissing = true; }
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, findChat(invitee)];
@@ -61424,9 +62093,9 @@ function createChatLogic(store, profileLogic) {
         });
     }
     function sendInvite(invitee, chatThing) {
-        var _a;
         return __awaiter(this, void 0, void 0, function () {
             var inviteeInbox, inviteBody, inviteResponse, locationStr;
+            var _a;
             return __generator(this, function (_b) {
                 switch (_b.label) {
                     case 0: return [4 /*yield*/, store.fetcher.load(invitee.doc())];
@@ -65618,20 +66287,12 @@ module.exports = _classCallCheck, module.exports.__esModule = true, module.expor
 
 var setPrototypeOf = __webpack_require__(/*! ./setPrototypeOf.js */ "./node_modules/@babel/runtime/helpers/setPrototypeOf.js");
 var isNativeReflectConstruct = __webpack_require__(/*! ./isNativeReflectConstruct.js */ "./node_modules/@babel/runtime/helpers/isNativeReflectConstruct.js");
-function _construct(Parent, args, Class) {
-  if (isNativeReflectConstruct()) {
-    module.exports = _construct = Reflect.construct.bind(), module.exports.__esModule = true, module.exports["default"] = module.exports;
-  } else {
-    module.exports = _construct = function _construct(Parent, args, Class) {
-      var a = [null];
-      a.push.apply(a, args);
-      var Constructor = Function.bind.apply(Parent, a);
-      var instance = new Constructor();
-      if (Class) setPrototypeOf(instance, Class.prototype);
-      return instance;
-    }, module.exports.__esModule = true, module.exports["default"] = module.exports;
-  }
-  return _construct.apply(null, arguments);
+function _construct(t, e, r) {
+  if (isNativeReflectConstruct()) return Reflect.construct.apply(null, arguments);
+  var o = [null];
+  o.push.apply(o, e);
+  var p = new (t.bind.apply(t, o))();
+  return r && setPrototypeOf(p, r.prototype), p;
 }
 module.exports = _construct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -65772,15 +66433,12 @@ module.exports = _isNativeFunction, module.exports.__esModule = true, module.exp
 /***/ ((module) => {
 
 function _isNativeReflectConstruct() {
-  if (typeof Reflect === "undefined" || !Reflect.construct) return false;
-  if (Reflect.construct.sham) return false;
-  if (typeof Proxy === "function") return true;
   try {
-    Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
-    return true;
-  } catch (e) {
-    return false;
-  }
+    var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {}));
+  } catch (t) {}
+  return (module.exports = _isNativeReflectConstruct = function _isNativeReflectConstruct() {
+    return !!t;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports)();
 }
 module.exports = _isNativeReflectConstruct, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
@@ -65998,7 +66656,7 @@ function _regeneratorRuntime() {
   function makeInvokeMethod(e, r, n) {
     var o = h;
     return function (i, a) {
-      if (o === f) throw new Error("Generator is already running");
+      if (o === f) throw Error("Generator is already running");
       if (o === s) {
         if ("throw" === i) throw a;
         return {
@@ -66140,7 +66798,7 @@ function _regeneratorRuntime() {
           } else if (c) {
             if (this.prev < i.catchLoc) return handle(i.catchLoc, !0);
           } else {
-            if (!u) throw new Error("try statement without catch or finally");
+            if (!u) throw Error("try statement without catch or finally");
             if (this.prev < i.finallyLoc) return handle(i.finallyLoc);
           }
         }
@@ -66180,7 +66838,7 @@ function _regeneratorRuntime() {
           return o;
         }
       }
-      throw new Error("illegal catch attempt");
+      throw Error("illegal catch attempt");
     },
     delegateYield: function delegateYield(e, r, n) {
       return this.delegate = {
@@ -66273,17 +66931,17 @@ module.exports = _toConsumableArray, module.exports.__esModule = true, module.ex
 /***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
-function _toPrimitive(input, hint) {
-  if (_typeof(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if (_typeof(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != _typeof(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != _typeof(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
-module.exports = _toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPrimitive, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -66295,11 +66953,11 @@ module.exports = _toPrimitive, module.exports.__esModule = true, module.exports[
 
 var _typeof = (__webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/typeof.js")["default"]);
 var toPrimitive = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/toPrimitive.js");
-function _toPropertyKey(arg) {
-  var key = toPrimitive(arg, "string");
-  return _typeof(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = toPrimitive(t, "string");
+  return "symbol" == _typeof(i) ? i : i + "";
 }
-module.exports = _toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = toPropertyKey, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ }),
 
@@ -66660,19 +67318,19 @@ function _setPrototypeOf(o, p) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPrimitive)
+/* harmony export */   "default": () => (/* binding */ toPrimitive)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 
-function _toPrimitive(input, hint) {
-  if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input) !== "object" || input === null) return input;
-  var prim = input[Symbol.toPrimitive];
-  if (prim !== undefined) {
-    var res = prim.call(input, hint || "default");
-    if ((0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(res) !== "object") return res;
+function toPrimitive(t, r) {
+  if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(t) || !t) return t;
+  var e = t[Symbol.toPrimitive];
+  if (void 0 !== e) {
+    var i = e.call(t, r || "default");
+    if ("object" != (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i)) return i;
     throw new TypeError("@@toPrimitive must return a primitive value.");
   }
-  return (hint === "string" ? String : Number)(input);
+  return ("string" === r ? String : Number)(t);
 }
 
 /***/ }),
@@ -66686,15 +67344,15 @@ function _toPrimitive(input, hint) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ _toPropertyKey)
+/* harmony export */   "default": () => (/* binding */ toPropertyKey)
 /* harmony export */ });
 /* harmony import */ var _typeof_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./typeof.js */ "./node_modules/@babel/runtime/helpers/esm/typeof.js");
 /* harmony import */ var _toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./toPrimitive.js */ "./node_modules/@babel/runtime/helpers/esm/toPrimitive.js");
 
 
-function _toPropertyKey(arg) {
-  var key = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(arg, "string");
-  return (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) === "symbol" ? key : String(key);
+function toPropertyKey(t) {
+  var i = (0,_toPrimitive_js__WEBPACK_IMPORTED_MODULE_1__["default"])(t, "string");
+  return "symbol" == (0,_typeof_js__WEBPACK_IMPORTED_MODULE_0__["default"])(i) ? i : i + "";
 }
 
 /***/ }),
@@ -73182,6 +73840,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   JOSEAlgNotAllowed: () => (/* binding */ JOSEAlgNotAllowed),
 /* harmony export */   JOSEError: () => (/* binding */ JOSEError),
 /* harmony export */   JOSENotSupported: () => (/* binding */ JOSENotSupported),
+/* harmony export */   JWEDecompressionFailed: () => (/* binding */ JWEDecompressionFailed),
 /* harmony export */   JWEDecryptionFailed: () => (/* binding */ JWEDecryptionFailed),
 /* harmony export */   JWEInvalid: () => (/* binding */ JWEInvalid),
 /* harmony export */   JWKInvalid: () => (/* binding */ JWKInvalid),
@@ -73255,6 +73914,16 @@ class JWEDecryptionFailed extends JOSEError {
     }
     static get code() {
         return 'ERR_JWE_DECRYPTION_FAILED';
+    }
+}
+class JWEDecompressionFailed extends JOSEError {
+    constructor() {
+        super(...arguments);
+        this.code = 'ERR_JWE_DECOMPRESSION_FAILED';
+        this.message = 'decompression operation failed';
+    }
+    static get code() {
+        return 'ERR_JWE_DECOMPRESSION_FAILED';
     }
 }
 class JWEInvalid extends JOSEError {
@@ -73372,7 +74041,7 @@ __webpack_require__.r(__webpack_exports__);
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"application/1d-interleaved-parityfec":{"source":"iana"},"application/3gpdash-qoe-report+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/3gpp-ims+xml":{"source":"iana","compressible":true},"application/3gpphal+json":{"source":"iana","compressible":true},"application/3gpphalforms+json":{"source":"iana","compressible":true},"application/a2l":{"source":"iana"},"application/ace+cbor":{"source":"iana"},"application/activemessage":{"source":"iana"},"application/activity+json":{"source":"iana","compressible":true},"application/alto-costmap+json":{"source":"iana","compressible":true},"application/alto-costmapfilter+json":{"source":"iana","compressible":true},"application/alto-directory+json":{"source":"iana","compressible":true},"application/alto-endpointcost+json":{"source":"iana","compressible":true},"application/alto-endpointcostparams+json":{"source":"iana","compressible":true},"application/alto-endpointprop+json":{"source":"iana","compressible":true},"application/alto-endpointpropparams+json":{"source":"iana","compressible":true},"application/alto-error+json":{"source":"iana","compressible":true},"application/alto-networkmap+json":{"source":"iana","compressible":true},"application/alto-networkmapfilter+json":{"source":"iana","compressible":true},"application/alto-updatestreamcontrol+json":{"source":"iana","compressible":true},"application/alto-updatestreamparams+json":{"source":"iana","compressible":true},"application/aml":{"source":"iana"},"application/andrew-inset":{"source":"iana","extensions":["ez"]},"application/applefile":{"source":"iana"},"application/applixware":{"source":"apache","extensions":["aw"]},"application/at+jwt":{"source":"iana"},"application/atf":{"source":"iana"},"application/atfx":{"source":"iana"},"application/atom+xml":{"source":"iana","compressible":true,"extensions":["atom"]},"application/atomcat+xml":{"source":"iana","compressible":true,"extensions":["atomcat"]},"application/atomdeleted+xml":{"source":"iana","compressible":true,"extensions":["atomdeleted"]},"application/atomicmail":{"source":"iana"},"application/atomsvc+xml":{"source":"iana","compressible":true,"extensions":["atomsvc"]},"application/atsc-dwd+xml":{"source":"iana","compressible":true,"extensions":["dwd"]},"application/atsc-dynamic-event-message":{"source":"iana"},"application/atsc-held+xml":{"source":"iana","compressible":true,"extensions":["held"]},"application/atsc-rdt+json":{"source":"iana","compressible":true},"application/atsc-rsat+xml":{"source":"iana","compressible":true,"extensions":["rsat"]},"application/atxml":{"source":"iana"},"application/auth-policy+xml":{"source":"iana","compressible":true},"application/bacnet-xdd+zip":{"source":"iana","compressible":false},"application/batch-smtp":{"source":"iana"},"application/bdoc":{"compressible":false,"extensions":["bdoc"]},"application/beep+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/calendar+json":{"source":"iana","compressible":true},"application/calendar+xml":{"source":"iana","compressible":true,"extensions":["xcs"]},"application/call-completion":{"source":"iana"},"application/cals-1840":{"source":"iana"},"application/captive+json":{"source":"iana","compressible":true},"application/cbor":{"source":"iana"},"application/cbor-seq":{"source":"iana"},"application/cccex":{"source":"iana"},"application/ccmp+xml":{"source":"iana","compressible":true},"application/ccxml+xml":{"source":"iana","compressible":true,"extensions":["ccxml"]},"application/cdfx+xml":{"source":"iana","compressible":true,"extensions":["cdfx"]},"application/cdmi-capability":{"source":"iana","extensions":["cdmia"]},"application/cdmi-container":{"source":"iana","extensions":["cdmic"]},"application/cdmi-domain":{"source":"iana","extensions":["cdmid"]},"application/cdmi-object":{"source":"iana","extensions":["cdmio"]},"application/cdmi-queue":{"source":"iana","extensions":["cdmiq"]},"application/cdni":{"source":"iana"},"application/cea":{"source":"iana"},"application/cea-2018+xml":{"source":"iana","compressible":true},"application/cellml+xml":{"source":"iana","compressible":true},"application/cfw":{"source":"iana"},"application/city+json":{"source":"iana","compressible":true},"application/clr":{"source":"iana"},"application/clue+xml":{"source":"iana","compressible":true},"application/clue_info+xml":{"source":"iana","compressible":true},"application/cms":{"source":"iana"},"application/cnrp+xml":{"source":"iana","compressible":true},"application/coap-group+json":{"source":"iana","compressible":true},"application/coap-payload":{"source":"iana"},"application/commonground":{"source":"iana"},"application/conference-info+xml":{"source":"iana","compressible":true},"application/cose":{"source":"iana"},"application/cose-key":{"source":"iana"},"application/cose-key-set":{"source":"iana"},"application/cpl+xml":{"source":"iana","compressible":true,"extensions":["cpl"]},"application/csrattrs":{"source":"iana"},"application/csta+xml":{"source":"iana","compressible":true},"application/cstadata+xml":{"source":"iana","compressible":true},"application/csvm+json":{"source":"iana","compressible":true},"application/cu-seeme":{"source":"apache","extensions":["cu"]},"application/cwt":{"source":"iana"},"application/cybercash":{"source":"iana"},"application/dart":{"compressible":true},"application/dash+xml":{"source":"iana","compressible":true,"extensions":["mpd"]},"application/dash-patch+xml":{"source":"iana","compressible":true,"extensions":["mpp"]},"application/dashdelta":{"source":"iana"},"application/davmount+xml":{"source":"iana","compressible":true,"extensions":["davmount"]},"application/dca-rft":{"source":"iana"},"application/dcd":{"source":"iana"},"application/dec-dx":{"source":"iana"},"application/dialog-info+xml":{"source":"iana","compressible":true},"application/dicom":{"source":"iana"},"application/dicom+json":{"source":"iana","compressible":true},"application/dicom+xml":{"source":"iana","compressible":true},"application/dii":{"source":"iana"},"application/dit":{"source":"iana"},"application/dns":{"source":"iana"},"application/dns+json":{"source":"iana","compressible":true},"application/dns-message":{"source":"iana"},"application/docbook+xml":{"source":"apache","compressible":true,"extensions":["dbk"]},"application/dots+cbor":{"source":"iana"},"application/dskpp+xml":{"source":"iana","compressible":true},"application/dssc+der":{"source":"iana","extensions":["dssc"]},"application/dssc+xml":{"source":"iana","compressible":true,"extensions":["xdssc"]},"application/dvcs":{"source":"iana"},"application/ecmascript":{"source":"iana","compressible":true,"extensions":["es","ecma"]},"application/edi-consent":{"source":"iana"},"application/edi-x12":{"source":"iana","compressible":false},"application/edifact":{"source":"iana","compressible":false},"application/efi":{"source":"iana"},"application/elm+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/elm+xml":{"source":"iana","compressible":true},"application/emergencycalldata.cap+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/emergencycalldata.comment+xml":{"source":"iana","compressible":true},"application/emergencycalldata.control+xml":{"source":"iana","compressible":true},"application/emergencycalldata.deviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.ecall.msd":{"source":"iana"},"application/emergencycalldata.providerinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.serviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.subscriberinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.veds+xml":{"source":"iana","compressible":true},"application/emma+xml":{"source":"iana","compressible":true,"extensions":["emma"]},"application/emotionml+xml":{"source":"iana","compressible":true,"extensions":["emotionml"]},"application/encaprtp":{"source":"iana"},"application/epp+xml":{"source":"iana","compressible":true},"application/epub+zip":{"source":"iana","compressible":false,"extensions":["epub"]},"application/eshop":{"source":"iana"},"application/exi":{"source":"iana","extensions":["exi"]},"application/expect-ct-report+json":{"source":"iana","compressible":true},"application/express":{"source":"iana","extensions":["exp"]},"application/fastinfoset":{"source":"iana"},"application/fastsoap":{"source":"iana"},"application/fdt+xml":{"source":"iana","compressible":true,"extensions":["fdt"]},"application/fhir+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/fhir+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/fido.trusted-apps+json":{"compressible":true},"application/fits":{"source":"iana"},"application/flexfec":{"source":"iana"},"application/font-sfnt":{"source":"iana"},"application/font-tdpfr":{"source":"iana","extensions":["pfr"]},"application/font-woff":{"source":"iana","compressible":false},"application/framework-attributes+xml":{"source":"iana","compressible":true},"application/geo+json":{"source":"iana","compressible":true,"extensions":["geojson"]},"application/geo+json-seq":{"source":"iana"},"application/geopackage+sqlite3":{"source":"iana"},"application/geoxacml+xml":{"source":"iana","compressible":true},"application/gltf-buffer":{"source":"iana"},"application/gml+xml":{"source":"iana","compressible":true,"extensions":["gml"]},"application/gpx+xml":{"source":"apache","compressible":true,"extensions":["gpx"]},"application/gxf":{"source":"apache","extensions":["gxf"]},"application/gzip":{"source":"iana","compressible":false,"extensions":["gz"]},"application/h224":{"source":"iana"},"application/held+xml":{"source":"iana","compressible":true},"application/hjson":{"extensions":["hjson"]},"application/http":{"source":"iana"},"application/hyperstudio":{"source":"iana","extensions":["stk"]},"application/ibe-key-request+xml":{"source":"iana","compressible":true},"application/ibe-pkg-reply+xml":{"source":"iana","compressible":true},"application/ibe-pp-data":{"source":"iana"},"application/iges":{"source":"iana"},"application/im-iscomposing+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/index":{"source":"iana"},"application/index.cmd":{"source":"iana"},"application/index.obj":{"source":"iana"},"application/index.response":{"source":"iana"},"application/index.vnd":{"source":"iana"},"application/inkml+xml":{"source":"iana","compressible":true,"extensions":["ink","inkml"]},"application/iotp":{"source":"iana"},"application/ipfix":{"source":"iana","extensions":["ipfix"]},"application/ipp":{"source":"iana"},"application/isup":{"source":"iana"},"application/its+xml":{"source":"iana","compressible":true,"extensions":["its"]},"application/java-archive":{"source":"apache","compressible":false,"extensions":["jar","war","ear"]},"application/java-serialized-object":{"source":"apache","compressible":false,"extensions":["ser"]},"application/java-vm":{"source":"apache","compressible":false,"extensions":["class"]},"application/javascript":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["js","mjs"]},"application/jf2feed+json":{"source":"iana","compressible":true},"application/jose":{"source":"iana"},"application/jose+json":{"source":"iana","compressible":true},"application/jrd+json":{"source":"iana","compressible":true},"application/jscalendar+json":{"source":"iana","compressible":true},"application/json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["json","map"]},"application/json-patch+json":{"source":"iana","compressible":true},"application/json-seq":{"source":"iana"},"application/json5":{"extensions":["json5"]},"application/jsonml+json":{"source":"apache","compressible":true,"extensions":["jsonml"]},"application/jwk+json":{"source":"iana","compressible":true},"application/jwk-set+json":{"source":"iana","compressible":true},"application/jwt":{"source":"iana"},"application/kpml-request+xml":{"source":"iana","compressible":true},"application/kpml-response+xml":{"source":"iana","compressible":true},"application/ld+json":{"source":"iana","compressible":true,"extensions":["jsonld"]},"application/lgr+xml":{"source":"iana","compressible":true,"extensions":["lgr"]},"application/link-format":{"source":"iana"},"application/load-control+xml":{"source":"iana","compressible":true},"application/lost+xml":{"source":"iana","compressible":true,"extensions":["lostxml"]},"application/lostsync+xml":{"source":"iana","compressible":true},"application/lpf+zip":{"source":"iana","compressible":false},"application/lxf":{"source":"iana"},"application/mac-binhex40":{"source":"iana","extensions":["hqx"]},"application/mac-compactpro":{"source":"apache","extensions":["cpt"]},"application/macwriteii":{"source":"iana"},"application/mads+xml":{"source":"iana","compressible":true,"extensions":["mads"]},"application/manifest+json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["webmanifest"]},"application/marc":{"source":"iana","extensions":["mrc"]},"application/marcxml+xml":{"source":"iana","compressible":true,"extensions":["mrcx"]},"application/mathematica":{"source":"iana","extensions":["ma","nb","mb"]},"application/mathml+xml":{"source":"iana","compressible":true,"extensions":["mathml"]},"application/mathml-content+xml":{"source":"iana","compressible":true},"application/mathml-presentation+xml":{"source":"iana","compressible":true},"application/mbms-associated-procedure-description+xml":{"source":"iana","compressible":true},"application/mbms-deregister+xml":{"source":"iana","compressible":true},"application/mbms-envelope+xml":{"source":"iana","compressible":true},"application/mbms-msk+xml":{"source":"iana","compressible":true},"application/mbms-msk-response+xml":{"source":"iana","compressible":true},"application/mbms-protection-description+xml":{"source":"iana","compressible":true},"application/mbms-reception-report+xml":{"source":"iana","compressible":true},"application/mbms-register+xml":{"source":"iana","compressible":true},"application/mbms-register-response+xml":{"source":"iana","compressible":true},"application/mbms-schedule+xml":{"source":"iana","compressible":true},"application/mbms-user-service-description+xml":{"source":"iana","compressible":true},"application/mbox":{"source":"iana","extensions":["mbox"]},"application/media-policy-dataset+xml":{"source":"iana","compressible":true,"extensions":["mpf"]},"application/media_control+xml":{"source":"iana","compressible":true},"application/mediaservercontrol+xml":{"source":"iana","compressible":true,"extensions":["mscml"]},"application/merge-patch+json":{"source":"iana","compressible":true},"application/metalink+xml":{"source":"apache","compressible":true,"extensions":["metalink"]},"application/metalink4+xml":{"source":"iana","compressible":true,"extensions":["meta4"]},"application/mets+xml":{"source":"iana","compressible":true,"extensions":["mets"]},"application/mf4":{"source":"iana"},"application/mikey":{"source":"iana"},"application/mipc":{"source":"iana"},"application/missing-blocks+cbor-seq":{"source":"iana"},"application/mmt-aei+xml":{"source":"iana","compressible":true,"extensions":["maei"]},"application/mmt-usd+xml":{"source":"iana","compressible":true,"extensions":["musd"]},"application/mods+xml":{"source":"iana","compressible":true,"extensions":["mods"]},"application/moss-keys":{"source":"iana"},"application/moss-signature":{"source":"iana"},"application/mosskey-data":{"source":"iana"},"application/mosskey-request":{"source":"iana"},"application/mp21":{"source":"iana","extensions":["m21","mp21"]},"application/mp4":{"source":"iana","extensions":["mp4s","m4p"]},"application/mpeg4-generic":{"source":"iana"},"application/mpeg4-iod":{"source":"iana"},"application/mpeg4-iod-xmt":{"source":"iana"},"application/mrb-consumer+xml":{"source":"iana","compressible":true},"application/mrb-publish+xml":{"source":"iana","compressible":true},"application/msc-ivr+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msc-mixer+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msword":{"source":"iana","compressible":false,"extensions":["doc","dot"]},"application/mud+json":{"source":"iana","compressible":true},"application/multipart-core":{"source":"iana"},"application/mxf":{"source":"iana","extensions":["mxf"]},"application/n-quads":{"source":"iana","extensions":["nq"]},"application/n-triples":{"source":"iana","extensions":["nt"]},"application/nasdata":{"source":"iana"},"application/news-checkgroups":{"source":"iana","charset":"US-ASCII"},"application/news-groupinfo":{"source":"iana","charset":"US-ASCII"},"application/news-transmission":{"source":"iana"},"application/nlsml+xml":{"source":"iana","compressible":true},"application/node":{"source":"iana","extensions":["cjs"]},"application/nss":{"source":"iana"},"application/oauth-authz-req+jwt":{"source":"iana"},"application/oblivious-dns-message":{"source":"iana"},"application/ocsp-request":{"source":"iana"},"application/ocsp-response":{"source":"iana"},"application/octet-stream":{"source":"iana","compressible":false,"extensions":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"]},"application/oda":{"source":"iana","extensions":["oda"]},"application/odm+xml":{"source":"iana","compressible":true},"application/odx":{"source":"iana"},"application/oebps-package+xml":{"source":"iana","compressible":true,"extensions":["opf"]},"application/ogg":{"source":"iana","compressible":false,"extensions":["ogx"]},"application/omdoc+xml":{"source":"apache","compressible":true,"extensions":["omdoc"]},"application/onenote":{"source":"apache","extensions":["onetoc","onetoc2","onetmp","onepkg"]},"application/opc-nodeset+xml":{"source":"iana","compressible":true},"application/oscore":{"source":"iana"},"application/oxps":{"source":"iana","extensions":["oxps"]},"application/p21":{"source":"iana"},"application/p21+zip":{"source":"iana","compressible":false},"application/p2p-overlay+xml":{"source":"iana","compressible":true,"extensions":["relo"]},"application/parityfec":{"source":"iana"},"application/passport":{"source":"iana"},"application/patch-ops-error+xml":{"source":"iana","compressible":true,"extensions":["xer"]},"application/pdf":{"source":"iana","compressible":false,"extensions":["pdf"]},"application/pdx":{"source":"iana"},"application/pem-certificate-chain":{"source":"iana"},"application/pgp-encrypted":{"source":"iana","compressible":false,"extensions":["pgp"]},"application/pgp-keys":{"source":"iana","extensions":["asc"]},"application/pgp-signature":{"source":"iana","extensions":["asc","sig"]},"application/pics-rules":{"source":"apache","extensions":["prf"]},"application/pidf+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pidf-diff+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pkcs10":{"source":"iana","extensions":["p10"]},"application/pkcs12":{"source":"iana"},"application/pkcs7-mime":{"source":"iana","extensions":["p7m","p7c"]},"application/pkcs7-signature":{"source":"iana","extensions":["p7s"]},"application/pkcs8":{"source":"iana","extensions":["p8"]},"application/pkcs8-encrypted":{"source":"iana"},"application/pkix-attr-cert":{"source":"iana","extensions":["ac"]},"application/pkix-cert":{"source":"iana","extensions":["cer"]},"application/pkix-crl":{"source":"iana","extensions":["crl"]},"application/pkix-pkipath":{"source":"iana","extensions":["pkipath"]},"application/pkixcmp":{"source":"iana","extensions":["pki"]},"application/pls+xml":{"source":"iana","compressible":true,"extensions":["pls"]},"application/poc-settings+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/postscript":{"source":"iana","compressible":true,"extensions":["ai","eps","ps"]},"application/ppsp-tracker+json":{"source":"iana","compressible":true},"application/problem+json":{"source":"iana","compressible":true},"application/problem+xml":{"source":"iana","compressible":true},"application/provenance+xml":{"source":"iana","compressible":true,"extensions":["provx"]},"application/prs.alvestrand.titrax-sheet":{"source":"iana"},"application/prs.cww":{"source":"iana","extensions":["cww"]},"application/prs.cyn":{"source":"iana","charset":"7-BIT"},"application/prs.hpub+zip":{"source":"iana","compressible":false},"application/prs.nprend":{"source":"iana"},"application/prs.plucker":{"source":"iana"},"application/prs.rdf-xml-crypt":{"source":"iana"},"application/prs.xsf+xml":{"source":"iana","compressible":true},"application/pskc+xml":{"source":"iana","compressible":true,"extensions":["pskcxml"]},"application/pvd+json":{"source":"iana","compressible":true},"application/qsig":{"source":"iana"},"application/raml+yaml":{"compressible":true,"extensions":["raml"]},"application/raptorfec":{"source":"iana"},"application/rdap+json":{"source":"iana","compressible":true},"application/rdf+xml":{"source":"iana","compressible":true,"extensions":["rdf","owl"]},"application/reginfo+xml":{"source":"iana","compressible":true,"extensions":["rif"]},"application/relax-ng-compact-syntax":{"source":"iana","extensions":["rnc"]},"application/remote-printing":{"source":"iana"},"application/reputon+json":{"source":"iana","compressible":true},"application/resource-lists+xml":{"source":"iana","compressible":true,"extensions":["rl"]},"application/resource-lists-diff+xml":{"source":"iana","compressible":true,"extensions":["rld"]},"application/rfc+xml":{"source":"iana","compressible":true},"application/riscos":{"source":"iana"},"application/rlmi+xml":{"source":"iana","compressible":true},"application/rls-services+xml":{"source":"iana","compressible":true,"extensions":["rs"]},"application/route-apd+xml":{"source":"iana","compressible":true,"extensions":["rapd"]},"application/route-s-tsid+xml":{"source":"iana","compressible":true,"extensions":["sls"]},"application/route-usd+xml":{"source":"iana","compressible":true,"extensions":["rusd"]},"application/rpki-ghostbusters":{"source":"iana","extensions":["gbr"]},"application/rpki-manifest":{"source":"iana","extensions":["mft"]},"application/rpki-publication":{"source":"iana"},"application/rpki-roa":{"source":"iana","extensions":["roa"]},"application/rpki-updown":{"source":"iana"},"application/rsd+xml":{"source":"apache","compressible":true,"extensions":["rsd"]},"application/rss+xml":{"source":"apache","compressible":true,"extensions":["rss"]},"application/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"application/rtploopback":{"source":"iana"},"application/rtx":{"source":"iana"},"application/samlassertion+xml":{"source":"iana","compressible":true},"application/samlmetadata+xml":{"source":"iana","compressible":true},"application/sarif+json":{"source":"iana","compressible":true},"application/sarif-external-properties+json":{"source":"iana","compressible":true},"application/sbe":{"source":"iana"},"application/sbml+xml":{"source":"iana","compressible":true,"extensions":["sbml"]},"application/scaip+xml":{"source":"iana","compressible":true},"application/scim+json":{"source":"iana","compressible":true},"application/scvp-cv-request":{"source":"iana","extensions":["scq"]},"application/scvp-cv-response":{"source":"iana","extensions":["scs"]},"application/scvp-vp-request":{"source":"iana","extensions":["spq"]},"application/scvp-vp-response":{"source":"iana","extensions":["spp"]},"application/sdp":{"source":"iana","extensions":["sdp"]},"application/secevent+jwt":{"source":"iana"},"application/senml+cbor":{"source":"iana"},"application/senml+json":{"source":"iana","compressible":true},"application/senml+xml":{"source":"iana","compressible":true,"extensions":["senmlx"]},"application/senml-etch+cbor":{"source":"iana"},"application/senml-etch+json":{"source":"iana","compressible":true},"application/senml-exi":{"source":"iana"},"application/sensml+cbor":{"source":"iana"},"application/sensml+json":{"source":"iana","compressible":true},"application/sensml+xml":{"source":"iana","compressible":true,"extensions":["sensmlx"]},"application/sensml-exi":{"source":"iana"},"application/sep+xml":{"source":"iana","compressible":true},"application/sep-exi":{"source":"iana"},"application/session-info":{"source":"iana"},"application/set-payment":{"source":"iana"},"application/set-payment-initiation":{"source":"iana","extensions":["setpay"]},"application/set-registration":{"source":"iana"},"application/set-registration-initiation":{"source":"iana","extensions":["setreg"]},"application/sgml":{"source":"iana"},"application/sgml-open-catalog":{"source":"iana"},"application/shf+xml":{"source":"iana","compressible":true,"extensions":["shf"]},"application/sieve":{"source":"iana","extensions":["siv","sieve"]},"application/simple-filter+xml":{"source":"iana","compressible":true},"application/simple-message-summary":{"source":"iana"},"application/simplesymbolcontainer":{"source":"iana"},"application/sipc":{"source":"iana"},"application/slate":{"source":"iana"},"application/smil":{"source":"iana"},"application/smil+xml":{"source":"iana","compressible":true,"extensions":["smi","smil"]},"application/smpte336m":{"source":"iana"},"application/soap+fastinfoset":{"source":"iana"},"application/soap+xml":{"source":"iana","compressible":true},"application/sparql-query":{"source":"iana","extensions":["rq"]},"application/sparql-results+xml":{"source":"iana","compressible":true,"extensions":["srx"]},"application/spdx+json":{"source":"iana","compressible":true},"application/spirits-event+xml":{"source":"iana","compressible":true},"application/sql":{"source":"iana"},"application/srgs":{"source":"iana","extensions":["gram"]},"application/srgs+xml":{"source":"iana","compressible":true,"extensions":["grxml"]},"application/sru+xml":{"source":"iana","compressible":true,"extensions":["sru"]},"application/ssdl+xml":{"source":"apache","compressible":true,"extensions":["ssdl"]},"application/ssml+xml":{"source":"iana","compressible":true,"extensions":["ssml"]},"application/stix+json":{"source":"iana","compressible":true},"application/swid+xml":{"source":"iana","compressible":true,"extensions":["swidtag"]},"application/tamp-apex-update":{"source":"iana"},"application/tamp-apex-update-confirm":{"source":"iana"},"application/tamp-community-update":{"source":"iana"},"application/tamp-community-update-confirm":{"source":"iana"},"application/tamp-error":{"source":"iana"},"application/tamp-sequence-adjust":{"source":"iana"},"application/tamp-sequence-adjust-confirm":{"source":"iana"},"application/tamp-status-query":{"source":"iana"},"application/tamp-status-response":{"source":"iana"},"application/tamp-update":{"source":"iana"},"application/tamp-update-confirm":{"source":"iana"},"application/tar":{"compressible":true},"application/taxii+json":{"source":"iana","compressible":true},"application/td+json":{"source":"iana","compressible":true},"application/tei+xml":{"source":"iana","compressible":true,"extensions":["tei","teicorpus"]},"application/tetra_isi":{"source":"iana"},"application/thraud+xml":{"source":"iana","compressible":true,"extensions":["tfi"]},"application/timestamp-query":{"source":"iana"},"application/timestamp-reply":{"source":"iana"},"application/timestamped-data":{"source":"iana","extensions":["tsd"]},"application/tlsrpt+gzip":{"source":"iana"},"application/tlsrpt+json":{"source":"iana","compressible":true},"application/tnauthlist":{"source":"iana"},"application/token-introspection+jwt":{"source":"iana"},"application/toml":{"compressible":true,"extensions":["toml"]},"application/trickle-ice-sdpfrag":{"source":"iana"},"application/trig":{"source":"iana","extensions":["trig"]},"application/ttml+xml":{"source":"iana","compressible":true,"extensions":["ttml"]},"application/tve-trigger":{"source":"iana"},"application/tzif":{"source":"iana"},"application/tzif-leap":{"source":"iana"},"application/ubjson":{"compressible":false,"extensions":["ubj"]},"application/ulpfec":{"source":"iana"},"application/urc-grpsheet+xml":{"source":"iana","compressible":true},"application/urc-ressheet+xml":{"source":"iana","compressible":true,"extensions":["rsheet"]},"application/urc-targetdesc+xml":{"source":"iana","compressible":true,"extensions":["td"]},"application/urc-uisocketdesc+xml":{"source":"iana","compressible":true},"application/vcard+json":{"source":"iana","compressible":true},"application/vcard+xml":{"source":"iana","compressible":true},"application/vemmi":{"source":"iana"},"application/vividence.scriptfile":{"source":"apache"},"application/vnd.1000minds.decision-model+xml":{"source":"iana","compressible":true,"extensions":["1km"]},"application/vnd.3gpp-prose+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ch+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-v2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gnas":{"source":"iana"},"application/vnd.3gpp.access-transfer-events+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.bsf+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gmop+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gtpc":{"source":"iana"},"application/vnd.3gpp.interworking-data":{"source":"iana"},"application/vnd.3gpp.lpp":{"source":"iana"},"application/vnd.3gpp.mc-signalling-ear":{"source":"iana"},"application/vnd.3gpp.mcdata-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-payload":{"source":"iana"},"application/vnd.3gpp.mcdata-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-signalling":{"source":"iana"},"application/vnd.3gpp.mcdata-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-floor-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-signed+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-init-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-transmission-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mid-call+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ngap":{"source":"iana"},"application/vnd.3gpp.pfcp":{"source":"iana"},"application/vnd.3gpp.pic-bw-large":{"source":"iana","extensions":["plb"]},"application/vnd.3gpp.pic-bw-small":{"source":"iana","extensions":["psb"]},"application/vnd.3gpp.pic-bw-var":{"source":"iana","extensions":["pvb"]},"application/vnd.3gpp.s1ap":{"source":"iana"},"application/vnd.3gpp.sms":{"source":"iana"},"application/vnd.3gpp.sms+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-ext+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.state-and-event-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ussd+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.bcmcsinfo+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.sms":{"source":"iana"},"application/vnd.3gpp2.tcap":{"source":"iana","extensions":["tcap"]},"application/vnd.3lightssoftware.imagescal":{"source":"iana"},"application/vnd.3m.post-it-notes":{"source":"iana","extensions":["pwn"]},"application/vnd.accpac.simply.aso":{"source":"iana","extensions":["aso"]},"application/vnd.accpac.simply.imp":{"source":"iana","extensions":["imp"]},"application/vnd.acucobol":{"source":"iana","extensions":["acu"]},"application/vnd.acucorp":{"source":"iana","extensions":["atc","acutc"]},"application/vnd.adobe.air-application-installer-package+zip":{"source":"apache","compressible":false,"extensions":["air"]},"application/vnd.adobe.flash.movie":{"source":"iana"},"application/vnd.adobe.formscentral.fcdt":{"source":"iana","extensions":["fcdt"]},"application/vnd.adobe.fxp":{"source":"iana","extensions":["fxp","fxpl"]},"application/vnd.adobe.partial-upload":{"source":"iana"},"application/vnd.adobe.xdp+xml":{"source":"iana","compressible":true,"extensions":["xdp"]},"application/vnd.adobe.xfdf":{"source":"iana","extensions":["xfdf"]},"application/vnd.aether.imp":{"source":"iana"},"application/vnd.afpc.afplinedata":{"source":"iana"},"application/vnd.afpc.afplinedata-pagedef":{"source":"iana"},"application/vnd.afpc.cmoca-cmresource":{"source":"iana"},"application/vnd.afpc.foca-charset":{"source":"iana"},"application/vnd.afpc.foca-codedfont":{"source":"iana"},"application/vnd.afpc.foca-codepage":{"source":"iana"},"application/vnd.afpc.modca":{"source":"iana"},"application/vnd.afpc.modca-cmtable":{"source":"iana"},"application/vnd.afpc.modca-formdef":{"source":"iana"},"application/vnd.afpc.modca-mediummap":{"source":"iana"},"application/vnd.afpc.modca-objectcontainer":{"source":"iana"},"application/vnd.afpc.modca-overlay":{"source":"iana"},"application/vnd.afpc.modca-pagesegment":{"source":"iana"},"application/vnd.age":{"source":"iana","extensions":["age"]},"application/vnd.ah-barcode":{"source":"iana"},"application/vnd.ahead.space":{"source":"iana","extensions":["ahead"]},"application/vnd.airzip.filesecure.azf":{"source":"iana","extensions":["azf"]},"application/vnd.airzip.filesecure.azs":{"source":"iana","extensions":["azs"]},"application/vnd.amadeus+json":{"source":"iana","compressible":true},"application/vnd.amazon.ebook":{"source":"apache","extensions":["azw"]},"application/vnd.amazon.mobi8-ebook":{"source":"iana"},"application/vnd.americandynamics.acc":{"source":"iana","extensions":["acc"]},"application/vnd.amiga.ami":{"source":"iana","extensions":["ami"]},"application/vnd.amundsen.maze+xml":{"source":"iana","compressible":true},"application/vnd.android.ota":{"source":"iana"},"application/vnd.android.package-archive":{"source":"apache","compressible":false,"extensions":["apk"]},"application/vnd.anki":{"source":"iana"},"application/vnd.anser-web-certificate-issue-initiation":{"source":"iana","extensions":["cii"]},"application/vnd.anser-web-funds-transfer-initiation":{"source":"apache","extensions":["fti"]},"application/vnd.antix.game-component":{"source":"iana","extensions":["atx"]},"application/vnd.apache.arrow.file":{"source":"iana"},"application/vnd.apache.arrow.stream":{"source":"iana"},"application/vnd.apache.thrift.binary":{"source":"iana"},"application/vnd.apache.thrift.compact":{"source":"iana"},"application/vnd.apache.thrift.json":{"source":"iana"},"application/vnd.api+json":{"source":"iana","compressible":true},"application/vnd.aplextor.warrp+json":{"source":"iana","compressible":true},"application/vnd.apothekende.reservation+json":{"source":"iana","compressible":true},"application/vnd.apple.installer+xml":{"source":"iana","compressible":true,"extensions":["mpkg"]},"application/vnd.apple.keynote":{"source":"iana","extensions":["key"]},"application/vnd.apple.mpegurl":{"source":"iana","extensions":["m3u8"]},"application/vnd.apple.numbers":{"source":"iana","extensions":["numbers"]},"application/vnd.apple.pages":{"source":"iana","extensions":["pages"]},"application/vnd.apple.pkpass":{"compressible":false,"extensions":["pkpass"]},"application/vnd.arastra.swi":{"source":"iana"},"application/vnd.aristanetworks.swi":{"source":"iana","extensions":["swi"]},"application/vnd.artisan+json":{"source":"iana","compressible":true},"application/vnd.artsquare":{"source":"iana"},"application/vnd.astraea-software.iota":{"source":"iana","extensions":["iota"]},"application/vnd.audiograph":{"source":"iana","extensions":["aep"]},"application/vnd.autopackage":{"source":"iana"},"application/vnd.avalon+json":{"source":"iana","compressible":true},"application/vnd.avistar+xml":{"source":"iana","compressible":true},"application/vnd.balsamiq.bmml+xml":{"source":"iana","compressible":true,"extensions":["bmml"]},"application/vnd.balsamiq.bmpr":{"source":"iana"},"application/vnd.banana-accounting":{"source":"iana"},"application/vnd.bbf.usp.error":{"source":"iana"},"application/vnd.bbf.usp.msg":{"source":"iana"},"application/vnd.bbf.usp.msg+json":{"source":"iana","compressible":true},"application/vnd.bekitzur-stech+json":{"source":"iana","compressible":true},"application/vnd.bint.med-content":{"source":"iana"},"application/vnd.biopax.rdf+xml":{"source":"iana","compressible":true},"application/vnd.blink-idb-value-wrapper":{"source":"iana"},"application/vnd.blueice.multipass":{"source":"iana","extensions":["mpm"]},"application/vnd.bluetooth.ep.oob":{"source":"iana"},"application/vnd.bluetooth.le.oob":{"source":"iana"},"application/vnd.bmi":{"source":"iana","extensions":["bmi"]},"application/vnd.bpf":{"source":"iana"},"application/vnd.bpf3":{"source":"iana"},"application/vnd.businessobjects":{"source":"iana","extensions":["rep"]},"application/vnd.byu.uapi+json":{"source":"iana","compressible":true},"application/vnd.cab-jscript":{"source":"iana"},"application/vnd.canon-cpdl":{"source":"iana"},"application/vnd.canon-lips":{"source":"iana"},"application/vnd.capasystems-pg+json":{"source":"iana","compressible":true},"application/vnd.cendio.thinlinc.clientconf":{"source":"iana"},"application/vnd.century-systems.tcp_stream":{"source":"iana"},"application/vnd.chemdraw+xml":{"source":"iana","compressible":true,"extensions":["cdxml"]},"application/vnd.chess-pgn":{"source":"iana"},"application/vnd.chipnuts.karaoke-mmd":{"source":"iana","extensions":["mmd"]},"application/vnd.ciedi":{"source":"iana"},"application/vnd.cinderella":{"source":"iana","extensions":["cdy"]},"application/vnd.cirpack.isdn-ext":{"source":"iana"},"application/vnd.citationstyles.style+xml":{"source":"iana","compressible":true,"extensions":["csl"]},"application/vnd.claymore":{"source":"iana","extensions":["cla"]},"application/vnd.cloanto.rp9":{"source":"iana","extensions":["rp9"]},"application/vnd.clonk.c4group":{"source":"iana","extensions":["c4g","c4d","c4f","c4p","c4u"]},"application/vnd.cluetrust.cartomobile-config":{"source":"iana","extensions":["c11amc"]},"application/vnd.cluetrust.cartomobile-config-pkg":{"source":"iana","extensions":["c11amz"]},"application/vnd.coffeescript":{"source":"iana"},"application/vnd.collabio.xodocuments.document":{"source":"iana"},"application/vnd.collabio.xodocuments.document-template":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation-template":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet-template":{"source":"iana"},"application/vnd.collection+json":{"source":"iana","compressible":true},"application/vnd.collection.doc+json":{"source":"iana","compressible":true},"application/vnd.collection.next+json":{"source":"iana","compressible":true},"application/vnd.comicbook+zip":{"source":"iana","compressible":false},"application/vnd.comicbook-rar":{"source":"iana"},"application/vnd.commerce-battelle":{"source":"iana"},"application/vnd.commonspace":{"source":"iana","extensions":["csp"]},"application/vnd.contact.cmsg":{"source":"iana","extensions":["cdbcmsg"]},"application/vnd.coreos.ignition+json":{"source":"iana","compressible":true},"application/vnd.cosmocaller":{"source":"iana","extensions":["cmc"]},"application/vnd.crick.clicker":{"source":"iana","extensions":["clkx"]},"application/vnd.crick.clicker.keyboard":{"source":"iana","extensions":["clkk"]},"application/vnd.crick.clicker.palette":{"source":"iana","extensions":["clkp"]},"application/vnd.crick.clicker.template":{"source":"iana","extensions":["clkt"]},"application/vnd.crick.clicker.wordbank":{"source":"iana","extensions":["clkw"]},"application/vnd.criticaltools.wbs+xml":{"source":"iana","compressible":true,"extensions":["wbs"]},"application/vnd.cryptii.pipe+json":{"source":"iana","compressible":true},"application/vnd.crypto-shade-file":{"source":"iana"},"application/vnd.cryptomator.encrypted":{"source":"iana"},"application/vnd.cryptomator.vault":{"source":"iana"},"application/vnd.ctc-posml":{"source":"iana","extensions":["pml"]},"application/vnd.ctct.ws+xml":{"source":"iana","compressible":true},"application/vnd.cups-pdf":{"source":"iana"},"application/vnd.cups-postscript":{"source":"iana"},"application/vnd.cups-ppd":{"source":"iana","extensions":["ppd"]},"application/vnd.cups-raster":{"source":"iana"},"application/vnd.cups-raw":{"source":"iana"},"application/vnd.curl":{"source":"iana"},"application/vnd.curl.car":{"source":"apache","extensions":["car"]},"application/vnd.curl.pcurl":{"source":"apache","extensions":["pcurl"]},"application/vnd.cyan.dean.root+xml":{"source":"iana","compressible":true},"application/vnd.cybank":{"source":"iana"},"application/vnd.cyclonedx+json":{"source":"iana","compressible":true},"application/vnd.cyclonedx+xml":{"source":"iana","compressible":true},"application/vnd.d2l.coursepackage1p0+zip":{"source":"iana","compressible":false},"application/vnd.d3m-dataset":{"source":"iana"},"application/vnd.d3m-problem":{"source":"iana"},"application/vnd.dart":{"source":"iana","compressible":true,"extensions":["dart"]},"application/vnd.data-vision.rdz":{"source":"iana","extensions":["rdz"]},"application/vnd.datapackage+json":{"source":"iana","compressible":true},"application/vnd.dataresource+json":{"source":"iana","compressible":true},"application/vnd.dbf":{"source":"iana","extensions":["dbf"]},"application/vnd.debian.binary-package":{"source":"iana"},"application/vnd.dece.data":{"source":"iana","extensions":["uvf","uvvf","uvd","uvvd"]},"application/vnd.dece.ttml+xml":{"source":"iana","compressible":true,"extensions":["uvt","uvvt"]},"application/vnd.dece.unspecified":{"source":"iana","extensions":["uvx","uvvx"]},"application/vnd.dece.zip":{"source":"iana","extensions":["uvz","uvvz"]},"application/vnd.denovo.fcselayout-link":{"source":"iana","extensions":["fe_launch"]},"application/vnd.desmume.movie":{"source":"iana"},"application/vnd.dir-bi.plate-dl-nosuffix":{"source":"iana"},"application/vnd.dm.delegation+xml":{"source":"iana","compressible":true},"application/vnd.dna":{"source":"iana","extensions":["dna"]},"application/vnd.document+json":{"source":"iana","compressible":true},"application/vnd.dolby.mlp":{"source":"apache","extensions":["mlp"]},"application/vnd.dolby.mobile.1":{"source":"iana"},"application/vnd.dolby.mobile.2":{"source":"iana"},"application/vnd.doremir.scorecloud-binary-document":{"source":"iana"},"application/vnd.dpgraph":{"source":"iana","extensions":["dpg"]},"application/vnd.dreamfactory":{"source":"iana","extensions":["dfac"]},"application/vnd.drive+json":{"source":"iana","compressible":true},"application/vnd.ds-keypoint":{"source":"apache","extensions":["kpxx"]},"application/vnd.dtg.local":{"source":"iana"},"application/vnd.dtg.local.flash":{"source":"iana"},"application/vnd.dtg.local.html":{"source":"iana"},"application/vnd.dvb.ait":{"source":"iana","extensions":["ait"]},"application/vnd.dvb.dvbisl+xml":{"source":"iana","compressible":true},"application/vnd.dvb.dvbj":{"source":"iana"},"application/vnd.dvb.esgcontainer":{"source":"iana"},"application/vnd.dvb.ipdcdftnotifaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess2":{"source":"iana"},"application/vnd.dvb.ipdcesgpdd":{"source":"iana"},"application/vnd.dvb.ipdcroaming":{"source":"iana"},"application/vnd.dvb.iptv.alfec-base":{"source":"iana"},"application/vnd.dvb.iptv.alfec-enhancement":{"source":"iana"},"application/vnd.dvb.notif-aggregate-root+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-container+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-generic+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-msglist+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-request+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-response+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-init+xml":{"source":"iana","compressible":true},"application/vnd.dvb.pfr":{"source":"iana"},"application/vnd.dvb.service":{"source":"iana","extensions":["svc"]},"application/vnd.dxr":{"source":"iana"},"application/vnd.dynageo":{"source":"iana","extensions":["geo"]},"application/vnd.dzr":{"source":"iana"},"application/vnd.easykaraoke.cdgdownload":{"source":"iana"},"application/vnd.ecdis-update":{"source":"iana"},"application/vnd.ecip.rlp":{"source":"iana"},"application/vnd.eclipse.ditto+json":{"source":"iana","compressible":true},"application/vnd.ecowin.chart":{"source":"iana","extensions":["mag"]},"application/vnd.ecowin.filerequest":{"source":"iana"},"application/vnd.ecowin.fileupdate":{"source":"iana"},"application/vnd.ecowin.series":{"source":"iana"},"application/vnd.ecowin.seriesrequest":{"source":"iana"},"application/vnd.ecowin.seriesupdate":{"source":"iana"},"application/vnd.efi.img":{"source":"iana"},"application/vnd.efi.iso":{"source":"iana"},"application/vnd.emclient.accessrequest+xml":{"source":"iana","compressible":true},"application/vnd.enliven":{"source":"iana","extensions":["nml"]},"application/vnd.enphase.envoy":{"source":"iana"},"application/vnd.eprints.data+xml":{"source":"iana","compressible":true},"application/vnd.epson.esf":{"source":"iana","extensions":["esf"]},"application/vnd.epson.msf":{"source":"iana","extensions":["msf"]},"application/vnd.epson.quickanime":{"source":"iana","extensions":["qam"]},"application/vnd.epson.salt":{"source":"iana","extensions":["slt"]},"application/vnd.epson.ssf":{"source":"iana","extensions":["ssf"]},"application/vnd.ericsson.quickcall":{"source":"iana"},"application/vnd.espass-espass+zip":{"source":"iana","compressible":false},"application/vnd.eszigno3+xml":{"source":"iana","compressible":true,"extensions":["es3","et3"]},"application/vnd.etsi.aoc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.asic-e+zip":{"source":"iana","compressible":false},"application/vnd.etsi.asic-s+zip":{"source":"iana","compressible":false},"application/vnd.etsi.cug+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvcommand+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-bc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-cod+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-npvr+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvservice+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsync+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvueprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mcid+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mheg5":{"source":"iana"},"application/vnd.etsi.overload-control-policy-dataset+xml":{"source":"iana","compressible":true},"application/vnd.etsi.pstn+xml":{"source":"iana","compressible":true},"application/vnd.etsi.sci+xml":{"source":"iana","compressible":true},"application/vnd.etsi.simservs+xml":{"source":"iana","compressible":true},"application/vnd.etsi.timestamp-token":{"source":"iana"},"application/vnd.etsi.tsl+xml":{"source":"iana","compressible":true},"application/vnd.etsi.tsl.der":{"source":"iana"},"application/vnd.eu.kasparian.car+json":{"source":"iana","compressible":true},"application/vnd.eudora.data":{"source":"iana"},"application/vnd.evolv.ecig.profile":{"source":"iana"},"application/vnd.evolv.ecig.settings":{"source":"iana"},"application/vnd.evolv.ecig.theme":{"source":"iana"},"application/vnd.exstream-empower+zip":{"source":"iana","compressible":false},"application/vnd.exstream-package":{"source":"iana"},"application/vnd.ezpix-album":{"source":"iana","extensions":["ez2"]},"application/vnd.ezpix-package":{"source":"iana","extensions":["ez3"]},"application/vnd.f-secure.mobile":{"source":"iana"},"application/vnd.familysearch.gedcom+zip":{"source":"iana","compressible":false},"application/vnd.fastcopy-disk-image":{"source":"iana"},"application/vnd.fdf":{"source":"iana","extensions":["fdf"]},"application/vnd.fdsn.mseed":{"source":"iana","extensions":["mseed"]},"application/vnd.fdsn.seed":{"source":"iana","extensions":["seed","dataless"]},"application/vnd.ffsns":{"source":"iana"},"application/vnd.ficlab.flb+zip":{"source":"iana","compressible":false},"application/vnd.filmit.zfc":{"source":"iana"},"application/vnd.fints":{"source":"iana"},"application/vnd.firemonkeys.cloudcell":{"source":"iana"},"application/vnd.flographit":{"source":"iana","extensions":["gph"]},"application/vnd.fluxtime.clip":{"source":"iana","extensions":["ftc"]},"application/vnd.font-fontforge-sfd":{"source":"iana"},"application/vnd.framemaker":{"source":"iana","extensions":["fm","frame","maker","book"]},"application/vnd.frogans.fnc":{"source":"iana","extensions":["fnc"]},"application/vnd.frogans.ltf":{"source":"iana","extensions":["ltf"]},"application/vnd.fsc.weblaunch":{"source":"iana","extensions":["fsc"]},"application/vnd.fujifilm.fb.docuworks":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.binder":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.container":{"source":"iana"},"application/vnd.fujifilm.fb.jfi+xml":{"source":"iana","compressible":true},"application/vnd.fujitsu.oasys":{"source":"iana","extensions":["oas"]},"application/vnd.fujitsu.oasys2":{"source":"iana","extensions":["oa2"]},"application/vnd.fujitsu.oasys3":{"source":"iana","extensions":["oa3"]},"application/vnd.fujitsu.oasysgp":{"source":"iana","extensions":["fg5"]},"application/vnd.fujitsu.oasysprs":{"source":"iana","extensions":["bh2"]},"application/vnd.fujixerox.art-ex":{"source":"iana"},"application/vnd.fujixerox.art4":{"source":"iana"},"application/vnd.fujixerox.ddd":{"source":"iana","extensions":["ddd"]},"application/vnd.fujixerox.docuworks":{"source":"iana","extensions":["xdw"]},"application/vnd.fujixerox.docuworks.binder":{"source":"iana","extensions":["xbd"]},"application/vnd.fujixerox.docuworks.container":{"source":"iana"},"application/vnd.fujixerox.hbpl":{"source":"iana"},"application/vnd.fut-misnet":{"source":"iana"},"application/vnd.futoin+cbor":{"source":"iana"},"application/vnd.futoin+json":{"source":"iana","compressible":true},"application/vnd.fuzzysheet":{"source":"iana","extensions":["fzs"]},"application/vnd.genomatix.tuxedo":{"source":"iana","extensions":["txd"]},"application/vnd.gentics.grd+json":{"source":"iana","compressible":true},"application/vnd.geo+json":{"source":"iana","compressible":true},"application/vnd.geocube+xml":{"source":"iana","compressible":true},"application/vnd.geogebra.file":{"source":"iana","extensions":["ggb"]},"application/vnd.geogebra.slides":{"source":"iana"},"application/vnd.geogebra.tool":{"source":"iana","extensions":["ggt"]},"application/vnd.geometry-explorer":{"source":"iana","extensions":["gex","gre"]},"application/vnd.geonext":{"source":"iana","extensions":["gxt"]},"application/vnd.geoplan":{"source":"iana","extensions":["g2w"]},"application/vnd.geospace":{"source":"iana","extensions":["g3w"]},"application/vnd.gerber":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt-response":{"source":"iana"},"application/vnd.gmx":{"source":"iana","extensions":["gmx"]},"application/vnd.google-apps.document":{"compressible":false,"extensions":["gdoc"]},"application/vnd.google-apps.presentation":{"compressible":false,"extensions":["gslides"]},"application/vnd.google-apps.spreadsheet":{"compressible":false,"extensions":["gsheet"]},"application/vnd.google-earth.kml+xml":{"source":"iana","compressible":true,"extensions":["kml"]},"application/vnd.google-earth.kmz":{"source":"iana","compressible":false,"extensions":["kmz"]},"application/vnd.gov.sk.e-form+xml":{"source":"iana","compressible":true},"application/vnd.gov.sk.e-form+zip":{"source":"iana","compressible":false},"application/vnd.gov.sk.xmldatacontainer+xml":{"source":"iana","compressible":true},"application/vnd.grafeq":{"source":"iana","extensions":["gqf","gqs"]},"application/vnd.gridmp":{"source":"iana"},"application/vnd.groove-account":{"source":"iana","extensions":["gac"]},"application/vnd.groove-help":{"source":"iana","extensions":["ghf"]},"application/vnd.groove-identity-message":{"source":"iana","extensions":["gim"]},"application/vnd.groove-injector":{"source":"iana","extensions":["grv"]},"application/vnd.groove-tool-message":{"source":"iana","extensions":["gtm"]},"application/vnd.groove-tool-template":{"source":"iana","extensions":["tpl"]},"application/vnd.groove-vcard":{"source":"iana","extensions":["vcg"]},"application/vnd.hal+json":{"source":"iana","compressible":true},"application/vnd.hal+xml":{"source":"iana","compressible":true,"extensions":["hal"]},"application/vnd.handheld-entertainment+xml":{"source":"iana","compressible":true,"extensions":["zmm"]},"application/vnd.hbci":{"source":"iana","extensions":["hbci"]},"application/vnd.hc+json":{"source":"iana","compressible":true},"application/vnd.hcl-bireports":{"source":"iana"},"application/vnd.hdt":{"source":"iana"},"application/vnd.heroku+json":{"source":"iana","compressible":true},"application/vnd.hhe.lesson-player":{"source":"iana","extensions":["les"]},"application/vnd.hl7cda+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.hl7v2+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.hp-hpgl":{"source":"iana","extensions":["hpgl"]},"application/vnd.hp-hpid":{"source":"iana","extensions":["hpid"]},"application/vnd.hp-hps":{"source":"iana","extensions":["hps"]},"application/vnd.hp-jlyt":{"source":"iana","extensions":["jlt"]},"application/vnd.hp-pcl":{"source":"iana","extensions":["pcl"]},"application/vnd.hp-pclxl":{"source":"iana","extensions":["pclxl"]},"application/vnd.httphone":{"source":"iana"},"application/vnd.hydrostatix.sof-data":{"source":"iana","extensions":["sfd-hdstx"]},"application/vnd.hyper+json":{"source":"iana","compressible":true},"application/vnd.hyper-item+json":{"source":"iana","compressible":true},"application/vnd.hyperdrive+json":{"source":"iana","compressible":true},"application/vnd.hzn-3d-crossword":{"source":"iana"},"application/vnd.ibm.afplinedata":{"source":"iana"},"application/vnd.ibm.electronic-media":{"source":"iana"},"application/vnd.ibm.minipay":{"source":"iana","extensions":["mpy"]},"application/vnd.ibm.modcap":{"source":"iana","extensions":["afp","listafp","list3820"]},"application/vnd.ibm.rights-management":{"source":"iana","extensions":["irm"]},"application/vnd.ibm.secure-container":{"source":"iana","extensions":["sc"]},"application/vnd.iccprofile":{"source":"iana","extensions":["icc","icm"]},"application/vnd.ieee.1905":{"source":"iana"},"application/vnd.igloader":{"source":"iana","extensions":["igl"]},"application/vnd.imagemeter.folder+zip":{"source":"iana","compressible":false},"application/vnd.imagemeter.image+zip":{"source":"iana","compressible":false},"application/vnd.immervision-ivp":{"source":"iana","extensions":["ivp"]},"application/vnd.immervision-ivu":{"source":"iana","extensions":["ivu"]},"application/vnd.ims.imsccv1p1":{"source":"iana"},"application/vnd.ims.imsccv1p2":{"source":"iana"},"application/vnd.ims.imsccv1p3":{"source":"iana"},"application/vnd.ims.lis.v2.result+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolconsumerprofile+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy.id+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings.simple+json":{"source":"iana","compressible":true},"application/vnd.informedcontrol.rms+xml":{"source":"iana","compressible":true},"application/vnd.informix-visionary":{"source":"iana"},"application/vnd.infotech.project":{"source":"iana"},"application/vnd.infotech.project+xml":{"source":"iana","compressible":true},"application/vnd.innopath.wamp.notification":{"source":"iana"},"application/vnd.insors.igm":{"source":"iana","extensions":["igm"]},"application/vnd.intercon.formnet":{"source":"iana","extensions":["xpw","xpx"]},"application/vnd.intergeo":{"source":"iana","extensions":["i2g"]},"application/vnd.intertrust.digibox":{"source":"iana"},"application/vnd.intertrust.nncp":{"source":"iana"},"application/vnd.intu.qbo":{"source":"iana","extensions":["qbo"]},"application/vnd.intu.qfx":{"source":"iana","extensions":["qfx"]},"application/vnd.iptc.g2.catalogitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.conceptitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.knowledgeitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsmessage+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.packageitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.planningitem+xml":{"source":"iana","compressible":true},"application/vnd.ipunplugged.rcprofile":{"source":"iana","extensions":["rcprofile"]},"application/vnd.irepository.package+xml":{"source":"iana","compressible":true,"extensions":["irp"]},"application/vnd.is-xpr":{"source":"iana","extensions":["xpr"]},"application/vnd.isac.fcs":{"source":"iana","extensions":["fcs"]},"application/vnd.iso11783-10+zip":{"source":"iana","compressible":false},"application/vnd.jam":{"source":"iana","extensions":["jam"]},"application/vnd.japannet-directory-service":{"source":"iana"},"application/vnd.japannet-jpnstore-wakeup":{"source":"iana"},"application/vnd.japannet-payment-wakeup":{"source":"iana"},"application/vnd.japannet-registration":{"source":"iana"},"application/vnd.japannet-registration-wakeup":{"source":"iana"},"application/vnd.japannet-setstore-wakeup":{"source":"iana"},"application/vnd.japannet-verification":{"source":"iana"},"application/vnd.japannet-verification-wakeup":{"source":"iana"},"application/vnd.jcp.javame.midlet-rms":{"source":"iana","extensions":["rms"]},"application/vnd.jisp":{"source":"iana","extensions":["jisp"]},"application/vnd.joost.joda-archive":{"source":"iana","extensions":["joda"]},"application/vnd.jsk.isdn-ngn":{"source":"iana"},"application/vnd.kahootz":{"source":"iana","extensions":["ktz","ktr"]},"application/vnd.kde.karbon":{"source":"iana","extensions":["karbon"]},"application/vnd.kde.kchart":{"source":"iana","extensions":["chrt"]},"application/vnd.kde.kformula":{"source":"iana","extensions":["kfo"]},"application/vnd.kde.kivio":{"source":"iana","extensions":["flw"]},"application/vnd.kde.kontour":{"source":"iana","extensions":["kon"]},"application/vnd.kde.kpresenter":{"source":"iana","extensions":["kpr","kpt"]},"application/vnd.kde.kspread":{"source":"iana","extensions":["ksp"]},"application/vnd.kde.kword":{"source":"iana","extensions":["kwd","kwt"]},"application/vnd.kenameaapp":{"source":"iana","extensions":["htke"]},"application/vnd.kidspiration":{"source":"iana","extensions":["kia"]},"application/vnd.kinar":{"source":"iana","extensions":["kne","knp"]},"application/vnd.koan":{"source":"iana","extensions":["skp","skd","skt","skm"]},"application/vnd.kodak-descriptor":{"source":"iana","extensions":["sse"]},"application/vnd.las":{"source":"iana"},"application/vnd.las.las+json":{"source":"iana","compressible":true},"application/vnd.las.las+xml":{"source":"iana","compressible":true,"extensions":["lasxml"]},"application/vnd.laszip":{"source":"iana"},"application/vnd.leap+json":{"source":"iana","compressible":true},"application/vnd.liberty-request+xml":{"source":"iana","compressible":true},"application/vnd.llamagraphics.life-balance.desktop":{"source":"iana","extensions":["lbd"]},"application/vnd.llamagraphics.life-balance.exchange+xml":{"source":"iana","compressible":true,"extensions":["lbe"]},"application/vnd.logipipe.circuit+zip":{"source":"iana","compressible":false},"application/vnd.loom":{"source":"iana"},"application/vnd.lotus-1-2-3":{"source":"iana","extensions":["123"]},"application/vnd.lotus-approach":{"source":"iana","extensions":["apr"]},"application/vnd.lotus-freelance":{"source":"iana","extensions":["pre"]},"application/vnd.lotus-notes":{"source":"iana","extensions":["nsf"]},"application/vnd.lotus-organizer":{"source":"iana","extensions":["org"]},"application/vnd.lotus-screencam":{"source":"iana","extensions":["scm"]},"application/vnd.lotus-wordpro":{"source":"iana","extensions":["lwp"]},"application/vnd.macports.portpkg":{"source":"iana","extensions":["portpkg"]},"application/vnd.mapbox-vector-tile":{"source":"iana","extensions":["mvt"]},"application/vnd.marlin.drm.actiontoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.conftoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.license+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.mdcf":{"source":"iana"},"application/vnd.mason+json":{"source":"iana","compressible":true},"application/vnd.maxar.archive.3tz+zip":{"source":"iana","compressible":false},"application/vnd.maxmind.maxmind-db":{"source":"iana"},"application/vnd.mcd":{"source":"iana","extensions":["mcd"]},"application/vnd.medcalcdata":{"source":"iana","extensions":["mc1"]},"application/vnd.mediastation.cdkey":{"source":"iana","extensions":["cdkey"]},"application/vnd.meridian-slingshot":{"source":"iana"},"application/vnd.mfer":{"source":"iana","extensions":["mwf"]},"application/vnd.mfmp":{"source":"iana","extensions":["mfm"]},"application/vnd.micro+json":{"source":"iana","compressible":true},"application/vnd.micrografx.flo":{"source":"iana","extensions":["flo"]},"application/vnd.micrografx.igx":{"source":"iana","extensions":["igx"]},"application/vnd.microsoft.portable-executable":{"source":"iana"},"application/vnd.microsoft.windows.thumbnail-cache":{"source":"iana"},"application/vnd.miele+json":{"source":"iana","compressible":true},"application/vnd.mif":{"source":"iana","extensions":["mif"]},"application/vnd.minisoft-hp3000-save":{"source":"iana"},"application/vnd.mitsubishi.misty-guard.trustweb":{"source":"iana"},"application/vnd.mobius.daf":{"source":"iana","extensions":["daf"]},"application/vnd.mobius.dis":{"source":"iana","extensions":["dis"]},"application/vnd.mobius.mbk":{"source":"iana","extensions":["mbk"]},"application/vnd.mobius.mqy":{"source":"iana","extensions":["mqy"]},"application/vnd.mobius.msl":{"source":"iana","extensions":["msl"]},"application/vnd.mobius.plc":{"source":"iana","extensions":["plc"]},"application/vnd.mobius.txf":{"source":"iana","extensions":["txf"]},"application/vnd.mophun.application":{"source":"iana","extensions":["mpn"]},"application/vnd.mophun.certificate":{"source":"iana","extensions":["mpc"]},"application/vnd.motorola.flexsuite":{"source":"iana"},"application/vnd.motorola.flexsuite.adsi":{"source":"iana"},"application/vnd.motorola.flexsuite.fis":{"source":"iana"},"application/vnd.motorola.flexsuite.gotap":{"source":"iana"},"application/vnd.motorola.flexsuite.kmr":{"source":"iana"},"application/vnd.motorola.flexsuite.ttc":{"source":"iana"},"application/vnd.motorola.flexsuite.wem":{"source":"iana"},"application/vnd.motorola.iprm":{"source":"iana"},"application/vnd.mozilla.xul+xml":{"source":"iana","compressible":true,"extensions":["xul"]},"application/vnd.ms-3mfdocument":{"source":"iana"},"application/vnd.ms-artgalry":{"source":"iana","extensions":["cil"]},"application/vnd.ms-asf":{"source":"iana"},"application/vnd.ms-cab-compressed":{"source":"iana","extensions":["cab"]},"application/vnd.ms-color.iccprofile":{"source":"apache"},"application/vnd.ms-excel":{"source":"iana","compressible":false,"extensions":["xls","xlm","xla","xlc","xlt","xlw"]},"application/vnd.ms-excel.addin.macroenabled.12":{"source":"iana","extensions":["xlam"]},"application/vnd.ms-excel.sheet.binary.macroenabled.12":{"source":"iana","extensions":["xlsb"]},"application/vnd.ms-excel.sheet.macroenabled.12":{"source":"iana","extensions":["xlsm"]},"application/vnd.ms-excel.template.macroenabled.12":{"source":"iana","extensions":["xltm"]},"application/vnd.ms-fontobject":{"source":"iana","compressible":true,"extensions":["eot"]},"application/vnd.ms-htmlhelp":{"source":"iana","extensions":["chm"]},"application/vnd.ms-ims":{"source":"iana","extensions":["ims"]},"application/vnd.ms-lrm":{"source":"iana","extensions":["lrm"]},"application/vnd.ms-office.activex+xml":{"source":"iana","compressible":true},"application/vnd.ms-officetheme":{"source":"iana","extensions":["thmx"]},"application/vnd.ms-opentype":{"source":"apache","compressible":true},"application/vnd.ms-outlook":{"compressible":false,"extensions":["msg"]},"application/vnd.ms-package.obfuscated-opentype":{"source":"apache"},"application/vnd.ms-pki.seccat":{"source":"apache","extensions":["cat"]},"application/vnd.ms-pki.stl":{"source":"apache","extensions":["stl"]},"application/vnd.ms-playready.initiator+xml":{"source":"iana","compressible":true},"application/vnd.ms-powerpoint":{"source":"iana","compressible":false,"extensions":["ppt","pps","pot"]},"application/vnd.ms-powerpoint.addin.macroenabled.12":{"source":"iana","extensions":["ppam"]},"application/vnd.ms-powerpoint.presentation.macroenabled.12":{"source":"iana","extensions":["pptm"]},"application/vnd.ms-powerpoint.slide.macroenabled.12":{"source":"iana","extensions":["sldm"]},"application/vnd.ms-powerpoint.slideshow.macroenabled.12":{"source":"iana","extensions":["ppsm"]},"application/vnd.ms-powerpoint.template.macroenabled.12":{"source":"iana","extensions":["potm"]},"application/vnd.ms-printdevicecapabilities+xml":{"source":"iana","compressible":true},"application/vnd.ms-printing.printticket+xml":{"source":"apache","compressible":true},"application/vnd.ms-printschematicket+xml":{"source":"iana","compressible":true},"application/vnd.ms-project":{"source":"iana","extensions":["mpp","mpt"]},"application/vnd.ms-tnef":{"source":"iana"},"application/vnd.ms-windows.devicepairing":{"source":"iana"},"application/vnd.ms-windows.nwprinting.oob":{"source":"iana"},"application/vnd.ms-windows.printerpairing":{"source":"iana"},"application/vnd.ms-windows.wsd.oob":{"source":"iana"},"application/vnd.ms-wmdrm.lic-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.lic-resp":{"source":"iana"},"application/vnd.ms-wmdrm.meter-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.meter-resp":{"source":"iana"},"application/vnd.ms-word.document.macroenabled.12":{"source":"iana","extensions":["docm"]},"application/vnd.ms-word.template.macroenabled.12":{"source":"iana","extensions":["dotm"]},"application/vnd.ms-works":{"source":"iana","extensions":["wps","wks","wcm","wdb"]},"application/vnd.ms-wpl":{"source":"iana","extensions":["wpl"]},"application/vnd.ms-xpsdocument":{"source":"iana","compressible":false,"extensions":["xps"]},"application/vnd.msa-disk-image":{"source":"iana"},"application/vnd.mseq":{"source":"iana","extensions":["mseq"]},"application/vnd.msign":{"source":"iana"},"application/vnd.multiad.creator":{"source":"iana"},"application/vnd.multiad.creator.cif":{"source":"iana"},"application/vnd.music-niff":{"source":"iana"},"application/vnd.musician":{"source":"iana","extensions":["mus"]},"application/vnd.muvee.style":{"source":"iana","extensions":["msty"]},"application/vnd.mynfc":{"source":"iana","extensions":["taglet"]},"application/vnd.nacamar.ybrid+json":{"source":"iana","compressible":true},"application/vnd.ncd.control":{"source":"iana"},"application/vnd.ncd.reference":{"source":"iana"},"application/vnd.nearst.inv+json":{"source":"iana","compressible":true},"application/vnd.nebumind.line":{"source":"iana"},"application/vnd.nervana":{"source":"iana"},"application/vnd.netfpx":{"source":"iana"},"application/vnd.neurolanguage.nlu":{"source":"iana","extensions":["nlu"]},"application/vnd.nimn":{"source":"iana"},"application/vnd.nintendo.nitro.rom":{"source":"iana"},"application/vnd.nintendo.snes.rom":{"source":"iana"},"application/vnd.nitf":{"source":"iana","extensions":["ntf","nitf"]},"application/vnd.noblenet-directory":{"source":"iana","extensions":["nnd"]},"application/vnd.noblenet-sealer":{"source":"iana","extensions":["nns"]},"application/vnd.noblenet-web":{"source":"iana","extensions":["nnw"]},"application/vnd.nokia.catalogs":{"source":"iana"},"application/vnd.nokia.conml+wbxml":{"source":"iana"},"application/vnd.nokia.conml+xml":{"source":"iana","compressible":true},"application/vnd.nokia.iptv.config+xml":{"source":"iana","compressible":true},"application/vnd.nokia.isds-radio-presets":{"source":"iana"},"application/vnd.nokia.landmark+wbxml":{"source":"iana"},"application/vnd.nokia.landmark+xml":{"source":"iana","compressible":true},"application/vnd.nokia.landmarkcollection+xml":{"source":"iana","compressible":true},"application/vnd.nokia.n-gage.ac+xml":{"source":"iana","compressible":true,"extensions":["ac"]},"application/vnd.nokia.n-gage.data":{"source":"iana","extensions":["ngdat"]},"application/vnd.nokia.n-gage.symbian.install":{"source":"iana","extensions":["n-gage"]},"application/vnd.nokia.ncd":{"source":"iana"},"application/vnd.nokia.pcd+wbxml":{"source":"iana"},"application/vnd.nokia.pcd+xml":{"source":"iana","compressible":true},"application/vnd.nokia.radio-preset":{"source":"iana","extensions":["rpst"]},"application/vnd.nokia.radio-presets":{"source":"iana","extensions":["rpss"]},"application/vnd.novadigm.edm":{"source":"iana","extensions":["edm"]},"application/vnd.novadigm.edx":{"source":"iana","extensions":["edx"]},"application/vnd.novadigm.ext":{"source":"iana","extensions":["ext"]},"application/vnd.ntt-local.content-share":{"source":"iana"},"application/vnd.ntt-local.file-transfer":{"source":"iana"},"application/vnd.ntt-local.ogw_remote-access":{"source":"iana"},"application/vnd.ntt-local.sip-ta_remote":{"source":"iana"},"application/vnd.ntt-local.sip-ta_tcp_stream":{"source":"iana"},"application/vnd.oasis.opendocument.chart":{"source":"iana","extensions":["odc"]},"application/vnd.oasis.opendocument.chart-template":{"source":"iana","extensions":["otc"]},"application/vnd.oasis.opendocument.database":{"source":"iana","extensions":["odb"]},"application/vnd.oasis.opendocument.formula":{"source":"iana","extensions":["odf"]},"application/vnd.oasis.opendocument.formula-template":{"source":"iana","extensions":["odft"]},"application/vnd.oasis.opendocument.graphics":{"source":"iana","compressible":false,"extensions":["odg"]},"application/vnd.oasis.opendocument.graphics-template":{"source":"iana","extensions":["otg"]},"application/vnd.oasis.opendocument.image":{"source":"iana","extensions":["odi"]},"application/vnd.oasis.opendocument.image-template":{"source":"iana","extensions":["oti"]},"application/vnd.oasis.opendocument.presentation":{"source":"iana","compressible":false,"extensions":["odp"]},"application/vnd.oasis.opendocument.presentation-template":{"source":"iana","extensions":["otp"]},"application/vnd.oasis.opendocument.spreadsheet":{"source":"iana","compressible":false,"extensions":["ods"]},"application/vnd.oasis.opendocument.spreadsheet-template":{"source":"iana","extensions":["ots"]},"application/vnd.oasis.opendocument.text":{"source":"iana","compressible":false,"extensions":["odt"]},"application/vnd.oasis.opendocument.text-master":{"source":"iana","extensions":["odm"]},"application/vnd.oasis.opendocument.text-template":{"source":"iana","extensions":["ott"]},"application/vnd.oasis.opendocument.text-web":{"source":"iana","extensions":["oth"]},"application/vnd.obn":{"source":"iana"},"application/vnd.ocf+cbor":{"source":"iana"},"application/vnd.oci.image.manifest.v1+json":{"source":"iana","compressible":true},"application/vnd.oftn.l10n+json":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessdownload+xml":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessstreaming+xml":{"source":"iana","compressible":true},"application/vnd.oipf.cspg-hexbinary":{"source":"iana"},"application/vnd.oipf.dae.svg+xml":{"source":"iana","compressible":true},"application/vnd.oipf.dae.xhtml+xml":{"source":"iana","compressible":true},"application/vnd.oipf.mippvcontrolmessage+xml":{"source":"iana","compressible":true},"application/vnd.oipf.pae.gem":{"source":"iana"},"application/vnd.oipf.spdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.oipf.spdlist+xml":{"source":"iana","compressible":true},"application/vnd.oipf.ueprofile+xml":{"source":"iana","compressible":true},"application/vnd.oipf.userprofile+xml":{"source":"iana","compressible":true},"application/vnd.olpc-sugar":{"source":"iana","extensions":["xo"]},"application/vnd.oma-scws-config":{"source":"iana"},"application/vnd.oma-scws-http-request":{"source":"iana"},"application/vnd.oma-scws-http-response":{"source":"iana"},"application/vnd.oma.bcast.associated-procedure-parameter+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.drm-trigger+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.imd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.ltkm":{"source":"iana"},"application/vnd.oma.bcast.notification+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.provisioningtrigger":{"source":"iana"},"application/vnd.oma.bcast.sgboot":{"source":"iana"},"application/vnd.oma.bcast.sgdd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sgdu":{"source":"iana"},"application/vnd.oma.bcast.simple-symbol-container":{"source":"iana"},"application/vnd.oma.bcast.smartcard-trigger+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sprov+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.stkm":{"source":"iana"},"application/vnd.oma.cab-address-book+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-feature-handler+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-pcc+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-subs-invite+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-user-prefs+xml":{"source":"iana","compressible":true},"application/vnd.oma.dcd":{"source":"iana"},"application/vnd.oma.dcdc":{"source":"iana"},"application/vnd.oma.dd2+xml":{"source":"iana","compressible":true,"extensions":["dd2"]},"application/vnd.oma.drm.risd+xml":{"source":"iana","compressible":true},"application/vnd.oma.group-usage-list+xml":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+cbor":{"source":"iana"},"application/vnd.oma.lwm2m+json":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+tlv":{"source":"iana"},"application/vnd.oma.pal+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.detailed-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.final-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.groups+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.invocation-descriptor+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.optimized-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.push":{"source":"iana"},"application/vnd.oma.scidm.messages+xml":{"source":"iana","compressible":true},"application/vnd.oma.xcap-directory+xml":{"source":"iana","compressible":true},"application/vnd.omads-email+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-file+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-folder+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omaloc-supl-init":{"source":"iana"},"application/vnd.onepager":{"source":"iana"},"application/vnd.onepagertamp":{"source":"iana"},"application/vnd.onepagertamx":{"source":"iana"},"application/vnd.onepagertat":{"source":"iana"},"application/vnd.onepagertatp":{"source":"iana"},"application/vnd.onepagertatx":{"source":"iana"},"application/vnd.openblox.game+xml":{"source":"iana","compressible":true,"extensions":["obgx"]},"application/vnd.openblox.game-binary":{"source":"iana"},"application/vnd.openeye.oeb":{"source":"iana"},"application/vnd.openofficeorg.extension":{"source":"apache","extensions":["oxt"]},"application/vnd.openstreetmap.data+xml":{"source":"iana","compressible":true,"extensions":["osm"]},"application/vnd.opentimestamps.ots":{"source":"iana"},"application/vnd.openxmlformats-officedocument.custom-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.customxmlproperties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawing+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chart+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramcolors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramdata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramlayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramstyle+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.extended-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.commentauthors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.handoutmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesslide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presentation":{"source":"iana","compressible":false,"extensions":["pptx"]},"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slide":{"source":"iana","extensions":["sldx"]},"application/vnd.openxmlformats-officedocument.presentationml.slide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidelayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidemaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideshow":{"source":"iana","extensions":["ppsx"]},"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideupdateinfo+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tablestyles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tags+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.template":{"source":"iana","extensions":["potx"]},"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.viewprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.calcchain+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.chartsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.dialogsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.externallink+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcachedefinition+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcacherecords+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivottable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.querytable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionheaders+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionlog+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sharedstrings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":{"source":"iana","compressible":false,"extensions":["xlsx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheetmetadata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.tablesinglecells+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.template":{"source":"iana","extensions":["xltx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.usernames+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.volatiledependencies+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.theme+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.themeoverride+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.vmldrawing":{"source":"iana"},"application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document":{"source":"iana","compressible":false,"extensions":["docx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.glossary+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.fonttable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.template":{"source":"iana","extensions":["dotx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.websettings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.core-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.relationships+xml":{"source":"iana","compressible":true},"application/vnd.oracle.resource+json":{"source":"iana","compressible":true},"application/vnd.orange.indata":{"source":"iana"},"application/vnd.osa.netdeploy":{"source":"iana"},"application/vnd.osgeo.mapguide.package":{"source":"iana","extensions":["mgp"]},"application/vnd.osgi.bundle":{"source":"iana"},"application/vnd.osgi.dp":{"source":"iana","extensions":["dp"]},"application/vnd.osgi.subsystem":{"source":"iana","extensions":["esa"]},"application/vnd.otps.ct-kip+xml":{"source":"iana","compressible":true},"application/vnd.oxli.countgraph":{"source":"iana"},"application/vnd.pagerduty+json":{"source":"iana","compressible":true},"application/vnd.palm":{"source":"iana","extensions":["pdb","pqa","oprc"]},"application/vnd.panoply":{"source":"iana"},"application/vnd.paos.xml":{"source":"iana"},"application/vnd.patentdive":{"source":"iana"},"application/vnd.patientecommsdoc":{"source":"iana"},"application/vnd.pawaafile":{"source":"iana","extensions":["paw"]},"application/vnd.pcos":{"source":"iana"},"application/vnd.pg.format":{"source":"iana","extensions":["str"]},"application/vnd.pg.osasli":{"source":"iana","extensions":["ei6"]},"application/vnd.piaccess.application-licence":{"source":"iana"},"application/vnd.picsel":{"source":"iana","extensions":["efif"]},"application/vnd.pmi.widget":{"source":"iana","extensions":["wg"]},"application/vnd.poc.group-advertisement+xml":{"source":"iana","compressible":true},"application/vnd.pocketlearn":{"source":"iana","extensions":["plf"]},"application/vnd.powerbuilder6":{"source":"iana","extensions":["pbd"]},"application/vnd.powerbuilder6-s":{"source":"iana"},"application/vnd.powerbuilder7":{"source":"iana"},"application/vnd.powerbuilder7-s":{"source":"iana"},"application/vnd.powerbuilder75":{"source":"iana"},"application/vnd.powerbuilder75-s":{"source":"iana"},"application/vnd.preminet":{"source":"iana"},"application/vnd.previewsystems.box":{"source":"iana","extensions":["box"]},"application/vnd.proteus.magazine":{"source":"iana","extensions":["mgz"]},"application/vnd.psfs":{"source":"iana"},"application/vnd.publishare-delta-tree":{"source":"iana","extensions":["qps"]},"application/vnd.pvi.ptid1":{"source":"iana","extensions":["ptid"]},"application/vnd.pwg-multiplexed":{"source":"iana"},"application/vnd.pwg-xhtml-print+xml":{"source":"iana","compressible":true},"application/vnd.qualcomm.brew-app-res":{"source":"iana"},"application/vnd.quarantainenet":{"source":"iana"},"application/vnd.quark.quarkxpress":{"source":"iana","extensions":["qxd","qxt","qwd","qwt","qxl","qxb"]},"application/vnd.quobject-quoxdocument":{"source":"iana"},"application/vnd.radisys.moml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conn+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-stream+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-base+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-detect+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-sendrecv+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-group+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-speech+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-transform+xml":{"source":"iana","compressible":true},"application/vnd.rainstor.data":{"source":"iana"},"application/vnd.rapid":{"source":"iana"},"application/vnd.rar":{"source":"iana","extensions":["rar"]},"application/vnd.realvnc.bed":{"source":"iana","extensions":["bed"]},"application/vnd.recordare.musicxml":{"source":"iana","extensions":["mxl"]},"application/vnd.recordare.musicxml+xml":{"source":"iana","compressible":true,"extensions":["musicxml"]},"application/vnd.renlearn.rlprint":{"source":"iana"},"application/vnd.resilient.logic":{"source":"iana"},"application/vnd.restful+json":{"source":"iana","compressible":true},"application/vnd.rig.cryptonote":{"source":"iana","extensions":["cryptonote"]},"application/vnd.rim.cod":{"source":"apache","extensions":["cod"]},"application/vnd.rn-realmedia":{"source":"apache","extensions":["rm"]},"application/vnd.rn-realmedia-vbr":{"source":"apache","extensions":["rmvb"]},"application/vnd.route66.link66+xml":{"source":"iana","compressible":true,"extensions":["link66"]},"application/vnd.rs-274x":{"source":"iana"},"application/vnd.ruckus.download":{"source":"iana"},"application/vnd.s3sms":{"source":"iana"},"application/vnd.sailingtracker.track":{"source":"iana","extensions":["st"]},"application/vnd.sar":{"source":"iana"},"application/vnd.sbm.cid":{"source":"iana"},"application/vnd.sbm.mid2":{"source":"iana"},"application/vnd.scribus":{"source":"iana"},"application/vnd.sealed.3df":{"source":"iana"},"application/vnd.sealed.csf":{"source":"iana"},"application/vnd.sealed.doc":{"source":"iana"},"application/vnd.sealed.eml":{"source":"iana"},"application/vnd.sealed.mht":{"source":"iana"},"application/vnd.sealed.net":{"source":"iana"},"application/vnd.sealed.ppt":{"source":"iana"},"application/vnd.sealed.tiff":{"source":"iana"},"application/vnd.sealed.xls":{"source":"iana"},"application/vnd.sealedmedia.softseal.html":{"source":"iana"},"application/vnd.sealedmedia.softseal.pdf":{"source":"iana"},"application/vnd.seemail":{"source":"iana","extensions":["see"]},"application/vnd.seis+json":{"source":"iana","compressible":true},"application/vnd.sema":{"source":"iana","extensions":["sema"]},"application/vnd.semd":{"source":"iana","extensions":["semd"]},"application/vnd.semf":{"source":"iana","extensions":["semf"]},"application/vnd.shade-save-file":{"source":"iana"},"application/vnd.shana.informed.formdata":{"source":"iana","extensions":["ifm"]},"application/vnd.shana.informed.formtemplate":{"source":"iana","extensions":["itp"]},"application/vnd.shana.informed.interchange":{"source":"iana","extensions":["iif"]},"application/vnd.shana.informed.package":{"source":"iana","extensions":["ipk"]},"application/vnd.shootproof+json":{"source":"iana","compressible":true},"application/vnd.shopkick+json":{"source":"iana","compressible":true},"application/vnd.shp":{"source":"iana"},"application/vnd.shx":{"source":"iana"},"application/vnd.sigrok.session":{"source":"iana"},"application/vnd.simtech-mindmapper":{"source":"iana","extensions":["twd","twds"]},"application/vnd.siren+json":{"source":"iana","compressible":true},"application/vnd.smaf":{"source":"iana","extensions":["mmf"]},"application/vnd.smart.notebook":{"source":"iana"},"application/vnd.smart.teacher":{"source":"iana","extensions":["teacher"]},"application/vnd.snesdev-page-table":{"source":"iana"},"application/vnd.software602.filler.form+xml":{"source":"iana","compressible":true,"extensions":["fo"]},"application/vnd.software602.filler.form-xml-zip":{"source":"iana"},"application/vnd.solent.sdkm+xml":{"source":"iana","compressible":true,"extensions":["sdkm","sdkd"]},"application/vnd.spotfire.dxp":{"source":"iana","extensions":["dxp"]},"application/vnd.spotfire.sfs":{"source":"iana","extensions":["sfs"]},"application/vnd.sqlite3":{"source":"iana"},"application/vnd.sss-cod":{"source":"iana"},"application/vnd.sss-dtf":{"source":"iana"},"application/vnd.sss-ntf":{"source":"iana"},"application/vnd.stardivision.calc":{"source":"apache","extensions":["sdc"]},"application/vnd.stardivision.draw":{"source":"apache","extensions":["sda"]},"application/vnd.stardivision.impress":{"source":"apache","extensions":["sdd"]},"application/vnd.stardivision.math":{"source":"apache","extensions":["smf"]},"application/vnd.stardivision.writer":{"source":"apache","extensions":["sdw","vor"]},"application/vnd.stardivision.writer-global":{"source":"apache","extensions":["sgl"]},"application/vnd.stepmania.package":{"source":"iana","extensions":["smzip"]},"application/vnd.stepmania.stepchart":{"source":"iana","extensions":["sm"]},"application/vnd.street-stream":{"source":"iana"},"application/vnd.sun.wadl+xml":{"source":"iana","compressible":true,"extensions":["wadl"]},"application/vnd.sun.xml.calc":{"source":"apache","extensions":["sxc"]},"application/vnd.sun.xml.calc.template":{"source":"apache","extensions":["stc"]},"application/vnd.sun.xml.draw":{"source":"apache","extensions":["sxd"]},"application/vnd.sun.xml.draw.template":{"source":"apache","extensions":["std"]},"application/vnd.sun.xml.impress":{"source":"apache","extensions":["sxi"]},"application/vnd.sun.xml.impress.template":{"source":"apache","extensions":["sti"]},"application/vnd.sun.xml.math":{"source":"apache","extensions":["sxm"]},"application/vnd.sun.xml.writer":{"source":"apache","extensions":["sxw"]},"application/vnd.sun.xml.writer.global":{"source":"apache","extensions":["sxg"]},"application/vnd.sun.xml.writer.template":{"source":"apache","extensions":["stw"]},"application/vnd.sus-calendar":{"source":"iana","extensions":["sus","susp"]},"application/vnd.svd":{"source":"iana","extensions":["svd"]},"application/vnd.swiftview-ics":{"source":"iana"},"application/vnd.sycle+xml":{"source":"iana","compressible":true},"application/vnd.syft+json":{"source":"iana","compressible":true},"application/vnd.symbian.install":{"source":"apache","extensions":["sis","sisx"]},"application/vnd.syncml+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xsm"]},"application/vnd.syncml.dm+wbxml":{"source":"iana","charset":"UTF-8","extensions":["bdm"]},"application/vnd.syncml.dm+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xdm"]},"application/vnd.syncml.dm.notification":{"source":"iana"},"application/vnd.syncml.dmddf+wbxml":{"source":"iana"},"application/vnd.syncml.dmddf+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["ddf"]},"application/vnd.syncml.dmtnds+wbxml":{"source":"iana"},"application/vnd.syncml.dmtnds+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.syncml.ds.notification":{"source":"iana"},"application/vnd.tableschema+json":{"source":"iana","compressible":true},"application/vnd.tao.intent-module-archive":{"source":"iana","extensions":["tao"]},"application/vnd.tcpdump.pcap":{"source":"iana","extensions":["pcap","cap","dmp"]},"application/vnd.think-cell.ppttc+json":{"source":"iana","compressible":true},"application/vnd.tmd.mediaflex.api+xml":{"source":"iana","compressible":true},"application/vnd.tml":{"source":"iana"},"application/vnd.tmobile-livetv":{"source":"iana","extensions":["tmo"]},"application/vnd.tri.onesource":{"source":"iana"},"application/vnd.trid.tpt":{"source":"iana","extensions":["tpt"]},"application/vnd.triscape.mxs":{"source":"iana","extensions":["mxs"]},"application/vnd.trueapp":{"source":"iana","extensions":["tra"]},"application/vnd.truedoc":{"source":"iana"},"application/vnd.ubisoft.webplayer":{"source":"iana"},"application/vnd.ufdl":{"source":"iana","extensions":["ufd","ufdl"]},"application/vnd.uiq.theme":{"source":"iana","extensions":["utz"]},"application/vnd.umajin":{"source":"iana","extensions":["umj"]},"application/vnd.unity":{"source":"iana","extensions":["unityweb"]},"application/vnd.uoml+xml":{"source":"iana","compressible":true,"extensions":["uoml"]},"application/vnd.uplanet.alert":{"source":"iana"},"application/vnd.uplanet.alert-wbxml":{"source":"iana"},"application/vnd.uplanet.bearer-choice":{"source":"iana"},"application/vnd.uplanet.bearer-choice-wbxml":{"source":"iana"},"application/vnd.uplanet.cacheop":{"source":"iana"},"application/vnd.uplanet.cacheop-wbxml":{"source":"iana"},"application/vnd.uplanet.channel":{"source":"iana"},"application/vnd.uplanet.channel-wbxml":{"source":"iana"},"application/vnd.uplanet.list":{"source":"iana"},"application/vnd.uplanet.list-wbxml":{"source":"iana"},"application/vnd.uplanet.listcmd":{"source":"iana"},"application/vnd.uplanet.listcmd-wbxml":{"source":"iana"},"application/vnd.uplanet.signal":{"source":"iana"},"application/vnd.uri-map":{"source":"iana"},"application/vnd.valve.source.material":{"source":"iana"},"application/vnd.vcx":{"source":"iana","extensions":["vcx"]},"application/vnd.vd-study":{"source":"iana"},"application/vnd.vectorworks":{"source":"iana"},"application/vnd.vel+json":{"source":"iana","compressible":true},"application/vnd.verimatrix.vcas":{"source":"iana"},"application/vnd.veritone.aion+json":{"source":"iana","compressible":true},"application/vnd.veryant.thin":{"source":"iana"},"application/vnd.ves.encrypted":{"source":"iana"},"application/vnd.vidsoft.vidconference":{"source":"iana"},"application/vnd.visio":{"source":"iana","extensions":["vsd","vst","vss","vsw"]},"application/vnd.visionary":{"source":"iana","extensions":["vis"]},"application/vnd.vividence.scriptfile":{"source":"iana"},"application/vnd.vsf":{"source":"iana","extensions":["vsf"]},"application/vnd.wap.sic":{"source":"iana"},"application/vnd.wap.slc":{"source":"iana"},"application/vnd.wap.wbxml":{"source":"iana","charset":"UTF-8","extensions":["wbxml"]},"application/vnd.wap.wmlc":{"source":"iana","extensions":["wmlc"]},"application/vnd.wap.wmlscriptc":{"source":"iana","extensions":["wmlsc"]},"application/vnd.webturbo":{"source":"iana","extensions":["wtb"]},"application/vnd.wfa.dpp":{"source":"iana"},"application/vnd.wfa.p2p":{"source":"iana"},"application/vnd.wfa.wsc":{"source":"iana"},"application/vnd.windows.devicepairing":{"source":"iana"},"application/vnd.wmc":{"source":"iana"},"application/vnd.wmf.bootstrap":{"source":"iana"},"application/vnd.wolfram.mathematica":{"source":"iana"},"application/vnd.wolfram.mathematica.package":{"source":"iana"},"application/vnd.wolfram.player":{"source":"iana","extensions":["nbp"]},"application/vnd.wordperfect":{"source":"iana","extensions":["wpd"]},"application/vnd.wqd":{"source":"iana","extensions":["wqd"]},"application/vnd.wrq-hp3000-labelled":{"source":"iana"},"application/vnd.wt.stf":{"source":"iana","extensions":["stf"]},"application/vnd.wv.csp+wbxml":{"source":"iana"},"application/vnd.wv.csp+xml":{"source":"iana","compressible":true},"application/vnd.wv.ssp+xml":{"source":"iana","compressible":true},"application/vnd.xacml+json":{"source":"iana","compressible":true},"application/vnd.xara":{"source":"iana","extensions":["xar"]},"application/vnd.xfdl":{"source":"iana","extensions":["xfdl"]},"application/vnd.xfdl.webform":{"source":"iana"},"application/vnd.xmi+xml":{"source":"iana","compressible":true},"application/vnd.xmpie.cpkg":{"source":"iana"},"application/vnd.xmpie.dpkg":{"source":"iana"},"application/vnd.xmpie.plan":{"source":"iana"},"application/vnd.xmpie.ppkg":{"source":"iana"},"application/vnd.xmpie.xlim":{"source":"iana"},"application/vnd.yamaha.hv-dic":{"source":"iana","extensions":["hvd"]},"application/vnd.yamaha.hv-script":{"source":"iana","extensions":["hvs"]},"application/vnd.yamaha.hv-voice":{"source":"iana","extensions":["hvp"]},"application/vnd.yamaha.openscoreformat":{"source":"iana","extensions":["osf"]},"application/vnd.yamaha.openscoreformat.osfpvg+xml":{"source":"iana","compressible":true,"extensions":["osfpvg"]},"application/vnd.yamaha.remote-setup":{"source":"iana"},"application/vnd.yamaha.smaf-audio":{"source":"iana","extensions":["saf"]},"application/vnd.yamaha.smaf-phrase":{"source":"iana","extensions":["spf"]},"application/vnd.yamaha.through-ngn":{"source":"iana"},"application/vnd.yamaha.tunnel-udpencap":{"source":"iana"},"application/vnd.yaoweme":{"source":"iana"},"application/vnd.yellowriver-custom-menu":{"source":"iana","extensions":["cmp"]},"application/vnd.youtube.yt":{"source":"iana"},"application/vnd.zul":{"source":"iana","extensions":["zir","zirz"]},"application/vnd.zzazz.deck+xml":{"source":"iana","compressible":true,"extensions":["zaz"]},"application/voicexml+xml":{"source":"iana","compressible":true,"extensions":["vxml"]},"application/voucher-cms+json":{"source":"iana","compressible":true},"application/vq-rtcpxr":{"source":"iana"},"application/wasm":{"source":"iana","compressible":true,"extensions":["wasm"]},"application/watcherinfo+xml":{"source":"iana","compressible":true,"extensions":["wif"]},"application/webpush-options+json":{"source":"iana","compressible":true},"application/whoispp-query":{"source":"iana"},"application/whoispp-response":{"source":"iana"},"application/widget":{"source":"iana","extensions":["wgt"]},"application/winhlp":{"source":"apache","extensions":["hlp"]},"application/wita":{"source":"iana"},"application/wordperfect5.1":{"source":"iana"},"application/wsdl+xml":{"source":"iana","compressible":true,"extensions":["wsdl"]},"application/wspolicy+xml":{"source":"iana","compressible":true,"extensions":["wspolicy"]},"application/x-7z-compressed":{"source":"apache","compressible":false,"extensions":["7z"]},"application/x-abiword":{"source":"apache","extensions":["abw"]},"application/x-ace-compressed":{"source":"apache","extensions":["ace"]},"application/x-amf":{"source":"apache"},"application/x-apple-diskimage":{"source":"apache","extensions":["dmg"]},"application/x-arj":{"compressible":false,"extensions":["arj"]},"application/x-authorware-bin":{"source":"apache","extensions":["aab","x32","u32","vox"]},"application/x-authorware-map":{"source":"apache","extensions":["aam"]},"application/x-authorware-seg":{"source":"apache","extensions":["aas"]},"application/x-bcpio":{"source":"apache","extensions":["bcpio"]},"application/x-bdoc":{"compressible":false,"extensions":["bdoc"]},"application/x-bittorrent":{"source":"apache","extensions":["torrent"]},"application/x-blorb":{"source":"apache","extensions":["blb","blorb"]},"application/x-bzip":{"source":"apache","compressible":false,"extensions":["bz"]},"application/x-bzip2":{"source":"apache","compressible":false,"extensions":["bz2","boz"]},"application/x-cbr":{"source":"apache","extensions":["cbr","cba","cbt","cbz","cb7"]},"application/x-cdlink":{"source":"apache","extensions":["vcd"]},"application/x-cfs-compressed":{"source":"apache","extensions":["cfs"]},"application/x-chat":{"source":"apache","extensions":["chat"]},"application/x-chess-pgn":{"source":"apache","extensions":["pgn"]},"application/x-chrome-extension":{"extensions":["crx"]},"application/x-cocoa":{"source":"nginx","extensions":["cco"]},"application/x-compress":{"source":"apache"},"application/x-conference":{"source":"apache","extensions":["nsc"]},"application/x-cpio":{"source":"apache","extensions":["cpio"]},"application/x-csh":{"source":"apache","extensions":["csh"]},"application/x-deb":{"compressible":false},"application/x-debian-package":{"source":"apache","extensions":["deb","udeb"]},"application/x-dgc-compressed":{"source":"apache","extensions":["dgc"]},"application/x-director":{"source":"apache","extensions":["dir","dcr","dxr","cst","cct","cxt","w3d","fgd","swa"]},"application/x-doom":{"source":"apache","extensions":["wad"]},"application/x-dtbncx+xml":{"source":"apache","compressible":true,"extensions":["ncx"]},"application/x-dtbook+xml":{"source":"apache","compressible":true,"extensions":["dtb"]},"application/x-dtbresource+xml":{"source":"apache","compressible":true,"extensions":["res"]},"application/x-dvi":{"source":"apache","compressible":false,"extensions":["dvi"]},"application/x-envoy":{"source":"apache","extensions":["evy"]},"application/x-eva":{"source":"apache","extensions":["eva"]},"application/x-font-bdf":{"source":"apache","extensions":["bdf"]},"application/x-font-dos":{"source":"apache"},"application/x-font-framemaker":{"source":"apache"},"application/x-font-ghostscript":{"source":"apache","extensions":["gsf"]},"application/x-font-libgrx":{"source":"apache"},"application/x-font-linux-psf":{"source":"apache","extensions":["psf"]},"application/x-font-pcf":{"source":"apache","extensions":["pcf"]},"application/x-font-snf":{"source":"apache","extensions":["snf"]},"application/x-font-speedo":{"source":"apache"},"application/x-font-sunos-news":{"source":"apache"},"application/x-font-type1":{"source":"apache","extensions":["pfa","pfb","pfm","afm"]},"application/x-font-vfont":{"source":"apache"},"application/x-freearc":{"source":"apache","extensions":["arc"]},"application/x-futuresplash":{"source":"apache","extensions":["spl"]},"application/x-gca-compressed":{"source":"apache","extensions":["gca"]},"application/x-glulx":{"source":"apache","extensions":["ulx"]},"application/x-gnumeric":{"source":"apache","extensions":["gnumeric"]},"application/x-gramps-xml":{"source":"apache","extensions":["gramps"]},"application/x-gtar":{"source":"apache","extensions":["gtar"]},"application/x-gzip":{"source":"apache"},"application/x-hdf":{"source":"apache","extensions":["hdf"]},"application/x-httpd-php":{"compressible":true,"extensions":["php"]},"application/x-install-instructions":{"source":"apache","extensions":["install"]},"application/x-iso9660-image":{"source":"apache","extensions":["iso"]},"application/x-iwork-keynote-sffkey":{"extensions":["key"]},"application/x-iwork-numbers-sffnumbers":{"extensions":["numbers"]},"application/x-iwork-pages-sffpages":{"extensions":["pages"]},"application/x-java-archive-diff":{"source":"nginx","extensions":["jardiff"]},"application/x-java-jnlp-file":{"source":"apache","compressible":false,"extensions":["jnlp"]},"application/x-javascript":{"compressible":true},"application/x-keepass2":{"extensions":["kdbx"]},"application/x-latex":{"source":"apache","compressible":false,"extensions":["latex"]},"application/x-lua-bytecode":{"extensions":["luac"]},"application/x-lzh-compressed":{"source":"apache","extensions":["lzh","lha"]},"application/x-makeself":{"source":"nginx","extensions":["run"]},"application/x-mie":{"source":"apache","extensions":["mie"]},"application/x-mobipocket-ebook":{"source":"apache","extensions":["prc","mobi"]},"application/x-mpegurl":{"compressible":false},"application/x-ms-application":{"source":"apache","extensions":["application"]},"application/x-ms-shortcut":{"source":"apache","extensions":["lnk"]},"application/x-ms-wmd":{"source":"apache","extensions":["wmd"]},"application/x-ms-wmz":{"source":"apache","extensions":["wmz"]},"application/x-ms-xbap":{"source":"apache","extensions":["xbap"]},"application/x-msaccess":{"source":"apache","extensions":["mdb"]},"application/x-msbinder":{"source":"apache","extensions":["obd"]},"application/x-mscardfile":{"source":"apache","extensions":["crd"]},"application/x-msclip":{"source":"apache","extensions":["clp"]},"application/x-msdos-program":{"extensions":["exe"]},"application/x-msdownload":{"source":"apache","extensions":["exe","dll","com","bat","msi"]},"application/x-msmediaview":{"source":"apache","extensions":["mvb","m13","m14"]},"application/x-msmetafile":{"source":"apache","extensions":["wmf","wmz","emf","emz"]},"application/x-msmoney":{"source":"apache","extensions":["mny"]},"application/x-mspublisher":{"source":"apache","extensions":["pub"]},"application/x-msschedule":{"source":"apache","extensions":["scd"]},"application/x-msterminal":{"source":"apache","extensions":["trm"]},"application/x-mswrite":{"source":"apache","extensions":["wri"]},"application/x-netcdf":{"source":"apache","extensions":["nc","cdf"]},"application/x-ns-proxy-autoconfig":{"compressible":true,"extensions":["pac"]},"application/x-nzb":{"source":"apache","extensions":["nzb"]},"application/x-perl":{"source":"nginx","extensions":["pl","pm"]},"application/x-pilot":{"source":"nginx","extensions":["prc","pdb"]},"application/x-pkcs12":{"source":"apache","compressible":false,"extensions":["p12","pfx"]},"application/x-pkcs7-certificates":{"source":"apache","extensions":["p7b","spc"]},"application/x-pkcs7-certreqresp":{"source":"apache","extensions":["p7r"]},"application/x-pki-message":{"source":"iana"},"application/x-rar-compressed":{"source":"apache","compressible":false,"extensions":["rar"]},"application/x-redhat-package-manager":{"source":"nginx","extensions":["rpm"]},"application/x-research-info-systems":{"source":"apache","extensions":["ris"]},"application/x-sea":{"source":"nginx","extensions":["sea"]},"application/x-sh":{"source":"apache","compressible":true,"extensions":["sh"]},"application/x-shar":{"source":"apache","extensions":["shar"]},"application/x-shockwave-flash":{"source":"apache","compressible":false,"extensions":["swf"]},"application/x-silverlight-app":{"source":"apache","extensions":["xap"]},"application/x-sql":{"source":"apache","extensions":["sql"]},"application/x-stuffit":{"source":"apache","compressible":false,"extensions":["sit"]},"application/x-stuffitx":{"source":"apache","extensions":["sitx"]},"application/x-subrip":{"source":"apache","extensions":["srt"]},"application/x-sv4cpio":{"source":"apache","extensions":["sv4cpio"]},"application/x-sv4crc":{"source":"apache","extensions":["sv4crc"]},"application/x-t3vm-image":{"source":"apache","extensions":["t3"]},"application/x-tads":{"source":"apache","extensions":["gam"]},"application/x-tar":{"source":"apache","compressible":true,"extensions":["tar"]},"application/x-tcl":{"source":"apache","extensions":["tcl","tk"]},"application/x-tex":{"source":"apache","extensions":["tex"]},"application/x-tex-tfm":{"source":"apache","extensions":["tfm"]},"application/x-texinfo":{"source":"apache","extensions":["texinfo","texi"]},"application/x-tgif":{"source":"apache","extensions":["obj"]},"application/x-ustar":{"source":"apache","extensions":["ustar"]},"application/x-virtualbox-hdd":{"compressible":true,"extensions":["hdd"]},"application/x-virtualbox-ova":{"compressible":true,"extensions":["ova"]},"application/x-virtualbox-ovf":{"compressible":true,"extensions":["ovf"]},"application/x-virtualbox-vbox":{"compressible":true,"extensions":["vbox"]},"application/x-virtualbox-vbox-extpack":{"compressible":false,"extensions":["vbox-extpack"]},"application/x-virtualbox-vdi":{"compressible":true,"extensions":["vdi"]},"application/x-virtualbox-vhd":{"compressible":true,"extensions":["vhd"]},"application/x-virtualbox-vmdk":{"compressible":true,"extensions":["vmdk"]},"application/x-wais-source":{"source":"apache","extensions":["src"]},"application/x-web-app-manifest+json":{"compressible":true,"extensions":["webapp"]},"application/x-www-form-urlencoded":{"source":"iana","compressible":true},"application/x-x509-ca-cert":{"source":"iana","extensions":["der","crt","pem"]},"application/x-x509-ca-ra-cert":{"source":"iana"},"application/x-x509-next-ca-cert":{"source":"iana"},"application/x-xfig":{"source":"apache","extensions":["fig"]},"application/x-xliff+xml":{"source":"apache","compressible":true,"extensions":["xlf"]},"application/x-xpinstall":{"source":"apache","compressible":false,"extensions":["xpi"]},"application/x-xz":{"source":"apache","extensions":["xz"]},"application/x-zmachine":{"source":"apache","extensions":["z1","z2","z3","z4","z5","z6","z7","z8"]},"application/x400-bp":{"source":"iana"},"application/xacml+xml":{"source":"iana","compressible":true},"application/xaml+xml":{"source":"apache","compressible":true,"extensions":["xaml"]},"application/xcap-att+xml":{"source":"iana","compressible":true,"extensions":["xav"]},"application/xcap-caps+xml":{"source":"iana","compressible":true,"extensions":["xca"]},"application/xcap-diff+xml":{"source":"iana","compressible":true,"extensions":["xdf"]},"application/xcap-el+xml":{"source":"iana","compressible":true,"extensions":["xel"]},"application/xcap-error+xml":{"source":"iana","compressible":true},"application/xcap-ns+xml":{"source":"iana","compressible":true,"extensions":["xns"]},"application/xcon-conference-info+xml":{"source":"iana","compressible":true},"application/xcon-conference-info-diff+xml":{"source":"iana","compressible":true},"application/xenc+xml":{"source":"iana","compressible":true,"extensions":["xenc"]},"application/xhtml+xml":{"source":"iana","compressible":true,"extensions":["xhtml","xht"]},"application/xhtml-voice+xml":{"source":"apache","compressible":true},"application/xliff+xml":{"source":"iana","compressible":true,"extensions":["xlf"]},"application/xml":{"source":"iana","compressible":true,"extensions":["xml","xsl","xsd","rng"]},"application/xml-dtd":{"source":"iana","compressible":true,"extensions":["dtd"]},"application/xml-external-parsed-entity":{"source":"iana"},"application/xml-patch+xml":{"source":"iana","compressible":true},"application/xmpp+xml":{"source":"iana","compressible":true},"application/xop+xml":{"source":"iana","compressible":true,"extensions":["xop"]},"application/xproc+xml":{"source":"apache","compressible":true,"extensions":["xpl"]},"application/xslt+xml":{"source":"iana","compressible":true,"extensions":["xsl","xslt"]},"application/xspf+xml":{"source":"apache","compressible":true,"extensions":["xspf"]},"application/xv+xml":{"source":"iana","compressible":true,"extensions":["mxml","xhvml","xvml","xvm"]},"application/yang":{"source":"iana","extensions":["yang"]},"application/yang-data+json":{"source":"iana","compressible":true},"application/yang-data+xml":{"source":"iana","compressible":true},"application/yang-patch+json":{"source":"iana","compressible":true},"application/yang-patch+xml":{"source":"iana","compressible":true},"application/yin+xml":{"source":"iana","compressible":true,"extensions":["yin"]},"application/zip":{"source":"iana","compressible":false,"extensions":["zip"]},"application/zlib":{"source":"iana"},"application/zstd":{"source":"iana"},"audio/1d-interleaved-parityfec":{"source":"iana"},"audio/32kadpcm":{"source":"iana"},"audio/3gpp":{"source":"iana","compressible":false,"extensions":["3gpp"]},"audio/3gpp2":{"source":"iana"},"audio/aac":{"source":"iana"},"audio/ac3":{"source":"iana"},"audio/adpcm":{"source":"apache","extensions":["adp"]},"audio/amr":{"source":"iana","extensions":["amr"]},"audio/amr-wb":{"source":"iana"},"audio/amr-wb+":{"source":"iana"},"audio/aptx":{"source":"iana"},"audio/asc":{"source":"iana"},"audio/atrac-advanced-lossless":{"source":"iana"},"audio/atrac-x":{"source":"iana"},"audio/atrac3":{"source":"iana"},"audio/basic":{"source":"iana","compressible":false,"extensions":["au","snd"]},"audio/bv16":{"source":"iana"},"audio/bv32":{"source":"iana"},"audio/clearmode":{"source":"iana"},"audio/cn":{"source":"iana"},"audio/dat12":{"source":"iana"},"audio/dls":{"source":"iana"},"audio/dsr-es201108":{"source":"iana"},"audio/dsr-es202050":{"source":"iana"},"audio/dsr-es202211":{"source":"iana"},"audio/dsr-es202212":{"source":"iana"},"audio/dv":{"source":"iana"},"audio/dvi4":{"source":"iana"},"audio/eac3":{"source":"iana"},"audio/encaprtp":{"source":"iana"},"audio/evrc":{"source":"iana"},"audio/evrc-qcp":{"source":"iana"},"audio/evrc0":{"source":"iana"},"audio/evrc1":{"source":"iana"},"audio/evrcb":{"source":"iana"},"audio/evrcb0":{"source":"iana"},"audio/evrcb1":{"source":"iana"},"audio/evrcnw":{"source":"iana"},"audio/evrcnw0":{"source":"iana"},"audio/evrcnw1":{"source":"iana"},"audio/evrcwb":{"source":"iana"},"audio/evrcwb0":{"source":"iana"},"audio/evrcwb1":{"source":"iana"},"audio/evs":{"source":"iana"},"audio/flexfec":{"source":"iana"},"audio/fwdred":{"source":"iana"},"audio/g711-0":{"source":"iana"},"audio/g719":{"source":"iana"},"audio/g722":{"source":"iana"},"audio/g7221":{"source":"iana"},"audio/g723":{"source":"iana"},"audio/g726-16":{"source":"iana"},"audio/g726-24":{"source":"iana"},"audio/g726-32":{"source":"iana"},"audio/g726-40":{"source":"iana"},"audio/g728":{"source":"iana"},"audio/g729":{"source":"iana"},"audio/g7291":{"source":"iana"},"audio/g729d":{"source":"iana"},"audio/g729e":{"source":"iana"},"audio/gsm":{"source":"iana"},"audio/gsm-efr":{"source":"iana"},"audio/gsm-hr-08":{"source":"iana"},"audio/ilbc":{"source":"iana"},"audio/ip-mr_v2.5":{"source":"iana"},"audio/isac":{"source":"apache"},"audio/l16":{"source":"iana"},"audio/l20":{"source":"iana"},"audio/l24":{"source":"iana","compressible":false},"audio/l8":{"source":"iana"},"audio/lpc":{"source":"iana"},"audio/melp":{"source":"iana"},"audio/melp1200":{"source":"iana"},"audio/melp2400":{"source":"iana"},"audio/melp600":{"source":"iana"},"audio/mhas":{"source":"iana"},"audio/midi":{"source":"apache","extensions":["mid","midi","kar","rmi"]},"audio/mobile-xmf":{"source":"iana","extensions":["mxmf"]},"audio/mp3":{"compressible":false,"extensions":["mp3"]},"audio/mp4":{"source":"iana","compressible":false,"extensions":["m4a","mp4a"]},"audio/mp4a-latm":{"source":"iana"},"audio/mpa":{"source":"iana"},"audio/mpa-robust":{"source":"iana"},"audio/mpeg":{"source":"iana","compressible":false,"extensions":["mpga","mp2","mp2a","mp3","m2a","m3a"]},"audio/mpeg4-generic":{"source":"iana"},"audio/musepack":{"source":"apache"},"audio/ogg":{"source":"iana","compressible":false,"extensions":["oga","ogg","spx","opus"]},"audio/opus":{"source":"iana"},"audio/parityfec":{"source":"iana"},"audio/pcma":{"source":"iana"},"audio/pcma-wb":{"source":"iana"},"audio/pcmu":{"source":"iana"},"audio/pcmu-wb":{"source":"iana"},"audio/prs.sid":{"source":"iana"},"audio/qcelp":{"source":"iana"},"audio/raptorfec":{"source":"iana"},"audio/red":{"source":"iana"},"audio/rtp-enc-aescm128":{"source":"iana"},"audio/rtp-midi":{"source":"iana"},"audio/rtploopback":{"source":"iana"},"audio/rtx":{"source":"iana"},"audio/s3m":{"source":"apache","extensions":["s3m"]},"audio/scip":{"source":"iana"},"audio/silk":{"source":"apache","extensions":["sil"]},"audio/smv":{"source":"iana"},"audio/smv-qcp":{"source":"iana"},"audio/smv0":{"source":"iana"},"audio/sofa":{"source":"iana"},"audio/sp-midi":{"source":"iana"},"audio/speex":{"source":"iana"},"audio/t140c":{"source":"iana"},"audio/t38":{"source":"iana"},"audio/telephone-event":{"source":"iana"},"audio/tetra_acelp":{"source":"iana"},"audio/tetra_acelp_bb":{"source":"iana"},"audio/tone":{"source":"iana"},"audio/tsvcis":{"source":"iana"},"audio/uemclip":{"source":"iana"},"audio/ulpfec":{"source":"iana"},"audio/usac":{"source":"iana"},"audio/vdvi":{"source":"iana"},"audio/vmr-wb":{"source":"iana"},"audio/vnd.3gpp.iufp":{"source":"iana"},"audio/vnd.4sb":{"source":"iana"},"audio/vnd.audiokoz":{"source":"iana"},"audio/vnd.celp":{"source":"iana"},"audio/vnd.cisco.nse":{"source":"iana"},"audio/vnd.cmles.radio-events":{"source":"iana"},"audio/vnd.cns.anp1":{"source":"iana"},"audio/vnd.cns.inf1":{"source":"iana"},"audio/vnd.dece.audio":{"source":"iana","extensions":["uva","uvva"]},"audio/vnd.digital-winds":{"source":"iana","extensions":["eol"]},"audio/vnd.dlna.adts":{"source":"iana"},"audio/vnd.dolby.heaac.1":{"source":"iana"},"audio/vnd.dolby.heaac.2":{"source":"iana"},"audio/vnd.dolby.mlp":{"source":"iana"},"audio/vnd.dolby.mps":{"source":"iana"},"audio/vnd.dolby.pl2":{"source":"iana"},"audio/vnd.dolby.pl2x":{"source":"iana"},"audio/vnd.dolby.pl2z":{"source":"iana"},"audio/vnd.dolby.pulse.1":{"source":"iana"},"audio/vnd.dra":{"source":"iana","extensions":["dra"]},"audio/vnd.dts":{"source":"iana","extensions":["dts"]},"audio/vnd.dts.hd":{"source":"iana","extensions":["dtshd"]},"audio/vnd.dts.uhd":{"source":"iana"},"audio/vnd.dvb.file":{"source":"iana"},"audio/vnd.everad.plj":{"source":"iana"},"audio/vnd.hns.audio":{"source":"iana"},"audio/vnd.lucent.voice":{"source":"iana","extensions":["lvp"]},"audio/vnd.ms-playready.media.pya":{"source":"iana","extensions":["pya"]},"audio/vnd.nokia.mobile-xmf":{"source":"iana"},"audio/vnd.nortel.vbk":{"source":"iana"},"audio/vnd.nuera.ecelp4800":{"source":"iana","extensions":["ecelp4800"]},"audio/vnd.nuera.ecelp7470":{"source":"iana","extensions":["ecelp7470"]},"audio/vnd.nuera.ecelp9600":{"source":"iana","extensions":["ecelp9600"]},"audio/vnd.octel.sbc":{"source":"iana"},"audio/vnd.presonus.multitrack":{"source":"iana"},"audio/vnd.qcelp":{"source":"iana"},"audio/vnd.rhetorex.32kadpcm":{"source":"iana"},"audio/vnd.rip":{"source":"iana","extensions":["rip"]},"audio/vnd.rn-realaudio":{"compressible":false},"audio/vnd.sealedmedia.softseal.mpeg":{"source":"iana"},"audio/vnd.vmx.cvsd":{"source":"iana"},"audio/vnd.wave":{"compressible":false},"audio/vorbis":{"source":"iana","compressible":false},"audio/vorbis-config":{"source":"iana"},"audio/wav":{"compressible":false,"extensions":["wav"]},"audio/wave":{"compressible":false,"extensions":["wav"]},"audio/webm":{"source":"apache","compressible":false,"extensions":["weba"]},"audio/x-aac":{"source":"apache","compressible":false,"extensions":["aac"]},"audio/x-aiff":{"source":"apache","extensions":["aif","aiff","aifc"]},"audio/x-caf":{"source":"apache","compressible":false,"extensions":["caf"]},"audio/x-flac":{"source":"apache","extensions":["flac"]},"audio/x-m4a":{"source":"nginx","extensions":["m4a"]},"audio/x-matroska":{"source":"apache","extensions":["mka"]},"audio/x-mpegurl":{"source":"apache","extensions":["m3u"]},"audio/x-ms-wax":{"source":"apache","extensions":["wax"]},"audio/x-ms-wma":{"source":"apache","extensions":["wma"]},"audio/x-pn-realaudio":{"source":"apache","extensions":["ram","ra"]},"audio/x-pn-realaudio-plugin":{"source":"apache","extensions":["rmp"]},"audio/x-realaudio":{"source":"nginx","extensions":["ra"]},"audio/x-tta":{"source":"apache"},"audio/x-wav":{"source":"apache","extensions":["wav"]},"audio/xm":{"source":"apache","extensions":["xm"]},"chemical/x-cdx":{"source":"apache","extensions":["cdx"]},"chemical/x-cif":{"source":"apache","extensions":["cif"]},"chemical/x-cmdf":{"source":"apache","extensions":["cmdf"]},"chemical/x-cml":{"source":"apache","extensions":["cml"]},"chemical/x-csml":{"source":"apache","extensions":["csml"]},"chemical/x-pdb":{"source":"apache"},"chemical/x-xyz":{"source":"apache","extensions":["xyz"]},"font/collection":{"source":"iana","extensions":["ttc"]},"font/otf":{"source":"iana","compressible":true,"extensions":["otf"]},"font/sfnt":{"source":"iana"},"font/ttf":{"source":"iana","compressible":true,"extensions":["ttf"]},"font/woff":{"source":"iana","extensions":["woff"]},"font/woff2":{"source":"iana","extensions":["woff2"]},"image/aces":{"source":"iana","extensions":["exr"]},"image/apng":{"compressible":false,"extensions":["apng"]},"image/avci":{"source":"iana","extensions":["avci"]},"image/avcs":{"source":"iana","extensions":["avcs"]},"image/avif":{"source":"iana","compressible":false,"extensions":["avif"]},"image/bmp":{"source":"iana","compressible":true,"extensions":["bmp"]},"image/cgm":{"source":"iana","extensions":["cgm"]},"image/dicom-rle":{"source":"iana","extensions":["drle"]},"image/emf":{"source":"iana","extensions":["emf"]},"image/fits":{"source":"iana","extensions":["fits"]},"image/g3fax":{"source":"iana","extensions":["g3"]},"image/gif":{"source":"iana","compressible":false,"extensions":["gif"]},"image/heic":{"source":"iana","extensions":["heic"]},"image/heic-sequence":{"source":"iana","extensions":["heics"]},"image/heif":{"source":"iana","extensions":["heif"]},"image/heif-sequence":{"source":"iana","extensions":["heifs"]},"image/hej2k":{"source":"iana","extensions":["hej2"]},"image/hsj2":{"source":"iana","extensions":["hsj2"]},"image/ief":{"source":"iana","extensions":["ief"]},"image/jls":{"source":"iana","extensions":["jls"]},"image/jp2":{"source":"iana","compressible":false,"extensions":["jp2","jpg2"]},"image/jpeg":{"source":"iana","compressible":false,"extensions":["jpeg","jpg","jpe"]},"image/jph":{"source":"iana","extensions":["jph"]},"image/jphc":{"source":"iana","extensions":["jhc"]},"image/jpm":{"source":"iana","compressible":false,"extensions":["jpm"]},"image/jpx":{"source":"iana","compressible":false,"extensions":["jpx","jpf"]},"image/jxr":{"source":"iana","extensions":["jxr"]},"image/jxra":{"source":"iana","extensions":["jxra"]},"image/jxrs":{"source":"iana","extensions":["jxrs"]},"image/jxs":{"source":"iana","extensions":["jxs"]},"image/jxsc":{"source":"iana","extensions":["jxsc"]},"image/jxsi":{"source":"iana","extensions":["jxsi"]},"image/jxss":{"source":"iana","extensions":["jxss"]},"image/ktx":{"source":"iana","extensions":["ktx"]},"image/ktx2":{"source":"iana","extensions":["ktx2"]},"image/naplps":{"source":"iana"},"image/pjpeg":{"compressible":false},"image/png":{"source":"iana","compressible":false,"extensions":["png"]},"image/prs.btif":{"source":"iana","extensions":["btif"]},"image/prs.pti":{"source":"iana","extensions":["pti"]},"image/pwg-raster":{"source":"iana"},"image/sgi":{"source":"apache","extensions":["sgi"]},"image/svg+xml":{"source":"iana","compressible":true,"extensions":["svg","svgz"]},"image/t38":{"source":"iana","extensions":["t38"]},"image/tiff":{"source":"iana","compressible":false,"extensions":["tif","tiff"]},"image/tiff-fx":{"source":"iana","extensions":["tfx"]},"image/vnd.adobe.photoshop":{"source":"iana","compressible":true,"extensions":["psd"]},"image/vnd.airzip.accelerator.azv":{"source":"iana","extensions":["azv"]},"image/vnd.cns.inf2":{"source":"iana"},"image/vnd.dece.graphic":{"source":"iana","extensions":["uvi","uvvi","uvg","uvvg"]},"image/vnd.djvu":{"source":"iana","extensions":["djvu","djv"]},"image/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"image/vnd.dwg":{"source":"iana","extensions":["dwg"]},"image/vnd.dxf":{"source":"iana","extensions":["dxf"]},"image/vnd.fastbidsheet":{"source":"iana","extensions":["fbs"]},"image/vnd.fpx":{"source":"iana","extensions":["fpx"]},"image/vnd.fst":{"source":"iana","extensions":["fst"]},"image/vnd.fujixerox.edmics-mmr":{"source":"iana","extensions":["mmr"]},"image/vnd.fujixerox.edmics-rlc":{"source":"iana","extensions":["rlc"]},"image/vnd.globalgraphics.pgb":{"source":"iana"},"image/vnd.microsoft.icon":{"source":"iana","compressible":true,"extensions":["ico"]},"image/vnd.mix":{"source":"iana"},"image/vnd.mozilla.apng":{"source":"iana"},"image/vnd.ms-dds":{"compressible":true,"extensions":["dds"]},"image/vnd.ms-modi":{"source":"iana","extensions":["mdi"]},"image/vnd.ms-photo":{"source":"apache","extensions":["wdp"]},"image/vnd.net-fpx":{"source":"iana","extensions":["npx"]},"image/vnd.pco.b16":{"source":"iana","extensions":["b16"]},"image/vnd.radiance":{"source":"iana"},"image/vnd.sealed.png":{"source":"iana"},"image/vnd.sealedmedia.softseal.gif":{"source":"iana"},"image/vnd.sealedmedia.softseal.jpg":{"source":"iana"},"image/vnd.svf":{"source":"iana"},"image/vnd.tencent.tap":{"source":"iana","extensions":["tap"]},"image/vnd.valve.source.texture":{"source":"iana","extensions":["vtf"]},"image/vnd.wap.wbmp":{"source":"iana","extensions":["wbmp"]},"image/vnd.xiff":{"source":"iana","extensions":["xif"]},"image/vnd.zbrush.pcx":{"source":"iana","extensions":["pcx"]},"image/webp":{"source":"apache","extensions":["webp"]},"image/wmf":{"source":"iana","extensions":["wmf"]},"image/x-3ds":{"source":"apache","extensions":["3ds"]},"image/x-cmu-raster":{"source":"apache","extensions":["ras"]},"image/x-cmx":{"source":"apache","extensions":["cmx"]},"image/x-freehand":{"source":"apache","extensions":["fh","fhc","fh4","fh5","fh7"]},"image/x-icon":{"source":"apache","compressible":true,"extensions":["ico"]},"image/x-jng":{"source":"nginx","extensions":["jng"]},"image/x-mrsid-image":{"source":"apache","extensions":["sid"]},"image/x-ms-bmp":{"source":"nginx","compressible":true,"extensions":["bmp"]},"image/x-pcx":{"source":"apache","extensions":["pcx"]},"image/x-pict":{"source":"apache","extensions":["pic","pct"]},"image/x-portable-anymap":{"source":"apache","extensions":["pnm"]},"image/x-portable-bitmap":{"source":"apache","extensions":["pbm"]},"image/x-portable-graymap":{"source":"apache","extensions":["pgm"]},"image/x-portable-pixmap":{"source":"apache","extensions":["ppm"]},"image/x-rgb":{"source":"apache","extensions":["rgb"]},"image/x-tga":{"source":"apache","extensions":["tga"]},"image/x-xbitmap":{"source":"apache","extensions":["xbm"]},"image/x-xcf":{"compressible":false},"image/x-xpixmap":{"source":"apache","extensions":["xpm"]},"image/x-xwindowdump":{"source":"apache","extensions":["xwd"]},"message/cpim":{"source":"iana"},"message/delivery-status":{"source":"iana"},"message/disposition-notification":{"source":"iana","extensions":["disposition-notification"]},"message/external-body":{"source":"iana"},"message/feedback-report":{"source":"iana"},"message/global":{"source":"iana","extensions":["u8msg"]},"message/global-delivery-status":{"source":"iana","extensions":["u8dsn"]},"message/global-disposition-notification":{"source":"iana","extensions":["u8mdn"]},"message/global-headers":{"source":"iana","extensions":["u8hdr"]},"message/http":{"source":"iana","compressible":false},"message/imdn+xml":{"source":"iana","compressible":true},"message/news":{"source":"iana"},"message/partial":{"source":"iana","compressible":false},"message/rfc822":{"source":"iana","compressible":true,"extensions":["eml","mime"]},"message/s-http":{"source":"iana"},"message/sip":{"source":"iana"},"message/sipfrag":{"source":"iana"},"message/tracking-status":{"source":"iana"},"message/vnd.si.simp":{"source":"iana"},"message/vnd.wfa.wsc":{"source":"iana","extensions":["wsc"]},"model/3mf":{"source":"iana","extensions":["3mf"]},"model/e57":{"source":"iana"},"model/gltf+json":{"source":"iana","compressible":true,"extensions":["gltf"]},"model/gltf-binary":{"source":"iana","compressible":true,"extensions":["glb"]},"model/iges":{"source":"iana","compressible":false,"extensions":["igs","iges"]},"model/mesh":{"source":"iana","compressible":false,"extensions":["msh","mesh","silo"]},"model/mtl":{"source":"iana","extensions":["mtl"]},"model/obj":{"source":"iana","extensions":["obj"]},"model/step":{"source":"iana"},"model/step+xml":{"source":"iana","compressible":true,"extensions":["stpx"]},"model/step+zip":{"source":"iana","compressible":false,"extensions":["stpz"]},"model/step-xml+zip":{"source":"iana","compressible":false,"extensions":["stpxz"]},"model/stl":{"source":"iana","extensions":["stl"]},"model/vnd.collada+xml":{"source":"iana","compressible":true,"extensions":["dae"]},"model/vnd.dwf":{"source":"iana","extensions":["dwf"]},"model/vnd.flatland.3dml":{"source":"iana"},"model/vnd.gdl":{"source":"iana","extensions":["gdl"]},"model/vnd.gs-gdl":{"source":"apache"},"model/vnd.gs.gdl":{"source":"iana"},"model/vnd.gtw":{"source":"iana","extensions":["gtw"]},"model/vnd.moml+xml":{"source":"iana","compressible":true},"model/vnd.mts":{"source":"iana","extensions":["mts"]},"model/vnd.opengex":{"source":"iana","extensions":["ogex"]},"model/vnd.parasolid.transmit.binary":{"source":"iana","extensions":["x_b"]},"model/vnd.parasolid.transmit.text":{"source":"iana","extensions":["x_t"]},"model/vnd.pytha.pyox":{"source":"iana"},"model/vnd.rosette.annotated-data-model":{"source":"iana"},"model/vnd.sap.vds":{"source":"iana","extensions":["vds"]},"model/vnd.usdz+zip":{"source":"iana","compressible":false,"extensions":["usdz"]},"model/vnd.valve.source.compiled-map":{"source":"iana","extensions":["bsp"]},"model/vnd.vtu":{"source":"iana","extensions":["vtu"]},"model/vrml":{"source":"iana","compressible":false,"extensions":["wrl","vrml"]},"model/x3d+binary":{"source":"apache","compressible":false,"extensions":["x3db","x3dbz"]},"model/x3d+fastinfoset":{"source":"iana","extensions":["x3db"]},"model/x3d+vrml":{"source":"apache","compressible":false,"extensions":["x3dv","x3dvz"]},"model/x3d+xml":{"source":"iana","compressible":true,"extensions":["x3d","x3dz"]},"model/x3d-vrml":{"source":"iana","extensions":["x3dv"]},"multipart/alternative":{"source":"iana","compressible":false},"multipart/appledouble":{"source":"iana"},"multipart/byteranges":{"source":"iana"},"multipart/digest":{"source":"iana"},"multipart/encrypted":{"source":"iana","compressible":false},"multipart/form-data":{"source":"iana","compressible":false},"multipart/header-set":{"source":"iana"},"multipart/mixed":{"source":"iana"},"multipart/multilingual":{"source":"iana"},"multipart/parallel":{"source":"iana"},"multipart/related":{"source":"iana","compressible":false},"multipart/report":{"source":"iana"},"multipart/signed":{"source":"iana","compressible":false},"multipart/vnd.bint.med-plus":{"source":"iana"},"multipart/voice-message":{"source":"iana"},"multipart/x-mixed-replace":{"source":"iana"},"text/1d-interleaved-parityfec":{"source":"iana"},"text/cache-manifest":{"source":"iana","compressible":true,"extensions":["appcache","manifest"]},"text/calendar":{"source":"iana","extensions":["ics","ifb"]},"text/calender":{"compressible":true},"text/cmd":{"compressible":true},"text/coffeescript":{"extensions":["coffee","litcoffee"]},"text/cql":{"source":"iana"},"text/cql-expression":{"source":"iana"},"text/cql-identifier":{"source":"iana"},"text/css":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["css"]},"text/csv":{"source":"iana","compressible":true,"extensions":["csv"]},"text/csv-schema":{"source":"iana"},"text/directory":{"source":"iana"},"text/dns":{"source":"iana"},"text/ecmascript":{"source":"iana"},"text/encaprtp":{"source":"iana"},"text/enriched":{"source":"iana"},"text/fhirpath":{"source":"iana"},"text/flexfec":{"source":"iana"},"text/fwdred":{"source":"iana"},"text/gff3":{"source":"iana"},"text/grammar-ref-list":{"source":"iana"},"text/html":{"source":"iana","compressible":true,"extensions":["html","htm","shtml"]},"text/jade":{"extensions":["jade"]},"text/javascript":{"source":"iana","compressible":true},"text/jcr-cnd":{"source":"iana"},"text/jsx":{"compressible":true,"extensions":["jsx"]},"text/less":{"compressible":true,"extensions":["less"]},"text/markdown":{"source":"iana","compressible":true,"extensions":["markdown","md"]},"text/mathml":{"source":"nginx","extensions":["mml"]},"text/mdx":{"compressible":true,"extensions":["mdx"]},"text/mizar":{"source":"iana"},"text/n3":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["n3"]},"text/parameters":{"source":"iana","charset":"UTF-8"},"text/parityfec":{"source":"iana"},"text/plain":{"source":"iana","compressible":true,"extensions":["txt","text","conf","def","list","log","in","ini"]},"text/provenance-notation":{"source":"iana","charset":"UTF-8"},"text/prs.fallenstein.rst":{"source":"iana"},"text/prs.lines.tag":{"source":"iana","extensions":["dsc"]},"text/prs.prop.logic":{"source":"iana"},"text/raptorfec":{"source":"iana"},"text/red":{"source":"iana"},"text/rfc822-headers":{"source":"iana"},"text/richtext":{"source":"iana","compressible":true,"extensions":["rtx"]},"text/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"text/rtp-enc-aescm128":{"source":"iana"},"text/rtploopback":{"source":"iana"},"text/rtx":{"source":"iana"},"text/sgml":{"source":"iana","extensions":["sgml","sgm"]},"text/shaclc":{"source":"iana"},"text/shex":{"source":"iana","extensions":["shex"]},"text/slim":{"extensions":["slim","slm"]},"text/spdx":{"source":"iana","extensions":["spdx"]},"text/strings":{"source":"iana"},"text/stylus":{"extensions":["stylus","styl"]},"text/t140":{"source":"iana"},"text/tab-separated-values":{"source":"iana","compressible":true,"extensions":["tsv"]},"text/troff":{"source":"iana","extensions":["t","tr","roff","man","me","ms"]},"text/turtle":{"source":"iana","charset":"UTF-8","extensions":["ttl"]},"text/ulpfec":{"source":"iana"},"text/uri-list":{"source":"iana","compressible":true,"extensions":["uri","uris","urls"]},"text/vcard":{"source":"iana","compressible":true,"extensions":["vcard"]},"text/vnd.a":{"source":"iana"},"text/vnd.abc":{"source":"iana"},"text/vnd.ascii-art":{"source":"iana"},"text/vnd.curl":{"source":"iana","extensions":["curl"]},"text/vnd.curl.dcurl":{"source":"apache","extensions":["dcurl"]},"text/vnd.curl.mcurl":{"source":"apache","extensions":["mcurl"]},"text/vnd.curl.scurl":{"source":"apache","extensions":["scurl"]},"text/vnd.debian.copyright":{"source":"iana","charset":"UTF-8"},"text/vnd.dmclientscript":{"source":"iana"},"text/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"text/vnd.esmertec.theme-descriptor":{"source":"iana","charset":"UTF-8"},"text/vnd.familysearch.gedcom":{"source":"iana","extensions":["ged"]},"text/vnd.ficlab.flt":{"source":"iana"},"text/vnd.fly":{"source":"iana","extensions":["fly"]},"text/vnd.fmi.flexstor":{"source":"iana","extensions":["flx"]},"text/vnd.gml":{"source":"iana"},"text/vnd.graphviz":{"source":"iana","extensions":["gv"]},"text/vnd.hans":{"source":"iana"},"text/vnd.hgl":{"source":"iana"},"text/vnd.in3d.3dml":{"source":"iana","extensions":["3dml"]},"text/vnd.in3d.spot":{"source":"iana","extensions":["spot"]},"text/vnd.iptc.newsml":{"source":"iana"},"text/vnd.iptc.nitf":{"source":"iana"},"text/vnd.latex-z":{"source":"iana"},"text/vnd.motorola.reflex":{"source":"iana"},"text/vnd.ms-mediapackage":{"source":"iana"},"text/vnd.net2phone.commcenter.command":{"source":"iana"},"text/vnd.radisys.msml-basic-layout":{"source":"iana"},"text/vnd.senx.warpscript":{"source":"iana"},"text/vnd.si.uricatalogue":{"source":"iana"},"text/vnd.sosi":{"source":"iana"},"text/vnd.sun.j2me.app-descriptor":{"source":"iana","charset":"UTF-8","extensions":["jad"]},"text/vnd.trolltech.linguist":{"source":"iana","charset":"UTF-8"},"text/vnd.wap.si":{"source":"iana"},"text/vnd.wap.sl":{"source":"iana"},"text/vnd.wap.wml":{"source":"iana","extensions":["wml"]},"text/vnd.wap.wmlscript":{"source":"iana","extensions":["wmls"]},"text/vtt":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["vtt"]},"text/x-asm":{"source":"apache","extensions":["s","asm"]},"text/x-c":{"source":"apache","extensions":["c","cc","cxx","cpp","h","hh","dic"]},"text/x-component":{"source":"nginx","extensions":["htc"]},"text/x-fortran":{"source":"apache","extensions":["f","for","f77","f90"]},"text/x-gwt-rpc":{"compressible":true},"text/x-handlebars-template":{"extensions":["hbs"]},"text/x-java-source":{"source":"apache","extensions":["java"]},"text/x-jquery-tmpl":{"compressible":true},"text/x-lua":{"extensions":["lua"]},"text/x-markdown":{"compressible":true,"extensions":["mkd"]},"text/x-nfo":{"source":"apache","extensions":["nfo"]},"text/x-opml":{"source":"apache","extensions":["opml"]},"text/x-org":{"compressible":true,"extensions":["org"]},"text/x-pascal":{"source":"apache","extensions":["p","pas"]},"text/x-processing":{"compressible":true,"extensions":["pde"]},"text/x-sass":{"extensions":["sass"]},"text/x-scss":{"extensions":["scss"]},"text/x-setext":{"source":"apache","extensions":["etx"]},"text/x-sfv":{"source":"apache","extensions":["sfv"]},"text/x-suse-ymp":{"compressible":true,"extensions":["ymp"]},"text/x-uuencode":{"source":"apache","extensions":["uu"]},"text/x-vcalendar":{"source":"apache","extensions":["vcs"]},"text/x-vcard":{"source":"apache","extensions":["vcf"]},"text/xml":{"source":"iana","compressible":true,"extensions":["xml"]},"text/xml-external-parsed-entity":{"source":"iana"},"text/yaml":{"compressible":true,"extensions":["yaml","yml"]},"video/1d-interleaved-parityfec":{"source":"iana"},"video/3gpp":{"source":"iana","extensions":["3gp","3gpp"]},"video/3gpp-tt":{"source":"iana"},"video/3gpp2":{"source":"iana","extensions":["3g2"]},"video/av1":{"source":"iana"},"video/bmpeg":{"source":"iana"},"video/bt656":{"source":"iana"},"video/celb":{"source":"iana"},"video/dv":{"source":"iana"},"video/encaprtp":{"source":"iana"},"video/ffv1":{"source":"iana"},"video/flexfec":{"source":"iana"},"video/h261":{"source":"iana","extensions":["h261"]},"video/h263":{"source":"iana","extensions":["h263"]},"video/h263-1998":{"source":"iana"},"video/h263-2000":{"source":"iana"},"video/h264":{"source":"iana","extensions":["h264"]},"video/h264-rcdo":{"source":"iana"},"video/h264-svc":{"source":"iana"},"video/h265":{"source":"iana"},"video/iso.segment":{"source":"iana","extensions":["m4s"]},"video/jpeg":{"source":"iana","extensions":["jpgv"]},"video/jpeg2000":{"source":"iana"},"video/jpm":{"source":"apache","extensions":["jpm","jpgm"]},"video/jxsv":{"source":"iana"},"video/mj2":{"source":"iana","extensions":["mj2","mjp2"]},"video/mp1s":{"source":"iana"},"video/mp2p":{"source":"iana"},"video/mp2t":{"source":"iana","extensions":["ts"]},"video/mp4":{"source":"iana","compressible":false,"extensions":["mp4","mp4v","mpg4"]},"video/mp4v-es":{"source":"iana"},"video/mpeg":{"source":"iana","compressible":false,"extensions":["mpeg","mpg","mpe","m1v","m2v"]},"video/mpeg4-generic":{"source":"iana"},"video/mpv":{"source":"iana"},"video/nv":{"source":"iana"},"video/ogg":{"source":"iana","compressible":false,"extensions":["ogv"]},"video/parityfec":{"source":"iana"},"video/pointer":{"source":"iana"},"video/quicktime":{"source":"iana","compressible":false,"extensions":["qt","mov"]},"video/raptorfec":{"source":"iana"},"video/raw":{"source":"iana"},"video/rtp-enc-aescm128":{"source":"iana"},"video/rtploopback":{"source":"iana"},"video/rtx":{"source":"iana"},"video/scip":{"source":"iana"},"video/smpte291":{"source":"iana"},"video/smpte292m":{"source":"iana"},"video/ulpfec":{"source":"iana"},"video/vc1":{"source":"iana"},"video/vc2":{"source":"iana"},"video/vnd.cctv":{"source":"iana"},"video/vnd.dece.hd":{"source":"iana","extensions":["uvh","uvvh"]},"video/vnd.dece.mobile":{"source":"iana","extensions":["uvm","uvvm"]},"video/vnd.dece.mp4":{"source":"iana"},"video/vnd.dece.pd":{"source":"iana","extensions":["uvp","uvvp"]},"video/vnd.dece.sd":{"source":"iana","extensions":["uvs","uvvs"]},"video/vnd.dece.video":{"source":"iana","extensions":["uvv","uvvv"]},"video/vnd.directv.mpeg":{"source":"iana"},"video/vnd.directv.mpeg-tts":{"source":"iana"},"video/vnd.dlna.mpeg-tts":{"source":"iana"},"video/vnd.dvb.file":{"source":"iana","extensions":["dvb"]},"video/vnd.fvt":{"source":"iana","extensions":["fvt"]},"video/vnd.hns.video":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.ttsavc":{"source":"iana"},"video/vnd.iptvforum.ttsmpeg2":{"source":"iana"},"video/vnd.motorola.video":{"source":"iana"},"video/vnd.motorola.videop":{"source":"iana"},"video/vnd.mpegurl":{"source":"iana","extensions":["mxu","m4u"]},"video/vnd.ms-playready.media.pyv":{"source":"iana","extensions":["pyv"]},"video/vnd.nokia.interleaved-multimedia":{"source":"iana"},"video/vnd.nokia.mp4vr":{"source":"iana"},"video/vnd.nokia.videovoip":{"source":"iana"},"video/vnd.objectvideo":{"source":"iana"},"video/vnd.radgamettools.bink":{"source":"iana"},"video/vnd.radgamettools.smacker":{"source":"iana"},"video/vnd.sealed.mpeg1":{"source":"iana"},"video/vnd.sealed.mpeg4":{"source":"iana"},"video/vnd.sealed.swf":{"source":"iana"},"video/vnd.sealedmedia.softseal.mov":{"source":"iana"},"video/vnd.uvvu.mp4":{"source":"iana","extensions":["uvu","uvvu"]},"video/vnd.vivo":{"source":"iana","extensions":["viv"]},"video/vnd.youtube.yt":{"source":"iana"},"video/vp8":{"source":"iana"},"video/vp9":{"source":"iana"},"video/webm":{"source":"apache","compressible":false,"extensions":["webm"]},"video/x-f4v":{"source":"apache","extensions":["f4v"]},"video/x-fli":{"source":"apache","extensions":["fli"]},"video/x-flv":{"source":"apache","compressible":false,"extensions":["flv"]},"video/x-m4v":{"source":"apache","extensions":["m4v"]},"video/x-matroska":{"source":"apache","compressible":false,"extensions":["mkv","mk3d","mks"]},"video/x-mng":{"source":"apache","extensions":["mng"]},"video/x-ms-asf":{"source":"apache","extensions":["asf","asx"]},"video/x-ms-vob":{"source":"apache","extensions":["vob"]},"video/x-ms-wm":{"source":"apache","extensions":["wm"]},"video/x-ms-wmv":{"source":"apache","compressible":false,"extensions":["wmv"]},"video/x-ms-wmx":{"source":"apache","extensions":["wmx"]},"video/x-ms-wvx":{"source":"apache","extensions":["wvx"]},"video/x-msvideo":{"source":"apache","extensions":["avi"]},"video/x-sgi-movie":{"source":"apache","extensions":["movie"]},"video/x-smv":{"source":"apache","extensions":["smv"]},"x-conference/x-cooltalk":{"source":"apache","extensions":["ice"]},"x-shader/x-fragment":{"compressible":true},"x-shader/x-vertex":{"compressible":true}}');
+module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec":{"source":"iana"},"application/3gpdash-qoe-report+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/3gpp-ims+xml":{"source":"iana","compressible":true},"application/3gpphal+json":{"source":"iana","compressible":true},"application/3gpphalforms+json":{"source":"iana","compressible":true},"application/a2l":{"source":"iana"},"application/ace+cbor":{"source":"iana"},"application/activemessage":{"source":"iana"},"application/activity+json":{"source":"iana","compressible":true},"application/alto-costmap+json":{"source":"iana","compressible":true},"application/alto-costmapfilter+json":{"source":"iana","compressible":true},"application/alto-directory+json":{"source":"iana","compressible":true},"application/alto-endpointcost+json":{"source":"iana","compressible":true},"application/alto-endpointcostparams+json":{"source":"iana","compressible":true},"application/alto-endpointprop+json":{"source":"iana","compressible":true},"application/alto-endpointpropparams+json":{"source":"iana","compressible":true},"application/alto-error+json":{"source":"iana","compressible":true},"application/alto-networkmap+json":{"source":"iana","compressible":true},"application/alto-networkmapfilter+json":{"source":"iana","compressible":true},"application/alto-updatestreamcontrol+json":{"source":"iana","compressible":true},"application/alto-updatestreamparams+json":{"source":"iana","compressible":true},"application/aml":{"source":"iana"},"application/andrew-inset":{"source":"iana","extensions":["ez"]},"application/applefile":{"source":"iana"},"application/applixware":{"source":"apache","extensions":["aw"]},"application/at+jwt":{"source":"iana"},"application/atf":{"source":"iana"},"application/atfx":{"source":"iana"},"application/atom+xml":{"source":"iana","compressible":true,"extensions":["atom"]},"application/atomcat+xml":{"source":"iana","compressible":true,"extensions":["atomcat"]},"application/atomdeleted+xml":{"source":"iana","compressible":true,"extensions":["atomdeleted"]},"application/atomicmail":{"source":"iana"},"application/atomsvc+xml":{"source":"iana","compressible":true,"extensions":["atomsvc"]},"application/atsc-dwd+xml":{"source":"iana","compressible":true,"extensions":["dwd"]},"application/atsc-dynamic-event-message":{"source":"iana"},"application/atsc-held+xml":{"source":"iana","compressible":true,"extensions":["held"]},"application/atsc-rdt+json":{"source":"iana","compressible":true},"application/atsc-rsat+xml":{"source":"iana","compressible":true,"extensions":["rsat"]},"application/atxml":{"source":"iana"},"application/auth-policy+xml":{"source":"iana","compressible":true},"application/bacnet-xdd+zip":{"source":"iana","compressible":false},"application/batch-smtp":{"source":"iana"},"application/bdoc":{"compressible":false,"extensions":["bdoc"]},"application/beep+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/calendar+json":{"source":"iana","compressible":true},"application/calendar+xml":{"source":"iana","compressible":true,"extensions":["xcs"]},"application/call-completion":{"source":"iana"},"application/cals-1840":{"source":"iana"},"application/captive+json":{"source":"iana","compressible":true},"application/cbor":{"source":"iana"},"application/cbor-seq":{"source":"iana"},"application/cccex":{"source":"iana"},"application/ccmp+xml":{"source":"iana","compressible":true},"application/ccxml+xml":{"source":"iana","compressible":true,"extensions":["ccxml"]},"application/cdfx+xml":{"source":"iana","compressible":true,"extensions":["cdfx"]},"application/cdmi-capability":{"source":"iana","extensions":["cdmia"]},"application/cdmi-container":{"source":"iana","extensions":["cdmic"]},"application/cdmi-domain":{"source":"iana","extensions":["cdmid"]},"application/cdmi-object":{"source":"iana","extensions":["cdmio"]},"application/cdmi-queue":{"source":"iana","extensions":["cdmiq"]},"application/cdni":{"source":"iana"},"application/cea":{"source":"iana"},"application/cea-2018+xml":{"source":"iana","compressible":true},"application/cellml+xml":{"source":"iana","compressible":true},"application/cfw":{"source":"iana"},"application/city+json":{"source":"iana","compressible":true},"application/clr":{"source":"iana"},"application/clue+xml":{"source":"iana","compressible":true},"application/clue_info+xml":{"source":"iana","compressible":true},"application/cms":{"source":"iana"},"application/cnrp+xml":{"source":"iana","compressible":true},"application/coap-group+json":{"source":"iana","compressible":true},"application/coap-payload":{"source":"iana"},"application/commonground":{"source":"iana"},"application/conference-info+xml":{"source":"iana","compressible":true},"application/cose":{"source":"iana"},"application/cose-key":{"source":"iana"},"application/cose-key-set":{"source":"iana"},"application/cpl+xml":{"source":"iana","compressible":true,"extensions":["cpl"]},"application/csrattrs":{"source":"iana"},"application/csta+xml":{"source":"iana","compressible":true},"application/cstadata+xml":{"source":"iana","compressible":true},"application/csvm+json":{"source":"iana","compressible":true},"application/cu-seeme":{"source":"apache","extensions":["cu"]},"application/cwt":{"source":"iana"},"application/cybercash":{"source":"iana"},"application/dart":{"compressible":true},"application/dash+xml":{"source":"iana","compressible":true,"extensions":["mpd"]},"application/dash-patch+xml":{"source":"iana","compressible":true,"extensions":["mpp"]},"application/dashdelta":{"source":"iana"},"application/davmount+xml":{"source":"iana","compressible":true,"extensions":["davmount"]},"application/dca-rft":{"source":"iana"},"application/dcd":{"source":"iana"},"application/dec-dx":{"source":"iana"},"application/dialog-info+xml":{"source":"iana","compressible":true},"application/dicom":{"source":"iana"},"application/dicom+json":{"source":"iana","compressible":true},"application/dicom+xml":{"source":"iana","compressible":true},"application/dii":{"source":"iana"},"application/dit":{"source":"iana"},"application/dns":{"source":"iana"},"application/dns+json":{"source":"iana","compressible":true},"application/dns-message":{"source":"iana"},"application/docbook+xml":{"source":"apache","compressible":true,"extensions":["dbk"]},"application/dots+cbor":{"source":"iana"},"application/dskpp+xml":{"source":"iana","compressible":true},"application/dssc+der":{"source":"iana","extensions":["dssc"]},"application/dssc+xml":{"source":"iana","compressible":true,"extensions":["xdssc"]},"application/dvcs":{"source":"iana"},"application/ecmascript":{"source":"iana","compressible":true,"extensions":["es","ecma"]},"application/edi-consent":{"source":"iana"},"application/edi-x12":{"source":"iana","compressible":false},"application/edifact":{"source":"iana","compressible":false},"application/efi":{"source":"iana"},"application/elm+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/elm+xml":{"source":"iana","compressible":true},"application/emergencycalldata.cap+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/emergencycalldata.comment+xml":{"source":"iana","compressible":true},"application/emergencycalldata.control+xml":{"source":"iana","compressible":true},"application/emergencycalldata.deviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.ecall.msd":{"source":"iana"},"application/emergencycalldata.providerinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.serviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.subscriberinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.veds+xml":{"source":"iana","compressible":true},"application/emma+xml":{"source":"iana","compressible":true,"extensions":["emma"]},"application/emotionml+xml":{"source":"iana","compressible":true,"extensions":["emotionml"]},"application/encaprtp":{"source":"iana"},"application/epp+xml":{"source":"iana","compressible":true},"application/epub+zip":{"source":"iana","compressible":false,"extensions":["epub"]},"application/eshop":{"source":"iana"},"application/exi":{"source":"iana","extensions":["exi"]},"application/expect-ct-report+json":{"source":"iana","compressible":true},"application/express":{"source":"iana","extensions":["exp"]},"application/fastinfoset":{"source":"iana"},"application/fastsoap":{"source":"iana"},"application/fdt+xml":{"source":"iana","compressible":true,"extensions":["fdt"]},"application/fhir+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/fhir+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/fido.trusted-apps+json":{"compressible":true},"application/fits":{"source":"iana"},"application/flexfec":{"source":"iana"},"application/font-sfnt":{"source":"iana"},"application/font-tdpfr":{"source":"iana","extensions":["pfr"]},"application/font-woff":{"source":"iana","compressible":false},"application/framework-attributes+xml":{"source":"iana","compressible":true},"application/geo+json":{"source":"iana","compressible":true,"extensions":["geojson"]},"application/geo+json-seq":{"source":"iana"},"application/geopackage+sqlite3":{"source":"iana"},"application/geoxacml+xml":{"source":"iana","compressible":true},"application/gltf-buffer":{"source":"iana"},"application/gml+xml":{"source":"iana","compressible":true,"extensions":["gml"]},"application/gpx+xml":{"source":"apache","compressible":true,"extensions":["gpx"]},"application/gxf":{"source":"apache","extensions":["gxf"]},"application/gzip":{"source":"iana","compressible":false,"extensions":["gz"]},"application/h224":{"source":"iana"},"application/held+xml":{"source":"iana","compressible":true},"application/hjson":{"extensions":["hjson"]},"application/http":{"source":"iana"},"application/hyperstudio":{"source":"iana","extensions":["stk"]},"application/ibe-key-request+xml":{"source":"iana","compressible":true},"application/ibe-pkg-reply+xml":{"source":"iana","compressible":true},"application/ibe-pp-data":{"source":"iana"},"application/iges":{"source":"iana"},"application/im-iscomposing+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/index":{"source":"iana"},"application/index.cmd":{"source":"iana"},"application/index.obj":{"source":"iana"},"application/index.response":{"source":"iana"},"application/index.vnd":{"source":"iana"},"application/inkml+xml":{"source":"iana","compressible":true,"extensions":["ink","inkml"]},"application/iotp":{"source":"iana"},"application/ipfix":{"source":"iana","extensions":["ipfix"]},"application/ipp":{"source":"iana"},"application/isup":{"source":"iana"},"application/its+xml":{"source":"iana","compressible":true,"extensions":["its"]},"application/java-archive":{"source":"apache","compressible":false,"extensions":["jar","war","ear"]},"application/java-serialized-object":{"source":"apache","compressible":false,"extensions":["ser"]},"application/java-vm":{"source":"apache","compressible":false,"extensions":["class"]},"application/javascript":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["js","mjs"]},"application/jf2feed+json":{"source":"iana","compressible":true},"application/jose":{"source":"iana"},"application/jose+json":{"source":"iana","compressible":true},"application/jrd+json":{"source":"iana","compressible":true},"application/jscalendar+json":{"source":"iana","compressible":true},"application/json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["json","map"]},"application/json-patch+json":{"source":"iana","compressible":true},"application/json-seq":{"source":"iana"},"application/json5":{"extensions":["json5"]},"application/jsonml+json":{"source":"apache","compressible":true,"extensions":["jsonml"]},"application/jwk+json":{"source":"iana","compressible":true},"application/jwk-set+json":{"source":"iana","compressible":true},"application/jwt":{"source":"iana"},"application/kpml-request+xml":{"source":"iana","compressible":true},"application/kpml-response+xml":{"source":"iana","compressible":true},"application/ld+json":{"source":"iana","compressible":true,"extensions":["jsonld"]},"application/lgr+xml":{"source":"iana","compressible":true,"extensions":["lgr"]},"application/link-format":{"source":"iana"},"application/load-control+xml":{"source":"iana","compressible":true},"application/lost+xml":{"source":"iana","compressible":true,"extensions":["lostxml"]},"application/lostsync+xml":{"source":"iana","compressible":true},"application/lpf+zip":{"source":"iana","compressible":false},"application/lxf":{"source":"iana"},"application/mac-binhex40":{"source":"iana","extensions":["hqx"]},"application/mac-compactpro":{"source":"apache","extensions":["cpt"]},"application/macwriteii":{"source":"iana"},"application/mads+xml":{"source":"iana","compressible":true,"extensions":["mads"]},"application/manifest+json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["webmanifest"]},"application/marc":{"source":"iana","extensions":["mrc"]},"application/marcxml+xml":{"source":"iana","compressible":true,"extensions":["mrcx"]},"application/mathematica":{"source":"iana","extensions":["ma","nb","mb"]},"application/mathml+xml":{"source":"iana","compressible":true,"extensions":["mathml"]},"application/mathml-content+xml":{"source":"iana","compressible":true},"application/mathml-presentation+xml":{"source":"iana","compressible":true},"application/mbms-associated-procedure-description+xml":{"source":"iana","compressible":true},"application/mbms-deregister+xml":{"source":"iana","compressible":true},"application/mbms-envelope+xml":{"source":"iana","compressible":true},"application/mbms-msk+xml":{"source":"iana","compressible":true},"application/mbms-msk-response+xml":{"source":"iana","compressible":true},"application/mbms-protection-description+xml":{"source":"iana","compressible":true},"application/mbms-reception-report+xml":{"source":"iana","compressible":true},"application/mbms-register+xml":{"source":"iana","compressible":true},"application/mbms-register-response+xml":{"source":"iana","compressible":true},"application/mbms-schedule+xml":{"source":"iana","compressible":true},"application/mbms-user-service-description+xml":{"source":"iana","compressible":true},"application/mbox":{"source":"iana","extensions":["mbox"]},"application/media-policy-dataset+xml":{"source":"iana","compressible":true,"extensions":["mpf"]},"application/media_control+xml":{"source":"iana","compressible":true},"application/mediaservercontrol+xml":{"source":"iana","compressible":true,"extensions":["mscml"]},"application/merge-patch+json":{"source":"iana","compressible":true},"application/metalink+xml":{"source":"apache","compressible":true,"extensions":["metalink"]},"application/metalink4+xml":{"source":"iana","compressible":true,"extensions":["meta4"]},"application/mets+xml":{"source":"iana","compressible":true,"extensions":["mets"]},"application/mf4":{"source":"iana"},"application/mikey":{"source":"iana"},"application/mipc":{"source":"iana"},"application/missing-blocks+cbor-seq":{"source":"iana"},"application/mmt-aei+xml":{"source":"iana","compressible":true,"extensions":["maei"]},"application/mmt-usd+xml":{"source":"iana","compressible":true,"extensions":["musd"]},"application/mods+xml":{"source":"iana","compressible":true,"extensions":["mods"]},"application/moss-keys":{"source":"iana"},"application/moss-signature":{"source":"iana"},"application/mosskey-data":{"source":"iana"},"application/mosskey-request":{"source":"iana"},"application/mp21":{"source":"iana","extensions":["m21","mp21"]},"application/mp4":{"source":"iana","extensions":["mp4s","m4p"]},"application/mpeg4-generic":{"source":"iana"},"application/mpeg4-iod":{"source":"iana"},"application/mpeg4-iod-xmt":{"source":"iana"},"application/mrb-consumer+xml":{"source":"iana","compressible":true},"application/mrb-publish+xml":{"source":"iana","compressible":true},"application/msc-ivr+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msc-mixer+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msword":{"source":"iana","compressible":false,"extensions":["doc","dot"]},"application/mud+json":{"source":"iana","compressible":true},"application/multipart-core":{"source":"iana"},"application/mxf":{"source":"iana","extensions":["mxf"]},"application/n-quads":{"source":"iana","extensions":["nq"]},"application/n-triples":{"source":"iana","extensions":["nt"]},"application/nasdata":{"source":"iana"},"application/news-checkgroups":{"source":"iana","charset":"US-ASCII"},"application/news-groupinfo":{"source":"iana","charset":"US-ASCII"},"application/news-transmission":{"source":"iana"},"application/nlsml+xml":{"source":"iana","compressible":true},"application/node":{"source":"iana","extensions":["cjs"]},"application/nss":{"source":"iana"},"application/oauth-authz-req+jwt":{"source":"iana"},"application/oblivious-dns-message":{"source":"iana"},"application/ocsp-request":{"source":"iana"},"application/ocsp-response":{"source":"iana"},"application/octet-stream":{"source":"iana","compressible":false,"extensions":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"]},"application/oda":{"source":"iana","extensions":["oda"]},"application/odm+xml":{"source":"iana","compressible":true},"application/odx":{"source":"iana"},"application/oebps-package+xml":{"source":"iana","compressible":true,"extensions":["opf"]},"application/ogg":{"source":"iana","compressible":false,"extensions":["ogx"]},"application/omdoc+xml":{"source":"apache","compressible":true,"extensions":["omdoc"]},"application/onenote":{"source":"apache","extensions":["onetoc","onetoc2","onetmp","onepkg"]},"application/opc-nodeset+xml":{"source":"iana","compressible":true},"application/oscore":{"source":"iana"},"application/oxps":{"source":"iana","extensions":["oxps"]},"application/p21":{"source":"iana"},"application/p21+zip":{"source":"iana","compressible":false},"application/p2p-overlay+xml":{"source":"iana","compressible":true,"extensions":["relo"]},"application/parityfec":{"source":"iana"},"application/passport":{"source":"iana"},"application/patch-ops-error+xml":{"source":"iana","compressible":true,"extensions":["xer"]},"application/pdf":{"source":"iana","compressible":false,"extensions":["pdf"]},"application/pdx":{"source":"iana"},"application/pem-certificate-chain":{"source":"iana"},"application/pgp-encrypted":{"source":"iana","compressible":false,"extensions":["pgp"]},"application/pgp-keys":{"source":"iana","extensions":["asc"]},"application/pgp-signature":{"source":"iana","extensions":["asc","sig"]},"application/pics-rules":{"source":"apache","extensions":["prf"]},"application/pidf+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pidf-diff+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pkcs10":{"source":"iana","extensions":["p10"]},"application/pkcs12":{"source":"iana"},"application/pkcs7-mime":{"source":"iana","extensions":["p7m","p7c"]},"application/pkcs7-signature":{"source":"iana","extensions":["p7s"]},"application/pkcs8":{"source":"iana","extensions":["p8"]},"application/pkcs8-encrypted":{"source":"iana"},"application/pkix-attr-cert":{"source":"iana","extensions":["ac"]},"application/pkix-cert":{"source":"iana","extensions":["cer"]},"application/pkix-crl":{"source":"iana","extensions":["crl"]},"application/pkix-pkipath":{"source":"iana","extensions":["pkipath"]},"application/pkixcmp":{"source":"iana","extensions":["pki"]},"application/pls+xml":{"source":"iana","compressible":true,"extensions":["pls"]},"application/poc-settings+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/postscript":{"source":"iana","compressible":true,"extensions":["ai","eps","ps"]},"application/ppsp-tracker+json":{"source":"iana","compressible":true},"application/problem+json":{"source":"iana","compressible":true},"application/problem+xml":{"source":"iana","compressible":true},"application/provenance+xml":{"source":"iana","compressible":true,"extensions":["provx"]},"application/prs.alvestrand.titrax-sheet":{"source":"iana"},"application/prs.cww":{"source":"iana","extensions":["cww"]},"application/prs.cyn":{"source":"iana","charset":"7-BIT"},"application/prs.hpub+zip":{"source":"iana","compressible":false},"application/prs.nprend":{"source":"iana"},"application/prs.plucker":{"source":"iana"},"application/prs.rdf-xml-crypt":{"source":"iana"},"application/prs.xsf+xml":{"source":"iana","compressible":true},"application/pskc+xml":{"source":"iana","compressible":true,"extensions":["pskcxml"]},"application/pvd+json":{"source":"iana","compressible":true},"application/qsig":{"source":"iana"},"application/raml+yaml":{"compressible":true,"extensions":["raml"]},"application/raptorfec":{"source":"iana"},"application/rdap+json":{"source":"iana","compressible":true},"application/rdf+xml":{"source":"iana","compressible":true,"extensions":["rdf","owl"]},"application/reginfo+xml":{"source":"iana","compressible":true,"extensions":["rif"]},"application/relax-ng-compact-syntax":{"source":"iana","extensions":["rnc"]},"application/remote-printing":{"source":"iana"},"application/reputon+json":{"source":"iana","compressible":true},"application/resource-lists+xml":{"source":"iana","compressible":true,"extensions":["rl"]},"application/resource-lists-diff+xml":{"source":"iana","compressible":true,"extensions":["rld"]},"application/rfc+xml":{"source":"iana","compressible":true},"application/riscos":{"source":"iana"},"application/rlmi+xml":{"source":"iana","compressible":true},"application/rls-services+xml":{"source":"iana","compressible":true,"extensions":["rs"]},"application/route-apd+xml":{"source":"iana","compressible":true,"extensions":["rapd"]},"application/route-s-tsid+xml":{"source":"iana","compressible":true,"extensions":["sls"]},"application/route-usd+xml":{"source":"iana","compressible":true,"extensions":["rusd"]},"application/rpki-ghostbusters":{"source":"iana","extensions":["gbr"]},"application/rpki-manifest":{"source":"iana","extensions":["mft"]},"application/rpki-publication":{"source":"iana"},"application/rpki-roa":{"source":"iana","extensions":["roa"]},"application/rpki-updown":{"source":"iana"},"application/rsd+xml":{"source":"apache","compressible":true,"extensions":["rsd"]},"application/rss+xml":{"source":"apache","compressible":true,"extensions":["rss"]},"application/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"application/rtploopback":{"source":"iana"},"application/rtx":{"source":"iana"},"application/samlassertion+xml":{"source":"iana","compressible":true},"application/samlmetadata+xml":{"source":"iana","compressible":true},"application/sarif+json":{"source":"iana","compressible":true},"application/sarif-external-properties+json":{"source":"iana","compressible":true},"application/sbe":{"source":"iana"},"application/sbml+xml":{"source":"iana","compressible":true,"extensions":["sbml"]},"application/scaip+xml":{"source":"iana","compressible":true},"application/scim+json":{"source":"iana","compressible":true},"application/scvp-cv-request":{"source":"iana","extensions":["scq"]},"application/scvp-cv-response":{"source":"iana","extensions":["scs"]},"application/scvp-vp-request":{"source":"iana","extensions":["spq"]},"application/scvp-vp-response":{"source":"iana","extensions":["spp"]},"application/sdp":{"source":"iana","extensions":["sdp"]},"application/secevent+jwt":{"source":"iana"},"application/senml+cbor":{"source":"iana"},"application/senml+json":{"source":"iana","compressible":true},"application/senml+xml":{"source":"iana","compressible":true,"extensions":["senmlx"]},"application/senml-etch+cbor":{"source":"iana"},"application/senml-etch+json":{"source":"iana","compressible":true},"application/senml-exi":{"source":"iana"},"application/sensml+cbor":{"source":"iana"},"application/sensml+json":{"source":"iana","compressible":true},"application/sensml+xml":{"source":"iana","compressible":true,"extensions":["sensmlx"]},"application/sensml-exi":{"source":"iana"},"application/sep+xml":{"source":"iana","compressible":true},"application/sep-exi":{"source":"iana"},"application/session-info":{"source":"iana"},"application/set-payment":{"source":"iana"},"application/set-payment-initiation":{"source":"iana","extensions":["setpay"]},"application/set-registration":{"source":"iana"},"application/set-registration-initiation":{"source":"iana","extensions":["setreg"]},"application/sgml":{"source":"iana"},"application/sgml-open-catalog":{"source":"iana"},"application/shf+xml":{"source":"iana","compressible":true,"extensions":["shf"]},"application/sieve":{"source":"iana","extensions":["siv","sieve"]},"application/simple-filter+xml":{"source":"iana","compressible":true},"application/simple-message-summary":{"source":"iana"},"application/simplesymbolcontainer":{"source":"iana"},"application/sipc":{"source":"iana"},"application/slate":{"source":"iana"},"application/smil":{"source":"iana"},"application/smil+xml":{"source":"iana","compressible":true,"extensions":["smi","smil"]},"application/smpte336m":{"source":"iana"},"application/soap+fastinfoset":{"source":"iana"},"application/soap+xml":{"source":"iana","compressible":true},"application/sparql-query":{"source":"iana","extensions":["rq"]},"application/sparql-results+xml":{"source":"iana","compressible":true,"extensions":["srx"]},"application/spdx+json":{"source":"iana","compressible":true},"application/spirits-event+xml":{"source":"iana","compressible":true},"application/sql":{"source":"iana"},"application/srgs":{"source":"iana","extensions":["gram"]},"application/srgs+xml":{"source":"iana","compressible":true,"extensions":["grxml"]},"application/sru+xml":{"source":"iana","compressible":true,"extensions":["sru"]},"application/ssdl+xml":{"source":"apache","compressible":true,"extensions":["ssdl"]},"application/ssml+xml":{"source":"iana","compressible":true,"extensions":["ssml"]},"application/stix+json":{"source":"iana","compressible":true},"application/swid+xml":{"source":"iana","compressible":true,"extensions":["swidtag"]},"application/tamp-apex-update":{"source":"iana"},"application/tamp-apex-update-confirm":{"source":"iana"},"application/tamp-community-update":{"source":"iana"},"application/tamp-community-update-confirm":{"source":"iana"},"application/tamp-error":{"source":"iana"},"application/tamp-sequence-adjust":{"source":"iana"},"application/tamp-sequence-adjust-confirm":{"source":"iana"},"application/tamp-status-query":{"source":"iana"},"application/tamp-status-response":{"source":"iana"},"application/tamp-update":{"source":"iana"},"application/tamp-update-confirm":{"source":"iana"},"application/tar":{"compressible":true},"application/taxii+json":{"source":"iana","compressible":true},"application/td+json":{"source":"iana","compressible":true},"application/tei+xml":{"source":"iana","compressible":true,"extensions":["tei","teicorpus"]},"application/tetra_isi":{"source":"iana"},"application/thraud+xml":{"source":"iana","compressible":true,"extensions":["tfi"]},"application/timestamp-query":{"source":"iana"},"application/timestamp-reply":{"source":"iana"},"application/timestamped-data":{"source":"iana","extensions":["tsd"]},"application/tlsrpt+gzip":{"source":"iana"},"application/tlsrpt+json":{"source":"iana","compressible":true},"application/tnauthlist":{"source":"iana"},"application/token-introspection+jwt":{"source":"iana"},"application/toml":{"compressible":true,"extensions":["toml"]},"application/trickle-ice-sdpfrag":{"source":"iana"},"application/trig":{"source":"iana","extensions":["trig"]},"application/ttml+xml":{"source":"iana","compressible":true,"extensions":["ttml"]},"application/tve-trigger":{"source":"iana"},"application/tzif":{"source":"iana"},"application/tzif-leap":{"source":"iana"},"application/ubjson":{"compressible":false,"extensions":["ubj"]},"application/ulpfec":{"source":"iana"},"application/urc-grpsheet+xml":{"source":"iana","compressible":true},"application/urc-ressheet+xml":{"source":"iana","compressible":true,"extensions":["rsheet"]},"application/urc-targetdesc+xml":{"source":"iana","compressible":true,"extensions":["td"]},"application/urc-uisocketdesc+xml":{"source":"iana","compressible":true},"application/vcard+json":{"source":"iana","compressible":true},"application/vcard+xml":{"source":"iana","compressible":true},"application/vemmi":{"source":"iana"},"application/vividence.scriptfile":{"source":"apache"},"application/vnd.1000minds.decision-model+xml":{"source":"iana","compressible":true,"extensions":["1km"]},"application/vnd.3gpp-prose+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ch+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-v2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gnas":{"source":"iana"},"application/vnd.3gpp.access-transfer-events+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.bsf+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gmop+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gtpc":{"source":"iana"},"application/vnd.3gpp.interworking-data":{"source":"iana"},"application/vnd.3gpp.lpp":{"source":"iana"},"application/vnd.3gpp.mc-signalling-ear":{"source":"iana"},"application/vnd.3gpp.mcdata-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-payload":{"source":"iana"},"application/vnd.3gpp.mcdata-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-signalling":{"source":"iana"},"application/vnd.3gpp.mcdata-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-floor-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-signed+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-init-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-transmission-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mid-call+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ngap":{"source":"iana"},"application/vnd.3gpp.pfcp":{"source":"iana"},"application/vnd.3gpp.pic-bw-large":{"source":"iana","extensions":["plb"]},"application/vnd.3gpp.pic-bw-small":{"source":"iana","extensions":["psb"]},"application/vnd.3gpp.pic-bw-var":{"source":"iana","extensions":["pvb"]},"application/vnd.3gpp.s1ap":{"source":"iana"},"application/vnd.3gpp.sms":{"source":"iana"},"application/vnd.3gpp.sms+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-ext+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.state-and-event-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ussd+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.bcmcsinfo+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.sms":{"source":"iana"},"application/vnd.3gpp2.tcap":{"source":"iana","extensions":["tcap"]},"application/vnd.3lightssoftware.imagescal":{"source":"iana"},"application/vnd.3m.post-it-notes":{"source":"iana","extensions":["pwn"]},"application/vnd.accpac.simply.aso":{"source":"iana","extensions":["aso"]},"application/vnd.accpac.simply.imp":{"source":"iana","extensions":["imp"]},"application/vnd.acucobol":{"source":"iana","extensions":["acu"]},"application/vnd.acucorp":{"source":"iana","extensions":["atc","acutc"]},"application/vnd.adobe.air-application-installer-package+zip":{"source":"apache","compressible":false,"extensions":["air"]},"application/vnd.adobe.flash.movie":{"source":"iana"},"application/vnd.adobe.formscentral.fcdt":{"source":"iana","extensions":["fcdt"]},"application/vnd.adobe.fxp":{"source":"iana","extensions":["fxp","fxpl"]},"application/vnd.adobe.partial-upload":{"source":"iana"},"application/vnd.adobe.xdp+xml":{"source":"iana","compressible":true,"extensions":["xdp"]},"application/vnd.adobe.xfdf":{"source":"iana","extensions":["xfdf"]},"application/vnd.aether.imp":{"source":"iana"},"application/vnd.afpc.afplinedata":{"source":"iana"},"application/vnd.afpc.afplinedata-pagedef":{"source":"iana"},"application/vnd.afpc.cmoca-cmresource":{"source":"iana"},"application/vnd.afpc.foca-charset":{"source":"iana"},"application/vnd.afpc.foca-codedfont":{"source":"iana"},"application/vnd.afpc.foca-codepage":{"source":"iana"},"application/vnd.afpc.modca":{"source":"iana"},"application/vnd.afpc.modca-cmtable":{"source":"iana"},"application/vnd.afpc.modca-formdef":{"source":"iana"},"application/vnd.afpc.modca-mediummap":{"source":"iana"},"application/vnd.afpc.modca-objectcontainer":{"source":"iana"},"application/vnd.afpc.modca-overlay":{"source":"iana"},"application/vnd.afpc.modca-pagesegment":{"source":"iana"},"application/vnd.age":{"source":"iana","extensions":["age"]},"application/vnd.ah-barcode":{"source":"iana"},"application/vnd.ahead.space":{"source":"iana","extensions":["ahead"]},"application/vnd.airzip.filesecure.azf":{"source":"iana","extensions":["azf"]},"application/vnd.airzip.filesecure.azs":{"source":"iana","extensions":["azs"]},"application/vnd.amadeus+json":{"source":"iana","compressible":true},"application/vnd.amazon.ebook":{"source":"apache","extensions":["azw"]},"application/vnd.amazon.mobi8-ebook":{"source":"iana"},"application/vnd.americandynamics.acc":{"source":"iana","extensions":["acc"]},"application/vnd.amiga.ami":{"source":"iana","extensions":["ami"]},"application/vnd.amundsen.maze+xml":{"source":"iana","compressible":true},"application/vnd.android.ota":{"source":"iana"},"application/vnd.android.package-archive":{"source":"apache","compressible":false,"extensions":["apk"]},"application/vnd.anki":{"source":"iana"},"application/vnd.anser-web-certificate-issue-initiation":{"source":"iana","extensions":["cii"]},"application/vnd.anser-web-funds-transfer-initiation":{"source":"apache","extensions":["fti"]},"application/vnd.antix.game-component":{"source":"iana","extensions":["atx"]},"application/vnd.apache.arrow.file":{"source":"iana"},"application/vnd.apache.arrow.stream":{"source":"iana"},"application/vnd.apache.thrift.binary":{"source":"iana"},"application/vnd.apache.thrift.compact":{"source":"iana"},"application/vnd.apache.thrift.json":{"source":"iana"},"application/vnd.api+json":{"source":"iana","compressible":true},"application/vnd.aplextor.warrp+json":{"source":"iana","compressible":true},"application/vnd.apothekende.reservation+json":{"source":"iana","compressible":true},"application/vnd.apple.installer+xml":{"source":"iana","compressible":true,"extensions":["mpkg"]},"application/vnd.apple.keynote":{"source":"iana","extensions":["key"]},"application/vnd.apple.mpegurl":{"source":"iana","extensions":["m3u8"]},"application/vnd.apple.numbers":{"source":"iana","extensions":["numbers"]},"application/vnd.apple.pages":{"source":"iana","extensions":["pages"]},"application/vnd.apple.pkpass":{"compressible":false,"extensions":["pkpass"]},"application/vnd.arastra.swi":{"source":"iana"},"application/vnd.aristanetworks.swi":{"source":"iana","extensions":["swi"]},"application/vnd.artisan+json":{"source":"iana","compressible":true},"application/vnd.artsquare":{"source":"iana"},"application/vnd.astraea-software.iota":{"source":"iana","extensions":["iota"]},"application/vnd.audiograph":{"source":"iana","extensions":["aep"]},"application/vnd.autopackage":{"source":"iana"},"application/vnd.avalon+json":{"source":"iana","compressible":true},"application/vnd.avistar+xml":{"source":"iana","compressible":true},"application/vnd.balsamiq.bmml+xml":{"source":"iana","compressible":true,"extensions":["bmml"]},"application/vnd.balsamiq.bmpr":{"source":"iana"},"application/vnd.banana-accounting":{"source":"iana"},"application/vnd.bbf.usp.error":{"source":"iana"},"application/vnd.bbf.usp.msg":{"source":"iana"},"application/vnd.bbf.usp.msg+json":{"source":"iana","compressible":true},"application/vnd.bekitzur-stech+json":{"source":"iana","compressible":true},"application/vnd.bint.med-content":{"source":"iana"},"application/vnd.biopax.rdf+xml":{"source":"iana","compressible":true},"application/vnd.blink-idb-value-wrapper":{"source":"iana"},"application/vnd.blueice.multipass":{"source":"iana","extensions":["mpm"]},"application/vnd.bluetooth.ep.oob":{"source":"iana"},"application/vnd.bluetooth.le.oob":{"source":"iana"},"application/vnd.bmi":{"source":"iana","extensions":["bmi"]},"application/vnd.bpf":{"source":"iana"},"application/vnd.bpf3":{"source":"iana"},"application/vnd.businessobjects":{"source":"iana","extensions":["rep"]},"application/vnd.byu.uapi+json":{"source":"iana","compressible":true},"application/vnd.cab-jscript":{"source":"iana"},"application/vnd.canon-cpdl":{"source":"iana"},"application/vnd.canon-lips":{"source":"iana"},"application/vnd.capasystems-pg+json":{"source":"iana","compressible":true},"application/vnd.cendio.thinlinc.clientconf":{"source":"iana"},"application/vnd.century-systems.tcp_stream":{"source":"iana"},"application/vnd.chemdraw+xml":{"source":"iana","compressible":true,"extensions":["cdxml"]},"application/vnd.chess-pgn":{"source":"iana"},"application/vnd.chipnuts.karaoke-mmd":{"source":"iana","extensions":["mmd"]},"application/vnd.ciedi":{"source":"iana"},"application/vnd.cinderella":{"source":"iana","extensions":["cdy"]},"application/vnd.cirpack.isdn-ext":{"source":"iana"},"application/vnd.citationstyles.style+xml":{"source":"iana","compressible":true,"extensions":["csl"]},"application/vnd.claymore":{"source":"iana","extensions":["cla"]},"application/vnd.cloanto.rp9":{"source":"iana","extensions":["rp9"]},"application/vnd.clonk.c4group":{"source":"iana","extensions":["c4g","c4d","c4f","c4p","c4u"]},"application/vnd.cluetrust.cartomobile-config":{"source":"iana","extensions":["c11amc"]},"application/vnd.cluetrust.cartomobile-config-pkg":{"source":"iana","extensions":["c11amz"]},"application/vnd.coffeescript":{"source":"iana"},"application/vnd.collabio.xodocuments.document":{"source":"iana"},"application/vnd.collabio.xodocuments.document-template":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation-template":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet-template":{"source":"iana"},"application/vnd.collection+json":{"source":"iana","compressible":true},"application/vnd.collection.doc+json":{"source":"iana","compressible":true},"application/vnd.collection.next+json":{"source":"iana","compressible":true},"application/vnd.comicbook+zip":{"source":"iana","compressible":false},"application/vnd.comicbook-rar":{"source":"iana"},"application/vnd.commerce-battelle":{"source":"iana"},"application/vnd.commonspace":{"source":"iana","extensions":["csp"]},"application/vnd.contact.cmsg":{"source":"iana","extensions":["cdbcmsg"]},"application/vnd.coreos.ignition+json":{"source":"iana","compressible":true},"application/vnd.cosmocaller":{"source":"iana","extensions":["cmc"]},"application/vnd.crick.clicker":{"source":"iana","extensions":["clkx"]},"application/vnd.crick.clicker.keyboard":{"source":"iana","extensions":["clkk"]},"application/vnd.crick.clicker.palette":{"source":"iana","extensions":["clkp"]},"application/vnd.crick.clicker.template":{"source":"iana","extensions":["clkt"]},"application/vnd.crick.clicker.wordbank":{"source":"iana","extensions":["clkw"]},"application/vnd.criticaltools.wbs+xml":{"source":"iana","compressible":true,"extensions":["wbs"]},"application/vnd.cryptii.pipe+json":{"source":"iana","compressible":true},"application/vnd.crypto-shade-file":{"source":"iana"},"application/vnd.cryptomator.encrypted":{"source":"iana"},"application/vnd.cryptomator.vault":{"source":"iana"},"application/vnd.ctc-posml":{"source":"iana","extensions":["pml"]},"application/vnd.ctct.ws+xml":{"source":"iana","compressible":true},"application/vnd.cups-pdf":{"source":"iana"},"application/vnd.cups-postscript":{"source":"iana"},"application/vnd.cups-ppd":{"source":"iana","extensions":["ppd"]},"application/vnd.cups-raster":{"source":"iana"},"application/vnd.cups-raw":{"source":"iana"},"application/vnd.curl":{"source":"iana"},"application/vnd.curl.car":{"source":"apache","extensions":["car"]},"application/vnd.curl.pcurl":{"source":"apache","extensions":["pcurl"]},"application/vnd.cyan.dean.root+xml":{"source":"iana","compressible":true},"application/vnd.cybank":{"source":"iana"},"application/vnd.cyclonedx+json":{"source":"iana","compressible":true},"application/vnd.cyclonedx+xml":{"source":"iana","compressible":true},"application/vnd.d2l.coursepackage1p0+zip":{"source":"iana","compressible":false},"application/vnd.d3m-dataset":{"source":"iana"},"application/vnd.d3m-problem":{"source":"iana"},"application/vnd.dart":{"source":"iana","compressible":true,"extensions":["dart"]},"application/vnd.data-vision.rdz":{"source":"iana","extensions":["rdz"]},"application/vnd.datapackage+json":{"source":"iana","compressible":true},"application/vnd.dataresource+json":{"source":"iana","compressible":true},"application/vnd.dbf":{"source":"iana","extensions":["dbf"]},"application/vnd.debian.binary-package":{"source":"iana"},"application/vnd.dece.data":{"source":"iana","extensions":["uvf","uvvf","uvd","uvvd"]},"application/vnd.dece.ttml+xml":{"source":"iana","compressible":true,"extensions":["uvt","uvvt"]},"application/vnd.dece.unspecified":{"source":"iana","extensions":["uvx","uvvx"]},"application/vnd.dece.zip":{"source":"iana","extensions":["uvz","uvvz"]},"application/vnd.denovo.fcselayout-link":{"source":"iana","extensions":["fe_launch"]},"application/vnd.desmume.movie":{"source":"iana"},"application/vnd.dir-bi.plate-dl-nosuffix":{"source":"iana"},"application/vnd.dm.delegation+xml":{"source":"iana","compressible":true},"application/vnd.dna":{"source":"iana","extensions":["dna"]},"application/vnd.document+json":{"source":"iana","compressible":true},"application/vnd.dolby.mlp":{"source":"apache","extensions":["mlp"]},"application/vnd.dolby.mobile.1":{"source":"iana"},"application/vnd.dolby.mobile.2":{"source":"iana"},"application/vnd.doremir.scorecloud-binary-document":{"source":"iana"},"application/vnd.dpgraph":{"source":"iana","extensions":["dpg"]},"application/vnd.dreamfactory":{"source":"iana","extensions":["dfac"]},"application/vnd.drive+json":{"source":"iana","compressible":true},"application/vnd.ds-keypoint":{"source":"apache","extensions":["kpxx"]},"application/vnd.dtg.local":{"source":"iana"},"application/vnd.dtg.local.flash":{"source":"iana"},"application/vnd.dtg.local.html":{"source":"iana"},"application/vnd.dvb.ait":{"source":"iana","extensions":["ait"]},"application/vnd.dvb.dvbisl+xml":{"source":"iana","compressible":true},"application/vnd.dvb.dvbj":{"source":"iana"},"application/vnd.dvb.esgcontainer":{"source":"iana"},"application/vnd.dvb.ipdcdftnotifaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess2":{"source":"iana"},"application/vnd.dvb.ipdcesgpdd":{"source":"iana"},"application/vnd.dvb.ipdcroaming":{"source":"iana"},"application/vnd.dvb.iptv.alfec-base":{"source":"iana"},"application/vnd.dvb.iptv.alfec-enhancement":{"source":"iana"},"application/vnd.dvb.notif-aggregate-root+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-container+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-generic+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-msglist+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-request+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-response+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-init+xml":{"source":"iana","compressible":true},"application/vnd.dvb.pfr":{"source":"iana"},"application/vnd.dvb.service":{"source":"iana","extensions":["svc"]},"application/vnd.dxr":{"source":"iana"},"application/vnd.dynageo":{"source":"iana","extensions":["geo"]},"application/vnd.dzr":{"source":"iana"},"application/vnd.easykaraoke.cdgdownload":{"source":"iana"},"application/vnd.ecdis-update":{"source":"iana"},"application/vnd.ecip.rlp":{"source":"iana"},"application/vnd.eclipse.ditto+json":{"source":"iana","compressible":true},"application/vnd.ecowin.chart":{"source":"iana","extensions":["mag"]},"application/vnd.ecowin.filerequest":{"source":"iana"},"application/vnd.ecowin.fileupdate":{"source":"iana"},"application/vnd.ecowin.series":{"source":"iana"},"application/vnd.ecowin.seriesrequest":{"source":"iana"},"application/vnd.ecowin.seriesupdate":{"source":"iana"},"application/vnd.efi.img":{"source":"iana"},"application/vnd.efi.iso":{"source":"iana"},"application/vnd.emclient.accessrequest+xml":{"source":"iana","compressible":true},"application/vnd.enliven":{"source":"iana","extensions":["nml"]},"application/vnd.enphase.envoy":{"source":"iana"},"application/vnd.eprints.data+xml":{"source":"iana","compressible":true},"application/vnd.epson.esf":{"source":"iana","extensions":["esf"]},"application/vnd.epson.msf":{"source":"iana","extensions":["msf"]},"application/vnd.epson.quickanime":{"source":"iana","extensions":["qam"]},"application/vnd.epson.salt":{"source":"iana","extensions":["slt"]},"application/vnd.epson.ssf":{"source":"iana","extensions":["ssf"]},"application/vnd.ericsson.quickcall":{"source":"iana"},"application/vnd.espass-espass+zip":{"source":"iana","compressible":false},"application/vnd.eszigno3+xml":{"source":"iana","compressible":true,"extensions":["es3","et3"]},"application/vnd.etsi.aoc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.asic-e+zip":{"source":"iana","compressible":false},"application/vnd.etsi.asic-s+zip":{"source":"iana","compressible":false},"application/vnd.etsi.cug+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvcommand+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-bc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-cod+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-npvr+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvservice+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsync+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvueprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mcid+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mheg5":{"source":"iana"},"application/vnd.etsi.overload-control-policy-dataset+xml":{"source":"iana","compressible":true},"application/vnd.etsi.pstn+xml":{"source":"iana","compressible":true},"application/vnd.etsi.sci+xml":{"source":"iana","compressible":true},"application/vnd.etsi.simservs+xml":{"source":"iana","compressible":true},"application/vnd.etsi.timestamp-token":{"source":"iana"},"application/vnd.etsi.tsl+xml":{"source":"iana","compressible":true},"application/vnd.etsi.tsl.der":{"source":"iana"},"application/vnd.eu.kasparian.car+json":{"source":"iana","compressible":true},"application/vnd.eudora.data":{"source":"iana"},"application/vnd.evolv.ecig.profile":{"source":"iana"},"application/vnd.evolv.ecig.settings":{"source":"iana"},"application/vnd.evolv.ecig.theme":{"source":"iana"},"application/vnd.exstream-empower+zip":{"source":"iana","compressible":false},"application/vnd.exstream-package":{"source":"iana"},"application/vnd.ezpix-album":{"source":"iana","extensions":["ez2"]},"application/vnd.ezpix-package":{"source":"iana","extensions":["ez3"]},"application/vnd.f-secure.mobile":{"source":"iana"},"application/vnd.familysearch.gedcom+zip":{"source":"iana","compressible":false},"application/vnd.fastcopy-disk-image":{"source":"iana"},"application/vnd.fdf":{"source":"iana","extensions":["fdf"]},"application/vnd.fdsn.mseed":{"source":"iana","extensions":["mseed"]},"application/vnd.fdsn.seed":{"source":"iana","extensions":["seed","dataless"]},"application/vnd.ffsns":{"source":"iana"},"application/vnd.ficlab.flb+zip":{"source":"iana","compressible":false},"application/vnd.filmit.zfc":{"source":"iana"},"application/vnd.fints":{"source":"iana"},"application/vnd.firemonkeys.cloudcell":{"source":"iana"},"application/vnd.flographit":{"source":"iana","extensions":["gph"]},"application/vnd.fluxtime.clip":{"source":"iana","extensions":["ftc"]},"application/vnd.font-fontforge-sfd":{"source":"iana"},"application/vnd.framemaker":{"source":"iana","extensions":["fm","frame","maker","book"]},"application/vnd.frogans.fnc":{"source":"iana","extensions":["fnc"]},"application/vnd.frogans.ltf":{"source":"iana","extensions":["ltf"]},"application/vnd.fsc.weblaunch":{"source":"iana","extensions":["fsc"]},"application/vnd.fujifilm.fb.docuworks":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.binder":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.container":{"source":"iana"},"application/vnd.fujifilm.fb.jfi+xml":{"source":"iana","compressible":true},"application/vnd.fujitsu.oasys":{"source":"iana","extensions":["oas"]},"application/vnd.fujitsu.oasys2":{"source":"iana","extensions":["oa2"]},"application/vnd.fujitsu.oasys3":{"source":"iana","extensions":["oa3"]},"application/vnd.fujitsu.oasysgp":{"source":"iana","extensions":["fg5"]},"application/vnd.fujitsu.oasysprs":{"source":"iana","extensions":["bh2"]},"application/vnd.fujixerox.art-ex":{"source":"iana"},"application/vnd.fujixerox.art4":{"source":"iana"},"application/vnd.fujixerox.ddd":{"source":"iana","extensions":["ddd"]},"application/vnd.fujixerox.docuworks":{"source":"iana","extensions":["xdw"]},"application/vnd.fujixerox.docuworks.binder":{"source":"iana","extensions":["xbd"]},"application/vnd.fujixerox.docuworks.container":{"source":"iana"},"application/vnd.fujixerox.hbpl":{"source":"iana"},"application/vnd.fut-misnet":{"source":"iana"},"application/vnd.futoin+cbor":{"source":"iana"},"application/vnd.futoin+json":{"source":"iana","compressible":true},"application/vnd.fuzzysheet":{"source":"iana","extensions":["fzs"]},"application/vnd.genomatix.tuxedo":{"source":"iana","extensions":["txd"]},"application/vnd.gentics.grd+json":{"source":"iana","compressible":true},"application/vnd.geo+json":{"source":"iana","compressible":true},"application/vnd.geocube+xml":{"source":"iana","compressible":true},"application/vnd.geogebra.file":{"source":"iana","extensions":["ggb"]},"application/vnd.geogebra.slides":{"source":"iana"},"application/vnd.geogebra.tool":{"source":"iana","extensions":["ggt"]},"application/vnd.geometry-explorer":{"source":"iana","extensions":["gex","gre"]},"application/vnd.geonext":{"source":"iana","extensions":["gxt"]},"application/vnd.geoplan":{"source":"iana","extensions":["g2w"]},"application/vnd.geospace":{"source":"iana","extensions":["g3w"]},"application/vnd.gerber":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt-response":{"source":"iana"},"application/vnd.gmx":{"source":"iana","extensions":["gmx"]},"application/vnd.google-apps.document":{"compressible":false,"extensions":["gdoc"]},"application/vnd.google-apps.presentation":{"compressible":false,"extensions":["gslides"]},"application/vnd.google-apps.spreadsheet":{"compressible":false,"extensions":["gsheet"]},"application/vnd.google-earth.kml+xml":{"source":"iana","compressible":true,"extensions":["kml"]},"application/vnd.google-earth.kmz":{"source":"iana","compressible":false,"extensions":["kmz"]},"application/vnd.gov.sk.e-form+xml":{"source":"iana","compressible":true},"application/vnd.gov.sk.e-form+zip":{"source":"iana","compressible":false},"application/vnd.gov.sk.xmldatacontainer+xml":{"source":"iana","compressible":true},"application/vnd.grafeq":{"source":"iana","extensions":["gqf","gqs"]},"application/vnd.gridmp":{"source":"iana"},"application/vnd.groove-account":{"source":"iana","extensions":["gac"]},"application/vnd.groove-help":{"source":"iana","extensions":["ghf"]},"application/vnd.groove-identity-message":{"source":"iana","extensions":["gim"]},"application/vnd.groove-injector":{"source":"iana","extensions":["grv"]},"application/vnd.groove-tool-message":{"source":"iana","extensions":["gtm"]},"application/vnd.groove-tool-template":{"source":"iana","extensions":["tpl"]},"application/vnd.groove-vcard":{"source":"iana","extensions":["vcg"]},"application/vnd.hal+json":{"source":"iana","compressible":true},"application/vnd.hal+xml":{"source":"iana","compressible":true,"extensions":["hal"]},"application/vnd.handheld-entertainment+xml":{"source":"iana","compressible":true,"extensions":["zmm"]},"application/vnd.hbci":{"source":"iana","extensions":["hbci"]},"application/vnd.hc+json":{"source":"iana","compressible":true},"application/vnd.hcl-bireports":{"source":"iana"},"application/vnd.hdt":{"source":"iana"},"application/vnd.heroku+json":{"source":"iana","compressible":true},"application/vnd.hhe.lesson-player":{"source":"iana","extensions":["les"]},"application/vnd.hl7cda+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.hl7v2+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.hp-hpgl":{"source":"iana","extensions":["hpgl"]},"application/vnd.hp-hpid":{"source":"iana","extensions":["hpid"]},"application/vnd.hp-hps":{"source":"iana","extensions":["hps"]},"application/vnd.hp-jlyt":{"source":"iana","extensions":["jlt"]},"application/vnd.hp-pcl":{"source":"iana","extensions":["pcl"]},"application/vnd.hp-pclxl":{"source":"iana","extensions":["pclxl"]},"application/vnd.httphone":{"source":"iana"},"application/vnd.hydrostatix.sof-data":{"source":"iana","extensions":["sfd-hdstx"]},"application/vnd.hyper+json":{"source":"iana","compressible":true},"application/vnd.hyper-item+json":{"source":"iana","compressible":true},"application/vnd.hyperdrive+json":{"source":"iana","compressible":true},"application/vnd.hzn-3d-crossword":{"source":"iana"},"application/vnd.ibm.afplinedata":{"source":"iana"},"application/vnd.ibm.electronic-media":{"source":"iana"},"application/vnd.ibm.minipay":{"source":"iana","extensions":["mpy"]},"application/vnd.ibm.modcap":{"source":"iana","extensions":["afp","listafp","list3820"]},"application/vnd.ibm.rights-management":{"source":"iana","extensions":["irm"]},"application/vnd.ibm.secure-container":{"source":"iana","extensions":["sc"]},"application/vnd.iccprofile":{"source":"iana","extensions":["icc","icm"]},"application/vnd.ieee.1905":{"source":"iana"},"application/vnd.igloader":{"source":"iana","extensions":["igl"]},"application/vnd.imagemeter.folder+zip":{"source":"iana","compressible":false},"application/vnd.imagemeter.image+zip":{"source":"iana","compressible":false},"application/vnd.immervision-ivp":{"source":"iana","extensions":["ivp"]},"application/vnd.immervision-ivu":{"source":"iana","extensions":["ivu"]},"application/vnd.ims.imsccv1p1":{"source":"iana"},"application/vnd.ims.imsccv1p2":{"source":"iana"},"application/vnd.ims.imsccv1p3":{"source":"iana"},"application/vnd.ims.lis.v2.result+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolconsumerprofile+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy.id+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings.simple+json":{"source":"iana","compressible":true},"application/vnd.informedcontrol.rms+xml":{"source":"iana","compressible":true},"application/vnd.informix-visionary":{"source":"iana"},"application/vnd.infotech.project":{"source":"iana"},"application/vnd.infotech.project+xml":{"source":"iana","compressible":true},"application/vnd.innopath.wamp.notification":{"source":"iana"},"application/vnd.insors.igm":{"source":"iana","extensions":["igm"]},"application/vnd.intercon.formnet":{"source":"iana","extensions":["xpw","xpx"]},"application/vnd.intergeo":{"source":"iana","extensions":["i2g"]},"application/vnd.intertrust.digibox":{"source":"iana"},"application/vnd.intertrust.nncp":{"source":"iana"},"application/vnd.intu.qbo":{"source":"iana","extensions":["qbo"]},"application/vnd.intu.qfx":{"source":"iana","extensions":["qfx"]},"application/vnd.iptc.g2.catalogitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.conceptitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.knowledgeitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsmessage+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.packageitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.planningitem+xml":{"source":"iana","compressible":true},"application/vnd.ipunplugged.rcprofile":{"source":"iana","extensions":["rcprofile"]},"application/vnd.irepository.package+xml":{"source":"iana","compressible":true,"extensions":["irp"]},"application/vnd.is-xpr":{"source":"iana","extensions":["xpr"]},"application/vnd.isac.fcs":{"source":"iana","extensions":["fcs"]},"application/vnd.iso11783-10+zip":{"source":"iana","compressible":false},"application/vnd.jam":{"source":"iana","extensions":["jam"]},"application/vnd.japannet-directory-service":{"source":"iana"},"application/vnd.japannet-jpnstore-wakeup":{"source":"iana"},"application/vnd.japannet-payment-wakeup":{"source":"iana"},"application/vnd.japannet-registration":{"source":"iana"},"application/vnd.japannet-registration-wakeup":{"source":"iana"},"application/vnd.japannet-setstore-wakeup":{"source":"iana"},"application/vnd.japannet-verification":{"source":"iana"},"application/vnd.japannet-verification-wakeup":{"source":"iana"},"application/vnd.jcp.javame.midlet-rms":{"source":"iana","extensions":["rms"]},"application/vnd.jisp":{"source":"iana","extensions":["jisp"]},"application/vnd.joost.joda-archive":{"source":"iana","extensions":["joda"]},"application/vnd.jsk.isdn-ngn":{"source":"iana"},"application/vnd.kahootz":{"source":"iana","extensions":["ktz","ktr"]},"application/vnd.kde.karbon":{"source":"iana","extensions":["karbon"]},"application/vnd.kde.kchart":{"source":"iana","extensions":["chrt"]},"application/vnd.kde.kformula":{"source":"iana","extensions":["kfo"]},"application/vnd.kde.kivio":{"source":"iana","extensions":["flw"]},"application/vnd.kde.kontour":{"source":"iana","extensions":["kon"]},"application/vnd.kde.kpresenter":{"source":"iana","extensions":["kpr","kpt"]},"application/vnd.kde.kspread":{"source":"iana","extensions":["ksp"]},"application/vnd.kde.kword":{"source":"iana","extensions":["kwd","kwt"]},"application/vnd.kenameaapp":{"source":"iana","extensions":["htke"]},"application/vnd.kidspiration":{"source":"iana","extensions":["kia"]},"application/vnd.kinar":{"source":"iana","extensions":["kne","knp"]},"application/vnd.koan":{"source":"iana","extensions":["skp","skd","skt","skm"]},"application/vnd.kodak-descriptor":{"source":"iana","extensions":["sse"]},"application/vnd.las":{"source":"iana"},"application/vnd.las.las+json":{"source":"iana","compressible":true},"application/vnd.las.las+xml":{"source":"iana","compressible":true,"extensions":["lasxml"]},"application/vnd.laszip":{"source":"iana"},"application/vnd.leap+json":{"source":"iana","compressible":true},"application/vnd.liberty-request+xml":{"source":"iana","compressible":true},"application/vnd.llamagraphics.life-balance.desktop":{"source":"iana","extensions":["lbd"]},"application/vnd.llamagraphics.life-balance.exchange+xml":{"source":"iana","compressible":true,"extensions":["lbe"]},"application/vnd.logipipe.circuit+zip":{"source":"iana","compressible":false},"application/vnd.loom":{"source":"iana"},"application/vnd.lotus-1-2-3":{"source":"iana","extensions":["123"]},"application/vnd.lotus-approach":{"source":"iana","extensions":["apr"]},"application/vnd.lotus-freelance":{"source":"iana","extensions":["pre"]},"application/vnd.lotus-notes":{"source":"iana","extensions":["nsf"]},"application/vnd.lotus-organizer":{"source":"iana","extensions":["org"]},"application/vnd.lotus-screencam":{"source":"iana","extensions":["scm"]},"application/vnd.lotus-wordpro":{"source":"iana","extensions":["lwp"]},"application/vnd.macports.portpkg":{"source":"iana","extensions":["portpkg"]},"application/vnd.mapbox-vector-tile":{"source":"iana","extensions":["mvt"]},"application/vnd.marlin.drm.actiontoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.conftoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.license+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.mdcf":{"source":"iana"},"application/vnd.mason+json":{"source":"iana","compressible":true},"application/vnd.maxar.archive.3tz+zip":{"source":"iana","compressible":false},"application/vnd.maxmind.maxmind-db":{"source":"iana"},"application/vnd.mcd":{"source":"iana","extensions":["mcd"]},"application/vnd.medcalcdata":{"source":"iana","extensions":["mc1"]},"application/vnd.mediastation.cdkey":{"source":"iana","extensions":["cdkey"]},"application/vnd.meridian-slingshot":{"source":"iana"},"application/vnd.mfer":{"source":"iana","extensions":["mwf"]},"application/vnd.mfmp":{"source":"iana","extensions":["mfm"]},"application/vnd.micro+json":{"source":"iana","compressible":true},"application/vnd.micrografx.flo":{"source":"iana","extensions":["flo"]},"application/vnd.micrografx.igx":{"source":"iana","extensions":["igx"]},"application/vnd.microsoft.portable-executable":{"source":"iana"},"application/vnd.microsoft.windows.thumbnail-cache":{"source":"iana"},"application/vnd.miele+json":{"source":"iana","compressible":true},"application/vnd.mif":{"source":"iana","extensions":["mif"]},"application/vnd.minisoft-hp3000-save":{"source":"iana"},"application/vnd.mitsubishi.misty-guard.trustweb":{"source":"iana"},"application/vnd.mobius.daf":{"source":"iana","extensions":["daf"]},"application/vnd.mobius.dis":{"source":"iana","extensions":["dis"]},"application/vnd.mobius.mbk":{"source":"iana","extensions":["mbk"]},"application/vnd.mobius.mqy":{"source":"iana","extensions":["mqy"]},"application/vnd.mobius.msl":{"source":"iana","extensions":["msl"]},"application/vnd.mobius.plc":{"source":"iana","extensions":["plc"]},"application/vnd.mobius.txf":{"source":"iana","extensions":["txf"]},"application/vnd.mophun.application":{"source":"iana","extensions":["mpn"]},"application/vnd.mophun.certificate":{"source":"iana","extensions":["mpc"]},"application/vnd.motorola.flexsuite":{"source":"iana"},"application/vnd.motorola.flexsuite.adsi":{"source":"iana"},"application/vnd.motorola.flexsuite.fis":{"source":"iana"},"application/vnd.motorola.flexsuite.gotap":{"source":"iana"},"application/vnd.motorola.flexsuite.kmr":{"source":"iana"},"application/vnd.motorola.flexsuite.ttc":{"source":"iana"},"application/vnd.motorola.flexsuite.wem":{"source":"iana"},"application/vnd.motorola.iprm":{"source":"iana"},"application/vnd.mozilla.xul+xml":{"source":"iana","compressible":true,"extensions":["xul"]},"application/vnd.ms-3mfdocument":{"source":"iana"},"application/vnd.ms-artgalry":{"source":"iana","extensions":["cil"]},"application/vnd.ms-asf":{"source":"iana"},"application/vnd.ms-cab-compressed":{"source":"iana","extensions":["cab"]},"application/vnd.ms-color.iccprofile":{"source":"apache"},"application/vnd.ms-excel":{"source":"iana","compressible":false,"extensions":["xls","xlm","xla","xlc","xlt","xlw"]},"application/vnd.ms-excel.addin.macroenabled.12":{"source":"iana","extensions":["xlam"]},"application/vnd.ms-excel.sheet.binary.macroenabled.12":{"source":"iana","extensions":["xlsb"]},"application/vnd.ms-excel.sheet.macroenabled.12":{"source":"iana","extensions":["xlsm"]},"application/vnd.ms-excel.template.macroenabled.12":{"source":"iana","extensions":["xltm"]},"application/vnd.ms-fontobject":{"source":"iana","compressible":true,"extensions":["eot"]},"application/vnd.ms-htmlhelp":{"source":"iana","extensions":["chm"]},"application/vnd.ms-ims":{"source":"iana","extensions":["ims"]},"application/vnd.ms-lrm":{"source":"iana","extensions":["lrm"]},"application/vnd.ms-office.activex+xml":{"source":"iana","compressible":true},"application/vnd.ms-officetheme":{"source":"iana","extensions":["thmx"]},"application/vnd.ms-opentype":{"source":"apache","compressible":true},"application/vnd.ms-outlook":{"compressible":false,"extensions":["msg"]},"application/vnd.ms-package.obfuscated-opentype":{"source":"apache"},"application/vnd.ms-pki.seccat":{"source":"apache","extensions":["cat"]},"application/vnd.ms-pki.stl":{"source":"apache","extensions":["stl"]},"application/vnd.ms-playready.initiator+xml":{"source":"iana","compressible":true},"application/vnd.ms-powerpoint":{"source":"iana","compressible":false,"extensions":["ppt","pps","pot"]},"application/vnd.ms-powerpoint.addin.macroenabled.12":{"source":"iana","extensions":["ppam"]},"application/vnd.ms-powerpoint.presentation.macroenabled.12":{"source":"iana","extensions":["pptm"]},"application/vnd.ms-powerpoint.slide.macroenabled.12":{"source":"iana","extensions":["sldm"]},"application/vnd.ms-powerpoint.slideshow.macroenabled.12":{"source":"iana","extensions":["ppsm"]},"application/vnd.ms-powerpoint.template.macroenabled.12":{"source":"iana","extensions":["potm"]},"application/vnd.ms-printdevicecapabilities+xml":{"source":"iana","compressible":true},"application/vnd.ms-printing.printticket+xml":{"source":"apache","compressible":true},"application/vnd.ms-printschematicket+xml":{"source":"iana","compressible":true},"application/vnd.ms-project":{"source":"iana","extensions":["mpp","mpt"]},"application/vnd.ms-tnef":{"source":"iana"},"application/vnd.ms-windows.devicepairing":{"source":"iana"},"application/vnd.ms-windows.nwprinting.oob":{"source":"iana"},"application/vnd.ms-windows.printerpairing":{"source":"iana"},"application/vnd.ms-windows.wsd.oob":{"source":"iana"},"application/vnd.ms-wmdrm.lic-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.lic-resp":{"source":"iana"},"application/vnd.ms-wmdrm.meter-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.meter-resp":{"source":"iana"},"application/vnd.ms-word.document.macroenabled.12":{"source":"iana","extensions":["docm"]},"application/vnd.ms-word.template.macroenabled.12":{"source":"iana","extensions":["dotm"]},"application/vnd.ms-works":{"source":"iana","extensions":["wps","wks","wcm","wdb"]},"application/vnd.ms-wpl":{"source":"iana","extensions":["wpl"]},"application/vnd.ms-xpsdocument":{"source":"iana","compressible":false,"extensions":["xps"]},"application/vnd.msa-disk-image":{"source":"iana"},"application/vnd.mseq":{"source":"iana","extensions":["mseq"]},"application/vnd.msign":{"source":"iana"},"application/vnd.multiad.creator":{"source":"iana"},"application/vnd.multiad.creator.cif":{"source":"iana"},"application/vnd.music-niff":{"source":"iana"},"application/vnd.musician":{"source":"iana","extensions":["mus"]},"application/vnd.muvee.style":{"source":"iana","extensions":["msty"]},"application/vnd.mynfc":{"source":"iana","extensions":["taglet"]},"application/vnd.nacamar.ybrid+json":{"source":"iana","compressible":true},"application/vnd.ncd.control":{"source":"iana"},"application/vnd.ncd.reference":{"source":"iana"},"application/vnd.nearst.inv+json":{"source":"iana","compressible":true},"application/vnd.nebumind.line":{"source":"iana"},"application/vnd.nervana":{"source":"iana"},"application/vnd.netfpx":{"source":"iana"},"application/vnd.neurolanguage.nlu":{"source":"iana","extensions":["nlu"]},"application/vnd.nimn":{"source":"iana"},"application/vnd.nintendo.nitro.rom":{"source":"iana"},"application/vnd.nintendo.snes.rom":{"source":"iana"},"application/vnd.nitf":{"source":"iana","extensions":["ntf","nitf"]},"application/vnd.noblenet-directory":{"source":"iana","extensions":["nnd"]},"application/vnd.noblenet-sealer":{"source":"iana","extensions":["nns"]},"application/vnd.noblenet-web":{"source":"iana","extensions":["nnw"]},"application/vnd.nokia.catalogs":{"source":"iana"},"application/vnd.nokia.conml+wbxml":{"source":"iana"},"application/vnd.nokia.conml+xml":{"source":"iana","compressible":true},"application/vnd.nokia.iptv.config+xml":{"source":"iana","compressible":true},"application/vnd.nokia.isds-radio-presets":{"source":"iana"},"application/vnd.nokia.landmark+wbxml":{"source":"iana"},"application/vnd.nokia.landmark+xml":{"source":"iana","compressible":true},"application/vnd.nokia.landmarkcollection+xml":{"source":"iana","compressible":true},"application/vnd.nokia.n-gage.ac+xml":{"source":"iana","compressible":true,"extensions":["ac"]},"application/vnd.nokia.n-gage.data":{"source":"iana","extensions":["ngdat"]},"application/vnd.nokia.n-gage.symbian.install":{"source":"iana","extensions":["n-gage"]},"application/vnd.nokia.ncd":{"source":"iana"},"application/vnd.nokia.pcd+wbxml":{"source":"iana"},"application/vnd.nokia.pcd+xml":{"source":"iana","compressible":true},"application/vnd.nokia.radio-preset":{"source":"iana","extensions":["rpst"]},"application/vnd.nokia.radio-presets":{"source":"iana","extensions":["rpss"]},"application/vnd.novadigm.edm":{"source":"iana","extensions":["edm"]},"application/vnd.novadigm.edx":{"source":"iana","extensions":["edx"]},"application/vnd.novadigm.ext":{"source":"iana","extensions":["ext"]},"application/vnd.ntt-local.content-share":{"source":"iana"},"application/vnd.ntt-local.file-transfer":{"source":"iana"},"application/vnd.ntt-local.ogw_remote-access":{"source":"iana"},"application/vnd.ntt-local.sip-ta_remote":{"source":"iana"},"application/vnd.ntt-local.sip-ta_tcp_stream":{"source":"iana"},"application/vnd.oasis.opendocument.chart":{"source":"iana","extensions":["odc"]},"application/vnd.oasis.opendocument.chart-template":{"source":"iana","extensions":["otc"]},"application/vnd.oasis.opendocument.database":{"source":"iana","extensions":["odb"]},"application/vnd.oasis.opendocument.formula":{"source":"iana","extensions":["odf"]},"application/vnd.oasis.opendocument.formula-template":{"source":"iana","extensions":["odft"]},"application/vnd.oasis.opendocument.graphics":{"source":"iana","compressible":false,"extensions":["odg"]},"application/vnd.oasis.opendocument.graphics-template":{"source":"iana","extensions":["otg"]},"application/vnd.oasis.opendocument.image":{"source":"iana","extensions":["odi"]},"application/vnd.oasis.opendocument.image-template":{"source":"iana","extensions":["oti"]},"application/vnd.oasis.opendocument.presentation":{"source":"iana","compressible":false,"extensions":["odp"]},"application/vnd.oasis.opendocument.presentation-template":{"source":"iana","extensions":["otp"]},"application/vnd.oasis.opendocument.spreadsheet":{"source":"iana","compressible":false,"extensions":["ods"]},"application/vnd.oasis.opendocument.spreadsheet-template":{"source":"iana","extensions":["ots"]},"application/vnd.oasis.opendocument.text":{"source":"iana","compressible":false,"extensions":["odt"]},"application/vnd.oasis.opendocument.text-master":{"source":"iana","extensions":["odm"]},"application/vnd.oasis.opendocument.text-template":{"source":"iana","extensions":["ott"]},"application/vnd.oasis.opendocument.text-web":{"source":"iana","extensions":["oth"]},"application/vnd.obn":{"source":"iana"},"application/vnd.ocf+cbor":{"source":"iana"},"application/vnd.oci.image.manifest.v1+json":{"source":"iana","compressible":true},"application/vnd.oftn.l10n+json":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessdownload+xml":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessstreaming+xml":{"source":"iana","compressible":true},"application/vnd.oipf.cspg-hexbinary":{"source":"iana"},"application/vnd.oipf.dae.svg+xml":{"source":"iana","compressible":true},"application/vnd.oipf.dae.xhtml+xml":{"source":"iana","compressible":true},"application/vnd.oipf.mippvcontrolmessage+xml":{"source":"iana","compressible":true},"application/vnd.oipf.pae.gem":{"source":"iana"},"application/vnd.oipf.spdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.oipf.spdlist+xml":{"source":"iana","compressible":true},"application/vnd.oipf.ueprofile+xml":{"source":"iana","compressible":true},"application/vnd.oipf.userprofile+xml":{"source":"iana","compressible":true},"application/vnd.olpc-sugar":{"source":"iana","extensions":["xo"]},"application/vnd.oma-scws-config":{"source":"iana"},"application/vnd.oma-scws-http-request":{"source":"iana"},"application/vnd.oma-scws-http-response":{"source":"iana"},"application/vnd.oma.bcast.associated-procedure-parameter+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.drm-trigger+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.imd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.ltkm":{"source":"iana"},"application/vnd.oma.bcast.notification+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.provisioningtrigger":{"source":"iana"},"application/vnd.oma.bcast.sgboot":{"source":"iana"},"application/vnd.oma.bcast.sgdd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sgdu":{"source":"iana"},"application/vnd.oma.bcast.simple-symbol-container":{"source":"iana"},"application/vnd.oma.bcast.smartcard-trigger+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sprov+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.stkm":{"source":"iana"},"application/vnd.oma.cab-address-book+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-feature-handler+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-pcc+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-subs-invite+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-user-prefs+xml":{"source":"iana","compressible":true},"application/vnd.oma.dcd":{"source":"iana"},"application/vnd.oma.dcdc":{"source":"iana"},"application/vnd.oma.dd2+xml":{"source":"iana","compressible":true,"extensions":["dd2"]},"application/vnd.oma.drm.risd+xml":{"source":"iana","compressible":true},"application/vnd.oma.group-usage-list+xml":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+cbor":{"source":"iana"},"application/vnd.oma.lwm2m+json":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+tlv":{"source":"iana"},"application/vnd.oma.pal+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.detailed-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.final-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.groups+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.invocation-descriptor+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.optimized-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.push":{"source":"iana"},"application/vnd.oma.scidm.messages+xml":{"source":"iana","compressible":true},"application/vnd.oma.xcap-directory+xml":{"source":"iana","compressible":true},"application/vnd.omads-email+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-file+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-folder+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omaloc-supl-init":{"source":"iana"},"application/vnd.onepager":{"source":"iana"},"application/vnd.onepagertamp":{"source":"iana"},"application/vnd.onepagertamx":{"source":"iana"},"application/vnd.onepagertat":{"source":"iana"},"application/vnd.onepagertatp":{"source":"iana"},"application/vnd.onepagertatx":{"source":"iana"},"application/vnd.openblox.game+xml":{"source":"iana","compressible":true,"extensions":["obgx"]},"application/vnd.openblox.game-binary":{"source":"iana"},"application/vnd.openeye.oeb":{"source":"iana"},"application/vnd.openofficeorg.extension":{"source":"apache","extensions":["oxt"]},"application/vnd.openstreetmap.data+xml":{"source":"iana","compressible":true,"extensions":["osm"]},"application/vnd.opentimestamps.ots":{"source":"iana"},"application/vnd.openxmlformats-officedocument.custom-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.customxmlproperties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawing+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chart+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramcolors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramdata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramlayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramstyle+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.extended-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.commentauthors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.handoutmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesslide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presentation":{"source":"iana","compressible":false,"extensions":["pptx"]},"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slide":{"source":"iana","extensions":["sldx"]},"application/vnd.openxmlformats-officedocument.presentationml.slide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidelayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidemaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideshow":{"source":"iana","extensions":["ppsx"]},"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideupdateinfo+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tablestyles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tags+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.template":{"source":"iana","extensions":["potx"]},"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.viewprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.calcchain+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.chartsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.dialogsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.externallink+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcachedefinition+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcacherecords+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivottable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.querytable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionheaders+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionlog+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sharedstrings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":{"source":"iana","compressible":false,"extensions":["xlsx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheetmetadata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.tablesinglecells+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.template":{"source":"iana","extensions":["xltx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.usernames+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.volatiledependencies+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.theme+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.themeoverride+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.vmldrawing":{"source":"iana"},"application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document":{"source":"iana","compressible":false,"extensions":["docx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.glossary+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.fonttable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.template":{"source":"iana","extensions":["dotx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.websettings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.core-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.relationships+xml":{"source":"iana","compressible":true},"application/vnd.oracle.resource+json":{"source":"iana","compressible":true},"application/vnd.orange.indata":{"source":"iana"},"application/vnd.osa.netdeploy":{"source":"iana"},"application/vnd.osgeo.mapguide.package":{"source":"iana","extensions":["mgp"]},"application/vnd.osgi.bundle":{"source":"iana"},"application/vnd.osgi.dp":{"source":"iana","extensions":["dp"]},"application/vnd.osgi.subsystem":{"source":"iana","extensions":["esa"]},"application/vnd.otps.ct-kip+xml":{"source":"iana","compressible":true},"application/vnd.oxli.countgraph":{"source":"iana"},"application/vnd.pagerduty+json":{"source":"iana","compressible":true},"application/vnd.palm":{"source":"iana","extensions":["pdb","pqa","oprc"]},"application/vnd.panoply":{"source":"iana"},"application/vnd.paos.xml":{"source":"iana"},"application/vnd.patentdive":{"source":"iana"},"application/vnd.patientecommsdoc":{"source":"iana"},"application/vnd.pawaafile":{"source":"iana","extensions":["paw"]},"application/vnd.pcos":{"source":"iana"},"application/vnd.pg.format":{"source":"iana","extensions":["str"]},"application/vnd.pg.osasli":{"source":"iana","extensions":["ei6"]},"application/vnd.piaccess.application-licence":{"source":"iana"},"application/vnd.picsel":{"source":"iana","extensions":["efif"]},"application/vnd.pmi.widget":{"source":"iana","extensions":["wg"]},"application/vnd.poc.group-advertisement+xml":{"source":"iana","compressible":true},"application/vnd.pocketlearn":{"source":"iana","extensions":["plf"]},"application/vnd.powerbuilder6":{"source":"iana","extensions":["pbd"]},"application/vnd.powerbuilder6-s":{"source":"iana"},"application/vnd.powerbuilder7":{"source":"iana"},"application/vnd.powerbuilder7-s":{"source":"iana"},"application/vnd.powerbuilder75":{"source":"iana"},"application/vnd.powerbuilder75-s":{"source":"iana"},"application/vnd.preminet":{"source":"iana"},"application/vnd.previewsystems.box":{"source":"iana","extensions":["box"]},"application/vnd.proteus.magazine":{"source":"iana","extensions":["mgz"]},"application/vnd.psfs":{"source":"iana"},"application/vnd.publishare-delta-tree":{"source":"iana","extensions":["qps"]},"application/vnd.pvi.ptid1":{"source":"iana","extensions":["ptid"]},"application/vnd.pwg-multiplexed":{"source":"iana"},"application/vnd.pwg-xhtml-print+xml":{"source":"iana","compressible":true},"application/vnd.qualcomm.brew-app-res":{"source":"iana"},"application/vnd.quarantainenet":{"source":"iana"},"application/vnd.quark.quarkxpress":{"source":"iana","extensions":["qxd","qxt","qwd","qwt","qxl","qxb"]},"application/vnd.quobject-quoxdocument":{"source":"iana"},"application/vnd.radisys.moml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conn+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-stream+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-base+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-detect+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-sendrecv+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-group+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-speech+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-transform+xml":{"source":"iana","compressible":true},"application/vnd.rainstor.data":{"source":"iana"},"application/vnd.rapid":{"source":"iana"},"application/vnd.rar":{"source":"iana","extensions":["rar"]},"application/vnd.realvnc.bed":{"source":"iana","extensions":["bed"]},"application/vnd.recordare.musicxml":{"source":"iana","extensions":["mxl"]},"application/vnd.recordare.musicxml+xml":{"source":"iana","compressible":true,"extensions":["musicxml"]},"application/vnd.renlearn.rlprint":{"source":"iana"},"application/vnd.resilient.logic":{"source":"iana"},"application/vnd.restful+json":{"source":"iana","compressible":true},"application/vnd.rig.cryptonote":{"source":"iana","extensions":["cryptonote"]},"application/vnd.rim.cod":{"source":"apache","extensions":["cod"]},"application/vnd.rn-realmedia":{"source":"apache","extensions":["rm"]},"application/vnd.rn-realmedia-vbr":{"source":"apache","extensions":["rmvb"]},"application/vnd.route66.link66+xml":{"source":"iana","compressible":true,"extensions":["link66"]},"application/vnd.rs-274x":{"source":"iana"},"application/vnd.ruckus.download":{"source":"iana"},"application/vnd.s3sms":{"source":"iana"},"application/vnd.sailingtracker.track":{"source":"iana","extensions":["st"]},"application/vnd.sar":{"source":"iana"},"application/vnd.sbm.cid":{"source":"iana"},"application/vnd.sbm.mid2":{"source":"iana"},"application/vnd.scribus":{"source":"iana"},"application/vnd.sealed.3df":{"source":"iana"},"application/vnd.sealed.csf":{"source":"iana"},"application/vnd.sealed.doc":{"source":"iana"},"application/vnd.sealed.eml":{"source":"iana"},"application/vnd.sealed.mht":{"source":"iana"},"application/vnd.sealed.net":{"source":"iana"},"application/vnd.sealed.ppt":{"source":"iana"},"application/vnd.sealed.tiff":{"source":"iana"},"application/vnd.sealed.xls":{"source":"iana"},"application/vnd.sealedmedia.softseal.html":{"source":"iana"},"application/vnd.sealedmedia.softseal.pdf":{"source":"iana"},"application/vnd.seemail":{"source":"iana","extensions":["see"]},"application/vnd.seis+json":{"source":"iana","compressible":true},"application/vnd.sema":{"source":"iana","extensions":["sema"]},"application/vnd.semd":{"source":"iana","extensions":["semd"]},"application/vnd.semf":{"source":"iana","extensions":["semf"]},"application/vnd.shade-save-file":{"source":"iana"},"application/vnd.shana.informed.formdata":{"source":"iana","extensions":["ifm"]},"application/vnd.shana.informed.formtemplate":{"source":"iana","extensions":["itp"]},"application/vnd.shana.informed.interchange":{"source":"iana","extensions":["iif"]},"application/vnd.shana.informed.package":{"source":"iana","extensions":["ipk"]},"application/vnd.shootproof+json":{"source":"iana","compressible":true},"application/vnd.shopkick+json":{"source":"iana","compressible":true},"application/vnd.shp":{"source":"iana"},"application/vnd.shx":{"source":"iana"},"application/vnd.sigrok.session":{"source":"iana"},"application/vnd.simtech-mindmapper":{"source":"iana","extensions":["twd","twds"]},"application/vnd.siren+json":{"source":"iana","compressible":true},"application/vnd.smaf":{"source":"iana","extensions":["mmf"]},"application/vnd.smart.notebook":{"source":"iana"},"application/vnd.smart.teacher":{"source":"iana","extensions":["teacher"]},"application/vnd.snesdev-page-table":{"source":"iana"},"application/vnd.software602.filler.form+xml":{"source":"iana","compressible":true,"extensions":["fo"]},"application/vnd.software602.filler.form-xml-zip":{"source":"iana"},"application/vnd.solent.sdkm+xml":{"source":"iana","compressible":true,"extensions":["sdkm","sdkd"]},"application/vnd.spotfire.dxp":{"source":"iana","extensions":["dxp"]},"application/vnd.spotfire.sfs":{"source":"iana","extensions":["sfs"]},"application/vnd.sqlite3":{"source":"iana"},"application/vnd.sss-cod":{"source":"iana"},"application/vnd.sss-dtf":{"source":"iana"},"application/vnd.sss-ntf":{"source":"iana"},"application/vnd.stardivision.calc":{"source":"apache","extensions":["sdc"]},"application/vnd.stardivision.draw":{"source":"apache","extensions":["sda"]},"application/vnd.stardivision.impress":{"source":"apache","extensions":["sdd"]},"application/vnd.stardivision.math":{"source":"apache","extensions":["smf"]},"application/vnd.stardivision.writer":{"source":"apache","extensions":["sdw","vor"]},"application/vnd.stardivision.writer-global":{"source":"apache","extensions":["sgl"]},"application/vnd.stepmania.package":{"source":"iana","extensions":["smzip"]},"application/vnd.stepmania.stepchart":{"source":"iana","extensions":["sm"]},"application/vnd.street-stream":{"source":"iana"},"application/vnd.sun.wadl+xml":{"source":"iana","compressible":true,"extensions":["wadl"]},"application/vnd.sun.xml.calc":{"source":"apache","extensions":["sxc"]},"application/vnd.sun.xml.calc.template":{"source":"apache","extensions":["stc"]},"application/vnd.sun.xml.draw":{"source":"apache","extensions":["sxd"]},"application/vnd.sun.xml.draw.template":{"source":"apache","extensions":["std"]},"application/vnd.sun.xml.impress":{"source":"apache","extensions":["sxi"]},"application/vnd.sun.xml.impress.template":{"source":"apache","extensions":["sti"]},"application/vnd.sun.xml.math":{"source":"apache","extensions":["sxm"]},"application/vnd.sun.xml.writer":{"source":"apache","extensions":["sxw"]},"application/vnd.sun.xml.writer.global":{"source":"apache","extensions":["sxg"]},"application/vnd.sun.xml.writer.template":{"source":"apache","extensions":["stw"]},"application/vnd.sus-calendar":{"source":"iana","extensions":["sus","susp"]},"application/vnd.svd":{"source":"iana","extensions":["svd"]},"application/vnd.swiftview-ics":{"source":"iana"},"application/vnd.sycle+xml":{"source":"iana","compressible":true},"application/vnd.syft+json":{"source":"iana","compressible":true},"application/vnd.symbian.install":{"source":"apache","extensions":["sis","sisx"]},"application/vnd.syncml+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xsm"]},"application/vnd.syncml.dm+wbxml":{"source":"iana","charset":"UTF-8","extensions":["bdm"]},"application/vnd.syncml.dm+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xdm"]},"application/vnd.syncml.dm.notification":{"source":"iana"},"application/vnd.syncml.dmddf+wbxml":{"source":"iana"},"application/vnd.syncml.dmddf+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["ddf"]},"application/vnd.syncml.dmtnds+wbxml":{"source":"iana"},"application/vnd.syncml.dmtnds+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.syncml.ds.notification":{"source":"iana"},"application/vnd.tableschema+json":{"source":"iana","compressible":true},"application/vnd.tao.intent-module-archive":{"source":"iana","extensions":["tao"]},"application/vnd.tcpdump.pcap":{"source":"iana","extensions":["pcap","cap","dmp"]},"application/vnd.think-cell.ppttc+json":{"source":"iana","compressible":true},"application/vnd.tmd.mediaflex.api+xml":{"source":"iana","compressible":true},"application/vnd.tml":{"source":"iana"},"application/vnd.tmobile-livetv":{"source":"iana","extensions":["tmo"]},"application/vnd.tri.onesource":{"source":"iana"},"application/vnd.trid.tpt":{"source":"iana","extensions":["tpt"]},"application/vnd.triscape.mxs":{"source":"iana","extensions":["mxs"]},"application/vnd.trueapp":{"source":"iana","extensions":["tra"]},"application/vnd.truedoc":{"source":"iana"},"application/vnd.ubisoft.webplayer":{"source":"iana"},"application/vnd.ufdl":{"source":"iana","extensions":["ufd","ufdl"]},"application/vnd.uiq.theme":{"source":"iana","extensions":["utz"]},"application/vnd.umajin":{"source":"iana","extensions":["umj"]},"application/vnd.unity":{"source":"iana","extensions":["unityweb"]},"application/vnd.uoml+xml":{"source":"iana","compressible":true,"extensions":["uoml"]},"application/vnd.uplanet.alert":{"source":"iana"},"application/vnd.uplanet.alert-wbxml":{"source":"iana"},"application/vnd.uplanet.bearer-choice":{"source":"iana"},"application/vnd.uplanet.bearer-choice-wbxml":{"source":"iana"},"application/vnd.uplanet.cacheop":{"source":"iana"},"application/vnd.uplanet.cacheop-wbxml":{"source":"iana"},"application/vnd.uplanet.channel":{"source":"iana"},"application/vnd.uplanet.channel-wbxml":{"source":"iana"},"application/vnd.uplanet.list":{"source":"iana"},"application/vnd.uplanet.list-wbxml":{"source":"iana"},"application/vnd.uplanet.listcmd":{"source":"iana"},"application/vnd.uplanet.listcmd-wbxml":{"source":"iana"},"application/vnd.uplanet.signal":{"source":"iana"},"application/vnd.uri-map":{"source":"iana"},"application/vnd.valve.source.material":{"source":"iana"},"application/vnd.vcx":{"source":"iana","extensions":["vcx"]},"application/vnd.vd-study":{"source":"iana"},"application/vnd.vectorworks":{"source":"iana"},"application/vnd.vel+json":{"source":"iana","compressible":true},"application/vnd.verimatrix.vcas":{"source":"iana"},"application/vnd.veritone.aion+json":{"source":"iana","compressible":true},"application/vnd.veryant.thin":{"source":"iana"},"application/vnd.ves.encrypted":{"source":"iana"},"application/vnd.vidsoft.vidconference":{"source":"iana"},"application/vnd.visio":{"source":"iana","extensions":["vsd","vst","vss","vsw"]},"application/vnd.visionary":{"source":"iana","extensions":["vis"]},"application/vnd.vividence.scriptfile":{"source":"iana"},"application/vnd.vsf":{"source":"iana","extensions":["vsf"]},"application/vnd.wap.sic":{"source":"iana"},"application/vnd.wap.slc":{"source":"iana"},"application/vnd.wap.wbxml":{"source":"iana","charset":"UTF-8","extensions":["wbxml"]},"application/vnd.wap.wmlc":{"source":"iana","extensions":["wmlc"]},"application/vnd.wap.wmlscriptc":{"source":"iana","extensions":["wmlsc"]},"application/vnd.webturbo":{"source":"iana","extensions":["wtb"]},"application/vnd.wfa.dpp":{"source":"iana"},"application/vnd.wfa.p2p":{"source":"iana"},"application/vnd.wfa.wsc":{"source":"iana"},"application/vnd.windows.devicepairing":{"source":"iana"},"application/vnd.wmc":{"source":"iana"},"application/vnd.wmf.bootstrap":{"source":"iana"},"application/vnd.wolfram.mathematica":{"source":"iana"},"application/vnd.wolfram.mathematica.package":{"source":"iana"},"application/vnd.wolfram.player":{"source":"iana","extensions":["nbp"]},"application/vnd.wordperfect":{"source":"iana","extensions":["wpd"]},"application/vnd.wqd":{"source":"iana","extensions":["wqd"]},"application/vnd.wrq-hp3000-labelled":{"source":"iana"},"application/vnd.wt.stf":{"source":"iana","extensions":["stf"]},"application/vnd.wv.csp+wbxml":{"source":"iana"},"application/vnd.wv.csp+xml":{"source":"iana","compressible":true},"application/vnd.wv.ssp+xml":{"source":"iana","compressible":true},"application/vnd.xacml+json":{"source":"iana","compressible":true},"application/vnd.xara":{"source":"iana","extensions":["xar"]},"application/vnd.xfdl":{"source":"iana","extensions":["xfdl"]},"application/vnd.xfdl.webform":{"source":"iana"},"application/vnd.xmi+xml":{"source":"iana","compressible":true},"application/vnd.xmpie.cpkg":{"source":"iana"},"application/vnd.xmpie.dpkg":{"source":"iana"},"application/vnd.xmpie.plan":{"source":"iana"},"application/vnd.xmpie.ppkg":{"source":"iana"},"application/vnd.xmpie.xlim":{"source":"iana"},"application/vnd.yamaha.hv-dic":{"source":"iana","extensions":["hvd"]},"application/vnd.yamaha.hv-script":{"source":"iana","extensions":["hvs"]},"application/vnd.yamaha.hv-voice":{"source":"iana","extensions":["hvp"]},"application/vnd.yamaha.openscoreformat":{"source":"iana","extensions":["osf"]},"application/vnd.yamaha.openscoreformat.osfpvg+xml":{"source":"iana","compressible":true,"extensions":["osfpvg"]},"application/vnd.yamaha.remote-setup":{"source":"iana"},"application/vnd.yamaha.smaf-audio":{"source":"iana","extensions":["saf"]},"application/vnd.yamaha.smaf-phrase":{"source":"iana","extensions":["spf"]},"application/vnd.yamaha.through-ngn":{"source":"iana"},"application/vnd.yamaha.tunnel-udpencap":{"source":"iana"},"application/vnd.yaoweme":{"source":"iana"},"application/vnd.yellowriver-custom-menu":{"source":"iana","extensions":["cmp"]},"application/vnd.youtube.yt":{"source":"iana"},"application/vnd.zul":{"source":"iana","extensions":["zir","zirz"]},"application/vnd.zzazz.deck+xml":{"source":"iana","compressible":true,"extensions":["zaz"]},"application/voicexml+xml":{"source":"iana","compressible":true,"extensions":["vxml"]},"application/voucher-cms+json":{"source":"iana","compressible":true},"application/vq-rtcpxr":{"source":"iana"},"application/wasm":{"source":"iana","compressible":true,"extensions":["wasm"]},"application/watcherinfo+xml":{"source":"iana","compressible":true,"extensions":["wif"]},"application/webpush-options+json":{"source":"iana","compressible":true},"application/whoispp-query":{"source":"iana"},"application/whoispp-response":{"source":"iana"},"application/widget":{"source":"iana","extensions":["wgt"]},"application/winhlp":{"source":"apache","extensions":["hlp"]},"application/wita":{"source":"iana"},"application/wordperfect5.1":{"source":"iana"},"application/wsdl+xml":{"source":"iana","compressible":true,"extensions":["wsdl"]},"application/wspolicy+xml":{"source":"iana","compressible":true,"extensions":["wspolicy"]},"application/x-7z-compressed":{"source":"apache","compressible":false,"extensions":["7z"]},"application/x-abiword":{"source":"apache","extensions":["abw"]},"application/x-ace-compressed":{"source":"apache","extensions":["ace"]},"application/x-amf":{"source":"apache"},"application/x-apple-diskimage":{"source":"apache","extensions":["dmg"]},"application/x-arj":{"compressible":false,"extensions":["arj"]},"application/x-authorware-bin":{"source":"apache","extensions":["aab","x32","u32","vox"]},"application/x-authorware-map":{"source":"apache","extensions":["aam"]},"application/x-authorware-seg":{"source":"apache","extensions":["aas"]},"application/x-bcpio":{"source":"apache","extensions":["bcpio"]},"application/x-bdoc":{"compressible":false,"extensions":["bdoc"]},"application/x-bittorrent":{"source":"apache","extensions":["torrent"]},"application/x-blorb":{"source":"apache","extensions":["blb","blorb"]},"application/x-bzip":{"source":"apache","compressible":false,"extensions":["bz"]},"application/x-bzip2":{"source":"apache","compressible":false,"extensions":["bz2","boz"]},"application/x-cbr":{"source":"apache","extensions":["cbr","cba","cbt","cbz","cb7"]},"application/x-cdlink":{"source":"apache","extensions":["vcd"]},"application/x-cfs-compressed":{"source":"apache","extensions":["cfs"]},"application/x-chat":{"source":"apache","extensions":["chat"]},"application/x-chess-pgn":{"source":"apache","extensions":["pgn"]},"application/x-chrome-extension":{"extensions":["crx"]},"application/x-cocoa":{"source":"nginx","extensions":["cco"]},"application/x-compress":{"source":"apache"},"application/x-conference":{"source":"apache","extensions":["nsc"]},"application/x-cpio":{"source":"apache","extensions":["cpio"]},"application/x-csh":{"source":"apache","extensions":["csh"]},"application/x-deb":{"compressible":false},"application/x-debian-package":{"source":"apache","extensions":["deb","udeb"]},"application/x-dgc-compressed":{"source":"apache","extensions":["dgc"]},"application/x-director":{"source":"apache","extensions":["dir","dcr","dxr","cst","cct","cxt","w3d","fgd","swa"]},"application/x-doom":{"source":"apache","extensions":["wad"]},"application/x-dtbncx+xml":{"source":"apache","compressible":true,"extensions":["ncx"]},"application/x-dtbook+xml":{"source":"apache","compressible":true,"extensions":["dtb"]},"application/x-dtbresource+xml":{"source":"apache","compressible":true,"extensions":["res"]},"application/x-dvi":{"source":"apache","compressible":false,"extensions":["dvi"]},"application/x-envoy":{"source":"apache","extensions":["evy"]},"application/x-eva":{"source":"apache","extensions":["eva"]},"application/x-font-bdf":{"source":"apache","extensions":["bdf"]},"application/x-font-dos":{"source":"apache"},"application/x-font-framemaker":{"source":"apache"},"application/x-font-ghostscript":{"source":"apache","extensions":["gsf"]},"application/x-font-libgrx":{"source":"apache"},"application/x-font-linux-psf":{"source":"apache","extensions":["psf"]},"application/x-font-pcf":{"source":"apache","extensions":["pcf"]},"application/x-font-snf":{"source":"apache","extensions":["snf"]},"application/x-font-speedo":{"source":"apache"},"application/x-font-sunos-news":{"source":"apache"},"application/x-font-type1":{"source":"apache","extensions":["pfa","pfb","pfm","afm"]},"application/x-font-vfont":{"source":"apache"},"application/x-freearc":{"source":"apache","extensions":["arc"]},"application/x-futuresplash":{"source":"apache","extensions":["spl"]},"application/x-gca-compressed":{"source":"apache","extensions":["gca"]},"application/x-glulx":{"source":"apache","extensions":["ulx"]},"application/x-gnumeric":{"source":"apache","extensions":["gnumeric"]},"application/x-gramps-xml":{"source":"apache","extensions":["gramps"]},"application/x-gtar":{"source":"apache","extensions":["gtar"]},"application/x-gzip":{"source":"apache"},"application/x-hdf":{"source":"apache","extensions":["hdf"]},"application/x-httpd-php":{"compressible":true,"extensions":["php"]},"application/x-install-instructions":{"source":"apache","extensions":["install"]},"application/x-iso9660-image":{"source":"apache","extensions":["iso"]},"application/x-iwork-keynote-sffkey":{"extensions":["key"]},"application/x-iwork-numbers-sffnumbers":{"extensions":["numbers"]},"application/x-iwork-pages-sffpages":{"extensions":["pages"]},"application/x-java-archive-diff":{"source":"nginx","extensions":["jardiff"]},"application/x-java-jnlp-file":{"source":"apache","compressible":false,"extensions":["jnlp"]},"application/x-javascript":{"compressible":true},"application/x-keepass2":{"extensions":["kdbx"]},"application/x-latex":{"source":"apache","compressible":false,"extensions":["latex"]},"application/x-lua-bytecode":{"extensions":["luac"]},"application/x-lzh-compressed":{"source":"apache","extensions":["lzh","lha"]},"application/x-makeself":{"source":"nginx","extensions":["run"]},"application/x-mie":{"source":"apache","extensions":["mie"]},"application/x-mobipocket-ebook":{"source":"apache","extensions":["prc","mobi"]},"application/x-mpegurl":{"compressible":false},"application/x-ms-application":{"source":"apache","extensions":["application"]},"application/x-ms-shortcut":{"source":"apache","extensions":["lnk"]},"application/x-ms-wmd":{"source":"apache","extensions":["wmd"]},"application/x-ms-wmz":{"source":"apache","extensions":["wmz"]},"application/x-ms-xbap":{"source":"apache","extensions":["xbap"]},"application/x-msaccess":{"source":"apache","extensions":["mdb"]},"application/x-msbinder":{"source":"apache","extensions":["obd"]},"application/x-mscardfile":{"source":"apache","extensions":["crd"]},"application/x-msclip":{"source":"apache","extensions":["clp"]},"application/x-msdos-program":{"extensions":["exe"]},"application/x-msdownload":{"source":"apache","extensions":["exe","dll","com","bat","msi"]},"application/x-msmediaview":{"source":"apache","extensions":["mvb","m13","m14"]},"application/x-msmetafile":{"source":"apache","extensions":["wmf","wmz","emf","emz"]},"application/x-msmoney":{"source":"apache","extensions":["mny"]},"application/x-mspublisher":{"source":"apache","extensions":["pub"]},"application/x-msschedule":{"source":"apache","extensions":["scd"]},"application/x-msterminal":{"source":"apache","extensions":["trm"]},"application/x-mswrite":{"source":"apache","extensions":["wri"]},"application/x-netcdf":{"source":"apache","extensions":["nc","cdf"]},"application/x-ns-proxy-autoconfig":{"compressible":true,"extensions":["pac"]},"application/x-nzb":{"source":"apache","extensions":["nzb"]},"application/x-perl":{"source":"nginx","extensions":["pl","pm"]},"application/x-pilot":{"source":"nginx","extensions":["prc","pdb"]},"application/x-pkcs12":{"source":"apache","compressible":false,"extensions":["p12","pfx"]},"application/x-pkcs7-certificates":{"source":"apache","extensions":["p7b","spc"]},"application/x-pkcs7-certreqresp":{"source":"apache","extensions":["p7r"]},"application/x-pki-message":{"source":"iana"},"application/x-rar-compressed":{"source":"apache","compressible":false,"extensions":["rar"]},"application/x-redhat-package-manager":{"source":"nginx","extensions":["rpm"]},"application/x-research-info-systems":{"source":"apache","extensions":["ris"]},"application/x-sea":{"source":"nginx","extensions":["sea"]},"application/x-sh":{"source":"apache","compressible":true,"extensions":["sh"]},"application/x-shar":{"source":"apache","extensions":["shar"]},"application/x-shockwave-flash":{"source":"apache","compressible":false,"extensions":["swf"]},"application/x-silverlight-app":{"source":"apache","extensions":["xap"]},"application/x-sql":{"source":"apache","extensions":["sql"]},"application/x-stuffit":{"source":"apache","compressible":false,"extensions":["sit"]},"application/x-stuffitx":{"source":"apache","extensions":["sitx"]},"application/x-subrip":{"source":"apache","extensions":["srt"]},"application/x-sv4cpio":{"source":"apache","extensions":["sv4cpio"]},"application/x-sv4crc":{"source":"apache","extensions":["sv4crc"]},"application/x-t3vm-image":{"source":"apache","extensions":["t3"]},"application/x-tads":{"source":"apache","extensions":["gam"]},"application/x-tar":{"source":"apache","compressible":true,"extensions":["tar"]},"application/x-tcl":{"source":"apache","extensions":["tcl","tk"]},"application/x-tex":{"source":"apache","extensions":["tex"]},"application/x-tex-tfm":{"source":"apache","extensions":["tfm"]},"application/x-texinfo":{"source":"apache","extensions":["texinfo","texi"]},"application/x-tgif":{"source":"apache","extensions":["obj"]},"application/x-ustar":{"source":"apache","extensions":["ustar"]},"application/x-virtualbox-hdd":{"compressible":true,"extensions":["hdd"]},"application/x-virtualbox-ova":{"compressible":true,"extensions":["ova"]},"application/x-virtualbox-ovf":{"compressible":true,"extensions":["ovf"]},"application/x-virtualbox-vbox":{"compressible":true,"extensions":["vbox"]},"application/x-virtualbox-vbox-extpack":{"compressible":false,"extensions":["vbox-extpack"]},"application/x-virtualbox-vdi":{"compressible":true,"extensions":["vdi"]},"application/x-virtualbox-vhd":{"compressible":true,"extensions":["vhd"]},"application/x-virtualbox-vmdk":{"compressible":true,"extensions":["vmdk"]},"application/x-wais-source":{"source":"apache","extensions":["src"]},"application/x-web-app-manifest+json":{"compressible":true,"extensions":["webapp"]},"application/x-www-form-urlencoded":{"source":"iana","compressible":true},"application/x-x509-ca-cert":{"source":"iana","extensions":["der","crt","pem"]},"application/x-x509-ca-ra-cert":{"source":"iana"},"application/x-x509-next-ca-cert":{"source":"iana"},"application/x-xfig":{"source":"apache","extensions":["fig"]},"application/x-xliff+xml":{"source":"apache","compressible":true,"extensions":["xlf"]},"application/x-xpinstall":{"source":"apache","compressible":false,"extensions":["xpi"]},"application/x-xz":{"source":"apache","extensions":["xz"]},"application/x-zmachine":{"source":"apache","extensions":["z1","z2","z3","z4","z5","z6","z7","z8"]},"application/x400-bp":{"source":"iana"},"application/xacml+xml":{"source":"iana","compressible":true},"application/xaml+xml":{"source":"apache","compressible":true,"extensions":["xaml"]},"application/xcap-att+xml":{"source":"iana","compressible":true,"extensions":["xav"]},"application/xcap-caps+xml":{"source":"iana","compressible":true,"extensions":["xca"]},"application/xcap-diff+xml":{"source":"iana","compressible":true,"extensions":["xdf"]},"application/xcap-el+xml":{"source":"iana","compressible":true,"extensions":["xel"]},"application/xcap-error+xml":{"source":"iana","compressible":true},"application/xcap-ns+xml":{"source":"iana","compressible":true,"extensions":["xns"]},"application/xcon-conference-info+xml":{"source":"iana","compressible":true},"application/xcon-conference-info-diff+xml":{"source":"iana","compressible":true},"application/xenc+xml":{"source":"iana","compressible":true,"extensions":["xenc"]},"application/xhtml+xml":{"source":"iana","compressible":true,"extensions":["xhtml","xht"]},"application/xhtml-voice+xml":{"source":"apache","compressible":true},"application/xliff+xml":{"source":"iana","compressible":true,"extensions":["xlf"]},"application/xml":{"source":"iana","compressible":true,"extensions":["xml","xsl","xsd","rng"]},"application/xml-dtd":{"source":"iana","compressible":true,"extensions":["dtd"]},"application/xml-external-parsed-entity":{"source":"iana"},"application/xml-patch+xml":{"source":"iana","compressible":true},"application/xmpp+xml":{"source":"iana","compressible":true},"application/xop+xml":{"source":"iana","compressible":true,"extensions":["xop"]},"application/xproc+xml":{"source":"apache","compressible":true,"extensions":["xpl"]},"application/xslt+xml":{"source":"iana","compressible":true,"extensions":["xsl","xslt"]},"application/xspf+xml":{"source":"apache","compressible":true,"extensions":["xspf"]},"application/xv+xml":{"source":"iana","compressible":true,"extensions":["mxml","xhvml","xvml","xvm"]},"application/yang":{"source":"iana","extensions":["yang"]},"application/yang-data+json":{"source":"iana","compressible":true},"application/yang-data+xml":{"source":"iana","compressible":true},"application/yang-patch+json":{"source":"iana","compressible":true},"application/yang-patch+xml":{"source":"iana","compressible":true},"application/yin+xml":{"source":"iana","compressible":true,"extensions":["yin"]},"application/zip":{"source":"iana","compressible":false,"extensions":["zip"]},"application/zlib":{"source":"iana"},"application/zstd":{"source":"iana"},"audio/1d-interleaved-parityfec":{"source":"iana"},"audio/32kadpcm":{"source":"iana"},"audio/3gpp":{"source":"iana","compressible":false,"extensions":["3gpp"]},"audio/3gpp2":{"source":"iana"},"audio/aac":{"source":"iana"},"audio/ac3":{"source":"iana"},"audio/adpcm":{"source":"apache","extensions":["adp"]},"audio/amr":{"source":"iana","extensions":["amr"]},"audio/amr-wb":{"source":"iana"},"audio/amr-wb+":{"source":"iana"},"audio/aptx":{"source":"iana"},"audio/asc":{"source":"iana"},"audio/atrac-advanced-lossless":{"source":"iana"},"audio/atrac-x":{"source":"iana"},"audio/atrac3":{"source":"iana"},"audio/basic":{"source":"iana","compressible":false,"extensions":["au","snd"]},"audio/bv16":{"source":"iana"},"audio/bv32":{"source":"iana"},"audio/clearmode":{"source":"iana"},"audio/cn":{"source":"iana"},"audio/dat12":{"source":"iana"},"audio/dls":{"source":"iana"},"audio/dsr-es201108":{"source":"iana"},"audio/dsr-es202050":{"source":"iana"},"audio/dsr-es202211":{"source":"iana"},"audio/dsr-es202212":{"source":"iana"},"audio/dv":{"source":"iana"},"audio/dvi4":{"source":"iana"},"audio/eac3":{"source":"iana"},"audio/encaprtp":{"source":"iana"},"audio/evrc":{"source":"iana"},"audio/evrc-qcp":{"source":"iana"},"audio/evrc0":{"source":"iana"},"audio/evrc1":{"source":"iana"},"audio/evrcb":{"source":"iana"},"audio/evrcb0":{"source":"iana"},"audio/evrcb1":{"source":"iana"},"audio/evrcnw":{"source":"iana"},"audio/evrcnw0":{"source":"iana"},"audio/evrcnw1":{"source":"iana"},"audio/evrcwb":{"source":"iana"},"audio/evrcwb0":{"source":"iana"},"audio/evrcwb1":{"source":"iana"},"audio/evs":{"source":"iana"},"audio/flexfec":{"source":"iana"},"audio/fwdred":{"source":"iana"},"audio/g711-0":{"source":"iana"},"audio/g719":{"source":"iana"},"audio/g722":{"source":"iana"},"audio/g7221":{"source":"iana"},"audio/g723":{"source":"iana"},"audio/g726-16":{"source":"iana"},"audio/g726-24":{"source":"iana"},"audio/g726-32":{"source":"iana"},"audio/g726-40":{"source":"iana"},"audio/g728":{"source":"iana"},"audio/g729":{"source":"iana"},"audio/g7291":{"source":"iana"},"audio/g729d":{"source":"iana"},"audio/g729e":{"source":"iana"},"audio/gsm":{"source":"iana"},"audio/gsm-efr":{"source":"iana"},"audio/gsm-hr-08":{"source":"iana"},"audio/ilbc":{"source":"iana"},"audio/ip-mr_v2.5":{"source":"iana"},"audio/isac":{"source":"apache"},"audio/l16":{"source":"iana"},"audio/l20":{"source":"iana"},"audio/l24":{"source":"iana","compressible":false},"audio/l8":{"source":"iana"},"audio/lpc":{"source":"iana"},"audio/melp":{"source":"iana"},"audio/melp1200":{"source":"iana"},"audio/melp2400":{"source":"iana"},"audio/melp600":{"source":"iana"},"audio/mhas":{"source":"iana"},"audio/midi":{"source":"apache","extensions":["mid","midi","kar","rmi"]},"audio/mobile-xmf":{"source":"iana","extensions":["mxmf"]},"audio/mp3":{"compressible":false,"extensions":["mp3"]},"audio/mp4":{"source":"iana","compressible":false,"extensions":["m4a","mp4a"]},"audio/mp4a-latm":{"source":"iana"},"audio/mpa":{"source":"iana"},"audio/mpa-robust":{"source":"iana"},"audio/mpeg":{"source":"iana","compressible":false,"extensions":["mpga","mp2","mp2a","mp3","m2a","m3a"]},"audio/mpeg4-generic":{"source":"iana"},"audio/musepack":{"source":"apache"},"audio/ogg":{"source":"iana","compressible":false,"extensions":["oga","ogg","spx","opus"]},"audio/opus":{"source":"iana"},"audio/parityfec":{"source":"iana"},"audio/pcma":{"source":"iana"},"audio/pcma-wb":{"source":"iana"},"audio/pcmu":{"source":"iana"},"audio/pcmu-wb":{"source":"iana"},"audio/prs.sid":{"source":"iana"},"audio/qcelp":{"source":"iana"},"audio/raptorfec":{"source":"iana"},"audio/red":{"source":"iana"},"audio/rtp-enc-aescm128":{"source":"iana"},"audio/rtp-midi":{"source":"iana"},"audio/rtploopback":{"source":"iana"},"audio/rtx":{"source":"iana"},"audio/s3m":{"source":"apache","extensions":["s3m"]},"audio/scip":{"source":"iana"},"audio/silk":{"source":"apache","extensions":["sil"]},"audio/smv":{"source":"iana"},"audio/smv-qcp":{"source":"iana"},"audio/smv0":{"source":"iana"},"audio/sofa":{"source":"iana"},"audio/sp-midi":{"source":"iana"},"audio/speex":{"source":"iana"},"audio/t140c":{"source":"iana"},"audio/t38":{"source":"iana"},"audio/telephone-event":{"source":"iana"},"audio/tetra_acelp":{"source":"iana"},"audio/tetra_acelp_bb":{"source":"iana"},"audio/tone":{"source":"iana"},"audio/tsvcis":{"source":"iana"},"audio/uemclip":{"source":"iana"},"audio/ulpfec":{"source":"iana"},"audio/usac":{"source":"iana"},"audio/vdvi":{"source":"iana"},"audio/vmr-wb":{"source":"iana"},"audio/vnd.3gpp.iufp":{"source":"iana"},"audio/vnd.4sb":{"source":"iana"},"audio/vnd.audiokoz":{"source":"iana"},"audio/vnd.celp":{"source":"iana"},"audio/vnd.cisco.nse":{"source":"iana"},"audio/vnd.cmles.radio-events":{"source":"iana"},"audio/vnd.cns.anp1":{"source":"iana"},"audio/vnd.cns.inf1":{"source":"iana"},"audio/vnd.dece.audio":{"source":"iana","extensions":["uva","uvva"]},"audio/vnd.digital-winds":{"source":"iana","extensions":["eol"]},"audio/vnd.dlna.adts":{"source":"iana"},"audio/vnd.dolby.heaac.1":{"source":"iana"},"audio/vnd.dolby.heaac.2":{"source":"iana"},"audio/vnd.dolby.mlp":{"source":"iana"},"audio/vnd.dolby.mps":{"source":"iana"},"audio/vnd.dolby.pl2":{"source":"iana"},"audio/vnd.dolby.pl2x":{"source":"iana"},"audio/vnd.dolby.pl2z":{"source":"iana"},"audio/vnd.dolby.pulse.1":{"source":"iana"},"audio/vnd.dra":{"source":"iana","extensions":["dra"]},"audio/vnd.dts":{"source":"iana","extensions":["dts"]},"audio/vnd.dts.hd":{"source":"iana","extensions":["dtshd"]},"audio/vnd.dts.uhd":{"source":"iana"},"audio/vnd.dvb.file":{"source":"iana"},"audio/vnd.everad.plj":{"source":"iana"},"audio/vnd.hns.audio":{"source":"iana"},"audio/vnd.lucent.voice":{"source":"iana","extensions":["lvp"]},"audio/vnd.ms-playready.media.pya":{"source":"iana","extensions":["pya"]},"audio/vnd.nokia.mobile-xmf":{"source":"iana"},"audio/vnd.nortel.vbk":{"source":"iana"},"audio/vnd.nuera.ecelp4800":{"source":"iana","extensions":["ecelp4800"]},"audio/vnd.nuera.ecelp7470":{"source":"iana","extensions":["ecelp7470"]},"audio/vnd.nuera.ecelp9600":{"source":"iana","extensions":["ecelp9600"]},"audio/vnd.octel.sbc":{"source":"iana"},"audio/vnd.presonus.multitrack":{"source":"iana"},"audio/vnd.qcelp":{"source":"iana"},"audio/vnd.rhetorex.32kadpcm":{"source":"iana"},"audio/vnd.rip":{"source":"iana","extensions":["rip"]},"audio/vnd.rn-realaudio":{"compressible":false},"audio/vnd.sealedmedia.softseal.mpeg":{"source":"iana"},"audio/vnd.vmx.cvsd":{"source":"iana"},"audio/vnd.wave":{"compressible":false},"audio/vorbis":{"source":"iana","compressible":false},"audio/vorbis-config":{"source":"iana"},"audio/wav":{"compressible":false,"extensions":["wav"]},"audio/wave":{"compressible":false,"extensions":["wav"]},"audio/webm":{"source":"apache","compressible":false,"extensions":["weba"]},"audio/x-aac":{"source":"apache","compressible":false,"extensions":["aac"]},"audio/x-aiff":{"source":"apache","extensions":["aif","aiff","aifc"]},"audio/x-caf":{"source":"apache","compressible":false,"extensions":["caf"]},"audio/x-flac":{"source":"apache","extensions":["flac"]},"audio/x-m4a":{"source":"nginx","extensions":["m4a"]},"audio/x-matroska":{"source":"apache","extensions":["mka"]},"audio/x-mpegurl":{"source":"apache","extensions":["m3u"]},"audio/x-ms-wax":{"source":"apache","extensions":["wax"]},"audio/x-ms-wma":{"source":"apache","extensions":["wma"]},"audio/x-pn-realaudio":{"source":"apache","extensions":["ram","ra"]},"audio/x-pn-realaudio-plugin":{"source":"apache","extensions":["rmp"]},"audio/x-realaudio":{"source":"nginx","extensions":["ra"]},"audio/x-tta":{"source":"apache"},"audio/x-wav":{"source":"apache","extensions":["wav"]},"audio/xm":{"source":"apache","extensions":["xm"]},"chemical/x-cdx":{"source":"apache","extensions":["cdx"]},"chemical/x-cif":{"source":"apache","extensions":["cif"]},"chemical/x-cmdf":{"source":"apache","extensions":["cmdf"]},"chemical/x-cml":{"source":"apache","extensions":["cml"]},"chemical/x-csml":{"source":"apache","extensions":["csml"]},"chemical/x-pdb":{"source":"apache"},"chemical/x-xyz":{"source":"apache","extensions":["xyz"]},"font/collection":{"source":"iana","extensions":["ttc"]},"font/otf":{"source":"iana","compressible":true,"extensions":["otf"]},"font/sfnt":{"source":"iana"},"font/ttf":{"source":"iana","compressible":true,"extensions":["ttf"]},"font/woff":{"source":"iana","extensions":["woff"]},"font/woff2":{"source":"iana","extensions":["woff2"]},"image/aces":{"source":"iana","extensions":["exr"]},"image/apng":{"compressible":false,"extensions":["apng"]},"image/avci":{"source":"iana","extensions":["avci"]},"image/avcs":{"source":"iana","extensions":["avcs"]},"image/avif":{"source":"iana","compressible":false,"extensions":["avif"]},"image/bmp":{"source":"iana","compressible":true,"extensions":["bmp"]},"image/cgm":{"source":"iana","extensions":["cgm"]},"image/dicom-rle":{"source":"iana","extensions":["drle"]},"image/emf":{"source":"iana","extensions":["emf"]},"image/fits":{"source":"iana","extensions":["fits"]},"image/g3fax":{"source":"iana","extensions":["g3"]},"image/gif":{"source":"iana","compressible":false,"extensions":["gif"]},"image/heic":{"source":"iana","extensions":["heic"]},"image/heic-sequence":{"source":"iana","extensions":["heics"]},"image/heif":{"source":"iana","extensions":["heif"]},"image/heif-sequence":{"source":"iana","extensions":["heifs"]},"image/hej2k":{"source":"iana","extensions":["hej2"]},"image/hsj2":{"source":"iana","extensions":["hsj2"]},"image/ief":{"source":"iana","extensions":["ief"]},"image/jls":{"source":"iana","extensions":["jls"]},"image/jp2":{"source":"iana","compressible":false,"extensions":["jp2","jpg2"]},"image/jpeg":{"source":"iana","compressible":false,"extensions":["jpeg","jpg","jpe"]},"image/jph":{"source":"iana","extensions":["jph"]},"image/jphc":{"source":"iana","extensions":["jhc"]},"image/jpm":{"source":"iana","compressible":false,"extensions":["jpm"]},"image/jpx":{"source":"iana","compressible":false,"extensions":["jpx","jpf"]},"image/jxr":{"source":"iana","extensions":["jxr"]},"image/jxra":{"source":"iana","extensions":["jxra"]},"image/jxrs":{"source":"iana","extensions":["jxrs"]},"image/jxs":{"source":"iana","extensions":["jxs"]},"image/jxsc":{"source":"iana","extensions":["jxsc"]},"image/jxsi":{"source":"iana","extensions":["jxsi"]},"image/jxss":{"source":"iana","extensions":["jxss"]},"image/ktx":{"source":"iana","extensions":["ktx"]},"image/ktx2":{"source":"iana","extensions":["ktx2"]},"image/naplps":{"source":"iana"},"image/pjpeg":{"compressible":false},"image/png":{"source":"iana","compressible":false,"extensions":["png"]},"image/prs.btif":{"source":"iana","extensions":["btif"]},"image/prs.pti":{"source":"iana","extensions":["pti"]},"image/pwg-raster":{"source":"iana"},"image/sgi":{"source":"apache","extensions":["sgi"]},"image/svg+xml":{"source":"iana","compressible":true,"extensions":["svg","svgz"]},"image/t38":{"source":"iana","extensions":["t38"]},"image/tiff":{"source":"iana","compressible":false,"extensions":["tif","tiff"]},"image/tiff-fx":{"source":"iana","extensions":["tfx"]},"image/vnd.adobe.photoshop":{"source":"iana","compressible":true,"extensions":["psd"]},"image/vnd.airzip.accelerator.azv":{"source":"iana","extensions":["azv"]},"image/vnd.cns.inf2":{"source":"iana"},"image/vnd.dece.graphic":{"source":"iana","extensions":["uvi","uvvi","uvg","uvvg"]},"image/vnd.djvu":{"source":"iana","extensions":["djvu","djv"]},"image/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"image/vnd.dwg":{"source":"iana","extensions":["dwg"]},"image/vnd.dxf":{"source":"iana","extensions":["dxf"]},"image/vnd.fastbidsheet":{"source":"iana","extensions":["fbs"]},"image/vnd.fpx":{"source":"iana","extensions":["fpx"]},"image/vnd.fst":{"source":"iana","extensions":["fst"]},"image/vnd.fujixerox.edmics-mmr":{"source":"iana","extensions":["mmr"]},"image/vnd.fujixerox.edmics-rlc":{"source":"iana","extensions":["rlc"]},"image/vnd.globalgraphics.pgb":{"source":"iana"},"image/vnd.microsoft.icon":{"source":"iana","compressible":true,"extensions":["ico"]},"image/vnd.mix":{"source":"iana"},"image/vnd.mozilla.apng":{"source":"iana"},"image/vnd.ms-dds":{"compressible":true,"extensions":["dds"]},"image/vnd.ms-modi":{"source":"iana","extensions":["mdi"]},"image/vnd.ms-photo":{"source":"apache","extensions":["wdp"]},"image/vnd.net-fpx":{"source":"iana","extensions":["npx"]},"image/vnd.pco.b16":{"source":"iana","extensions":["b16"]},"image/vnd.radiance":{"source":"iana"},"image/vnd.sealed.png":{"source":"iana"},"image/vnd.sealedmedia.softseal.gif":{"source":"iana"},"image/vnd.sealedmedia.softseal.jpg":{"source":"iana"},"image/vnd.svf":{"source":"iana"},"image/vnd.tencent.tap":{"source":"iana","extensions":["tap"]},"image/vnd.valve.source.texture":{"source":"iana","extensions":["vtf"]},"image/vnd.wap.wbmp":{"source":"iana","extensions":["wbmp"]},"image/vnd.xiff":{"source":"iana","extensions":["xif"]},"image/vnd.zbrush.pcx":{"source":"iana","extensions":["pcx"]},"image/webp":{"source":"apache","extensions":["webp"]},"image/wmf":{"source":"iana","extensions":["wmf"]},"image/x-3ds":{"source":"apache","extensions":["3ds"]},"image/x-cmu-raster":{"source":"apache","extensions":["ras"]},"image/x-cmx":{"source":"apache","extensions":["cmx"]},"image/x-freehand":{"source":"apache","extensions":["fh","fhc","fh4","fh5","fh7"]},"image/x-icon":{"source":"apache","compressible":true,"extensions":["ico"]},"image/x-jng":{"source":"nginx","extensions":["jng"]},"image/x-mrsid-image":{"source":"apache","extensions":["sid"]},"image/x-ms-bmp":{"source":"nginx","compressible":true,"extensions":["bmp"]},"image/x-pcx":{"source":"apache","extensions":["pcx"]},"image/x-pict":{"source":"apache","extensions":["pic","pct"]},"image/x-portable-anymap":{"source":"apache","extensions":["pnm"]},"image/x-portable-bitmap":{"source":"apache","extensions":["pbm"]},"image/x-portable-graymap":{"source":"apache","extensions":["pgm"]},"image/x-portable-pixmap":{"source":"apache","extensions":["ppm"]},"image/x-rgb":{"source":"apache","extensions":["rgb"]},"image/x-tga":{"source":"apache","extensions":["tga"]},"image/x-xbitmap":{"source":"apache","extensions":["xbm"]},"image/x-xcf":{"compressible":false},"image/x-xpixmap":{"source":"apache","extensions":["xpm"]},"image/x-xwindowdump":{"source":"apache","extensions":["xwd"]},"message/cpim":{"source":"iana"},"message/delivery-status":{"source":"iana"},"message/disposition-notification":{"source":"iana","extensions":["disposition-notification"]},"message/external-body":{"source":"iana"},"message/feedback-report":{"source":"iana"},"message/global":{"source":"iana","extensions":["u8msg"]},"message/global-delivery-status":{"source":"iana","extensions":["u8dsn"]},"message/global-disposition-notification":{"source":"iana","extensions":["u8mdn"]},"message/global-headers":{"source":"iana","extensions":["u8hdr"]},"message/http":{"source":"iana","compressible":false},"message/imdn+xml":{"source":"iana","compressible":true},"message/news":{"source":"iana"},"message/partial":{"source":"iana","compressible":false},"message/rfc822":{"source":"iana","compressible":true,"extensions":["eml","mime"]},"message/s-http":{"source":"iana"},"message/sip":{"source":"iana"},"message/sipfrag":{"source":"iana"},"message/tracking-status":{"source":"iana"},"message/vnd.si.simp":{"source":"iana"},"message/vnd.wfa.wsc":{"source":"iana","extensions":["wsc"]},"model/3mf":{"source":"iana","extensions":["3mf"]},"model/e57":{"source":"iana"},"model/gltf+json":{"source":"iana","compressible":true,"extensions":["gltf"]},"model/gltf-binary":{"source":"iana","compressible":true,"extensions":["glb"]},"model/iges":{"source":"iana","compressible":false,"extensions":["igs","iges"]},"model/mesh":{"source":"iana","compressible":false,"extensions":["msh","mesh","silo"]},"model/mtl":{"source":"iana","extensions":["mtl"]},"model/obj":{"source":"iana","extensions":["obj"]},"model/step":{"source":"iana"},"model/step+xml":{"source":"iana","compressible":true,"extensions":["stpx"]},"model/step+zip":{"source":"iana","compressible":false,"extensions":["stpz"]},"model/step-xml+zip":{"source":"iana","compressible":false,"extensions":["stpxz"]},"model/stl":{"source":"iana","extensions":["stl"]},"model/vnd.collada+xml":{"source":"iana","compressible":true,"extensions":["dae"]},"model/vnd.dwf":{"source":"iana","extensions":["dwf"]},"model/vnd.flatland.3dml":{"source":"iana"},"model/vnd.gdl":{"source":"iana","extensions":["gdl"]},"model/vnd.gs-gdl":{"source":"apache"},"model/vnd.gs.gdl":{"source":"iana"},"model/vnd.gtw":{"source":"iana","extensions":["gtw"]},"model/vnd.moml+xml":{"source":"iana","compressible":true},"model/vnd.mts":{"source":"iana","extensions":["mts"]},"model/vnd.opengex":{"source":"iana","extensions":["ogex"]},"model/vnd.parasolid.transmit.binary":{"source":"iana","extensions":["x_b"]},"model/vnd.parasolid.transmit.text":{"source":"iana","extensions":["x_t"]},"model/vnd.pytha.pyox":{"source":"iana"},"model/vnd.rosette.annotated-data-model":{"source":"iana"},"model/vnd.sap.vds":{"source":"iana","extensions":["vds"]},"model/vnd.usdz+zip":{"source":"iana","compressible":false,"extensions":["usdz"]},"model/vnd.valve.source.compiled-map":{"source":"iana","extensions":["bsp"]},"model/vnd.vtu":{"source":"iana","extensions":["vtu"]},"model/vrml":{"source":"iana","compressible":false,"extensions":["wrl","vrml"]},"model/x3d+binary":{"source":"apache","compressible":false,"extensions":["x3db","x3dbz"]},"model/x3d+fastinfoset":{"source":"iana","extensions":["x3db"]},"model/x3d+vrml":{"source":"apache","compressible":false,"extensions":["x3dv","x3dvz"]},"model/x3d+xml":{"source":"iana","compressible":true,"extensions":["x3d","x3dz"]},"model/x3d-vrml":{"source":"iana","extensions":["x3dv"]},"multipart/alternative":{"source":"iana","compressible":false},"multipart/appledouble":{"source":"iana"},"multipart/byteranges":{"source":"iana"},"multipart/digest":{"source":"iana"},"multipart/encrypted":{"source":"iana","compressible":false},"multipart/form-data":{"source":"iana","compressible":false},"multipart/header-set":{"source":"iana"},"multipart/mixed":{"source":"iana"},"multipart/multilingual":{"source":"iana"},"multipart/parallel":{"source":"iana"},"multipart/related":{"source":"iana","compressible":false},"multipart/report":{"source":"iana"},"multipart/signed":{"source":"iana","compressible":false},"multipart/vnd.bint.med-plus":{"source":"iana"},"multipart/voice-message":{"source":"iana"},"multipart/x-mixed-replace":{"source":"iana"},"text/1d-interleaved-parityfec":{"source":"iana"},"text/cache-manifest":{"source":"iana","compressible":true,"extensions":["appcache","manifest"]},"text/calendar":{"source":"iana","extensions":["ics","ifb"]},"text/calender":{"compressible":true},"text/cmd":{"compressible":true},"text/coffeescript":{"extensions":["coffee","litcoffee"]},"text/cql":{"source":"iana"},"text/cql-expression":{"source":"iana"},"text/cql-identifier":{"source":"iana"},"text/css":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["css"]},"text/csv":{"source":"iana","compressible":true,"extensions":["csv"]},"text/csv-schema":{"source":"iana"},"text/directory":{"source":"iana"},"text/dns":{"source":"iana"},"text/ecmascript":{"source":"iana"},"text/encaprtp":{"source":"iana"},"text/enriched":{"source":"iana"},"text/fhirpath":{"source":"iana"},"text/flexfec":{"source":"iana"},"text/fwdred":{"source":"iana"},"text/gff3":{"source":"iana"},"text/grammar-ref-list":{"source":"iana"},"text/html":{"source":"iana","compressible":true,"extensions":["html","htm","shtml"]},"text/jade":{"extensions":["jade"]},"text/javascript":{"source":"iana","compressible":true},"text/jcr-cnd":{"source":"iana"},"text/jsx":{"compressible":true,"extensions":["jsx"]},"text/less":{"compressible":true,"extensions":["less"]},"text/markdown":{"source":"iana","compressible":true,"extensions":["markdown","md"]},"text/mathml":{"source":"nginx","extensions":["mml"]},"text/mdx":{"compressible":true,"extensions":["mdx"]},"text/mizar":{"source":"iana"},"text/n3":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["n3"]},"text/parameters":{"source":"iana","charset":"UTF-8"},"text/parityfec":{"source":"iana"},"text/plain":{"source":"iana","compressible":true,"extensions":["txt","text","conf","def","list","log","in","ini"]},"text/provenance-notation":{"source":"iana","charset":"UTF-8"},"text/prs.fallenstein.rst":{"source":"iana"},"text/prs.lines.tag":{"source":"iana","extensions":["dsc"]},"text/prs.prop.logic":{"source":"iana"},"text/raptorfec":{"source":"iana"},"text/red":{"source":"iana"},"text/rfc822-headers":{"source":"iana"},"text/richtext":{"source":"iana","compressible":true,"extensions":["rtx"]},"text/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"text/rtp-enc-aescm128":{"source":"iana"},"text/rtploopback":{"source":"iana"},"text/rtx":{"source":"iana"},"text/sgml":{"source":"iana","extensions":["sgml","sgm"]},"text/shaclc":{"source":"iana"},"text/shex":{"source":"iana","extensions":["shex"]},"text/slim":{"extensions":["slim","slm"]},"text/spdx":{"source":"iana","extensions":["spdx"]},"text/strings":{"source":"iana"},"text/stylus":{"extensions":["stylus","styl"]},"text/t140":{"source":"iana"},"text/tab-separated-values":{"source":"iana","compressible":true,"extensions":["tsv"]},"text/troff":{"source":"iana","extensions":["t","tr","roff","man","me","ms"]},"text/turtle":{"source":"iana","charset":"UTF-8","extensions":["ttl"]},"text/ulpfec":{"source":"iana"},"text/uri-list":{"source":"iana","compressible":true,"extensions":["uri","uris","urls"]},"text/vcard":{"source":"iana","compressible":true,"extensions":["vcard"]},"text/vnd.a":{"source":"iana"},"text/vnd.abc":{"source":"iana"},"text/vnd.ascii-art":{"source":"iana"},"text/vnd.curl":{"source":"iana","extensions":["curl"]},"text/vnd.curl.dcurl":{"source":"apache","extensions":["dcurl"]},"text/vnd.curl.mcurl":{"source":"apache","extensions":["mcurl"]},"text/vnd.curl.scurl":{"source":"apache","extensions":["scurl"]},"text/vnd.debian.copyright":{"source":"iana","charset":"UTF-8"},"text/vnd.dmclientscript":{"source":"iana"},"text/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"text/vnd.esmertec.theme-descriptor":{"source":"iana","charset":"UTF-8"},"text/vnd.familysearch.gedcom":{"source":"iana","extensions":["ged"]},"text/vnd.ficlab.flt":{"source":"iana"},"text/vnd.fly":{"source":"iana","extensions":["fly"]},"text/vnd.fmi.flexstor":{"source":"iana","extensions":["flx"]},"text/vnd.gml":{"source":"iana"},"text/vnd.graphviz":{"source":"iana","extensions":["gv"]},"text/vnd.hans":{"source":"iana"},"text/vnd.hgl":{"source":"iana"},"text/vnd.in3d.3dml":{"source":"iana","extensions":["3dml"]},"text/vnd.in3d.spot":{"source":"iana","extensions":["spot"]},"text/vnd.iptc.newsml":{"source":"iana"},"text/vnd.iptc.nitf":{"source":"iana"},"text/vnd.latex-z":{"source":"iana"},"text/vnd.motorola.reflex":{"source":"iana"},"text/vnd.ms-mediapackage":{"source":"iana"},"text/vnd.net2phone.commcenter.command":{"source":"iana"},"text/vnd.radisys.msml-basic-layout":{"source":"iana"},"text/vnd.senx.warpscript":{"source":"iana"},"text/vnd.si.uricatalogue":{"source":"iana"},"text/vnd.sosi":{"source":"iana"},"text/vnd.sun.j2me.app-descriptor":{"source":"iana","charset":"UTF-8","extensions":["jad"]},"text/vnd.trolltech.linguist":{"source":"iana","charset":"UTF-8"},"text/vnd.wap.si":{"source":"iana"},"text/vnd.wap.sl":{"source":"iana"},"text/vnd.wap.wml":{"source":"iana","extensions":["wml"]},"text/vnd.wap.wmlscript":{"source":"iana","extensions":["wmls"]},"text/vtt":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["vtt"]},"text/x-asm":{"source":"apache","extensions":["s","asm"]},"text/x-c":{"source":"apache","extensions":["c","cc","cxx","cpp","h","hh","dic"]},"text/x-component":{"source":"nginx","extensions":["htc"]},"text/x-fortran":{"source":"apache","extensions":["f","for","f77","f90"]},"text/x-gwt-rpc":{"compressible":true},"text/x-handlebars-template":{"extensions":["hbs"]},"text/x-java-source":{"source":"apache","extensions":["java"]},"text/x-jquery-tmpl":{"compressible":true},"text/x-lua":{"extensions":["lua"]},"text/x-markdown":{"compressible":true,"extensions":["mkd"]},"text/x-nfo":{"source":"apache","extensions":["nfo"]},"text/x-opml":{"source":"apache","extensions":["opml"]},"text/x-org":{"compressible":true,"extensions":["org"]},"text/x-pascal":{"source":"apache","extensions":["p","pas"]},"text/x-processing":{"compressible":true,"extensions":["pde"]},"text/x-sass":{"extensions":["sass"]},"text/x-scss":{"extensions":["scss"]},"text/x-setext":{"source":"apache","extensions":["etx"]},"text/x-sfv":{"source":"apache","extensions":["sfv"]},"text/x-suse-ymp":{"compressible":true,"extensions":["ymp"]},"text/x-uuencode":{"source":"apache","extensions":["uu"]},"text/x-vcalendar":{"source":"apache","extensions":["vcs"]},"text/x-vcard":{"source":"apache","extensions":["vcf"]},"text/xml":{"source":"iana","compressible":true,"extensions":["xml"]},"text/xml-external-parsed-entity":{"source":"iana"},"text/yaml":{"compressible":true,"extensions":["yaml","yml"]},"video/1d-interleaved-parityfec":{"source":"iana"},"video/3gpp":{"source":"iana","extensions":["3gp","3gpp"]},"video/3gpp-tt":{"source":"iana"},"video/3gpp2":{"source":"iana","extensions":["3g2"]},"video/av1":{"source":"iana"},"video/bmpeg":{"source":"iana"},"video/bt656":{"source":"iana"},"video/celb":{"source":"iana"},"video/dv":{"source":"iana"},"video/encaprtp":{"source":"iana"},"video/ffv1":{"source":"iana"},"video/flexfec":{"source":"iana"},"video/h261":{"source":"iana","extensions":["h261"]},"video/h263":{"source":"iana","extensions":["h263"]},"video/h263-1998":{"source":"iana"},"video/h263-2000":{"source":"iana"},"video/h264":{"source":"iana","extensions":["h264"]},"video/h264-rcdo":{"source":"iana"},"video/h264-svc":{"source":"iana"},"video/h265":{"source":"iana"},"video/iso.segment":{"source":"iana","extensions":["m4s"]},"video/jpeg":{"source":"iana","extensions":["jpgv"]},"video/jpeg2000":{"source":"iana"},"video/jpm":{"source":"apache","extensions":["jpm","jpgm"]},"video/jxsv":{"source":"iana"},"video/mj2":{"source":"iana","extensions":["mj2","mjp2"]},"video/mp1s":{"source":"iana"},"video/mp2p":{"source":"iana"},"video/mp2t":{"source":"iana","extensions":["ts"]},"video/mp4":{"source":"iana","compressible":false,"extensions":["mp4","mp4v","mpg4"]},"video/mp4v-es":{"source":"iana"},"video/mpeg":{"source":"iana","compressible":false,"extensions":["mpeg","mpg","mpe","m1v","m2v"]},"video/mpeg4-generic":{"source":"iana"},"video/mpv":{"source":"iana"},"video/nv":{"source":"iana"},"video/ogg":{"source":"iana","compressible":false,"extensions":["ogv"]},"video/parityfec":{"source":"iana"},"video/pointer":{"source":"iana"},"video/quicktime":{"source":"iana","compressible":false,"extensions":["qt","mov"]},"video/raptorfec":{"source":"iana"},"video/raw":{"source":"iana"},"video/rtp-enc-aescm128":{"source":"iana"},"video/rtploopback":{"source":"iana"},"video/rtx":{"source":"iana"},"video/scip":{"source":"iana"},"video/smpte291":{"source":"iana"},"video/smpte292m":{"source":"iana"},"video/ulpfec":{"source":"iana"},"video/vc1":{"source":"iana"},"video/vc2":{"source":"iana"},"video/vnd.cctv":{"source":"iana"},"video/vnd.dece.hd":{"source":"iana","extensions":["uvh","uvvh"]},"video/vnd.dece.mobile":{"source":"iana","extensions":["uvm","uvvm"]},"video/vnd.dece.mp4":{"source":"iana"},"video/vnd.dece.pd":{"source":"iana","extensions":["uvp","uvvp"]},"video/vnd.dece.sd":{"source":"iana","extensions":["uvs","uvvs"]},"video/vnd.dece.video":{"source":"iana","extensions":["uvv","uvvv"]},"video/vnd.directv.mpeg":{"source":"iana"},"video/vnd.directv.mpeg-tts":{"source":"iana"},"video/vnd.dlna.mpeg-tts":{"source":"iana"},"video/vnd.dvb.file":{"source":"iana","extensions":["dvb"]},"video/vnd.fvt":{"source":"iana","extensions":["fvt"]},"video/vnd.hns.video":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.ttsavc":{"source":"iana"},"video/vnd.iptvforum.ttsmpeg2":{"source":"iana"},"video/vnd.motorola.video":{"source":"iana"},"video/vnd.motorola.videop":{"source":"iana"},"video/vnd.mpegurl":{"source":"iana","extensions":["mxu","m4u"]},"video/vnd.ms-playready.media.pyv":{"source":"iana","extensions":["pyv"]},"video/vnd.nokia.interleaved-multimedia":{"source":"iana"},"video/vnd.nokia.mp4vr":{"source":"iana"},"video/vnd.nokia.videovoip":{"source":"iana"},"video/vnd.objectvideo":{"source":"iana"},"video/vnd.radgamettools.bink":{"source":"iana"},"video/vnd.radgamettools.smacker":{"source":"iana"},"video/vnd.sealed.mpeg1":{"source":"iana"},"video/vnd.sealed.mpeg4":{"source":"iana"},"video/vnd.sealed.swf":{"source":"iana"},"video/vnd.sealedmedia.softseal.mov":{"source":"iana"},"video/vnd.uvvu.mp4":{"source":"iana","extensions":["uvu","uvvu"]},"video/vnd.vivo":{"source":"iana","extensions":["viv"]},"video/vnd.youtube.yt":{"source":"iana"},"video/vp8":{"source":"iana"},"video/vp9":{"source":"iana"},"video/webm":{"source":"apache","compressible":false,"extensions":["webm"]},"video/x-f4v":{"source":"apache","extensions":["f4v"]},"video/x-fli":{"source":"apache","extensions":["fli"]},"video/x-flv":{"source":"apache","compressible":false,"extensions":["flv"]},"video/x-m4v":{"source":"apache","extensions":["m4v"]},"video/x-matroska":{"source":"apache","compressible":false,"extensions":["mkv","mk3d","mks"]},"video/x-mng":{"source":"apache","extensions":["mng"]},"video/x-ms-asf":{"source":"apache","extensions":["asf","asx"]},"video/x-ms-vob":{"source":"apache","extensions":["vob"]},"video/x-ms-wm":{"source":"apache","extensions":["wm"]},"video/x-ms-wmv":{"source":"apache","compressible":false,"extensions":["wmv"]},"video/x-ms-wmx":{"source":"apache","extensions":["wmx"]},"video/x-ms-wvx":{"source":"apache","extensions":["wvx"]},"video/x-msvideo":{"source":"apache","extensions":["avi"]},"video/x-sgi-movie":{"source":"apache","extensions":["movie"]},"video/x-smv":{"source":"apache","extensions":["smv"]},"x-conference/x-cooltalk":{"source":"apache","extensions":["ice"]},"x-shader/x-fragment":{"compressible":true},"x-shader/x-vertex":{"compressible":true}}');
 
 /***/ })
 

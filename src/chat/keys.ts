@@ -68,7 +68,7 @@ export async function getPrivateKey (webId: NamedNode) {
       // delete invalid public key
       if (publicKey) {
         del = [$rdf.st(webId, ns.solid('publicKey'), $rdf.lit(publicKey), store.sym(publicKeyDoc))]
-        debug.log(del)
+        debug.log('delete invalid publicKey ' + del)
       }
       // update new valid key
       const newPublicKey = generatePublicKey(privateKey)
@@ -89,10 +89,10 @@ const deleteKeyAcl = async (keyDoc: string) => {
     // delete READ only keyAclDoc. This is possible if the webId is an owner
     try {
       const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value) // this may fail if webId is not an owner
-      debug.log('delete ' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
+      debug.log('delete keyAcl' + keyAclDoc.value + ' ' + response.status) // should test 404 and 2xx
     } catch (err) {
       if (err.response.status !== 404) { throw new Error(err) }
-      debug.log('delete ' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
+      debug.log('delete keyAcl' + keyAclDoc.value + ' ' + err.response.status) // should test 404 and 2xx
     }
   }
 }

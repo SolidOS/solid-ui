@@ -3,7 +3,6 @@
  * @packageDocumentation
  */
 
-/* global alert confirm */
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { media } from '../media/index'
@@ -24,53 +23,6 @@ const BOOKMARK_ICON = 'noun_45961.svg'
 
 const label = utils.label
 const dom = window.document || null
-
-/** Create a resource if it really does not exist
- *  Be absolutely sure something does not exist before creating a new empty file
- * as otherwise existing could  be deleted.
- * @param doc {NamedNode} - The resource
- */
-function createIfNotExists (doc) {
-  return new Promise(function (resolve, reject) {
-    store.fetcher.load(doc).then(
-      response => {
-        debug.log('createIfNotExists doc exists, all good ' + doc)
-        // store.fetcher.webOperation('HEAD', doc.uri).then(response => {
-        resolve(response)
-      },
-      err => {
-        if (err.response.status === 404) {
-          debug.log(
-            'createIfNotExists doc does NOT exist, will create... ' + doc
-          )
-
-          store.fetcher
-            .webOperation('PUT', doc.uri, {
-              data: '',
-              contentType: 'text/turtle'
-            })
-            .then(
-              response => {
-                // fetcher.requested[doc.uri] = 'done' // do not need to read ??  but no headers
-                delete store.fetcher.requested[doc.uri] // delete cached 404 error
-                debug.log('createIfNotExists doc created ok ' + doc)
-                resolve(response)
-              },
-              err => {
-                debug.log('createIfNotExists doc FAILED: ' + doc + ': ' + err)
-                reject(err)
-              }
-            )
-        } else {
-          debug.log(
-            'createIfNotExists doc load error NOT 404:  ' + doc + ': ' + err
-          )
-          reject(err)
-        }
-      }
-    )
-  })
-}
 
 // @@@@ use the one in rdflib.js when it is avaiable and delete this
 function updatePromise (del, ins) {
@@ -99,7 +51,8 @@ export async function findBookmarkDocument (userContext) {
   if (userContext.instances && userContext.instances.length > 0) {
     userContext.bookmarkDocument = userContext.instances[0]
     if (userContext.instances.length > 1) {
-      alert('More than one bookmark file! ' + userContext.instances)
+      debug.warn('More than one bookmark file! ' + userContext.instances) // @@ todo - deal with > 1
+      // Note: should pick up community bookmarks as well
     }
   } else {
     if (userContext.publicProfile) {
@@ -109,9 +62,9 @@ export async function findBookmarkDocument (userContext) {
       )
       try {
         debug.log('Creating new bookmark file ' + newBookmarkFile)
-        await createIfNotExists(newBookmarkFile)
+        await store.fetcher.createIfNotExists(newBookmarkFile)
       } catch (e) {
-        alert.error("Can't make fresh bookmark file:" + e)
+        debug.warn("Can't make fresh bookmark file:" + e)
         return userContext
       }
       await registerInTypeIndex(
@@ -121,7 +74,7 @@ export async function findBookmarkDocument (userContext) {
       )
       userContext.bookmarkDocument = newBookmarkFile
     } else {
-      alert('You seem to have no bookmark file and not even a profile file.')
+      debug.warn('You seem to have no bookmark file, nor even a profile file!')
     }
   }
   return userContext
@@ -164,7 +117,7 @@ async function addBookmark (context, target) {
     await updatePromise([], ins) // 20190118A
   } catch (e) {
     const msg = 'Making bookmark: ' + e
-    alert.error(msg)
+    debug.warn(msg)
     return null
   }
   return bookmark
@@ -188,7 +141,7 @@ export async function toggleBookmark (userContext, target, bookmarkButton) {
         debug.log('Bookmark deleted: ' + bookmarks[i])
       } catch (e) {
         debug.error('Cant delete bookmark:' + e)
-        alert('Cant delete bookmark:' + e)
+        debug.warn('Cannot delete bookmark:' + e)
       }
     }
   } else {

@@ -1,1 +1,1 @@
-{"version":3,"file":"typings.d.js","names":[],"sources":["../src/typings.d.ts"],"sourcesContent":["declare module '*.sparql' {\n  const content: string\n  export default content\n}\n"],"mappings":""}
+{"version":3,"file":"typings.d.js","names":[],"sources":["../src/typings.d.ts"],"sourcesContent":["declare module '*.sparql' {\n  const content: string\n  export default content\n}\n"],"mappings":"","ignoreList":[]}
