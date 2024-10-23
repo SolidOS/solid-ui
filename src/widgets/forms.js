@@ -823,7 +823,7 @@ field[ns.ui('Choice').uri] = function (
   if (multiSelect) opts.multiSelect = true
 
   // by default searches the dataDoc graph or optionally the full store
-  const dataSource = kb.any(form, ui('search-full-store')).length ? null : dataDoc // optional
+  const dataSource = kb.each(form, ui('search-full-store')).length ? null : dataDoc // optional
 
   let selector
   rhs.refresh = function () {
