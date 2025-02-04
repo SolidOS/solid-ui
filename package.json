@@ -1,6 +1,6 @@
 {
   "name": "solid-ui",
-  "version": "2.4.33",
+  "version": "2.5.0",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -32,7 +32,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/solidos/solid-ui"
+    "url": "git+https://github.com/solidos/solid-ui.git"
   },
   "keywords": [
     "solid",
@@ -55,16 +55,16 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
-    "@noble/curves": "^1.4.0",
+    "@noble/curves": "^1.8.1",
     "acorn": "^7.4.1",
     "escape-html": "^1.0.3",
     "eslint-plugin-n": "^15.7.0",
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
-    "pane-registry": "^2.4.26",
-    "solid-logic": "^3.0.7",
-    "solid-namespace": "^0.5.3",
+    "pane-registry": "^2.4.27",
+    "solid-logic": "^3.0.8",
+    "solid-namespace": "^0.5.4",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
