@@ -45,7 +45,6 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build
-      - run: rm .gitignore
       - uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
@@ -76,7 +75,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v4
         with:
           name: build
       - uses: actions/setup-node@v1
