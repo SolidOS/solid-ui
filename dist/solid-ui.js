@@ -14246,10 +14246,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports.versionInfo = void 0;
 var versionInfo = exports.versionInfo = {
-  buildTime: '2025-02-04T10:46:32Z',
-  commit: 'bbb601441bd7f999fd7b28ba7f06849243532508',
+  buildTime: '2025-02-04T10:47:39Z',
+  commit: '33f09d8e27b878d7c848ad00abd824eb98110e30',
   npmInfo: {
-    'solid-ui': '2.5.0',
+    'solid-ui': '2.5.1',
     npm: '8.19.4',
     node: '18.20.6',
     acorn: '8.13.0',
