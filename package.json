@@ -58,14 +58,13 @@
     "@noble/curves": "^1.8.1",
     "acorn": "^7.4.1",
     "escape-html": "^1.0.3",
-    "eslint-plugin-n": "^15.7.0",
     "i": "^0.3.7",
     "mime-types": "^2.1.35",
     "npm": "^8.19.4",
     "pane-registry": "^2.4.27",
     "solid-logic": "^3.0.8",
     "solid-namespace": "^0.5.4",
-    "uuid": "^8.3.2"
+    "uuid": "^11.0.5"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
@@ -100,6 +99,7 @@
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.31.0",
     "eslint-plugin-jest": "^26.9.0",
+    "eslint-plugin-n": "^16.6.2",
     "eslint-plugin-node": "^11.1.0",
     "eslint-plugin-promise": "^6.6.0",
     "get-random-values": "^2.1.0",
