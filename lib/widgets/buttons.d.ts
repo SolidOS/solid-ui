@@ -133,7 +133,7 @@ export declare function findImage(thing: NamedNode): string;
  * ToDo: Also add icons for *properties* like  home, work, email, range, domain, comment,
  */
 export declare function setImage(element: HTMLElement, thing: NamedNode): void;
-export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLImageElement | HTMLObjectElement;
+export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLObjectElement | HTMLImageElement;
 /**
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?

@@ -8,7 +8,6 @@ export declare const versionInfo: {
         acorn: string;
         ada: string;
         ares: string;
-        base64: string;
         brotli: string;
         cjs_module_lexer: string;
         cldr: string;
