@@ -73,6 +73,10 @@ When you want to test the component within a solid-pane, you can use the [develo
 The following document gives guidance on how to add and perform testing in solid-ui.
 [Testing in solid-ui](https://github.com/SolidOS/solid-ui/blob/18070a02fa8159a2b83d9503ee400f8e046bf1f6/test/unit/README.md)
 
+## Girhub Pages
+
+* The github pages should contain the storybook and further documentation. In order to make sure it is deployed there is a step in the CI (gh-pages). This depends on the previous `build` step. It MUST contain `build-storybook` otherwise the storybook is not being published.
+
 ## Further documentation
 
 - [Some code know-how](https://github.com/SolidOS/solidos/wiki/2.-Solid-UI-know-how)
