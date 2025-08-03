@@ -55,16 +55,16 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
-    "@noble/curves": "^1.8.1",
-    "acorn": "^7.4.1",
+    "@noble/curves": "^1.9.6",
+    "acorn": "^8.15.0",
     "escape-html": "^1.0.3",
     "i": "^0.3.7",
-    "mime-types": "^2.1.35",
-    "npm": "^8.19.4",
-    "pane-registry": "^2.4.27",
-    "solid-logic": "^3.0.8",
+    "mime-types": "^3.0.1",
+    "pane-registry": "file:../pane-registry",
+    "rdflib": "^2.2.37",
+    "solid-logic": "file:../solid-logic",
     "solid-namespace": "^0.5.4",
-    "uuid": "^11.0.5"
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.26.4",
