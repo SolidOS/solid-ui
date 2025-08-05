@@ -7,13 +7,13 @@ window.$rdf = UI.rdf
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
-  var dom = document
+  const kb = UI.store
+  const dom = document
 
-  var uri = window.location.href
-  var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
-  var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
-  var testDoc = $rdf.sym(testDocURI)
+  const uri = window.location.href
+  const base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
+  const testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
+  const testDoc = $rdf.sym(testDocURI)
   // var subject_uri = testDocURI + '#event1'
   // var me_uri = testDocURI + '#a0'
   // var me = kb.sym(me_uri)
@@ -21,32 +21,32 @@ document.addEventListener('DOMContentLoaded', function () {
   //    var forms_uri = window.document.title = base+ 'forms.ttl';
 
   // var subject = kb.sym(subject_uri)
-  var div = dom.getElementById('UITestArea')
+  const div = dom.getElementById('UITestArea')
 
-  var showResults = function () {
-    var prologue = dom.getElementById('Prologue').textContent
+  const showResults = function () {
+    const prologue = dom.getElementById('Prologue').textContent
 
-    var tests = dom.getElementById('TestData').children
-    var inputText = function (tr) {
+    const tests = dom.getElementById('TestData').children
+    const inputText = function (tr) {
       return tr.children[0].children[0].textContent
     }
-    var testClass = function (tr) {
+    const testClass = function (tr) {
       return tr.children[0].getAttribute('class')
     }
-    var output = function (tr) {
+    const output = function (tr) {
       return tr.children[1]
     }
-    var t = 0
+    let t = 0
     try {
       $rdf.parse(prologue + inputText(tests[t]), kb, testDocURI, 'text/turtle') // str, kb, base, contentType
     } catch (e) {
       output(tests[t]).textContent = e
     }
 
-    var options = { dom: dom }
-    var target
+    const options = { dom }
+    let target
 
-    var createFreshWidget = function () {
+    const createFreshWidget = function () {
       target = kb.the(undefined, UI.ns.rdf('type'), UI.ns.ui('Tabs'))
       options.predicate = kb.the(target, UI.ns.ui('predicate'))
       options.subject = kb.the(target, UI.ns.ui('subject'))
@@ -54,7 +54,7 @@ document.addEventListener('DOMContentLoaded', function () {
       options.orientation = kb.the(target, UI.ns.ui('orientation')).value
       options.onClose = function (_event) {} // Test it can make a close button is a good place
       // todo: test both cases
-      var tabs = div.appendChild(UI.tabs.tabWidget(options))
+      const tabs = div.appendChild(UI.tabs.tabWidget(options))
       return tabs
     }
 
@@ -63,7 +63,7 @@ document.addEventListener('DOMContentLoaded', function () {
     // var dataPointForNT = []
     // var doc = testDoc
 
-    var tabContentCache = []
+    const tabContentCache = []
 
     options.renderMain = function (container, subject) {
       container.innerHTML = ''
@@ -72,7 +72,7 @@ document.addEventListener('DOMContentLoaded', function () {
         debug.log('  used cached copy for ' + subject.uri)
         return
       }
-      var iframe = container.appendChild(dom.createElement('iframe'))
+      const iframe = container.appendChild(dom.createElement('iframe'))
       iframe.setAttribute('src', subject.uri)
       iframe.setAttribute(
         'style',
@@ -81,16 +81,16 @@ document.addEventListener('DOMContentLoaded', function () {
       tabContentCache[subject.uri] = iframe
     }
 
-    var tabs = div.appendChild(createFreshWidget())
+    let tabs = div.appendChild(createFreshWidget())
 
-    var agenda = []
+    const agenda = []
 
-    var nextTest = function nextTest () {
+    const nextTest = function nextTest () {
       // First take a copy of the DOM the klast test produced
       output(tests[t]).appendChild(tabs.cloneNode(true))
 
       t += 1
-      var test = tests[t]
+      const test = tests[t]
       if (!test) return
       // var tClass =
       kb.removeMany(undefined, undefined, undefined, testDoc) // Flush out previous test data

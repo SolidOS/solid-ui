@@ -6,7 +6,7 @@ Object.defineProperty(exports, '__esModule', {
 })
 
 class JSDOMEnvironment extends JSDOMEnvironmentBase {
-  constructor(...args) {
+  constructor (...args) {
     const { global } = super(...args)
     global.TextEncoder = TextEncoder
     global.TextDecoder = TextDecoder
@@ -15,4 +15,4 @@ class JSDOMEnvironment extends JSDOMEnvironmentBase {
 }
 
 exports.default = JSDOMEnvironment
-exports.TestEnvironment = JSDOMEnvironment;
+exports.TestEnvironment = JSDOMEnvironment

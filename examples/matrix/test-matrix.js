@@ -6,36 +6,36 @@ window.$rdf = UI.rdf
 document.addEventListener('DOMContentLoaded', function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
-  var dom = document
+  const kb = UI.store
+  const dom = document
 
-  var ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
-  var SCHED = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
-  var DC = $rdf.Namespace('http://purl.org/dc/elements/1.1/')
+  const ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
+  const SCHED = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
+  const DC = $rdf.Namespace('http://purl.org/dc/elements/1.1/')
 
-  var uri = window.location.href
-  var base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
-  var testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
-  var testDoc = $rdf.sym(testDocURI)
-  var subjectURI = testDocURI + '#event1'
-  var meURI = testDocURI + '#a0'
-  var me = kb.sym(meURI)
+  const uri = window.location.href
+  const base = (window.document.title = uri.slice(0, uri.lastIndexOf('/') + 1))
+  const testDocURI = base + 'test.ttl' // imaginary doc - just use its URL
+  const testDoc = $rdf.sym(testDocURI)
+  const subjectURI = testDocURI + '#event1'
+  const meURI = testDocURI + '#a0'
+  const me = kb.sym(meURI)
 
   //    var forms_uri = window.document.title = base+ 'forms.ttl';
 
-  var subject = kb.sym(subjectURI)
-  var div = dom.getElementById('UITestArea')
+  const subject = kb.sym(subjectURI)
+  const div = dom.getElementById('UITestArea')
 
-  var showResults = function () {
+  const showResults = function () {
     //       Now the form for responsing to the poll
     //
 
     // div.appendChild(dom.createElement('hr'))
 
-    var invitation = subject
+    const invitation = subject
 
-    var query = new $rdf.Query('Responses')
-    var v = {}
+    const query = new $rdf.Query('Responses')
+    const v = {}
     ;['time', 'author', 'value', 'resp', 'cell'].map(function (x) {
       query.vars.push((v[x] = $rdf.variable(x)))
     })
@@ -50,24 +50,24 @@ document.addEventListener('DOMContentLoaded', function () {
     @prefix ical:  <http://www.w3.org/2002/12/cal/icaltzd#>.\n\
     @prefix dc:    <http://purl.org/dc/elements/1.1/>.\n";
     */
-    var prologue = dom.getElementById('Prologue').textContent
+    const prologue = dom.getElementById('Prologue').textContent
 
     // var config = dom.getElementById('Config').textContent;
     // $rdf.parse(prologue + config, kb, testDocURI, 'text/turtle') // str, kb, base, contentType
 
-    var tests = dom.getElementById('TestData').children
-    var inputText = function (tr) {
+    const tests = dom.getElementById('TestData').children
+    const inputText = function (tr) {
       return tr.children[0].children[0].textContent
     }
-    var output = function (tr) {
+    const output = function (tr) {
       return tr.children[1]
     }
-    var t = 0
+    let t = 0
     $rdf.parse(prologue + inputText(tests[t]), kb, testDocURI, 'text/turtle') // str, kb, base, contentType
 
-    var options = {}
+    const options = {}
 
-    var setAxes = function () {
+    const setAxes = function () {
       options.set_x = kb.each(subject, SCHED('option')) // @@@@@ option -> dtstart in future
       options.set_x = options.set_x.map(function (opt) {
         return kb.any(opt, ICAL('dtstart'))
@@ -83,8 +83,8 @@ document.addEventListener('DOMContentLoaded', function () {
     // var possibleTimes = kb.each(invitation, SCHED('option'))
     //         .map(function (opt) { return kb.any(opt, ICAL('dtstart')) })
 
-    var displayTheMatrix = function () {
-      var matrix = div.appendChild(
+    const displayTheMatrix = function () {
+      const matrix = div.appendChild(
         UI.matrix.matrixForQuery(
           dom,
           query,
@@ -98,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
       matrix.setAttribute('class', 'matrix')
 
-      var refreshButton = dom.createElement('button')
+      const refreshButton = dom.createElement('button')
       refreshButton.textContent = 'refresh'
       refreshButton.addEventListener(
         'click',
@@ -111,9 +111,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     // @@ Give other combos too-- see schedule ontology
-    var possibleAvailabilities = [SCHED('No'), SCHED('Maybe'), SCHED('Yes')]
+    const possibleAvailabilities = [SCHED('No'), SCHED('Maybe'), SCHED('Yes')]
 
-    var dataPointForNT = []
+    const dataPointForNT = []
 
     // var doc = testDoc
     options.set_y = options.set_y.filter(function (z) {
@@ -122,8 +122,8 @@ document.addEventListener('DOMContentLoaded', function () {
     options.set_y.push(me) // Put me on the end
 
     options.cellFunction = function (cell, x, y, value) {
-      var refreshColor = function () {
-        var bg = kb.any(value, UI.ns.ui('backgroundColor'))
+      const refreshColor = function () {
+        const bg = kb.any(value, UI.ns.ui('backgroundColor'))
         if (bg) {
           cell.setAttribute(
             'style',
@@ -135,13 +135,13 @@ document.addEventListener('DOMContentLoaded', function () {
         refreshColor()
       }
       if (y.sameTerm(me)) {
-        var callback = function () {
+        const callback = function () {
           refreshColor()
         } //  @@ may need that
-        var selectOptions = {}
-        var predicate = SCHED('availabilty')
-        var cellSubject = dataPointForNT[x.toNT()]
-        var selector = UI.widgets.makeSelectForOptions(
+        const selectOptions = {}
+        const predicate = SCHED('availabilty')
+        const cellSubject = dataPointForNT[x.toNT()]
+        const selector = UI.widgets.makeSelectForOptions(
           dom,
           kb,
           cellSubject,
@@ -157,16 +157,16 @@ document.addEventListener('DOMContentLoaded', function () {
       }
     }
 
-    var matrix = displayTheMatrix()
+    const matrix = displayTheMatrix()
 
-    var agenda = []
+    const agenda = []
 
-    var nextTest = function nextTest () {
+    const nextTest = function nextTest () {
       // First take a copy of the DOM the klast test produced
       output(tests[t]).appendChild(matrix.cloneNode(true))
 
       t += 1
-      var test = tests[t]
+      const test = tests[t]
       if (!test) return
 
       kb.removeMany(undefined, undefined, undefined, testDoc) // Flush out previous test data
