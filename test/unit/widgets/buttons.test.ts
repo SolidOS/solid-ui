@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { getByRole } from '@testing-library/dom'
 import userEvent from '@testing-library/user-event'
