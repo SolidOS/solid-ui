@@ -4,8 +4,7 @@ export default {
   addons: [
     '@storybook/addon-links',
     '@storybook/addon-actions',
-    '@storybook/addon-essentials',
-    '@storybook/addon-mdx-gfm'
+    '@storybook/addon-essentials'
   ],
 
   framework: {
