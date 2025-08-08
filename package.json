@@ -78,7 +78,7 @@
     "@babel/runtime": "^7.28.2",
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.32.0",
-    "@mdx-js/react": "^2.3.0",
+    "@mdx-js/react": "^3.1.0",
     "@storybook/addon-actions": "7.6.20",
     "@storybook/addon-docs": "7.6.20",
     "@storybook/addon-essentials": "7.6.20",
