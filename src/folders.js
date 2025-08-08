@@ -14,7 +14,6 @@ import * as widgets from './widgets'
 const UI = { icons, ns, rdf, style, widgets }
 
 export function deleteRecursive (kb, folder) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
       const promises = kb.each(folder, ns.ldp('contains')).map(file => {
@@ -47,7 +46,6 @@ export function deleteRecursive (kb, folder) {
  * @param action - returns a promise.  All the promises must be resolved
  */
 function forAllFiles (folder, kb, action) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
       const promises = kb.each(folder, ns.ldp('contains')).map(file => {

@@ -1,6 +1,6 @@
 import { lit, sym } from 'rdflib'
 import { label } from '../../../src/utils'
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { store } from 'solid-logic'
 
 silenceDebugMessages()

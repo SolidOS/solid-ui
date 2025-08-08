@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { infiniteMessageArea } from '../../../src/chat/infinite'
 import { sym } from 'rdflib'

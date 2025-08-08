@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { cameraCaptureControl, cameraButton } from '../../src/media/media-capture'
 import { graph } from 'rdflib'
@@ -19,7 +19,7 @@ describe('cameraCaptureControl', () => {
         () => {},
         () => {}
       )
-    }).toThrowError('navigator.mediaDevices not available')
+    }).toThrow('navigator.mediaDevices not available')
   })
 })
 

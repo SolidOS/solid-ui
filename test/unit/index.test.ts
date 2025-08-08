@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import * as Index from '../../src/index'
 
 silenceDebugMessages()

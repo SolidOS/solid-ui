@@ -351,7 +351,7 @@ export function findImage (thing: NamedNode): string {
     kb.any(thing, ns.vcard('hasPhoto')) ||
     kb.any(thing, ns.vcard('photo')) ||
     kb.any(thing, ns.foaf('depiction'))
-  return image ? (image as any).uri : null
+  return image ? (image as any).uri : null as any
 }
 
 /**

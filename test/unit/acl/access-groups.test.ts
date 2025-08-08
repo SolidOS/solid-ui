@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'

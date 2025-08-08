@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
 // @ts-ignore

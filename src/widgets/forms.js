@@ -2,7 +2,6 @@
  *
  *      A Vanilla Dom implementation of the form language
  */
-/* eslint-disable multiline-ternary */
 
 /* global alert */
 
@@ -267,7 +266,6 @@ field[ns.ui('Multiple').uri] = function (
       list.elements.push(object)
       await saveListThenRefresh()
     } else {
-      // eslint-disable-next-line multiline-ternary
       const toBeInserted = reverse ? [$rdf.st(object, property, subject, dataDoc)] : [$rdf.st(subject, property, object, dataDoc)]
       try {
         await kb.updater.update([], toBeInserted)

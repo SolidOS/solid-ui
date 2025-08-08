@@ -218,8 +218,7 @@ export function messageArea (dom, kb, subject, messageStore, options) {
       }
     })
 
-    // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele; ) {
+    for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)

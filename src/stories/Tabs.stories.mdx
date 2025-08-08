@@ -1,6 +1,6 @@
 import * as UI from "../../lib";
 
-import { Canvas, Meta, Story, Props } from "@storybook/addon-docs";
+import { Canvas, Meta, Story } from "@storybook/addon-docs";
 import { action } from "@storybook/addon-actions";
 
 <Meta title="Tabs" />
@@ -143,8 +143,6 @@ tabs by coloring the selected tab a bit darker.
   </Story>
 </Canvas>
 
-<Props story="background color" />
-
 ## tabWidget: Option onClose
 
 <Canvas>
@@ -173,7 +171,6 @@ Using option `orientation` we can set how the tabs and body should be positioned
     args={{ orientation: "1" }}
     argTypes={{ orientation: { control: { type: "select", options: ["0", "1", "2", "3"] } } }}
   >
-    >
     {({ orientation }) => {
       const item1 = UI.rdf.namedNode(location.origin + "#item3A");
       const item2 = UI.rdf.namedNode(location.origin + "#item3B");
@@ -187,8 +184,6 @@ Using option `orientation` we can set how the tabs and body should be positioned
     }}
   </Story>
 </Canvas>
-
-<Props story="orientation" />
 
 ## tabWidget: Option renderTab
 

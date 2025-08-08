@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { matrix } from '../../src/matrix'
 import { JSDOM } from 'jsdom'
 

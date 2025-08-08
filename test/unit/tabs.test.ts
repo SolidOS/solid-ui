@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { tabs } from '../../src/index'
 import { tabWidget } from '../../src/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
@@ -123,7 +123,7 @@ describe('tabWidget', () => {
       tabWidgetElement = tabs.tabWidget({ backgroundColor: '#ff0000', ...minimalOptions })
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style['background-color']).toEqual('rgb(178, 0, 0)')
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style.color).toEqual('rgb(255, 255, 255)')
-      expect(tabWidgetElement.bodyContainer.querySelector('main').style['border-color']).toEqual('#b20000')
+      expect(tabWidgetElement.bodyContainer.querySelector('main').style['border-color']).toEqual('rgb(178, 0, 0)')
     })
 
     it('considers lighter colors and set color of text accordingly', () => {

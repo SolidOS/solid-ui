@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../../helpers/setup'
+import { silenceDebugMessages } from '../../helpers/debugger'
 import { namedNode } from 'rdflib'
 import * as ns from '../../../../src/ns'
 import { store } from 'solid-logic'
