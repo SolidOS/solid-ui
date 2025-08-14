@@ -45,6 +45,8 @@ export default defineConfig([
 
       parser: tsParser,
     },
+    
+    files: ["src/**/*.js", "src/**/*.ts", "src/**/*.cjs", "src/**/*.mjs"],
 
     rules: {
       'no-console': 'error',
