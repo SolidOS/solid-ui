@@ -6882,6 +6882,7 @@ https://github.com/solidos/solid
  */
 
 // REMOVE @ts-ignore as you migrate files to TypeScript
+var _interopRequireDefault = __webpack_require__(/*! @babel/runtime/helpers/interopRequireDefault */ "./node_modules/@babel/runtime/helpers/interopRequireDefault.js");
 var _typeof = __webpack_require__(/*! @babel/runtime/helpers/typeof */ "./node_modules/@babel/runtime/helpers/typeof.js");
 Object.defineProperty(exports, "__esModule", ({
   value: true
@@ -6972,7 +6973,7 @@ exports.utils = exports.tabs = void 0;
 Object.defineProperty(exports, "versionInfo", ({
   enumerable: true,
   get: function get() {
-    return _versionInfo.versionInfo;
+    return _versionInfo["default"];
   }
 }));
 exports.widgets = void 0;
@@ -7008,7 +7009,7 @@ var login = _interopRequireWildcard(__webpack_require__(/*! ./login/login */ "./
 exports.login = login;
 var widgets = _interopRequireWildcard(__webpack_require__(/*! ./widgets/index */ "./lib/widgets/index.js"));
 exports.widgets = widgets;
-var _versionInfo = __webpack_require__(/*! ./versionInfo */ "./lib/versionInfo.js");
+var _versionInfo = _interopRequireDefault(__webpack_require__(/*! ./versionInfo */ "./lib/versionInfo.js"));
 var _header = __webpack_require__(/*! ./header */ "./lib/header/index.js");
 var _footer = __webpack_require__(/*! ./footer */ "./lib/footer/index.js");
 var createTypes = _interopRequireWildcard(__webpack_require__(/*! ./create/types */ "./lib/create/types.js"));
@@ -7056,7 +7057,7 @@ if (typeof window !== 'undefined') {
     tabs: tabs,
     utils: utils,
     widgets: widgets,
-    versionInfo: _versionInfo.versionInfo,
+    versionInfo: _versionInfo["default"],
     initHeader: _header.initHeader,
     initFooter: _footer.initFooter
   }; // Simpler access by non-node scripts
@@ -14216,36 +14217,37 @@ function getWellKnownLabel(thing) {
 Object.defineProperty(exports, "__esModule", ({
   value: true
 }));
-exports.versionInfo = void 0;
-var versionInfo = exports.versionInfo = {
-  buildTime: '2025-08-01T13:19:22Z',
-  commit: 'b39d1ff3b843545d27fe0a23162ce44d2f018ca3',
+exports["default"] = void 0;
+var _default = exports["default"] = {
+  buildTime: '2025-08-19T14:44:01Z',
+  commit: '8f006f2c8823037c9f560a855dabcd1756b5a00c',
   npmInfo: {
-    'solid-ui': '2.5.1',
-    npm: '8.19.4',
-    node: '20.19.4',
-    acorn: '8.14.0',
-    ada: '2.9.2',
-    ares: '1.34.5',
-    brotli: '1.1.0',
-    cjs_module_lexer: '1.4.1',
-    cldr: '47.0',
-    icu: '77.1',
-    llhttp: '9.2.1',
-    modules: '115',
-    napi: '9',
-    nghttp2: '1.61.0',
-    nghttp3: '0.7.0',
-    ngtcp2: '1.1.0',
-    openssl: '3.0.15+quic',
-    simdutf: '6.4.2',
-    tz: '2025b',
-    undici: '6.21.2',
-    unicode: '16.0',
-    uv: '1.46.0',
-    uvwasi: '0.0.21',
-    v8: '11.3.244.8-node.29',
-    zlib: '1.3.0.1-motley-82a5fec'
+    "'solid-ui'": "'2.5.1',",
+    npm: "'8.19.4',",
+    node: "'20.19.4',",
+    acorn: "'8.14.0',",
+    ada: "'2.9.2',",
+    ares: "'1.34.5',",
+    brotli: "'1.1.0',",
+    cjs_module_lexer: "'1.4.1',",
+    cldr: "'47.0',",
+    icu: "'77.1',",
+    llhttp: "'9.2.1',",
+    modules: "'115',",
+    napi: "'9',",
+    nghttp2: "'1.61.0',",
+    nghttp3: "'0.7.0',",
+    ngtcp2: "'1.1.0',",
+    openssl: "'3.0.15+quic',",
+    simdutf: "'6.4.2',",
+    tz: "'2025b',",
+    undici: "'6.21.2',",
+    unicode: "'16.0',",
+    uv: "'1.46.0',",
+    uvwasi: "'0.0.21',",
+    v8: "'11.3.244.8-node.29',",
+    zlib: "'1.3.0.1-motley-82a5fec'",
+    '}': '}'
   }
 };
 //# sourceMappingURL=versionInfo.js.map

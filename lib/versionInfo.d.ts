@@ -1,8 +1,8 @@
-export declare const versionInfo: {
+declare const _default: {
     buildTime: string;
     commit: string;
     npmInfo: {
-        'solid-ui': string;
+        "'solid-ui'": string;
         npm: string;
         node: string;
         acorn: string;
@@ -27,6 +27,8 @@ export declare const versionInfo: {
         uvwasi: string;
         v8: string;
         zlib: string;
+        '}': string;
     };
 };
+export default _default;
 //# sourceMappingURL=versionInfo.d.ts.map

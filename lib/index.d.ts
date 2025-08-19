@@ -27,7 +27,7 @@ import * as tabs from './tabs';
 import * as utils from './utils';
 import * as login from './login/login';
 import * as widgets from './widgets/index';
-import { versionInfo } from './versionInfo';
+import versionInfo from './versionInfo';
 import { initHeader } from './header';
 import { initFooter } from './footer';
 import * as createTypes from './create/types';
