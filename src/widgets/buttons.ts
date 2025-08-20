@@ -351,7 +351,7 @@ export function findImage (thing: NamedNode): string {
     kb.any(thing, ns.vcard('hasPhoto')) ||
     kb.any(thing, ns.vcard('photo')) ||
     kb.any(thing, ns.foaf('depiction'))
-  return image ? (image as any).uri : null
+  return image ? (image as any).uri : null as any
 }
 
 /**
@@ -655,7 +655,6 @@ export function askName (
   predicate?: NamedNode,
   theClass?: NamedNode,
   noun?: string) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))

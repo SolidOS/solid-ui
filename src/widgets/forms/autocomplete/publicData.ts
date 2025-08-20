@@ -3,7 +3,7 @@
 * including filtering resut by natural language etc
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
-/* eslint-disable no-console */
+
 import { Literal, NamedNode, parse } from 'rdflib'
 import { store } from 'solid-logic'
 import * as debug from '../../../debug'
@@ -30,7 +30,8 @@ export interface Binding {
 type Bindings = Binding[]
 
 export type QueryParameters =
-{ label: string;
+{
+  label: string;
   limit?: number;
   logo?: NamedNode;
   searchByNameQuery?: string;

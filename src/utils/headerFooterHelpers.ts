@@ -6,9 +6,9 @@ import { ns } from '..'
 
 /* @ts-ignore  no-console */
 type ThrottleOptions = {
-    leading?: boolean;
-    throttling?: boolean;
-    trailing?: boolean;
+  leading?: boolean;
+  throttling?: boolean;
+  trailing?: boolean;
 }
 
 /**

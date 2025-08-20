@@ -13,7 +13,7 @@ import { originalIconBase } from '../../iconBase'
  * @returns The anchor tag for the subject
  *
  */
-// eslint-disable-next-line complexity
+
 export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
   const anchor = dom.createElement('a')
   anchor.setAttribute('href', subject.uri)
@@ -41,7 +41,7 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
  * @returns The HTML widget created
  *
  */
-// eslint-disable-next-line complexity
+
 export const createLinkForURI = (dom: HTMLDocument, linkDiv: HTMLDivElement, obj: NamedNode) => {
   const iconLink = linkIcon(dom, obj)
   const anchor = linkDiv.appendChild(iconLink)
