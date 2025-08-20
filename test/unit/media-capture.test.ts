@@ -19,7 +19,7 @@ describe('cameraCaptureControl', () => {
         () => {},
         () => {}
       )
-    }).toThrowError('navigator.mediaDevices not available')
+    }).toThrow('navigator.mediaDevices not available')
   })
 })
 
