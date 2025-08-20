@@ -12,7 +12,6 @@
  * You can also use it if you want to just run a mashlib whhich takes its
  * icons seved by other than github.
  */
-/* eslint-disable multiline-ternary */
 
 import { log } from './debug'
 

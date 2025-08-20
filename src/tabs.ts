@@ -25,7 +25,7 @@ type TabWidgetOptions = {
   selectedTab?: NamedNode;
   startEmpty?: boolean;
   subject?: NamedNode;
-};
+}
 
 export class TabWidgetElement extends HTMLElement {
   bodyContainer?: HTMLElement

@@ -655,7 +655,6 @@ export function askName (
   predicate?: NamedNode,
   theClass?: NamedNode,
   noun?: string) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))

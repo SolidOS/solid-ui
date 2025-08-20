@@ -1,6 +1,6 @@
 {
   "name": "solid-ui",
-  "version": "2.5.1",
+  "version": "2.6.0",
   "description": "UI library for writing Solid read-write-web applications",
   "main": "./lib/index.js",
   "types": "./lib/index.d.ts",
@@ -60,9 +60,9 @@
     "escape-html": "^1.0.3",
     "i": "^0.3.7",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.4.27",
+    "pane-registry": "^2.5.0",
     "rdflib": "^2.2.37",
-    "solid-logic": "^3.0.8",
+    "solid-logic": "^3.0.9",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
   },

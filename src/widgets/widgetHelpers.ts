@@ -16,7 +16,7 @@ import {
  *
  * @internal exporting this only for unit tests
  */
-// eslint-disable-next-line complexity
+
 export const wrapDivInATR = (dom: HTMLDocument, div: HTMLDivElement, obj: any) => {
   const tr = dom.createElement('tr')
   const td = tr.appendChild(dom.createElement('td'))
@@ -37,7 +37,7 @@ export const wrapDivInATR = (dom: HTMLDocument, div: HTMLDivElement, obj: any) =
  *
  * @internal exporting this only for unit tests
  */
-// eslint-disable-next-line complexity
+
 export const addClickListenerToElement = (div: HTMLDivElement, onClickFunction: () => void) => {
   div.addEventListener('click', onClickFunction)
 }
@@ -56,7 +56,7 @@ export const addClickListenerToElement = (div: HTMLDivElement, onClickFunction: 
  *
  * @internal exporting this only for unit tests
  */
-// eslint-disable-next-line complexity
+
 export const createImageDiv = (dom: HTMLDocument, div: HTMLDivElement, image: HTMLImageElement | HTMLObjectElement) => {
   const imageDiv = div.appendChild(dom.createElement('div'))
 
