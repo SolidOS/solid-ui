@@ -86,7 +86,7 @@
     "@storybook/html": "7.6.20",
     "@storybook/html-webpack5": "^7.6.20",
     "@testing-library/dom": "^10.4.1",
-    "@testing-library/user-event": "^13.5.0",
+    "@testing-library/user-event": "^14.6.1",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.2.0",
