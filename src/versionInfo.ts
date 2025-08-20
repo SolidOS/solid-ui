@@ -1,9 +1,9 @@
 export default {
-  buildTime: '2025-08-19T14:44:01Z',
-  commit: '8f006f2c8823037c9f560a855dabcd1756b5a00c',
+  buildTime: '2025-08-20T08:13:56Z',
+  commit: 'd661f7772868615e51ce4ff953c1afcf21f83591',
   npmInfo: {
-    "'solid-ui'": "'2.5.1',",
-    npm: "'8.19.4',",
+    "'solid-ui'": "'2.6.0',",
+    npm: "'10.8.2',",
     node: "'20.19.4',",
     acorn: "'8.14.0',",
     ada: "'2.9.2',",
@@ -27,6 +27,6 @@ export default {
     uvwasi: "'0.0.21',",
     v8: "'11.3.244.8-node.29',",
     zlib: "'1.3.0.1-motley-82a5fec'",
-    '}': '}'
+    '}': '}',
   }
 }

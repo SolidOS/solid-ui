@@ -11,7 +11,6 @@ export const utf8Encoder = new TextEncoder()
 export const SEC = 'https://w3id.org/security#' // Proof, VerificationMethod
 // export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey, key
 
-/* eslint-disable no-unused-vars */
 /* export enum Kind {
   Metadata = 0,
   Text = 1,

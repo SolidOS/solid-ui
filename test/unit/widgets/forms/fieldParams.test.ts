@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../../helpers/setup'
+import { silenceDebugMessages } from '../../helpers/debugger'
 import ns from '../../../../src/ns'
 import { fieldParams } from '../../../../src/widgets/forms/fieldParams'
 

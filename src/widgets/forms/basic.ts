@@ -100,7 +100,7 @@ export function fieldStore (subject: NamedNode | BlankNode | Variable, predicate
  *
  * @returns The HTML widget created
  */
-// eslint-disable-next-line complexity
+
 export function basicField (
   dom: HTMLDocument,
   container: HTMLElement | undefined,

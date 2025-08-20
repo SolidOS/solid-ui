@@ -1,12 +1,12 @@
 /** @internal */
 export declare enum LogLevel {
-    Error,
-    Warning,
-    Message,
-    Success,
-    Info,
-    Debug,
-    All
+    Error = 1,
+    Warning = 2,
+    Message = 4,
+    Success = 8,
+    Info = 16,
+    Debug = 32,
+    All = 63
 }
 /**
  * Adds a message to the element with id "status". The messages are prepended with
