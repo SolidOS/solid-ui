@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`autocompleteField adds the autocomplete field to the container, if provided 1`] = `
 <div>
@@ -64,7 +64,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
           type="button"
         >
           <img
@@ -75,7 +75,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
           type="button"
         >
           <img
@@ -86,7 +86,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
           type="button"
         >
           <img
@@ -155,7 +155,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
           type="button"
         >
           <img
@@ -166,7 +166,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
           type="button"
         >
           <img
@@ -177,7 +177,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
           type="button"
         >
           <img
@@ -281,7 +281,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
           type="button"
         >
           <img
@@ -292,7 +292,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
           type="button"
         >
           <img
@@ -303,7 +303,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: .01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
           type="button"
         >
           <img

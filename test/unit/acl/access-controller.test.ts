@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { instantiateAccessController } from '../helpers/instantiateAccessController'
 import { AccessController } from '../../../src/acl/access-controller'
 import { JSDOM } from 'jsdom'

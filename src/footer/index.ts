@@ -14,9 +14,9 @@ const DEFAULT_SOLID_PROJECT_NAME = 'solidproject.org'
   FooterOptions allow for customizing the link and name of the link part of the footer.
   */
 export type FooterOptions = {
-    solidProjectUrl?: string,
-    solidProjectName?: string
-  }
+  solidProjectUrl?: string,
+  solidProjectName?: string
+}
 
 /**
  * Initialize footer component, the footer object returned depends on whether the user is authenticated.

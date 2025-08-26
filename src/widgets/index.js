@@ -9,7 +9,6 @@
  *  Note... For pointers to posssible text-editing code, see
  *  http://stackoverflow.com/questions/6756407/what-contenteditable-editors
  */
-/* eslint-disable no-console */
 
 // Each widget should ideally live in its own file.  In order to break up this
 // monolithic widget index over time, we should add new widgets to the

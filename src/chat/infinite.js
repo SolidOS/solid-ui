@@ -123,7 +123,6 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
-    // eslint-disable-next-line space-in-parens
     for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {

@@ -32,7 +32,7 @@ import { AutocompleteOptions } from './autocompletePicker'
   *
   * @returns The HTML widget created
  */
-// eslint-disable-next-line complexity
+
 export function autocompleteField (
   dom: HTMLDocument,
   container: HTMLElement | undefined,

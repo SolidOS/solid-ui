@@ -25,7 +25,7 @@
  */
 import { PaneDefinition } from 'pane-registry'
 import { BlankNode, NamedNode, st } from 'rdflib'
-// eslint-disable-next-line camelcase
+
 import { Quad_Object } from 'rdflib/lib/tf-types'
 import {
   AppDetails,
@@ -802,7 +802,7 @@ export function selectWorkspace (
       const newWs = widgets.newThing(context.preferencesFile)
       const newData = [
         st(context.me, ns.space('workspace'), newWs, context.preferencesFile),
-        // eslint-disable-next-line camelcase
+
         st(
           newWs,
           ns.space('uriPrefix'),

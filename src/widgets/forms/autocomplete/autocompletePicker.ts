@@ -36,12 +36,12 @@ export type AutocompleteDecoration = {
   deleteButton?: HTMLElement
 }
 export type AutocompleteOptions = {
-     targetClass?: NamedNode,
-     currentObject?: NamedNode,
-     currentName?: Literal,
-     queryParams: QueryParameters,
-     size?: number,
-     permanent?: boolean
+  targetClass?: NamedNode,
+  currentObject?: NamedNode,
+  currentName?: Literal,
+  queryParams: QueryParameters,
+  size?: number,
+  permanent?: boolean
 }
 
 interface Callback1 {

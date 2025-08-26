@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import * as Preferences from '../../src/preferences'
 import { sym } from 'rdflib'

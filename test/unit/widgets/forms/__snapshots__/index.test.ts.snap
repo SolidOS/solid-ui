@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Comment runs 1`] = `
 <div>
@@ -10,7 +10,7 @@ exports[`Comment runs 1`] = `
 
 exports[`Form field runs 1`] = `
 <div
-  style="padding-left: 2em; border: 0.05em solid #888888; border-radius: 0.2em; display: flex; flex-direction: column;"
+  style="padding-left: 2em; border: 0.05em solid rgb(136, 136, 136); border-radius: 0.2em; display: flex; flex-direction: column;"
 />
 `;
 

@@ -101,7 +101,7 @@ export function filterByLanguage (bindings, languagePrefs) {
   const languagePrefs2 = languagePrefs || defaultPreferredLanguages
   languagePrefs2.reverse() // Preferred last
 
-  const slimmed = ([] as Array<Binding>)
+  const slimmed = [] as Array<Binding>
   // console.log(` @@ {languagePrefs2 ${languagePrefs2}`)
   for (const u in uris) { // needs hasOwnProperty ?
     const bindings = uris[u]
