@@ -31,8 +31,8 @@ export async function initFooter (store: LiveStore, options?: FooterOptions) {
   const pod = getPod()
   const podOwner = await getPodOwner(pod, store)
   rebuildFooter(footer, store, pod, podOwner, options)()
-  authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options))
-  authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.events.on("login", rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.events.on("logout", rebuildFooter(footer, store, pod, podOwner, options))
 }
 /**
  * @ignore exporting this only for the unit test

@@ -57,8 +57,8 @@ export async function initHeader (store: IndexedFormula, userMenuList: MenuItems
 
   const pod = getPod()
   rebuildHeader(header, store, pod, userMenuList, options)()
-  authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options))
-  authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options))
+  authSession.events.on("logout", rebuildHeader(header, store, pod, userMenuList, options))
+  authSession.events.on("login", rebuildHeader(header, store, pod, userMenuList, options))
 }
 /**
  * @ignore exporting this only for the unit test
