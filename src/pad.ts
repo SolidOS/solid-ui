@@ -146,7 +146,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const next: any = kb.any(chunk as any, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      log("You can't delete the only line.")
+      log('You can\'t delete the only line.')
       return
     }
 
@@ -192,7 +192,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         }, 1000)
       } else {
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        log("    removePart was deleteing :'" + del)
+        log('    removePart was deleteing :\'' + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response ? (response as any).status : ' [no response field] '
         complain('Error ' + res + ' saving changes: ' + (errorMessage as any).true) // upstream,
@@ -213,9 +213,9 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     updater.update(del, ins as any, function (uri, ok, errorBody) {
       if (!ok) {
         log(
-          "Indent change FAILED '" +
+          'Indent change FAILED \'' +
           newIndent +
-          "' for " +
+          '\' for ' +
           padDoc +
           ': ' +
           errorBody
@@ -329,11 +329,11 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       if (part.lastSent) {
         if (old !== part.lastSent) {
           throw new Error(
-            "Out of order, last sent expected '" +
+            'Out of order, last sent expected \'' +
             old +
-            "' but found '" +
+            '\' but found \'' +
             part.lastSent +
-            "'"
+            '\''
           )
         }
       }
@@ -358,11 +358,11 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           log(
             '    patch FAILED ' +
             (xhr as any).status +
-            " for '" +
+            ' for \'' +
             old +
-            "' -> '" +
+            '\' -> \'' +
             newOne +
-            "': " +
+            '\': ' +
             errorBody
           )
           if ((xhr as any).status === 409) {
@@ -386,7 +386,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         } else {
           clearStatus(true) // upstream
           setPartStyle(part) // synced
-          log("    Patch ok '" + old + "' -> '" + newOne + "' ")
+          log('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ')
 
           if (part.state === 4) {
             //  delete me
@@ -409,7 +409,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
       log(
-        'Input event state ' + part.state + " value '" + part.value + "'"
+        'Input event state ' + part.state + ' value \'' + part.value + '\''
       )
       switch (part.state) {
         case 3: // being deleted
@@ -454,7 +454,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       addListeners(part, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
-      log("Note can't add listeners - not logged in")
+      log('Note can\'t add listeners - not logged in')
     }
     return part
   }

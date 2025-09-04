@@ -1413,7 +1413,7 @@ export function renderTableViewPane (doc, options) {
         span.appendChild(doc.createTextNode(']'))
         return span
       } else {
-        return doc.createTextNode("unknown termtype '" + obj.termType + "'!")
+        return doc.createTextNode('unknown termtype \'' + obj.termType + '\'!')
       }
     }
   }

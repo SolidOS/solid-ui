@@ -56,7 +56,7 @@ export function createControllerInfoBlock (store: LiveStore, user: NamedNode | n
   profileLinkContainer.setAttribute('style', style.footer)
 
   const podLinkPre = document.createElement('span')
-  podLinkPre.innerText = "You're visiting "
+  podLinkPre.innerText = 'You\'re visiting '
 
   const podLink = document.createElement('a')
   podLink.href = pod.uri

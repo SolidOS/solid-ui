@@ -64,7 +64,7 @@ export async function findBookmarkDocument (userContext) {
         debug.log('Creating new bookmark file ' + newBookmarkFile)
         await store.fetcher.createIfNotExists(newBookmarkFile)
       } catch (e) {
-        debug.warn("Can't make fresh bookmark file:" + e)
+        debug.warn('Can\'t make fresh bookmark file:' + e)
         return userContext
       }
       await registerInTypeIndex(

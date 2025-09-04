@@ -129,14 +129,14 @@ export function newThingUI (
                   p.setAttribute('style', 'font-size: 120%;')
                   // Make link to new thing
                   p.innerHTML =
-                    "Your <a target='_blank' href='" +
+                    'Your <a target=\'_blank\' href=\'' +
                     newPaneOptions.newInstance.uri +
-                    "'><b>new " +
+                    '\'><b>new ' +
                     options.noun +
                     '</b></a> is ready to be set up. ' +
-                    "<br/><br/><a target='_blank' href='" +
+                    '<br/><br/><a target=\'_blank\' href=\'' +
                     newPaneOptions.newInstance.uri +
-                    "'>Go to your new " +
+                    '\'>Go to your new ' +
                     options.noun +
                     '.</a>'
                   // selectUI.parentNode.removeChild(selectUI) // Clean up
