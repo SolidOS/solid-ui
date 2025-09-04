@@ -1,15 +1,17 @@
 module.exports = {
-  verbose: true,
-  // https://github.com/paralleldrive/cuid2/issues/44#issuecomment-1531731695
-  testEnvironment: 'jsdom', // had to extend; see https://github.com/jsdom/jsdom/issues/2524
-  testMatch: [
-    '**/?(*.)+(spec|test).[tj]s?(x)'],
-  setupFilesAfterEnv: [
-    './test/helpers/setup.ts'
-  ],
-  transformIgnorePatterns: ['/node_modules/(?!lit-html).+\\.js'],
+  verbose: true, // Uncomment for detailed test output
+  collectCoverage: true,
+  coverageDirectory: 'coverage',
+  testEnvironment: 'jsdom',
   testEnvironmentOptions: {
-    customExportConditions: ['node']
-  }
-
+    customExportConditions: ['node'],
+  },
+  testPathIgnorePatterns: ['/node_modules/', '/dist/'],
+  transform: {
+    '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.js' }],
+  },
+  transformIgnorePatterns: ['/node_modules/(?!lit-html).+\\.js'],
+  setupFilesAfterEnv: ['./test/helpers/setup.ts'],
+  testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
+  roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/__mocks__'],
 }
