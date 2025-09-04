@@ -61,12 +61,12 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: 20.x
-      - uses: rlespinasse/github-slug-action@v3.x
+      - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v1
+      - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
@@ -79,12 +79,12 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: build
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v4
         with:
           node-version: 20.x
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v1
+      - uses: JS-DevTools/npm-publish@v2
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: latest
