@@ -9,7 +9,7 @@
     "dist"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-dev && npm run build-dist && npm run build-storybook",
+    "build": "npm run clean && npm run build-lib && npm run build-types && npm run build-version && npm run build-dev && npm run build-dist && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
     "build-types": "tsc --emitDeclarationOnly",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
@@ -20,7 +20,8 @@
     "clean": "rm -rf lib dist ./Documentation/form-examples/main.js",
     "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "lint": "eslint",
-    "lint-fix": "eslint --fix",
+    "typecheck": "tsc --noEmit",
+    "typecheck:test": "tsc --noEmit -p tsconfig.test.json",
     "jest": "jest --no-coverage",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "test": "npm run build-version && npm run lint && npm run jest",
