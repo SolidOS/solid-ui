@@ -32,7 +32,6 @@ describe('Index', () => {
       'table',
       'tabs',
       'utils',
-      'versionInfo',
       'widgets'
     ])
   })

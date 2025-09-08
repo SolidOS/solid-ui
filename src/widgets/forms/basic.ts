@@ -131,8 +131,9 @@ export function basicField (
   let params = fieldParams[uri]
   if (params === undefined) params = { style: '' } // non-bottom field types can do this
   const paramStyle = params.style || ''
+  const inputStyle = style.textInputStyle + paramStyle
   const field = dom.createElement('input')
-  ;(field as any).style = style.textInputStyle + paramStyle
+  ;(field as any).style = inputStyle
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
@@ -156,7 +157,7 @@ export function basicField (
     /* istanbul ignore next */
     field.value = obj.value || obj.value || ''
   }
-  field.setAttribute('style', style)
+  field.setAttribute('style', inputStyle)
   if (!kb.updater) {
     throw new Error('kb has no updater')
   }
@@ -176,7 +177,7 @@ export function basicField (
       if (params.pattern) {
         field.setAttribute(
           'style',
-          style +
+          inputStyle +
             (field.value.match(params.pattern)
               ? 'color: green;'
               : 'color: red;')
@@ -191,7 +192,7 @@ export function basicField (
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
       field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-      field.setAttribute('style', style + 'color: gray;') // pending
+      field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
       if (params.namedNode) {
@@ -255,7 +256,7 @@ export function basicField (
         // kb.updater.update(ds, is, function (uri, ok, body) {
         if (ok) {
           field.disabled = false
-          field.setAttribute('style', style)
+          field.setAttribute('style', inputStyle)
         } else {
           box.appendChild(errorMessageBlock(dom, body))
         }

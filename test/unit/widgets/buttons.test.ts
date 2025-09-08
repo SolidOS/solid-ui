@@ -44,13 +44,13 @@ import {
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
-import { foaf, rdf, sioc, vcard } from '../../../src/ns'
+import ns from '../../../src/ns'
 // @ts-ignore
 import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from 'solid-logic'
-import * as style from '../../../src/style'
+import { style } from '../../../src/style'
 const { iconBase } = icons
 const store = solidLogicSingleton.store
 
@@ -229,7 +229,7 @@ describe('createNameDiv', () => {
   })
 
   it('uses the name from the obj if no title is given', () => {
-    createNameDiv(dom, element, null, obj)
+    createNameDiv(dom, element, undefined, obj)
     expect(element.children[0].textContent).toEqual('name')
   })
 })
@@ -274,31 +274,31 @@ describe('findImage', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
   it('handles foaf(Agent)', () =>
-    expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
+    expect(findImage(ns.foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
   it('handles rdf(Resource)', () =>
-    expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
+    expect(findImage(ns.rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
   it('handles sioc(avatar)', () => {
-    store.add(subject, sioc('avatar'), imageObject, subject.doc())
+    store.add(subject, ns.sioc('avatar'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles sioc(avatar)', () => {
-    store.add(subject, foaf('img'), imageObject, subject.doc())
+    store.add(subject, ns.foaf('img'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(logo)', () => {
-    store.add(subject, vcard('logo'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('logo'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(hasPhoto)', () => {
-    store.add(subject, vcard('hasPhoto'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('hasPhoto'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(photo)', () => {
-    store.add(subject, vcard('photo'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('photo'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles foaf(depiction)', () => {
-    store.add(subject, foaf('depiction'), imageObject, subject.doc())
+    store.add(subject, ns.foaf('depiction'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('returns null when nothing is found', () => expect(findImage(subject)).toBeNull())
