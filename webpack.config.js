@@ -6,7 +6,7 @@ module.exports = (env, args) => {
   const production = args.mode === 'production'
   return {
     mode: args.mode || 'development',
-    entry: './lib/index.js',
+    entry: './src/index.ts',
     output: {
       path: path.join(__dirname, '/dist/'),
       publicPath: '',
@@ -27,6 +27,7 @@ module.exports = (env, args) => {
       '@trust/webcrypto': 'crypto'
     },
     resolve: {
+      extensions: ['.ts', '.js'],
       fallback: { path: false }
     },
     devServer: {
@@ -35,14 +36,16 @@ module.exports = (env, args) => {
     devtool: 'source-map',
     module: {
       rules: [{
+        test: /\.ts$/,
+        use: 'babel-loader',
+        exclude: /node_modules/
+      }, {
         test: /\.sparql$/i,
         type: 'asset/source'
-      },
-      {
+      }, {
         test: /\.ttl$/i,
         type: 'asset/source'
-      }
-      ]
+      }]
     }
   }
 }

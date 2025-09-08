@@ -39,7 +39,7 @@ https://github.com/solidos/solid
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import * as ns from './ns'
+import ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore
@@ -59,7 +59,7 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import * as style from './style'
+import { style } from './style'
 // @ts-ignore
 import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
@@ -67,7 +67,6 @@ import * as tabs from './tabs'
 import * as utils from './utils'
 import * as login from './login/login'
 import * as widgets from './widgets/index'
-import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
@@ -102,7 +101,6 @@ if (typeof window !== 'undefined') {
     tabs,
     utils,
     widgets,
-    versionInfo,
     initHeader,
     initFooter
   } // Simpler access by non-node scripts
@@ -135,7 +133,6 @@ export {
   tabs,
   utils,
   widgets,
-  versionInfo,
   initHeader,
   initFooter
 }

@@ -1,6 +1,6 @@
 import * as debug from '../../debug'
 import { store } from 'solid-logic'
-import * as ns from '../../ns'
+import ns from '../../ns'
 import { NamedNode } from 'rdflib'
 import { getRootIfPreferencesExist } from './otherHelpers'
 

@@ -4,13 +4,13 @@
 
 /** @module pad
  */
-import * as ns from './ns'
+import ns from './ns'
 import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from './utils'
 import { log } from './debug'
 import { solidLogicSingleton } from 'solid-logic'
-import * as style from './style'
+import { style } from './style'
 export { renderParticipants, participationObject, manageParticipation, recordParticipation } from './participation'
 
 const store = solidLogicSingleton.store

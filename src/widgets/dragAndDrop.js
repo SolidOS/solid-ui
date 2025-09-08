@@ -10,7 +10,7 @@
  */
 import * as debug from '../debug'
 import * as mime from 'mime-types'
-import * as style from '../style'
+import { style } from '../style'
 
 /* global FileReader alert */
 

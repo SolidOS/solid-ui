@@ -6,11 +6,11 @@
 import { icons } from '../iconBase'
 import { store } from 'solid-logic'
 import { media } from '../media/index'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as login from '../login/login'
 import * as pad from '../pad'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../style'
+import { style } from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 

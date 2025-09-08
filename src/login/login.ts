@@ -43,9 +43,9 @@ import {
   WebOperationError
 } from 'solid-logic'
 import * as debug from '../debug'
-import * as style from '../style'
+import { style } from '../style'
 import { alert } from '../log'
-import * as ns from '../ns.js'
+import ns from '../ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from '../utils'
 import * as widgets from '../widgets'

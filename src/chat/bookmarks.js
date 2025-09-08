@@ -6,13 +6,13 @@
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { media } from '../media/index'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../style'
+import { style } from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { store, registerInTypeIndex, authn } from 'solid-logic'
+import { store, createTypeIndexLogic, authn } from 'solid-logic'
 import { findAppInstances } from '../login/login'
 
 const UI = { icons, ns, media, pad, rdf, style, utils, widgets }
@@ -67,7 +67,7 @@ export async function findBookmarkDocument (userContext) {
         debug.warn('Can\'t make fresh bookmark file:' + e)
         return userContext
       }
-      await registerInTypeIndex(
+      await createTypeIndexLogic.registerInTypeIndex(
         newBookmarkFile,
         userContext.index,
         theClass
