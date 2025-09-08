@@ -1,5 +1,5 @@
-const path = require('path');
-const HtmlWebpackPlugin = require('html-webpack-plugin');
+const path = require('path')
+const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 const common = {
   entry: './src/index.ts',
@@ -42,7 +42,7 @@ const common = {
       type: 'asset/source'
     }]
   }
-};
+}
 
 const minified = {
   ...common,
@@ -54,7 +54,7 @@ const minified = {
   optimization: {
     minimize: true
   }
-};
+}
 
 const unminified = {
   ...common,
@@ -66,6 +66,6 @@ const unminified = {
   optimization: {
     minimize: false
   }
-};
+}
 
-module.exports = [minified, unminified];
+module.exports = [minified, unminified]
