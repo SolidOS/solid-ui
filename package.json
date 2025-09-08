@@ -79,7 +79,7 @@
     "@eslint/eslintrc": "^3.3.1",
     "@eslint/js": "^9.32.0",
     "@mdx-js/react": "^3.1.0",
-    "@storybook/addon-actions": "7.6.20",
+    "@storybook/addon-actions": "9.0.8",
     "@storybook/addon-docs": "7.6.20",
     "@storybook/addon-essentials": "7.6.20",
     "@storybook/addon-links": "7.6.20",
