@@ -5,7 +5,7 @@ src/versionInfo.ts
 .idea
 .vscode
 coverage
-Documentation/api
+docs/api
 examples/storybook
 .history/
-Documentation/form-examples/main.js
+docs/form-examples/main.js

@@ -8,8 +8,8 @@ These are HTML5 widgets which connect to a solid store. Building blocks for soli
 Vanilla JS.  Includes large widgets like chat, table, matrix, form fields, and small widgets.
 
 See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) for SolidUI widgets.
-See [Solid-UI API](https://solidos.github.io/solid-ui/Documentation/api/) for SolidUI functions.
-See [Forms introduction](./Documentation/FormsReadme.md) for UI vocabulary implementation.
+See [Solid-UI API](https://solidos.github.io/solid-ui/docs/api/) for SolidUI functions.
+See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation.
 
 Table of content:
 - Getting started(#getting-started)
@@ -36,8 +36,8 @@ Clone this repo, and in the repo root run:
 * `npm install`
 * `npm run build`
 
-This will generate a `dist/` folder containing, among other artifacts, `dist/main.js`.
-Now run `npx serve` and go to http://localhost:3000/Documentation/ with your browser to see some examples.
+This will generate a `dist/` folder containing, among other artifacts, `dist/solid-ui.js`.
+Now run `npx serve` and go to http://localhost:3000/docs/ with your browser to see some examples.
 
 While viewing one of those examples, you can open the web console in your browser and for instance
 try how you can create a button:

@@ -11,7 +11,7 @@ export default [
       '**/*.html',
       '**/*.md',
       '**/*.json',
-      'Documentation/**',
+      'docs/**',
       'node_modules/**',
       'coverage/**',
       'dist/**',
