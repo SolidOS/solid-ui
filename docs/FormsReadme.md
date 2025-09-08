@@ -50,9 +50,9 @@ Run this instruction which will do all that for you.
 ```
 npm run build-form-examples
 ```
-2. Use the newly build solid-ui (called main.js) in your html.
-You need to use the new build main.js:
-* uncommenting the usage of the main.js script; Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/docs/form-examples/structures3.html#L21)
+2. Use the newly build solid-ui (called solid-ui.js) in your html.
+You need to use the new build solid-ui.js:
+* uncommenting the usage of the solid-ui.js script; Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/docs/form-examples/structures3.html#L21)
 * commenting out the mashlib.js usage. Example [here](https://github.com/SolidOS/solid-ui/blob/4f620aea3e91daf5ce9591dd83d3c95c161a44ad/docs/form-examples/structures3.html#L15)
 
 3. Use your own rad data and form
