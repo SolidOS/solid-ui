@@ -69,7 +69,7 @@ document.addEventListener('DOMContentLoaded', function () {
       container.innerHTML = ''
       if (tabContentCache[subject.uri]) {
         container.appendChild(tabContentCache[subject.uri])
-        debug.log('  used cached copy for ' + subject.uri)
+        console.log('  used cached copy for ' + subject.uri)
         return
       }
       const iframe = container.appendChild(dom.createElement('iframe'))
