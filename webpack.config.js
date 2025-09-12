@@ -1,8 +1,8 @@
-import path from 'path';
-import HtmlWebpackPlugin from 'html-webpack-plugin';
-import { fileURLToPath } from 'url';
+import path from 'path'
+import HtmlWebpackPlugin from 'html-webpack-plugin'
+import { fileURLToPath } from 'url'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 const common = {
   entry: './src/index.ts',
@@ -71,4 +71,4 @@ const unminified = {
   }
 }
 
-export default [minified, unminified];
+export default [minified, unminified]

@@ -1,7 +1,7 @@
 {
   "name": "solid-ui",
   "version": "2.6.0",
-  "description": "UI library for writing Solid read-write-web applications",
+  "description": "UI library for Solid applications",
   "main": "dist/solid-ui.js",
   "types": "dist/index.d.ts",
   "files": [
@@ -12,7 +12,7 @@
   "scripts": {
     "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
     "build": "npm run clean && npm run build-types && npm run build-version && npm run build-dist && npm run build-storybook",
-    "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint 'src/versionInfo.ts' --fix",
+    "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-types": "tsc --emitDeclarationOnly",
     "build-dist": "webpack --progress --mode=production",
     "build-form-examples": "npm run build-types && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
@@ -22,7 +22,7 @@
     "test": "jest --no-coverage",
     "test:coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",   
+    "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",
     "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
     "prepublishOnly": "npm run build && npm test && npm run doc",
     "preversion": "npm run lint && npm run typecheck && npm test",
@@ -67,6 +67,7 @@
     "uuid": "^11.1.0"
   },
   "devDependencies": {
+    "@babel/cli": "^7.28.3",
     "@babel/core": "^7.28.3",
     "@babel/plugin-transform-runtime": "^7.28.3",
     "@babel/preset-env": "^7.28.0",
