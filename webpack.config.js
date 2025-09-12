@@ -1,29 +1,43 @@
 import path from 'path'
 import HtmlWebpackPlugin from 'html-webpack-plugin'
-import { fileURLToPath } from 'url'
+import TerserPlugin from 'terser-webpack-plugin'
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const externalsBase = {
+  fs: 'null',
+  'node-fetch': 'fetch',
+  'isomorphic-fetch': 'fetch',
+  xmldom: 'window',
+  'text-encoding': 'TextEncoder',
+  'whatwg-url': 'window',
+  '@trust/webcrypto': 'crypto'
+}
+
+// rdflib externalized
+const externalsWithoutRdflib = {
+  ...externalsBase,
+  rdflib: '$rdf'
+}
+
+// rdflib bundled
+const externalsWithRdflib = {
+  ...externalsBase
+}
 
 const common = {
   entry: './src/index.ts',
   output: {
-    path: path.join(__dirname, '/dist/'),
-    publicPath: '',
-    library: 'solid-ui',
-    libraryTarget: 'umd'
+    path: path.resolve(process.cwd(), 'dist'),
+    library: {
+      name: 'UI',
+      type: 'umd'
+    },
+    globalObject: 'this',
+    iife: true,
+    clean: false
   },
   plugins: [
     new HtmlWebpackPlugin()
   ],
-  externals: {
-    fs: 'null',
-    'node-fetch': 'fetch',
-    'isomorphic-fetch': 'fetch',
-    xmldom: 'window',
-    'text-encoding': 'TextEncoder',
-    'whatwg-url': 'window',
-    '@trust/webcrypto': 'crypto'
-  },
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: { path: false }
@@ -47,6 +61,7 @@ const common = {
   }
 }
 
+// Minified, rdflib external
 const minified = {
   ...common,
   mode: 'production',
@@ -54,11 +69,14 @@ const minified = {
     ...common.output,
     filename: 'solid-ui.min.js'
   },
+  externals: externalsWithRdflib,
   optimization: {
-    minimize: true
+    minimize: true,
+    minimizer: [new TerserPlugin({ extractComments: false })]
   }
 }
 
+// Unminified, rdflib external
 const unminified = {
   ...common,
   mode: 'development',
@@ -66,9 +84,91 @@ const unminified = {
     ...common.output,
     filename: 'solid-ui.js'
   },
+  externals: externalsWithRdflib,
   optimization: {
     minimize: false
   }
 }
 
-export default [minified, unminified]
+// Minified, rdflib bundled
+const minifiedWithRdflib = {
+  ...common,
+  mode: 'production',
+  output: {
+    ...common.output,
+    filename: 'solid-ui.external.min.js'
+  },
+  externals: externalsWithoutRdflib,
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({ extractComments: false })]
+  }
+}
+
+// Unminified, rdflib bundled
+const unminifiedWithRdflib = {
+  ...common,
+  mode: 'development',
+  output: {
+    ...common.output,
+    filename: 'solid-ui.external.js'
+  },
+  externals: externalsWithoutRdflib,
+  optimization: {
+    minimize: false
+  }
+}
+
+// ESM minified, rdflib external
+const esmMinified = {
+  ...common,
+  output: {
+    path: path.resolve(process.cwd(), 'dist'),
+    filename: 'solid-ui.esm..external.min.js',
+    library: {
+      type: 'module'
+    },
+    environment: { module: true },
+    clean: false
+  },
+  externals: externalsWithoutRdflib,
+  experiments: {
+    outputModule: true
+  },
+  mode: 'production',
+  optimization: {
+    minimize: true,
+    minimizer: [new TerserPlugin({ extractComments: false })]
+  }
+}
+
+// ESM unminified, rdflib external
+const esmUnminified = {
+  ...common,
+  output: {
+    path: path.resolve(process.cwd(), 'dist'),
+    filename: 'solid-ui.esm.external.js',
+    library: {
+      type: 'module'
+    },
+    environment: { module: true },
+    clean: false
+  },
+  externals: externalsWithoutRdflib,
+  experiments: {
+    outputModule: true
+  },
+  mode: 'development',
+  optimization: {
+    minimize: false
+  }
+}
+
+export default [
+  minified,
+  unminified,
+  minifiedWithRdflib,
+  unminifiedWithRdflib,
+  esmMinified,
+  esmUnminified
+]
