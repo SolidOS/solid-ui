@@ -1,5 +1,8 @@
-const path = require('path')
-const HtmlWebpackPlugin = require('html-webpack-plugin')
+import path from 'path';
+import HtmlWebpackPlugin from 'html-webpack-plugin';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 const common = {
   entry: './src/index.ts',
@@ -68,4 +71,4 @@ const unminified = {
   }
 }
 
-module.exports = [minified, unminified]
+export default [minified, unminified];
