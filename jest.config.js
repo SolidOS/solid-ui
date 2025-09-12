@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   // verbose: true, // Uncomment for detailed test output
   collectCoverage: true,
   coverageDirectory: 'coverage',
