@@ -3,10 +3,10 @@ import HtmlWebpackPlugin from 'html-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
 const externalsBase = {
-  fs: 'null',
+  'fs': 'null',
   'node-fetch': 'fetch',
   'isomorphic-fetch': 'fetch',
-  xmldom: 'window',
+  'xmldom': 'window',
   'text-encoding': 'TextEncoder',
   'whatwg-url': 'window',
   '@trust/webcrypto': 'crypto'
