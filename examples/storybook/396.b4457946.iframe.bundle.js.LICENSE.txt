@@ -1,0 +1,4 @@
+/**
+ * @version IconicMultiSelect v0.7.0
+ * @licence  MIT
+ */
