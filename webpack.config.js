@@ -61,7 +61,7 @@ const common = {
   }
 }
 
-// Minified, rdflib external
+// UMD Minified, rdflib bundled
 const minified = {
   ...common,
   mode: 'production',
@@ -76,7 +76,7 @@ const minified = {
   }
 }
 
-// Unminified, rdflib external
+// UMD Unminified, rdflib bundled
 const unminified = {
   ...common,
   mode: 'development',
@@ -90,7 +90,7 @@ const unminified = {
   }
 }
 
-// Minified, rdflib bundled
+// UMD Minified, rdflib external
 const minifiedWithRdflib = {
   ...common,
   mode: 'production',
@@ -105,7 +105,7 @@ const minifiedWithRdflib = {
   }
 }
 
-// Unminified, rdflib bundled
+// UMD Unminified, rdflib external
 const unminifiedWithRdflib = {
   ...common,
   mode: 'development',
