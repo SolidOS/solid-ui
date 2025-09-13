@@ -16,8 +16,6 @@ declare const _default: {
         modules: string;
         napi: string;
         nghttp2: string;
-        nghttp3: string;
-        ngtcp2: string;
         openssl: string;
         simdutf: string;
         tz: string;
