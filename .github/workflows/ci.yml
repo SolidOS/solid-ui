@@ -67,6 +67,7 @@ jobs:
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
       - uses: JS-DevTools/npm-publish@v1
+        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
@@ -85,6 +86,7 @@ jobs:
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
       - uses: JS-DevTools/npm-publish@v1
+        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
         with:
           token: ${{ secrets.NPM_TOKEN }}
           tag: latest
