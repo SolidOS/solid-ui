@@ -96,8 +96,6 @@ describe('createBanner', () => {
 // getProfileImg, need to mock widgets.findImage(user)
 describe('getProfileImg', () => {
   it.skip('returns an empty image', () => {
-    // eslint-disable-next-line no-undef
-    // eslint-disable-next-line no-undef
     const findImageSpy = jest.spyOn(widgets, 'findImage').mockImplementation(() => { return 'test' })
     const user = new NamedNode('http://test.com')
     expect(getProfileImg(store, user)).toMatchSnapshot()

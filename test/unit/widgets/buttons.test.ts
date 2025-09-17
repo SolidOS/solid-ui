@@ -360,7 +360,7 @@ describe('index.twoLine', () => {
     expect(index.twoLine).toBeInstanceOf(Object)
   })
 })
-describe("index.twoLine['']", () => {
+describe('index.twoLine[\'\']', () => {
   it('exists', () => {
     expect(index.twoLine['']).toBeInstanceOf(Function)
   })
@@ -368,7 +368,7 @@ describe("index.twoLine['']", () => {
     expect(index.twoLine[''](dom, sym('https://domain.tld/#test'))).toBeTruthy()
   })
 })
-describe("index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']", () => {
+describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
   it('exists', () => {
     expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(
       Function
@@ -383,7 +383,7 @@ describe("index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']", 
     ).toBeTruthy()
   })
 })
-describe("index.twoLine['http://www.w3.org/ns/pim/trip#Trip']", () => {
+describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
   it('exists', () => {
     expect(index.twoLine['http://www.w3.org/ns/pim/trip#Trip']).toBeInstanceOf(Function)
   })

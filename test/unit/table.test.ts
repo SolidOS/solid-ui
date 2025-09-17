@@ -22,10 +22,10 @@ const query = new Query('List people')
 const vars = ['person', 'name', 'age', 'hobby']
 
 export interface Person {
-    person: NamedNode,
-    name: string,
-    age: number,
-    hobby: string
+  person: NamedNode,
+  name: string,
+  age: number,
+  hobby: string
 }
 
 const v = <Person> {} // The RDF variable objects for each variable name
@@ -54,13 +54,13 @@ describe('renderTableViewPane', () => {
   })
   it('calls onDone', async () => {
     const onDone = jest.fn() // mock function
-    const _ = renderTableViewPane(document, { query, onDone }).innerHTML
+    renderTableViewPane(document, { query, onDone })
     await new Promise(resolve => setTimeout(resolve, 1000))
     expect(onDone).toHaveBeenCalled()
   })
   it('includes the data', async () => {
     let result = null
-    const _ = renderTableViewPane(document, { query, onDone })
+    renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
       result = ele.innerHTML
@@ -74,7 +74,7 @@ describe('renderTableViewPane', () => {
   })
   it('includes the data', async () => {
     let result = null
-    const _ = renderTableViewPane(document, { query, onDone })
+    renderTableViewPane(document, { query, onDone })
 
     function onDone (ele) {
       result = ele.innerHTML
@@ -97,7 +97,7 @@ describe('renderTableViewPane', () => {
   it('orders by reverse age', async () => {
     const options = { query, onDone, sortBy: '?age', sortReverse: true }
     let result = null
-    const _ = renderTableViewPane(document, options)
+    renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
@@ -108,7 +108,7 @@ describe('renderTableViewPane', () => {
   it('orders by name', async () => {
     const options = { query, onDone, sortBy: '?name', sortReverse: false }
     let result = null
-    const _ = renderTableViewPane(document, options)
+    renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
@@ -120,7 +120,7 @@ describe('renderTableViewPane', () => {
   it('orders by hobby', async () => {
     const options = { query, onDone, sortBy: '?hobby', sortReverse: false }
     let result = null
-    const _ = renderTableViewPane(document, options)
+    renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
@@ -141,7 +141,7 @@ describe('renderTableViewPane', () => {
       }
     }
     let result = null
-    const _ = renderTableViewPane(document, options)
+    renderTableViewPane(document, options)
     function onDone (ele) {
       result = ele.innerHTML
     }
