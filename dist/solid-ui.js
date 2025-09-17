@@ -14208,8 +14208,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _default = exports["default"] = {
-  buildTime: '2025-09-17T14:35:51Z',
-  commit: 'a753fecfedf67b5434ce6b294d55adfebb3bef79',
+  buildTime: '2025-09-17T14:48:03Z',
+  commit: 'cb8980587142771cabaa94b76553aa51dced5022',
   npmInfo: {
     "'solid-ui'": "'2.6.0',",
     npm: "'10.8.2',",
