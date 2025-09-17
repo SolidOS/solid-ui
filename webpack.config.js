@@ -124,7 +124,7 @@ const esmMinified = {
   ...common,
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm..external.min.js',
+    filename: 'solid-ui.esm.external.min.js',
     library: {
       type: 'module'
     },
