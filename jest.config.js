@@ -2,6 +2,7 @@ export default {
   // verbose: true, // Uncomment for detailed test output
   collectCoverage: true,
   coverageDirectory: 'coverage',
+  preset: 'ts-jest/presets/js-with-babel',
   testEnvironment: 'jsdom',
   testEnvironmentOptions: {
     customExportConditions: ['node'],
