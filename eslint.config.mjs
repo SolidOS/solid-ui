@@ -33,7 +33,8 @@ export default [
       semi: ['error', 'never'],
       quotes: ['error', 'single'],
       'no-console': 'error',
-      'no-unused-vars': 'off'
+      'no-unused-vars': 'error',
+      'no-undef': 'error'
     },
   },
   {

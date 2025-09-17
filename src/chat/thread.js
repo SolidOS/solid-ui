@@ -259,7 +259,8 @@ export function thread (dom, kb, subject, messageStore, options) {
     return message
   }
 
-  const _deleteMessage = async function (message) { // alain: must delete message and all linked with isReplacedBy
+  // eslint-disable-next-line no-unused-vars
+  async function deleteMessage (message) { // alain: must delete message and all linked with isReplacedBy
     // alain: check that me is not the author and ask for confirmation.
     const deletions = await store.connectedStatements(message, messageStore)
     await updater.updateMany(deletions, [], function (uri, ok, body) {
