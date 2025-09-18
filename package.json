@@ -16,7 +16,7 @@
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
     "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
-    "build-dist": "webpack --progress --mode=production",
+    "build-dist": "webpack --progress",
     "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
