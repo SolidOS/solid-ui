@@ -7447,7 +7447,7 @@ function _ensureLoadedPreferences() {
             _context4.next = 5;
             break;
           }
-          m2 = 'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?';
+          m2 = 'Oops — you are not authenticated (properly logged in), so SolidOS cannot read your preferences file. Try logging out and then logging back in.';
           (0, _log.alert)(m2);
           _context4.next = 11;
           break;
@@ -14208,8 +14208,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _default = exports["default"] = {
-  buildTime: '2025-09-17T14:48:03Z',
-  commit: 'cb8980587142771cabaa94b76553aa51dced5022',
+  buildTime: '2025-09-18T13:50:13Z',
+  commit: '2c94accd8113e15678db3c65a9fa255881ea5080',
   npmInfo: {
     "'solid-ui'": "'2.6.0',",
     npm: "'10.8.2',",
