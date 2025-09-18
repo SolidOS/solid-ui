@@ -26,7 +26,7 @@
     "test-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",
     "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
-    "prepublishOnly": "npm run build && npm test && npm run doc",
+    "prepublishOnly": "npm run build && npm run lint && npm test && npm run doc",
     "preversion": "npm run lint && npm run typecheck && npm test",
     "postpublish": "git push origin main --follow-tags",
     "storybook": "storybook dev -p 6006",
