@@ -39,8 +39,7 @@ const common = {
     new HtmlWebpackPlugin()
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
-    fallback: { path: false }
+    extensions: ['.ts', '.js']
   },
   devServer: {
     static: './dist'
@@ -79,7 +78,7 @@ const minified = {
 // UMD Unminified, rdflib bundled
 const unminified = {
   ...common,
-  mode: 'development',
+  mode: 'production',
   output: {
     ...common.output,
     filename: 'solid-ui.js'
@@ -108,7 +107,7 @@ const minifiedWithRdflib = {
 // UMD Unminified, rdflib external
 const unminifiedWithRdflib = {
   ...common,
-  mode: 'development',
+  mode: 'production',
   output: {
     ...common.output,
     filename: 'solid-ui.external.js'
@@ -158,7 +157,7 @@ const esmUnminified = {
   experiments: {
     outputModule: true
   },
-  mode: 'development',
+  mode: 'production',
   optimization: {
     minimize: false
   }
