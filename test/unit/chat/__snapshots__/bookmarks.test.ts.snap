@@ -1,3 +1,3 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`findBookmarkDocument complains if you have multiple bookmark docs 1`] = `"More than one bookmark file! <http://example.com/bookmarks2.ttl>,<http://example.com/bookmarks3.ttl>"`;

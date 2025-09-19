@@ -8,8 +8,8 @@ These are HTML5 widgets which connect to a solid store. Building blocks for soli
 Vanilla JS.  Includes large widgets like chat, table, matrix, form fields, and small widgets.
 
 See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) for SolidUI widgets.
-See [Solid-UI API](https://solidos.github.io/solid-ui/Documentation/api/) for SolidUI functions.
-See [Forms introduction](./Documentation/FormsReadme.md) for UI vocabulary implementation.
+See [Solid-UI API](https://solidos.github.io/solid-ui/docs/api/) for SolidUI functions.
+See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation.
 
 Table of content:
 - Getting started(#getting-started)
@@ -21,38 +21,87 @@ Table of content:
 Contributions of bug fixes and new functionality, documentation, and tests are
 always appreciated.
 
-### In npm-based projects
-When including solid-ui in an npm-based project, you can use it with:
+## Install via npm
 
-```js
-  import { ns, rdf,  acl, aclControl, create, dom, icons, log, matrix, media,
-  messageArea, infiniteMessageArea, pad, preferences, style, table, tabs, utils, widgets, versionInfo
-} from 'solid-ui'
-
-```
-### Directly in a webpage
-Clone this repo, and in the repo root run:
-
-* `npm install`
-* `npm run build`
-
-This will generate a `dist/` folder containing, among other artifacts, `dist/main.js`.
-Now run `npx serve` and go to http://localhost:3000/Documentation/ with your browser to see some examples.
-
-While viewing one of those examples, you can open the web console in your browser and for instance
-try how you can create a button:
-```js
-const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
-UI.widgets.clearElement(document.body)
-document.body.appendChild(myButton)
+```sh
+npm install solid-ui
 ```
 
-Or a chat widget:
 ```js
-const chatChannel = 'https://example-user.inrupt.net/public/example-chat/index.ttl#this'
-const chat = UI.infiniteMessageArea(document, store, UI.rdf.namedNode(chatChannel))
-document.body.appendChild(chat)
+   import * as UI from 'solid-ui'
+```
+
+## Use directly in a browser
+
+There are a few differences to mention:
+* the UMD bundles come in 2 flavours, with rdflib bundled together and without;
+* the ESM bundles do not contain rdflib, so it must be imported separately.
+
+## Files
+- For browser UMD, bundled with rdflib: `dist/solid-ui.js` (global `window.UI`)
+- For browser UMD, without rdflib: `dist/solid-ui.external.js` (global `window.UI`)
+- For browser ESM, without rdflib: `dist/solid-ui.esm.external.js` (import as module)
+- UMD bundles come in chunked files
+- both version also containe minified versions.
+
+
+### UMD bundle (global variable)
+
+```html
+<!-- Load dependencies first -->
+<script src="https://unpkg.com/rdflib/dist/rdflib.min.js"></script>
+<!-- or -->
+<!-- script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script -->
+<!-- Load solid-ui UMD bundle -->
+<script src="https://unpkg.com/solid-ui/dist/solid-ui.external.min.js"></script>
+<!-- or -->
+<!-- script src="https://cdn.jsdelivr.net/npm/solid-ui/dist/solid-ui.external.min.js"></script -->
+<!-- or -->
+<!-- script src="dist/solid-ui.js"></script -->
+<script>
+	// Access via global variable
+	const UI = window.UI;
+	// Create a button
+	const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
+  const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
+  UI.widgets.clearElement(document.body)
+  document.body.appendChild(myButton)
+</script>
+```
+
+
+### ESM bundle (import as module)
+
+```html
+<script type="module">
+	import * as $rdf from 'https://esm.sh/rdflib'
+	import { someFunction } from 'https://esm.sh/solid-ui'
+
+	// Example usage
+	// someFunction(...)
+</script>
+```
+
+or 
+
+### ESM bundle with import map (bare specifiers)
+
+```html
+<script type="importmap">
+{
+	"imports": {
+		"rdflib": "https://esm.sh/rdflib",
+		"solid-ui": "https://esm.sh/solid-ui"
+	}
+}
+</script>
+<script type="module">
+    import * as $rdf from 'rdflib'
+	import { someFunction } from 'solid-ui'
+
+	// Example usage
+	// someFunction(...)
+</script>
 ```
 
 ### Development new components

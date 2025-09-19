@@ -1,26 +1,46 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
+import tseslintPlugin from '@typescript-eslint/eslint-plugin'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import neostandard from 'neostandard'
 
-export default defineConfig([
+export default [
   ...neostandard(),
-  globalIgnores([
-    'lib/*',
-    '**/*.html',
-    '**/*.md',
-    '**/*.json',
-    'Documentation/*',
-    'node_modules/*',
-    'coverage/*',
-    'dist/*',
-    'test/*',
-    'examples/*'
-  ]),
   {
+    ignores: [
+      '**/*.html',
+      '**/*.md',
+      '**/*.json',
+      'docs/**',
+      'node_modules/**',
+      'coverage/**',
+      'dist/**',
+      'examples/**',
+      '*.js'
+    ],
+  },
+  {
+    files: ['src/**/*.js', 'src/**/*.cjs', 'src/**/*.mjs'],
+
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        Atomics: 'readonly',
+        SharedArrayBuffer: 'readonly',
+      }
+    },
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      'no-console': 'error',
+      'no-unused-vars': 'error',
+      'no-undef': 'error'
+    },
+  },
+  {
+    files: ['src/**/*.ts'],
     plugins: {
-      '@typescript-eslint': typescriptEslint,
+      '@typescript-eslint': tseslintPlugin,
     },
 
     languageOptions: {
@@ -30,20 +50,48 @@ export default defineConfig([
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
       },
-
       parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.json']
+      },
     },
-
-    files: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.cjs', 'src/**/*.mjs'],
-
     rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
       'no-console': 'error',
       'no-unused-vars': 'off',
-
       '@typescript-eslint/no-unused-vars': ['warn', {
         argsIgnorePattern: '^_',
         varsIgnorePattern: '^_',
       }],
+      // '@typescript-eslint/no-explicit-any': 'warn', - codebase not ready for this
     },
   },
-])
+  {
+    files: ['test/**/*.ts'],
+    plugins: {
+      '@typescript-eslint': tseslintPlugin,
+    },
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.test.json'],
+      },
+    },
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      'no-console': 'off', // Allow console in tests
+      'no-undef': 'off', // Tests may define globals
+    }
+  },
+  {
+    files: ['test/**/**/*.js', 'test/**/*.js'],
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      'no-console': 'off', // Allow console in tests
+      'no-undef': 'off', // Tests may define globals
+    }
+  }
+]

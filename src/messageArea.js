@@ -4,9 +4,9 @@
 import { icons } from './iconBase'
 import * as login from './login/login'
 import { solidLogicSingleton } from 'solid-logic'
-import * as ns from './ns'
+import ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from './style'
+import { style } from './style'
 import * as utils from './utils'
 import * as widgets from './widgets'
 

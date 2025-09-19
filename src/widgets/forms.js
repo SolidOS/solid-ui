@@ -13,12 +13,12 @@ import * as debug from '../debug'
 import { errorMessageBlock } from './error'
 import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
-import * as style from '../style'
+import { style } from '../style'
 import styleConstants from '../styleConstants'
 
 import { icons } from '../iconBase'
 import * as log from '../log'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
@@ -775,7 +775,7 @@ field[ns.ui('Choice').uri] = function (
   lhs.appendChild(fieldLabel(dom, property, form))
   const uiFrom = kb.any(form, ui('from'))
   if (!uiFrom) {
-    return errorMessageBlock(dom, "No 'from' for Choice: " + form)
+    return errorMessageBlock(dom, 'No \'from\' for Choice: ' + form)
   }
   const subForm = kb.any(form, ui('use')) // Optional
   // const follow = kb.anyJS(form, ui('follow'), null, formDoc) // data doc moves to new subject?
@@ -1185,7 +1185,7 @@ export function promptForNew (
       p.textContent =
         'I am sorry, you need to provide information about a ' +
         utils.label(theClass) +
-        " but I don't know enough information about those to ask you."
+        ' but I don\'t know enough information about those to ask you.'
       const b = box.appendChild(dom.createElement('button'))
       b.setAttribute('type', 'button')
       b.setAttribute('style', 'float: right;')
@@ -1369,7 +1369,7 @@ export function makeSelectForClassifierOptions (
   if (n === 0 && !options.mint) {
     return errorMessageBlock(
       dom,
-      "Can't do selector with no options, subject= " +
+      'Can\'t do selector with no options, subject= ' +
         subject +
         ' property = ' +
         predicate +
@@ -1574,7 +1574,7 @@ export function makeSelectForOptions (
   if (n === 0) {
     return errorMessageBlock(
       dom,
-      "Can't do selector with no options, subject= " +
+      'Can\'t do selector with no options, subject= ' +
         subject +
         ' property = ' +
         predicate +
@@ -1723,7 +1723,7 @@ export function makeSelectForCategory (
   if (subs.length === 0) {
     return errorMessageBlock(
       dom,
-      "Can't do " +
+      'Can\'t do ' +
         (multiple ? 'multiple ' : '') +
         'selector with no subclasses of category: ' +
         category
@@ -1732,7 +1732,7 @@ export function makeSelectForCategory (
   if (subs.length === 1) {
     return errorMessageBlock(
       dom,
-      "Can't do " +
+      'Can\'t do ' +
         (multiple ? 'multiple ' : '') +
         'selector with only 1 subclass of category: ' +
         category +
@@ -2007,7 +2007,7 @@ export function makeSelectForChoice (
   if (isEmpty && !options.mint) {
     return errorMessageBlock(
       dom,
-      "Can't do selector with no options, subject= " +
+      'Can\'t do selector with no options, subject= ' +
         subject +
         ' property = ' +
         predicate +

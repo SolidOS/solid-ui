@@ -10,7 +10,7 @@ import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
 import * as utils from '../utils'
 import * as debug from '../debug'
-import * as style from '../style'
+import { style } from '../style'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.

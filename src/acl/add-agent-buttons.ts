@@ -8,10 +8,10 @@ import { AuthenticationContext } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { ensureLoadedProfile } from '../login/login'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import * as style from '../style'
+import { style } from '../style'
 import { AccessGroups } from './access-groups'
 
 /**

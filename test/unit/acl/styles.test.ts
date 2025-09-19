@@ -1,10 +1,10 @@
 import { silenceDebugMessages } from '../helpers/debugger'
-import * as Style from '../../../src/style'
+import { style } from '../../../src/style'
 
 silenceDebugMessages()
 
 describe('Style', () => {
   it('exists', () => {
-    expect(typeof Style).toEqual('object')
+    expect(typeof style).toEqual('object')
   })
 })

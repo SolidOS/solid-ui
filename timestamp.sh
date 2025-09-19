@@ -10,4 +10,4 @@ echo "  npmInfo: {"
     echo "    \"${key}\": \"${value}\","
   done
 echo "  }"
-echo "};"
+echo "}"
