@@ -39,7 +39,8 @@ const common = {
     new HtmlWebpackPlugin()
   ],
   resolve: {
-    extensions: ['.ts', '.js']
+    extensions: ['.ts', '.js'],
+    fallback: { path: false }
   },
   devServer: {
     static: './dist'
