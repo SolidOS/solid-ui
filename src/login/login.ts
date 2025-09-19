@@ -136,7 +136,7 @@ export async function ensureLoadedPreferences (
     let m2: string
     if (err instanceof UnauthorizedError) {
       m2 =
-        'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
+        'Oops — you are not authenticated (properly logged in), so SolidOS cannot read your preferences file. Try logging out and then logging back in.'
       alert(m2)
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
