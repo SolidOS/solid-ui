@@ -6302,8 +6302,8 @@ function _initFooter() {
         case 2:
           podOwner = _context2.sent;
           rebuildFooter(footer, store, pod, podOwner, options)();
-          _solidLogic.authSession.onLogin(rebuildFooter(footer, store, pod, podOwner, options));
-          _solidLogic.authSession.onLogout(rebuildFooter(footer, store, pod, podOwner, options));
+          _solidLogic.authSession.events.on('login', rebuildFooter(footer, store, pod, podOwner, options));
+          _solidLogic.authSession.events.on('logout', rebuildFooter(footer, store, pod, podOwner, options));
         case 3:
         case "end":
           return _context2.stop();
@@ -6469,8 +6469,8 @@ function _initHeader() {
         case 1:
           pod = (0, _headerFooterHelpers.getPod)();
           rebuildHeader(header, store, pod, userMenuList, options)();
-          _solidLogic.authSession.onLogout(rebuildHeader(header, store, pod, userMenuList, options));
-          _solidLogic.authSession.onLogin(rebuildHeader(header, store, pod, userMenuList, options));
+          _solidLogic.authSession.events.on('logout', rebuildHeader(header, store, pod, userMenuList, options));
+          _solidLogic.authSession.events.on('login', rebuildHeader(header, store, pod, userMenuList, options));
         case 2:
         case "end":
           return _context2.stop();
@@ -7875,7 +7875,7 @@ function signInOrSignUpBox(dom, setUserCallback) {
   signInPopUpButton.setAttribute('type', 'button');
   signInPopUpButton.setAttribute('value', 'Log in');
   signInPopUpButton.setAttribute('style', "".concat(signInButtonStyle).concat(style.headerBannerLoginInput) + style.signUpBackground);
-  _solidLogic.authSession.onLogin(function () {
+  _solidLogic.authSession.events.on('login', function () {
     var me = _solidLogic.authn.currentUser();
     // const sessionInfo = authSession.info
     // if (sessionInfo && sessionInfo.isLoggedIn) {
@@ -8122,13 +8122,13 @@ function loginStatusBox(dom) {
     box.refresh();
   }
   trackSession();
-  _solidLogic.authSession.onLogin(trackSession);
-  _solidLogic.authSession.onLogout(trackSession);
+  _solidLogic.authSession.events.on('login', trackSession);
+  _solidLogic.authSession.events.on('logout', trackSession);
   box.me = '99999'; // Force refresh
   box.refresh();
   return box;
 }
-_solidLogic.authSession.onLogout(/*#__PURE__*/(0, _asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function _callee2() {
+_solidLogic.authSession.events.on('logout', /*#__PURE__*/(0, _asyncToGenerator2["default"])(/*#__PURE__*/_regenerator["default"].mark(function _callee2() {
   var issuer, wellKnownUri, wellKnownResult, openidConfiguration, _t2;
   return _regenerator["default"].wrap(function (_context2) {
     while (1) switch (_context2.prev = _context2.next) {
@@ -14208,10 +14208,10 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _default = exports["default"] = {
-  buildTime: '2025-09-18T13:50:13Z',
-  commit: '2c94accd8113e15678db3c65a9fa255881ea5080',
+  buildTime: '2025-09-23T13:51:05Z',
+  commit: '16dc9f9a75cc0bfc125ae8579a7cdab86a8f2536',
   npmInfo: {
-    "'solid-ui'": "'2.6.0',",
+    "'solid-ui'": "'2.6.1',",
     npm: "'10.8.2',",
     node: "'20.19.5',",
     acorn: "'8.15.0',",
@@ -27336,8 +27336,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   Version: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.Version),
 /* harmony export */   WebStorageStateStore: () => (/* reexport safe */ _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.WebStorageStateStore),
 /* harmony export */   clearOidcPersistentStorage: () => (/* binding */ clearOidcPersistentStorage),
-/* harmony export */   getBearerToken: () => (/* binding */ getBearerToken),
-/* harmony export */   getDpopToken: () => (/* binding */ getDpopToken),
+/* harmony export */   getTokens: () => (/* binding */ getTokens),
 /* harmony export */   normalizeCallbackUrl: () => (/* binding */ normalizeCallbackUrl),
 /* harmony export */   refresh: () => (/* binding */ refresh),
 /* harmony export */   registerClient: () => (/* binding */ registerClient)
@@ -27345,8 +27344,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @inrupt/oidc-client */ "./node_modules/@inrupt/oidc-client/lib/oidc-client.min.js");
 /* harmony import */ var _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.mjs");
-/* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
-
 
 
 
@@ -27375,36 +27372,39 @@ function processErrorResponse(
 // The type is any here because the object is parsed from a JSON response
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 responseBody, options) {
-    var _a, _b, _c, _d;
     // The following errors are defined by the spec, and allow providing some context.
     // See https://tools.ietf.org/html/rfc7591#section-3.2.2 for more information
     if (responseBody.error === "invalid_redirect_uri") {
-        throw new Error(`Dynamic client registration failed: the provided redirect uri [${(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()}] is invalid - ${(_b = responseBody.error_description) !== null && _b !== void 0 ? _b : ""}`);
+        throw new Error(`Dynamic client registration failed: the provided redirect uri [${options.redirectUrl?.toString()}] is invalid - ${responseBody.error_description ?? ""}`);
     }
     if (responseBody.error === "invalid_client_metadata") {
-        throw new Error(`Dynamic client registration failed: the provided client metadata ${JSON.stringify(options)} is invalid - ${(_c = responseBody.error_description) !== null && _c !== void 0 ? _c : ""}`);
+        throw new Error(`Dynamic client registration failed: the provided client metadata ${JSON.stringify(options)} is invalid - ${responseBody.error_description ?? ""}`);
     }
     // We currently don't support software statements, so no related error should happen.
     // If an error outside of the spec happens, no additional context can be provided
-    throw new Error(`Dynamic client registration failed: ${responseBody.error} - ${(_d = responseBody.error_description) !== null && _d !== void 0 ? _d : ""}`);
+    throw new Error(`Dynamic client registration failed: ${responseBody.error} - ${responseBody.error_description ?? ""}`);
 }
-function validateRegistrationResponse(
-// The type is any here because the object is parsed from a JSON response
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-responseBody, options) {
-    if (responseBody.client_id === undefined) {
+function hasClientId(body) {
+    return typeof body.client_id === "string";
+}
+function hasRedirectUri(body) {
+    return (Array.isArray(body.redirect_uris) &&
+        body.redirect_uris.every((uri) => typeof uri === "string"));
+}
+function validateRegistrationResponse(responseBody, options) {
+    if (!hasClientId(responseBody)) {
         throw new Error(`Dynamic client registration failed: no client_id has been found on ${JSON.stringify(responseBody)}`);
     }
     if (options.redirectUrl &&
-        (responseBody.redirect_uris === undefined ||
-            responseBody.redirect_uris[0] !== options.redirectUrl.toString())) {
+        hasRedirectUri(responseBody) &&
+        responseBody.redirect_uris[0] !== options.redirectUrl.toString()) {
         throw new Error(`Dynamic client registration failed: the returned redirect URIs ${JSON.stringify(responseBody.redirect_uris)} don't match the provided ${JSON.stringify([
             options.redirectUrl.toString(),
         ])}`);
     }
+    return true;
 }
 async function registerClient(options, issuerConfig) {
-    var _a;
     if (!issuerConfig.registrationEndpoint) {
         throw new Error("Dynamic Registration could not be completed because the issuer has no registration endpoint.");
     }
@@ -27416,7 +27416,7 @@ async function registerClient(options, issuerConfig) {
         /* eslint-disable camelcase */
         client_name: options.clientName,
         application_type: "web",
-        redirect_uris: [(_a = options.redirectUrl) === null || _a === void 0 ? void 0 : _a.toString()],
+        redirect_uris: [options.redirectUrl?.toString()],
         subject_type: "public",
         token_endpoint_auth_method: "client_secret_basic",
         id_token_signed_response_alg: signingAlg,
@@ -27437,6 +27437,7 @@ async function registerClient(options, issuerConfig) {
         return {
             clientId: responseBody.client_id,
             clientSecret: responseBody.client_secret,
+            expiresAt: responseBody.client_secret_expires_at,
             idTokenSignedResponseAlg: responseBody.id_token_signed_response_alg,
             clientType: "dynamic",
         };
@@ -27548,7 +27549,9 @@ async function getTokens(issuer, client, data, dpop) {
         dpopKey = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.generateDpopKeyPair)();
         headers.DPoP = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.createDpopHeader)(issuer.tokenEndpoint, "POST", dpopKey);
     }
-    // TODO: Find out where this is specified.
+    // Note: this defaults to client_secret_basic. client_secret_post
+    // is currently not supported. See https://openid.net/specs/openid-connect-core-1_0.html#ClientAuthentication
+    // for details.
     if (client.clientSecret) {
         headers.Authorization = `Basic ${btoa(`${client.clientId}:${client.clientSecret}`)}`;
     }
@@ -27566,10 +27569,10 @@ async function getTokens(issuer, client, data, dpop) {
         headers,
         body: new URLSearchParams(requestBody).toString(),
     };
-    const rawTokenResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(issuer.tokenEndpoint, tokenRequestInit);
+    const rawTokenResponse = await fetch(issuer.tokenEndpoint, tokenRequestInit);
     const jsonTokenResponse = (await rawTokenResponse.json());
     const tokenResponse = validateTokenEndpointResponse(jsonTokenResponse, dpop);
-    const webId = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.getWebidFromTokenPayload)(tokenResponse.id_token, issuer.jwksUri, issuer.issuer, client.clientId);
+    const { webId, clientId } = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.getWebidFromTokenPayload)(tokenResponse.id_token, issuer.jwksUri, issuer.issuer, client.clientId);
     return {
         accessToken: tokenResponse.access_token,
         idToken: tokenResponse.id_token,
@@ -27577,76 +27580,10 @@ async function getTokens(issuer, client, data, dpop) {
             ? tokenResponse.refresh_token
             : undefined,
         webId,
+        clientId,
         dpopKey,
         expiresIn: tokenResponse.expires_in,
     };
-}
-/**
- * This function exchanges an authorization code for a bearer token.
- * Note that it is based on oidc-client-js, and assumes that the same client has
- * been used to issue the initial redirect.
- * @param redirectUrl The URL to which the user has been redirected
- */
-async function getBearerToken(redirectUrl) {
-    let signinResponse;
-    try {
-        const client = new _inrupt_oidc_client__WEBPACK_IMPORTED_MODULE_0__.OidcClient({
-            // TODO: We should look at the various interfaces being used for storage,
-            //  i.e. between oidc-client-js (WebStorageStoreState), localStorage
-            //  (which has an interface Storage), and our own proprietary interface
-            //  IStorage - i.e. we should really just be using the browser Web Storage
-            //  API, e.g. "stateStore: window.localStorage,".
-            // We are instantiating a new instance here, so the only value we need to
-            // explicitly provide is the response mode (default otherwise will look
-            // for a hash '#' fragment!).
-            // eslint-disable-next-line camelcase
-            response_mode: "query",
-            // The userinfo endpoint on NSS fails, so disable this for now
-            // Note that in Solid, information should be retrieved from the
-            // profile referenced by the WebId.
-            // TODO: Note that this is heavy-handed, and that this userinfo check
-            //  verifies that the `sub` claim in the id token you get along with the
-            //  access token matches the sub claim associated with the access token at
-            //  the userinfo endpoint.
-            // That is a useful check, and in the future it should be only disabled
-            // against NSS, and not in general.
-            // Issue tracker: https://github.com/solid/node-solid-server/issues/1490
-            loadUserInfo: false,
-        });
-        signinResponse = await client.processSigninResponse(redirectUrl);
-        if (client.settings.metadata === undefined) {
-            throw new Error("Cannot retrieve issuer metadata from client information in storage.");
-        }
-        if (client.settings.metadata.jwks_uri === undefined) {
-            throw new Error("Missing some issuer metadata from client information in storage: 'jwks_uri' is undefined");
-        }
-        if (client.settings.metadata.issuer === undefined) {
-            throw new Error("Missing some issuer metadata from client information in storage: 'issuer' is undefined");
-        }
-        if (client.settings.client_id === undefined) {
-            throw new Error("Missing some client information in storage: 'client_id' is undefined");
-        }
-        const webId = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.getWebidFromTokenPayload)(signinResponse.id_token, client.settings.metadata.jwks_uri, client.settings.metadata.issuer, client.settings.client_id);
-        return {
-            accessToken: signinResponse.access_token,
-            idToken: signinResponse.id_token,
-            webId,
-            // Although not a field in the TypeScript response interface, the refresh
-            // token (which can optionally come back with the access token (if, as per
-            // the OAuth2 spec, we requested one using the scope of 'offline_access')
-            // will be included in the signin response object.
-            // eslint-disable-next-line camelcase
-            // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-            // @ts-ignore
-            refreshToken: signinResponse.refresh_token,
-        };
-    }
-    catch (err) {
-        throw new Error(`Problem handling Auth Code Grant (Flow) redirect - URL [${redirectUrl}]: ${err}`);
-    }
-}
-async function getDpopToken(issuer, client, data) {
-    return getTokens(issuer, client, data, true);
 }
 
 //
@@ -27677,7 +27614,7 @@ const isValidUrl = (url) => {
         new URL(url);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 };
@@ -27690,7 +27627,6 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
     const requestBody = {
         grant_type: "refresh_token",
         refresh_token: refreshToken,
-        scope: _inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.DEFAULT_SCOPES,
     };
     let dpopHeader = {};
     if (dpopKey !== undefined) {
@@ -27712,7 +27648,7 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
         // request body.
         requestBody.client_id = client.clientId;
     }
-    const rawResponse = await (0,_inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_2__.fetch)(issuer.tokenEndpoint, {
+    const rawResponse = await fetch(issuer.tokenEndpoint, {
         method: "POST",
         body: new URLSearchParams(requestBody).toString(),
         headers: {
@@ -27730,7 +27666,7 @@ async function refresh(refreshToken, issuer, client, dpopKey) {
         throw new Error(`The token endpoint of issuer ${issuer.issuer} returned a malformed response.`);
     }
     const validatedResponse = validateTokenEndpointResponse(response, dpopKey !== undefined);
-    const webId = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.getWebidFromTokenPayload)(validatedResponse.id_token, issuer.jwksUri, issuer.issuer, client.clientId);
+    const { webId } = await (0,_inrupt_solid_client_authn_core__WEBPACK_IMPORTED_MODULE_1__.getWebidFromTokenPayload)(validatedResponse.id_token, issuer.jwksUri, issuer.issuer, client.clientId);
     return {
         accessToken: validatedResponse.access_token,
         idToken: validatedResponse.id_token,
@@ -27874,10 +27810,9 @@ e.read=function(t,e,r,n,i){var o,s,a=8*i-n-1,u=(1<<a)-1,c=u>>1,h=-7,l=r?i-1:0,f=
 
 
 var solidClientAuthnCore = __webpack_require__(/*! @inrupt/solid-client-authn-core */ "./node_modules/@inrupt/solid-client-authn-core/dist/index.js");
-var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js");
+var uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/cjs-browser/index.js");
 var EventEmitter = __webpack_require__(/*! events */ "./node_modules/events/events.js");
 var oidcClientExt = __webpack_require__(/*! @inrupt/oidc-client-ext */ "./node_modules/@inrupt/oidc-client-ext/dist/index.es.js");
-var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
 
 //
 // Copyright Inrupt Inc.
@@ -27936,81 +27871,77 @@ class StorageUtilityBrowser extends solidClientAuthnCore.StorageUtility {
  * @hidden
  */
 class ClientAuthentication extends solidClientAuthnCore.ClientAuthentication {
-    constructor() {
-        super(...arguments);
-        // Define these functions as properties so that they don't get accidentally re-bound.
-        // Isn't Javascript fun?
-        this.login = async (options, eventEmitter) => {
-            var _a, _b;
-            // In order to get a clean start, make sure that the session is logged out
-            // on login.
-            // But we may want to preserve our client application info, particularly if
-            // we used Dynamic Client Registration to register (since we don't
-            // necessarily want the user to have to register this app each time they
-            // login).
+    // Define these functions as properties so that they don't get accidentally re-bound.
+    // Isn't Javascript fun?
+    login = async (options, eventEmitter) => {
+        // In order to get a clean start, make sure that the session is logged out
+        // on login, except when doing a silent login so that Dynamic Client information
+        // is preserved.
+        if (options.prompt !== "none") {
             await this.sessionInfoManager.clear(options.sessionId);
-            // In the case of the user hitting the 'back' button in their browser, they
-            // could return to a previous redirect URL that contains OIDC params that
-            // are now longer valid. To be safe, strip relevant params now.
-            // If the user is providing a redirect IRI, it should not be modified, so
-            // normalization only applies if we default to the current location (which is
-            // a bad practice and should be discouraged).
-            const redirectUrl = (_a = options.redirectUrl) !== null && _a !== void 0 ? _a : oidcClientExt.normalizeCallbackUrl(window.location.href);
-            if (!solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
-                throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI, includes a hash fragment, or reserved query parameters ('code' or 'state').`);
-            }
-            await this.loginHandler.handle({
-                ...options,
-                redirectUrl,
-                // If no clientName is provided, the clientId may be used instead.
-                clientName: (_b = options.clientName) !== null && _b !== void 0 ? _b : options.clientId,
-                eventEmitter,
-            });
-        };
-        // Collects session information from storage, and returns them. Returns null
-        // if the expected information cannot be found.
-        // Note that the ID token is not stored, which means the session information
-        // cannot be validated at this point.
-        this.validateCurrentSession = async (currentSessionId) => {
-            const sessionInfo = await this.sessionInfoManager.get(currentSessionId);
-            if (sessionInfo === undefined ||
-                sessionInfo.clientAppId === undefined ||
-                sessionInfo.issuer === undefined) {
-                return null;
-            }
-            return sessionInfo;
-        };
-        this.handleIncomingRedirect = async (url, eventEmitter) => {
-            try {
-                const redirectInfo = await this.redirectHandler.handle(url, eventEmitter);
-                // The `FallbackRedirectHandler` directly returns the global `fetch` for
-                // his value, so we should ensure it's bound to `window` rather than to
-                // ClientAuthentication, to avoid the following error:
-                // > 'fetch' called on an object that does not implement interface Window.
-                this.fetch = redirectInfo.fetch.bind(window);
-                this.boundLogout = redirectInfo.getLogoutUrl;
-                // Strip the oauth params:
-                await this.cleanUrlAfterRedirect(url);
-                return {
-                    isLoggedIn: redirectInfo.isLoggedIn,
-                    webId: redirectInfo.webId,
-                    sessionId: redirectInfo.sessionId,
-                    expirationDate: redirectInfo.expirationDate,
-                };
-            }
-            catch (err) {
-                // Strip the oauth params:
-                await this.cleanUrlAfterRedirect(url);
-                // FIXME: EVENTS.ERROR should be errorCode, errorDescription
-                //
-                // I'm not sure if "redirect" is a good error code, and in theory `err`
-                // maybe an Error object and not a string; Maybe we want to just hardcode
-                // a description instead?
-                eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, "redirect", err);
-                return undefined;
-            }
-        };
-    }
+        }
+        // In the case of the user hitting the 'back' button in their browser, they
+        // could return to a previous redirect URL that contains OIDC params that
+        // are now longer valid. To be safe, strip relevant params now.
+        // If the user is providing a redirect IRI, it should not be modified, so
+        // normalization only applies if we default to the current location (which is
+        // a bad practice and should be discouraged).
+        const redirectUrl = options.redirectUrl ?? oidcClientExt.normalizeCallbackUrl(window.location.href);
+        if (!solidClientAuthnCore.isValidRedirectUrl(redirectUrl)) {
+            throw new Error(`${redirectUrl} is not a valid redirect URL, it is either a malformed IRI, includes a hash fragment, or reserved query parameters ('code' or 'state').`);
+        }
+        await this.loginHandler.handle({
+            ...options,
+            redirectUrl,
+            // If no clientName is provided, the clientId may be used instead.
+            clientName: options.clientName ?? options.clientId,
+            eventEmitter,
+        });
+    };
+    // Collects session information from storage, and returns them. Returns null
+    // if the expected information cannot be found.
+    // Note that the ID token is not stored, which means the session information
+    // cannot be validated at this point.
+    validateCurrentSession = async (currentSessionId) => {
+        const sessionInfo = await this.sessionInfoManager.get(currentSessionId);
+        if (sessionInfo === undefined ||
+            sessionInfo.clientAppId === undefined ||
+            sessionInfo.issuer === undefined) {
+            return null;
+        }
+        return sessionInfo;
+    };
+    handleIncomingRedirect = async (url, eventEmitter) => {
+        try {
+            const redirectInfo = await this.redirectHandler.handle(url, eventEmitter, undefined);
+            // The `FallbackRedirectHandler` directly returns the global `fetch` for
+            // his value, so we should ensure it's bound to `window` rather than to
+            // ClientAuthentication, to avoid the following error:
+            // > 'fetch' called on an object that does not implement interface Window.
+            this.fetch = redirectInfo.fetch.bind(window);
+            this.boundLogout = redirectInfo.getLogoutUrl;
+            // Strip the oauth params:
+            await this.cleanUrlAfterRedirect(url);
+            return {
+                isLoggedIn: redirectInfo.isLoggedIn,
+                webId: redirectInfo.webId,
+                sessionId: redirectInfo.sessionId,
+                expirationDate: redirectInfo.expirationDate,
+                clientAppId: redirectInfo.clientAppId,
+            };
+        }
+        catch (err) {
+            // Strip the oauth params:
+            await this.cleanUrlAfterRedirect(url);
+            // FIXME: EVENTS.ERROR should be errorCode, errorDescription
+            //
+            // I'm not sure if "redirect" is a good error code, and in theory `err`
+            // maybe an Error object and not a string; Maybe we want to just hardcode
+            // a description instead?
+            eventEmitter.emit(solidClientAuthnCore.EVENTS.ERROR, "redirect", err);
+            return undefined;
+        }
+    };
     async cleanUrlAfterRedirect(url) {
         const cleanedUpUrl = solidClientAuthnCore.removeOpenIdParams(url).href;
         // Remove OAuth-specific query params (since the login flow finishes with
@@ -28063,6 +27994,10 @@ function hasRedirectUrl(options) {
  * @hidden
  */
 class OidcLoginHandler {
+    storageUtility;
+    oidcHandler;
+    issuerConfigFetcher;
+    clientRegistrar;
     constructor(storageUtility, oidcHandler, issuerConfigFetcher, clientRegistrar) {
         this.storageUtility = storageUtility;
         this.oidcHandler = oidcHandler;
@@ -28099,6 +28034,7 @@ class OidcLoginHandler {
             ...options,
             issuerConfiguration: issuerConfig,
             client: clientRegistration,
+            scopes: solidClientAuthnCore.normalizeScopes(options.customScopes),
         };
         // Call proper OIDC Handler
         return this.oidcHandler.handle(OidcOptions);
@@ -28132,30 +28068,28 @@ class OidcLoginHandler {
  */
 class AuthorizationCodeWithPkceOidcHandler extends solidClientAuthnCore.AuthorizationCodeWithPkceOidcHandlerBase {
     async handle(oidcLoginOptions) {
-        var _a;
         /* eslint-disable camelcase */
         const oidcOptions = {
             authority: oidcLoginOptions.issuer.toString(),
             client_id: oidcLoginOptions.client.clientId,
             client_secret: oidcLoginOptions.client.clientSecret,
-            redirect_uri: oidcLoginOptions.redirectUrl.toString(),
-            post_logout_redirect_uri: oidcLoginOptions.redirectUrl.toString(),
+            redirect_uri: oidcLoginOptions.redirectUrl,
             response_type: "code",
-            scope: solidClientAuthnCore.DEFAULT_SCOPES,
+            scope: oidcLoginOptions.scopes.join(" "),
             filterProtocolClaims: true,
             // The userinfo endpoint on NSS fails, so disable this for now
             // Note that in Solid, information should be retrieved from the
             // profile referenced by the WebId.
             loadUserInfo: false,
             code_verifier: true,
-            prompt: (_a = oidcLoginOptions.prompt) !== null && _a !== void 0 ? _a : "consent",
+            prompt: oidcLoginOptions.prompt ?? "consent",
         };
         /* eslint-enable camelcase */
         const oidcClientLibrary = new oidcClientExt.OidcClient(oidcOptions);
         try {
             const signingRequest = await oidcClientLibrary.createSigninRequest();
             // Make sure to await the promise before returning so that the error is caught.
-            return await this.handleRedirect({
+            return await this.setupRedirectHandler({
                 oidcLoginOptions,
                 // eslint-disable-next-line no-underscore-dangle
                 state: signingRequest.state._id,
@@ -28303,6 +28237,7 @@ function processConfig(config) {
  * @hidden
  */
 class IssuerConfigFetcher {
+    storageUtility;
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
         this.storageUtility = storageUtility;
@@ -28318,7 +28253,7 @@ class IssuerConfigFetcher {
         // Make sure to append a slash at issuer URL, so that the .well-known URL
         // includes the full issuer path. See https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderConfig.
         issuer.endsWith("/") ? issuer : `${issuer}/`).href;
-        const issuerConfigRequestBody = await universalFetch.fetch.call(globalThis, openIdConfigUrl);
+        const issuerConfigRequestBody = await fetch(openIdConfigUrl);
         // Check the validity of the fetched config
         try {
             issuerConfig = processConfig(await issuerConfigRequestBody.json());
@@ -28421,7 +28356,7 @@ class SessionInfoManager extends solidClientAuthnCore.SessionInfoManagerBase {
             clientAppId: clientId,
             clientAppSecret: clientSecret,
             // Default the token type to DPoP if unspecified.
-            tokenType: tokenType !== null && tokenType !== void 0 ? tokenType : "DPoP",
+            tokenType: tokenType ?? "DPoP",
         };
     }
     /**
@@ -28502,16 +28437,13 @@ class FallbackRedirectHandler {
 //
 /**
  * @hidden
- * @packageDocumentation
- */
-// FIXME: The following doesn't work in the browser, it results in all the fetches
-// being unauthenticated. This should be looked into when migrating to universal-fetch.
-// import { fetch } from "cross-fetch";
-const globalFetch = (...args) => universalFetch.fetch.call(globalThis, ...args);
-/**
- * @hidden
  */
 class AuthCodeRedirectHandler {
+    storageUtility;
+    sessionInfoManager;
+    issuerConfigFetcher;
+    clientRegistrar;
+    tokerRefresher;
     constructor(storageUtility, sessionInfoManager, issuerConfigFetcher, clientRegistrar, tokerRefresher) {
         this.storageUtility = storageUtility;
         this.sessionInfoManager = sessionInfoManager;
@@ -28555,25 +28487,18 @@ class AuthCodeRedirectHandler {
             throw new Error(`The redirect URL for session ${storedSessionId} is missing from storage.`);
         }
         const client = await this.clientRegistrar.getClient({ sessionId: storedSessionId }, issuerConfig);
-        let tokens;
         const tokenCreatedAt = Date.now();
-        if (isDpop) {
-            tokens = await oidcClientExt.getDpopToken(issuerConfig, client, {
-                grantType: "authorization_code",
-                // We rely on our 'canHandle' function checking that the OAuth 'code'
-                // parameter is present in our query string.
-                code: url.searchParams.get("code"),
-                codeVerifier,
-                redirectUrl: storedRedirectIri,
-            });
-            // Delete oidc-client-specific session information from storage. This is
-            // done automatically when retrieving a bearer token, but since the DPoP
-            // binding uses our custom code, this needs to be done manually.
-            window.localStorage.removeItem(`oidc.${oauthState}`);
-        }
-        else {
-            tokens = await oidcClientExt.getBearerToken(url.toString());
-        }
+        const tokens = await oidcClientExt.getTokens(issuerConfig, client, {
+            grantType: "authorization_code",
+            // We rely on our 'canHandle' function checking that the OAuth 'code'
+            // parameter is present in our query string.
+            code: url.searchParams.get("code"),
+            codeVerifier,
+            redirectUrl: storedRedirectIri,
+        }, isDpop);
+        // Delete oidc-client-specific session information from storage. oidc-client
+        // is no longer used for the token exchange, so it doesn't perform this automatically.
+        window.localStorage.removeItem(`oidc.${oauthState}`);
         let refreshOptions;
         if (tokens.refreshToken !== undefined) {
             refreshOptions = {
@@ -28582,16 +28507,13 @@ class AuthCodeRedirectHandler {
                 tokenRefresher: this.tokerRefresher,
             };
         }
-        const authFetch = await solidClientAuthnCore.buildAuthenticatedFetch(globalFetch, tokens.accessToken, {
+        const authFetch = solidClientAuthnCore.buildAuthenticatedFetch(tokens.accessToken, {
             dpopKey: tokens.dpopKey,
             refreshOptions,
             eventEmitter,
             expiresIn: tokens.expiresIn,
         });
-        await this.storageUtility.setForUser(storedSessionId, {
-            webId: tokens.webId,
-            isLoggedIn: "true",
-        }, { secure: true });
+        await solidClientAuthnCore.saveSessionInfoToStorage(this.storageUtility, storedSessionId, tokens.webId, tokens.clientId, "true", undefined, true);
         const sessionInfo = await this.sessionInfoManager.get(storedSessionId);
         if (!sessionInfo) {
             throw new Error(`Could not retrieve session: [${storedSessionId}].`);
@@ -28737,41 +28659,67 @@ class Redirector {
  * @hidden
  */
 class ClientRegistrar {
+    storageUtility;
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
         this.storageUtility = storageUtility;
     }
     async getClient(options, issuerConfig) {
         // If client secret and/or client id are stored in storage, use those.
-        const [storedClientId, storedClientSecret,
-        // storedClientName,
-        ] = await Promise.all([
+        const [storedClientId, storedClientSecret, expiresAt, storedClientName, storedClientType,] = await Promise.all([
             this.storageUtility.getForUser(options.sessionId, "clientId", {
                 secure: false,
             }),
             this.storageUtility.getForUser(options.sessionId, "clientSecret", {
                 secure: false,
             }),
-            // this.storageUtility.getForUser(options.sessionId, "clientName", {
-            //   // FIXME: figure out how to persist secure storage at reload
-            //   secure: false,
-            // }),
+            this.storageUtility.getForUser(options.sessionId, "expiresAt", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(options.sessionId, "clientName", {
+                secure: false,
+            }),
+            this.storageUtility.getForUser(options.sessionId, "clientType", {
+                secure: false,
+            }),
         ]);
-        if (storedClientId) {
-            return {
-                clientId: storedClientId,
-                clientSecret: storedClientSecret,
-                clientType: "dynamic",
-            };
+        // -1 is used as a default to identify legacy cases when a value should
+        // have been stored, but wasn't. It will be treated as an expired client.
+        const expirationDate = expiresAt !== undefined ? Number.parseInt(expiresAt, 10) : -1;
+        // Expiration is only applicable to confidential clients.
+        // If the client registration never expires, then the expirationDate is 0.
+        // Note that Date.now() is in milliseconds, and expirationDate in seconds.
+        const expired = storedClientSecret !== undefined &&
+            expirationDate !== 0 &&
+            Math.floor(Date.now() / 1000) > expirationDate;
+        if (storedClientId && solidClientAuthnCore.isKnownClientType(storedClientType) && !expired) {
+            return storedClientSecret !== undefined
+                ? {
+                    clientId: storedClientId,
+                    clientSecret: storedClientSecret,
+                    clientName: storedClientName,
+                    // Note: static clients are not applicable in a browser context.
+                    clientType: "dynamic",
+                    expiresAt: expirationDate,
+                }
+                : {
+                    clientId: storedClientId,
+                    clientName: storedClientName,
+                    // Note: static clients are not applicable in a browser context.
+                    clientType: storedClientType,
+                    // The type assertion is required even though the type should match the declaration.
+                };
         }
         try {
             const registeredClient = await oidcClientExt.registerClient(options, issuerConfig);
             // Save info
             const infoToSave = {
                 clientId: registeredClient.clientId,
+                clientType: "dynamic",
             };
-            if (registeredClient.clientSecret) {
+            if (registeredClient.clientSecret !== undefined) {
                 infoToSave.clientSecret = registeredClient.clientSecret;
+                infoToSave.expiresAt = String(registeredClient.expiresAt);
             }
             if (registeredClient.idTokenSignedResponseAlg) {
                 infoToSave.idTokenSignedResponseAlg =
@@ -28786,7 +28734,7 @@ class ClientRegistrar {
             return registeredClient;
         }
         catch (error) {
-            throw new Error(`Client registration failed: [${error}]`);
+            throw new Error(`Client registration failed.`, { cause: error });
         }
     }
 }
@@ -28865,6 +28813,9 @@ class ErrorOidcHandler {
  * @hidden
  */
 class TokenRefresher {
+    storageUtility;
+    issuerConfigFetcher;
+    clientRegistrar;
     constructor(storageUtility, issuerConfigFetcher, clientRegistrar) {
         this.storageUtility = storageUtility;
         this.issuerConfigFetcher = issuerConfigFetcher;
@@ -28886,10 +28837,7 @@ class TokenRefresher {
         }
         const tokenSet = await oidcClientExt.refresh(refreshToken, oidcContext.issuerConfig, clientInfo, dpopKey);
         if (tokenSet.refreshToken !== undefined) {
-            eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(solidClientAuthnCore.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-            await this.storageUtility.setForUser(sessionId, {
-                refreshToken: tokenSet.refreshToken,
-            });
+            eventEmitter?.emit(solidClientAuthnCore.EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
         }
         return tokenSet;
     }
@@ -28916,9 +28864,8 @@ class TokenRefresher {
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 /**
- *
  * @param dependencies
- * @deprecated This function will be removed from the external API in an upcoming release.
+ * @hidden
  */
 function getClientAuthenticationWithDependencies(dependencies) {
     const inMemoryStorage = new solidClientAuthnCore.InMemoryStorage();
@@ -28986,7 +28933,6 @@ const KEY_CURRENT_URL = `${solidClientAuthnCore.SOLID_CLIENT_AUTHN_KEY_PREFIX}cu
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
 async function silentlyAuthenticate(sessionId, clientAuthn, session) {
-    var _a;
     const storedSessionInfo = await clientAuthn.validateCurrentSession(sessionId);
     if (storedSessionInfo !== null) {
         // It can be really useful to save the user's current browser location,
@@ -29001,19 +28947,31 @@ async function silentlyAuthenticate(sessionId, clientAuthn, session) {
             redirectUrl: storedSessionInfo.redirectUrl,
             clientId: storedSessionInfo.clientAppId,
             clientSecret: storedSessionInfo.clientAppSecret,
-            tokenType: (_a = storedSessionInfo.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
+            tokenType: storedSessionInfo.tokenType ?? "DPoP",
         }, session.events);
         return true;
     }
     return false;
 }
 function isLoggedIn(sessionInfo) {
-    return !!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn);
+    return !!sessionInfo?.isLoggedIn;
 }
 /**
- * A {@link Session} object represents a user's session on an application. The session holds state, as it stores information enabling acces to private resources after login for instance.
+ * A {@link Session} object represents a user's session on an application. The session holds state, as it stores information enabling access to private resources after login for instance.
  */
-class Session extends EventEmitter {
+class Session {
+    /**
+     * Information regarding the current session.
+     */
+    info;
+    /**
+     * Session attribute exposing the EventEmitter interface, to listen on session
+     * events such as login, logout, etc.
+     * @since 1.15.0
+     */
+    events;
+    clientAuthentication;
+    tokenRequestInProgress = false;
     /**
      * Session object constructor. Typically called as follows:
      *
@@ -29030,155 +28988,7 @@ class Session extends EventEmitter {
      *
      */
     constructor(sessionOptions = {}, sessionId = undefined) {
-        super();
-        this.tokenRequestInProgress = false;
-        /**
-         * Triggers the login process. Note that this method will redirect the user away from your app.
-         *
-         * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
-         * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by {@linkcode handleIncomingRedirect}.
-         */
-        // Define these functions as properties so that they don't get accidentally re-bound.
-        // Isn't Javascript fun?
-        this.login = async (options) => {
-            var _a;
-            await this.clientAuthentication.login({
-                sessionId: this.info.sessionId,
-                ...options,
-                // Defaults the token type to DPoP
-                tokenType: (_a = options.tokenType) !== null && _a !== void 0 ? _a : "DPoP",
-            }, this.events);
-            // `login` redirects the user away from the app,
-            // so unless it throws an error, there is no code that should run afterwards
-            // (since there is no "after" in the lifetime of the script).
-            // Hence, this Promise never resolves:
-            return new Promise(() => { });
-        };
-        /**
-         * Fetches data using available login information. If the user is not logged in, this will behave as a regular `fetch`. The signature of this method is identical to the [canonical `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
-         *
-         * @param url The URL from which data should be fetched.
-         * @param init Optional parameters customizing the request, by specifying an HTTP method, headers, a body, etc. Follows the [WHATWG Fetch Standard](https://fetch.spec.whatwg.org/).
-         */
-        this.fetch = (url, init) => this.clientAuthentication.fetch(url, init);
-        /**
-         * An internal logout function, to control whether or not the logout signal
-         * should be sent, i.e. if the logout was user-initiated or is the result of
-         * an external event.
-         *
-         * @hidden
-         */
-        this.internalLogout = async (emitSignal, options) => {
-            // Clearing this value means that silent refresh will no longer be attempted.
-            // In particular, in the case of a silent authentication error it prevents
-            // from getting stuck in an authentication retries loop.
-            window.localStorage.removeItem(KEY_CURRENT_SESSION);
-            await this.clientAuthentication.logout(this.info.sessionId, options);
-            this.info.isLoggedIn = false;
-            if (emitSignal) {
-                this.events.emit(solidClientAuthnCore.EVENTS.LOGOUT);
-            }
-        };
-        /**
-         * Logs the user out of the application.
-         *
-         * There are 2 types of logout supported by this library,
-         * `app` logout and `idp` logout.
-         *
-         * App logout will log the user out within the application
-         * by clearing any session data from the browser. It does
-         * not log the user out of their Solid identity provider,
-         * and should not redirect the user away.
-         * App logout can be performed as follows:
-         * ```typescript
-         * await session.logout({ logoutType: 'app' });
-         * ```
-         *
-         * IDP logout will log the user out of their Solid identity provider,
-         * and will redirect the user away from the application to do so. In order
-         * for users to be redirected back to `postLogoutUrl` you MUST include the
-         * `postLogoutUrl` value in the `post_logout_redirect_uris` field in the
-         * [Client ID Document](https://docs.inrupt.com/ess/latest/security/authentication/#client-identifier-client-id).
-         * IDP logout can be performed as follows:
-         * ```typescript
-         * await session.logout({
-         *  logoutType: 'idp',
-         *  // An optional URL to redirect to after logout has completed;
-         *  // this MUST match a logout URL listed in the Client ID Document
-         *  // of the application that is logged in.
-         *  // If the application is logged in with a Client ID that is not
-         *  // a URI dereferencing to a Client ID Document then users will
-         *  // not be redirected back to the `postLogoutUrl` after logout.
-         *  postLogoutUrl: 'https://example.com/logout',
-         *  // An optional value to be included in the query parameters
-         *  // when the IDP provider redirects the user to the postLogoutRedirectUrl.
-         *  state: "my-state"
-         * });
-         * ```
-         */
-        this.logout = async (options) => this.internalLogout(true, options);
-        /**
-         * Completes the login process by processing the information provided by the
-         * Solid identity provider through redirect.
-         *
-         * @param options See {@see IHandleIncomingRedirectOptions}.
-         */
-        this.handleIncomingRedirect = async (inputOptions = {}) => {
-            var _a;
-            if (this.info.isLoggedIn) {
-                return this.info;
-            }
-            if (this.tokenRequestInProgress) {
-                return undefined;
-            }
-            const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
-            const url = (_a = options.url) !== null && _a !== void 0 ? _a : window.location.href;
-            this.tokenRequestInProgress = true;
-            const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
-            if (isLoggedIn(sessionInfo)) {
-                this.setSessionInfo(sessionInfo);
-                const currentUrl = window.localStorage.getItem(KEY_CURRENT_URL);
-                if (currentUrl === null) {
-                    // The login event can only be triggered **after** the user has been
-                    // redirected from the IdP with access and ID tokens.
-                    this.events.emit(solidClientAuthnCore.EVENTS.LOGIN);
-                }
-                else {
-                    // If an URL is stored in local storage, we are being logged in after a
-                    // silent authentication, so remove our currently stored URL location
-                    // to clean up our state now that we are completing the re-login process.
-                    window.localStorage.removeItem(KEY_CURRENT_URL);
-                    this.events.emit(solidClientAuthnCore.EVENTS.SESSION_RESTORED, currentUrl);
-                }
-            }
-            else if (options.restorePreviousSession === true) {
-                // Silent authentication happens after a refresh, which means there are no
-                // OAuth params in the current location IRI. It can only succeed if a session
-                // was previously logged in, in which case its ID will be present with a known
-                // identifier in local storage.
-                // Check if we have a locally stored session ID...
-                const storedSessionId = window.localStorage.getItem(KEY_CURRENT_SESSION);
-                // ...if not, then there is no ID token, and so silent authentication cannot happen, but
-                // if we do have a stored session ID, attempt to re-authenticate now silently.
-                if (storedSessionId !== null) {
-                    const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
-                    // At this point, we know that the main window will imminently be redirected.
-                    // However, this redirect is asynchronous and there is no way to halt execution
-                    // until it happens precisely. That's why the current Promise simply does not
-                    // resolve.
-                    if (attemptedSilentAuthentication) {
-                        return new Promise(() => { });
-                    }
-                }
-            }
-            this.tokenRequestInProgress = false;
-            return sessionInfo;
-        };
-        // Until Session no longer implements EventEmitter, this.events is just a proxy
-        // to this (with some interface filtering). When we make the breaking change,
-        // this.events will be a regular EventEmitter (implementing ISessionEventEmitter):
-        // this.events = new EventEmitter();
-        this.events = new Proxy(this, solidClientAuthnCore.buildProxyHandler(Session.prototype, "events only implements ISessionEventListener"));
+        this.events = new EventEmitter();
         if (sessionOptions.clientAuthentication) {
             this.clientAuthentication = sessionOptions.clientAuthentication;
         }
@@ -29196,11 +29006,12 @@ class Session extends EventEmitter {
                 sessionId: sessionOptions.sessionInfo.sessionId,
                 isLoggedIn: false,
                 webId: sessionOptions.sessionInfo.webId,
+                clientAppId: sessionOptions.sessionInfo.clientAppId,
             };
         }
         else {
             this.info = {
-                sessionId: sessionId !== null && sessionId !== void 0 ? sessionId : uuid.v4(),
+                sessionId: sessionId ?? uuid.v4(),
                 isLoggedIn: false,
             };
         }
@@ -29213,61 +29024,150 @@ class Session extends EventEmitter {
         this.events.on(solidClientAuthnCore.EVENTS.ERROR, () => this.internalLogout(false));
     }
     /**
-     * Register a callback function to be called when a user completes login.
+     * Triggers the login process. Note that this method will redirect the user away from your app.
      *
-     * The callback is called when {@link handleIncomingRedirect} completes successfully.
-     *
-     * @param callback The function called when a user completes login.
-     * @deprecated Prefer session.events.on(EVENTS.LOGIN, callback)
+     * @param options Parameter to customize the login behaviour. In particular, two options are mandatory: `options.oidcIssuer`, the user's identity provider, and `options.redirectUrl`, the URL to which the user will be redirected after logging in their identity provider.
+     * @returns This method should redirect the user away from the app: it does not return anything. The login process is completed by {@linkcode handleIncomingRedirect}.
      */
-    onLogin(callback) {
-        this.events.on(solidClientAuthnCore.EVENTS.LOGIN, callback);
-    }
+    // Define these functions as properties so that they don't get accidentally re-bound.
+    // Isn't Javascript fun?
+    login = async (options) => {
+        await this.clientAuthentication.login({
+            sessionId: this.info.sessionId,
+            ...options,
+            // Defaults the token type to DPoP
+            tokenType: options.tokenType ?? "DPoP",
+        }, this.events);
+        // `login` redirects the user away from the app,
+        // so unless it throws an error, there is no code that should run afterwards
+        // (since there is no "after" in the lifetime of the script).
+        // Hence, this Promise never resolves:
+        return new Promise(() => { });
+    };
     /**
-     * Register a callback function to be called when a user logs out:
+     * Fetches data using available login information. If the user is not logged in, this will behave as a regular `fetch`. The signature of this method is identical to the [canonical `fetch`](https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API).
      *
-     * @param callback The function called when a user completes logout.
-     * @deprecated Prefer session.events.on(EVENTS.LOGOUT, callback)
+     * @param url The URL from which data should be fetched.
+     * @param init Optional parameters customizing the request, by specifying an HTTP method, headers, a body, etc. Follows the [WHATWG Fetch Standard](https://fetch.spec.whatwg.org/).
      */
-    onLogout(callback) {
-        this.events.on(solidClientAuthnCore.EVENTS.LOGOUT, callback);
-    }
+    fetch = (url, init) => this.clientAuthentication.fetch(url, init);
     /**
-     * Register a callback function to be called when a user logs out:
+     * An internal logout function, to control whether or not the logout signal
+     * should be sent, i.e. if the logout was user-initiated or is the result of
+     * an external event.
      *
-     * @param callback The function called when an error occurs.
-     * @since 1.11.0
-     * @deprecated Prefer session.events.on(EVENTS.ERROR, callback)
+     * @hidden
      */
-    onError(callback) {
-        this.events.on(solidClientAuthnCore.EVENTS.ERROR, callback);
-    }
+    internalLogout = async (emitSignal, options) => {
+        // Clearing this value means that silent refresh will no longer be attempted.
+        // In particular, in the case of a silent authentication error it prevents
+        // from getting stuck in an authentication retries loop.
+        window.localStorage.removeItem(KEY_CURRENT_SESSION);
+        await this.clientAuthentication.logout(this.info.sessionId, options);
+        this.info.isLoggedIn = false;
+        if (emitSignal) {
+            this.events.emit(solidClientAuthnCore.EVENTS.LOGOUT);
+        }
+    };
     /**
-     * Register a callback function to be called when a session is restored.
+     * Logs the user out of the application.
      *
-     * Note: the callback will be called with the saved value of the 'current URL'
-     * at the time the session was restored.
+     * There are 2 types of logout supported by this library,
+     * `app` logout and `idp` logout.
      *
-     * @param callback The function called when a user's already logged-in session is restored, e.g., after a silent authentication is completed after a page refresh.
-     * @deprecated Prefer session.events.on(EVENTS.SESSION_RESTORED, callback)
+     * App logout will log the user out within the application
+     * by clearing any session data from the browser. It does
+     * not log the user out of their Solid identity provider,
+     * and should not redirect the user away.
+     * App logout can be performed as follows:
+     * ```typescript
+     * await session.logout({ logoutType: 'app' });
+     * ```
+     *
+     * IDP logout will log the user out of their Solid identity provider,
+     * and will redirect the user away from the application to do so. In order
+     * for users to be redirected back to `postLogoutUrl` you MUST include the
+     * `postLogoutUrl` value in the `post_logout_redirect_uris` field in the
+     * [Client ID Document](https://docs.inrupt.com/ess/latest/security/authentication/#client-identifier-client-id).
+     * IDP logout can be performed as follows:
+     * ```typescript
+     * await session.logout({
+     *  logoutType: 'idp',
+     *  // An optional URL to redirect to after logout has completed;
+     *  // this MUST match a logout URL listed in the Client ID Document
+     *  // of the application that is logged in.
+     *  // If the application is logged in with a Client ID that is not
+     *  // a URI dereferencing to a Client ID Document then users will
+     *  // not be redirected back to the `postLogoutUrl` after logout.
+     *  postLogoutUrl: 'https://example.com/logout',
+     *  // An optional value to be included in the query parameters
+     *  // when the IDP provider redirects the user to the postLogoutRedirectUrl.
+     *  state: "my-state"
+     * });
+     * ```
      */
-    onSessionRestore(callback) {
-        this.events.on(solidClientAuthnCore.EVENTS.SESSION_RESTORED, callback);
-    }
+    logout = async (options) => this.internalLogout(true, options);
     /**
-     * Register a callback that runs when the session expires and can no longer
-     * make authenticated requests, but following a user logout.
-     * @param callback The function that runs on session expiration.
-     * @since 1.11.0
-     * @deprecated Prefer session.events.on(EVENTS.SESSION_EXPIRED, callback)
+     * Completes the login process by processing the information provided by the
+     * Solid identity provider through redirect.
+     *
+     * @param options See {@link IHandleIncomingRedirectOptions}.
      */
-    onSessionExpiration(callback) {
-        this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXPIRED, callback);
-    }
+    handleIncomingRedirect = async (inputOptions = {}) => {
+        if (this.info.isLoggedIn) {
+            return this.info;
+        }
+        if (this.tokenRequestInProgress) {
+            return undefined;
+        }
+        const options = typeof inputOptions === "string" ? { url: inputOptions } : inputOptions;
+        const url = options.url ?? window.location.href;
+        this.tokenRequestInProgress = true;
+        const sessionInfo = await this.clientAuthentication.handleIncomingRedirect(url, this.events);
+        if (isLoggedIn(sessionInfo)) {
+            this.setSessionInfo(sessionInfo);
+            const currentUrl = window.localStorage.getItem(KEY_CURRENT_URL);
+            if (currentUrl === null) {
+                // The login event can only be triggered **after** the user has been
+                // redirected from the IdP with access and ID tokens.
+                this.events.emit(solidClientAuthnCore.EVENTS.LOGIN);
+            }
+            else {
+                // If an URL is stored in local storage, we are being logged in after a
+                // silent authentication, so remove our currently stored URL location
+                // to clean up our state now that we are completing the re-login process.
+                window.localStorage.removeItem(KEY_CURRENT_URL);
+                this.events.emit(solidClientAuthnCore.EVENTS.SESSION_RESTORED, currentUrl);
+            }
+        }
+        else if (options.restorePreviousSession === true) {
+            // Silent authentication happens after a refresh, which means there are no
+            // OAuth params in the current location IRI. It can only succeed if a session
+            // was previously logged in, in which case its ID will be present with a known
+            // identifier in local storage.
+            // Check if we have a locally stored session ID...
+            const storedSessionId = window.localStorage.getItem(KEY_CURRENT_SESSION);
+            // ...if not, then there is no ID token, and so silent authentication cannot happen, but
+            // if we do have a stored session ID, attempt to re-authenticate now silently.
+            if (storedSessionId !== null) {
+                const attemptedSilentAuthentication = await silentlyAuthenticate(storedSessionId, this.clientAuthentication, this);
+                // At this point, we know that the main window will imminently be redirected.
+                // However, this redirect is asynchronous and there is no way to halt execution
+                // until it happens precisely. That's why the current Promise simply does not
+                // resolve.
+                if (attemptedSilentAuthentication) {
+                    return new Promise(() => { });
+                }
+            }
+        }
+        this.tokenRequestInProgress = false;
+        return sessionInfo;
+    };
     setSessionInfo(sessionInfo) {
         this.info.isLoggedIn = sessionInfo.isLoggedIn;
         this.info.webId = sessionInfo.webId;
         this.info.sessionId = sessionInfo.sessionId;
+        this.info.clientAppId = sessionInfo.clientAppId;
         this.info.expirationDate = sessionInfo.expirationDate;
         this.events.on(solidClientAuthnCore.EVENTS.SESSION_EXTENDED, (expiresIn) => {
             this.info.expirationDate = Date.now() + expiresIn * 1000;
@@ -29321,7 +29221,7 @@ function getDefaultSession() {
  * @since 1.3.0
  */
 /* eslint-disable-next-line no-shadow */
-const fetch = (...args) => {
+const fetch$1 = (...args) => {
     const session = getDefaultSession();
     return session.fetch(...args);
 };
@@ -29360,43 +29260,6 @@ const handleIncomingRedirect = (...args) => {
     return session.handleIncomingRedirect(...args);
 };
 /**
- * Register a callback function to be called when a user completes login.
- *
- * The callback is called when {@link handleIncomingRedirect} completes successfully.
- * @since 1.3.0
- *
- * @param callback The function called when a user completes login.
- * @deprecated Prefer events.on(EVENTS.LOGIN, callback)
-
- */
-const onLogin = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogin(...args);
-};
-/**
- * Register a callback function to be called when a user logs out:
- *
- * @param callback The function called when a user completes logout.
- * @since 1.3.0
- * @deprecated Prefer events.on(EVENTS.LOGOUT, callback)
- *
- */
-const onLogout = (...args) => {
-    const session = getDefaultSession();
-    return session.onLogout(...args);
-};
-/**
- * Register a callback function to be called when a session is restored:
- *
- * @param callback The function called when a session is restored.
- * @since 1.3.0
- * @deprecated Prefer events.on(EVENTS.SESSION_RESTORED, callback)
- */
-const onSessionRestore = (...args) => {
-    const session = getDefaultSession();
-    return session.onSessionRestore(...args);
-};
-/**
  * {@link SessionEventEmitter} instance to subscribe to events by the default session.
  *
  * @since 1.14.0
@@ -29406,1041 +29269,30 @@ const events = () => {
 };
 
 Object.defineProperty(exports, "ConfigurationError", ({
-  enumerable: true,
-  get: function () { return solidClientAuthnCore.ConfigurationError; }
+    enumerable: true,
+    get: function () { return solidClientAuthnCore.ConfigurationError; }
 }));
 Object.defineProperty(exports, "EVENTS", ({
-  enumerable: true,
-  get: function () { return solidClientAuthnCore.EVENTS; }
+    enumerable: true,
+    get: function () { return solidClientAuthnCore.EVENTS; }
 }));
 Object.defineProperty(exports, "InMemoryStorage", ({
-  enumerable: true,
-  get: function () { return solidClientAuthnCore.InMemoryStorage; }
+    enumerable: true,
+    get: function () { return solidClientAuthnCore.InMemoryStorage; }
 }));
 Object.defineProperty(exports, "NotImplementedError", ({
-  enumerable: true,
-  get: function () { return solidClientAuthnCore.NotImplementedError; }
+    enumerable: true,
+    get: function () { return solidClientAuthnCore.NotImplementedError; }
 }));
 exports.Session = Session;
 exports.events = events;
-exports.fetch = fetch;
-exports.getClientAuthenticationWithDependencies = getClientAuthenticationWithDependencies;
+exports.fetch = fetch$1;
 exports.getDefaultSession = getDefaultSession;
 exports.handleIncomingRedirect = handleIncomingRedirect;
 exports.login = login;
 exports.logout = logout;
-exports.onLogin = onLogin;
-exports.onLogout = onLogout;
-exports.onSessionRestore = onSessionRestore;
 //# sourceMappingURL=index.js.map
 
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/index.js ***!
-  \**********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "NIL", ({
-  enumerable: true,
-  get: function get() {
-    return _nil.default;
-  }
-}));
-Object.defineProperty(exports, "parse", ({
-  enumerable: true,
-  get: function get() {
-    return _parse.default;
-  }
-}));
-Object.defineProperty(exports, "stringify", ({
-  enumerable: true,
-  get: function get() {
-    return _stringify.default;
-  }
-}));
-Object.defineProperty(exports, "v1", ({
-  enumerable: true,
-  get: function get() {
-    return _v.default;
-  }
-}));
-Object.defineProperty(exports, "v3", ({
-  enumerable: true,
-  get: function get() {
-    return _v2.default;
-  }
-}));
-Object.defineProperty(exports, "v4", ({
-  enumerable: true,
-  get: function get() {
-    return _v3.default;
-  }
-}));
-Object.defineProperty(exports, "v5", ({
-  enumerable: true,
-  get: function get() {
-    return _v4.default;
-  }
-}));
-Object.defineProperty(exports, "validate", ({
-  enumerable: true,
-  get: function get() {
-    return _validate.default;
-  }
-}));
-Object.defineProperty(exports, "version", ({
-  enumerable: true,
-  get: function get() {
-    return _version.default;
-  }
-}));
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js"));
-
-var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js"));
-
-var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js"));
-
-var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js"));
-
-var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js"));
-
-var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js"));
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js"));
-
-var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js ***!
-  \********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-/*
- * Browser-compatible JavaScript MD5
- *
- * Modification of JavaScript MD5
- * https://github.com/blueimp/JavaScript-MD5
- *
- * Copyright 2011, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * https://opensource.org/licenses/MIT
- *
- * Based on
- * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
- * Digest Algorithm, as defined in RFC 1321.
- * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
- * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
- * Distributed under the BSD License
- * See http://pajhome.org.uk/crypt/md5 for more info.
- */
-function md5(bytes) {
-  if (typeof bytes === 'string') {
-    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
-
-    bytes = new Uint8Array(msg.length);
-
-    for (let i = 0; i < msg.length; ++i) {
-      bytes[i] = msg.charCodeAt(i);
-    }
-  }
-
-  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
-}
-/*
- * Convert an array of little-endian words to an array of bytes
- */
-
-
-function md5ToHexEncodedArray(input) {
-  const output = [];
-  const length32 = input.length * 32;
-  const hexTab = '0123456789abcdef';
-
-  for (let i = 0; i < length32; i += 8) {
-    const x = input[i >> 5] >>> i % 32 & 0xff;
-    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
-    output.push(hex);
-  }
-
-  return output;
-}
-/**
- * Calculate output length with padding and bit length
- */
-
-
-function getOutputLength(inputLength8) {
-  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
-}
-/*
- * Calculate the MD5 of an array of little-endian words, and a bit length.
- */
-
-
-function wordsToMd5(x, len) {
-  /* append padding */
-  x[len >> 5] |= 0x80 << len % 32;
-  x[getOutputLength(len) - 1] = len;
-  let a = 1732584193;
-  let b = -271733879;
-  let c = -1732584194;
-  let d = 271733878;
-
-  for (let i = 0; i < x.length; i += 16) {
-    const olda = a;
-    const oldb = b;
-    const oldc = c;
-    const oldd = d;
-    a = md5ff(a, b, c, d, x[i], 7, -680876936);
-    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
-    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
-    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
-    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
-    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
-    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
-    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
-    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
-    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
-    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
-    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
-    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
-    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
-    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
-    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
-    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
-    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
-    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
-    b = md5gg(b, c, d, a, x[i], 20, -373897302);
-    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
-    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
-    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
-    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
-    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
-    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
-    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
-    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
-    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
-    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
-    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
-    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
-    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
-    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
-    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
-    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
-    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
-    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
-    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
-    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
-    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
-    d = md5hh(d, a, b, c, x[i], 11, -358537222);
-    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
-    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
-    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
-    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
-    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
-    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
-    a = md5ii(a, b, c, d, x[i], 6, -198630844);
-    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
-    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
-    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
-    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
-    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
-    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
-    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
-    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
-    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
-    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
-    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
-    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
-    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
-    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
-    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
-    a = safeAdd(a, olda);
-    b = safeAdd(b, oldb);
-    c = safeAdd(c, oldc);
-    d = safeAdd(d, oldd);
-  }
-
-  return [a, b, c, d];
-}
-/*
- * Convert an array bytes to an array of little-endian words
- * Characters >255 have their high-byte silently ignored.
- */
-
-
-function bytesToWords(input) {
-  if (input.length === 0) {
-    return [];
-  }
-
-  const length8 = input.length * 8;
-  const output = new Uint32Array(getOutputLength(length8));
-
-  for (let i = 0; i < length8; i += 8) {
-    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
-  }
-
-  return output;
-}
-/*
- * Add integers, wrapping at 2^32. This uses 16-bit operations internally
- * to work around bugs in some JS interpreters.
- */
-
-
-function safeAdd(x, y) {
-  const lsw = (x & 0xffff) + (y & 0xffff);
-  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-  return msw << 16 | lsw & 0xffff;
-}
-/*
- * Bitwise rotate a 32-bit number to the left.
- */
-
-
-function bitRotateLeft(num, cnt) {
-  return num << cnt | num >>> 32 - cnt;
-}
-/*
- * These functions implement the four basic operations the algorithm uses.
- */
-
-
-function md5cmn(q, a, b, x, s, t) {
-  return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
-}
-
-function md5ff(a, b, c, d, x, s, t) {
-  return md5cmn(b & c | ~b & d, a, b, x, s, t);
-}
-
-function md5gg(a, b, c, d, x, s, t) {
-  return md5cmn(b & d | c & ~d, a, b, x, s, t);
-}
-
-function md5hh(a, b, c, d, x, s, t) {
-  return md5cmn(b ^ c ^ d, a, b, x, s, t);
-}
-
-function md5ii(a, b, c, d, x, s, t) {
-  return md5cmn(c ^ (b | ~d), a, b, x, s, t);
-}
-
-var _default = md5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js":
-/*!***********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js ***!
-  \***********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-var _default = {
-  randomUUID
-};
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/nil.js ***!
-  \********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = '00000000-0000-0000-0000-000000000000';
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js ***!
-  \**********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function parse(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  let v;
-  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
-
-  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-  arr[1] = v >>> 16 & 0xff;
-  arr[2] = v >>> 8 & 0xff;
-  arr[3] = v & 0xff; // Parse ........-####-....-....-............
-
-  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-  arr[5] = v & 0xff; // Parse ........-....-####-....-............
-
-  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-  arr[7] = v & 0xff; // Parse ........-....-....-####-............
-
-  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-  arr[9] = v & 0xff; // Parse ........-....-....-....-############
-  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
-
-  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
-  arr[11] = v / 0x100000000 & 0xff;
-  arr[12] = v >>> 24 & 0xff;
-  arr[13] = v >>> 16 & 0xff;
-  arr[14] = v >>> 8 & 0xff;
-  arr[15] = v & 0xff;
-  return arr;
-}
-
-var _default = parse;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js ***!
-  \**********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js ***!
-  \********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = rng;
-// Unique ID creation requires a high quality random # generator. In the browser we therefore
-// require the crypto API and do not support built-in fallback to lower quality random number
-// generators (like Math.random()).
-let getRandomValues;
-const rnds8 = new Uint8Array(16);
-
-function rng() {
-  // lazy load so that environments that need to polyfill have a chance to do so
-  if (!getRandomValues) {
-    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
-    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
-
-    if (!getRandomValues) {
-      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-    }
-  }
-
-  return getRandomValues(rnds8);
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js":
-/*!*********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js ***!
-  \*********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-// Adapted from Chris Veness' SHA1 code at
-// http://www.movable-type.co.uk/scripts/sha1.html
-function f(s, x, y, z) {
-  switch (s) {
-    case 0:
-      return x & y ^ ~x & z;
-
-    case 1:
-      return x ^ y ^ z;
-
-    case 2:
-      return x & y ^ x & z ^ y & z;
-
-    case 3:
-      return x ^ y ^ z;
-  }
-}
-
-function ROTL(x, n) {
-  return x << n | x >>> 32 - n;
-}
-
-function sha1(bytes) {
-  const K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
-  const H = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
-
-  if (typeof bytes === 'string') {
-    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
-
-    bytes = [];
-
-    for (let i = 0; i < msg.length; ++i) {
-      bytes.push(msg.charCodeAt(i));
-    }
-  } else if (!Array.isArray(bytes)) {
-    // Convert Array-like to Array
-    bytes = Array.prototype.slice.call(bytes);
-  }
-
-  bytes.push(0x80);
-  const l = bytes.length / 4 + 2;
-  const N = Math.ceil(l / 16);
-  const M = new Array(N);
-
-  for (let i = 0; i < N; ++i) {
-    const arr = new Uint32Array(16);
-
-    for (let j = 0; j < 16; ++j) {
-      arr[j] = bytes[i * 64 + j * 4] << 24 | bytes[i * 64 + j * 4 + 1] << 16 | bytes[i * 64 + j * 4 + 2] << 8 | bytes[i * 64 + j * 4 + 3];
-    }
-
-    M[i] = arr;
-  }
-
-  M[N - 1][14] = (bytes.length - 1) * 8 / Math.pow(2, 32);
-  M[N - 1][14] = Math.floor(M[N - 1][14]);
-  M[N - 1][15] = (bytes.length - 1) * 8 & 0xffffffff;
-
-  for (let i = 0; i < N; ++i) {
-    const W = new Uint32Array(80);
-
-    for (let t = 0; t < 16; ++t) {
-      W[t] = M[i][t];
-    }
-
-    for (let t = 16; t < 80; ++t) {
-      W[t] = ROTL(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
-    }
-
-    let a = H[0];
-    let b = H[1];
-    let c = H[2];
-    let d = H[3];
-    let e = H[4];
-
-    for (let t = 0; t < 80; ++t) {
-      const s = Math.floor(t / 20);
-      const T = ROTL(a, 5) + f(s, b, c, d) + e + K[s] + W[t] >>> 0;
-      e = d;
-      d = c;
-      c = ROTL(b, 30) >>> 0;
-      b = a;
-      a = T;
-    }
-
-    H[0] = H[0] + a >>> 0;
-    H[1] = H[1] + b >>> 0;
-    H[2] = H[2] + c >>> 0;
-    H[3] = H[3] + d >>> 0;
-    H[4] = H[4] + e >>> 0;
-  }
-
-  return [H[0] >> 24 & 0xff, H[0] >> 16 & 0xff, H[0] >> 8 & 0xff, H[0] & 0xff, H[1] >> 24 & 0xff, H[1] >> 16 & 0xff, H[1] >> 8 & 0xff, H[1] & 0xff, H[2] >> 24 & 0xff, H[2] >> 16 & 0xff, H[2] >> 8 & 0xff, H[2] & 0xff, H[3] >> 24 & 0xff, H[3] >> 16 & 0xff, H[3] >> 8 & 0xff, H[3] & 0xff, H[4] >> 24 & 0xff, H[4] >> 16 & 0xff, H[4] >> 8 & 0xff, H[4] & 0xff];
-}
-
-var _default = sha1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js":
-/*!**************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js ***!
-  \**************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-exports.unsafeStringify = unsafeStringify;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).slice(1));
-}
-
-function unsafeStringify(arr, offset = 0) {
-  // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
-}
-
-function stringify(arr, offset = 0) {
-  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
-  // of the following:
-  // - One or more input array values don't map to a hex octet (leading to
-  // "undefined" in the uuid)
-  // - Invalid input values for the RFC `version` or `variant` fields
-
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Stringified UUID is invalid');
-  }
-
-  return uuid;
-}
-
-var _default = stringify;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v1.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js"));
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-let _nodeId;
-
-let _clockseq; // Previous uuid creation time
-
-
-let _lastMSecs = 0;
-let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
-
-function v1(options, buf, offset) {
-  let i = buf && offset || 0;
-  const b = buf || new Array(16);
-  options = options || {};
-  let node = options.node || _nodeId;
-  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-
-  if (node == null || clockseq == null) {
-    const seedBytes = options.random || (options.rng || _rng.default)();
-
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-
-
-  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-
-  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
-
-  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
-
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-
-
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  } // Per 4.2.1.2 Throw error if too many uuids are requested
-
-
-  if (nsecs >= 10000) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-
-  msecs += 12219292800000; // `time_low`
-
-  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff; // `time_mid`
-
-  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff; // `time_high_and_version`
-
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-
-  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-
-  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
-
-  b[i++] = clockseq & 0xff; // `node`
-
-  for (let n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf || (0, _stringify.unsafeStringify)(b);
-}
-
-var _default = v1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v3.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js"));
-
-var _md = _interopRequireDefault(__webpack_require__(/*! ./md5.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/md5.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v3 = (0, _v.default)('v3', 0x30, _md.default);
-var _default = v3;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js ***!
-  \********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.URL = exports.DNS = void 0;
-exports["default"] = v35;
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/parse.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str)); // UTF8 escape
-
-  const bytes = [];
-
-  for (let i = 0; i < str.length; ++i) {
-    bytes.push(str.charCodeAt(i));
-  }
-
-  return bytes;
-}
-
-const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-exports.DNS = DNS;
-const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-exports.URL = URL;
-
-function v35(name, version, hashfunc) {
-  function generateUUID(value, namespace, buf, offset) {
-    var _namespace;
-
-    if (typeof value === 'string') {
-      value = stringToBytes(value);
-    }
-
-    if (typeof namespace === 'string') {
-      namespace = (0, _parse.default)(namespace);
-    }
-
-    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
-      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
-    } // Compute hash of namespace and value, Per 4.3
-    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
-    // hashfunc([...namespace, ... value])`
-
-
-    let bytes = new Uint8Array(16 + value.length);
-    bytes.set(namespace);
-    bytes.set(value, namespace.length);
-    bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 0x0f | version;
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-
-    if (buf) {
-      offset = offset || 0;
-
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = bytes[i];
-      }
-
-      return buf;
-    }
-
-    return (0, _stringify.unsafeStringify)(bytes);
-  } // Function#name is not settable on some platforms (#270)
-
-
-  try {
-    generateUUID.name = name; // eslint-disable-next-line no-empty
-  } catch (err) {} // For CommonJS default export support
-
-
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL;
-  return generateUUID;
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v4.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _native = _interopRequireDefault(__webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/native.js"));
-
-var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/rng.js"));
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function v4(options, buf, offset) {
-  if (_native.default.randomUUID && !buf && !options) {
-    return _native.default.randomUUID();
-  }
-
-  options = options || {};
-
-  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-
-  rnds[6] = rnds[6] & 0x0f | 0x40;
-  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
-
-  return (0, _stringify.unsafeStringify)(rnds);
-}
-
-var _default = v4;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v5.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/v35.js"));
-
-var _sha = _interopRequireDefault(__webpack_require__(/*! ./sha1.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/sha1.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v5 = (0, _v.default)('v5', 0x50, _sha.default);
-var _default = v5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js":
-/*!*************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js ***!
-  \*************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _regex = _interopRequireDefault(__webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/regex.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex.default.test(uuid);
-}
-
-var _default = validate;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js":
-/*!************************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/version.js ***!
-  \************************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-browser/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function version(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  return parseInt(uuid.slice(14, 15), 16);
-}
-
-var _default = version;
-exports["default"] = _default;
 
 /***/ }),
 
@@ -30453,10 +29305,8 @@ exports["default"] = _default;
 "use strict";
 
 
-var events = __webpack_require__(/*! events */ "./node_modules/events/events.js");
-var universalFetch = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js");
 var jose = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/index.js");
-var uuid = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js");
+var uuid = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/cjs-browser/index.js");
 
 //
 // Copyright Inrupt Inc.
@@ -30494,6 +29344,8 @@ const EVENTS = {
     LOGIN: "login",
     LOGOUT: "logout",
     NEW_REFRESH_TOKEN: "newRefreshToken",
+    NEW_TOKENS: "newTokens",
+    AUTHORIZATION_REQUEST: "authorizationRequest",
     SESSION_EXPIRED: "sessionExpired",
     SESSION_EXTENDED: "sessionExtended",
     SESSION_RESTORED: "sessionRestore",
@@ -30509,49 +29361,7 @@ const SCOPE_OPENID = "openid";
 const SCOPE_OFFLINE = "offline_access";
 // The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
 const SCOPE_WEBID = "webid";
-// The scopes are expected as a space-separated list.
-const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Temporary internal builder for safe proxying.
- */
-const buildProxyHandler = (
-// The class to be excluded needs to be injected, because it is defined in a
-// dependency.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-toExclude, errorMessage) => ({
-    // This proxy is only a temporary measure until Session no longer extends
-    // SessionEventEmitter, and the proxying is no longer necessary.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    get(target, prop, receiver) {
-        // Reject any calls to the proxy that isn't specific to the EventEmitter API
-        if (!Object.getOwnPropertyNames(events.EventEmitter).includes(prop) &&
-            Object.getOwnPropertyNames(toExclude).includes(prop)) {
-            throw new Error(`${errorMessage}: [${prop}] is not supported`);
-        }
-        return Reflect.get(target, prop, receiver);
-    },
-});
+const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID];
 
 //
 // Copyright Inrupt Inc.
@@ -30577,6 +29387,7 @@ toExclude, errorMessage) => ({
  * @hidden
  */
 class AggregateHandler {
+    handleables;
     constructor(handleables) {
         this.handleables = handleables;
         this.handleables = handleables;
@@ -30656,40 +29467,20 @@ class AggregateHandler {
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// eslint-disable-next-line no-shadow
-async function fetchJwks(jwksIri, issuerIri) {
-    // FIXME: the following line works, but the underlying network calls don't seem
-    // to be mocked properly by our test code. It would be nicer to replace calls to this
-    // function by the following line and to fix the mocks.
-    // const jwks = createRemoteJWKSet(new URL(jwksIri));
-    const jwksResponse = await universalFetch.fetch.call(globalThis, jwksIri);
-    if (jwksResponse.status !== 200) {
-        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
-    }
-    // The JWKS should only contain the current key for the issuer.
-    let jwk;
-    try {
-        jwk = (await jwksResponse.json()).keys[0];
-    }
-    catch (e) {
-        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
-    }
-    return jwk;
-}
 /**
- * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
+ * Extract a WebID and the clientID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
  * Note that this does not yet implement the user endpoint lookup, and only checks
- * for `webid` or IRI-like `sub` claims.
+ * for `webid`, `azp` or IRI-like `sub` claims.
  *
  * @param idToken the payload of the ID token from which the WebID can be extracted.
- * @returns a WebID extracted from the ID token.
+ * @returns an object with entries webId and clientId extracted from the ID token.
  * @internal
  */
 async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
-    const jwk = await fetchJwks(jwksIri, issuerIri);
     let payload;
+    let clientIdInPayload;
     try {
-        const { payload: verifiedPayload } = await jose.jwtVerify(idToken, await jose.importJWK(jwk), {
+        const { payload: verifiedPayload } = await jose.jwtVerify(idToken, jose.createRemoteJWKSet(new URL(jwksIri)), {
             issuer: issuerIri,
             audience: clientId,
         });
@@ -30698,8 +29489,14 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     catch (e) {
         throw new Error(`Token verification failed: ${e.stack}`);
     }
+    if (typeof payload.azp === "string") {
+        clientIdInPayload = payload.azp;
+    }
     if (typeof payload.webid === "string") {
-        return payload.webid;
+        return {
+            webId: payload.webid,
+            clientId: clientIdInPayload,
+        };
     }
     if (typeof payload.sub !== "string") {
         throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
@@ -30710,11 +29507,48 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
         // as specified by the Identity Provider.
         // eslint-disable-next-line no-new
         new URL(payload.sub);
-        return payload.sub;
+        return {
+            webId: payload.sub,
+            clientId: clientIdInPayload,
+        };
     }
     catch (e) {
         throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
     }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+function normalizeScopes(scopes) {
+    if (!Array.isArray(scopes)) {
+        return DEFAULT_SCOPES;
+    }
+    return Array.from(
+    // De-dupe potentia conflicts if any.
+    new Set([
+        ...DEFAULT_SCOPES,
+        ...scopes.filter(
+        // Remove user-provided scopes that are not strings or include spaces.
+        (scope) => typeof scope === "string" && !scope.includes(" ")),
+    ]));
 }
 
 //
@@ -30769,23 +29603,38 @@ function removeOpenIdParams(redirectUrl) {
  * @hidden
  * @packageDocumentation
  */
+function booleanWithFallback(value, fallback) {
+    if (typeof value === "boolean") {
+        return Boolean(value);
+    }
+    return Boolean(fallback);
+}
 /**
  * @hidden
  * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
  * PKCE: https://tools.ietf.org/html/rfc7636
  */
 class AuthorizationCodeWithPkceOidcHandlerBase {
+    storageUtility;
+    redirector;
     constructor(storageUtility, redirector) {
         this.storageUtility = storageUtility;
         this.redirector = redirector;
         this.storageUtility = storageUtility;
         this.redirector = redirector;
     }
+    parametersGuard = (oidcLoginOptions) => {
+        return (oidcLoginOptions.issuerConfiguration.grantTypesSupported !== undefined &&
+            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1 &&
+            oidcLoginOptions.redirectUrl !== undefined);
+    };
     async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
+        return this.parametersGuard(oidcLoginOptions);
     }
-    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+    async setupRedirectHandler({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+        if (!this.parametersGuard(oidcLoginOptions)) {
+            throw new Error("The authorization code grant requires a redirectUrl.");
+        }
         await Promise.all([
             // We use the OAuth 'state' value (which should be crypto-random) as
             // the key in our storage to store our actual SessionID. We do this
@@ -30796,7 +29645,6 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
             // that session ID can be any developer-specified value, and therefore
             // may not be appropriate (since the OAuth 'state' value should really
             // be an unguessable crypto-random value).
-            // eslint-disable-next-line no-underscore-dangle
             this.storageUtility.setForUser(state, {
                 sessionId: oidcLoginOptions.sessionId,
             }),
@@ -30805,12 +29653,12 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
             // our session ID is unnecessary, but it provides a slightly cleaner
             // separation of concerns.
             this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
-                // eslint-disable-next-line no-underscore-dangle
                 codeVerifier,
                 issuer: oidcLoginOptions.issuer.toString(),
                 // The redirect URL is read after redirect, so it must be stored now.
                 redirectUrl: oidcLoginOptions.redirectUrl,
-                dpop: oidcLoginOptions.dpop ? "true" : "false",
+                dpop: Boolean(oidcLoginOptions.dpop).toString(),
+                keepAlive: booleanWithFallback(oidcLoginOptions.keepAlive, true).toString(),
             }),
         ]);
         this.redirector.redirect(targetUrl, {
@@ -30844,6 +29692,7 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
  * @hidden
  */
 class GeneralLogoutHandler {
+    sessionInfoManager;
     constructor(sessionInfoManager) {
         this.sessionInfoManager = sessionInfoManager;
         this.sessionInfoManager = sessionInfoManager;
@@ -30857,15 +29706,16 @@ class GeneralLogoutHandler {
 }
 
 class IRpLogoutHandler {
+    redirector;
     constructor(redirector) {
         this.redirector = redirector;
         this.redirector = redirector;
     }
     async canHandle(userId, options) {
-        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
+        return options?.logoutType === "idp";
     }
     async handle(userId, options) {
-        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
+        if (options?.logoutType !== "idp") {
             throw new Error("Attempting to call idp logout handler to perform app logout");
         }
         if (options.toLogoutUrl === undefined) {
@@ -30878,6 +29728,7 @@ class IRpLogoutHandler {
 }
 
 class IWaterfallLogoutHandler {
+    handlers;
     constructor(sessionInfoManager, redirector) {
         this.handlers = [
             new GeneralLogoutHandler(sessionInfoManager),
@@ -30925,7 +29776,7 @@ function getUnauthenticatedSession() {
     return {
         isLoggedIn: false,
         sessionId: uuid.v4(),
-        fetch: (...args) => universalFetch.fetch.call(globalThis, ...args),
+        fetch: (...args) => fetch(...args),
     };
 }
 /**
@@ -30943,11 +29794,15 @@ async function clear(sessionId, storage) {
  * @hidden
  */
 class SessionInfoManagerBase {
+    storageUtility;
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
         this.storageUtility = storageUtility;
     }
     update(_sessionId, _options) {
+        throw new Error("Not Implemented");
+    }
+    set(_sessionId, _sessionInfo) {
         throw new Error("Not Implemented");
     }
     get(_) {
@@ -30960,7 +29815,6 @@ class SessionInfoManagerBase {
     /**
      * This function removes all session-related information from storage.
      * @param sessionId the session identifier
-     * @param storage the storage where session info is stored
      * @hidden
      */
     async clear(sessionId) {
@@ -30968,7 +29822,6 @@ class SessionInfoManagerBase {
     }
     /**
      * Registers a new session, so that its ID can be retrieved.
-     * @param sessionId
      */
     async register(_sessionId) {
         throw new Error("Not implemented");
@@ -30984,6 +29837,12 @@ class SessionInfoManagerBase {
      * Deletes all information about all sessions, including their registrations.
      */
     async clearAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Sets authorization request state in storage for a given session ID.
+     */
+    async setOidcContext(_sessionId, _authorizationRequestState) {
         throw new Error("Not implemented");
     }
 }
@@ -31102,34 +29961,46 @@ function isValidUrl(url) {
         new URL(url);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }
 function determineSigningAlg(supported, preferred) {
-    var _a;
-    return ((_a = preferred.find((signingAlg) => {
+    return (preferred.find((signingAlg) => {
         return supported.includes(signingAlg);
-    })) !== null && _a !== void 0 ? _a : null);
+    }) ?? null);
 }
-function determineClientType(options, issuerConfig) {
-    if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
-        return "static";
-    }
-    if (issuerConfig.scopesSupported.includes("webid") &&
+function isStaticClient(options) {
+    return options.clientId !== undefined && !isValidUrl(options.clientId);
+}
+function isSolidOidcClient(options, issuerConfig) {
+    return (issuerConfig.scopesSupported.includes("webid") &&
         options.clientId !== undefined &&
-        isValidUrl(options.clientId)) {
-        return "solid-oidc";
-    }
-    // If no client_id is provided, the client must go through Dynamic Client Registration.
-    // If a client_id is provided and it looks like a URI, yet the Identity Provider
-    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
-    // provided client_id).
-    return "dynamic";
+        isValidUrl(options.clientId));
+}
+function isKnownClientType(clientType) {
+    return (typeof clientType === "string" &&
+        ["dynamic", "static", "solid-oidc"].includes(clientType));
 }
 async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
-    const clientType = determineClientType(options, issuerConfig);
-    if (clientType === "dynamic") {
+    let clientInfo;
+    if (isSolidOidcClient(options, issuerConfig)) {
+        clientInfo = {
+            clientId: options.clientId,
+            clientName: options.clientName,
+            clientType: "solid-oidc",
+        };
+    }
+    else if (isStaticClient(options)) {
+        clientInfo = {
+            clientId: options.clientId,
+            clientSecret: options.clientSecret,
+            clientName: options.clientName,
+            clientType: "static",
+        };
+    }
+    else {
+        // Case of a dynamically registered client.
         return clientRegistrar.getClient({
             sessionId: options.sessionId,
             clientName: options.clientName,
@@ -31140,28 +30011,21 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
     // or it is not compliant but the client_id isn't an IRI (we assume it has already
     // been registered with the IdP), then the client registration information needs
     // to be stored so that it can be retrieved later after redirect.
-    await storageUtility.setForUser(options.sessionId, {
-        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-    });
-    if (options.clientSecret) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientSecret: options.clientSecret,
-        });
-    }
-    if (options.clientName) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientName: options.clientName,
-        });
-    }
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-        clientSecret: options.clientSecret,
-        clientName: options.clientName,
-        clientType,
+    const infoToSave = {
+        clientId: clientInfo.clientId,
+        clientType: clientInfo.clientType,
     };
+    if (clientInfo.clientType === "static") {
+        infoToSave.clientSecret = clientInfo.clientSecret;
+    }
+    if (clientInfo.clientName) {
+        infoToSave.clientName = clientInfo.clientName;
+    }
+    // Note that due to the underlying implementation, doing a `Promise.all`
+    // on multiple `storageUtility.setForUser` results in the last one
+    // overriding the previous calls.
+    await storageUtility.setForUser(options.sessionId, infoToSave);
+    return clientInfo;
 }
 
 //
@@ -31184,56 +30048,55 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-/**
- * @hidden
- * @packageDocumentation
- */
-// By only referring to `window` at runtime, apps that do server-side rendering
-// won't run into errors when rendering code that instantiates a
-// ClientAuthentication:
-const globalFetch = (request, init) => universalFetch.fetch.call(globalThis, request, init);
+const boundFetch = (request, init) => fetch(request, init);
 /**
  * @hidden
  */
 class ClientAuthentication {
+    loginHandler;
+    redirectHandler;
+    logoutHandler;
+    sessionInfoManager;
+    issuerConfigFetcher;
+    boundLogout;
     constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
         this.loginHandler = loginHandler;
         this.redirectHandler = redirectHandler;
         this.logoutHandler = logoutHandler;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
-        // By default, our fetch() resolves to the environment fetch() function.
-        this.fetch = globalFetch;
-        this.logout = async (sessionId, options) => {
-            // When doing IDP logout this will redirect away from the current page, so we should not expect
-            // code after this condition to be run if it is true.
-            // We also need to make sure that any other cleanup that we want to do for
-            // our session takes place before this condition is run
-            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
-                ? {
-                    ...options,
-                    toLogoutUrl: this.boundLogout,
-                }
-                : options);
-            // Restore our fetch() function back to the environment fetch(), effectively
-            // leaving us with un-authenticated fetches from now on.
-            this.fetch = globalFetch;
-            // Delete the bound logout function, so that it can't be called after this.
-            delete this.boundLogout;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            // TODO complete
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
         this.loginHandler = loginHandler;
         this.redirectHandler = redirectHandler;
         this.logoutHandler = logoutHandler;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
     }
+    // By default, our fetch() resolves to the environment fetch() function.
+    fetch = boundFetch;
+    logout = async (sessionId, options) => {
+        // When doing IDP logout this will redirect away from the current page, so we should not expect
+        // code after this condition to be run if it is true.
+        // We also need to make sure that any other cleanup that we want to do for
+        // our session takes place before this condition is run
+        await this.logoutHandler.handle(sessionId, options?.logoutType === "idp"
+            ? {
+                ...options,
+                toLogoutUrl: this.boundLogout,
+            }
+            : options);
+        // Restore our fetch() function back to the environment fetch(), effectively
+        // leaving us with un-authenticated fetches from now on.
+        this.fetch = boundFetch;
+        // Delete the bound logout function, so that it can't be called after this.
+        delete this.boundLogout;
+    };
+    getSessionInfo = async (sessionId) => {
+        // TODO complete
+        return this.sessionInfoManager.get(sessionId);
+    };
+    getAllSessionInfo = async () => {
+        return this.sessionInfoManager.getAll();
+    };
 }
 
 //
@@ -31276,13 +30139,14 @@ async function getSessionIdFromOauthState(storageUtility, oauthState) {
  */
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
-        const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
+        const [issuerIri, codeVerifier, storedRedirectIri, dpop, keepAlive] = await Promise.all([
             storageUtility.getForUser(sessionId, "issuer", {
                 errorIfNull: true,
             }),
             storageUtility.getForUser(sessionId, "codeVerifier"),
             storageUtility.getForUser(sessionId, "redirectUrl"),
             storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
+            storageUtility.getForUser(sessionId, "keepAlive"),
         ]);
         // Clear the code verifier, which is one-time use.
         await storageUtility.deleteForUser(sessionId, "codeVerifier");
@@ -31293,6 +30157,8 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
             redirectUrl: storedRedirectIri,
             issuerConfig,
             dpop: dpop === "true",
+            // Default keepAlive to true if not found in storage.
+            keepAlive: typeof keepAlive === "string" ? keepAlive === "true" : true,
         };
     }
     catch (e) {
@@ -31307,18 +30173,22 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
  * @param storageUtility
  * @param sessionId
  * @param webId
+ * @param clientId
  * @param isLoggedIn
  * @param refreshToken
  * @param secure
  * @param dpopKey
  */
-async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+async function saveSessionInfoToStorage(storageUtility, sessionId, webId, clientId, isLoggedIn, refreshToken, secure, dpopKey) {
     // TODO: Investigate why this does not work with a Promise.all
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
     }
     if (webId !== undefined) {
         await storageUtility.setForUser(sessionId, { webId }, { secure });
+    }
+    if (clientId !== undefined) {
+        await storageUtility.setForUser(sessionId, { clientId }, { secure });
     }
     if (isLoggedIn !== undefined) {
         await storageUtility.setForUser(sessionId, { isLoggedIn }, { secure });
@@ -31335,6 +30205,8 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
  * @hidden
  */
 class StorageUtility {
+    secureStorage;
+    insecureStorage;
     constructor(secureStorage, insecureStorage) {
         this.secureStorage = secureStorage;
         this.insecureStorage = insecureStorage;
@@ -31345,9 +30217,7 @@ class StorageUtility {
         return `solidClientAuthenticationUser:${userId}`;
     }
     async getUserData(userId, secure) {
-        const stored = await (secure
-            ? this.secureStorage
-            : this.insecureStorage).get(this.getKey(userId));
+        const stored = await (secure ? this.secureStorage : this.insecureStorage).get(this.getKey(userId));
         if (stored === undefined) {
             return {};
         }
@@ -31362,28 +30232,26 @@ class StorageUtility {
         await (secure ? this.secureStorage : this.insecureStorage).set(this.getKey(userId), JSON.stringify(data));
     }
     async get(key, options) {
-        const value = await ((options === null || options === void 0 ? void 0 : options.secure)
-            ? this.secureStorage
-            : this.insecureStorage).get(key);
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+        const value = await (options?.secure ? this.secureStorage : this.insecureStorage).get(key);
+        if (value === undefined && options?.errorIfNull) {
             throw new Error(`[${key}] is not stored`);
         }
         return value;
     }
     async set(key, value, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).set(key, value);
+        return (options?.secure ? this.secureStorage : this.insecureStorage).set(key, value);
     }
     async delete(key, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(key);
+        return (options?.secure ? this.secureStorage : this.insecureStorage).delete(key);
     }
     async getForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        const userData = await this.getUserData(userId, options?.secure);
         let value;
         if (!userData || !userData[key]) {
             value = undefined;
         }
         value = userData[key];
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+        if (value === undefined && options?.errorIfNull) {
             throw new Error(`Field [${key}] for user [${userId}] is not stored`);
         }
         return value || undefined;
@@ -31391,21 +30259,21 @@ class StorageUtility {
     async setForUser(userId, values, options) {
         let userData;
         try {
-            userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+            userData = await this.getUserData(userId, options?.secure);
         }
-        catch (_a) {
+        catch {
             // if reading the user data throws, the data is corrupted, and we want to write over it
             userData = {};
         }
-        await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
+        await this.setUserData(userId, { ...userData, ...values }, options?.secure);
     }
     async deleteForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        const userData = await this.getUserData(userId, options?.secure);
         delete userData[key];
-        await this.setUserData(userId, userData, options === null || options === void 0 ? void 0 : options.secure);
+        await this.setUserData(userId, userData, options?.secure);
     }
     async deleteAllUserData(userId, options) {
-        await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
+        await (options?.secure ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
     }
 }
 
@@ -31433,9 +30301,7 @@ class StorageUtility {
  * @hidden
  */
 class InMemoryStorage {
-    constructor() {
-        this.map = {};
-    }
+    map = {};
     async get(key) {
         return this.map[key] || undefined;
     }
@@ -31556,6 +30422,7 @@ class NotImplementedError extends Error {
  * @hidden
  */
 class InvalidResponseError extends Error {
+    missingFields;
     /* istanbul ignore next */
     constructor(missingFields) {
         super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
@@ -31597,6 +30464,8 @@ class InvalidResponseError extends Error {
  * @hidden
  */
 class OidcProviderError extends Error {
+    error;
+    errorDescription;
     /* istanbul ignore next */
     constructor(message, error, errorDescription) {
         super(message);
@@ -31642,7 +30511,7 @@ function normalizeHTU(audience) {
  *
  * @param audience Target URL.
  * @param method HTTP method allowed.
- * @param key Key used to sign the token.
+ * @param dpopKey Key used to sign the token.
  * @returns A JWT that can be used as a DPoP Authorization header.
  */
 async function createDpopHeader(audience, method, dpopKey) {
@@ -31702,11 +30571,10 @@ function isExpectedAuthError(statusCode) {
     return [401, 403].includes(statusCode);
 }
 async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
-    var _a;
-    const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    const headers = new Headers(defaultOptions?.headers);
     // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `DPoP ${authToken}`);
-    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    headers.set("DPoP", await createDpopHeader(targetUrl, defaultOptions?.method ?? "get", dpopKey));
     return {
         ...defaultOptions,
         headers,
@@ -31716,7 +30584,7 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
     if (dpopKey !== undefined) {
         return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
     }
-    const headers = new universalFetch.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    const headers = new Headers(defaultOptions?.headers);
     // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `Bearer ${authToken}`);
     return {
@@ -31724,16 +30592,12 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
         headers,
     };
 }
-async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+async function makeAuthenticatedRequest(accessToken, url, defaultRequestInit, dpopKey, unauthFetch = fetch) {
     return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
 }
 async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
-    var _a;
     const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
-    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
-    if (typeof tokenSet.refreshToken === "string") {
-        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-    }
+    eventEmitter?.emit(EVENTS.SESSION_EXTENDED, tokenSet.expiresIn ?? DEFAULT_EXPIRATION_TIME_SECONDS);
     return {
         accessToken: tokenSet.accessToken,
         refreshToken: tokenSet.refreshToken,
@@ -31755,25 +30619,23 @@ const computeRefreshDelay = (expiresIn) => {
     return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
 /**
- * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
- * @param authToken an access token, either a Bearer token or a DPoP one.
+ * @param accessToken an access token, either a Bearer token or a DPoP one.
  * @param options The option object may contain two objects: the DPoP key token
- * is bound to if applicable, and options to customise token renewal behaviour.
+ * is bound to if applicable, and options to customize token renewal behavior.
+ * @param {typeof fetch} [options.fetch=fetch] A custom fetch function (defaults to the global fetch).
  *
  * @returns A fetch function that adds an appropriate Authorization header with
  * the provided token, and adds a DPoP header if applicable.
  */
-async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
-    var _a;
+function buildAuthenticatedFetch(accessToken, options) {
     let currentAccessToken = accessToken;
     let latestTimeout;
-    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    const currentRefreshOptions = options?.refreshOptions;
     // Setup the refresh timeout outside of the authenticated fetch, so that
     // an idle app will not get logged out if it doesn't issue a fetch before
     // the first expiration date.
     if (currentRefreshOptions !== undefined) {
         const proactivelyRefreshToken = async () => {
-            var _a, _b, _c, _d;
             try {
                 const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
                 // If currentRefreshOptions is defined, options is necessarily defined too.
@@ -31786,13 +30648,13 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                 if (refreshToken !== undefined) {
                     currentRefreshOptions.refreshToken = refreshToken;
                 }
-                // Each time the access token is refreshed, we must plan fo the next
+                // Each time the access token is refreshed, we must plan for the next
                 // refresh iteration.
                 clearTimeout(latestTimeout);
                 latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
                 // If currentRefreshOptions is defined, options is necessarily defined too.
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+                options.eventEmitter?.emit(EVENTS.TIMEOUT_SET, latestTimeout);
             }
             catch (e) {
                 // It is possible that an underlying library throws an error on refresh flow failure.
@@ -31804,11 +30666,11 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                     /* istanbul ignore next 100% coverage would require testing that nothing
                         happens here if the emitter is undefined, which is more cumbersome
                         than what it's worth. */
-                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    options?.eventEmitter?.emit(EVENTS.ERROR, e.error, e.errorDescription);
                     /* istanbul ignore next 100% coverage would require testing that nothing
                       happens here if the emitter is undefined, which is more cumbersome
                       than what it's worth. */
-                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                    options?.eventEmitter?.emit(EVENTS.SESSION_EXPIRED);
                 }
                 if (e instanceof InvalidResponseError &&
                     e.missingFields.includes("access_token")) {
@@ -31817,7 +30679,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                     /* istanbul ignore next 100% coverage would require testing that nothing
                       happens here if the emitter is undefined, which is more cumbersome
                       than what it's worth. */
-                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                    options?.eventEmitter?.emit(EVENTS.SESSION_EXPIRED);
                 }
             }
         };
@@ -31826,7 +30688,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         computeRefreshDelay(options.expiresIn) * 1000);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+        options.eventEmitter?.emit(EVENTS.TIMEOUT_SET, latestTimeout);
     }
     else if (options !== undefined && options.eventEmitter !== undefined) {
         // If no refresh options are provided, the session expires when the access token does.
@@ -31840,7 +30702,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
         options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
     }
     return async (url, requestInit) => {
-        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        let response = await makeAuthenticatedRequest(currentAccessToken, url, requestInit, options?.dpopKey, options?.fetch);
         const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
         if (response.ok || failedButNotExpectedAuthError) {
             // If there hasn't been a redirection, or if there has been a non-auth related
@@ -31848,15 +30710,15 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
             return response;
         }
         const hasBeenRedirected = response.url !== url;
-        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+        if (hasBeenRedirected && options?.dpopKey !== undefined) {
             // If the request failed for auth reasons, and has been redirected, we should
             // replay it generating a DPoP header for the rediration target IRI. This
             // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
             // to a given resource and method, while the DPoP header (associated to a
             // DPoP token) is.
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
+            response = await makeAuthenticatedRequest(currentAccessToken, 
             // Replace the original target IRI (`url`) by the redirection target
-            response.url, requestInit, options.dpopKey);
+            response.url, requestInit, options.dpopKey, options.fetch);
         }
         return response;
     };
@@ -31952,23 +30814,23 @@ exports.StorageUtilityGetResponse = StorageUtilityGetResponse;
 exports.StorageUtilityMock = StorageUtilityMock;
 exports.USER_SESSION_PREFIX = USER_SESSION_PREFIX;
 exports.buildAuthenticatedFetch = buildAuthenticatedFetch;
-exports.buildProxyHandler = buildProxyHandler;
 exports.clear = clear;
 exports.createDpopHeader = createDpopHeader;
 exports.determineSigningAlg = determineSigningAlg;
-exports.fetchJwks = fetchJwks;
 exports.generateDpopKeyPair = generateDpopKeyPair;
 exports.getEndSessionUrl = getEndSessionUrl;
 exports.getSessionIdFromOauthState = getSessionIdFromOauthState;
 exports.getUnauthenticatedSession = getUnauthenticatedSession;
 exports.getWebidFromTokenPayload = getWebidFromTokenPayload;
 exports.handleRegistration = handleRegistration;
+exports.isKnownClientType = isKnownClientType;
 exports.isSupportedTokenType = isSupportedTokenType;
 exports.isValidRedirectUrl = isValidRedirectUrl;
 exports.loadOidcContextFromStorage = loadOidcContextFromStorage;
 exports.maybeBuildRpInitiatedLogout = maybeBuildRpInitiatedLogout;
 exports.mockStorage = mockStorage;
 exports.mockStorageUtility = mockStorageUtility;
+exports.normalizeScopes = normalizeScopes;
 exports.removeOpenIdParams = removeOpenIdParams;
 exports.saveSessionInfoToStorage = saveSessionInfoToStorage;
 //# sourceMappingURL=index.js.map
@@ -32007,36 +30869,32 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   StorageUtilityMock: () => (/* binding */ StorageUtilityMock),
 /* harmony export */   USER_SESSION_PREFIX: () => (/* binding */ USER_SESSION_PREFIX),
 /* harmony export */   buildAuthenticatedFetch: () => (/* binding */ buildAuthenticatedFetch),
-/* harmony export */   buildProxyHandler: () => (/* binding */ buildProxyHandler),
 /* harmony export */   clear: () => (/* binding */ clear),
 /* harmony export */   createDpopHeader: () => (/* binding */ createDpopHeader),
 /* harmony export */   determineSigningAlg: () => (/* binding */ determineSigningAlg),
-/* harmony export */   fetchJwks: () => (/* binding */ fetchJwks),
 /* harmony export */   generateDpopKeyPair: () => (/* binding */ generateDpopKeyPair),
 /* harmony export */   getEndSessionUrl: () => (/* binding */ getEndSessionUrl),
 /* harmony export */   getSessionIdFromOauthState: () => (/* binding */ getSessionIdFromOauthState),
 /* harmony export */   getUnauthenticatedSession: () => (/* binding */ getUnauthenticatedSession),
 /* harmony export */   getWebidFromTokenPayload: () => (/* binding */ getWebidFromTokenPayload),
 /* harmony export */   handleRegistration: () => (/* binding */ handleRegistration),
+/* harmony export */   isKnownClientType: () => (/* binding */ isKnownClientType),
 /* harmony export */   isSupportedTokenType: () => (/* binding */ isSupportedTokenType),
 /* harmony export */   isValidRedirectUrl: () => (/* binding */ isValidRedirectUrl),
 /* harmony export */   loadOidcContextFromStorage: () => (/* binding */ loadOidcContextFromStorage),
 /* harmony export */   maybeBuildRpInitiatedLogout: () => (/* binding */ maybeBuildRpInitiatedLogout),
 /* harmony export */   mockStorage: () => (/* binding */ mockStorage),
 /* harmony export */   mockStorageUtility: () => (/* binding */ mockStorageUtility),
+/* harmony export */   normalizeScopes: () => (/* binding */ normalizeScopes),
 /* harmony export */   removeOpenIdParams: () => (/* binding */ removeOpenIdParams),
 /* harmony export */   saveSessionInfoToStorage: () => (/* binding */ saveSessionInfoToStorage)
 /* harmony export */ });
-/* harmony import */ var events__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! events */ "./node_modules/events/events.js");
-/* harmony import */ var _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @inrupt/universal-fetch */ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/jwt/verify.js");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/jwt/sign.js");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/key/export.js");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/key/import.js");
-/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/key/generate_key_pair.js");
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! uuid */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js");
-
-
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/jwt/verify.js");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/jwt/sign.js");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/jwks/remote.js");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/key/export.js");
+/* harmony import */ var jose__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jose */ "./node_modules/jose/dist/browser/key/generate_key_pair.js");
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! uuid */ "./node_modules/uuid/dist/esm-browser/v4.js");
 
 
 
@@ -32076,6 +30934,8 @@ const EVENTS = {
     LOGIN: "login",
     LOGOUT: "logout",
     NEW_REFRESH_TOKEN: "newRefreshToken",
+    NEW_TOKENS: "newTokens",
+    AUTHORIZATION_REQUEST: "authorizationRequest",
     SESSION_EXPIRED: "sessionExpired",
     SESSION_EXTENDED: "sessionExtended",
     SESSION_RESTORED: "sessionRestore",
@@ -32091,49 +30951,7 @@ const SCOPE_OPENID = "openid";
 const SCOPE_OFFLINE = "offline_access";
 // The webid scope is required as per https://solid.github.io/solid-oidc/#webid-scope
 const SCOPE_WEBID = "webid";
-// The scopes are expected as a space-separated list.
-const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID].join(" ");
-
-//
-// Copyright Inrupt Inc.
-//
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal in
-// the Software without restriction, including without limitation the rights to use,
-// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
-// Software, and to permit persons to whom the Software is furnished to do so,
-// subject to the following conditions:
-//
-// The above copyright notice and this permission notice shall be included in
-// all copies or substantial portions of the Software.
-//
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
-// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
-// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
-// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
-// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-//
-/**
- * Temporary internal builder for safe proxying.
- */
-const buildProxyHandler = (
-// The class to be excluded needs to be injected, because it is defined in a
-// dependency.
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-toExclude, errorMessage) => ({
-    // This proxy is only a temporary measure until Session no longer extends
-    // SessionEventEmitter, and the proxying is no longer necessary.
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    get(target, prop, receiver) {
-        // Reject any calls to the proxy that isn't specific to the EventEmitter API
-        if (!Object.getOwnPropertyNames(events__WEBPACK_IMPORTED_MODULE_0__.EventEmitter).includes(prop) &&
-            Object.getOwnPropertyNames(toExclude).includes(prop)) {
-            throw new Error(`${errorMessage}: [${prop}] is not supported`);
-        }
-        return Reflect.get(target, prop, receiver);
-    },
-});
+const DEFAULT_SCOPES = [SCOPE_OPENID, SCOPE_OFFLINE, SCOPE_WEBID];
 
 //
 // Copyright Inrupt Inc.
@@ -32159,6 +30977,7 @@ toExclude, errorMessage) => ({
  * @hidden
  */
 class AggregateHandler {
+    handleables;
     constructor(handleables) {
         this.handleables = handleables;
         this.handleables = handleables;
@@ -32238,40 +31057,20 @@ class AggregateHandler {
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-// eslint-disable-next-line no-shadow
-async function fetchJwks(jwksIri, issuerIri) {
-    // FIXME: the following line works, but the underlying network calls don't seem
-    // to be mocked properly by our test code. It would be nicer to replace calls to this
-    // function by the following line and to fix the mocks.
-    // const jwks = createRemoteJWKSet(new URL(jwksIri));
-    const jwksResponse = await _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__.fetch.call(globalThis, jwksIri);
-    if (jwksResponse.status !== 200) {
-        throw new Error(`Could not fetch JWKS for [${issuerIri}] at [${jwksIri}]: ${jwksResponse.status} ${jwksResponse.statusText}`);
-    }
-    // The JWKS should only contain the current key for the issuer.
-    let jwk;
-    try {
-        jwk = (await jwksResponse.json()).keys[0];
-    }
-    catch (e) {
-        throw new Error(`Malformed JWKS for [${issuerIri}] at [${jwksIri}]: ${e.message}`);
-    }
-    return jwk;
-}
 /**
- * Extract a WebID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
+ * Extract a WebID and the clientID from an ID token payload based on https://github.com/solid/webid-oidc-spec.
  * Note that this does not yet implement the user endpoint lookup, and only checks
- * for `webid` or IRI-like `sub` claims.
+ * for `webid`, `azp` or IRI-like `sub` claims.
  *
  * @param idToken the payload of the ID token from which the WebID can be extracted.
- * @returns a WebID extracted from the ID token.
+ * @returns an object with entries webId and clientId extracted from the ID token.
  * @internal
  */
 async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
-    const jwk = await fetchJwks(jwksIri, issuerIri);
     let payload;
+    let clientIdInPayload;
     try {
-        const { payload: verifiedPayload } = await (0,jose__WEBPACK_IMPORTED_MODULE_2__.jwtVerify)(idToken, await (0,jose__WEBPACK_IMPORTED_MODULE_5__.importJWK)(jwk), {
+        const { payload: verifiedPayload } = await (0,jose__WEBPACK_IMPORTED_MODULE_0__.jwtVerify)(idToken, (0,jose__WEBPACK_IMPORTED_MODULE_2__.createRemoteJWKSet)(new URL(jwksIri)), {
             issuer: issuerIri,
             audience: clientId,
         });
@@ -32280,8 +31079,14 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
     catch (e) {
         throw new Error(`Token verification failed: ${e.stack}`);
     }
+    if (typeof payload.azp === "string") {
+        clientIdInPayload = payload.azp;
+    }
     if (typeof payload.webid === "string") {
-        return payload.webid;
+        return {
+            webId: payload.webid,
+            clientId: clientIdInPayload,
+        };
     }
     if (typeof payload.sub !== "string") {
         throw new Error(`The token ${JSON.stringify(payload)} is invalid: it has no 'webid' claim and no 'sub' claim.`);
@@ -32292,11 +31097,48 @@ async function getWebidFromTokenPayload(idToken, jwksIri, issuerIri, clientId) {
         // as specified by the Identity Provider.
         // eslint-disable-next-line no-new
         new URL(payload.sub);
-        return payload.sub;
+        return {
+            webId: payload.sub,
+            clientId: clientIdInPayload,
+        };
     }
     catch (e) {
         throw new Error(`The token has no 'webid' claim, and its 'sub' claim of [${payload.sub}] is invalid as a URL - error [${e}].`);
     }
+}
+
+//
+// Copyright Inrupt Inc.
+//
+// Permission is hereby granted, free of charge, to any person obtaining a copy
+// of this software and associated documentation files (the "Software"), to deal in
+// the Software without restriction, including without limitation the rights to use,
+// copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the
+// Software, and to permit persons to whom the Software is furnished to do so,
+// subject to the following conditions:
+//
+// The above copyright notice and this permission notice shall be included in
+// all copies or substantial portions of the Software.
+//
+// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED,
+// INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A
+// PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT
+// HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
+// OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
+// SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
+//
+function normalizeScopes(scopes) {
+    if (!Array.isArray(scopes)) {
+        return DEFAULT_SCOPES;
+    }
+    return Array.from(
+    // De-dupe potentia conflicts if any.
+    new Set([
+        ...DEFAULT_SCOPES,
+        ...scopes.filter(
+        // Remove user-provided scopes that are not strings or include spaces.
+        (scope) => typeof scope === "string" && !scope.includes(" ")),
+    ]));
 }
 
 //
@@ -32351,23 +31193,38 @@ function removeOpenIdParams(redirectUrl) {
  * @hidden
  * @packageDocumentation
  */
+function booleanWithFallback(value, fallback) {
+    if (typeof value === "boolean") {
+        return Boolean(value);
+    }
+    return Boolean(fallback);
+}
 /**
  * @hidden
  * Authorization code flow spec: https://openid.net/specs/openid-connect-core-1_0.html#CodeFlowAuth
  * PKCE: https://tools.ietf.org/html/rfc7636
  */
 class AuthorizationCodeWithPkceOidcHandlerBase {
+    storageUtility;
+    redirector;
     constructor(storageUtility, redirector) {
         this.storageUtility = storageUtility;
         this.redirector = redirector;
         this.storageUtility = storageUtility;
         this.redirector = redirector;
     }
+    parametersGuard = (oidcLoginOptions) => {
+        return (oidcLoginOptions.issuerConfiguration.grantTypesSupported !== undefined &&
+            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1 &&
+            oidcLoginOptions.redirectUrl !== undefined);
+    };
     async canHandle(oidcLoginOptions) {
-        return !!(oidcLoginOptions.issuerConfiguration.grantTypesSupported &&
-            oidcLoginOptions.issuerConfiguration.grantTypesSupported.indexOf("authorization_code") > -1);
+        return this.parametersGuard(oidcLoginOptions);
     }
-    async handleRedirect({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+    async setupRedirectHandler({ oidcLoginOptions, state, codeVerifier, targetUrl, }) {
+        if (!this.parametersGuard(oidcLoginOptions)) {
+            throw new Error("The authorization code grant requires a redirectUrl.");
+        }
         await Promise.all([
             // We use the OAuth 'state' value (which should be crypto-random) as
             // the key in our storage to store our actual SessionID. We do this
@@ -32378,7 +31235,6 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
             // that session ID can be any developer-specified value, and therefore
             // may not be appropriate (since the OAuth 'state' value should really
             // be an unguessable crypto-random value).
-            // eslint-disable-next-line no-underscore-dangle
             this.storageUtility.setForUser(state, {
                 sessionId: oidcLoginOptions.sessionId,
             }),
@@ -32387,12 +31243,12 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
             // our session ID is unnecessary, but it provides a slightly cleaner
             // separation of concerns.
             this.storageUtility.setForUser(oidcLoginOptions.sessionId, {
-                // eslint-disable-next-line no-underscore-dangle
                 codeVerifier,
                 issuer: oidcLoginOptions.issuer.toString(),
                 // The redirect URL is read after redirect, so it must be stored now.
                 redirectUrl: oidcLoginOptions.redirectUrl,
-                dpop: oidcLoginOptions.dpop ? "true" : "false",
+                dpop: Boolean(oidcLoginOptions.dpop).toString(),
+                keepAlive: booleanWithFallback(oidcLoginOptions.keepAlive, true).toString(),
             }),
         ]);
         this.redirector.redirect(targetUrl, {
@@ -32426,6 +31282,7 @@ class AuthorizationCodeWithPkceOidcHandlerBase {
  * @hidden
  */
 class GeneralLogoutHandler {
+    sessionInfoManager;
     constructor(sessionInfoManager) {
         this.sessionInfoManager = sessionInfoManager;
         this.sessionInfoManager = sessionInfoManager;
@@ -32439,15 +31296,16 @@ class GeneralLogoutHandler {
 }
 
 class IRpLogoutHandler {
+    redirector;
     constructor(redirector) {
         this.redirector = redirector;
         this.redirector = redirector;
     }
     async canHandle(userId, options) {
-        return (options === null || options === void 0 ? void 0 : options.logoutType) === "idp";
+        return options?.logoutType === "idp";
     }
     async handle(userId, options) {
-        if ((options === null || options === void 0 ? void 0 : options.logoutType) !== "idp") {
+        if (options?.logoutType !== "idp") {
             throw new Error("Attempting to call idp logout handler to perform app logout");
         }
         if (options.toLogoutUrl === undefined) {
@@ -32460,6 +31318,7 @@ class IRpLogoutHandler {
 }
 
 class IWaterfallLogoutHandler {
+    handlers;
     constructor(sessionInfoManager, redirector) {
         this.handlers = [
             new GeneralLogoutHandler(sessionInfoManager),
@@ -32506,8 +31365,8 @@ class IWaterfallLogoutHandler {
 function getUnauthenticatedSession() {
     return {
         isLoggedIn: false,
-        sessionId: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
-        fetch: (...args) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__.fetch.call(globalThis, ...args),
+        sessionId: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
+        fetch: (...args) => fetch(...args),
     };
 }
 /**
@@ -32525,11 +31384,15 @@ async function clear(sessionId, storage) {
  * @hidden
  */
 class SessionInfoManagerBase {
+    storageUtility;
     constructor(storageUtility) {
         this.storageUtility = storageUtility;
         this.storageUtility = storageUtility;
     }
     update(_sessionId, _options) {
+        throw new Error("Not Implemented");
+    }
+    set(_sessionId, _sessionInfo) {
         throw new Error("Not Implemented");
     }
     get(_) {
@@ -32542,7 +31405,6 @@ class SessionInfoManagerBase {
     /**
      * This function removes all session-related information from storage.
      * @param sessionId the session identifier
-     * @param storage the storage where session info is stored
      * @hidden
      */
     async clear(sessionId) {
@@ -32550,7 +31412,6 @@ class SessionInfoManagerBase {
     }
     /**
      * Registers a new session, so that its ID can be retrieved.
-     * @param sessionId
      */
     async register(_sessionId) {
         throw new Error("Not implemented");
@@ -32566,6 +31427,12 @@ class SessionInfoManagerBase {
      * Deletes all information about all sessions, including their registrations.
      */
     async clearAll() {
+        throw new Error("Not implemented");
+    }
+    /**
+     * Sets authorization request state in storage for a given session ID.
+     */
+    async setOidcContext(_sessionId, _authorizationRequestState) {
         throw new Error("Not implemented");
     }
 }
@@ -32684,34 +31551,46 @@ function isValidUrl(url) {
         new URL(url);
         return true;
     }
-    catch (_a) {
+    catch {
         return false;
     }
 }
 function determineSigningAlg(supported, preferred) {
-    var _a;
-    return ((_a = preferred.find((signingAlg) => {
+    return (preferred.find((signingAlg) => {
         return supported.includes(signingAlg);
-    })) !== null && _a !== void 0 ? _a : null);
+    }) ?? null);
 }
-function determineClientType(options, issuerConfig) {
-    if (options.clientId !== undefined && !isValidUrl(options.clientId)) {
-        return "static";
-    }
-    if (issuerConfig.scopesSupported.includes("webid") &&
+function isStaticClient(options) {
+    return options.clientId !== undefined && !isValidUrl(options.clientId);
+}
+function isSolidOidcClient(options, issuerConfig) {
+    return (issuerConfig.scopesSupported.includes("webid") &&
         options.clientId !== undefined &&
-        isValidUrl(options.clientId)) {
-        return "solid-oidc";
-    }
-    // If no client_id is provided, the client must go through Dynamic Client Registration.
-    // If a client_id is provided and it looks like a URI, yet the Identity Provider
-    // does *not* support Solid-OIDC, then we also perform DCR (and discard the
-    // provided client_id).
-    return "dynamic";
+        isValidUrl(options.clientId));
+}
+function isKnownClientType(clientType) {
+    return (typeof clientType === "string" &&
+        ["dynamic", "static", "solid-oidc"].includes(clientType));
 }
 async function handleRegistration(options, issuerConfig, storageUtility, clientRegistrar) {
-    const clientType = determineClientType(options, issuerConfig);
-    if (clientType === "dynamic") {
+    let clientInfo;
+    if (isSolidOidcClient(options, issuerConfig)) {
+        clientInfo = {
+            clientId: options.clientId,
+            clientName: options.clientName,
+            clientType: "solid-oidc",
+        };
+    }
+    else if (isStaticClient(options)) {
+        clientInfo = {
+            clientId: options.clientId,
+            clientSecret: options.clientSecret,
+            clientName: options.clientName,
+            clientType: "static",
+        };
+    }
+    else {
+        // Case of a dynamically registered client.
         return clientRegistrar.getClient({
             sessionId: options.sessionId,
             clientName: options.clientName,
@@ -32722,28 +31601,21 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
     // or it is not compliant but the client_id isn't an IRI (we assume it has already
     // been registered with the IdP), then the client registration information needs
     // to be stored so that it can be retrieved later after redirect.
-    await storageUtility.setForUser(options.sessionId, {
-        // If the client is either static or solid-oidc compliant, its client ID cannot be undefined.
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-    });
-    if (options.clientSecret) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientSecret: options.clientSecret,
-        });
-    }
-    if (options.clientName) {
-        await storageUtility.setForUser(options.sessionId, {
-            clientName: options.clientName,
-        });
-    }
-    return {
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        clientId: options.clientId,
-        clientSecret: options.clientSecret,
-        clientName: options.clientName,
-        clientType,
+    const infoToSave = {
+        clientId: clientInfo.clientId,
+        clientType: clientInfo.clientType,
     };
+    if (clientInfo.clientType === "static") {
+        infoToSave.clientSecret = clientInfo.clientSecret;
+    }
+    if (clientInfo.clientName) {
+        infoToSave.clientName = clientInfo.clientName;
+    }
+    // Note that due to the underlying implementation, doing a `Promise.all`
+    // on multiple `storageUtility.setForUser` results in the last one
+    // overriding the previous calls.
+    await storageUtility.setForUser(options.sessionId, infoToSave);
+    return clientInfo;
 }
 
 //
@@ -32766,56 +31638,55 @@ async function handleRegistration(options, issuerConfig, storageUtility, clientR
 // OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 // SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 //
-/**
- * @hidden
- * @packageDocumentation
- */
-// By only referring to `window` at runtime, apps that do server-side rendering
-// won't run into errors when rendering code that instantiates a
-// ClientAuthentication:
-const globalFetch = (request, init) => _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__.fetch.call(globalThis, request, init);
+const boundFetch = (request, init) => fetch(request, init);
 /**
  * @hidden
  */
 class ClientAuthentication {
+    loginHandler;
+    redirectHandler;
+    logoutHandler;
+    sessionInfoManager;
+    issuerConfigFetcher;
+    boundLogout;
     constructor(loginHandler, redirectHandler, logoutHandler, sessionInfoManager, issuerConfigFetcher) {
         this.loginHandler = loginHandler;
         this.redirectHandler = redirectHandler;
         this.logoutHandler = logoutHandler;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
-        // By default, our fetch() resolves to the environment fetch() function.
-        this.fetch = globalFetch;
-        this.logout = async (sessionId, options) => {
-            // When doing IDP logout this will redirect away from the current page, so we should not expect
-            // code after this condition to be run if it is true.
-            // We also need to make sure that any other cleanup that we want to do for
-            // our session takes place before this condition is run
-            await this.logoutHandler.handle(sessionId, (options === null || options === void 0 ? void 0 : options.logoutType) === "idp"
-                ? {
-                    ...options,
-                    toLogoutUrl: this.boundLogout,
-                }
-                : options);
-            // Restore our fetch() function back to the environment fetch(), effectively
-            // leaving us with un-authenticated fetches from now on.
-            this.fetch = globalFetch;
-            // Delete the bound logout function, so that it can't be called after this.
-            delete this.boundLogout;
-        };
-        this.getSessionInfo = async (sessionId) => {
-            // TODO complete
-            return this.sessionInfoManager.get(sessionId);
-        };
-        this.getAllSessionInfo = async () => {
-            return this.sessionInfoManager.getAll();
-        };
         this.loginHandler = loginHandler;
         this.redirectHandler = redirectHandler;
         this.logoutHandler = logoutHandler;
         this.sessionInfoManager = sessionInfoManager;
         this.issuerConfigFetcher = issuerConfigFetcher;
     }
+    // By default, our fetch() resolves to the environment fetch() function.
+    fetch = boundFetch;
+    logout = async (sessionId, options) => {
+        // When doing IDP logout this will redirect away from the current page, so we should not expect
+        // code after this condition to be run if it is true.
+        // We also need to make sure that any other cleanup that we want to do for
+        // our session takes place before this condition is run
+        await this.logoutHandler.handle(sessionId, options?.logoutType === "idp"
+            ? {
+                ...options,
+                toLogoutUrl: this.boundLogout,
+            }
+            : options);
+        // Restore our fetch() function back to the environment fetch(), effectively
+        // leaving us with un-authenticated fetches from now on.
+        this.fetch = boundFetch;
+        // Delete the bound logout function, so that it can't be called after this.
+        delete this.boundLogout;
+    };
+    getSessionInfo = async (sessionId) => {
+        // TODO complete
+        return this.sessionInfoManager.get(sessionId);
+    };
+    getAllSessionInfo = async () => {
+        return this.sessionInfoManager.getAll();
+    };
 }
 
 //
@@ -32858,13 +31729,14 @@ async function getSessionIdFromOauthState(storageUtility, oauthState) {
  */
 async function loadOidcContextFromStorage(sessionId, storageUtility, configFetcher) {
     try {
-        const [issuerIri, codeVerifier, storedRedirectIri, dpop] = await Promise.all([
+        const [issuerIri, codeVerifier, storedRedirectIri, dpop, keepAlive] = await Promise.all([
             storageUtility.getForUser(sessionId, "issuer", {
                 errorIfNull: true,
             }),
             storageUtility.getForUser(sessionId, "codeVerifier"),
             storageUtility.getForUser(sessionId, "redirectUrl"),
             storageUtility.getForUser(sessionId, "dpop", { errorIfNull: true }),
+            storageUtility.getForUser(sessionId, "keepAlive"),
         ]);
         // Clear the code verifier, which is one-time use.
         await storageUtility.deleteForUser(sessionId, "codeVerifier");
@@ -32875,6 +31747,8 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
             redirectUrl: storedRedirectIri,
             issuerConfig,
             dpop: dpop === "true",
+            // Default keepAlive to true if not found in storage.
+            keepAlive: typeof keepAlive === "string" ? keepAlive === "true" : true,
         };
     }
     catch (e) {
@@ -32889,12 +31763,13 @@ async function loadOidcContextFromStorage(sessionId, storageUtility, configFetch
  * @param storageUtility
  * @param sessionId
  * @param webId
+ * @param clientId
  * @param isLoggedIn
  * @param refreshToken
  * @param secure
  * @param dpopKey
  */
-async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLoggedIn, refreshToken, secure, dpopKey) {
+async function saveSessionInfoToStorage(storageUtility, sessionId, webId, clientId, isLoggedIn, refreshToken, secure, dpopKey) {
     // TODO: Investigate why this does not work with a Promise.all
     if (refreshToken !== undefined) {
         await storageUtility.setForUser(sessionId, { refreshToken }, { secure });
@@ -32902,13 +31777,16 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
     if (webId !== undefined) {
         await storageUtility.setForUser(sessionId, { webId }, { secure });
     }
+    if (clientId !== undefined) {
+        await storageUtility.setForUser(sessionId, { clientId }, { secure });
+    }
     if (isLoggedIn !== undefined) {
         await storageUtility.setForUser(sessionId, { isLoggedIn }, { secure });
     }
     if (dpopKey !== undefined) {
         await storageUtility.setForUser(sessionId, {
             publicKey: JSON.stringify(dpopKey.publicKey),
-            privateKey: JSON.stringify(await (0,jose__WEBPACK_IMPORTED_MODULE_4__.exportJWK)(dpopKey.privateKey)),
+            privateKey: JSON.stringify(await (0,jose__WEBPACK_IMPORTED_MODULE_3__.exportJWK)(dpopKey.privateKey)),
         }, { secure });
     }
 }
@@ -32917,6 +31795,8 @@ async function saveSessionInfoToStorage(storageUtility, sessionId, webId, isLogg
  * @hidden
  */
 class StorageUtility {
+    secureStorage;
+    insecureStorage;
     constructor(secureStorage, insecureStorage) {
         this.secureStorage = secureStorage;
         this.insecureStorage = insecureStorage;
@@ -32927,9 +31807,7 @@ class StorageUtility {
         return `solidClientAuthenticationUser:${userId}`;
     }
     async getUserData(userId, secure) {
-        const stored = await (secure
-            ? this.secureStorage
-            : this.insecureStorage).get(this.getKey(userId));
+        const stored = await (secure ? this.secureStorage : this.insecureStorage).get(this.getKey(userId));
         if (stored === undefined) {
             return {};
         }
@@ -32944,28 +31822,26 @@ class StorageUtility {
         await (secure ? this.secureStorage : this.insecureStorage).set(this.getKey(userId), JSON.stringify(data));
     }
     async get(key, options) {
-        const value = await ((options === null || options === void 0 ? void 0 : options.secure)
-            ? this.secureStorage
-            : this.insecureStorage).get(key);
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+        const value = await (options?.secure ? this.secureStorage : this.insecureStorage).get(key);
+        if (value === undefined && options?.errorIfNull) {
             throw new Error(`[${key}] is not stored`);
         }
         return value;
     }
     async set(key, value, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).set(key, value);
+        return (options?.secure ? this.secureStorage : this.insecureStorage).set(key, value);
     }
     async delete(key, options) {
-        return ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(key);
+        return (options?.secure ? this.secureStorage : this.insecureStorage).delete(key);
     }
     async getForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        const userData = await this.getUserData(userId, options?.secure);
         let value;
         if (!userData || !userData[key]) {
             value = undefined;
         }
         value = userData[key];
-        if (value === undefined && (options === null || options === void 0 ? void 0 : options.errorIfNull)) {
+        if (value === undefined && options?.errorIfNull) {
             throw new Error(`Field [${key}] for user [${userId}] is not stored`);
         }
         return value || undefined;
@@ -32973,21 +31849,21 @@ class StorageUtility {
     async setForUser(userId, values, options) {
         let userData;
         try {
-            userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+            userData = await this.getUserData(userId, options?.secure);
         }
-        catch (_a) {
+        catch {
             // if reading the user data throws, the data is corrupted, and we want to write over it
             userData = {};
         }
-        await this.setUserData(userId, { ...userData, ...values }, options === null || options === void 0 ? void 0 : options.secure);
+        await this.setUserData(userId, { ...userData, ...values }, options?.secure);
     }
     async deleteForUser(userId, key, options) {
-        const userData = await this.getUserData(userId, options === null || options === void 0 ? void 0 : options.secure);
+        const userData = await this.getUserData(userId, options?.secure);
         delete userData[key];
-        await this.setUserData(userId, userData, options === null || options === void 0 ? void 0 : options.secure);
+        await this.setUserData(userId, userData, options?.secure);
     }
     async deleteAllUserData(userId, options) {
-        await ((options === null || options === void 0 ? void 0 : options.secure) ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
+        await (options?.secure ? this.secureStorage : this.insecureStorage).delete(this.getKey(userId));
     }
 }
 
@@ -33015,9 +31891,7 @@ class StorageUtility {
  * @hidden
  */
 class InMemoryStorage {
-    constructor() {
-        this.map = {};
-    }
+    map = {};
     async get(key) {
         return this.map[key] || undefined;
     }
@@ -33138,6 +32012,7 @@ class NotImplementedError extends Error {
  * @hidden
  */
 class InvalidResponseError extends Error {
+    missingFields;
     /* istanbul ignore next */
     constructor(missingFields) {
         super(`Invalid response from OIDC provider: missing fields ${missingFields}`);
@@ -33179,6 +32054,8 @@ class InvalidResponseError extends Error {
  * @hidden
  */
 class OidcProviderError extends Error {
+    error;
+    errorDescription;
     /* istanbul ignore next */
     constructor(message, error, errorDescription) {
         super(message);
@@ -33224,14 +32101,14 @@ function normalizeHTU(audience) {
  *
  * @param audience Target URL.
  * @param method HTTP method allowed.
- * @param key Key used to sign the token.
+ * @param dpopKey Key used to sign the token.
  * @returns A JWT that can be used as a DPoP Authorization header.
  */
 async function createDpopHeader(audience, method, dpopKey) {
-    return new jose__WEBPACK_IMPORTED_MODULE_3__.SignJWT({
+    return new jose__WEBPACK_IMPORTED_MODULE_1__.SignJWT({
         htu: normalizeHTU(audience),
         htm: method.toUpperCase(),
-        jti: (0,uuid__WEBPACK_IMPORTED_MODULE_7__["default"])(),
+        jti: (0,uuid__WEBPACK_IMPORTED_MODULE_5__["default"])(),
     })
         .setProtectedHeader({
         alg: PREFERRED_SIGNING_ALG[0],
@@ -33242,10 +32119,10 @@ async function createDpopHeader(audience, method, dpopKey) {
         .sign(dpopKey.privateKey, {});
 }
 async function generateDpopKeyPair() {
-    const { privateKey, publicKey } = await (0,jose__WEBPACK_IMPORTED_MODULE_6__.generateKeyPair)(PREFERRED_SIGNING_ALG[0]);
+    const { privateKey, publicKey } = await (0,jose__WEBPACK_IMPORTED_MODULE_4__.generateKeyPair)(PREFERRED_SIGNING_ALG[0]);
     const dpopKeyPair = {
         privateKey,
-        publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_4__.exportJWK)(publicKey),
+        publicKey: await (0,jose__WEBPACK_IMPORTED_MODULE_3__.exportJWK)(publicKey),
     };
     // The alg property isn't set by exportJWK, so set it manually.
     [dpopKeyPair.publicKey.alg] = PREFERRED_SIGNING_ALG;
@@ -33284,11 +32161,10 @@ function isExpectedAuthError(statusCode) {
     return [401, 403].includes(statusCode);
 }
 async function buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions) {
-    var _a;
-    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    const headers = new Headers(defaultOptions?.headers);
     // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `DPoP ${authToken}`);
-    headers.set("DPoP", await createDpopHeader(targetUrl, (_a = defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.method) !== null && _a !== void 0 ? _a : "get", dpopKey));
+    headers.set("DPoP", await createDpopHeader(targetUrl, defaultOptions?.method ?? "get", dpopKey));
     return {
         ...defaultOptions,
         headers,
@@ -33298,7 +32174,7 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
     if (dpopKey !== undefined) {
         return buildDpopFetchOptions(targetUrl, authToken, dpopKey, defaultOptions);
     }
-    const headers = new _inrupt_universal_fetch__WEBPACK_IMPORTED_MODULE_1__.Headers(defaultOptions === null || defaultOptions === void 0 ? void 0 : defaultOptions.headers);
+    const headers = new Headers(defaultOptions?.headers);
     // Any pre-existing Authorization header should be overriden.
     headers.set("Authorization", `Bearer ${authToken}`);
     return {
@@ -33306,16 +32182,12 @@ async function buildAuthenticatedHeaders(targetUrl, authToken, dpopKey, defaultO
         headers,
     };
 }
-async function makeAuthenticatedRequest(unauthFetch, accessToken, url, defaultRequestInit, dpopKey) {
+async function makeAuthenticatedRequest(accessToken, url, defaultRequestInit, dpopKey, unauthFetch = fetch) {
     return unauthFetch(url, await buildAuthenticatedHeaders(url.toString(), accessToken, dpopKey, defaultRequestInit));
 }
 async function refreshAccessToken(refreshOptions, dpopKey, eventEmitter) {
-    var _a;
     const tokenSet = await refreshOptions.tokenRefresher.refresh(refreshOptions.sessionId, refreshOptions.refreshToken, dpopKey);
-    eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.SESSION_EXTENDED, (_a = tokenSet.expiresIn) !== null && _a !== void 0 ? _a : DEFAULT_EXPIRATION_TIME_SECONDS);
-    if (typeof tokenSet.refreshToken === "string") {
-        eventEmitter === null || eventEmitter === void 0 ? void 0 : eventEmitter.emit(EVENTS.NEW_REFRESH_TOKEN, tokenSet.refreshToken);
-    }
+    eventEmitter?.emit(EVENTS.SESSION_EXTENDED, tokenSet.expiresIn ?? DEFAULT_EXPIRATION_TIME_SECONDS);
     return {
         accessToken: tokenSet.accessToken,
         refreshToken: tokenSet.refreshToken,
@@ -33337,25 +32209,23 @@ const computeRefreshDelay = (expiresIn) => {
     return DEFAULT_EXPIRATION_TIME_SECONDS;
 };
 /**
- * @param unauthFetch a regular fetch function, compliant with the WHATWG spec.
- * @param authToken an access token, either a Bearer token or a DPoP one.
+ * @param accessToken an access token, either a Bearer token or a DPoP one.
  * @param options The option object may contain two objects: the DPoP key token
- * is bound to if applicable, and options to customise token renewal behaviour.
+ * is bound to if applicable, and options to customize token renewal behavior.
+ * @param {typeof fetch} [options.fetch=fetch] A custom fetch function (defaults to the global fetch).
  *
  * @returns A fetch function that adds an appropriate Authorization header with
  * the provided token, and adds a DPoP header if applicable.
  */
-async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
-    var _a;
+function buildAuthenticatedFetch(accessToken, options) {
     let currentAccessToken = accessToken;
     let latestTimeout;
-    const currentRefreshOptions = options === null || options === void 0 ? void 0 : options.refreshOptions;
+    const currentRefreshOptions = options?.refreshOptions;
     // Setup the refresh timeout outside of the authenticated fetch, so that
     // an idle app will not get logged out if it doesn't issue a fetch before
     // the first expiration date.
     if (currentRefreshOptions !== undefined) {
         const proactivelyRefreshToken = async () => {
-            var _a, _b, _c, _d;
             try {
                 const { accessToken: refreshedAccessToken, refreshToken, expiresIn, } = await refreshAccessToken(currentRefreshOptions, 
                 // If currentRefreshOptions is defined, options is necessarily defined too.
@@ -33368,13 +32238,13 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                 if (refreshToken !== undefined) {
                     currentRefreshOptions.refreshToken = refreshToken;
                 }
-                // Each time the access token is refreshed, we must plan fo the next
+                // Each time the access token is refreshed, we must plan for the next
                 // refresh iteration.
                 clearTimeout(latestTimeout);
                 latestTimeout = setTimeout(proactivelyRefreshToken, computeRefreshDelay(expiresIn) * 1000);
                 // If currentRefreshOptions is defined, options is necessarily defined too.
                 // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-                (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+                options.eventEmitter?.emit(EVENTS.TIMEOUT_SET, latestTimeout);
             }
             catch (e) {
                 // It is possible that an underlying library throws an error on refresh flow failure.
@@ -33386,11 +32256,11 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                     /* istanbul ignore next 100% coverage would require testing that nothing
                         happens here if the emitter is undefined, which is more cumbersome
                         than what it's worth. */
-                    (_b = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _b === void 0 ? void 0 : _b.emit(EVENTS.ERROR, e.error, e.errorDescription);
+                    options?.eventEmitter?.emit(EVENTS.ERROR, e.error, e.errorDescription);
                     /* istanbul ignore next 100% coverage would require testing that nothing
                       happens here if the emitter is undefined, which is more cumbersome
                       than what it's worth. */
-                    (_c = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _c === void 0 ? void 0 : _c.emit(EVENTS.SESSION_EXPIRED);
+                    options?.eventEmitter?.emit(EVENTS.SESSION_EXPIRED);
                 }
                 if (e instanceof InvalidResponseError &&
                     e.missingFields.includes("access_token")) {
@@ -33399,7 +32269,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
                     /* istanbul ignore next 100% coverage would require testing that nothing
                       happens here if the emitter is undefined, which is more cumbersome
                       than what it's worth. */
-                    (_d = options === null || options === void 0 ? void 0 : options.eventEmitter) === null || _d === void 0 ? void 0 : _d.emit(EVENTS.SESSION_EXPIRED);
+                    options?.eventEmitter?.emit(EVENTS.SESSION_EXPIRED);
                 }
             }
         };
@@ -33408,7 +32278,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
         computeRefreshDelay(options.expiresIn) * 1000);
         // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        (_a = options.eventEmitter) === null || _a === void 0 ? void 0 : _a.emit(EVENTS.TIMEOUT_SET, latestTimeout);
+        options.eventEmitter?.emit(EVENTS.TIMEOUT_SET, latestTimeout);
     }
     else if (options !== undefined && options.eventEmitter !== undefined) {
         // If no refresh options are provided, the session expires when the access token does.
@@ -33422,7 +32292,7 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
         options.eventEmitter.emit(EVENTS.TIMEOUT_SET, expirationTimeout);
     }
     return async (url, requestInit) => {
-        let response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, url, requestInit, options === null || options === void 0 ? void 0 : options.dpopKey);
+        let response = await makeAuthenticatedRequest(currentAccessToken, url, requestInit, options?.dpopKey, options?.fetch);
         const failedButNotExpectedAuthError = !response.ok && !isExpectedAuthError(response.status);
         if (response.ok || failedButNotExpectedAuthError) {
             // If there hasn't been a redirection, or if there has been a non-auth related
@@ -33430,15 +32300,15 @@ async function buildAuthenticatedFetch(unauthFetch, accessToken, options) {
             return response;
         }
         const hasBeenRedirected = response.url !== url;
-        if (hasBeenRedirected && (options === null || options === void 0 ? void 0 : options.dpopKey) !== undefined) {
+        if (hasBeenRedirected && options?.dpopKey !== undefined) {
             // If the request failed for auth reasons, and has been redirected, we should
             // replay it generating a DPoP header for the rediration target IRI. This
             // doesn't apply to Bearer tokens, as the Bearer tokens aren't specific
             // to a given resource and method, while the DPoP header (associated to a
             // DPoP token) is.
-            response = await makeAuthenticatedRequest(unauthFetch, currentAccessToken, 
+            response = await makeAuthenticatedRequest(currentAccessToken, 
             // Replace the original target IRI (`url`) by the redirection target
-            response.url, requestInit, options.dpopKey);
+            response.url, requestInit, options.dpopKey, options.fetch);
         }
         return response;
     };
@@ -33514,1241 +32384,6 @@ const mockStorageUtility = (stored, isSecure = false) => {
 
 
 //# sourceMappingURL=index.mjs.map
-
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/index.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-Object.defineProperty(exports, "NIL", ({
-  enumerable: true,
-  get: function get() {
-    return _nil.default;
-  }
-}));
-Object.defineProperty(exports, "parse", ({
-  enumerable: true,
-  get: function get() {
-    return _parse.default;
-  }
-}));
-Object.defineProperty(exports, "stringify", ({
-  enumerable: true,
-  get: function get() {
-    return _stringify.default;
-  }
-}));
-Object.defineProperty(exports, "v1", ({
-  enumerable: true,
-  get: function get() {
-    return _v.default;
-  }
-}));
-Object.defineProperty(exports, "v3", ({
-  enumerable: true,
-  get: function get() {
-    return _v2.default;
-  }
-}));
-Object.defineProperty(exports, "v4", ({
-  enumerable: true,
-  get: function get() {
-    return _v3.default;
-  }
-}));
-Object.defineProperty(exports, "v5", ({
-  enumerable: true,
-  get: function get() {
-    return _v4.default;
-  }
-}));
-Object.defineProperty(exports, "validate", ({
-  enumerable: true,
-  get: function get() {
-    return _validate.default;
-  }
-}));
-Object.defineProperty(exports, "version", ({
-  enumerable: true,
-  get: function get() {
-    return _version.default;
-  }
-}));
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js"));
-
-var _v2 = _interopRequireDefault(__webpack_require__(/*! ./v3.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js"));
-
-var _v3 = _interopRequireDefault(__webpack_require__(/*! ./v4.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js"));
-
-var _v4 = _interopRequireDefault(__webpack_require__(/*! ./v5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js"));
-
-var _nil = _interopRequireDefault(__webpack_require__(/*! ./nil.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js"));
-
-var _version = _interopRequireDefault(__webpack_require__(/*! ./version.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js"));
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-var _stringify = _interopRequireDefault(__webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js"));
-
-var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-/*
- * Browser-compatible JavaScript MD5
- *
- * Modification of JavaScript MD5
- * https://github.com/blueimp/JavaScript-MD5
- *
- * Copyright 2011, Sebastian Tschan
- * https://blueimp.net
- *
- * Licensed under the MIT license:
- * https://opensource.org/licenses/MIT
- *
- * Based on
- * A JavaScript implementation of the RSA Data Security, Inc. MD5 Message
- * Digest Algorithm, as defined in RFC 1321.
- * Version 2.2 Copyright (C) Paul Johnston 1999 - 2009
- * Other contributors: Greg Holt, Andrew Kepert, Ydnar, Lostinet
- * Distributed under the BSD License
- * See http://pajhome.org.uk/crypt/md5 for more info.
- */
-function md5(bytes) {
-  if (typeof bytes === 'string') {
-    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
-
-    bytes = new Uint8Array(msg.length);
-
-    for (let i = 0; i < msg.length; ++i) {
-      bytes[i] = msg.charCodeAt(i);
-    }
-  }
-
-  return md5ToHexEncodedArray(wordsToMd5(bytesToWords(bytes), bytes.length * 8));
-}
-/*
- * Convert an array of little-endian words to an array of bytes
- */
-
-
-function md5ToHexEncodedArray(input) {
-  const output = [];
-  const length32 = input.length * 32;
-  const hexTab = '0123456789abcdef';
-
-  for (let i = 0; i < length32; i += 8) {
-    const x = input[i >> 5] >>> i % 32 & 0xff;
-    const hex = parseInt(hexTab.charAt(x >>> 4 & 0x0f) + hexTab.charAt(x & 0x0f), 16);
-    output.push(hex);
-  }
-
-  return output;
-}
-/**
- * Calculate output length with padding and bit length
- */
-
-
-function getOutputLength(inputLength8) {
-  return (inputLength8 + 64 >>> 9 << 4) + 14 + 1;
-}
-/*
- * Calculate the MD5 of an array of little-endian words, and a bit length.
- */
-
-
-function wordsToMd5(x, len) {
-  /* append padding */
-  x[len >> 5] |= 0x80 << len % 32;
-  x[getOutputLength(len) - 1] = len;
-  let a = 1732584193;
-  let b = -271733879;
-  let c = -1732584194;
-  let d = 271733878;
-
-  for (let i = 0; i < x.length; i += 16) {
-    const olda = a;
-    const oldb = b;
-    const oldc = c;
-    const oldd = d;
-    a = md5ff(a, b, c, d, x[i], 7, -680876936);
-    d = md5ff(d, a, b, c, x[i + 1], 12, -389564586);
-    c = md5ff(c, d, a, b, x[i + 2], 17, 606105819);
-    b = md5ff(b, c, d, a, x[i + 3], 22, -1044525330);
-    a = md5ff(a, b, c, d, x[i + 4], 7, -176418897);
-    d = md5ff(d, a, b, c, x[i + 5], 12, 1200080426);
-    c = md5ff(c, d, a, b, x[i + 6], 17, -1473231341);
-    b = md5ff(b, c, d, a, x[i + 7], 22, -45705983);
-    a = md5ff(a, b, c, d, x[i + 8], 7, 1770035416);
-    d = md5ff(d, a, b, c, x[i + 9], 12, -1958414417);
-    c = md5ff(c, d, a, b, x[i + 10], 17, -42063);
-    b = md5ff(b, c, d, a, x[i + 11], 22, -1990404162);
-    a = md5ff(a, b, c, d, x[i + 12], 7, 1804603682);
-    d = md5ff(d, a, b, c, x[i + 13], 12, -40341101);
-    c = md5ff(c, d, a, b, x[i + 14], 17, -1502002290);
-    b = md5ff(b, c, d, a, x[i + 15], 22, 1236535329);
-    a = md5gg(a, b, c, d, x[i + 1], 5, -165796510);
-    d = md5gg(d, a, b, c, x[i + 6], 9, -1069501632);
-    c = md5gg(c, d, a, b, x[i + 11], 14, 643717713);
-    b = md5gg(b, c, d, a, x[i], 20, -373897302);
-    a = md5gg(a, b, c, d, x[i + 5], 5, -701558691);
-    d = md5gg(d, a, b, c, x[i + 10], 9, 38016083);
-    c = md5gg(c, d, a, b, x[i + 15], 14, -660478335);
-    b = md5gg(b, c, d, a, x[i + 4], 20, -405537848);
-    a = md5gg(a, b, c, d, x[i + 9], 5, 568446438);
-    d = md5gg(d, a, b, c, x[i + 14], 9, -1019803690);
-    c = md5gg(c, d, a, b, x[i + 3], 14, -187363961);
-    b = md5gg(b, c, d, a, x[i + 8], 20, 1163531501);
-    a = md5gg(a, b, c, d, x[i + 13], 5, -1444681467);
-    d = md5gg(d, a, b, c, x[i + 2], 9, -51403784);
-    c = md5gg(c, d, a, b, x[i + 7], 14, 1735328473);
-    b = md5gg(b, c, d, a, x[i + 12], 20, -1926607734);
-    a = md5hh(a, b, c, d, x[i + 5], 4, -378558);
-    d = md5hh(d, a, b, c, x[i + 8], 11, -2022574463);
-    c = md5hh(c, d, a, b, x[i + 11], 16, 1839030562);
-    b = md5hh(b, c, d, a, x[i + 14], 23, -35309556);
-    a = md5hh(a, b, c, d, x[i + 1], 4, -1530992060);
-    d = md5hh(d, a, b, c, x[i + 4], 11, 1272893353);
-    c = md5hh(c, d, a, b, x[i + 7], 16, -155497632);
-    b = md5hh(b, c, d, a, x[i + 10], 23, -1094730640);
-    a = md5hh(a, b, c, d, x[i + 13], 4, 681279174);
-    d = md5hh(d, a, b, c, x[i], 11, -358537222);
-    c = md5hh(c, d, a, b, x[i + 3], 16, -722521979);
-    b = md5hh(b, c, d, a, x[i + 6], 23, 76029189);
-    a = md5hh(a, b, c, d, x[i + 9], 4, -640364487);
-    d = md5hh(d, a, b, c, x[i + 12], 11, -421815835);
-    c = md5hh(c, d, a, b, x[i + 15], 16, 530742520);
-    b = md5hh(b, c, d, a, x[i + 2], 23, -995338651);
-    a = md5ii(a, b, c, d, x[i], 6, -198630844);
-    d = md5ii(d, a, b, c, x[i + 7], 10, 1126891415);
-    c = md5ii(c, d, a, b, x[i + 14], 15, -1416354905);
-    b = md5ii(b, c, d, a, x[i + 5], 21, -57434055);
-    a = md5ii(a, b, c, d, x[i + 12], 6, 1700485571);
-    d = md5ii(d, a, b, c, x[i + 3], 10, -1894986606);
-    c = md5ii(c, d, a, b, x[i + 10], 15, -1051523);
-    b = md5ii(b, c, d, a, x[i + 1], 21, -2054922799);
-    a = md5ii(a, b, c, d, x[i + 8], 6, 1873313359);
-    d = md5ii(d, a, b, c, x[i + 15], 10, -30611744);
-    c = md5ii(c, d, a, b, x[i + 6], 15, -1560198380);
-    b = md5ii(b, c, d, a, x[i + 13], 21, 1309151649);
-    a = md5ii(a, b, c, d, x[i + 4], 6, -145523070);
-    d = md5ii(d, a, b, c, x[i + 11], 10, -1120210379);
-    c = md5ii(c, d, a, b, x[i + 2], 15, 718787259);
-    b = md5ii(b, c, d, a, x[i + 9], 21, -343485551);
-    a = safeAdd(a, olda);
-    b = safeAdd(b, oldb);
-    c = safeAdd(c, oldc);
-    d = safeAdd(d, oldd);
-  }
-
-  return [a, b, c, d];
-}
-/*
- * Convert an array bytes to an array of little-endian words
- * Characters >255 have their high-byte silently ignored.
- */
-
-
-function bytesToWords(input) {
-  if (input.length === 0) {
-    return [];
-  }
-
-  const length8 = input.length * 8;
-  const output = new Uint32Array(getOutputLength(length8));
-
-  for (let i = 0; i < length8; i += 8) {
-    output[i >> 5] |= (input[i / 8] & 0xff) << i % 32;
-  }
-
-  return output;
-}
-/*
- * Add integers, wrapping at 2^32. This uses 16-bit operations internally
- * to work around bugs in some JS interpreters.
- */
-
-
-function safeAdd(x, y) {
-  const lsw = (x & 0xffff) + (y & 0xffff);
-  const msw = (x >> 16) + (y >> 16) + (lsw >> 16);
-  return msw << 16 | lsw & 0xffff;
-}
-/*
- * Bitwise rotate a 32-bit number to the left.
- */
-
-
-function bitRotateLeft(num, cnt) {
-  return num << cnt | num >>> 32 - cnt;
-}
-/*
- * These functions implement the four basic operations the algorithm uses.
- */
-
-
-function md5cmn(q, a, b, x, s, t) {
-  return safeAdd(bitRotateLeft(safeAdd(safeAdd(a, q), safeAdd(x, t)), s), b);
-}
-
-function md5ff(a, b, c, d, x, s, t) {
-  return md5cmn(b & c | ~b & d, a, b, x, s, t);
-}
-
-function md5gg(a, b, c, d, x, s, t) {
-  return md5cmn(b & d | c & ~d, a, b, x, s, t);
-}
-
-function md5hh(a, b, c, d, x, s, t) {
-  return md5cmn(b ^ c ^ d, a, b, x, s, t);
-}
-
-function md5ii(a, b, c, d, x, s, t) {
-  return md5cmn(c ^ (b | ~d), a, b, x, s, t);
-}
-
-var _default = md5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js":
-/*!********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js ***!
-  \********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-var _default = {
-  randomUUID
-};
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/nil.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = '00000000-0000-0000-0000-000000000000';
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function parse(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  let v;
-  const arr = new Uint8Array(16); // Parse ########-....-....-....-............
-
-  arr[0] = (v = parseInt(uuid.slice(0, 8), 16)) >>> 24;
-  arr[1] = v >>> 16 & 0xff;
-  arr[2] = v >>> 8 & 0xff;
-  arr[3] = v & 0xff; // Parse ........-####-....-....-............
-
-  arr[4] = (v = parseInt(uuid.slice(9, 13), 16)) >>> 8;
-  arr[5] = v & 0xff; // Parse ........-....-####-....-............
-
-  arr[6] = (v = parseInt(uuid.slice(14, 18), 16)) >>> 8;
-  arr[7] = v & 0xff; // Parse ........-....-....-####-............
-
-  arr[8] = (v = parseInt(uuid.slice(19, 23), 16)) >>> 8;
-  arr[9] = v & 0xff; // Parse ........-....-....-....-############
-  // (Use "/" to avoid 32-bit truncation when bit-shifting high-order bytes)
-
-  arr[10] = (v = parseInt(uuid.slice(24, 36), 16)) / 0x10000000000 & 0xff;
-  arr[11] = v / 0x100000000 & 0xff;
-  arr[12] = v >>> 24 & 0xff;
-  arr[13] = v >>> 16 & 0xff;
-  arr[14] = v >>> 8 & 0xff;
-  arr[15] = v & 0xff;
-  return arr;
-}
-
-var _default = parse;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js":
-/*!*******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js ***!
-  \*******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-var _default = /^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = rng;
-// Unique ID creation requires a high quality random # generator. In the browser we therefore
-// require the crypto API and do not support built-in fallback to lower quality random number
-// generators (like Math.random()).
-let getRandomValues;
-const rnds8 = new Uint8Array(16);
-
-function rng() {
-  // lazy load so that environments that need to polyfill have a chance to do so
-  if (!getRandomValues) {
-    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
-    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
-
-    if (!getRandomValues) {
-      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-    }
-  }
-
-  return getRandomValues(rnds8);
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js":
-/*!******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js ***!
-  \******************************************************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-// Adapted from Chris Veness' SHA1 code at
-// http://www.movable-type.co.uk/scripts/sha1.html
-function f(s, x, y, z) {
-  switch (s) {
-    case 0:
-      return x & y ^ ~x & z;
-
-    case 1:
-      return x ^ y ^ z;
-
-    case 2:
-      return x & y ^ x & z ^ y & z;
-
-    case 3:
-      return x ^ y ^ z;
-  }
-}
-
-function ROTL(x, n) {
-  return x << n | x >>> 32 - n;
-}
-
-function sha1(bytes) {
-  const K = [0x5a827999, 0x6ed9eba1, 0x8f1bbcdc, 0xca62c1d6];
-  const H = [0x67452301, 0xefcdab89, 0x98badcfe, 0x10325476, 0xc3d2e1f0];
-
-  if (typeof bytes === 'string') {
-    const msg = unescape(encodeURIComponent(bytes)); // UTF8 escape
-
-    bytes = [];
-
-    for (let i = 0; i < msg.length; ++i) {
-      bytes.push(msg.charCodeAt(i));
-    }
-  } else if (!Array.isArray(bytes)) {
-    // Convert Array-like to Array
-    bytes = Array.prototype.slice.call(bytes);
-  }
-
-  bytes.push(0x80);
-  const l = bytes.length / 4 + 2;
-  const N = Math.ceil(l / 16);
-  const M = new Array(N);
-
-  for (let i = 0; i < N; ++i) {
-    const arr = new Uint32Array(16);
-
-    for (let j = 0; j < 16; ++j) {
-      arr[j] = bytes[i * 64 + j * 4] << 24 | bytes[i * 64 + j * 4 + 1] << 16 | bytes[i * 64 + j * 4 + 2] << 8 | bytes[i * 64 + j * 4 + 3];
-    }
-
-    M[i] = arr;
-  }
-
-  M[N - 1][14] = (bytes.length - 1) * 8 / Math.pow(2, 32);
-  M[N - 1][14] = Math.floor(M[N - 1][14]);
-  M[N - 1][15] = (bytes.length - 1) * 8 & 0xffffffff;
-
-  for (let i = 0; i < N; ++i) {
-    const W = new Uint32Array(80);
-
-    for (let t = 0; t < 16; ++t) {
-      W[t] = M[i][t];
-    }
-
-    for (let t = 16; t < 80; ++t) {
-      W[t] = ROTL(W[t - 3] ^ W[t - 8] ^ W[t - 14] ^ W[t - 16], 1);
-    }
-
-    let a = H[0];
-    let b = H[1];
-    let c = H[2];
-    let d = H[3];
-    let e = H[4];
-
-    for (let t = 0; t < 80; ++t) {
-      const s = Math.floor(t / 20);
-      const T = ROTL(a, 5) + f(s, b, c, d) + e + K[s] + W[t] >>> 0;
-      e = d;
-      d = c;
-      c = ROTL(b, 30) >>> 0;
-      b = a;
-      a = T;
-    }
-
-    H[0] = H[0] + a >>> 0;
-    H[1] = H[1] + b >>> 0;
-    H[2] = H[2] + c >>> 0;
-    H[3] = H[3] + d >>> 0;
-    H[4] = H[4] + e >>> 0;
-  }
-
-  return [H[0] >> 24 & 0xff, H[0] >> 16 & 0xff, H[0] >> 8 & 0xff, H[0] & 0xff, H[1] >> 24 & 0xff, H[1] >> 16 & 0xff, H[1] >> 8 & 0xff, H[1] & 0xff, H[2] >> 24 & 0xff, H[2] >> 16 & 0xff, H[2] >> 8 & 0xff, H[2] & 0xff, H[3] >> 24 & 0xff, H[3] >> 16 & 0xff, H[3] >> 8 & 0xff, H[3] & 0xff, H[4] >> 24 & 0xff, H[4] >> 16 & 0xff, H[4] >> 8 & 0xff, H[4] & 0xff];
-}
-
-var _default = sha1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js":
-/*!***********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js ***!
-  \***********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-exports.unsafeStringify = unsafeStringify;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).slice(1));
-}
-
-function unsafeStringify(arr, offset = 0) {
-  // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
-}
-
-function stringify(arr, offset = 0) {
-  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
-  // of the following:
-  // - One or more input array values don't map to a hex octet (leading to
-  // "undefined" in the uuid)
-  // - Invalid input values for the RFC `version` or `variant` fields
-
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Stringified UUID is invalid');
-  }
-
-  return uuid;
-}
-
-var _default = stringify;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js":
-/*!****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v1.js ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js"));
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-// **`v1()` - Generate time-based UUID**
-//
-// Inspired by https://github.com/LiosK/UUID.js
-// and http://docs.python.org/library/uuid.html
-let _nodeId;
-
-let _clockseq; // Previous uuid creation time
-
-
-let _lastMSecs = 0;
-let _lastNSecs = 0; // See https://github.com/uuidjs/uuid for API details
-
-function v1(options, buf, offset) {
-  let i = buf && offset || 0;
-  const b = buf || new Array(16);
-  options = options || {};
-  let node = options.node || _nodeId;
-  let clockseq = options.clockseq !== undefined ? options.clockseq : _clockseq; // node and clockseq need to be initialized to random values if they're not
-  // specified.  We do this lazily to minimize issues related to insufficient
-  // system entropy.  See #189
-
-  if (node == null || clockseq == null) {
-    const seedBytes = options.random || (options.rng || _rng.default)();
-
-    if (node == null) {
-      // Per 4.5, create and 48-bit node id, (47 random bits + multicast bit = 1)
-      node = _nodeId = [seedBytes[0] | 0x01, seedBytes[1], seedBytes[2], seedBytes[3], seedBytes[4], seedBytes[5]];
-    }
-
-    if (clockseq == null) {
-      // Per 4.2.2, randomize (14 bit) clockseq
-      clockseq = _clockseq = (seedBytes[6] << 8 | seedBytes[7]) & 0x3fff;
-    }
-  } // UUID timestamps are 100 nano-second units since the Gregorian epoch,
-  // (1582-10-15 00:00).  JSNumbers aren't precise enough for this, so
-  // time is handled internally as 'msecs' (integer milliseconds) and 'nsecs'
-  // (100-nanoseconds offset from msecs) since unix epoch, 1970-01-01 00:00.
-
-
-  let msecs = options.msecs !== undefined ? options.msecs : Date.now(); // Per 4.2.1.2, use count of uuid's generated during the current clock
-  // cycle to simulate higher resolution clock
-
-  let nsecs = options.nsecs !== undefined ? options.nsecs : _lastNSecs + 1; // Time since last uuid creation (in msecs)
-
-  const dt = msecs - _lastMSecs + (nsecs - _lastNSecs) / 10000; // Per 4.2.1.2, Bump clockseq on clock regression
-
-  if (dt < 0 && options.clockseq === undefined) {
-    clockseq = clockseq + 1 & 0x3fff;
-  } // Reset nsecs if clock regresses (new clockseq) or we've moved onto a new
-  // time interval
-
-
-  if ((dt < 0 || msecs > _lastMSecs) && options.nsecs === undefined) {
-    nsecs = 0;
-  } // Per 4.2.1.2 Throw error if too many uuids are requested
-
-
-  if (nsecs >= 10000) {
-    throw new Error("uuid.v1(): Can't create more than 10M uuids/sec");
-  }
-
-  _lastMSecs = msecs;
-  _lastNSecs = nsecs;
-  _clockseq = clockseq; // Per 4.1.4 - Convert from unix epoch to Gregorian epoch
-
-  msecs += 12219292800000; // `time_low`
-
-  const tl = ((msecs & 0xfffffff) * 10000 + nsecs) % 0x100000000;
-  b[i++] = tl >>> 24 & 0xff;
-  b[i++] = tl >>> 16 & 0xff;
-  b[i++] = tl >>> 8 & 0xff;
-  b[i++] = tl & 0xff; // `time_mid`
-
-  const tmh = msecs / 0x100000000 * 10000 & 0xfffffff;
-  b[i++] = tmh >>> 8 & 0xff;
-  b[i++] = tmh & 0xff; // `time_high_and_version`
-
-  b[i++] = tmh >>> 24 & 0xf | 0x10; // include version
-
-  b[i++] = tmh >>> 16 & 0xff; // `clock_seq_hi_and_reserved` (Per 4.2.2 - include variant)
-
-  b[i++] = clockseq >>> 8 | 0x80; // `clock_seq_low`
-
-  b[i++] = clockseq & 0xff; // `node`
-
-  for (let n = 0; n < 6; ++n) {
-    b[i + n] = node[n];
-  }
-
-  return buf || (0, _stringify.unsafeStringify)(b);
-}
-
-var _default = v1;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js":
-/*!****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v3.js ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js"));
-
-var _md = _interopRequireDefault(__webpack_require__(/*! ./md5.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/md5.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v3 = (0, _v.default)('v3', 0x30, _md.default);
-var _default = v3;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports.URL = exports.DNS = void 0;
-exports["default"] = v35;
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-var _parse = _interopRequireDefault(__webpack_require__(/*! ./parse.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/parse.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function stringToBytes(str) {
-  str = unescape(encodeURIComponent(str)); // UTF8 escape
-
-  const bytes = [];
-
-  for (let i = 0; i < str.length; ++i) {
-    bytes.push(str.charCodeAt(i));
-  }
-
-  return bytes;
-}
-
-const DNS = '6ba7b810-9dad-11d1-80b4-00c04fd430c8';
-exports.DNS = DNS;
-const URL = '6ba7b811-9dad-11d1-80b4-00c04fd430c8';
-exports.URL = URL;
-
-function v35(name, version, hashfunc) {
-  function generateUUID(value, namespace, buf, offset) {
-    var _namespace;
-
-    if (typeof value === 'string') {
-      value = stringToBytes(value);
-    }
-
-    if (typeof namespace === 'string') {
-      namespace = (0, _parse.default)(namespace);
-    }
-
-    if (((_namespace = namespace) === null || _namespace === void 0 ? void 0 : _namespace.length) !== 16) {
-      throw TypeError('Namespace must be array-like (16 iterable integer values, 0-255)');
-    } // Compute hash of namespace and value, Per 4.3
-    // Future: Use spread syntax when supported on all platforms, e.g. `bytes =
-    // hashfunc([...namespace, ... value])`
-
-
-    let bytes = new Uint8Array(16 + value.length);
-    bytes.set(namespace);
-    bytes.set(value, namespace.length);
-    bytes = hashfunc(bytes);
-    bytes[6] = bytes[6] & 0x0f | version;
-    bytes[8] = bytes[8] & 0x3f | 0x80;
-
-    if (buf) {
-      offset = offset || 0;
-
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = bytes[i];
-      }
-
-      return buf;
-    }
-
-    return (0, _stringify.unsafeStringify)(bytes);
-  } // Function#name is not settable on some platforms (#270)
-
-
-  try {
-    generateUUID.name = name; // eslint-disable-next-line no-empty
-  } catch (err) {} // For CommonJS default export support
-
-
-  generateUUID.DNS = DNS;
-  generateUUID.URL = URL;
-  return generateUUID;
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js":
-/*!****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v4.js ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _native = _interopRequireDefault(__webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/native.js"));
-
-var _rng = _interopRequireDefault(__webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/rng.js"));
-
-var _stringify = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/stringify.js");
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function v4(options, buf, offset) {
-  if (_native.default.randomUUID && !buf && !options) {
-    return _native.default.randomUUID();
-  }
-
-  options = options || {};
-
-  const rnds = options.random || (options.rng || _rng.default)(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-
-  rnds[6] = rnds[6] & 0x0f | 0x40;
-  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
-
-  return (0, _stringify.unsafeStringify)(rnds);
-}
-
-var _default = v4;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js":
-/*!****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v5.js ***!
-  \****************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _v = _interopRequireDefault(__webpack_require__(/*! ./v35.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/v35.js"));
-
-var _sha = _interopRequireDefault(__webpack_require__(/*! ./sha1.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/sha1.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-const v5 = (0, _v.default)('v5', 0x50, _sha.default);
-var _default = v5;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js":
-/*!**********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js ***!
-  \**********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _regex = _interopRequireDefault(__webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/regex.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex.default.test(uuid);
-}
-
-var _default = validate;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js":
-/*!*********************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/version.js ***!
-  \*********************************************************************************************************/
-/***/ ((__unused_webpack_module, exports, __webpack_require__) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({
-  value: true
-}));
-exports["default"] = void 0;
-
-var _validate = _interopRequireDefault(__webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/commonjs-browser/validate.js"));
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-function version(uuid) {
-  if (!(0, _validate.default)(uuid)) {
-    throw TypeError('Invalid UUID');
-  }
-
-  return parseInt(uuid.slice(14, 15), 16);
-}
-
-var _default = version;
-exports["default"] = _default;
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js":
-/*!***************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js ***!
-  \***************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({
-  randomUUID
-});
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js":
-/*!**************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js ***!
-  \**************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js":
-/*!************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js ***!
-  \************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (/* binding */ rng)
-/* harmony export */ });
-// Unique ID creation requires a high quality random # generator. In the browser we therefore
-// require the crypto API and do not support built-in fallback to lower quality random number
-// generators (like Math.random()).
-let getRandomValues;
-const rnds8 = new Uint8Array(16);
-function rng() {
-  // lazy load so that environments that need to polyfill have a chance to do so
-  if (!getRandomValues) {
-    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation.
-    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto);
-
-    if (!getRandomValues) {
-      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-    }
-  }
-
-  return getRandomValues(rnds8);
-}
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js":
-/*!******************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js ***!
-  \******************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
-/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
-/* harmony export */ });
-/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js");
-
-/**
- * Convert array of 16 byte values to UUID string format of the form:
- * XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX
- */
-
-const byteToHex = [];
-
-for (let i = 0; i < 256; ++i) {
-  byteToHex.push((i + 0x100).toString(16).slice(1));
-}
-
-function unsafeStringify(arr, offset = 0) {
-  // Note: Be careful editing this code!  It's been tuned for performance
-  // and works in ways you may not expect. See https://github.com/uuidjs/uuid/pull/434
-  return byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + '-' + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + '-' + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + '-' + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + '-' + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]];
-}
-
-function stringify(arr, offset = 0) {
-  const uuid = unsafeStringify(arr, offset); // Consistency check for valid UUID.  If this throws, it's likely due to one
-  // of the following:
-  // - One or more input array values don't map to a hex octet (leading to
-  // "undefined" in the uuid)
-  // - Invalid input values for the RFC `version` or `variant` fields
-
-  if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__["default"])(uuid)) {
-    throw TypeError('Stringified UUID is invalid');
-  }
-
-  return uuid;
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js":
-/*!***********************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/v4.js ***!
-  \***********************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/native.js");
-/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/rng.js");
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/stringify.js");
-
-
-
-
-function v4(options, buf, offset) {
-  if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
-    return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
-  }
-
-  options = options || {};
-  const rnds = options.random || (options.rng || _rng_js__WEBPACK_IMPORTED_MODULE_1__["default"])(); // Per 4.4, set bits for version and `clock_seq_hi_and_reserved`
-
-  rnds[6] = rnds[6] & 0x0f | 0x40;
-  rnds[8] = rnds[8] & 0x3f | 0x80; // Copy bytes to buffer, if provided
-
-  if (buf) {
-    offset = offset || 0;
-
-    for (let i = 0; i < 16; ++i) {
-      buf[offset + i] = rnds[i];
-    }
-
-    return buf;
-  }
-
-  return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__.unsafeStringify)(rnds);
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js":
-/*!*****************************************************************************************************!*\
-  !*** ./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/validate.js ***!
-  \*****************************************************************************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/@inrupt/solid-client-authn-core/node_modules/uuid/dist/esm-browser/regex.js");
-
-
-function validate(uuid) {
-  return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
-}
-
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/universal-fetch/dist/index-browser.js":
-/*!********************************************************************!*\
-  !*** ./node_modules/@inrupt/universal-fetch/dist/index-browser.js ***!
-  \********************************************************************/
-/***/ ((__unused_webpack_module, exports) => {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", ({ value: true }));
-
-var indexBrowser = globalThis.fetch;
-const { fetch, Response, Request, Headers } = globalThis;
-
-exports.Headers = Headers;
-exports.Request = Request;
-exports.Response = Response;
-exports["default"] = indexBrowser;
-exports.fetch = fetch;
-
-
-/***/ }),
-
-/***/ "./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs":
-/*!*********************************************************************!*\
-  !*** ./node_modules/@inrupt/universal-fetch/dist/index-browser.mjs ***!
-  \*********************************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Headers: () => (/* binding */ Headers),
-/* harmony export */   Request: () => (/* binding */ Request),
-/* harmony export */   Response: () => (/* binding */ Response),
-/* harmony export */   "default": () => (/* binding */ indexBrowser),
-/* harmony export */   fetch: () => (/* binding */ fetch)
-/* harmony export */ });
-var indexBrowser = globalThis.fetch;
-const { fetch, Response, Request, Headers } = globalThis;
-
-
 
 
 /***/ }),
@@ -48300,6 +45935,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   decodeJwt: () => (/* reexport safe */ _util_decode_jwt_js__WEBPACK_IMPORTED_MODULE_24__.decodeJwt),
 /* harmony export */   decodeProtectedHeader: () => (/* reexport safe */ _util_decode_protected_header_js__WEBPACK_IMPORTED_MODULE_23__.decodeProtectedHeader),
 /* harmony export */   errors: () => (/* reexport module object */ _util_errors_js__WEBPACK_IMPORTED_MODULE_25__),
+/* harmony export */   experimental_jwksCache: () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.experimental_jwksCache),
 /* harmony export */   exportJWK: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportJWK),
 /* harmony export */   exportPKCS8: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportPKCS8),
 /* harmony export */   exportSPKI: () => (/* reexport safe */ _key_export_js__WEBPACK_IMPORTED_MODULE_21__.exportSPKI),
@@ -48313,6 +45949,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   importPKCS8: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importPKCS8),
 /* harmony export */   importSPKI: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importSPKI),
 /* harmony export */   importX509: () => (/* reexport safe */ _key_import_js__WEBPACK_IMPORTED_MODULE_22__.importX509),
+/* harmony export */   jwksCache: () => (/* reexport safe */ _jwks_remote_js__WEBPACK_IMPORTED_MODULE_19__.jwksCache),
 /* harmony export */   jwtDecrypt: () => (/* reexport safe */ _jwt_decrypt_js__WEBPACK_IMPORTED_MODULE_8__.jwtDecrypt),
 /* harmony export */   jwtVerify: () => (/* reexport safe */ _jwt_verify_js__WEBPACK_IMPORTED_MODULE_7__.jwtVerify)
 /* harmony export */ });
@@ -48378,8 +46015,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-
 /***/ }),
 
 /***/ "./node_modules/jose/dist/browser/jwe/compact/decrypt.js":
@@ -48412,9 +46047,9 @@ async function compactDecrypt(jwe, key, options) {
     }
     const decrypted = await (0,_flattened_decrypt_js__WEBPACK_IMPORTED_MODULE_0__.flattenedDecrypt)({
         ciphertext,
-        iv: (iv || undefined),
-        protected: protectedHeader || undefined,
-        tag: (tag || undefined),
+        iv: iv || undefined,
+        protected: protectedHeader,
+        tag: tag || undefined,
         encrypted_key: encryptedKey || undefined,
     }, key, options);
     const result = { plaintext: decrypted.plaintext, protectedHeader: decrypted.protectedHeader };
@@ -48482,16 +46117,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
-/* harmony import */ var _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../runtime/zlib.js */ "./node_modules/jose/dist/browser/runtime/zlib.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
-/* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
-/* harmony import */ var _lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/decrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/decrypt_key_management.js");
-/* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
-/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
-/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
-/* harmony import */ var _lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../lib/validate_algorithms.js */ "./node_modules/jose/dist/browser/lib/validate_algorithms.js");
-
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
+/* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
+/* harmony import */ var _lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lib/decrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/decrypt_key_management.js");
+/* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
+/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
+/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
+/* harmony import */ var _lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../lib/validate_algorithms.js */ "./node_modules/jose/dist/browser/lib/validate_algorithms.js");
 
 
 
@@ -48503,87 +46136,82 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function flattenedDecrypt(jwe, key, options) {
-    var _a;
-    if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jwe)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Flattened JWE must be an object');
+    if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwe)) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Flattened JWE must be an object');
     }
     if (jwe.protected === undefined && jwe.header === undefined && jwe.unprotected === undefined) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JOSE Header missing');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JOSE Header missing');
     }
-    if (typeof jwe.iv !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Initialization Vector missing or incorrect type');
+    if (jwe.iv !== undefined && typeof jwe.iv !== 'string') {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Initialization Vector incorrect type');
     }
     if (typeof jwe.ciphertext !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Ciphertext missing or incorrect type');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Ciphertext missing or incorrect type');
     }
-    if (typeof jwe.tag !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Authentication Tag missing or incorrect type');
+    if (jwe.tag !== undefined && typeof jwe.tag !== 'string') {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Authentication Tag incorrect type');
     }
     if (jwe.protected !== undefined && typeof jwe.protected !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Protected Header incorrect type');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Protected Header incorrect type');
     }
     if (jwe.encrypted_key !== undefined && typeof jwe.encrypted_key !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Encrypted Key incorrect type');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Encrypted Key incorrect type');
     }
     if (jwe.aad !== undefined && typeof jwe.aad !== 'string') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE AAD incorrect type');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE AAD incorrect type');
     }
-    if (jwe.header !== undefined && !(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jwe.header)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Shared Unprotected Header incorrect type');
+    if (jwe.header !== undefined && !(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwe.header)) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Shared Unprotected Header incorrect type');
     }
-    if (jwe.unprotected !== undefined && !(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jwe.unprotected)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Per-Recipient Unprotected Header incorrect type');
+    if (jwe.unprotected !== undefined && !(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwe.unprotected)) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Per-Recipient Unprotected Header incorrect type');
     }
     let parsedProt;
     if (jwe.protected) {
         try {
             const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.protected);
-            parsedProt = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.decoder.decode(protectedHeader));
+            parsedProt = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.decoder.decode(protectedHeader));
         }
-        catch (_b) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Protected Header is invalid');
+        catch {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Protected Header is invalid');
         }
     }
-    if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_4__["default"])(parsedProt, jwe.header, jwe.unprotected)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE Protected, JWE Unprotected Header, and JWE Per-Recipient Unprotected Header Parameter names must be disjoint');
+    if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_3__["default"])(parsedProt, jwe.header, jwe.unprotected)) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Protected, JWE Unprotected Header, and JWE Per-Recipient Unprotected Header Parameter names must be disjoint');
     }
     const joseHeader = {
         ...parsedProt,
         ...jwe.header,
         ...jwe.unprotected,
     };
-    (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_9__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid, new Map(), options === null || options === void 0 ? void 0 : options.crit, parsedProt, joseHeader);
+    (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_8__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid, new Map(), options?.crit, parsedProt, joseHeader);
     if (joseHeader.zip !== undefined) {
-        if (!parsedProt || !parsedProt.zip) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('JWE "zip" (Compression Algorithm) Header MUST be integrity protected');
-        }
-        if (joseHeader.zip !== 'DEF') {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSENotSupported('Unsupported JWE "zip" (Compression Algorithm) Header Parameter value');
-        }
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('JWE "zip" (Compression Algorithm) Header Parameter is not supported.');
     }
     const { alg, enc } = joseHeader;
     if (typeof alg !== 'string' || !alg) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('missing JWE Algorithm (alg) in JWE Header');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('missing JWE Algorithm (alg) in JWE Header');
     }
     if (typeof enc !== 'string' || !enc) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('missing JWE Encryption Algorithm (enc) in JWE Header');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('missing JWE Encryption Algorithm (enc) in JWE Header');
     }
-    const keyManagementAlgorithms = options && (0,_lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_10__["default"])('keyManagementAlgorithms', options.keyManagementAlgorithms);
+    const keyManagementAlgorithms = options && (0,_lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_9__["default"])('keyManagementAlgorithms', options.keyManagementAlgorithms);
     const contentEncryptionAlgorithms = options &&
-        (0,_lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_10__["default"])('contentEncryptionAlgorithms', options.contentEncryptionAlgorithms);
-    if (keyManagementAlgorithms && !keyManagementAlgorithms.has(alg)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSEAlgNotAllowed('"alg" (Algorithm) Header Parameter not allowed');
+        (0,_lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_9__["default"])('contentEncryptionAlgorithms', options.contentEncryptionAlgorithms);
+    if ((keyManagementAlgorithms && !keyManagementAlgorithms.has(alg)) ||
+        (!keyManagementAlgorithms && alg.startsWith('PBES2'))) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSEAlgNotAllowed('"alg" (Algorithm) Header Parameter value not allowed');
     }
     if (contentEncryptionAlgorithms && !contentEncryptionAlgorithms.has(enc)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSEAlgNotAllowed('"enc" (Encryption Algorithm) Header Parameter not allowed');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSEAlgNotAllowed('"enc" (Encryption Algorithm) Header Parameter value not allowed');
     }
     let encryptedKey;
     if (jwe.encrypted_key !== undefined) {
         try {
             encryptedKey = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.encrypted_key);
         }
-        catch (_c) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the encrypted_key');
+        catch {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Failed to base64url decode the encrypted_key');
         }
     }
     let resolvedKey = false;
@@ -48593,32 +46221,36 @@ async function flattenedDecrypt(jwe, key, options) {
     }
     let cek;
     try {
-        cek = await (0,_lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, encryptedKey, joseHeader, options);
+        cek = await (0,_lib_decrypt_key_management_js__WEBPACK_IMPORTED_MODULE_5__["default"])(alg, key, encryptedKey, joseHeader, options);
     }
     catch (err) {
-        if (err instanceof TypeError || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSENotSupported) {
+        if (err instanceof TypeError || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid || err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported) {
             throw err;
         }
-        cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_8__["default"])(enc);
+        cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_7__["default"])(enc);
     }
     let iv;
     let tag;
-    try {
-        iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
+    if (jwe.iv !== undefined) {
+        try {
+            iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.iv);
+        }
+        catch {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Failed to base64url decode the iv');
+        }
     }
-    catch (_d) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the iv');
+    if (jwe.tag !== undefined) {
+        try {
+            tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
+        }
+        catch {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Failed to base64url decode the tag');
+        }
     }
-    try {
-        tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.tag);
-    }
-    catch (_e) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the tag');
-    }
-    const protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode((_a = jwe.protected) !== null && _a !== void 0 ? _a : '');
+    const protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode(jwe.protected ?? '');
     let additionalData;
     if (jwe.aad !== undefined) {
-        additionalData = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.concat)(protectedHeader, _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode('.'), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode(jwe.aad));
+        additionalData = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.concat)(protectedHeader, _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode('.'), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode(jwe.aad));
     }
     else {
         additionalData = protectedHeader;
@@ -48627,13 +46259,10 @@ async function flattenedDecrypt(jwe, key, options) {
     try {
         ciphertext = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.ciphertext);
     }
-    catch (_f) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the ciphertext');
+    catch {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Failed to base64url decode the ciphertext');
     }
-    let plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, ciphertext, iv, tag, additionalData);
-    if (joseHeader.zip === 'DEF') {
-        plaintext = await ((options === null || options === void 0 ? void 0 : options.inflateRaw) || _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__.inflate)(plaintext);
-    }
+    const plaintext = await (0,_runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, cek, ciphertext, iv, tag, additionalData);
     const result = { plaintext };
     if (jwe.protected !== undefined) {
         result.protectedHeader = parsedProt;
@@ -48642,8 +46271,8 @@ async function flattenedDecrypt(jwe, key, options) {
         try {
             result.additionalAuthenticatedData = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwe.aad);
         }
-        catch (_g) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWEInvalid('Failed to base64url decode the aad');
+        catch {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('Failed to base64url decode the aad');
         }
     }
     if (jwe.unprotected !== undefined) {
@@ -48670,18 +46299,16 @@ async function flattenedDecrypt(jwe, key, options) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   FlattenedEncrypt: () => (/* binding */ FlattenedEncrypt),
-/* harmony export */   unprotected: () => (/* binding */ unprotected)
+/* harmony export */   FlattenedEncrypt: () => (/* binding */ FlattenedEncrypt)
 /* harmony export */ });
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-/* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
-/* harmony import */ var _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../runtime/zlib.js */ "./node_modules/jose/dist/browser/runtime/zlib.js");
-/* harmony import */ var _lib_iv_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/iv.js */ "./node_modules/jose/dist/browser/lib/iv.js");
-/* harmony import */ var _lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/encrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/encrypt_key_management.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
-/* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
-/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
+/* harmony import */ var _lib_private_symbols_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/private_symbols.js */ "./node_modules/jose/dist/browser/lib/private_symbols.js");
+/* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
+/* harmony import */ var _lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/encrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/encrypt_key_management.js");
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
+/* harmony import */ var _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/buffer_utils.js */ "./node_modules/jose/dist/browser/lib/buffer_utils.js");
+/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
 
 
 
@@ -48690,8 +46317,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
-
-const unprotected = Symbol();
 class FlattenedEncrypt {
     constructor(plaintext) {
         if (!(plaintext instanceof Uint8Array)) {
@@ -48747,49 +46372,37 @@ class FlattenedEncrypt {
     }
     async encrypt(key, options) {
         if (!this._protectedHeader && !this._unprotectedHeader && !this._sharedUnprotectedHeader) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('either setProtectedHeader, setUnprotectedHeader, or sharedUnprotectedHeader must be called before #encrypt()');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('either setProtectedHeader, setUnprotectedHeader, or sharedUnprotectedHeader must be called before #encrypt()');
         }
-        if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_6__["default"])(this._protectedHeader, this._unprotectedHeader, this._sharedUnprotectedHeader)) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Protected, JWE Shared Unprotected and JWE Per-Recipient Header Parameter names must be disjoint');
+        if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_5__["default"])(this._protectedHeader, this._unprotectedHeader, this._sharedUnprotectedHeader)) {
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('JWE Protected, JWE Shared Unprotected and JWE Per-Recipient Header Parameter names must be disjoint');
         }
         const joseHeader = {
             ...this._protectedHeader,
             ...this._unprotectedHeader,
             ...this._sharedUnprotectedHeader,
         };
-        (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_8__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid, new Map(), options === null || options === void 0 ? void 0 : options.crit, this._protectedHeader, joseHeader);
+        (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid, new Map(), options?.crit, this._protectedHeader, joseHeader);
         if (joseHeader.zip !== undefined) {
-            if (!this._protectedHeader || !this._protectedHeader.zip) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE "zip" (Compression Algorithm) Header MUST be integrity protected');
-            }
-            if (joseHeader.zip !== 'DEF') {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JOSENotSupported('Unsupported JWE "zip" (Compression Algorithm) Header Parameter value');
-            }
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JOSENotSupported('JWE "zip" (Compression Algorithm) Header Parameter is not supported.');
         }
         const { alg, enc } = joseHeader;
         if (typeof alg !== 'string' || !alg) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE "alg" (Algorithm) Header Parameter missing or invalid');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('JWE "alg" (Algorithm) Header Parameter missing or invalid');
         }
         if (typeof enc !== 'string' || !enc) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter missing or invalid');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter missing or invalid');
         }
         let encryptedKey;
-        if (alg === 'dir') {
-            if (this._cek) {
-                throw new TypeError('setContentEncryptionKey cannot be called when using Direct Encryption');
-            }
-        }
-        else if (alg === 'ECDH-ES') {
-            if (this._cek) {
-                throw new TypeError('setContentEncryptionKey cannot be called when using Direct Key Agreement');
-            }
+        if (this._cek && (alg === 'dir' || alg === 'ECDH-ES')) {
+            throw new TypeError(`setContentEncryptionKey cannot be called with JWE "alg" (Algorithm) Header ${alg}`);
         }
         let cek;
         {
             let parameters;
-            ({ cek, encryptedKey, parameters } = await (0,_lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_4__["default"])(alg, enc, key, this._cek, this._keyManagementParameters));
+            ({ cek, encryptedKey, parameters } = await (0,_lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_3__["default"])(alg, enc, key, this._cek, this._keyManagementParameters));
             if (parameters) {
-                if (options && unprotected in options) {
+                if (options && _lib_private_symbols_js__WEBPACK_IMPORTED_MODULE_1__.unprotected in options) {
                     if (!this._unprotectedHeader) {
                         this.setUnprotectedHeader(parameters);
                     }
@@ -48797,48 +46410,40 @@ class FlattenedEncrypt {
                         this._unprotectedHeader = { ...this._unprotectedHeader, ...parameters };
                     }
                 }
+                else if (!this._protectedHeader) {
+                    this.setProtectedHeader(parameters);
+                }
                 else {
-                    if (!this._protectedHeader) {
-                        this.setProtectedHeader(parameters);
-                    }
-                    else {
-                        this._protectedHeader = { ...this._protectedHeader, ...parameters };
-                    }
+                    this._protectedHeader = { ...this._protectedHeader, ...parameters };
                 }
             }
         }
-        this._iv || (this._iv = (0,_lib_iv_js__WEBPACK_IMPORTED_MODULE_3__["default"])(enc));
         let additionalData;
         let protectedHeader;
         let aadMember;
         if (this._protectedHeader) {
-            protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode((0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(JSON.stringify(this._protectedHeader)));
+            protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode((0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(JSON.stringify(this._protectedHeader)));
         }
         else {
-            protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode('');
+            protectedHeader = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode('');
         }
         if (this._aad) {
             aadMember = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(this._aad);
-            additionalData = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.concat)(protectedHeader, _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode('.'), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.encoder.encode(aadMember));
+            additionalData = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.concat)(protectedHeader, _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode('.'), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.encoder.encode(aadMember));
         }
         else {
             additionalData = protectedHeader;
         }
-        let ciphertext;
-        let tag;
-        if (joseHeader.zip === 'DEF') {
-            const deflated = await ((options === null || options === void 0 ? void 0 : options.deflateRaw) || _runtime_zlib_js__WEBPACK_IMPORTED_MODULE_2__.deflate)(this._plaintext);
-            ({ ciphertext, tag } = await (0,_runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, deflated, cek, this._iv, additionalData));
-        }
-        else {
-            ;
-            ({ ciphertext, tag } = await (0,_runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, this._plaintext, cek, this._iv, additionalData));
-        }
+        const { ciphertext, tag, iv } = await (0,_runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_2__["default"])(enc, this._plaintext, cek, this._iv, additionalData);
         const jwe = {
             ciphertext: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(ciphertext),
-            iv: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(this._iv),
-            tag: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(tag),
         };
+        if (iv) {
+            jwe.iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(iv);
+        }
+        if (tag) {
+            jwe.tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(tag);
+        }
         if (encryptedKey) {
             jwe.encrypted_key = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(encryptedKey);
         }
@@ -48846,7 +46451,7 @@ class FlattenedEncrypt {
             jwe.aad = aadMember;
         }
         if (this._protectedHeader) {
-            jwe.protected = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_7__.decoder.decode(protectedHeader);
+            jwe.protected = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_6__.decoder.decode(protectedHeader);
         }
         if (this._sharedUnprotectedHeader) {
             jwe.unprotected = this._sharedUnprotectedHeader;
@@ -48901,7 +46506,7 @@ async function generalDecrypt(jwe, key, options) {
                 unprotected: jwe.unprotected,
             }, key, options);
         }
-        catch (_a) {
+        catch {
         }
     }
     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEDecryptionFailed();
@@ -48922,12 +46527,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   GeneralEncrypt: () => (/* binding */ GeneralEncrypt)
 /* harmony export */ });
 /* harmony import */ var _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../flattened/encrypt.js */ "./node_modules/jose/dist/browser/jwe/flattened/encrypt.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
-/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
-/* harmony import */ var _lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/encrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/encrypt_key_management.js");
-/* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
+/* harmony import */ var _lib_private_symbols_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../lib/private_symbols.js */ "./node_modules/jose/dist/browser/lib/private_symbols.js");
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
+/* harmony import */ var _lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../lib/is_disjoint.js */ "./node_modules/jose/dist/browser/lib/is_disjoint.js");
+/* harmony import */ var _lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../lib/encrypt_key_management.js */ "./node_modules/jose/dist/browser/lib/encrypt_key_management.js");
+/* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
+/* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
+
 
 
 
@@ -48964,7 +46571,7 @@ class GeneralEncrypt {
         this._plaintext = plaintext;
     }
     addRecipient(key, options) {
-        const recipient = new IndividualRecipient(this, key, { crit: options === null || options === void 0 ? void 0 : options.crit });
+        const recipient = new IndividualRecipient(this, key, { crit: options?.crit });
         this._recipients.push(recipient);
         return recipient;
     }
@@ -48986,12 +46593,10 @@ class GeneralEncrypt {
         this._aad = aad;
         return this;
     }
-    async encrypt(options) {
-        var _a, _b, _c;
+    async encrypt() {
         if (!this._recipients.length) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('at least one recipient must be added');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('at least one recipient must be added');
         }
-        options = { deflateRaw: options === null || options === void 0 ? void 0 : options.deflateRaw };
         if (this._recipients.length === 1) {
             const [recipient] = this._recipients;
             const flattened = await new _flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__.FlattenedEncrypt(this._plaintext)
@@ -48999,8 +46604,8 @@ class GeneralEncrypt {
                 .setProtectedHeader(this._protectedHeader)
                 .setSharedUnprotectedHeader(this._unprotectedHeader)
                 .setUnprotectedHeader(recipient.unprotectedHeader)
-                .encrypt(recipient.key, { ...recipient.options, ...options });
-            let jwe = {
+                .encrypt(recipient.key, { ...recipient.options });
+            const jwe = {
                 ciphertext: flattened.ciphertext,
                 iv: flattened.iv,
                 recipients: [{}],
@@ -49021,8 +46626,8 @@ class GeneralEncrypt {
         let enc;
         for (let i = 0; i < this._recipients.length; i++) {
             const recipient = this._recipients[i];
-            if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_3__["default"])(this._protectedHeader, this._unprotectedHeader, recipient.unprotectedHeader)) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('JWE Protected, JWE Shared Unprotected and JWE Per-Recipient Header Parameter names must be disjoint');
+            if (!(0,_lib_is_disjoint_js__WEBPACK_IMPORTED_MODULE_4__["default"])(this._protectedHeader, this._unprotectedHeader, recipient.unprotectedHeader)) {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE Protected, JWE Shared Unprotected and JWE Per-Recipient Header Parameter names must be disjoint');
             }
             const joseHeader = {
                 ...this._protectedHeader,
@@ -49031,29 +46636,27 @@ class GeneralEncrypt {
             };
             const { alg } = joseHeader;
             if (typeof alg !== 'string' || !alg) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('JWE "alg" (Algorithm) Header Parameter missing or invalid');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE "alg" (Algorithm) Header Parameter missing or invalid');
             }
             if (alg === 'dir' || alg === 'ECDH-ES') {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('"dir" and "ECDH-ES" alg may only be used with a single recipient');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('"dir" and "ECDH-ES" alg may only be used with a single recipient');
             }
             if (typeof joseHeader.enc !== 'string' || !joseHeader.enc) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter missing or invalid');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter missing or invalid');
             }
             if (!enc) {
                 enc = joseHeader.enc;
             }
             else if (enc !== joseHeader.enc) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter must be the same for all recipients');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid('JWE "enc" (Encryption Algorithm) Header Parameter must be the same for all recipients');
             }
-            (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_6__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid, new Map(), recipient.options.crit, this._protectedHeader, joseHeader);
+            (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWEInvalid, new Map(), recipient.options.crit, this._protectedHeader, joseHeader);
             if (joseHeader.zip !== undefined) {
-                if (!this._protectedHeader || !this._protectedHeader.zip) {
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWEInvalid('JWE "zip" (Compression Algorithm) Header MUST be integrity protected');
-                }
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSENotSupported('JWE "zip" (Compression Algorithm) Header Parameter is not supported.');
             }
         }
-        const cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_2__["default"])(enc);
-        let jwe = {
+        const cek = (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_3__["default"])(enc);
+        const jwe = {
             ciphertext: '',
             iv: '',
             recipients: [],
@@ -49079,8 +46682,7 @@ class GeneralEncrypt {
                     .setKeyManagementParameters({ p2c })
                     .encrypt(recipient.key, {
                     ...recipient.options,
-                    ...options,
-                    [_flattened_encrypt_js__WEBPACK_IMPORTED_MODULE_0__.unprotected]: true,
+                    [_lib_private_symbols_js__WEBPACK_IMPORTED_MODULE_1__.unprotected]: true,
                 });
                 jwe.ciphertext = flattened.ciphertext;
                 jwe.iv = flattened.iv;
@@ -49096,10 +46698,10 @@ class GeneralEncrypt {
                     target.header = flattened.header;
                 continue;
             }
-            const { encryptedKey, parameters } = await (0,_lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_4__["default"])(((_a = recipient.unprotectedHeader) === null || _a === void 0 ? void 0 : _a.alg) ||
-                ((_b = this._protectedHeader) === null || _b === void 0 ? void 0 : _b.alg) ||
-                ((_c = this._unprotectedHeader) === null || _c === void 0 ? void 0 : _c.alg), enc, recipient.key, cek, { p2c });
-            target.encrypted_key = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_5__.encode)(encryptedKey);
+            const { encryptedKey, parameters } = await (0,_lib_encrypt_key_management_js__WEBPACK_IMPORTED_MODULE_5__["default"])(recipient.unprotectedHeader?.alg ||
+                this._protectedHeader?.alg ||
+                this._unprotectedHeader?.alg, enc, recipient.key, cek, { p2c });
+            target.encrypted_key = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_6__.encode)(encryptedKey);
             if (recipient.unprotectedHeader || parameters)
                 target.header = { ...recipient.unprotectedHeader, ...parameters };
         }
@@ -49130,12 +46732,12 @@ __webpack_require__.r(__webpack_exports__);
 async function EmbeddedJWK(protectedHeader, token) {
     const joseHeader = {
         ...protectedHeader,
-        ...token === null || token === void 0 ? void 0 : token.header,
+        ...token?.header,
     };
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__["default"])(joseHeader.jwk)) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('"jwk" (JSON Web Key) Header Parameter must be a JSON object');
     }
-    const key = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_0__.importJWK)({ ...joseHeader.jwk, ext: true }, joseHeader.alg, true);
+    const key = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_0__.importJWK)({ ...joseHeader.jwk, ext: true }, joseHeader.alg);
     if (key instanceof Uint8Array || key.type !== 'public') {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('"jwk" (JSON Web Key) Header Parameter must be a public key');
     }
@@ -49176,7 +46778,7 @@ async function calculateJwkThumbprint(jwk, digestAlgorithm) {
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwk)) {
         throw new TypeError('JWK must be an object');
     }
-    digestAlgorithm !== null && digestAlgorithm !== void 0 ? digestAlgorithm : (digestAlgorithm = 'sha256');
+    digestAlgorithm ?? (digestAlgorithm = 'sha256');
     if (digestAlgorithm !== 'sha256' &&
         digestAlgorithm !== 'sha384' &&
         digestAlgorithm !== 'sha512') {
@@ -49211,7 +46813,7 @@ async function calculateJwkThumbprint(jwk, digestAlgorithm) {
     return (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_1__.encode)(await (0,_runtime_digest_js__WEBPACK_IMPORTED_MODULE_0__["default"])(digestAlgorithm, data));
 }
 async function calculateJwkThumbprintUri(jwk, digestAlgorithm) {
-    digestAlgorithm !== null && digestAlgorithm !== void 0 ? digestAlgorithm : (digestAlgorithm = 'sha256');
+    digestAlgorithm ?? (digestAlgorithm = 'sha256');
     const thumbprint = await calculateJwkThumbprint(jwk, digestAlgorithm);
     return `urn:ietf:params:oauth:jwk-thumbprint:sha-${digestAlgorithm.slice(-3)}:${thumbprint}`;
 }
@@ -49228,9 +46830,7 @@ async function calculateJwkThumbprintUri(jwk, digestAlgorithm) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   LocalJWKSet: () => (/* binding */ LocalJWKSet),
-/* harmony export */   createLocalJWKSet: () => (/* binding */ createLocalJWKSet),
-/* harmony export */   isJWKSLike: () => (/* binding */ isJWKSLike)
+/* harmony export */   createLocalJWKSet: () => (/* binding */ createLocalJWKSet)
 /* harmony export */ });
 /* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
@@ -49275,7 +46875,7 @@ class LocalJWKSet {
         this._jwks = clone(jwks);
     }
     async getKey(protectedHeader, token) {
-        const { alg, kid } = { ...protectedHeader, ...token === null || token === void 0 ? void 0 : token.header };
+        const { alg, kid } = { ...protectedHeader, ...token?.header };
         const kty = getKtyFromAlg(alg);
         const candidates = this._jwks.keys.filter((jwk) => {
             let candidate = kty === jwk.kty;
@@ -49291,9 +46891,6 @@ class LocalJWKSet {
             if (candidate && Array.isArray(jwk.key_ops)) {
                 candidate = jwk.key_ops.includes('verify');
             }
-            if (candidate && alg === 'EdDSA') {
-                candidate = jwk.crv === 'Ed25519' || jwk.crv === 'Ed448';
-            }
             if (candidate) {
                 switch (alg) {
                     case 'ES256':
@@ -49308,6 +46905,12 @@ class LocalJWKSet {
                     case 'ES512':
                         candidate = jwk.crv === 'P-521';
                         break;
+                    case 'Ed25519':
+                        candidate = jwk.crv === 'Ed25519';
+                        break;
+                    case 'EdDSA':
+                        candidate = jwk.crv === 'Ed25519' || jwk.crv === 'Ed448';
+                        break;
                 }
             }
             return candidate;
@@ -49316,7 +46919,7 @@ class LocalJWKSet {
         if (length === 0) {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSNoMatchingKey();
         }
-        else if (length !== 1) {
+        if (length !== 1) {
             const error = new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSMultipleMatchingKeys();
             const { _cached } = this;
             error[Symbol.asyncIterator] = async function* () {
@@ -49324,9 +46927,7 @@ class LocalJWKSet {
                     try {
                         yield await importWithAlgCache(_cached, jwk, alg);
                     }
-                    catch (_a) {
-                        continue;
-                    }
+                    catch { }
                 }
             };
             throw error;
@@ -49347,9 +46948,16 @@ async function importWithAlgCache(cache, jwk, alg) {
 }
 function createLocalJWKSet(jwks) {
     const set = new LocalJWKSet(jwks);
-    return async function (protectedHeader, token) {
-        return set.getKey(protectedHeader, token);
-    };
+    const localJWKSet = async (protectedHeader, token) => set.getKey(protectedHeader, token);
+    Object.defineProperties(localJWKSet, {
+        jwks: {
+            value: () => clone(set._jwks),
+            enumerable: true,
+            configurable: false,
+            writable: false,
+        },
+    });
+    return localJWKSet;
 }
 
 
@@ -49364,11 +46972,15 @@ function createLocalJWKSet(jwks) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   createRemoteJWKSet: () => (/* binding */ createRemoteJWKSet)
+/* harmony export */   createRemoteJWKSet: () => (/* binding */ createRemoteJWKSet),
+/* harmony export */   experimental_jwksCache: () => (/* binding */ experimental_jwksCache),
+/* harmony export */   jwksCache: () => (/* binding */ jwksCache)
 /* harmony export */ });
 /* harmony import */ var _runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/fetch_jwks.js */ "./node_modules/jose/dist/browser/runtime/fetch_jwks.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
 /* harmony import */ var _local_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./local.js */ "./node_modules/jose/dist/browser/jwks/local.js");
+/* harmony import */ var _lib_is_object_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../lib/is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
+
 
 
 
@@ -49377,20 +46989,47 @@ function isCloudflareWorkers() {
         (typeof navigator !== 'undefined' && navigator.userAgent === 'Cloudflare-Workers') ||
         (typeof EdgeRuntime !== 'undefined' && EdgeRuntime === 'vercel'));
 }
-class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_2__.LocalJWKSet {
+let USER_AGENT;
+if (typeof navigator === 'undefined' || !navigator.userAgent?.startsWith?.('Mozilla/5.0 ')) {
+    const NAME = 'jose';
+    const VERSION = 'v5.10.0';
+    USER_AGENT = `${NAME}/${VERSION}`;
+}
+const jwksCache = Symbol();
+function isFreshJwksCache(input, cacheMaxAge) {
+    if (typeof input !== 'object' || input === null) {
+        return false;
+    }
+    if (!('uat' in input) || typeof input.uat !== 'number' || Date.now() - input.uat >= cacheMaxAge) {
+        return false;
+    }
+    if (!('jwks' in input) ||
+        !(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_3__["default"])(input.jwks) ||
+        !Array.isArray(input.jwks.keys) ||
+        !Array.prototype.every.call(input.jwks.keys, _lib_is_object_js__WEBPACK_IMPORTED_MODULE_3__["default"])) {
+        return false;
+    }
+    return true;
+}
+class RemoteJWKSet {
     constructor(url, options) {
-        super({ keys: [] });
-        this._jwks = undefined;
         if (!(url instanceof URL)) {
             throw new TypeError('url must be an instance of URL');
         }
         this._url = new URL(url.href);
-        this._options = { agent: options === null || options === void 0 ? void 0 : options.agent, headers: options === null || options === void 0 ? void 0 : options.headers };
+        this._options = { agent: options?.agent, headers: options?.headers };
         this._timeoutDuration =
-            typeof (options === null || options === void 0 ? void 0 : options.timeoutDuration) === 'number' ? options === null || options === void 0 ? void 0 : options.timeoutDuration : 5000;
+            typeof options?.timeoutDuration === 'number' ? options?.timeoutDuration : 5000;
         this._cooldownDuration =
-            typeof (options === null || options === void 0 ? void 0 : options.cooldownDuration) === 'number' ? options === null || options === void 0 ? void 0 : options.cooldownDuration : 30000;
-        this._cacheMaxAge = typeof (options === null || options === void 0 ? void 0 : options.cacheMaxAge) === 'number' ? options === null || options === void 0 ? void 0 : options.cacheMaxAge : 600000;
+            typeof options?.cooldownDuration === 'number' ? options?.cooldownDuration : 30000;
+        this._cacheMaxAge = typeof options?.cacheMaxAge === 'number' ? options?.cacheMaxAge : 600000;
+        if (options?.[jwksCache] !== undefined) {
+            this._cache = options?.[jwksCache];
+            if (isFreshJwksCache(options?.[jwksCache], this._cacheMaxAge)) {
+                this._jwksTimestamp = this._cache.uat;
+                this._local = (0,_local_js__WEBPACK_IMPORTED_MODULE_2__.createLocalJWKSet)(this._cache.jwks);
+            }
+        }
     }
     coolingDown() {
         return typeof this._jwksTimestamp === 'number'
@@ -49403,17 +47042,17 @@ class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_2__.LocalJWKSet {
             : false;
     }
     async getKey(protectedHeader, token) {
-        if (!this._jwks || !this.fresh()) {
+        if (!this._local || !this.fresh()) {
             await this.reload();
         }
         try {
-            return await super.getKey(protectedHeader, token);
+            return await this._local(protectedHeader, token);
         }
         catch (err) {
             if (err instanceof _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSNoMatchingKey) {
                 if (this.coolingDown() === false) {
                     await this.reload();
-                    return super.getKey(protectedHeader, token);
+                    return this._local(protectedHeader, token);
                 }
             }
             throw err;
@@ -49423,12 +47062,18 @@ class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_2__.LocalJWKSet {
         if (this._pendingFetch && isCloudflareWorkers()) {
             this._pendingFetch = undefined;
         }
+        const headers = new Headers(this._options.headers);
+        if (USER_AGENT && !headers.has('User-Agent')) {
+            headers.set('User-Agent', USER_AGENT);
+            this._options.headers = Object.fromEntries(headers.entries());
+        }
         this._pendingFetch || (this._pendingFetch = (0,_runtime_fetch_jwks_js__WEBPACK_IMPORTED_MODULE_0__["default"])(this._url, this._timeoutDuration, this._options)
             .then((json) => {
-            if (!(0,_local_js__WEBPACK_IMPORTED_MODULE_2__.isJWKSLike)(json)) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWKSInvalid('JSON Web Key Set malformed');
+            this._local = (0,_local_js__WEBPACK_IMPORTED_MODULE_2__.createLocalJWKSet)(json);
+            if (this._cache) {
+                this._cache.uat = Date.now();
+                this._cache.jwks = json;
             }
-            this._jwks = { keys: json.keys };
             this._jwksTimestamp = Date.now();
             this._pendingFetch = undefined;
         })
@@ -49441,10 +47086,39 @@ class RemoteJWKSet extends _local_js__WEBPACK_IMPORTED_MODULE_2__.LocalJWKSet {
 }
 function createRemoteJWKSet(url, options) {
     const set = new RemoteJWKSet(url, options);
-    return async function (protectedHeader, token) {
-        return set.getKey(protectedHeader, token);
-    };
+    const remoteJWKSet = async (protectedHeader, token) => set.getKey(protectedHeader, token);
+    Object.defineProperties(remoteJWKSet, {
+        coolingDown: {
+            get: () => set.coolingDown(),
+            enumerable: true,
+            configurable: false,
+        },
+        fresh: {
+            get: () => set.fresh(),
+            enumerable: true,
+            configurable: false,
+        },
+        reload: {
+            value: () => set.reload(),
+            enumerable: true,
+            configurable: false,
+            writable: false,
+        },
+        reloading: {
+            get: () => !!set._pendingFetch,
+            enumerable: true,
+            configurable: false,
+        },
+        jwks: {
+            value: () => set._local?.jwks(),
+            enumerable: true,
+            configurable: false,
+            writable: false,
+        },
+    });
+    return remoteJWKSet;
 }
+const experimental_jwksCache = jwksCache;
 
 
 /***/ }),
@@ -49578,7 +47252,7 @@ class FlattenedSign {
             ...this._protectedHeader,
             ...this._unprotectedHeader,
         };
-        const extensions = (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_6__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWSInvalid, new Map([['b64', true]]), options === null || options === void 0 ? void 0 : options.crit, this._protectedHeader, joseHeader);
+        const extensions = (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_6__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWSInvalid, new Map([['b64', true]]), options?.crit, this._protectedHeader, joseHeader);
         let b64 = true;
         if (extensions.has('b64')) {
             b64 = this._protectedHeader.b64;
@@ -49590,7 +47264,7 @@ class FlattenedSign {
         if (typeof alg !== 'string' || !alg) {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JWSInvalid('JWS "alg" (Algorithm) Header Parameter missing or invalid');
         }
-        (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_5__["default"])(alg, key, 'sign');
+        (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_5__.checkKeyTypeWithJwk)(alg, key, 'sign');
         let payload = this._payload;
         if (b64) {
             payload = _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_4__.encoder.encode((0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.encode)(payload));
@@ -49644,6 +47318,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../../lib/check_key_type.js */ "./node_modules/jose/dist/browser/lib/check_key_type.js");
 /* harmony import */ var _lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../lib/validate_crit.js */ "./node_modules/jose/dist/browser/lib/validate_crit.js");
 /* harmony import */ var _lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../lib/validate_algorithms.js */ "./node_modules/jose/dist/browser/lib/validate_algorithms.js");
+/* harmony import */ var _lib_is_jwk_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../lib/is_jwk.js */ "./node_modules/jose/dist/browser/lib/is_jwk.js");
+/* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
+
+
 
 
 
@@ -49654,7 +47332,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function flattenedVerify(jws, key, options) {
-    var _a;
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_5__["default"])(jws)) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Flattened JWS must be an object');
     }
@@ -49679,7 +47356,7 @@ async function flattenedVerify(jws, key, options) {
             const protectedHeader = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.protected);
             parsedProt = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.decoder.decode(protectedHeader));
         }
-        catch (_b) {
+        catch {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('JWS Protected Header is invalid');
         }
     }
@@ -49690,7 +47367,7 @@ async function flattenedVerify(jws, key, options) {
         ...parsedProt,
         ...jws.header,
     };
-    const extensions = (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid, new Map([['b64', true]]), options === null || options === void 0 ? void 0 : options.crit, parsedProt, joseHeader);
+    const extensions = (0,_lib_validate_crit_js__WEBPACK_IMPORTED_MODULE_7__["default"])(_util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid, new Map([['b64', true]]), options?.crit, parsedProt, joseHeader);
     let b64 = true;
     if (extensions.has('b64')) {
         b64 = parsedProt.b64;
@@ -49704,7 +47381,7 @@ async function flattenedVerify(jws, key, options) {
     }
     const algorithms = options && (0,_lib_validate_algorithms_js__WEBPACK_IMPORTED_MODULE_8__["default"])('algorithms', options.algorithms);
     if (algorithms && !algorithms.has(alg)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSEAlgNotAllowed('"alg" (Algorithm) Header Parameter not allowed');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JOSEAlgNotAllowed('"alg" (Algorithm) Header Parameter value not allowed');
     }
     if (b64) {
         if (typeof jws.payload !== 'string') {
@@ -49718,14 +47395,20 @@ async function flattenedVerify(jws, key, options) {
     if (typeof key === 'function') {
         key = await key(parsedProt, jws);
         resolvedKey = true;
+        (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__.checkKeyTypeWithJwk)(alg, key, 'verify');
+        if ((0,_lib_is_jwk_js__WEBPACK_IMPORTED_MODULE_9__.isJWK)(key)) {
+            key = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_10__.importJWK)(key, alg);
+        }
     }
-    (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__["default"])(alg, key, 'verify');
-    const data = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.concat)(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode((_a = jws.protected) !== null && _a !== void 0 ? _a : ''), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode('.'), typeof jws.payload === 'string' ? _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload) : jws.payload);
+    else {
+        (0,_lib_check_key_type_js__WEBPACK_IMPORTED_MODULE_6__.checkKeyTypeWithJwk)(alg, key, 'verify');
+    }
+    const data = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.concat)(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.protected ?? ''), _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode('.'), typeof jws.payload === 'string' ? _lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_3__.encoder.encode(jws.payload) : jws.payload);
     let signature;
     try {
         signature = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.signature);
     }
-    catch (_c) {
+    catch {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the signature');
     }
     const verified = await (0,_runtime_verify_js__WEBPACK_IMPORTED_MODULE_1__["default"])(alg, key, signature, data);
@@ -49737,7 +47420,7 @@ async function flattenedVerify(jws, key, options) {
         try {
             payload = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jws.payload);
         }
-        catch (_d) {
+        catch {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWSInvalid('Failed to base64url decode the payload');
         }
     }
@@ -49880,7 +47563,7 @@ async function generalVerify(jws, key, options) {
                 signature: signature.signature,
             }, key, options);
         }
-        catch (_a) {
+        catch {
         }
     }
     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWSSignatureVerificationFailed();
@@ -49911,14 +47594,14 @@ async function jwtDecrypt(jwt, key, options) {
     const payload = (0,_lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__["default"])(decrypted.protectedHeader, decrypted.plaintext, options);
     const { protectedHeader } = decrypted;
     if (protectedHeader.iss !== undefined && protectedHeader.iss !== payload.iss) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "iss" claim header parameter mismatch', 'iss', 'mismatch');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "iss" claim header parameter mismatch', payload, 'iss', 'mismatch');
     }
     if (protectedHeader.sub !== undefined && protectedHeader.sub !== payload.sub) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "sub" claim header parameter mismatch', 'sub', 'mismatch');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "sub" claim header parameter mismatch', payload, 'sub', 'mismatch');
     }
     if (protectedHeader.aud !== undefined &&
         JSON.stringify(protectedHeader.aud) !== JSON.stringify(payload.aud)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "aud" claim header parameter mismatch', 'aud', 'mismatch');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTClaimValidationFailed('replicated "aud" claim header parameter mismatch', payload, 'aud', 'mismatch');
     }
     const result = { payload, protectedHeader };
     if (typeof key === 'function') {
@@ -50033,8 +47716,14 @@ __webpack_require__.r(__webpack_exports__);
 
 
 
+function validateInput(label, input) {
+    if (!Number.isFinite(input)) {
+        throw new TypeError(`Invalid ${label} input`);
+    }
+    return input;
+}
 class ProduceJWT {
-    constructor(payload) {
+    constructor(payload = {}) {
         if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_1__["default"])(payload)) {
             throw new TypeError('JWT Claims Set MUST be an object');
         }
@@ -50058,7 +47747,10 @@ class ProduceJWT {
     }
     setNotBefore(input) {
         if (typeof input === 'number') {
-            this._payload = { ...this._payload, nbf: input };
+            this._payload = { ...this._payload, nbf: validateInput('setNotBefore', input) };
+        }
+        else if (input instanceof Date) {
+            this._payload = { ...this._payload, nbf: validateInput('setNotBefore', (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input)) };
         }
         else {
             this._payload = { ...this._payload, nbf: (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(new Date()) + (0,_lib_secs_js__WEBPACK_IMPORTED_MODULE_2__["default"])(input) };
@@ -50067,7 +47759,10 @@ class ProduceJWT {
     }
     setExpirationTime(input) {
         if (typeof input === 'number') {
-            this._payload = { ...this._payload, exp: input };
+            this._payload = { ...this._payload, exp: validateInput('setExpirationTime', input) };
+        }
+        else if (input instanceof Date) {
+            this._payload = { ...this._payload, exp: validateInput('setExpirationTime', (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input)) };
         }
         else {
             this._payload = { ...this._payload, exp: (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(new Date()) + (0,_lib_secs_js__WEBPACK_IMPORTED_MODULE_2__["default"])(input) };
@@ -50078,8 +47773,17 @@ class ProduceJWT {
         if (typeof input === 'undefined') {
             this._payload = { ...this._payload, iat: (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(new Date()) };
         }
+        else if (input instanceof Date) {
+            this._payload = { ...this._payload, iat: validateInput('setIssuedAt', (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(input)) };
+        }
+        else if (typeof input === 'string') {
+            this._payload = {
+                ...this._payload,
+                iat: validateInput('setIssuedAt', (0,_lib_epoch_js__WEBPACK_IMPORTED_MODULE_0__["default"])(new Date()) + (0,_lib_secs_js__WEBPACK_IMPORTED_MODULE_2__["default"])(input)),
+            };
+        }
         else {
-            this._payload = { ...this._payload, iat: input };
+            this._payload = { ...this._payload, iat: validateInput('setIssuedAt', input) };
         }
         return this;
     }
@@ -50113,10 +47817,9 @@ class SignJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_3__.ProduceJWT {
         return this;
     }
     async sign(key, options) {
-        var _a;
         const sig = new _jws_compact_sign_js__WEBPACK_IMPORTED_MODULE_0__.CompactSign(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_2__.encoder.encode(JSON.stringify(this._payload)));
         sig.setProtectedHeader(this._protectedHeader);
-        if (Array.isArray((_a = this._protectedHeader) === null || _a === void 0 ? void 0 : _a.crit) &&
+        if (Array.isArray(this._protectedHeader?.crit) &&
             this._protectedHeader.crit.includes('b64') &&
             this._protectedHeader.b64 === false) {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JWTInvalid('JWTs MUST NOT use unencoded payload');
@@ -50169,7 +47872,7 @@ class UnsecuredJWT extends _produce_js__WEBPACK_IMPORTED_MODULE_4__.ProduceJWT {
             if (header.alg !== 'none')
                 throw new Error();
         }
-        catch (_a) {
+        catch {
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTInvalid('Invalid Unsecured JWT');
         }
         const payload = (0,_lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_3__["default"])(header, _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode(encodedPayload), options);
@@ -50198,9 +47901,8 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function jwtVerify(jwt, key, options) {
-    var _a;
     const verified = await (0,_jws_compact_verify_js__WEBPACK_IMPORTED_MODULE_0__.compactVerify)(jwt, key, options);
-    if (((_a = verified.protectedHeader.crit) === null || _a === void 0 ? void 0 : _a.includes('b64')) && verified.protectedHeader.b64 === false) {
+    if (verified.protectedHeader.crit?.includes('b64') && verified.protectedHeader.b64 === false) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_2__.JWTInvalid('JWTs MUST NOT use unencoded payload');
     }
     const payload = (0,_lib_jwt_claims_set_js__WEBPACK_IMPORTED_MODULE_1__["default"])(verified.protectedHeader, verified.payload, options);
@@ -50327,8 +48029,7 @@ async function importPKCS8(pkcs8, alg, options) {
     }
     return (0,_runtime_asn1_js__WEBPACK_IMPORTED_MODULE_1__.fromPKCS8)(pkcs8, alg, options);
 }
-async function importJWK(jwk, alg, octAsKeyObject) {
-    var _a;
+async function importJWK(jwk, alg) {
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(jwk)) {
         throw new TypeError('JWK must be an object');
     }
@@ -50338,13 +48039,9 @@ async function importJWK(jwk, alg, octAsKeyObject) {
             if (typeof jwk.k !== 'string' || !jwk.k) {
                 throw new TypeError('missing "k" (Key Value) Parameter value');
             }
-            octAsKeyObject !== null && octAsKeyObject !== void 0 ? octAsKeyObject : (octAsKeyObject = jwk.ext !== true);
-            if (octAsKeyObject) {
-                return (0,_runtime_jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__["default"])({ ...jwk, alg, ext: (_a = jwk.ext) !== null && _a !== void 0 ? _a : false });
-            }
             return (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(jwk.k);
         case 'RSA':
-            if (jwk.oth !== undefined) {
+            if ('oth' in jwk && jwk.oth !== undefined) {
                 throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_3__.JOSENotSupported('RSA JWK "oth" (Other Primes Info) Parameter value is not supported');
             }
         case 'EC':
@@ -50372,17 +48069,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../runtime/encrypt.js */ "./node_modules/jose/dist/browser/runtime/encrypt.js");
 /* harmony import */ var _runtime_decrypt_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/decrypt.js */ "./node_modules/jose/dist/browser/runtime/decrypt.js");
-/* harmony import */ var _iv_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./iv.js */ "./node_modules/jose/dist/browser/lib/iv.js");
-/* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-
+/* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
 
 
 
 async function wrap(alg, key, cek, iv) {
     const jweAlgorithm = alg.slice(0, 7);
-    iv || (iv = (0,_iv_js__WEBPACK_IMPORTED_MODULE_2__["default"])(jweAlgorithm));
-    const { ciphertext: encryptedKey, tag } = await (0,_runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_0__["default"])(jweAlgorithm, cek, key, iv, new Uint8Array(0));
-    return { encryptedKey, iv: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_3__.encode)(iv), tag: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_3__.encode)(tag) };
+    const wrapped = await (0,_runtime_encrypt_js__WEBPACK_IMPORTED_MODULE_0__["default"])(jweAlgorithm, cek, key, iv, new Uint8Array(0));
+    return {
+        encryptedKey: wrapped.ciphertext,
+        iv: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_2__.encode)(wrapped.iv),
+        tag: (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_2__.encode)(wrapped.tag),
+    };
 }
 async function unwrap(alg, key, encryptedKey, iv, tag) {
     const jweAlgorithm = alg.slice(0, 7);
@@ -50419,10 +48117,10 @@ function concat(...buffers) {
     const size = buffers.reduce((acc, { length }) => acc + length, 0);
     const buf = new Uint8Array(size);
     let i = 0;
-    buffers.forEach((buffer) => {
+    for (const buffer of buffers) {
         buf.set(buffer, i);
         i += buffer.length;
-    });
+    }
     return buf;
 }
 function p2s(alg, p2sInput) {
@@ -50538,55 +48236,89 @@ const checkIvLength = (enc, iv) => {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   checkKeyTypeWithJwk: () => (/* binding */ checkKeyTypeWithJwk),
 /* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
 /* harmony export */ });
 /* harmony import */ var _invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./invalid_key_input.js */ "./node_modules/jose/dist/browser/lib/invalid_key_input.js");
 /* harmony import */ var _runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../runtime/is_key_like.js */ "./node_modules/jose/dist/browser/runtime/is_key_like.js");
+/* harmony import */ var _is_jwk_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./is_jwk.js */ "./node_modules/jose/dist/browser/lib/is_jwk.js");
 
 
-const symmetricTypeCheck = (alg, key) => {
+
+const tag = (key) => key?.[Symbol.toStringTag];
+const jwkMatchesOp = (alg, key, usage) => {
+    if (key.use !== undefined && key.use !== 'sig') {
+        throw new TypeError('Invalid key for this operation, when present its use must be sig');
+    }
+    if (key.key_ops !== undefined && key.key_ops.includes?.(usage) !== true) {
+        throw new TypeError(`Invalid key for this operation, when present its key_ops must include ${usage}`);
+    }
+    if (key.alg !== undefined && key.alg !== alg) {
+        throw new TypeError(`Invalid key for this operation, when present its alg must be ${alg}`);
+    }
+    return true;
+};
+const symmetricTypeCheck = (alg, key, usage, allowJwk) => {
     if (key instanceof Uint8Array)
         return;
+    if (allowJwk && _is_jwk_js__WEBPACK_IMPORTED_MODULE_2__.isJWK(key)) {
+        if (_is_jwk_js__WEBPACK_IMPORTED_MODULE_2__.isSecretJWK(key) && jwkMatchesOp(alg, key, usage))
+            return;
+        throw new TypeError(`JSON Web Key for symmetric algorithms must have JWK "kty" (Key Type) equal to "oct" and the JWK "k" (Key Value) present`);
+    }
     if (!(0,_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__["default"])(key)) {
-        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types, 'Uint8Array'));
+        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types, 'Uint8Array', allowJwk ? 'JSON Web Key' : null));
     }
     if (key.type !== 'secret') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for symmetric algorithms must be of type "secret"`);
+        throw new TypeError(`${tag(key)} instances for symmetric algorithms must be of type "secret"`);
     }
 };
-const asymmetricTypeCheck = (alg, key, usage) => {
+const asymmetricTypeCheck = (alg, key, usage, allowJwk) => {
+    if (allowJwk && _is_jwk_js__WEBPACK_IMPORTED_MODULE_2__.isJWK(key)) {
+        switch (usage) {
+            case 'sign':
+                if (_is_jwk_js__WEBPACK_IMPORTED_MODULE_2__.isPrivateJWK(key) && jwkMatchesOp(alg, key, usage))
+                    return;
+                throw new TypeError(`JSON Web Key for this operation be a private JWK`);
+            case 'verify':
+                if (_is_jwk_js__WEBPACK_IMPORTED_MODULE_2__.isPublicJWK(key) && jwkMatchesOp(alg, key, usage))
+                    return;
+                throw new TypeError(`JSON Web Key for this operation be a public JWK`);
+        }
+    }
     if (!(0,_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__["default"])(key)) {
-        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types));
+        throw new TypeError((0,_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_0__.withAlg)(alg, key, ..._runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types, allowJwk ? 'JSON Web Key' : null));
     }
     if (key.type === 'secret') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithms must not be of type "secret"`);
+        throw new TypeError(`${tag(key)} instances for asymmetric algorithms must not be of type "secret"`);
     }
     if (usage === 'sign' && key.type === 'public') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithm signing must be of type "private"`);
+        throw new TypeError(`${tag(key)} instances for asymmetric algorithm signing must be of type "private"`);
     }
     if (usage === 'decrypt' && key.type === 'public') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithm decryption must be of type "private"`);
+        throw new TypeError(`${tag(key)} instances for asymmetric algorithm decryption must be of type "private"`);
     }
     if (key.algorithm && usage === 'verify' && key.type === 'private') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithm verifying must be of type "public"`);
+        throw new TypeError(`${tag(key)} instances for asymmetric algorithm verifying must be of type "public"`);
     }
     if (key.algorithm && usage === 'encrypt' && key.type === 'private') {
-        throw new TypeError(`${_runtime_is_key_like_js__WEBPACK_IMPORTED_MODULE_1__.types.join(' or ')} instances for asymmetric algorithm encryption must be of type "public"`);
+        throw new TypeError(`${tag(key)} instances for asymmetric algorithm encryption must be of type "public"`);
     }
 };
-const checkKeyType = (alg, key, usage) => {
+function checkKeyType(allowJwk, alg, key, usage) {
     const symmetric = alg.startsWith('HS') ||
         alg === 'dir' ||
         alg.startsWith('PBES2') ||
         /^A\d{3}(?:GCM)?KW$/.test(alg);
     if (symmetric) {
-        symmetricTypeCheck(alg, key);
+        symmetricTypeCheck(alg, key, usage, allowJwk);
     }
     else {
-        asymmetricTypeCheck(alg, key, usage);
+        asymmetricTypeCheck(alg, key, usage, allowJwk);
     }
-};
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkKeyType);
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (checkKeyType.bind(undefined, false));
+const checkKeyTypeWithJwk = checkKeyType.bind(undefined, true);
 
 
 /***/ }),
@@ -50703,6 +48435,11 @@ function checkSigCryptoKey(key, alg, ...usages) {
             }
             break;
         }
+        case 'Ed25519': {
+            if (!isAlgorithm(key.algorithm, 'Ed25519'))
+                throw unusable('Ed25519');
+            break;
+        }
         case 'ES256':
         case 'ES384':
         case 'ES512': {
@@ -50797,12 +48534,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../runtime/pbes2kw.js */ "./node_modules/jose/dist/browser/runtime/pbes2kw.js");
 /* harmony import */ var _runtime_rsaes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../runtime/rsaes.js */ "./node_modules/jose/dist/browser/runtime/rsaes.js");
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
-/* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
-/* harmony import */ var _check_key_type_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./check_key_type.js */ "./node_modules/jose/dist/browser/lib/check_key_type.js");
-/* harmony import */ var _is_object_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
-/* harmony import */ var _aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./aesgcmkw.js */ "./node_modules/jose/dist/browser/lib/aesgcmkw.js");
+/* harmony import */ var _runtime_normalize_key_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../runtime/normalize_key.js */ "./node_modules/jose/dist/browser/runtime/normalize_key.js");
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
+/* harmony import */ var _key_import_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../key/import.js */ "./node_modules/jose/dist/browser/key/import.js");
+/* harmony import */ var _check_key_type_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./check_key_type.js */ "./node_modules/jose/dist/browser/lib/check_key_type.js");
+/* harmony import */ var _is_object_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
+/* harmony import */ var _aesgcmkw_js__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./aesgcmkw.js */ "./node_modules/jose/dist/browser/lib/aesgcmkw.js");
+
 
 
 
@@ -50815,51 +48554,52 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options) {
-    (0,_check_key_type_js__WEBPACK_IMPORTED_MODULE_8__["default"])(alg, key, 'decrypt');
+    (0,_check_key_type_js__WEBPACK_IMPORTED_MODULE_9__["default"])(alg, key, 'decrypt');
+    key = (await _runtime_normalize_key_js__WEBPACK_IMPORTED_MODULE_5__["default"].normalizePrivateKey?.(key, alg)) || key;
     switch (alg) {
         case 'dir': {
             if (encryptedKey !== undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Encountered unexpected JWE Encrypted Key');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Encountered unexpected JWE Encrypted Key');
             return key;
         }
         case 'ECDH-ES':
             if (encryptedKey !== undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Encountered unexpected JWE Encrypted Key');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Encountered unexpected JWE Encrypted Key');
         case 'ECDH-ES+A128KW':
         case 'ECDH-ES+A192KW':
         case 'ECDH-ES+A256KW': {
-            if (!(0,_is_object_js__WEBPACK_IMPORTED_MODULE_9__["default"])(joseHeader.epk))
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "epk" (Ephemeral Public Key) missing or invalid`);
+            if (!(0,_is_object_js__WEBPACK_IMPORTED_MODULE_10__["default"])(joseHeader.epk))
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "epk" (Ephemeral Public Key) missing or invalid`);
             if (!_runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.ecdhAllowed(key))
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JOSENotSupported('ECDH with the provided key is not allowed or not supported by your javascript runtime');
-            const epk = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_7__.importJWK)(joseHeader.epk, alg);
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JOSENotSupported('ECDH with the provided key is not allowed or not supported by your javascript runtime');
+            const epk = await (0,_key_import_js__WEBPACK_IMPORTED_MODULE_8__.importJWK)(joseHeader.epk, alg);
             let partyUInfo;
             let partyVInfo;
             if (joseHeader.apu !== undefined) {
                 if (typeof joseHeader.apu !== 'string')
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apu" (Agreement PartyUInfo) invalid`);
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "apu" (Agreement PartyUInfo) invalid`);
                 try {
                     partyUInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apu);
                 }
-                catch (_a) {
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apu');
+                catch {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Failed to base64url decode the apu');
                 }
             }
             if (joseHeader.apv !== undefined) {
                 if (typeof joseHeader.apv !== 'string')
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "apv" (Agreement PartyVInfo) invalid`);
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "apv" (Agreement PartyVInfo) invalid`);
                 try {
                     partyVInfo = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.apv);
                 }
-                catch (_b) {
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the apv');
+                catch {
+                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Failed to base64url decode the apv');
                 }
             }
-            const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(epk, key, alg === 'ECDH-ES' ? joseHeader.enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__.bitLength)(joseHeader.enc) : parseInt(alg.slice(-5, -2), 10), partyUInfo, partyVInfo);
+            const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(epk, key, alg === 'ECDH-ES' ? joseHeader.enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_7__.bitLength)(joseHeader.enc) : parseInt(alg.slice(-5, -2), 10), partyUInfo, partyVInfo);
             if (alg === 'ECDH-ES')
                 return sharedSecret;
             if (encryptedKey === undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('JWE Encrypted Key missing');
             return (0,_runtime_aeskw_js__WEBPACK_IMPORTED_MODULE_0__.unwrap)(alg.slice(-6), sharedSecret, encryptedKey);
         }
         case 'RSA1_5':
@@ -50868,27 +48608,27 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
         case 'RSA-OAEP-384':
         case 'RSA-OAEP-512': {
             if (encryptedKey === undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('JWE Encrypted Key missing');
             return (0,_runtime_rsaes_js__WEBPACK_IMPORTED_MODULE_3__.decrypt)(alg, key, encryptedKey);
         }
         case 'PBES2-HS256+A128KW':
         case 'PBES2-HS384+A192KW':
         case 'PBES2-HS512+A256KW': {
             if (encryptedKey === undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('JWE Encrypted Key missing');
             if (typeof joseHeader.p2c !== 'number')
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) missing or invalid`);
-            const p2cLimit = (options === null || options === void 0 ? void 0 : options.maxPBES2Count) || 10000;
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) missing or invalid`);
+            const p2cLimit = options?.maxPBES2Count || 10000;
             if (joseHeader.p2c > p2cLimit)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) out is of acceptable bounds`);
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "p2c" (PBES2 Count) out is of acceptable bounds`);
             if (typeof joseHeader.p2s !== 'string')
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "p2s" (PBES2 Salt) missing or invalid`);
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "p2s" (PBES2 Salt) missing or invalid`);
             let p2s;
             try {
                 p2s = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.p2s);
             }
-            catch (_c) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the p2s');
+            catch {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Failed to base64url decode the p2s');
             }
             return (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.decrypt)(alg, key, encryptedKey, joseHeader.p2c, p2s);
         }
@@ -50896,36 +48636,36 @@ async function decryptKeyManagement(alg, key, encryptedKey, joseHeader, options)
         case 'A192KW':
         case 'A256KW': {
             if (encryptedKey === undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('JWE Encrypted Key missing');
             return (0,_runtime_aeskw_js__WEBPACK_IMPORTED_MODULE_0__.unwrap)(alg, key, encryptedKey);
         }
         case 'A128GCMKW':
         case 'A192GCMKW':
         case 'A256GCMKW': {
             if (encryptedKey === undefined)
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('JWE Encrypted Key missing');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('JWE Encrypted Key missing');
             if (typeof joseHeader.iv !== 'string')
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "iv" (Initialization Vector) missing or invalid`);
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "iv" (Initialization Vector) missing or invalid`);
             if (typeof joseHeader.tag !== 'string')
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid(`JOSE Header "tag" (Authentication Tag) missing or invalid`);
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid(`JOSE Header "tag" (Authentication Tag) missing or invalid`);
             let iv;
             try {
                 iv = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.iv);
             }
-            catch (_d) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the iv');
+            catch {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Failed to base64url decode the iv');
             }
             let tag;
             try {
                 tag = (0,_runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__.decode)(joseHeader.tag);
             }
-            catch (_e) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JWEInvalid('Failed to base64url decode the tag');
+            catch {
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JWEInvalid('Failed to base64url decode the tag');
             }
-            return (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__.unwrap)(alg, key, encryptedKey, iv, tag);
+            return (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_11__.unwrap)(alg, key, encryptedKey, iv, tag);
         }
         default: {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_5__.JOSENotSupported('Invalid or unsupported "alg" (JWE Algorithm) header value');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JOSENotSupported('Invalid or unsupported "alg" (JWE Algorithm) header value');
         }
     }
 }
@@ -50950,11 +48690,13 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../runtime/pbes2kw.js */ "./node_modules/jose/dist/browser/runtime/pbes2kw.js");
 /* harmony import */ var _runtime_rsaes_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../runtime/rsaes.js */ "./node_modules/jose/dist/browser/runtime/rsaes.js");
 /* harmony import */ var _runtime_base64url_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../runtime/base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _key_export_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../key/export.js */ "./node_modules/jose/dist/browser/key/export.js");
-/* harmony import */ var _check_key_type_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./check_key_type.js */ "./node_modules/jose/dist/browser/lib/check_key_type.js");
-/* harmony import */ var _aesgcmkw_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./aesgcmkw.js */ "./node_modules/jose/dist/browser/lib/aesgcmkw.js");
+/* harmony import */ var _runtime_normalize_key_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../runtime/normalize_key.js */ "./node_modules/jose/dist/browser/runtime/normalize_key.js");
+/* harmony import */ var _lib_cek_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../lib/cek.js */ "./node_modules/jose/dist/browser/lib/cek.js");
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _key_export_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../key/export.js */ "./node_modules/jose/dist/browser/key/export.js");
+/* harmony import */ var _check_key_type_js__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./check_key_type.js */ "./node_modules/jose/dist/browser/lib/check_key_type.js");
+/* harmony import */ var _aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./aesgcmkw.js */ "./node_modules/jose/dist/browser/lib/aesgcmkw.js");
+
 
 
 
@@ -50969,7 +48711,8 @@ async function encryptKeyManagement(alg, enc, key, providedCek, providedParamete
     let encryptedKey;
     let parameters;
     let cek;
-    (0,_check_key_type_js__WEBPACK_IMPORTED_MODULE_8__["default"])(alg, key, 'encrypt');
+    (0,_check_key_type_js__WEBPACK_IMPORTED_MODULE_9__["default"])(alg, key, 'encrypt');
+    key = (await _runtime_normalize_key_js__WEBPACK_IMPORTED_MODULE_5__["default"].normalizePublicKey?.(key, alg)) || key;
     switch (alg) {
         case 'dir': {
             cek = key;
@@ -50980,13 +48723,13 @@ async function encryptKeyManagement(alg, enc, key, providedCek, providedParamete
         case 'ECDH-ES+A192KW':
         case 'ECDH-ES+A256KW': {
             if (!_runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.ecdhAllowed(key)) {
-                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JOSENotSupported('ECDH with the provided key is not allowed or not supported by your javascript runtime');
+                throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_7__.JOSENotSupported('ECDH with the provided key is not allowed or not supported by your javascript runtime');
             }
             const { apu, apv } = providedParameters;
             let { epk: ephemeralKey } = providedParameters;
             ephemeralKey || (ephemeralKey = (await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.generateEpk(key)).privateKey);
-            const { x, y, crv, kty } = await (0,_key_export_js__WEBPACK_IMPORTED_MODULE_7__.exportJWK)(ephemeralKey);
-            const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(key, ephemeralKey, alg === 'ECDH-ES' ? enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__.bitLength)(enc) : parseInt(alg.slice(-5, -2), 10), apu, apv);
+            const { x, y, crv, kty } = await (0,_key_export_js__WEBPACK_IMPORTED_MODULE_8__.exportJWK)(ephemeralKey);
+            const sharedSecret = await _runtime_ecdhes_js__WEBPACK_IMPORTED_MODULE_1__.deriveKey(key, ephemeralKey, alg === 'ECDH-ES' ? enc : alg, alg === 'ECDH-ES' ? (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__.bitLength)(enc) : parseInt(alg.slice(-5, -2), 10), apu, apv);
             parameters = { epk: { x, crv, kty } };
             if (kty === 'EC')
                 parameters.epk.y = y;
@@ -50998,7 +48741,7 @@ async function encryptKeyManagement(alg, enc, key, providedCek, providedParamete
                 cek = sharedSecret;
                 break;
             }
-            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__["default"])(enc);
+            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
             const kwAlg = alg.slice(-6);
             encryptedKey = await (0,_runtime_aeskw_js__WEBPACK_IMPORTED_MODULE_0__.wrap)(kwAlg, sharedSecret, cek);
             break;
@@ -51008,14 +48751,14 @@ async function encryptKeyManagement(alg, enc, key, providedCek, providedParamete
         case 'RSA-OAEP-256':
         case 'RSA-OAEP-384':
         case 'RSA-OAEP-512': {
-            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__["default"])(enc);
+            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
             encryptedKey = await (0,_runtime_rsaes_js__WEBPACK_IMPORTED_MODULE_3__.encrypt)(alg, key, cek);
             break;
         }
         case 'PBES2-HS256+A128KW':
         case 'PBES2-HS384+A192KW':
         case 'PBES2-HS512+A256KW': {
-            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__["default"])(enc);
+            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
             const { p2c, p2s } = providedParameters;
             ({ encryptedKey, ...parameters } = await (0,_runtime_pbes2kw_js__WEBPACK_IMPORTED_MODULE_2__.encrypt)(alg, key, cek, p2c, p2s));
             break;
@@ -51023,20 +48766,20 @@ async function encryptKeyManagement(alg, enc, key, providedCek, providedParamete
         case 'A128KW':
         case 'A192KW':
         case 'A256KW': {
-            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__["default"])(enc);
+            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
             encryptedKey = await (0,_runtime_aeskw_js__WEBPACK_IMPORTED_MODULE_0__.wrap)(alg, key, cek);
             break;
         }
         case 'A128GCMKW':
         case 'A192GCMKW':
         case 'A256GCMKW': {
-            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_5__["default"])(enc);
+            cek = providedCek || (0,_lib_cek_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
             const { iv } = providedParameters;
-            ({ encryptedKey, ...parameters } = await (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_9__.wrap)(alg, key, cek, iv));
+            ({ encryptedKey, ...parameters } = await (0,_aesgcmkw_js__WEBPACK_IMPORTED_MODULE_10__.wrap)(alg, key, cek, iv));
             break;
         }
         default: {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JOSENotSupported('Invalid or unsupported "alg" (JWE Algorithm) header value');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_7__.JOSENotSupported('Invalid or unsupported "alg" (JWE Algorithm) header value');
         }
     }
     return { cek, encryptedKey, parameters };
@@ -51094,6 +48837,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   withAlg: () => (/* binding */ withAlg)
 /* harmony export */ });
 function message(msg, actual, ...types) {
+    types = types.filter(Boolean);
     if (types.length > 2) {
         const last = types.pop();
         msg += `one of type ${types.join(', ')}, or ${last}.`;
@@ -51111,7 +48855,7 @@ function message(msg, actual, ...types) {
         msg += ` Received function ${actual.name}`;
     }
     else if (typeof actual === 'object' && actual != null) {
-        if (actual.constructor && actual.constructor.name) {
+        if (actual.constructor?.name) {
             msg += ` Received an instance of ${actual.constructor.name}`;
         }
     }
@@ -51160,6 +48904,38 @@ const isDisjoint = (...headers) => {
     return true;
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (isDisjoint);
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/lib/is_jwk.js":
+/*!******************************************************!*\
+  !*** ./node_modules/jose/dist/browser/lib/is_jwk.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   isJWK: () => (/* binding */ isJWK),
+/* harmony export */   isPrivateJWK: () => (/* binding */ isPrivateJWK),
+/* harmony export */   isPublicJWK: () => (/* binding */ isPublicJWK),
+/* harmony export */   isSecretJWK: () => (/* binding */ isSecretJWK)
+/* harmony export */ });
+/* harmony import */ var _is_object_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./is_object.js */ "./node_modules/jose/dist/browser/lib/is_object.js");
+
+function isJWK(key) {
+    return (0,_is_object_js__WEBPACK_IMPORTED_MODULE_0__["default"])(key) && typeof key.kty === 'string';
+}
+function isPrivateJWK(key) {
+    return key.kty !== 'oct' && typeof key.d === 'string';
+}
+function isPublicJWK(key) {
+    return key.kty !== 'oct' && typeof key.d === 'undefined';
+}
+function isSecretJWK(key) {
+    return isJWK(key) && key.kty === 'oct' && typeof key.k === 'string';
+}
 
 
 /***/ }),
@@ -51265,44 +49041,46 @@ const checkAudiencePresence = (audPayload, audOption) => {
     return false;
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((protectedHeader, encodedPayload, options = {}) => {
-    const { typ } = options;
-    if (typ &&
-        (typeof protectedHeader.typ !== 'string' ||
-            normalizeTyp(protectedHeader.typ) !== normalizeTyp(typ))) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "typ" JWT header value', 'typ', 'check_failed');
-    }
     let payload;
     try {
         payload = JSON.parse(_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__.decoder.decode(encodedPayload));
     }
-    catch (_a) {
+    catch {
     }
     if (!(0,_is_object_js__WEBPACK_IMPORTED_MODULE_4__["default"])(payload)) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTInvalid('JWT Claims Set must be a top-level JSON object');
     }
+    const { typ } = options;
+    if (typ &&
+        (typeof protectedHeader.typ !== 'string' ||
+            normalizeTyp(protectedHeader.typ) !== normalizeTyp(typ))) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "typ" JWT header value', payload, 'typ', 'check_failed');
+    }
     const { requiredClaims = [], issuer, subject, audience, maxTokenAge } = options;
+    const presenceCheck = [...requiredClaims];
     if (maxTokenAge !== undefined)
-        requiredClaims.push('iat');
+        presenceCheck.push('iat');
     if (audience !== undefined)
-        requiredClaims.push('aud');
+        presenceCheck.push('aud');
     if (subject !== undefined)
-        requiredClaims.push('sub');
+        presenceCheck.push('sub');
     if (issuer !== undefined)
-        requiredClaims.push('iss');
-    for (const claim of new Set(requiredClaims.reverse())) {
+        presenceCheck.push('iss');
+    for (const claim of new Set(presenceCheck.reverse())) {
         if (!(claim in payload)) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed(`missing required "${claim}" claim`, claim, 'missing');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed(`missing required "${claim}" claim`, payload, claim, 'missing');
         }
     }
-    if (issuer && !(Array.isArray(issuer) ? issuer : [issuer]).includes(payload.iss)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "iss" claim value', 'iss', 'check_failed');
+    if (issuer &&
+        !(Array.isArray(issuer) ? issuer : [issuer]).includes(payload.iss)) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "iss" claim value', payload, 'iss', 'check_failed');
     }
     if (subject && payload.sub !== subject) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "sub" claim value', 'sub', 'check_failed');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "sub" claim value', payload, 'sub', 'check_failed');
     }
     if (audience &&
         !checkAudiencePresence(payload.aud, typeof audience === 'string' ? [audience] : audience)) {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "aud" claim value', 'aud', 'check_failed');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('unexpected "aud" claim value', payload, 'aud', 'check_failed');
     }
     let tolerance;
     switch (typeof options.clockTolerance) {
@@ -51321,36 +49099,52 @@ const checkAudiencePresence = (audPayload, audOption) => {
     const { currentDate } = options;
     const now = (0,_epoch_js__WEBPACK_IMPORTED_MODULE_2__["default"])(currentDate || new Date());
     if ((payload.iat !== undefined || maxTokenAge) && typeof payload.iat !== 'number') {
-        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"iat" claim must be a number', 'iat', 'invalid');
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"iat" claim must be a number', payload, 'iat', 'invalid');
     }
     if (payload.nbf !== undefined) {
         if (typeof payload.nbf !== 'number') {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"nbf" claim must be a number', 'nbf', 'invalid');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"nbf" claim must be a number', payload, 'nbf', 'invalid');
         }
         if (payload.nbf > now + tolerance) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"nbf" claim timestamp check failed', 'nbf', 'check_failed');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"nbf" claim timestamp check failed', payload, 'nbf', 'check_failed');
         }
     }
     if (payload.exp !== undefined) {
         if (typeof payload.exp !== 'number') {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"exp" claim must be a number', 'exp', 'invalid');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"exp" claim must be a number', payload, 'exp', 'invalid');
         }
         if (payload.exp <= now - tolerance) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTExpired('"exp" claim timestamp check failed', 'exp', 'check_failed');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTExpired('"exp" claim timestamp check failed', payload, 'exp', 'check_failed');
         }
     }
     if (maxTokenAge) {
         const age = now - payload.iat;
         const max = typeof maxTokenAge === 'number' ? maxTokenAge : (0,_secs_js__WEBPACK_IMPORTED_MODULE_3__["default"])(maxTokenAge);
         if (age - tolerance > max) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTExpired('"iat" claim timestamp check failed (too far in the past)', 'iat', 'check_failed');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTExpired('"iat" claim timestamp check failed (too far in the past)', payload, 'iat', 'check_failed');
         }
         if (age < 0 - tolerance) {
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"iat" claim timestamp check failed (it should be in the past)', 'iat', 'check_failed');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JWTClaimValidationFailed('"iat" claim timestamp check failed (it should be in the past)', payload, 'iat', 'check_failed');
         }
     }
     return payload;
 });
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/lib/private_symbols.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/jose/dist/browser/lib/private_symbols.js ***!
+  \***************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   unprotected: () => (/* binding */ unprotected)
+/* harmony export */ });
+const unprotected = Symbol();
 
 
 /***/ }),
@@ -51371,44 +49165,55 @@ const hour = minute * 60;
 const day = hour * 24;
 const week = day * 7;
 const year = day * 365.25;
-const REGEX = /^(\d+|\d+\.\d+) ?(seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)$/i;
+const REGEX = /^(\+|\-)? ?(\d+|\d+\.\d+) ?(seconds?|secs?|s|minutes?|mins?|m|hours?|hrs?|h|days?|d|weeks?|w|years?|yrs?|y)(?: (ago|from now))?$/i;
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((str) => {
     const matched = REGEX.exec(str);
-    if (!matched) {
+    if (!matched || (matched[4] && matched[1])) {
         throw new TypeError('Invalid time period format');
     }
-    const value = parseFloat(matched[1]);
-    const unit = matched[2].toLowerCase();
+    const value = parseFloat(matched[2]);
+    const unit = matched[3].toLowerCase();
+    let numericDate;
     switch (unit) {
         case 'sec':
         case 'secs':
         case 'second':
         case 'seconds':
         case 's':
-            return Math.round(value);
+            numericDate = Math.round(value);
+            break;
         case 'minute':
         case 'minutes':
         case 'min':
         case 'mins':
         case 'm':
-            return Math.round(value * minute);
+            numericDate = Math.round(value * minute);
+            break;
         case 'hour':
         case 'hours':
         case 'hr':
         case 'hrs':
         case 'h':
-            return Math.round(value * hour);
+            numericDate = Math.round(value * hour);
+            break;
         case 'day':
         case 'days':
         case 'd':
-            return Math.round(value * day);
+            numericDate = Math.round(value * day);
+            break;
         case 'week':
         case 'weeks':
         case 'w':
-            return Math.round(value * week);
+            numericDate = Math.round(value * week);
+            break;
         default:
-            return Math.round(value * year);
+            numericDate = Math.round(value * year);
+            break;
     }
+    if (matched[1] === '-' || matched[4] === 'ago') {
+        return -numericDate;
+    }
+    return numericDate;
 });
 
 
@@ -51454,7 +49259,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
 
 function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader, joseHeader) {
-    if (joseHeader.crit !== undefined && protectedHeader.crit === undefined) {
+    if (joseHeader.crit !== undefined && protectedHeader?.crit === undefined) {
         throw new Err('"crit" (Critical) Header Parameter MUST be integrity protected');
     }
     if (!protectedHeader || protectedHeader.crit === undefined) {
@@ -51479,7 +49284,7 @@ function validateCrit(Err, recognizedDefault, recognizedOption, protectedHeader,
         if (joseHeader[parameter] === undefined) {
             throw new Err(`Extension Header Parameter "${parameter}" is missing`);
         }
-        else if (recognized.get(parameter) && protectedHeader[parameter] === undefined) {
+        if (recognized.get(parameter) && protectedHeader[parameter] === undefined) {
             throw new Err(`Extension Header Parameter "${parameter}" MUST be integrity protected`);
         }
     }
@@ -51593,7 +49398,7 @@ const findOid = (keyData, oid, from = 0) => {
         oid.unshift(oid.length);
         oid.unshift(0x06);
     }
-    let i = keyData.indexOf(oid[0], from);
+    const i = keyData.indexOf(oid[0], from);
     if (i === -1)
         return false;
     const sub = keyData.subarray(i, i + oid.length);
@@ -51622,7 +49427,6 @@ const getNamedCurve = (keyData) => {
     }
 };
 const genericImport = async (replace, keyFormat, pem, alg, options) => {
-    var _a;
     let algorithm;
     let keyUsages;
     const keyData = new Uint8Array(atob(pem.replace(replace, ''))
@@ -51673,6 +49477,10 @@ const genericImport = async (replace, keyFormat, pem, alg, options) => {
             keyUsages = isPublic ? [] : ['deriveBits'];
             break;
         }
+        case 'Ed25519':
+            algorithm = { name: 'Ed25519' };
+            keyUsages = isPublic ? ['verify'] : ['sign'];
+            break;
         case 'EdDSA':
             algorithm = { name: getNamedCurve(keyData) };
             keyUsages = isPublic ? ['verify'] : ['sign'];
@@ -51680,7 +49488,7 @@ const genericImport = async (replace, keyFormat, pem, alg, options) => {
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JOSENotSupported('Invalid or unsupported "alg" (Algorithm) value');
     }
-    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.importKey(keyFormat, keyData, algorithm, (_a = options === null || options === void 0 ? void 0 : options.extractable) !== null && _a !== void 0 ? _a : false, keyUsages);
+    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.importKey(keyFormat, keyData, algorithm, options?.extractable ?? false, keyUsages);
 };
 const fromPKCS8 = (pem, alg, options) => {
     return genericImport(/(?:-----(?:BEGIN|END) PRIVATE KEY-----|\s)/g, 'pkcs8', pem, alg, options);
@@ -51689,10 +49497,10 @@ const fromSPKI = (pem, alg, options) => {
     return genericImport(/(?:-----(?:BEGIN|END) PUBLIC KEY-----|\s)/g, 'spki', pem, alg, options);
 };
 function getElement(seq) {
-    let result = [];
+    const result = [];
     let next = 0;
     while (next < seq.length) {
-        let nextPart = parseElement(seq.subarray(next));
+        const nextPart = parseElement(seq.subarray(next));
         result.push(nextPart);
         next += nextPart.byteLength;
     }
@@ -51732,7 +49540,7 @@ function parseElement(bytes) {
         };
     }
     else {
-        let numberOfDigits = bytes[position] & 0x7f;
+        const numberOfDigits = bytes[position] & 0x7f;
         position++;
         length = 0;
         for (let i = 0; i < numberOfDigits; i++) {
@@ -51818,7 +49626,7 @@ const decode = (input) => {
     try {
         return decodeBase64(encoded);
     }
-    catch (_a) {
+    catch {
         throw new TypeError('The input to be decoded is not correctly encoded.');
     }
 };
@@ -51939,7 +49747,7 @@ async function cbcDecrypt(enc, cek, ciphertext, iv, tag, aad) {
     try {
         macCheckPassed = (0,_timing_safe_equal_js__WEBPACK_IMPORTED_MODULE_3__["default"])(tag, expectedTag);
     }
-    catch (_a) {
+    catch {
     }
     if (!macCheckPassed) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEDecryptionFailed();
@@ -51948,7 +49756,7 @@ async function cbcDecrypt(enc, cek, ciphertext, iv, tag, aad) {
     try {
         plaintext = new Uint8Array(await _webcrypto_js__WEBPACK_IMPORTED_MODULE_5__["default"].subtle.decrypt({ iv, name: 'AES-CBC' }, encKey, ciphertext));
     }
-    catch (_b) {
+    catch {
     }
     if (!plaintext) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEDecryptionFailed();
@@ -51972,13 +49780,19 @@ async function gcmDecrypt(enc, cek, ciphertext, iv, tag, aad) {
             tagLength: 128,
         }, encKey, (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.concat)(ciphertext, tag)));
     }
-    catch (_a) {
+    catch {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEDecryptionFailed();
     }
 }
 const decrypt = async (enc, cek, ciphertext, iv, tag, aad) => {
     if (!(0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_5__.isCryptoKey)(cek) && !(cek instanceof Uint8Array)) {
         throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_7__["default"])(cek, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_8__.types, 'Uint8Array'));
+    }
+    if (!iv) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('JWE Initialization Vector missing');
+    }
+    if (!tag) {
+        throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_4__.JWEInvalid('JWE Authentication Tag missing');
     }
     (0,_lib_check_iv_length_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, iv);
     switch (enc) {
@@ -52067,7 +49881,8 @@ async function deriveKey(publicKey, privateKey, algorithm, keyLength, apu = new 
     }
     else {
         length =
-            Math.ceil(parseInt(publicKey.algorithm.namedCurve.substr(-3), 10) / 8) << 3;
+            Math.ceil(parseInt(publicKey.algorithm.namedCurve.substr(-3), 10) / 8) <<
+                3;
     }
     const sharedSecret = new Uint8Array(await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.deriveBits({
         name: publicKey.algorithm.name,
@@ -52110,8 +49925,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _lib_crypto_key_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../lib/crypto_key.js */ "./node_modules/jose/dist/browser/lib/crypto_key.js");
 /* harmony import */ var _lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../lib/invalid_key_input.js */ "./node_modules/jose/dist/browser/lib/invalid_key_input.js");
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _is_key_like_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ./is_key_like.js */ "./node_modules/jose/dist/browser/runtime/is_key_like.js");
+/* harmony import */ var _lib_iv_js__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ../lib/iv.js */ "./node_modules/jose/dist/browser/lib/iv.js");
+/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
+/* harmony import */ var _is_key_like_js__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./is_key_like.js */ "./node_modules/jose/dist/browser/runtime/is_key_like.js");
+
 
 
 
@@ -52136,7 +49953,7 @@ async function cbcEncrypt(enc, plaintext, cek, iv, aad) {
     }, encKey, plaintext));
     const macData = (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.concat)(aad, iv, ciphertext, (0,_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_0__.uint64be)(aad.length << 3));
     const tag = new Uint8Array((await _webcrypto_js__WEBPACK_IMPORTED_MODULE_3__["default"].subtle.sign('HMAC', macKey, macData)).slice(0, keySize >> 3));
-    return { ciphertext, tag };
+    return { ciphertext, tag, iv };
 }
 async function gcmEncrypt(enc, plaintext, cek, iv, aad) {
     let encKey;
@@ -52155,28 +49972,35 @@ async function gcmEncrypt(enc, plaintext, cek, iv, aad) {
     }, encKey, plaintext));
     const tag = encrypted.slice(-16);
     const ciphertext = encrypted.slice(0, -16);
-    return { ciphertext, tag };
+    return { ciphertext, tag, iv };
 }
 const encrypt = async (enc, plaintext, cek, iv, aad) => {
     if (!(0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_3__.isCryptoKey)(cek) && !(cek instanceof Uint8Array)) {
-        throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_5__["default"])(cek, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_7__.types, 'Uint8Array'));
+        throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_5__["default"])(cek, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_8__.types, 'Uint8Array'));
     }
-    (0,_lib_check_iv_length_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, iv);
+    if (iv) {
+        (0,_lib_check_iv_length_js__WEBPACK_IMPORTED_MODULE_1__["default"])(enc, iv);
+    }
+    else {
+        iv = (0,_lib_iv_js__WEBPACK_IMPORTED_MODULE_6__["default"])(enc);
+    }
     switch (enc) {
         case 'A128CBC-HS256':
         case 'A192CBC-HS384':
         case 'A256CBC-HS512':
-            if (cek instanceof Uint8Array)
+            if (cek instanceof Uint8Array) {
                 (0,_check_cek_length_js__WEBPACK_IMPORTED_MODULE_2__["default"])(cek, parseInt(enc.slice(-3), 10));
+            }
             return cbcEncrypt(enc, plaintext, cek, iv, aad);
         case 'A128GCM':
         case 'A192GCM':
         case 'A256GCM':
-            if (cek instanceof Uint8Array)
+            if (cek instanceof Uint8Array) {
                 (0,_check_cek_length_js__WEBPACK_IMPORTED_MODULE_2__["default"])(cek, parseInt(enc.slice(1, 4), 10));
+            }
             return gcmEncrypt(enc, plaintext, cek, iv, aad);
         default:
-            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_6__.JOSENotSupported('Unsupported JWE Content Encryption Algorithm');
+            throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_7__.JOSENotSupported('Unsupported JWE Content Encryption Algorithm');
     }
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (encrypt);
@@ -52225,7 +50049,7 @@ const fetchJwks = async (url, timeout, options) => {
     try {
         return await response.json();
     }
-    catch (_a) {
+    catch {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JOSEError('Failed to parse the JSON Web Key Set HTTP response as JSON');
     }
 };
@@ -52253,7 +50077,6 @@ __webpack_require__.r(__webpack_exports__);
 
 
 async function generateSecret(alg, options) {
-    var _a;
     let length;
     let algorithm;
     let keyUsages;
@@ -52290,18 +50113,16 @@ async function generateSecret(alg, options) {
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
     }
-    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.generateKey(algorithm, (_a = options === null || options === void 0 ? void 0 : options.extractable) !== null && _a !== void 0 ? _a : false, keyUsages);
+    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.generateKey(algorithm, options?.extractable ?? false, keyUsages);
 }
 function getModulusLengthOption(options) {
-    var _a;
-    const modulusLength = (_a = options === null || options === void 0 ? void 0 : options.modulusLength) !== null && _a !== void 0 ? _a : 2048;
+    const modulusLength = options?.modulusLength ?? 2048;
     if (typeof modulusLength !== 'number' || modulusLength < 2048) {
         throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported('Invalid or unsupported modulusLength option provided, 2048 bits or larger keys must be used');
     }
     return modulusLength;
 }
 async function generateKeyPair(alg, options) {
-    var _a, _b, _c;
     let algorithm;
     let keyUsages;
     switch (alg) {
@@ -52351,9 +50172,13 @@ async function generateKeyPair(alg, options) {
             algorithm = { name: 'ECDSA', namedCurve: 'P-521' };
             keyUsages = ['sign', 'verify'];
             break;
-        case 'EdDSA':
+        case 'Ed25519':
+            algorithm = { name: 'Ed25519' };
             keyUsages = ['sign', 'verify'];
-            const crv = (_a = options === null || options === void 0 ? void 0 : options.crv) !== null && _a !== void 0 ? _a : 'Ed25519';
+            break;
+        case 'EdDSA': {
+            keyUsages = ['sign', 'verify'];
+            const crv = options?.crv ?? 'Ed25519';
             switch (crv) {
                 case 'Ed25519':
                 case 'Ed448':
@@ -52363,12 +50188,13 @@ async function generateKeyPair(alg, options) {
                     throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported('Invalid or unsupported crv option provided');
             }
             break;
+        }
         case 'ECDH-ES':
         case 'ECDH-ES+A128KW':
         case 'ECDH-ES+A192KW':
         case 'ECDH-ES+A256KW': {
             keyUsages = ['deriveKey', 'deriveBits'];
-            const crv = (_b = options === null || options === void 0 ? void 0 : options.crv) !== null && _b !== void 0 ? _b : 'P-256';
+            const crv = options?.crv ?? 'P-256';
             switch (crv) {
                 case 'P-256':
                 case 'P-384':
@@ -52388,7 +50214,7 @@ async function generateKeyPair(alg, options) {
         default:
             throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
     }
-    return (_webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.generateKey(algorithm, (_c = options === null || options === void 0 ? void 0 : options.extractable) !== null && _c !== void 0 ? _c : false, keyUsages));
+    return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.generateKey(algorithm, options?.extractable ?? false, keyUsages);
 }
 
 
@@ -52409,11 +50235,19 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _lib_crypto_key_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../lib/crypto_key.js */ "./node_modules/jose/dist/browser/lib/crypto_key.js");
 /* harmony import */ var _lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../lib/invalid_key_input.js */ "./node_modules/jose/dist/browser/lib/invalid_key_input.js");
 /* harmony import */ var _is_key_like_js__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./is_key_like.js */ "./node_modules/jose/dist/browser/runtime/is_key_like.js");
+/* harmony import */ var _normalize_key_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./normalize_key.js */ "./node_modules/jose/dist/browser/runtime/normalize_key.js");
 
 
 
 
-function getCryptoKey(alg, key, usage) {
+
+async function getCryptoKey(alg, key, usage) {
+    if (usage === 'sign') {
+        key = await _normalize_key_js__WEBPACK_IMPORTED_MODULE_4__["default"].normalizePrivateKey(key, alg);
+    }
+    if (usage === 'verify') {
+        key = await _normalize_key_js__WEBPACK_IMPORTED_MODULE_4__["default"].normalizePublicKey(key, alg);
+    }
     if ((0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_0__.isCryptoKey)(key)) {
         (0,_lib_crypto_key_js__WEBPACK_IMPORTED_MODULE_1__.checkSigCryptoKey)(key, alg, usage);
         return key;
@@ -52424,7 +50258,7 @@ function getCryptoKey(alg, key, usage) {
         }
         return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.importKey('raw', key, { hash: `SHA-${alg.slice(-3)}`, name: 'HMAC' }, false, [usage]);
     }
-    throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_2__["default"])(key, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_3__.types, 'Uint8Array'));
+    throw new TypeError((0,_lib_invalid_key_input_js__WEBPACK_IMPORTED_MODULE_2__["default"])(key, ..._is_key_like_js__WEBPACK_IMPORTED_MODULE_3__.types, 'Uint8Array', 'JSON Web Key'));
 }
 
 
@@ -52445,7 +50279,10 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ((key) => {
-    return (0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_0__.isCryptoKey)(key);
+    if ((0,_webcrypto_js__WEBPACK_IMPORTED_MODULE_0__.isCryptoKey)(key)) {
+        return true;
+    }
+    return key?.[Symbol.toStringTag] === 'KeyObject';
 });
 const types = ['CryptoKey'];
 
@@ -52465,52 +50302,12 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony import */ var _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./webcrypto.js */ "./node_modules/jose/dist/browser/runtime/webcrypto.js");
 /* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-/* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
-
 
 
 function subtleMapping(jwk) {
     let algorithm;
     let keyUsages;
     switch (jwk.kty) {
-        case 'oct': {
-            switch (jwk.alg) {
-                case 'HS256':
-                case 'HS384':
-                case 'HS512':
-                    algorithm = { name: 'HMAC', hash: `SHA-${jwk.alg.slice(-3)}` };
-                    keyUsages = ['sign', 'verify'];
-                    break;
-                case 'A128CBC-HS256':
-                case 'A192CBC-HS384':
-                case 'A256CBC-HS512':
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported(`${jwk.alg} keys cannot be imported as CryptoKey instances`);
-                case 'A128GCM':
-                case 'A192GCM':
-                case 'A256GCM':
-                case 'A128GCMKW':
-                case 'A192GCMKW':
-                case 'A256GCMKW':
-                    algorithm = { name: 'AES-GCM' };
-                    keyUsages = ['encrypt', 'decrypt'];
-                    break;
-                case 'A128KW':
-                case 'A192KW':
-                case 'A256KW':
-                    algorithm = { name: 'AES-KW' };
-                    keyUsages = ['wrapKey', 'unwrapKey'];
-                    break;
-                case 'PBES2-HS256+A128KW':
-                case 'PBES2-HS384+A192KW':
-                case 'PBES2-HS512+A256KW':
-                    algorithm = { name: 'PBKDF2' };
-                    keyUsages = ['deriveBits'];
-                    break;
-                default:
-                    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_1__.JOSENotSupported('Invalid or unsupported JWK "alg" (Algorithm) Parameter value');
-            }
-            break;
-        }
         case 'RSA': {
             switch (jwk.alg) {
                 case 'PS256':
@@ -52568,6 +50365,10 @@ function subtleMapping(jwk) {
         }
         case 'OKP': {
             switch (jwk.alg) {
+                case 'Ed25519':
+                    algorithm = { name: 'Ed25519' };
+                    keyUsages = jwk.d ? ['sign'] : ['verify'];
+                    break;
                 case 'EdDSA':
                     algorithm = { name: jwk.crv };
                     keyUsages = jwk.d ? ['sign'] : ['verify'];
@@ -52590,19 +50391,15 @@ function subtleMapping(jwk) {
     return { algorithm, keyUsages };
 }
 const parse = async (jwk) => {
-    var _a, _b;
     if (!jwk.alg) {
         throw new TypeError('"alg" argument is required when "jwk.alg" is not present');
     }
     const { algorithm, keyUsages } = subtleMapping(jwk);
     const rest = [
         algorithm,
-        (_a = jwk.ext) !== null && _a !== void 0 ? _a : false,
-        (_b = jwk.key_ops) !== null && _b !== void 0 ? _b : keyUsages,
+        jwk.ext ?? false,
+        jwk.key_ops ?? keyUsages,
     ];
-    if (algorithm.name === 'PBKDF2') {
-        return _webcrypto_js__WEBPACK_IMPORTED_MODULE_0__["default"].subtle.importKey('raw', (0,_base64url_js__WEBPACK_IMPORTED_MODULE_2__.decode)(jwk.k), ...rest);
-    }
     const keyData = { ...jwk };
     delete keyData.alg;
     delete keyData.use;
@@ -52649,6 +50446,92 @@ const keyToJWK = async (key) => {
     return jwk;
 };
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (keyToJWK);
+
+
+/***/ }),
+
+/***/ "./node_modules/jose/dist/browser/runtime/normalize_key.js":
+/*!*****************************************************************!*\
+  !*** ./node_modules/jose/dist/browser/runtime/normalize_key.js ***!
+  \*****************************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _lib_is_jwk_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../lib/is_jwk.js */ "./node_modules/jose/dist/browser/lib/is_jwk.js");
+/* harmony import */ var _base64url_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./base64url.js */ "./node_modules/jose/dist/browser/runtime/base64url.js");
+/* harmony import */ var _jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./jwk_to_key.js */ "./node_modules/jose/dist/browser/runtime/jwk_to_key.js");
+
+
+
+const exportKeyValue = (k) => (0,_base64url_js__WEBPACK_IMPORTED_MODULE_1__.decode)(k);
+let privCache;
+let pubCache;
+const isKeyObject = (key) => {
+    return key?.[Symbol.toStringTag] === 'KeyObject';
+};
+const importAndCache = async (cache, key, jwk, alg, freeze = false) => {
+    let cached = cache.get(key);
+    if (cached?.[alg]) {
+        return cached[alg];
+    }
+    const cryptoKey = await (0,_jwk_to_key_js__WEBPACK_IMPORTED_MODULE_2__["default"])({ ...jwk, alg });
+    if (freeze)
+        Object.freeze(key);
+    if (!cached) {
+        cache.set(key, { [alg]: cryptoKey });
+    }
+    else {
+        cached[alg] = cryptoKey;
+    }
+    return cryptoKey;
+};
+const normalizePublicKey = (key, alg) => {
+    if (isKeyObject(key)) {
+        let jwk = key.export({ format: 'jwk' });
+        delete jwk.d;
+        delete jwk.dp;
+        delete jwk.dq;
+        delete jwk.p;
+        delete jwk.q;
+        delete jwk.qi;
+        if (jwk.k) {
+            return exportKeyValue(jwk.k);
+        }
+        pubCache || (pubCache = new WeakMap());
+        return importAndCache(pubCache, key, jwk, alg);
+    }
+    if ((0,_lib_is_jwk_js__WEBPACK_IMPORTED_MODULE_0__.isJWK)(key)) {
+        if (key.k)
+            return (0,_base64url_js__WEBPACK_IMPORTED_MODULE_1__.decode)(key.k);
+        pubCache || (pubCache = new WeakMap());
+        const cryptoKey = importAndCache(pubCache, key, key, alg, true);
+        return cryptoKey;
+    }
+    return key;
+};
+const normalizePrivateKey = (key, alg) => {
+    if (isKeyObject(key)) {
+        let jwk = key.export({ format: 'jwk' });
+        if (jwk.k) {
+            return exportKeyValue(jwk.k);
+        }
+        privCache || (privCache = new WeakMap());
+        return importAndCache(privCache, key, jwk, alg);
+    }
+    if ((0,_lib_is_jwk_js__WEBPACK_IMPORTED_MODULE_0__.isJWK)(key)) {
+        if (key.k)
+            return (0,_base64url_js__WEBPACK_IMPORTED_MODULE_1__.decode)(key.k);
+        privCache || (privCache = new WeakMap());
+        const cryptoKey = importAndCache(privCache, key, key, alg, true);
+        return cryptoKey;
+    }
+    return key;
+};
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ normalizePublicKey, normalizePrivateKey });
 
 
 /***/ }),
@@ -52885,6 +50768,8 @@ function subtleDsa(alg, algorithm) {
         case 'ES384':
         case 'ES512':
             return { hash, name: 'ECDSA', namedCurve: algorithm.namedCurve };
+        case 'Ed25519':
+            return { name: 'Ed25519' };
         case 'EdDSA':
             return { name: algorithm.name };
         default:
@@ -52983,7 +50868,7 @@ const verify = async (alg, key, signature, data) => {
     try {
         return await _webcrypto_js__WEBPACK_IMPORTED_MODULE_1__["default"].subtle.verify(algorithm, cryptoKey, signature, data);
     }
-    catch (_a) {
+    catch {
         return false;
     }
 };
@@ -53006,30 +50891,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ });
 /* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (crypto);
 const isCryptoKey = (key) => key instanceof CryptoKey;
-
-
-/***/ }),
-
-/***/ "./node_modules/jose/dist/browser/runtime/zlib.js":
-/*!********************************************************!*\
-  !*** ./node_modules/jose/dist/browser/runtime/zlib.js ***!
-  \********************************************************/
-/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-__webpack_require__.r(__webpack_exports__);
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   deflate: () => (/* binding */ deflate),
-/* harmony export */   inflate: () => (/* binding */ inflate)
-/* harmony export */ });
-/* harmony import */ var _util_errors_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../util/errors.js */ "./node_modules/jose/dist/browser/util/errors.js");
-
-const inflate = async () => {
-    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JOSENotSupported('JWE "zip" (Compression Algorithm) Header Parameter is not supported by your javascript runtime. You need to use the `inflateRaw` decrypt option to provide Inflate Raw implementation.');
-};
-const deflate = async () => {
-    throw new _util_errors_js__WEBPACK_IMPORTED_MODULE_0__.JOSENotSupported('JWE "zip" (Compression Algorithm) Header Parameter is not supported by your javascript runtime. You need to use the `deflateRaw` encrypt option to provide Deflate Raw implementation.');
-};
 
 
 /***/ }),
@@ -53087,14 +50948,14 @@ function decodeJwt(jwt) {
     try {
         decoded = (0,_base64url_js__WEBPACK_IMPORTED_MODULE_0__.decode)(payload);
     }
-    catch (_a) {
+    catch {
         throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to base64url decode the payload');
     }
     let result;
     try {
         result = JSON.parse(_lib_buffer_utils_js__WEBPACK_IMPORTED_MODULE_1__.decoder.decode(decoded));
     }
-    catch (_b) {
+    catch {
         throw new _errors_js__WEBPACK_IMPORTED_MODULE_3__.JWTInvalid('Failed to parse the decoded payload as JSON');
     }
     if (!(0,_lib_is_object_js__WEBPACK_IMPORTED_MODULE_2__["default"])(result))
@@ -53149,7 +51010,7 @@ function decodeProtectedHeader(token) {
         }
         return result;
     }
-    catch (_a) {
+    catch {
         throw new TypeError('Invalid Token or Protected Header formatting');
     }
 }
@@ -53169,7 +51030,6 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   JOSEAlgNotAllowed: () => (/* binding */ JOSEAlgNotAllowed),
 /* harmony export */   JOSEError: () => (/* binding */ JOSEError),
 /* harmony export */   JOSENotSupported: () => (/* binding */ JOSENotSupported),
-/* harmony export */   JWEDecompressionFailed: () => (/* binding */ JWEDecompressionFailed),
 /* harmony export */   JWEDecryptionFailed: () => (/* binding */ JWEDecryptionFailed),
 /* harmony export */   JWEInvalid: () => (/* binding */ JWEInvalid),
 /* harmony export */   JWKInvalid: () => (/* binding */ JWKInvalid),
@@ -53184,163 +51044,119 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   JWTInvalid: () => (/* binding */ JWTInvalid)
 /* harmony export */ });
 class JOSEError extends Error {
-    static get code() {
-        return 'ERR_JOSE_GENERIC';
-    }
-    constructor(message) {
-        var _a;
-        super(message);
+    constructor(message, options) {
+        super(message, options);
         this.code = 'ERR_JOSE_GENERIC';
         this.name = this.constructor.name;
-        (_a = Error.captureStackTrace) === null || _a === void 0 ? void 0 : _a.call(Error, this, this.constructor);
+        Error.captureStackTrace?.(this, this.constructor);
     }
 }
+JOSEError.code = 'ERR_JOSE_GENERIC';
 class JWTClaimValidationFailed extends JOSEError {
-    static get code() {
-        return 'ERR_JWT_CLAIM_VALIDATION_FAILED';
-    }
-    constructor(message, claim = 'unspecified', reason = 'unspecified') {
-        super(message);
+    constructor(message, payload, claim = 'unspecified', reason = 'unspecified') {
+        super(message, { cause: { claim, reason, payload } });
         this.code = 'ERR_JWT_CLAIM_VALIDATION_FAILED';
         this.claim = claim;
         this.reason = reason;
+        this.payload = payload;
     }
 }
+JWTClaimValidationFailed.code = 'ERR_JWT_CLAIM_VALIDATION_FAILED';
 class JWTExpired extends JOSEError {
-    static get code() {
-        return 'ERR_JWT_EXPIRED';
-    }
-    constructor(message, claim = 'unspecified', reason = 'unspecified') {
-        super(message);
+    constructor(message, payload, claim = 'unspecified', reason = 'unspecified') {
+        super(message, { cause: { claim, reason, payload } });
         this.code = 'ERR_JWT_EXPIRED';
         this.claim = claim;
         this.reason = reason;
+        this.payload = payload;
     }
 }
+JWTExpired.code = 'ERR_JWT_EXPIRED';
 class JOSEAlgNotAllowed extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JOSE_ALG_NOT_ALLOWED';
     }
-    static get code() {
-        return 'ERR_JOSE_ALG_NOT_ALLOWED';
-    }
 }
+JOSEAlgNotAllowed.code = 'ERR_JOSE_ALG_NOT_ALLOWED';
 class JOSENotSupported extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JOSE_NOT_SUPPORTED';
     }
-    static get code() {
-        return 'ERR_JOSE_NOT_SUPPORTED';
-    }
 }
+JOSENotSupported.code = 'ERR_JOSE_NOT_SUPPORTED';
 class JWEDecryptionFailed extends JOSEError {
-    constructor() {
-        super(...arguments);
+    constructor(message = 'decryption operation failed', options) {
+        super(message, options);
         this.code = 'ERR_JWE_DECRYPTION_FAILED';
-        this.message = 'decryption operation failed';
-    }
-    static get code() {
-        return 'ERR_JWE_DECRYPTION_FAILED';
     }
 }
-class JWEDecompressionFailed extends JOSEError {
-    constructor() {
-        super(...arguments);
-        this.code = 'ERR_JWE_DECOMPRESSION_FAILED';
-        this.message = 'decompression operation failed';
-    }
-    static get code() {
-        return 'ERR_JWE_DECOMPRESSION_FAILED';
-    }
-}
+JWEDecryptionFailed.code = 'ERR_JWE_DECRYPTION_FAILED';
 class JWEInvalid extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JWE_INVALID';
     }
-    static get code() {
-        return 'ERR_JWE_INVALID';
-    }
 }
+JWEInvalid.code = 'ERR_JWE_INVALID';
 class JWSInvalid extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JWS_INVALID';
     }
-    static get code() {
-        return 'ERR_JWS_INVALID';
-    }
 }
+JWSInvalid.code = 'ERR_JWS_INVALID';
 class JWTInvalid extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JWT_INVALID';
     }
-    static get code() {
-        return 'ERR_JWT_INVALID';
-    }
 }
+JWTInvalid.code = 'ERR_JWT_INVALID';
 class JWKInvalid extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JWK_INVALID';
     }
-    static get code() {
-        return 'ERR_JWK_INVALID';
-    }
 }
+JWKInvalid.code = 'ERR_JWK_INVALID';
 class JWKSInvalid extends JOSEError {
     constructor() {
         super(...arguments);
         this.code = 'ERR_JWKS_INVALID';
     }
-    static get code() {
-        return 'ERR_JWKS_INVALID';
-    }
 }
+JWKSInvalid.code = 'ERR_JWKS_INVALID';
 class JWKSNoMatchingKey extends JOSEError {
-    constructor() {
-        super(...arguments);
+    constructor(message = 'no applicable key found in the JSON Web Key Set', options) {
+        super(message, options);
         this.code = 'ERR_JWKS_NO_MATCHING_KEY';
-        this.message = 'no applicable key found in the JSON Web Key Set';
-    }
-    static get code() {
-        return 'ERR_JWKS_NO_MATCHING_KEY';
     }
 }
+JWKSNoMatchingKey.code = 'ERR_JWKS_NO_MATCHING_KEY';
 class JWKSMultipleMatchingKeys extends JOSEError {
-    constructor() {
-        super(...arguments);
+    constructor(message = 'multiple matching keys found in the JSON Web Key Set', options) {
+        super(message, options);
         this.code = 'ERR_JWKS_MULTIPLE_MATCHING_KEYS';
-        this.message = 'multiple matching keys found in the JSON Web Key Set';
-    }
-    static get code() {
-        return 'ERR_JWKS_MULTIPLE_MATCHING_KEYS';
     }
 }
 Symbol.asyncIterator;
+JWKSMultipleMatchingKeys.code = 'ERR_JWKS_MULTIPLE_MATCHING_KEYS';
 class JWKSTimeout extends JOSEError {
-    constructor() {
-        super(...arguments);
+    constructor(message = 'request timed out', options) {
+        super(message, options);
         this.code = 'ERR_JWKS_TIMEOUT';
-        this.message = 'request timed out';
-    }
-    static get code() {
-        return 'ERR_JWKS_TIMEOUT';
     }
 }
+JWKSTimeout.code = 'ERR_JWKS_TIMEOUT';
 class JWSSignatureVerificationFailed extends JOSEError {
-    constructor() {
-        super(...arguments);
+    constructor(message = 'signature verification failed', options) {
+        super(message, options);
         this.code = 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED';
-        this.message = 'signature verification failed';
-    }
-    static get code() {
-        return 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED';
     }
 }
+JWSSignatureVerificationFailed.code = 'ERR_JWS_SIGNATURE_VERIFICATION_FAILED';
 
 
 /***/ }),
@@ -69356,9 +67172,7 @@ function createAclLogic(store) {
 Object.defineProperty(exports, "__esModule", ({ value: true }));
 exports.authSession = void 0;
 var solid_client_authn_browser_1 = __webpack_require__(/*! @inrupt/solid-client-authn-browser */ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js");
-exports.authSession = new solid_client_authn_browser_1.Session({
-    clientAuthentication: (0, solid_client_authn_browser_1.getClientAuthenticationWithDependencies)({})
-}, 'mySession');
+exports.authSession = new solid_client_authn_browser_1.Session();
 //# sourceMappingURL=authSession.js.map
 
 /***/ }),
@@ -69445,6 +67259,7 @@ exports.SolidAuthnLogic = void 0;
 var rdflib_1 = __webpack_require__(/*! rdflib */ "./node_modules/rdflib/esm/index.js");
 var authUtil_1 = __webpack_require__(/*! ./authUtil */ "./node_modules/solid-logic/lib/authn/authUtil.js");
 var debug = __importStar(__webpack_require__(/*! ../util/debug */ "./node_modules/solid-logic/lib/util/debug.js"));
+var solid_client_authn_browser_1 = __webpack_require__(/*! @inrupt/solid-client-authn-browser */ "./node_modules/@inrupt/solid-client-authn-browser/dist/index.js");
 var SolidAuthnLogic = /** @class */ (function () {
     function SolidAuthnLogic(solidAuthSession) {
         this.session = solidAuthSession;
@@ -69482,7 +67297,8 @@ var SolidAuthnLogic = /** @class */ (function () {
                         if (preLoginRedirectHash) {
                             window.localStorage.setItem('preLoginRedirectHash', preLoginRedirectHash);
                         }
-                        this.session.onSessionRestore(function (url) {
+                        this.session.events.on(solid_client_authn_browser_1.EVENTS.SESSION_RESTORED, function (url) {
+                            debug.log("Session restored to ".concat(url));
                             if (document.location.toString() !== url)
                                 history.replaceState(null, '', url);
                         });
@@ -70119,7 +67935,7 @@ function createInboxLogic(store, profileLogic, utilityLogic, containerLogic, acl
 "use strict";
 
 Object.defineProperty(exports, "__esModule", ({ value: true }));
-exports.authSession = exports.authn = exports.store = exports.solidLogicSingleton = exports.WebOperationError = exports.NotEditableError = exports.FetchError = exports.NotFoundError = exports.SameOriginForbiddenError = exports.CrossOriginForbiddenError = exports.UnauthorizedError = exports.getSuggestedIssuers = exports.appContext = exports.offlineTestID = exports.ACL_LINK = void 0;
+exports.authSession = exports.authn = exports.store = exports.solidLogicSingleton = exports.WebOperationError = exports.NotEditableError = exports.FetchError = exports.NotFoundError = exports.SameOriginForbiddenError = exports.CrossOriginForbiddenError = exports.UnauthorizedError = exports.createTypeIndexLogic = exports.getSuggestedIssuers = exports.appContext = exports.offlineTestID = exports.ACL_LINK = void 0;
 // Make these variables directly accessible as it is what you need most of the time
 // This also makes these variable globaly accesible in mashlib
 var solidLogicSingleton_1 = __webpack_require__(/*! ./logic/solidLogicSingleton */ "./node_modules/solid-logic/lib/logic/solidLogicSingleton.js");
@@ -70137,6 +67953,8 @@ Object.defineProperty(exports, "offlineTestID", ({ enumerable: true, get: functi
 Object.defineProperty(exports, "appContext", ({ enumerable: true, get: function () { return authUtil_1.appContext; } }));
 var issuerLogic_1 = __webpack_require__(/*! ./issuer/issuerLogic */ "./node_modules/solid-logic/lib/issuer/issuerLogic.js");
 Object.defineProperty(exports, "getSuggestedIssuers", ({ enumerable: true, get: function () { return issuerLogic_1.getSuggestedIssuers; } }));
+var typeIndexLogic_1 = __webpack_require__(/*! ./typeIndex/typeIndexLogic */ "./node_modules/solid-logic/lib/typeIndex/typeIndexLogic.js");
+Object.defineProperty(exports, "createTypeIndexLogic", ({ enumerable: true, get: function () { return typeIndexLogic_1.createTypeIndexLogic; } }));
 var CustomError_1 = __webpack_require__(/*! ./logic/CustomError */ "./node_modules/solid-logic/lib/logic/CustomError.js");
 Object.defineProperty(exports, "UnauthorizedError", ({ enumerable: true, get: function () { return CustomError_1.UnauthorizedError; } }));
 Object.defineProperty(exports, "CrossOriginForbiddenError", ({ enumerable: true, get: function () { return CustomError_1.CrossOriginForbiddenError; } }));
@@ -70178,11 +67996,11 @@ var DEFAULT_ISSUERS = [
         uri: 'https://solidweb.org'
     },
     {
-        name: 'Inrupt.net',
-        uri: 'https://inrupt.net'
+        name: 'Solid Web ME',
+        uri: 'https://solidweb.me'
     },
     {
-        name: 'pod.Inrupt.com',
+        name: 'Inrupt.com',
         uri: 'https://login.inrupt.com'
     }
 ];
@@ -72724,6 +70542,183 @@ function version(uuid) {
     return parseInt(uuid.slice(14, 15), 16);
 }
 exports["default"] = version;
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/native.js":
+/*!******************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/native.js ***!
+  \******************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ randomUUID });
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/regex.js":
+/*!*****************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/regex.js ***!
+  \*****************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-8][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000|ffffffff-ffff-ffff-ffff-ffffffffffff)$/i);
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/rng.js":
+/*!***************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/rng.js ***!
+  \***************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (/* binding */ rng)
+/* harmony export */ });
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+function rng() {
+    if (!getRandomValues) {
+        if (typeof crypto === 'undefined' || !crypto.getRandomValues) {
+            throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+        }
+        getRandomValues = crypto.getRandomValues.bind(crypto);
+    }
+    return getRandomValues(rnds8);
+}
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/stringify.js":
+/*!*********************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/stringify.js ***!
+  \*********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__),
+/* harmony export */   unsafeStringify: () => (/* binding */ unsafeStringify)
+/* harmony export */ });
+/* harmony import */ var _validate_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./validate.js */ "./node_modules/uuid/dist/esm-browser/validate.js");
+
+const byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+    byteToHex.push((i + 0x100).toString(16).slice(1));
+}
+function unsafeStringify(arr, offset = 0) {
+    return (byteToHex[arr[offset + 0]] +
+        byteToHex[arr[offset + 1]] +
+        byteToHex[arr[offset + 2]] +
+        byteToHex[arr[offset + 3]] +
+        '-' +
+        byteToHex[arr[offset + 4]] +
+        byteToHex[arr[offset + 5]] +
+        '-' +
+        byteToHex[arr[offset + 6]] +
+        byteToHex[arr[offset + 7]] +
+        '-' +
+        byteToHex[arr[offset + 8]] +
+        byteToHex[arr[offset + 9]] +
+        '-' +
+        byteToHex[arr[offset + 10]] +
+        byteToHex[arr[offset + 11]] +
+        byteToHex[arr[offset + 12]] +
+        byteToHex[arr[offset + 13]] +
+        byteToHex[arr[offset + 14]] +
+        byteToHex[arr[offset + 15]]).toLowerCase();
+}
+function stringify(arr, offset = 0) {
+    const uuid = unsafeStringify(arr, offset);
+    if (!(0,_validate_js__WEBPACK_IMPORTED_MODULE_0__["default"])(uuid)) {
+        throw TypeError('Stringified UUID is invalid');
+    }
+    return uuid;
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (stringify);
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/v4.js":
+/*!**************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/v4.js ***!
+  \**************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./native.js */ "./node_modules/uuid/dist/esm-browser/native.js");
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./rng.js */ "./node_modules/uuid/dist/esm-browser/rng.js");
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./stringify.js */ "./node_modules/uuid/dist/esm-browser/stringify.js");
+
+
+
+function v4(options, buf, offset) {
+    if (_native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID && !buf && !options) {
+        return _native_js__WEBPACK_IMPORTED_MODULE_0__["default"].randomUUID();
+    }
+    options = options || {};
+    const rnds = options.random ?? options.rng?.() ?? (0,_rng_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
+    rnds[6] = (rnds[6] & 0x0f) | 0x40;
+    rnds[8] = (rnds[8] & 0x3f) | 0x80;
+    if (buf) {
+        offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
+        for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = rnds[i];
+        }
+        return buf;
+    }
+    return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__.unsafeStringify)(rnds);
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
+
+
+/***/ }),
+
+/***/ "./node_modules/uuid/dist/esm-browser/validate.js":
+/*!********************************************************!*\
+  !*** ./node_modules/uuid/dist/esm-browser/validate.js ***!
+  \********************************************************/
+/***/ ((__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) => {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "default": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _regex_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./regex.js */ "./node_modules/uuid/dist/esm-browser/regex.js");
+
+function validate(uuid) {
+    return typeof uuid === 'string' && _regex_js__WEBPACK_IMPORTED_MODULE_0__["default"].test(uuid);
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (validate);
 
 
 /***/ }),
