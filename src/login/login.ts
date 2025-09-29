@@ -136,7 +136,7 @@ export async function ensureLoadedPreferences (
     let m2: string
     if (err instanceof UnauthorizedError) {
       m2 =
-        'Ooops - you are not authenticated (properly logged in) to for me to read your preference file.  Try loggin out and logging in?'
+        'Oops — you are not authenticated (properly logged in), so SolidOS cannot read your preferences file. Try logging out and then logging back in.'
       alert(m2)
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
@@ -387,7 +387,7 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}${style.headerBannerLoginInput}` + style.signUpBackground)
 
-  authSession.onLogin(() => {
+  authSession.events.on('login', () => {
     const me = authn.currentUser()
     // const sessionInfo = authSession.info
     // if (sessionInfo && sessionInfo.isLoggedIn) {
@@ -693,14 +693,14 @@ export function loginStatusBox (
   }
   trackSession()
 
-  authSession.onLogin(trackSession)
-  authSession.onLogout(trackSession)
+  authSession.events.on('login', trackSession)
+  authSession.events.on('logout', trackSession)
   box.me = '99999' // Force refresh
   box.refresh()
   return box
 }
 
-authSession.onLogout(async () => {
+authSession.events.on('logout', async () => {
   const issuer = window.localStorage.getItem('loginIssuer')
   if (issuer) {
     try {
