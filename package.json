@@ -55,7 +55,7 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
-    "@noble/curves": "^1.9.6",
+    "@noble/curves": "^2.0.1",
     "acorn": "^8.15.0",
     "escape-html": "^1.0.3",
     "i": "^0.3.7",
