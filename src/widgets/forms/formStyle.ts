@@ -1,4 +1,4 @@
-import * as ns from '../../ns'
+import ns from '../../ns'
 import { Node } from 'rdflib'
 import { store } from 'solid-logic'
 import { fieldParams } from './fieldParams'

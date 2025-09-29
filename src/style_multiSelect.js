@@ -185,5 +185,3 @@ export const style = {
 style.setStyle = function setStyle (ele, styleName) {
   ele.style = style[styleName]
 }
-
-module.exports = style

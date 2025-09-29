@@ -16,7 +16,7 @@ There are a lot of tests in `solid-ui`, so you will most likely want to run only
 
 ### Coverage
 Run the following command:
-`npm run coverage`
+`npm run test:coverage`
 
 The results will be found in `coverage/lcov-report/index.html`. If you are using VSCode, you can right click and select `Open in Browser Preview`. Alternatively, you can type the path in your browser; for instance, the following:
 ```

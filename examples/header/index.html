@@ -4,8 +4,8 @@
 <head>
   <meta charset='UTF-8'>
   <title>solid-ui UI.widgets.header examples page</title>
-  <script type="text/javascript" src="../../lib/webpack-bundle.js"></script>
-  <script type="text/javascript" src="../../lib/index.js"></script>  <script>
+  <script src="../../dist/solid-ui.js"></script>
+  <script>
     const $ = document.querySelector.bind(document)
     function showSource(widgetName) {
       $(`#viewSource-${widgetName}`).innerHTML = $(`#script-${widgetName}`).innerText
@@ -27,11 +27,11 @@
       loginBanner.appendChild(UI.login.loginStatusBox(document, null, {}));
 
       async function finishLogin() {
-        await UI.authSession.handleIncomingRedirect();
-        const session = UI.authSession;
+        await UI.authn.authSession.handleIncomingRedirect();
+        const session = UI.authn.authSession;
         if (session.info.isLoggedIn) {
           // Update the page with the status.
-          webId.innerHTML = "Logged in as: " + authn.currentUser().uri;
+          webId.innerHTML = "Logged in as: " + session.currentUser().uri;
         } else {
           webId.innerHTML = "";
         }

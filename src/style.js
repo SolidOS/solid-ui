@@ -165,5 +165,3 @@ export const style = { // styleModule
 style.setStyle = function setStyle (ele, styleName) {
   ele.style = style[styleName]
 }
-
-module.exports = style // @@ No way to do this in ESM

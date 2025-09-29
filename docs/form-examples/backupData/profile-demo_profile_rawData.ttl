@@ -1,4 +1,4 @@
-########### used for https://solidos.github.io/solid-ui/Documentation/form-examples/profile-demo.html #####
+########### used for https://solidos.github.io/solid-ui/docs/form-examples/profile-demo.html #####
 
 @prefix : <#>.
 @prefix acl: <http://www.w3.org/ns/auth/acl#>.

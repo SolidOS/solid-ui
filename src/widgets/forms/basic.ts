@@ -1,7 +1,7 @@
 import { BlankNode, Literal, NamedNode, Node, st, Store, Variable } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
-import * as ns from '../../ns'
-import { formFieldNameBoxStyle, textInputStyle, textInputStyleUneditable } from '../../style'
+import ns from '../../ns'
+import { style } from '../../style'
 import styleConstants from '../../styleConstants'
 import { label } from '../../utils'
 import { errorMessageBlock } from '../error'
@@ -21,7 +21,7 @@ export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElem
   const rhs = box.appendChild(dom.createElement('div'))
 
   lhs.setAttribute('class', 'formFieldName')
-  lhs.setAttribute('style', formFieldNameBoxStyle)
+  lhs.setAttribute('style', style.formFieldNameBoxStyle)
   rhs.setAttribute('class', 'formFieldValue')
   if (label) {
     lhs.appendChild(dom.createTextNode(label))
@@ -131,9 +131,9 @@ export function basicField (
   let params = fieldParams[uri]
   if (params === undefined) params = { style: '' } // non-bottom field types can do this
   const paramStyle = params.style || ''
-  const style = textInputStyle + paramStyle
+  const inputStyle = style.textInputStyle + paramStyle
   const field = dom.createElement('input')
-  ;(field as any).style = style
+  ;(field as any).style = inputStyle
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
 
@@ -157,13 +157,13 @@ export function basicField (
     /* istanbul ignore next */
     field.value = obj.value || obj.value || ''
   }
-  field.setAttribute('style', style)
+  field.setAttribute('style', inputStyle)
   if (!kb.updater) {
     throw new Error('kb has no updater')
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = textInputStyleUneditable + paramStyle
+    ;(field as any).style = style.textInputStyleUneditable + paramStyle
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
     }
@@ -177,7 +177,7 @@ export function basicField (
       if (params.pattern) {
         field.setAttribute(
           'style',
-          style +
+          inputStyle +
             (field.value.match(params.pattern)
               ? 'color: green;'
               : 'color: red;')
@@ -192,7 +192,7 @@ export function basicField (
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
       field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-      field.setAttribute('style', style + 'color: gray;') // pending
+      field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
       if (params.namedNode) {
@@ -256,7 +256,7 @@ export function basicField (
         // kb.updater.update(ds, is, function (uri, ok, body) {
         if (ok) {
           field.disabled = false
-          field.setAttribute('style', style)
+          field.setAttribute('style', inputStyle)
         } else {
           box.appendChild(errorMessageBlock(dom, body))
         }

@@ -1,4 +1,3 @@
-/* global $rdf UI debug */
 if (!window.UI) {
   window.alert('Please run "npm install && npm run build" in your repo root first.')
 }
@@ -69,7 +68,7 @@ document.addEventListener('DOMContentLoaded', function () {
       container.innerHTML = ''
       if (tabContentCache[subject.uri]) {
         container.appendChild(tabContentCache[subject.uri])
-        debug.log('  used cached copy for ' + subject.uri)
+        console.log('  used cached copy for ' + subject.uri)
         return
       }
       const iframe = container.appendChild(dom.createElement('iframe'))

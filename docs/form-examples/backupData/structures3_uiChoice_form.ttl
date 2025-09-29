@@ -1,4 +1,4 @@
-########### used for https://solidos.github.io/solid-ui/Documentation/form-examples/structures3.html #####
+########### used for https://solidos.github.io/solid-ui/docs/form-examples/structures3.html #####
 
 @prefix ui: <http://www.w3.org/ns/ui#>.
 @prefix skos: <http://www.w3.org/2004/02/skos/core#>.

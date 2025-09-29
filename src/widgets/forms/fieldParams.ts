@@ -1,5 +1,5 @@
-import * as ns from '../../ns'
-import { commentStyle, formHeadingStyle, formGroupStyle } from '../../style'
+import ns from '../../ns'
+import { style } from '../../style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute
@@ -98,7 +98,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
   },
 
   [ns.ui('Group').uri]: {
-    style: formGroupStyle
+    style: style.formGroupStyle
   },
 
   /**
@@ -106,10 +106,10 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
    */
   [ns.ui('Comment').uri]: {
     element: 'p',
-    style: commentStyle
+    style: style.commentStyle
   },
   [ns.ui('Heading').uri]: {
     element: 'h3',
-    style: formHeadingStyle
+    style: style.formHeadingStyle
   }
 }
