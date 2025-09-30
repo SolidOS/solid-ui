@@ -80,7 +80,7 @@ jobs:
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.0
+      - uses: JS-DevTools/npm-publish@v4.1.1
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
           token: ${{ secrets.NPM_TOKEN }}
@@ -99,7 +99,7 @@ jobs:
           node-version: 20.x
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.0
+      - uses: JS-DevTools/npm-publish@v4.1.1
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
         with:
           token: ${{ secrets.NPM_TOKEN }}
