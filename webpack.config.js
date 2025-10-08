@@ -39,7 +39,11 @@ const common = {
     new HtmlWebpackPlugin()
   ],
   resolve: {
-    extensions: ['.ts', '.js'],
+    extensions: ['.ts', '.tsx', '.js', '.jsx'],
+    extensionAlias: {
+    '.js': ['.js', '.ts'], 
+    '.mjs': ['.mjs', '.mts'],
+    },
     fallback: { path: false }
   },
   devServer: {
@@ -47,11 +51,22 @@ const common = {
   },
   devtool: 'source-map',
   module: {
-    rules: [{
-      test: /\.ts$/,
-      use: 'babel-loader',
-      exclude: /node_modules/
-    }, {
+    rules: [
+      {
+        test: /\.(mjs|js|ts)$/,
+        exclude: /(node_modules|bower_components|dist)/,
+        use: {
+          loader: 'babel-loader',
+          options: {
+            presets: [
+              ['@babel/preset-env', {
+                modules: false // Preserve ES modules for webpack
+              }],
+              '@babel/preset-typescript'
+            ]
+          }
+        }
+      }, {
       test: /\.sparql$/i,
       type: 'asset/source'
     }, {
