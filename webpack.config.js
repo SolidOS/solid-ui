@@ -6,9 +6,7 @@ const externalsBase = {
   'fs': 'null',
   'node-fetch': 'fetch',
   'isomorphic-fetch': 'fetch',
-  '@xmldom/xmldom': 'window',
   'text-encoding': 'TextEncoder',
-  'whatwg-url': 'window',
   '@trust/webcrypto': 'crypto'
 }
 
@@ -32,6 +30,7 @@ const common = {
       type: 'umd'
     },
     globalObject: 'this',
+    publicPath: '',
     iife: true,
     clean: false
   },
