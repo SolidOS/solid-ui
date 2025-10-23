@@ -13,7 +13,7 @@ const externalsBase = {
 // rdflib externalized
 const externalsWithoutRdflib = {
   ...externalsBase,
-  rdflib: '$rdf'
+  rdflib: 'rdflib'
 }
 
 // rdflib bundled
