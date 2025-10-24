@@ -6,8 +6,6 @@ import {
   renderMessageRow
 } from '../../../src/chat/message'
 import { store } from 'solid-logic'
-// import { originalVersion } from '../../../src/chat/chatLogic'
-import * as widgets from '../../../src/widgets'
 
 const bindings = {
   '?creator': {

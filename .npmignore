@@ -1,4 +1,0 @@
-# This file primarily exists to prevent ./dist from being ignored when publishing.
-# (Because it's listed in .gitignore).
-
-coverage
