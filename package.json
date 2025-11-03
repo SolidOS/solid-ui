@@ -12,7 +12,7 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
-    "build": "npm run clean && npm run build-version && npm run build-js && npm run build-dist && npm run postbuild-js && npm run build-storybook",
+    "build": "npm run clean && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
     "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
@@ -62,9 +62,9 @@
     "escape-html": "^1.0.3",
     "i": "^0.3.7",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.5.1",
+    "pane-registry": "^2.5.1-0c3d1cb",
     "rdflib": "^2.2.37",
-    "solid-logic": "^3.1.1",
+    "solid-logic": "^3.1.1-da65b2c",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
   },
