@@ -136,3 +136,5 @@ export {
   initHeader,
   initFooter
 }
+// uses in solid-panes
+export type { CreateContext, NewAppInstanceOptions } from './create/types'

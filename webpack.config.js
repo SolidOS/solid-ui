@@ -1,5 +1,4 @@
 import path from 'path'
-import HtmlWebpackPlugin from 'html-webpack-plugin'
 import TerserPlugin from 'terser-webpack-plugin'
 
 const externalsBase = {
@@ -35,9 +34,6 @@ const common = {
     iife: true,
     clean: false
   },
-  plugins: [
-    new HtmlWebpackPlugin()
-  ],
   resolve: {
     extensions: ['.ts', '.js'],
     fallback: { path: false }

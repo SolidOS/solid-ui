@@ -101,7 +101,6 @@
     "eslint-plugin-promise": "^7.2.1",
     "get-random-values": "^4.0.0",
     "globals": "^16.3.0",
-    "html-webpack-plugin": "^5.6.3",
     "husky": "^9.1.7",
     "isomorphic-fetch": "^3.0.0",
     "jest": "^30.0.5",
