@@ -69,7 +69,7 @@
     "@noble/hashes": "^1.8.0",
     "escape-html": "^1.0.3",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.5.1-8566b05",
+    "pane-registry": "^2.5.1-0d5aa53",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
   },
