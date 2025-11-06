@@ -5,6 +5,13 @@
   "main": "dist/solid-ui.js",
   "types": "dist/index.d.ts",
   "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/solid-ui.esm.js",
+      "require": "./dist/solid-ui.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
     "dist/",
     "README.md",
@@ -19,6 +26,7 @@
     "build-dist": "webpack --progress",
     "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",
+    "lint-fix": "eslint --fix",
     "typecheck": "tsc --noEmit",
     "typecheck-test": "tsc --noEmit -p tsconfig.test.json",
     "test": "jest --no-coverage",
@@ -58,15 +66,16 @@
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
     "@noble/curves": "^1.9.6",
-    "acorn": "^8.15.0",
+    "@noble/hashes": "^1.8.0",
     "escape-html": "^1.0.3",
-    "i": "^0.3.7",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.5.1-0c3d1cb",
-    "rdflib": "^2.2.37",
-    "solid-logic": "^3.1.1-da65b2c",
+    "pane-registry": "^2.5.1-8566b05",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
+  },
+  "peerDependencies": {
+    "rdflib": "^2.2.37",
+    "solid-logic": "^3.1.1-536a3ae"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -101,20 +110,19 @@
     "eslint-plugin-promise": "^7.2.1",
     "get-random-values": "^4.0.0",
     "globals": "^16.3.0",
-    "husky": "^9.1.7",
     "isomorphic-fetch": "^3.0.0",
     "jest": "^30.0.5",
     "jest-environment-jsdom": "^30.0.5",
     "jsdom": "^26.1.0",
-    "lint-staged": "^16.1.4",
     "neostandard": "^0.12.2",
     "nock": "^13.5.6",
+    "rdflib": "^2.2.37",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
+    "solid-logic": "^3.1.1-536a3ae",
     "storybook": "^7.6.20",
     "terser-webpack-plugin": "^5.3.14",
-    "ts-jest": "^29.4.1",
     "typedoc": "^0.28.9",
     "typescript": "^5.9.2",
     "webpack": "^5.101.0",
@@ -122,16 +130,5 @@
   },
   "optionalDependencies": {
     "fsevents": "*"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.(js|ts)": [
-      "eslint"
-    ]
   }
 }

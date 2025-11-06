@@ -33,14 +33,11 @@ npm install solid-ui
 
 ## Use directly in a browser
 
-There are a few differences to mention:
-* the UMD bundles come in 2 flavours, with rdflib bundled together and without;
-* the ESM bundles do not contain rdflib, so it must be imported separately.
+All bundels, DO NOT bundle rdflin and solid-logic. These need to be provided separately.
 
 ## Files
-- For browser UMD, bundled with rdflib: `dist/solid-ui.js` (global `window.UI`)
-- For browser UMD, without rdflib: `dist/solid-ui.external.js` (global `window.UI`)
-- For browser ESM, without rdflib: `dist/solid-ui.esm.external.js` (import as module)
+- For browser UMD, without rdflib, solid-logic: `dist/solid-ui.js` (global `window.UI`)
+- For browser ESM, without rdflib, solid-logic: `dist/solid-ui.esm.js` (import as module)
 - UMD bundles come in chunked files
 - both version also containe minified versions.
 
@@ -52,20 +49,22 @@ There are a few differences to mention:
 <script src="https://unpkg.com/rdflib/dist/rdflib.min.js"></script>
 <!-- or -->
 <!-- script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script -->
+<script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
 <!-- Load solid-ui UMD bundle -->
-<script src="https://unpkg.com/solid-ui/dist/solid-ui.external.min.js"></script>
+<script src="https://unpkg.com/solid-ui/dist/solid-ui.min.js"></script>
 <!-- or -->
-<!-- script src="https://cdn.jsdelivr.net/npm/solid-ui/dist/solid-ui.external.min.js"></script -->
+<!-- script src="https://cdn.jsdelivr.net/npm/solid-ui/dist/solid-ui.min.js"></script -->
 <!-- or -->
 <!-- script src="dist/solid-ui.js"></script -->
 <script>
 	// Access via global variable
+	const logic = window.SolidLogic;
 	const UI = window.UI;
 	// Create a button
 	const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-  const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
-  UI.widgets.clearElement(document.body)
-  document.body.appendChild(myButton)
+	const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
+	UI.widgets.clearElement(document.body)
+	document.body.appendChild(myButton)
 </script>
 ```
 
@@ -75,7 +74,8 @@ There are a few differences to mention:
 ```html
 <script type="module">
 	import * as $rdf from 'https://esm.sh/rdflib'
-	import { someFunction } from 'https://esm.sh/solid-ui'
+	import { store }  from 'https://esm.sh/solid-logic'
+	import { widgets } from 'https://esm.sh/solid-ui'
 
 	// Example usage
 	// someFunction(...)
@@ -91,13 +91,15 @@ or
 {
 	"imports": {
 		"rdflib": "https://esm.sh/rdflib",
+		"solid-logic": "https://esm.sh/solid-logic",
 		"solid-ui": "https://esm.sh/solid-ui"
 	}
 }
 </script>
 <script type="module">
     import * as $rdf from 'rdflib'
-	import { someFunction } from 'solid-ui'
+	import { store }  from 'https://esm.sh/solid-logic'
+	import { widgets } from 'solid-ui'
 
 	// Example usage
 	// someFunction(...)

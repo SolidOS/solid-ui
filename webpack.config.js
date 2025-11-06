@@ -6,19 +6,10 @@ const externalsBase = {
   'node-fetch': 'fetch',
   'isomorphic-fetch': 'fetch',
   'text-encoding': 'TextEncoder',
-  '@trust/webcrypto': 'crypto'
+  '@trust/webcrypto': 'crypto',
   // Removed @xmldom/xmldom and whatwg-url - use native browser APIs
-}
-
-// rdflib externalized
-const externalsWithoutRdflib = {
-  ...externalsBase,
-  'rdflib': '$rdf'
-}
-
-// rdflib bundled
-const externalsWithRdflib = {
-  ...externalsBase
+  'rdflib': '$rdf',
+  'solid-logic': 'SolidLogic'
 }
 
 const common = {
@@ -72,7 +63,7 @@ const common = {
   }
 }
 
-// UMD Minified, rdflib bundled
+// UMD Minified, rdflib external
 const minified = {
   ...common,
   mode: 'production',
@@ -80,36 +71,7 @@ const minified = {
     ...common.output,
     filename: 'solid-ui.min.js'
   },
-  externals: externalsWithRdflib,
-  optimization: {
-    minimize: true,
-    minimizer: [new TerserPlugin({ extractComments: false })]
-  }
-}
-
-// UMD Unminified, rdflib bundled
-const unminified = {
-  ...common,
-  mode: 'production',
-  output: {
-    ...common.output,
-    filename: 'solid-ui.js'
-  },
-  externals: externalsWithRdflib,
-  optimization: {
-    minimize: false
-  }
-}
-
-// UMD Minified, rdflib external
-const minifiedWithRdflib = {
-  ...common,
-  mode: 'production',
-  output: {
-    ...common.output,
-    filename: 'solid-ui.external.min.js'
-  },
-  externals: externalsWithoutRdflib,
+  externals: externalsBase,
   optimization: {
     minimize: true,
     minimizer: [new TerserPlugin({ extractComments: false })]
@@ -117,14 +79,14 @@ const minifiedWithRdflib = {
 }
 
 // UMD Unminified, rdflib external
-const unminifiedWithRdflib = {
+const unminified = {
   ...common,
   mode: 'production',
   output: {
     ...common.output,
-    filename: 'solid-ui.external.js'
+    filename: 'solid-ui.js'
   },
-  externals: externalsWithoutRdflib,
+  externals: externalsBase,
   optimization: {
     minimize: false
   }
@@ -135,14 +97,14 @@ const esmMinified = {
   ...common,
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.external.min.js',
+    filename: 'solid-ui.esm.min.js',
     library: {
       type: 'module'
     },
     environment: { module: true },
     clean: false
   },
-  externals: externalsWithoutRdflib,
+  externals: externalsBase,
   experiments: {
     outputModule: true
   },
@@ -158,14 +120,14 @@ const esmUnminified = {
   ...common,
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.external.js',
+    filename: 'solid-ui.esm.js',
     library: {
       type: 'module'
     },
     environment: { module: true },
     clean: false
   },
-  externals: externalsWithoutRdflib,
+  externals: externalsBase,
   experiments: {
     outputModule: true
   },
@@ -178,8 +140,6 @@ const esmUnminified = {
 export default [
   minified,
   unminified,
-  minifiedWithRdflib,
-  unminifiedWithRdflib,
   esmMinified,
   esmUnminified
 ]

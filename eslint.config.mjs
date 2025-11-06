@@ -14,6 +14,7 @@ export default [
       'node_modules/**',
       'coverage/**',
       'dist/**',
+      'lib/**',
       'examples/**',
       '*.js'
     ],
