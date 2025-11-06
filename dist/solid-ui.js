@@ -14208,8 +14208,8 @@ Object.defineProperty(exports, "__esModule", ({
 }));
 exports["default"] = void 0;
 var _default = exports["default"] = {
-  buildTime: '2025-10-23T07:53:42Z',
-  commit: '0c6989e3aa9dd71fd0ffb8ba33a2c9f76666f043',
+  buildTime: '2025-11-06T13:11:56Z',
+  commit: 'feda906292d0a8456e96b62f09a8776382a1d9b1',
   npmInfo: {
     "'solid-ui'": "'2.6.1',",
     npm: "'10.8.2',",
@@ -70894,7 +70894,6 @@ function validate(uuid) {
 /******/ 				script = document.createElement('script');
 /******/ 		
 /******/ 				script.charset = 'utf-8';
-/******/ 				script.timeout = 120;
 /******/ 				if (__webpack_require__.nc) {
 /******/ 					script.setAttribute("nonce", __webpack_require__.nc);
 /******/ 				}
