@@ -33,9 +33,6 @@ const common = {
     },
     fallback: { path: false }
   },
-  devServer: {
-    static: './dist'
-  },
   devtool: 'source-map',
   module: {
     rules: [

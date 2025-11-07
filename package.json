@@ -69,13 +69,13 @@
     "@noble/hashes": "^1.8.0",
     "escape-html": "^1.0.3",
     "mime-types": "^3.0.1",
-    "pane-registry": "2.5.1-4c50f58",
+    "pane-registry": "^2.5.1-ee1545f",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
   },
   "peerDependencies": {
-    "rdflib": "^2.2.37",
-    "solid-logic": "3.1.1-d167ace"
+    "rdflib": "^2.3.0",
+    "solid-logic": "3.1.1-3343cc7"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -116,11 +116,11 @@
     "jsdom": "^26.1.0",
     "neostandard": "^0.12.2",
     "nock": "^13.5.6",
-    "rdflib": "^2.2.37",
+    "rdflib": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
-    "solid-logic": "3.1.1-d167ace",
+    "solid-logic": "^3.1.1-3343cc7",
     "storybook": "^7.6.20",
     "terser-webpack-plugin": "^5.3.14",
     "typedoc": "^0.28.9",

@@ -46,7 +46,7 @@ All bundels, DO NOT bundle rdflin and solid-logic. These need to be provided sep
 
 ```html
 <!-- Load dependencies first -->
-<script src="https://unpkg.com/rdflib/dist/rdflib.min.js"></script>
+ <script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
 <!-- or -->
 <!-- script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script -->
 <script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
@@ -98,7 +98,7 @@ or
 </script>
 <script type="module">
     import * as $rdf from 'rdflib'
-	import { store }  from 'https://esm.sh/solid-logic'
+	import { store }  from 'solid-logic'
 	import { widgets } from 'solid-ui'
 
 	// Example usage

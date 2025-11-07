@@ -27,17 +27,16 @@ https://github.com/solidos/solid
 'use strict'
 /**
  * Provides a Solid client helper object (which exposes various static modules).
- * @module solidUi.js
- * @main solidUi.js
+ * @module UI.js
+ * @main UI.js
  */
 
 /**
- * @class SolidUi
+ * @class UI
  * @static
  */
 
 // REMOVE @ts-ignore as you migrate files to TypeScript
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import ns from './ns'
 import { acl, aclControl } from './acl/index'
@@ -70,16 +69,12 @@ import * as widgets from './widgets/index'
 import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
-import { authn, store } from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
-    authn,
-    store,
     ns,
-    rdf,
     acl,
     aclControl,
     create,
@@ -108,10 +103,7 @@ if (typeof window !== 'undefined') {
 
 // this variables are directly used in the storybook
 export {
-  authn,
-  store,
   ns,
-  rdf,
   acl,
   aclControl,
   create,
