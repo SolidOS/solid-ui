@@ -8,15 +8,14 @@ import { icons } from '../iconBase'
 import { media } from '../media/index'
 import ns from '../ns'
 import * as pad from '../pad'
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { style } from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { store, createTypeIndexLogic, authn } from 'solid-logic'
 import { findAppInstances } from '../login/login'
 
-const UI = { icons, ns, media, pad, rdf, style, utils, widgets }
-const $rdf = UI.rdf
+const UI = { icons, ns, media, pad, style, utils, widgets }
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
 const BOOKMARK_ICON = 'noun_45961.svg'

@@ -16,8 +16,8 @@ export default {
     autodocs: true
   },
   webpackFinal: async (config) => {
-    // For Storybook, we want to bundle rdflib and solid-logic from devDependencies
-    // instead of externalizing them, so we DON'T add them to externals
+    // For Storybook, we DON'T externalize rdflib and solid-logic
+    // Instead, we let webpack bundle them from node_modules
 
     // Handle Node.js modules for browser
     config.resolve.fallback = {
@@ -30,32 +30,10 @@ export default {
       buffer: false
     }
 
-    // Add module name mapping to resolve the external references
+    // Alias $rdf to rdflib for solid-logic compatibility
     config.resolve.alias = {
       ...config.resolve.alias,
-      $rdf: require.resolve('rdflib'),
-      SolidLogic: require.resolve('solid-logic')
-    }
-
-    // Ensure solid-logic is not treated as external for Storybook
-    if (config.externals) {
-      if (Array.isArray(config.externals)) {
-        config.externals = config.externals.filter(external => {
-          if (typeof external === 'string') return !['rdflib', 'solid-logic', '$rdf', 'SolidLogic'].includes(external)
-          if (typeof external === 'object') {
-            delete external['rdflib']
-            delete external['solid-logic']
-            delete external['$rdf']
-            delete external['SolidLogic']
-          }
-          return true
-        })
-      } else if (typeof config.externals === 'object') {
-        delete config.externals['rdflib']
-        delete config.externals['solid-logic']
-        delete config.externals['$rdf']
-        delete config.externals['SolidLogic']
-      }
+      $rdf: 'rdflib'
     }
 
     return config

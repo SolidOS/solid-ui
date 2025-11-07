@@ -1,14 +1,9 @@
 
-/* global $rdf UI debug */
-if (!window) {
-  window.alert('Missing UI code - load mashlib first.')
-}
-window.$rdf = window.UI.rdf
 
 document.addEventListener('DOMContentLoaded', async function () {
   /// ///////////////////////////////////////////
 
-  var kb = UI.store
+  var kb = SolidLogic.store
 
   kb.updater.editable = // uri => true // Force modifyable UX // @@@
     function (uri) {

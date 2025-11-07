@@ -12,9 +12,9 @@ import { rawJsonDecorator } from "./decorators";
 <Canvas withSource="open">
   <Story name="isAudio" decorators={[rawJsonDecorator]}>
     {() => {
-      const type = UI.rdf.namedNode("http://www.w3.org/ns/iana/media-types/audio/");
-      UI.store.add(UI.rdf.namedNode("http://example.com/audio.mpeg"), UI.ns.rdf("type"), type);
-      return UI.widgets.isAudio(UI.rdf.namedNode("http://example.com/audio.mpeg"));
+      const type = $rdf.namedNode("http://www.w3.org/ns/iana/media-types/audio/");
+      SolidLogic.store.add($rdf.namedNode("http://example.com/audio.mpeg"), UI.ns.rdf("type"), type);
+      return UI.widgets.isAudio($rdf.namedNode("http://example.com/audio.mpeg"));
     }}
   </Story>
 </Canvas>
@@ -26,9 +26,9 @@ import { rawJsonDecorator } from "./decorators";
 <Canvas withSource="open">
   <Story name="isVideo" decorators={[rawJsonDecorator]}>
     {() => {
-      const type = UI.rdf.namedNode("http://www.w3.org/ns/iana/media-types/video/");
-      UI.store.add(UI.rdf.namedNode("http://example.com/video.mov"), UI.ns.rdf("type"), type);
-      return UI.widgets.isVideo(UI.rdf.namedNode("http://example.com/video.mov"));
+      const type = $rdf.namedNode("http://www.w3.org/ns/iana/media-types/video/");
+      SolidLogic.store.add($rdf.namedNode("http://example.com/video.mov"), UI.ns.rdf("type"), type);
+      return UI.widgets.isVideo($rdf.namedNode("http://example.com/video.mov"));
     }}
   </Story>
 </Canvas>
@@ -40,9 +40,9 @@ import { rawJsonDecorator } from "./decorators";
 <Canvas withSource="open">
   <Story name="isImage" decorators={[rawJsonDecorator]}>
     {() => {
-      const type = UI.rdf.namedNode("http://www.w3.org/ns/iana/media-types/image/");
-      UI.store.add(UI.rdf.namedNode("http://example.com/image.jpeg"), UI.ns.rdf("type"), type);
-      return UI.widgets.isImage(UI.rdf.namedNode("http://example.com/image.jpeg"));
+      const type = $rdf.namedNode("http://www.w3.org/ns/iana/media-types/image/");
+      SolidLogic.store.add($rdf.namedNode("http://example.com/image.jpeg"), UI.ns.rdf("type"), type);
+      return UI.widgets.isImage($rdf.namedNode("http://example.com/image.jpeg"));
     }}
   </Story>
 </Canvas>

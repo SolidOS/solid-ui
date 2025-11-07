@@ -7,7 +7,7 @@ import { action } from "@storybook/addon-actions";
 
 export const loadTurtleDecorator = (Story) => {
   const { render, data } = Story();
-  UI.rdf.parse(data, UI.store, location.origin, "text/turtle", (error) => {
+  $rdf.parse(data, SolidLogic.store, location.origin, "text/turtle", (error) => {
     if (error) console.error(error);
   });
   const div = document.createElement("div");
@@ -29,8 +29,8 @@ The triples belows shows the minimum data you need to start using the tabWidget 
 <Canvas>
   <Story name="rdf collection" decorators={[loadTurtleDecorator]}>
     {() => {
-      const subject = UI.rdf.namedNode(location.origin + "#subject1");
-      const predicate = UI.rdf.namedNode(location.origin + "#predicate1");
+      const subject = $rdf.namedNode(location.origin + "#subject1");
+      const predicate = $rdf.namedNode(location.origin + "#predicate1");
       return {
         data: `
 @prefix : <#> .
@@ -50,8 +50,8 @@ The triples belows shows the minimum data you need to start using the tabWidget 
   </Story>
 </Canvas>
 
-Note that you would probably use `UI.rdf.namedNode` directly from rdflib.js. (E.g. instead of
-`UI.rdf.namedNode` you would probably make use of namedNode with
+Note that you would probably use `$rdf.namedNode` directly from rdflib.js. (E.g. instead of
+`$rdf.namedNode` you would probably make use of namedNode with
 `import { namedNode } from 'rdflib'`.
 
 ## tabWidget: Populating content using unsorted triples
@@ -65,8 +65,8 @@ Note that we've set option ordered to false in this example.
 <Canvas>
   <Story name="unsorted triples" decorators={[loadTurtleDecorator]}>
     {() => {
-      const subject = UI.rdf.namedNode(location.origin + "#subject2");
-      const predicate = UI.rdf.namedNode(location.origin + "#predicate2");
+      const subject = $rdf.namedNode(location.origin + "#subject2");
+      const predicate = $rdf.namedNode(location.origin + "#predicate2");
       return {
         data: `
 @prefix :     <#> .
@@ -101,8 +101,8 @@ We do not need to use options subject and predicate when using items.
 <Canvas>
   <Story name="option items">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
@@ -130,8 +130,8 @@ tabs by coloring the selected tab a bit darker.
     }}
   >
     {({ backgroundColor }) => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         backgroundColor,
         items: [item1, item2],
@@ -148,8 +148,8 @@ tabs by coloring the selected tab a bit darker.
 <Canvas>
   <Story name="on close">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         onClose: action("closed"),
         items: [item1, item2],
@@ -172,8 +172,8 @@ Using option `orientation` we can set how the tabs and body should be positioned
     argTypes={{ orientation: { control: { type: "select", options: ["0", "1", "2", "3"] } } }}
   >
     {({ orientation }) => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         orientation,
         items: [item1, item2],
@@ -192,8 +192,8 @@ Using option `orientation` we can set how the tabs and body should be positioned
 <Canvas>
   <Story name="renderTab">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
@@ -215,8 +215,8 @@ Using option `orientation` we can set how the tabs and body should be positioned
 <Canvas>
   <Story name="renderTabSettings">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
@@ -238,8 +238,8 @@ in junction with `renderTab` since it relies on `dataset.name` being set.
 <Canvas>
   <Story name="selectedTab">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         renderMain: (bodyMain, subject) => {
@@ -262,8 +262,8 @@ in junction with `renderTab` since it relies on `dataset.name` being set.
 <Canvas>
   <Story name="startEmpty">
     {() => {
-      const item1 = UI.rdf.namedNode(location.origin + "#item3A");
-      const item2 = UI.rdf.namedNode(location.origin + "#item3B");
+      const item1 = $rdf.namedNode(location.origin + "#item3A");
+      const item2 = $rdf.namedNode(location.origin + "#item3B");
       return UI.tabs.tabWidget({
         items: [item1, item2],
         startEmpty: true,
