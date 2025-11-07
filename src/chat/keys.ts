@@ -30,7 +30,7 @@ export async function getPublicKey (webId: NamedNode) {
     await store.fetcher.load(publicKeyDoc) // url.href)
     const key = store.any(webId, ns.solid('publicKey'))
     return key?.value // as NamedNode
-  } catch (err) {
+  } catch (_err) {
     return undefined
   }
 }

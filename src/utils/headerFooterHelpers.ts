@@ -44,7 +44,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
   if (podOwner) {
     try {
       await store.fetcher.load((podOwner as NamedNode).doc())
-    } catch (err) {
+    } catch (_err) {
       console.warn('Unable to load profile of pod owner ' + podOwner)
       return null
     }
@@ -59,7 +59,7 @@ export async function getPodOwner (pod: NamedNode, store: LiveStore): Promise<Na
     try {
       // @ts-ignore  LiveStore always has fetcher
       await store.fetcher.load(guess)
-    } catch (err) {
+    } catch (_err) {
       console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.')
       return null
     }

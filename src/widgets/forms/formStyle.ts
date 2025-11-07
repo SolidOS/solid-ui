@@ -29,7 +29,7 @@ export function setFieldStyle (ele:HTMLElement, field:Node) {
         const cssAttribute = st.predicate.uri.slice(STYLE_URI_PREFIX.length)
         try {
           ele.style[cssAttribute] = st.object.value
-        } catch (err) {
+        } catch (_err) {
           console.warn(`setFieldStyle: Error setting element style ${cssAttribute} to "${st.object.value}"`)
           console.warn(`setFieldStyle:   ... Element tagName was "${ele.tagName || '???'}"`)
         }
