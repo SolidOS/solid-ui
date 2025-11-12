@@ -19,7 +19,7 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
-    "build": "npm run clean && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
+    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
     "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
@@ -69,11 +69,13 @@
     "@noble/hashes": "^1.8.0",
     "escape-html": "^1.0.3",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.5.1-928f05a",
-    "rdflib": "^2.3.0",
-    "solid-logic": "^3.1.1-aa7c1ee",
+    "pane-registry": "^2.5.1-b6d15a2",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
+  },
+  "peerDependencies": {
+    "rdflib": "^2.3.0",
+    "solid-logic": "3.1.1-e2f3838"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.3",
@@ -96,7 +98,6 @@
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
     "babel-jest": "^30.1.2",
     "babel-loader": "^10.0.0",
@@ -114,9 +115,11 @@
     "jsdom": "^26.1.0",
     "neostandard": "^0.12.2",
     "nock": "^13.5.6",
+    "rdflib": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
+    "solid-logic": "^3.1.1-e2f3838",
     "storybook": "^7.6.20",
     "terser-webpack-plugin": "^5.3.14",
     "typedoc": "^0.28.9",

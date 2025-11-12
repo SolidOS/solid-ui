@@ -209,9 +209,8 @@ export function manageParticipation (
   const table = dom.createElement('table')
   container.appendChild(table)
   renderParticipants(dom, table, padDoc, subject, me, options)
-  let _participation
   try {
-    _participation = recordParticipation(subject, padDoc, table)
+    recordParticipation(subject, padDoc, table)
   } catch (e) {
     container.appendChild(
       errorMessageBlock(

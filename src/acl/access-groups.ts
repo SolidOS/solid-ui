@@ -66,9 +66,9 @@ export class AccessGroups {
     private aclDoc: NamedNode,
     public controller: AccessController,
     store: Store, // @@ was LiveStore
-    private options: AccessGroupsOptions = {}
+    private _options: AccessGroupsOptions = {}
   ) {
-    this.defaults = options.defaults || false
+    this.defaults = this._options.defaults || false
     this._store = store
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)

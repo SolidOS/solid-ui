@@ -1,4 +1,3 @@
-'use strict'
 /**
  * Provides a simple configuration object for Solid web client and other
  * modules.

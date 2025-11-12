@@ -7,8 +7,6 @@ import { mostSpecificClassURI } from './fieldFunction'
 
 const STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#'
 
-/* eslint-disable no-console */
-
 export function setFieldStyle (ele:HTMLElement, field:Node) {
   const classUri = mostSpecificClassURI(field)
   const params = fieldParams[classUri] || {}

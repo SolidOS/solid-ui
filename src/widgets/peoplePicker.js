@@ -134,8 +134,8 @@ export class PeoplePicker {
           .then(function (_xhr) {
             return resolve({ book })
           })
-          .catch(function (err) {
-            return reject(new Error('Could not load address book ' + err))
+          .catch(function (errr) {
+            return reject(new Error('Could not load address book ' + errr))
           })
       })
     })
