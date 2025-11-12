@@ -27,19 +27,18 @@ https://github.com/solidos/solid
 'use strict'
 /**
  * Provides a Solid client helper object (which exposes various static modules).
- * @module solidUi.js
- * @main solidUi.js
+ * @module UI.js
+ * @main UI.js
  */
 
 /**
- * @class SolidUi
+ * @class UI
  * @static
  */
 
 // REMOVE @ts-ignore as you migrate files to TypeScript
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import * as ns from './ns'
+import ns from './ns'
 import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore
@@ -59,7 +58,7 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import * as style from './style'
+import { style } from './style'
 // @ts-ignore
 import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
@@ -67,20 +66,15 @@ import * as tabs from './tabs'
 import * as utils from './utils'
 import * as login from './login/login'
 import * as widgets from './widgets/index'
-import versionInfo from './versionInfo'
 import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
-import { authn, store } from 'solid-logic'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
-    authn,
-    store,
     ns,
-    rdf,
     acl,
     aclControl,
     create,
@@ -102,7 +96,6 @@ if (typeof window !== 'undefined') {
     tabs,
     utils,
     widgets,
-    versionInfo,
     initHeader,
     initFooter
   } // Simpler access by non-node scripts
@@ -110,10 +103,7 @@ if (typeof window !== 'undefined') {
 
 // this variables are directly used in the storybook
 export {
-  authn,
-  store,
   ns,
-  rdf,
   acl,
   aclControl,
   create,
@@ -135,7 +125,8 @@ export {
   tabs,
   utils,
   widgets,
-  versionInfo,
   initHeader,
   initFooter
 }
+// uses in solid-panes
+export type { CreateContext, NewAppInstanceOptions } from './create/types'

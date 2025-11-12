@@ -16,7 +16,7 @@ import * as debug from '../debug'
 /** @module mediaCapture */
 
 import { icons } from '../iconBase'
-import * as style from '../style'
+import { style } from '../style'
 import * as widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 

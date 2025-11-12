@@ -6,17 +6,16 @@
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { media } from '../media/index'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as pad from '../pad'
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../style'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import { style } from '../style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
-import { store, registerInTypeIndex, authn } from 'solid-logic'
+import { store, createTypeIndexLogic, authn } from 'solid-logic'
 import { findAppInstances } from '../login/login'
 
-const UI = { icons, ns, media, pad, rdf, style, utils, widgets }
-const $rdf = UI.rdf
+const UI = { icons, ns, media, pad, style, utils, widgets }
 
 const BOOK = $rdf.Namespace('http://www.w3.org/2002/01/bookmark#')
 const BOOKMARK_ICON = 'noun_45961.svg'
@@ -64,10 +63,10 @@ export async function findBookmarkDocument (userContext) {
         debug.log('Creating new bookmark file ' + newBookmarkFile)
         await store.fetcher.createIfNotExists(newBookmarkFile)
       } catch (e) {
-        debug.warn("Can't make fresh bookmark file:" + e)
+        debug.warn('Can\'t make fresh bookmark file:' + e)
         return userContext
       }
-      await registerInTypeIndex(
+      await createTypeIndexLogic.registerInTypeIndex(
         newBookmarkFile,
         userContext.index,
         theClass

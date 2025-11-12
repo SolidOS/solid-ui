@@ -4,12 +4,12 @@
 // import { currentUser } from './authn/authn'
 import * as debug from './debug'
 import { LiveStore, NamedNode, st, UpdateManager } from 'rdflib'
-import * as ns from './ns'
+import ns from './ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from './utils'
 import { lightColorHash } from './pad'
 import { log } from './debug'
-import * as style from './style'
+import { style } from './style'
 import styleConstants from './styleConstants'
 import { solidLogicSingleton, authn } from 'solid-logic'
 
@@ -209,9 +209,8 @@ export function manageParticipation (
   const table = dom.createElement('table')
   container.appendChild(table)
   renderParticipants(dom, table, padDoc, subject, me, options)
-  let _participation
   try {
-    _participation = recordParticipation(subject, padDoc, table)
+    recordParticipation(subject, padDoc, table)
   } catch (e) {
     container.appendChild(
       errorMessageBlock(

@@ -1,4 +1,4 @@
-import * as UI from '../../lib'
+import * as UI from '../../src/index'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs'
 import { rawJsonDecorator } from './decorators'
@@ -15,9 +15,9 @@ The inputs will be stored to [https://example-user.inrupt.net/public/example-not
 <Canvas>
   <Story name="notepad">
         {() => {
-          const pad = UI.rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
-          const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
-          const subject = UI.store.sym('https://test.test#')
+          const pad = $rdf.namedNode('https://example-user.inrupt.net/public/example-notepad/index.ttl#this')
+          const me = new $rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
+          const subject = SolidLogic.store.sym('https://test.test#')
           const options = {}
           return UI.pad.notepad(document, pad.doc(), subject, me, options)
         }}
@@ -29,11 +29,11 @@ The inputs will be stored to [https://example-user.inrupt.net/public/example-not
 <Canvas>
   <Story name="manageParticipation">
     {() => {
-      const me = new UI.rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
+      const me = new $rdf.NamedNode('https://example-user.inrupt.net/profile/card#me')
       const structure = document.createElement('div')
       const container = document.createElement('div')
-      const subject = UI.store.sym('https://test.test#')
-      const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+      const subject = SolidLogic.store.sym('https://test.test#')
+      const pad = $rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       const options = { statusArea: container }
       return UI.pad.manageParticipation(document, structure, pad.doc(), subject, me, options)
     }}
@@ -48,9 +48,9 @@ This method converts a pad.ttl document to HTML.
   <Story name="notepadToHTML">
     {() => {
       const div = document.createElement("div")
-      const kb = UI.store
-      const fetcher = UI.rdf.fetcher(kb)
-      const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+      const kb = SolidLogic.store
+      const fetcher = $rdf.fetcher(kb)
+      const pad = $rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       fetcher.load(pad.doc()).then(() => {
         const htmlStr = UI.pad.notepadToHTML(pad, kb)
         div.appendChild(document.createTextNode(htmlStr))
@@ -67,7 +67,7 @@ This method returns a hex value for setting the color of the input box of the no
 <Canvas>
   <Story name="lightColorHash">
     {() => {
-        const colorStr = UI.pad.lightColorHash(new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
+        const colorStr = UI.pad.lightColorHash(new $rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'))
       const inputBox = document.createElement('INPUT')
       inputBox.setAttribute("type", "text")
       inputBox.style.backgroundColor = colorStr
@@ -85,15 +85,15 @@ Creates the table with the list of participants that have contributed to the giv
     {() => {
       const div = document.createElement("div")
       const table = document.createElement('table');
-      const kb = UI.store
-      const fetcher = UI.rdf.fetcher(kb)
-      const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+      const kb = SolidLogic.store
+      const fetcher = $rdf.fetcher(kb)
+      const pad = $rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       fetcher.load(pad.doc()).then(() => {
         // subject = new NamedNode('test') // this i think the page where a list.. ns.ws('participants') are stored
         const subject = kb.sym('https://test.test#')
         const options = {} // what to put in options
         //options are used in the button personTR there are the following properties can be defined deleteFunction, link, draggable
-        const tableOfParticipants = UI.pad.renderParticipants(document, table, pad, subject, new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
+        const tableOfParticipants = UI.pad.renderParticipants(document, table, pad, subject, new $rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me'), options)
         div.appendChild(tableOfParticipants)
       })
       return div
@@ -107,12 +107,12 @@ Creates the table with the list of participants that have contributed to the giv
   <Story name="participationObject">
     {() => {
       const container = document.createElement("pre")
-      const kb = UI.store
+      const kb = SolidLogic.store
       const subject = kb.sym('https://test.test#');
-      const fetcher = UI.rdf.fetcher(kb)
-      const pad = UI.rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
+      const fetcher = $rdf.fetcher(kb)
+      const pad = $rdf.namedNode('https://sharonstrats.inrupt.net/public/edu.mit.solid.pane.pad/id1584238219755/index.ttl#this')
       fetcher.load(pad.doc()).then(() => {
-        const me = new UI.rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
+        const me = new $rdf.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
         return UI.pad.participationObject(subject, pad, me);
       }).then((node) => {
         container.appendChild(document.createTextNode(JSON.stringify(node, null, 2)))

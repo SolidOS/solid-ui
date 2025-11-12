@@ -1,4 +1,4 @@
-import * as UI from "../../../lib";
+import * as UI from '../../../src/index'
 
 import { Canvas, Meta, Story } from "@storybook/addon-docs";
 import { action } from "@storybook/addon-actions";
@@ -12,16 +12,16 @@ import { action } from "@storybook/addon-actions";
     {() => {
       const container = document.createElement("div");
       const already = {};
-      const subject = UI.rdf.namedNode("http://example.com/#this");
-      const form = UI.rdf.namedNode("http://example.com/#form");
-      const doc = UI.rdf.namedNode("http://example.com/");
+      const subject = $rdf.namedNode("http://example.com/#this");
+      const form = $rdf.namedNode("http://example.com/#form");
+      const doc = $rdf.namedNode("http://example.com/");
       const callbackFunction = (ok, errorMessage) => {
         console.log(ok, errorMessage, document.getElementById("div-basicField").innerHTML);
       };
-      UI.store.add(
+      SolidLogic.store.add(
         form,
         UI.ns.ui("property"),
-        UI.rdf.namedNode("http://example.com/#some-property"),
+        $rdf.namedNode("http://example.com/#some-property"),
         doc
       );
       // FIXME: https://github.com/solidos/solid-ui/issues/239
@@ -65,35 +65,35 @@ import { action } from "@storybook/addon-actions";
     {() => {
       const container = document.createElement("div");
       const already = {};
-      const subject = UI.rdf.namedNode("http://example.com/#this");
-      const form = UI.rdf.namedNode("http://example.com/#form");
-      const store = UI.rdf.namedNode("http://example.com/#store");
-      UI.store.add(
+      const subject = $rdf.namedNode("http://example.com/#this");
+      const form = $rdf.namedNode("http://example.com/#form");
+      const store = $rdf.namedNode("http://example.com/#store");
+      SolidLogic.store.add(
         form,
         UI.ns.ui("parts"),
-        new UI.rdf.Collection([
-          UI.rdf.namedNode("http://example.com/#part1"),
-          UI.rdf.namedNode("http://example.com/#part2"),
+        new $rdf.Collection([
+          $rdf.namedNode("http://example.com/#part1"),
+          $rdf.namedNode("http://example.com/#part2"),
         ]),
-        UI.rdf.namedNode("http://example.com/")
+        $rdf.namedNode("http://example.com/")
       );
-      UI.store.add(
-        UI.rdf.namedNode("http://example.com/#part1"),
+      SolidLogic.store.add(
+        $rdf.namedNode("http://example.com/#part1"),
         UI.ns.rdf("type"),
         UI.ns.ui("Comment")
       );
-      UI.store.add(
-        UI.rdf.namedNode("http://example.com/#part1"),
+      SolidLogic.store.add(
+        $rdf.namedNode("http://example.com/#part1"),
         UI.ns.ui("contents"),
         "[this is part 1 of the form]"
       );
-      UI.store.add(
-        UI.rdf.namedNode("http://example.com/#part2"),
+      SolidLogic.store.add(
+        $rdf.namedNode("http://example.com/#part2"),
         UI.ns.rdf("type"),
         UI.ns.ui("Comment")
       );
-      UI.store.add(
-        UI.rdf.namedNode("http://example.com/#part2"),
+      SolidLogic.store.add(
+        $rdf.namedNode("http://example.com/#part2"),
         UI.ns.ui("contents"),
         "[this is part 2 of the form]"
       );
@@ -124,9 +124,9 @@ this additional example shows the use of `already`.
   <Story name="form / group, with already">
     {() => {
       const container = document.createElement("div");
-      const subject = UI.rdf.namedNode("http://example.com/#this");
-      const form = UI.rdf.namedNode("http://example.com/#form");
-      const store = UI.rdf.namedNode("http://example.com/#store");
+      const subject = $rdf.namedNode("http://example.com/#this");
+      const form = $rdf.namedNode("http://example.com/#form");
+      const store = $rdf.namedNode("http://example.com/#store");
       const key = subject.toNT() + "|" + form.toNT();
       const already = {
         [key]: true,

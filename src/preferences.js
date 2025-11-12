@@ -6,7 +6,7 @@ import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from './debug'
 import { ensureLoadedPreferences } from './login/login'
-import * as ns from './ns'
+import ns from './ns'
 import * as participation from './participation' // @ts-ignore
 import * as widgets from './widgets'
 
@@ -159,7 +159,7 @@ export function renderPreferencesForm (subject, theClass, preferencesForm, conte
         }
       )
 
-      heading("Everyone's  view of this " + context.noun)
+      heading('Everyone\'s  view of this ' + context.noun)
       recordSharedPreferences(subject, context).then(context => {
         const sharedPreferences = context.sharedPreferences
         widgets.appendForm(

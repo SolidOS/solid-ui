@@ -10,7 +10,7 @@
  */
 import * as debug from '../debug'
 import * as mime from 'mime-types'
-import * as style from '../style'
+import { style } from '../style'
 
 /* global FileReader alert */
 
@@ -81,7 +81,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
       }
       if (uris === null && text && text.slice(0, 4) === 'http') {
         uris = text
-        debug.log("Waring: Poor man's drop: using text for URI") // chrome disables text/uri-list??
+        debug.log('Waring: Poor man\'s drop: using text for URI') // chrome disables text/uri-list??
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value

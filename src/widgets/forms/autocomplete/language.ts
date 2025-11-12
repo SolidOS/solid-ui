@@ -3,12 +3,12 @@
 * including filtering resut by natural language etc
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
-/* eslint-disable no-console */
+
 import * as debug from '../../../debug'
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
 import { authn, store } from 'solid-logic'
-import * as ns from '../../../ns'
+import ns from '../../../ns'
 import { Collection, NamedNode, Node } from 'rdflib'
 // import { Binding } from '../widgets/forms/autocomplete/publicData'
 // import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'

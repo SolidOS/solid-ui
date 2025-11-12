@@ -10,9 +10,9 @@
  *  Meanwhile the stack is dumped to the console for the developer, so you actually know
  *  where it happened!
  */
-/* eslint-disable no-console */
+
 import { cancelButton } from '../widgets'
-import * as style from '../style'
+import { style } from '../style'
 import styleConstants from '../styleConstants'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
