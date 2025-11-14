@@ -1,6 +1,6 @@
 import * as debug from '../debug'
-import { schnorr } from '@noble/curves/secp256k1'
-import { bytesToHex } from '@noble/hashes/utils'
+import { secp256k1 } from '@noble/curves/secp256k1.js'
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js'
 import * as ns from '../ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
@@ -9,11 +9,11 @@ import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } fr
 import { setAcl, keyContainerAclBody, keyAclBody } from '../utils/keyHelpers/acl'
 
 export function generatePrivateKey (): string {
-  return bytesToHex(schnorr.utils.randomPrivateKey())
+  return bytesToHex(secp256k1.utils.randomSecretKey())
 }
 
 export function generatePublicKey (privateKey: string): string {
-  return bytesToHex(schnorr.getPublicKey(privateKey))
+  return bytesToHex(secp256k1.getPublicKey(hexToBytes(privateKey)))
 }
 
 /**
