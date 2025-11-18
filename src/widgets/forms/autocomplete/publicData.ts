@@ -7,7 +7,7 @@
 import { Literal, NamedNode, parse } from 'rdflib'
 import { store } from 'solid-logic'
 import * as debug from '../../../debug'
-import * as ns from '../../../ns'
+import ns from '../../../ns'
 import { defaultPreferredLanguages, getPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server

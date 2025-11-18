@@ -7,7 +7,7 @@ import { solidLogicSingleton } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
 import { ensureLoadedProfile, selectWorkspace } from '../login/login'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 import { CreateContext, NewAppInstanceOptions } from './types'
@@ -129,14 +129,14 @@ export function newThingUI (
                   p.setAttribute('style', 'font-size: 120%;')
                   // Make link to new thing
                   p.innerHTML =
-                    "Your <a target='_blank' href='" +
+                    'Your <a target=\'_blank\' href=\'' +
                     newPaneOptions.newInstance.uri +
-                    "'><b>new " +
+                    '\'><b>new ' +
                     options.noun +
                     '</b></a> is ready to be set up. ' +
-                    "<br/><br/><a target='_blank' href='" +
+                    '<br/><br/><a target=\'_blank\' href=\'' +
                     newPaneOptions.newInstance.uri +
-                    "'>Go to your new " +
+                    '\'>Go to your new ' +
                     options.noun +
                     '.</a>'
                   // selectUI.parentNode.removeChild(selectUI) // Clean up

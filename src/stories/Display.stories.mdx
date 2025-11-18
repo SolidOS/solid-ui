@@ -1,4 +1,4 @@
-import * as UI from "../../lib";
+import * as UI from '../../src/index'
 
 import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
@@ -6,7 +6,7 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 ## complain
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#complain)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#complain)
 
 <Canvas>
   <Story name="complain">
@@ -20,7 +20,7 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 ## errorMessageBlock
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_error_.html#errormessageblock)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_error_.html#errormessageblock)
 
 <Canvas>
   <Story name="errorMessageBlock">
@@ -34,14 +34,14 @@ import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
 Sets the best name we have and looks up a better one
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#setname)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#setname)
 
 <Canvas>
   <Story name="setName">
     {() => {
       const div = document.createElement("div");
-      const jane = UI.rdf.namedNode("https://jane.example/person/card#me");
-      UI.store.add(jane, UI.ns.foaf("name"), "Jane Doe");
+      const jane = $rdf.namedNode("https://jane.example/person/card#me");
+      SolidLogic.store.add(jane, UI.ns.foaf("name"), "Jane Doe");
       UI.widgets.setName(div, jane);
       return div;
     }}

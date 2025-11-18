@@ -1,61 +1,51 @@
 import { silenceDebugMessages } from './helpers/debugger'
-import {
-  buttonStyle,
-  classIconStyle,
-  formTextInput,
-  iconStyle,
-  messageBodyStyle,
-  multilineTextInputStyle,
-  pendingeditModifier,
-  signInAndUpButtonStyle,
-  textInputStyle
-} from '../../src/style'
+import { style } from '../../src/style'
 
 silenceDebugMessages()
 
 describe('textInputStyle', () => {
   it('exists', () => {
-    expect(typeof textInputStyle).toEqual('string')
+    expect(typeof style.textInputStyle).toEqual('string')
   })
 })
 
 describe('buttonStyle', () => {
   it('exists', () => {
-    expect(typeof buttonStyle).toEqual('string')
+    expect(typeof style.buttonStyle).toEqual('string')
   })
 })
 describe('iconStyle', () => {
   it('exists', () => {
-    expect(typeof iconStyle).toEqual('string')
+    expect(typeof style.iconStyle).toEqual('string')
   })
 })
 describe('classIconStyle', () => {
   it('exists', () => {
-    expect(typeof classIconStyle).toEqual('string')
+    expect(typeof style.classIconStyle).toEqual('string')
   })
 })
 describe('messageBodyStyle', () => {
   it('exists', () => {
-    expect(typeof messageBodyStyle).toEqual('string')
+    expect(typeof style.messageBodyStyle).toEqual('string')
   })
 })
 describe('pendingeditModifier', () => {
   it('exists', () => {
-    expect(typeof pendingeditModifier).toEqual('string')
+    expect(typeof style.pendingeditModifier).toEqual('string')
   })
 })
 describe('signInButtonStyle', () => {
   it('exists', () => {
-    expect(typeof signInAndUpButtonStyle).toEqual('string')
+    expect(typeof style.signInAndUpButtonStyle).toEqual('string')
   })
 })
 describe('formTextInput', () => {
   it('exists', () => {
-    expect(typeof formTextInput).toEqual('string')
+    expect(typeof style.formTextInput).toEqual('string')
   })
 })
 describe('multilineTextInputStyle', () => {
   it('exists', () => {
-    expect(typeof multilineTextInputStyle).toEqual('string')
+    expect(typeof style.multilineTextInputStyle).toEqual('string')
   })
 })
