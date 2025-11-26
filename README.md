@@ -11,9 +11,15 @@ See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) 
 See [Solid-UI API](https://solidos.github.io/solid-ui/docs/api/) for UI functions.
 See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation.
 
-Table of content:
-- Getting started(#getting-started)
-- Further documentation(#further-ocumentation)
+## Table of Contents
+- [Getting Started](#getting-started)
+- [Install via npm](#install-via-npm)
+- [Use Directly in Browser](#use-directly-in-a-browser)
+  - [UMD Bundle](#umd-bundle-global-variable)
+  - [ESM Bundle](#esm-bundle-import-as-module)
+- [Development](#development-new-components)
+- [Testing](#adding-tests)
+- [Further Documentation](#further-documentation)
 
 
 ## Getting started
@@ -24,86 +30,227 @@ always appreciated.
 ## Install via npm
 
 ```sh
-npm install solid-ui
+npm install solid-ui rdflib solid-logic
 ```
+
+Then import in your JavaScript/TypeScript code:
 
 ```js
-   import * as UI from 'solid-ui'
+import * as UI from 'solid-ui'
+import * as $rdf from 'rdflib'
+import * as SolidLogic from 'solid-logic'
+
+// Example: Create a button
+const button = UI.widgets.button(
+  document,
+  'https://solidproject.org/assets/img/solid-emblem.svg',
+  'Click me',
+  () => alert('Button clicked!')
+)
+document.body.appendChild(button)
 ```
 
-## Use directly in a browser
+## Use Directly in a Browser
 
-All bundels, DO NOT bundle rdflin and solid-logic. These need to be provided separately.
+Solid-UI provides both **UMD** and **ESM** bundles for direct browser usage. Both bundles externalize `rdflib` and `solid-logic`, which must be loaded separately.
 
-## Files
-- For browser UMD, without rdflib, solid-logic: `dist/solid-ui.js` (global `window.UI`)
-- For browser ESM, without rdflib, solid-logic: `dist/solid-ui.esm.js` (import as module)
-- UMD bundles come in chunked files
-- both version also containe minified versions.
+### Available Files
 
+- **UMD (Universal Module Definition)**:
+  - Development: `dist/solid-ui.js` (exposes global `window.UI`)
+  - Production: `dist/solid-ui.min.js` (minified)
+  
+- **ESM (ES Modules)**:
+  - Development: `dist/solid-ui.esm.js`
+  - Production: `dist/solid-ui.esm.min.js` (minified)
 
-### UMD bundle (global variable)
+### UMD Bundle (Global Variable)
+
+Load via `<script>` tags and access through global variables `window.$rdf`, `window.SolidLogic`, and `window.UI`.
 
 ```html
-<!-- Load dependencies first -->
- <script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
-<!-- or -->
-<!-- script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script -->
-<script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
-<!-- Load solid-ui UMD bundle -->
-<script src="https://unpkg.com/solid-ui/dist/solid-ui.min.js"></script>
-<!-- or -->
-<!-- script src="https://cdn.jsdelivr.net/npm/solid-ui/dist/solid-ui.min.js"></script -->
-<!-- or -->
-<!-- script src="dist/solid-ui.js"></script -->
-<script>
-	// Access via global variable
-	const logic = window.SolidLogic;
-	const UI = window.UI;
-	// Create a button
-	const solidLogo = 'https://solidproject.org/assets/img/solid-emblem.svg'
-	const myButton = UI.widgets.button(document, solidLogo, 'test', () => window.alert('clicked!'))
-	UI.widgets.clearElement(document.body)
-	document.body.appendChild(myButton)
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solid-UI UMD Example</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Load dependencies first -->
+  <script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
+  <script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
+  
+  <!-- Load solid-ui UMD bundle -->
+  <script src="https://unpkg.com/solid-ui/dist/solid-ui.min.js"></script>
+
+  <script>
+    // Access via global variables
+    const { store, authn } = window.SolidLogic
+    const { widgets } = window.UI
+
+    // Get the logged-in user
+    const webId = authn.currentUser()
+    
+    if (webId) {
+      // User is logged in - create button with their WebID
+      const userButton = widgets.button(
+        document,
+        'https://solidproject.org/assets/img/solid-emblem.svg',
+        `Logged in as: ${webId.value}`,
+        () => alert(`Your WebID: ${webId.value}`)
+      )
+      document.getElementById('app').appendChild(userButton)
+    } else {
+      // User not logged in - create login button
+      const loginButton = widgets.button(
+        document,
+        'https://solidproject.org/assets/img/solid-emblem.svg',
+        'Login to Solid',
+        () => authn.checkUser().then(() => location.reload())
+      )
+      document.getElementById('app').appendChild(loginButton)
+    }
+  </script>
+</body>
+</html>
 ```
 
+### ESM Bundle (Import as Module)
 
-### ESM bundle (import as module)
+Use modern JavaScript modules with `import` statements.
 
 ```html
-<script type="module">
-	import * as $rdf from 'https://esm.sh/rdflib'
-	import { store }  from 'https://esm.sh/solid-logic'
-	import { widgets } from 'https://esm.sh/solid-ui'
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solid-UI ESM Example</title>
+</head>
+<body>
+  <div id="app"></div>
 
-	// Example usage
-	// someFunction(...)
-</script>
+  <script type="module">
+    // Import from CDN (esm.sh, unpkg, or jsdelivr)
+    import * as $rdf from 'https://esm.sh/rdflib'
+    import * as SolidLogic from 'https://esm.sh/solid-logic'
+    import * as UI from 'https://esm.sh/solid-ui'
+
+    // Get the logged-in user
+    const webId = SolidLogic.authn.currentUser()
+    
+    if (webId) {
+      // User is logged in - create personalized button
+      const userName = await getUserName(webId)
+      const userButton = UI.widgets.button(
+        document,
+        'https://solidproject.org/assets/img/solid-emblem.svg',
+        userName || 'My Profile',
+        () => window.open(webId.value, '_blank')
+      )
+      document.getElementById('app').appendChild(userButton)
+    } else {
+      // User not logged in
+      const loginButton = UI.widgets.button(
+        document,
+        'https://solidproject.org/assets/img/solid-emblem.svg',
+        'Login to Solid',
+        async () => {
+          await SolidLogic.authn.checkUser()
+          location.reload()
+        }
+      )
+      document.getElementById('app').appendChild(loginButton)
+    }
+
+    // Helper function to fetch user's name from their profile
+    async function getUserName(webId) {
+      try {
+        await SolidLogic.store.fetcher.load(webId.doc())
+        const name = SolidLogic.store.any(webId, $rdf.sym('http://xmlns.com/foaf/0.1/name'))
+        return name ? name.value : null
+      } catch (error) {
+        console.error('Error fetching user name:', error)
+        return null
+      }
+    }
+  </script>
+</body>
+</html>
 ```
 
-or 
+### ESM Bundle with Import Maps
 
-### ESM bundle with import map (bare specifiers)
+Use import maps for cleaner module specifiers:
 
 ```html
-<script type="importmap">
-{
-	"imports": {
-		"rdflib": "https://esm.sh/rdflib",
-		"solid-logic": "https://esm.sh/solid-logic",
-		"solid-ui": "https://esm.sh/solid-ui"
-	}
-}
-</script>
-<script type="module">
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Solid-UI ESM with Import Maps</title>
+</head>
+<body>
+  <div id="app"></div>
+
+  <!-- Define import map for bare specifiers -->
+  <script type="importmap">
+  {
+    "imports": {
+      "rdflib": "https://esm.sh/rdflib",
+      "solid-logic": "https://esm.sh/solid-logic",
+      "solid-ui": "https://esm.sh/solid-ui"
+    }
+  }
+  </script>
+
+  <script type="module">
+    // Use clean bare specifiers
     import * as $rdf from 'rdflib'
-	import { store }  from 'solid-logic'
-	import { widgets } from 'solid-ui'
+    import * as SolidLogic from 'solid-logic'
+    import * as UI from 'solid-ui'
 
-	// Example usage
-	// someFunction(...)
-</script>
+    const app = document.getElementById('app')
+    
+    // Create a profile button for logged-in user
+    async function createUserButton() {
+      const webId = SolidLogic.authn.currentUser()
+      
+      if (!webId) {
+        const loginBtn = UI.widgets.button(
+          document,
+          'https://solidproject.org/assets/img/solid-emblem.svg',
+          'Login',
+          () => SolidLogic.authn.checkUser()
+        )
+        app.appendChild(loginBtn)
+        return
+      }
+
+      // Fetch user profile
+      try {
+        await SolidLogic.store.fetcher.load(webId.doc())
+        const name = SolidLogic.store.any(
+          webId,
+          $rdf.sym('http://xmlns.com/foaf/0.1/name')
+        )
+        
+        const profileBtn = UI.widgets.button(
+          document,
+          'https://solidproject.org/assets/img/solid-emblem.svg',
+          name ? name.value : 'My Profile',
+          () => {
+            alert(`WebID: ${webId.value}\nName: ${name ? name.value : 'Not set'}`)
+          }
+        )
+        app.appendChild(profileBtn)
+      } catch (error) {
+        console.error('Error loading profile:', error)
+      }
+    }
+
+    createUserButton()
+  </script>
+</body>
+</html>
 ```
 
 ### Development new components
@@ -132,7 +279,7 @@ npm run test-coverage
 The following document gives guidance on how to add and perform testing in solid-ui.
 [Testing in solid-ui](https://github.com/SolidOS/solid-ui/blob/18070a02fa8159a2b83d9503ee400f8e046bf1f6/test/unit/README.md)
 
-## Girhub Pages
+## GitHub Pages
 
 * The github pages should contain the storybook and further documentation. In order to make sure it is deployed there is a step in the CI (gh-pages). This depends on the previous `build` step. It MUST contain `build-storybook` otherwise the storybook is not being published.
 
