@@ -19,7 +19,8 @@
   ],
   "scripts": {
     "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
-    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
+    "build-types": "tsc",
+    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-types && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
     "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
