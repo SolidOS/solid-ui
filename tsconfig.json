@@ -1,16 +1,16 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "es5" /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019' or 'ESNEXT'. */,
-    "module": "commonjs" /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */,
+    "target": "ES2019" /* Specify ECMAScript target version - matches your browser support */,
+    "module": "ESNext" /* Let bundlers handle module transformation for better tree-shaking */,
+    "moduleResolution": "node", /* Use Node.js-style module resolution for Webpack compatibility. */
     /* Crucial for library compatibility: */
-    "skipLibCheck": true,
+    "skipLibCheck": true, // if true, Type errors in library .d.ts files will be ignored, so you might miss some issues.
     "allowSyntheticDefaultImports": true, // Often helps with ESM interop
     /* Crucial for library compatibility END */
     "lib": [
-      "dom",
-      "es2015",
-      "es2019"
+      "DOM",
+      "ES2019"
     ] /* Specify library files to be included in the compilation. */,
     // "allowJs": true,                       /* Allow javascript files to be compiled. */
     // "checkJs": true,                       /* Report errors in .js files. */
@@ -20,7 +20,7 @@
     "sourceMap": true /* Generates corresponding '.map' file. */,
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
 
-    "outDir": "lib" /* Redirect output structure to the directory. */,
+    "outDir": "dist" /* Redirect output structure to the directory. */,
     "rootDir": "src/",
 
     // "rootDir": "./",                       /* Specify the root directory of input files. Use to control the output directory structure with --outDir. */
@@ -44,7 +44,7 @@
     "alwaysStrict": true /* Parse in strict mode and emit "use strict" for each source file. */,
 
     /* Additional Checks */
-    // "noUnusedLocals": true,                /* Report errors on unused locals. */
+    "noUnusedLocals": true,                /* Report errors on unused locals. */
     // "noUnusedParameters": true,            /* Report errors on unused parameters. */
     // "noImplicitReturns": true,             /* Report error when not all code paths in function return a value. */
     // "noFallthroughCasesInSwitch": true,    /* Report errors for fallthrough cases in switch statement. */
@@ -57,7 +57,8 @@
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     "typeRoots": [
       "node_modules/@types",
-      "typings"
+      "node_modules/@testing-library",
+      "declarations.d.ts"
     ] /* List of folders to include type definitions from. */,
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
     "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
@@ -74,6 +75,8 @@
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
   },
   "include": [
-    "src/**/*"
-  ]
+    "src/**/*",
+    "declarations.d.ts"
+  ],
+  "exclude": ["node_modules", "dist"]
 }

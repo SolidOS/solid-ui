@@ -1,7 +1,7 @@
 import * as debug from '../debug'
 import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
-import * as ns from '../ns'
+import ns from '../ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'
@@ -30,7 +30,7 @@ export async function getPublicKey (webId: NamedNode) {
     await store.fetcher.load(publicKeyDoc) // url.href)
     const key = store.any(webId, ns.solid('publicKey'))
     return key?.value // as NamedNode
-  } catch (err) {
+  } catch (_err) {
     return undefined
   }
 }

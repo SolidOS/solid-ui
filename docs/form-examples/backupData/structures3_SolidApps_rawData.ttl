@@ -1,4 +1,4 @@
-########### used for https://solidos.github.io/solid-ui/Documentation/form-examples/structures3.html #####
+########### used for https://solidos.github.io/solid-ui/docs/form-examples/structures3.html #####
 
 @prefix : <#>.
 @prefix dct: <http://purl.org/dc/terms/>.

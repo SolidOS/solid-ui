@@ -1,4 +1,4 @@
-import * as UI from '../../lib'
+import * as UI from '../../src/index'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs';
 import { action } from '@storybook/addon-actions'
@@ -87,7 +87,7 @@ import { action } from '@storybook/addon-actions'
                 document.outlineManager = {
                   GotoSubject: action('go to subject')
                 }
-                return UI.widgets.linkButton(document, UI.rdf.namedNode('http://example.com/'))
+                return UI.widgets.linkButton(document, $rdf.namedNode('http://example.com/'))
             }
            }
    </Story>
@@ -100,7 +100,7 @@ import { action } from '@storybook/addon-actions'
            {
             UI.widgets.linkIcon(
                       document,
-                      UI.rdf.namedNode('https://solidproject.org/')
+                      $rdf.namedNode('https://solidproject.org/')
                     )
            }
    </Story>
@@ -108,7 +108,7 @@ import { action } from '@storybook/addon-actions'
               {
                UI.widgets.linkIcon(
                          document,
-                         UI.rdf.namedNode('https://solidproject.org/'),
+                         $rdf.namedNode('https://solidproject.org/'),
                          'https://solidproject.org/favicon.ico'
                        )
               }

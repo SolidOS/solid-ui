@@ -1,4 +1,4 @@
-import * as UI from '../../lib'
+import * as UI from '../../src/index'
 
 import { Canvas, Meta, Story } from '@storybook/addon-docs';
 import { action } from '@storybook/addon-actions'
@@ -25,7 +25,7 @@ Drag the message from the "Draggable" story or drag any file or image and drop i
     {() => {
       const dragElement = document.createElement("div")
       dragElement.appendChild(document.createTextNode("Drag me to the target!"))
-      const uri = new UI.rdf.NamedNode('https://exampleuser.inrupt.net')
+      const uri = new $rdf.NamedNode('https://exampleuser.inrupt.net')
       UI.widgets.makeDraggable(dragElement, uri)
       return dragElement
     }}
@@ -56,7 +56,7 @@ The function `uploadFiles` could for example be used in the droppedFileHandler f
         target.style = "padding: 1em; text-align:center; border: 1px solid black; width: 100px; height: 100px"
         target.appendChild(document.createTextNode("Drop a file (document, picture, ...) here"))
         UI.widgets.makeDropTarget(target, action('dropped uri'), (files) => {
-          UI.widgets.uploadFiles(UI.store.fetcher, files, fileBase, pictureBase, action('file uploaded successfully'))
+          UI.widgets.uploadFiles(SolidLogic.store.fetcher, files, fileBase, pictureBase, action('file uploaded successfully'))
         })
         return target
     }}

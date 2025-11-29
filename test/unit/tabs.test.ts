@@ -8,7 +8,7 @@ import { label } from '../../src/utils'
 import { solidLogicSingleton } from 'solid-logic'
 
 // @ts-ignore
-import { meeting, rdfs } from '../../src/ns'
+import ns from '../../src/ns'
 
 const store = solidLogicSingleton.store
 
@@ -36,9 +36,9 @@ describe('tabWidget', () => {
 
   describe('minimal setup of options', () => {
     beforeAll(() => {
-      const predicate = meeting('toolList')
+      const predicate = ns.meeting('toolList')
       store.add(subject, predicate, new Collection([item1, item2]), subject.doc())
-      store.add(item1, rdfs('label'), lit('Item 1'), subject.doc())
+      store.add(item1, ns.rdfs('label'), lit('Item 1'), subject.doc())
 
       tabWidgetElement = tabs.tabWidget({
         dom,
@@ -155,7 +155,7 @@ describe('tabWidget', () => {
     afterAll(clearStore)
 
     it('allows for tabs to be fetched from triples instead of a collection', () => {
-      const predicate = meeting('toolList')
+      const predicate = ns.meeting('toolList')
       store.add(subject, predicate, item1, subject.doc())
       store.add(subject, predicate, item2, subject.doc())
       store.add(subject, predicate, item3, subject.doc())
@@ -238,7 +238,7 @@ describe('tabWidget', () => {
       tabWidgetElement = tabs.tabWidget({
         renderMain,
         renderTab,
-        selectedTab: item2.uri,
+        selectedTab: item2,
         ...minimalOptions
       })
     })

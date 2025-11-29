@@ -13,11 +13,3 @@ The following ${diffStatements.length} statements does not exist in the above gr
 ${diffStatements.map(st => `- ${st.subject} ${st.predicate} ${st.object} ${st.graph} .\n`).join('')}`
   }
 }
-
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toContainGraph (a: IndexedFormula): R;
-    }
-  }
-}

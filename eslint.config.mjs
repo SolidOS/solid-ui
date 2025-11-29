@@ -1,27 +1,26 @@
-import { defineConfig, globalIgnores } from 'eslint/config'
-import typescriptEslint from '@typescript-eslint/eslint-plugin'
 import globals from 'globals'
 import tsParser from '@typescript-eslint/parser'
 import neostandard from 'neostandard'
 
-export default defineConfig([
+export default [
   ...neostandard(),
-  globalIgnores([
-    'lib/*',
-    '**/*.html',
-    '**/*.md',
-    '**/*.json',
-    'Documentation/*',
-    'node_modules/*',
-    'coverage/*',
-    'dist/*',
-    'test/*',
-    'examples/*'
-  ]),
   {
-    plugins: {
-      '@typescript-eslint': typescriptEslint,
-    },
+    ignores: [
+      '**/*.html',
+      '**/*.md',
+      '**/*.json',
+      'docs/**',
+      'Documentation/**',
+      'node_modules/**',
+      'coverage/**',
+      'dist/**',
+      'lib/**',
+      'examples/**',
+      '*.js'
+    ],
+  },
+  {
+    files: ['src/**/*.js', 'src/**/*.cjs', 'src/**/*.mjs'],
 
     languageOptions: {
       globals: {
@@ -30,20 +29,73 @@ export default defineConfig([
         Atomics: 'readonly',
         SharedArrayBuffer: 'readonly',
       },
-
-      parser: tsParser,
+      ecmaVersion: 2022, // Support class fields and other modern syntax
+      sourceType: 'module' // Match TypeScript module: ESNext
     },
-
-    files: ['src/**/*.js', 'src/**/*.ts', 'src/**/*.cjs', 'src/**/*.mjs'],
-
     rules: {
-      'no-console': 'error',
-      'no-unused-vars': 'off',
+      // Code style - match TypeScript settings
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
 
-      '@typescript-eslint/no-unused-vars': ['warn', {
-        argsIgnorePattern: '^_',
-        varsIgnorePattern: '^_',
-      }],
+      // Strict checking - match TypeScript strictness
+      'no-console': 'error',
+      'no-unused-vars': 'error', // Match TypeScript noUnusedLocals: true
+      'no-undef': 'error',
+      strict: ['error', 'global'], // Match TypeScript alwaysStrict: true
+
+      // Additional strictness to match TypeScript behavior
+      'no-implicit-globals': 'error',
+      'prefer-const': 'error', // Encourage immutability
+      'no-var': 'error', // Use let/const only
+      'no-redeclare': 'error'
     },
   },
-])
+  {
+    files: ['src/**/*.ts'],
+
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node,
+        Atomics: 'readonly',
+        SharedArrayBuffer: 'readonly',
+      },
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.json']
+      },
+    },
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      // Disable ESLint rules that TypeScript handles better
+      'no-unused-vars': 'off', // TypeScript handles this via noUnusedLocals
+      'no-undef': 'off', // TypeScript handles undefined variables
+    },
+  },
+  {
+    files: ['test/**/*.ts'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: ['./tsconfig.test.json'],
+      },
+    },
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      // Disable ESLint rules that TypeScript handles better
+      'no-unused-vars': 'off', // TypeScript handles this via noUnusedLocals
+      'no-undef': 'off', // TypeScript handles undefined variables
+    }
+  },
+  {
+    files: ['test/**/**/*.js', 'test/**/*.js'],
+    rules: {
+      semi: ['error', 'never'],
+      quotes: ['error', 'single'],
+      'no-console': 'off', // Allow console in tests
+      'no-undef': 'off', // Tests may define globals
+    }
+  }
+]

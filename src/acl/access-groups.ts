@@ -7,12 +7,12 @@
 import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
-import * as ns from '../ns'
+import ns from '../ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
-import * as style from '../style'
+import { style } from '../style'
 
 const ACL = ns.acl
 
@@ -66,9 +66,9 @@ export class AccessGroups {
     private aclDoc: NamedNode,
     public controller: AccessController,
     store: Store, // @@ was LiveStore
-    private options: AccessGroupsOptions = {}
+    private _options: AccessGroupsOptions = {}
   ) {
-    this.defaults = options.defaults || false
+    this.defaults = this._options.defaults || false
     this._store = store
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)

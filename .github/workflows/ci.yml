@@ -5,10 +5,10 @@ permissions:
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
-      - "**"  
+      - main
   workflow_dispatch:
 
 jobs:
@@ -17,7 +17,6 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18.x
           - 20.x
           - 22.x
     steps:
@@ -75,7 +74,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 20.x
-      - uses: rlespinasse/github-slug-action@v3.x
+      - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions

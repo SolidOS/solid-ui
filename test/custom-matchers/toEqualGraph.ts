@@ -34,11 +34,3 @@ The following ${recDiffExpStatements.length} statements does not exist in the ab
 ${recDiffExpStatements.map(st => `- ${st.subject} ${st.predicate} ${st.object} ${st.graph} .\n`).join('')}`
   }
 }
-
-declare global {
-  namespace jest {
-    interface Matchers<R> {
-      toEqualGraph (a: IndexedFormula): R;
-    }
-  }
-}

@@ -4,16 +4,19 @@ import 'isomorphic-fetch'
 import { TextEncoder, TextDecoder } from 'util'
 
 // https://stackoverflow.com/questions/52612122/how-to-use-jest-to-test-functions-using-crypto-or-window-mscrypto
-// globalThis.crypto = require('crypto').webcrypto // with node >=16
-const nodeCrypto = require('crypto')
+
+import crypto from 'crypto'
 global.crypto = {
   getRandomValues: function (buffer) {
-    return nodeCrypto.randomFillSync(buffer)
+    return crypto.randomFillSync(buffer)
   }
 }
 
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
+
+// Mock external dependencies that solid-logic expects
+jest.mock('$rdf', () => require('rdflib'), { virtual: true })
 
 // adding custom matchers
 expect.extend({
