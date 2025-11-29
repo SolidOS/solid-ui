@@ -7,8 +7,8 @@ import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
-import * as ns from '../ns'
-// import * as style from '../style'
+import ns from '../ns'
+// import { style } from '../style'
 // import * as utils from '../utils'
 import * as widgets from '../widgets'
 // import * as pad from '../pad'
@@ -349,6 +349,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
     }
 
+    // eslint-disable-next-line no-unused-vars
     async function scrollForwardButtonHandler (_event) {
       if (messageTable.extendedForwards) {
         removePreviousMessages(false, messageTable)
@@ -404,9 +405,9 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
     const test = true
     if (test) { // ws options.infinite but need for non-infinite
       const titleTR = dom.createElement('tr')
-      const scrollBackbuttonCell = titleTR.appendChild(
+      /*  const scrollBackbuttonCell = titleTR.appendChild(
         dom.createElement('td')
-      )
+      ) */
       // up traingles: noun_1369237.svg
       // down triangles: noun_1369241.svg
       /*

@@ -1,4 +1,4 @@
-import * as UI from "../../lib";
+import * as UI from '../../src/index'
 
 import { Canvas, Meta, Story } from "@storybook/addon-docs";
 
@@ -8,14 +8,14 @@ import { action } from "@storybook/addon-actions";
 
 ## Ask name
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#askname)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#askname)
 
 <Canvas>
   <Story name="Ask name">
     {() => {
       const div = document.createElement("div");
       UI.widgets
-        .askName(document, UI.store, div)
+        .askName(document, SolidLogic.store, div)
         .then((name) => window.alert(`You picked "${name}"`));
       return div;
     }}
@@ -27,20 +27,20 @@ import { action } from "@storybook/addon-actions";
 Component that displays a list of resources, for instance the attachments of a message, or the various documents related to a meeting.
 Accepts dropping URLs onto it to add attachments to it.
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#attachmentlist)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#attachmentlist)
 
 <Canvas>
   <Story name="Attachment list">
     {() => {
       const div = document.createElement("div");
-      UI.store.add(
-        UI.rdf.namedNode("https://example-user.inrupt.net/public/some-message.ttl#this"),
+      SolidLogic.store.add(
+        $rdf.namedNode("https://example-user.inrupt.net/public/some-message.ttl#this"),
         UI.ns.wf("attachment"),
-        UI.rdf.namedNode("http://example.com/#some-attachment")
+        $rdf.namedNode("http://example.com/#some-attachment")
       );
       UI.widgets.attachmentList(
         document,
-        UI.rdf.namedNode("https://example-user.inrupt.net/public/some-message.ttl" + "#this"),
+        $rdf.namedNode("https://example-user.inrupt.net/public/some-message.ttl" + "#this"),
         div
       );
       return div;
@@ -52,12 +52,12 @@ Accepts dropping URLs onto it to add attachments to it.
 
 A TR to represent a draggable person, etc in a list
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#persontr)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#persontr)
 
 <Canvas>
   <Story name="Person TR">
     {() => {
-      const michiel = UI.rdf.namedNode("https://michielbdejong.inrupt.net/profile/card#me");
+      const michiel = $rdf.namedNode("https://michielbdejong.inrupt.net/profile/card#me");
       return UI.widgets.personTR(document, null, michiel);
     }}
   </Story>
@@ -67,12 +67,12 @@ A TR to represent a draggable person, etc in a list
 
 A Div to represent a draggable person, etc in a list
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#persontr)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#persontr)
 
 <Canvas>
   <Story name="Render As DIV">
     {() => {
-      const michiel = UI.rdf.namedNode("https://michielbdejong.inrupt.net/profile/card#me");
+      const michiel = $rdf.namedNode("https://michielbdejong.inrupt.net/profile/card#me");
       const options = {
         wrapInATR: true,
       };
@@ -83,19 +83,19 @@ A Div to represent a draggable person, etc in a list
 
 ## selectorPanel
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#selectorpanel)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#selectorpanel)
 
 <Canvas>
   <Story name="selectorPanel">
     {() => {
-      const kb = UI.rdf.graph();
-      const type = UI.rdf.namedNode("http://example.com/#type");
-      const predicate = UI.rdf.namedNode("http://example.com/#pred");
+      const kb = $rdf.graph();
+      const type = $rdf.namedNode("http://example.com/#type");
+      const predicate = $rdf.namedNode("http://example.com/#pred");
       const inverse = false;
       const possible = [
-        UI.rdf.namedNode("http://example.com/#blue"),
-        UI.rdf.namedNode("http://example.com/#green"),
-        UI.rdf.namedNode("http://example.com/#yellow"),
+        $rdf.namedNode("http://example.com/#blue"),
+        $rdf.namedNode("http://example.com/#green"),
+        $rdf.namedNode("http://example.com/#yellow"),
       ];
       const options = {};
       return UI.widgets.selectorPanel(
@@ -115,20 +115,20 @@ A Div to represent a draggable person, etc in a list
 
 ## selectorPanelRefresh
 
-[API documentation](https://solidos.github.io/solid-ui/Documentation/api/modules/_widgets_buttons_.html#selectorpanelrefresh)
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#selectorpanelrefresh)
 
 <Canvas>
   <Story name="selectorPanelRefresh">
     {() => {
       const list = document.createElement("div");
-      const kb = UI.rdf.graph();
-      const type = UI.rdf.namedNode("http://example.com/#type");
-      const predicate = UI.rdf.namedNode("http://example.com/#pred");
+      const kb = $rdf.graph();
+      const type = $rdf.namedNode("http://example.com/#type");
+      const predicate = $rdf.namedNode("http://example.com/#pred");
       const inverse = false;
       const possible = [
-        UI.rdf.namedNode("http://example.com/#blue"),
-        UI.rdf.namedNode("http://example.com/#green"),
-        UI.rdf.namedNode("http://example.com/#yellow"),
+        $rdf.namedNode("http://example.com/#blue"),
+        $rdf.namedNode("http://example.com/#green"),
+        $rdf.namedNode("http://example.com/#yellow"),
       ];
       const options = {};
       return UI.widgets.selectorPanelRefresh(

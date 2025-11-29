@@ -4,7 +4,7 @@ This control has the buttons which control the state between editing, viewing, s
 and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
 
 */
-import * as ns from '../../../ns'
+import ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from 'solid-logic'
 import * as widgets from '../../../widgets'

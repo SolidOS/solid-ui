@@ -2,8 +2,8 @@
 */
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
 import { icons } from '../iconBase'
-import * as ns from '../ns'
-import * as style from '../style'
+import ns from '../ns'
+import { style } from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'

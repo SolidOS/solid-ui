@@ -10,14 +10,14 @@
  *
  */
 import escape from 'escape-html'
-import uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import * as rdf from 'rdflib'
 import * as debug from '../debug'
 
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
-import * as ns from '../ns'
+import ns from '../ns'
 import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
@@ -134,8 +134,8 @@ export class PeoplePicker {
           .then(function (_xhr) {
             return resolve({ book })
           })
-          .catch(function (err) {
-            return reject(new Error('Could not load address book ' + err))
+          .catch(function (errr) {
+            return reject(new Error('Could not load address book ' + errr))
           })
       })
     })
@@ -144,7 +144,7 @@ export class PeoplePicker {
   createNewGroup (book, defaultNewGroupName) {
     const { groupIndex, groupContainer } = indexes(book)
     const group = rdf.sym(
-      `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
+      `${groupContainer.uri}${uuidv4().slice(0, 8)}.ttl#this`
     )
     const name = defaultNewGroupName || 'Untitled Group'
 

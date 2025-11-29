@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","names":["_create","require","create","exports","newThingUI"],"sources":["../../src/create/index.ts"],"sourcesContent":["import {\n  newThingUI\n} from './create'\n\nexport const create = {\n  newThingUI\n}\n"],"mappings":";;;;;;AAAA,IAAAA,OAAA,GAAAC,OAAA;AAIO,IAAMC,MAAM,GAAAC,OAAA,CAAAD,MAAA,GAAG;EACpBE,UAAU,EAAVA;AACF,CAAC","ignoreList":[]}

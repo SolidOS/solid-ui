@@ -6,9 +6,9 @@
 import * as debug from './debug'
 import { icons } from './iconBase'
 import { solidLogicSingleton } from 'solid-logic'
-import * as ns from './ns'
+import ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from './style'
+import { style } from './style'
 import * as widgets from './widgets'
 
 const UI = { icons, ns, rdf, style, widgets }

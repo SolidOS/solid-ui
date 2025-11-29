@@ -1,1 +1,0 @@
-{"version":3,"file":"types.js","names":[],"sources":["../../src/matrix/types.ts"],"sourcesContent":["export type MatrixOptions = {\n  cellFunction?: (td, x, y, value) => string\n  xDecreasing?: boolean\n  yDecreasing?: boolean\n\n  set_x: any[]\n\n  set_y: any[]\n}\n"],"mappings":"","ignoreList":[]}

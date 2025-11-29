@@ -1,31 +1,41 @@
 {
   "name": "solid-ui",
-  "version": "2.6.1",
-  "description": "UI library for writing Solid read-write-web applications",
-  "main": "./lib/index.js",
-  "types": "./lib/index.d.ts",
+  "version": "3.0.0",
+  "description": "UI library for Solid applications",
+  "main": "dist/solid-ui.js",
+  "types": "dist/index.d.ts",
+  "sideEffects": false,
+  "exports": {
+    ".": {
+      "import": "./dist/solid-ui.esm.js",
+      "require": "./dist/solid-ui.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
   "files": [
-    "lib",
-    "dist"
+    "dist/",
+    "README.md",
+    "LICENSE"
   ],
   "scripts": {
-    "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-dev && npm run build-dist && npm run build-storybook",
-    "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
-    "build-types": "tsc --emitDeclarationOnly",
-    "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
-    "build-dev": "webpack --progress",
-    "build-dist": "webpack --progress --mode=production",
-    "build-form-examples": "npm run build-lib && npm run build-dev && cp ./dist/*.js ./Documentation/form-examples/",
-    "watch": "npm run build-version && babel src --out-dir lib --watch --source-maps --extensions \".ts,.js\"",
-    "clean": "rm -rf lib dist ./Documentation/form-examples/main.js",
-    "coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
+    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
+    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
+    "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
+    "build-js": "tsc",
+    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
+    "build-dist": "webpack --progress",
+    "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",
     "lint-fix": "eslint --fix",
-    "jest": "jest",
-    "test:debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "test": "npm run build-version && npm run lint && npm run jest",
-    "doc": "typedoc --out ./Documentation/api/ ./src/ --excludeInternal",
-    "prepublishOnly": "npm test && npm run build && npm run doc",
+    "typecheck": "tsc --noEmit",
+    "typecheck-test": "tsc --noEmit -p tsconfig.test.json",
+    "test": "jest --no-coverage",
+    "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
+    "test-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
+    "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",
+    "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
+    "prepublishOnly": "npm run build && npm run lint && npm test && npm run doc",
+    "preversion": "npm run lint && npm run typecheck && npm test",
     "postpublish": "git push origin main --follow-tags",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build  --output-dir ./examples/storybook"
@@ -56,23 +66,21 @@
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
     "@noble/curves": "^1.9.6",
-    "acorn": "^8.15.0",
+    "@noble/hashes": "^1.8.0",
     "escape-html": "^1.0.3",
-    "i": "^0.3.7",
     "mime-types": "^3.0.1",
-    "pane-registry": "^2.5.1",
-    "rdflib": "^2.2.37",
-    "solid-logic": "^3.1.1",
+    "pane-registry": "^3.0.0",
     "solid-namespace": "^0.5.4",
     "uuid": "^11.1.0"
   },
+  "peerDependencies": {
+    "rdflib": "^2.3.0",
+    "solid-logic": "^4.0.0"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.28.0",
-    "@babel/core": "^7.28.0",
-    "@babel/plugin-transform-async-to-generator": "^7.27.1",
-    "@babel/plugin-transform-class-properties": "^7.27.1",
-    "@babel/plugin-transform-optional-chaining": "^7.27.1",
-    "@babel/plugin-transform-runtime": "^7.28.0",
+    "@babel/cli": "^7.28.3",
+    "@babel/core": "^7.28.3",
+    "@babel/plugin-transform-runtime": "^7.28.3",
     "@babel/preset-env": "^7.28.0",
     "@babel/preset-typescript": "^7.27.1",
     "@babel/runtime": "^7.28.2",
@@ -80,18 +88,18 @@
     "@eslint/js": "^9.32.0",
     "@mdx-js/react": "^3.1.0",
     "@storybook/addon-actions": "7.6.20",
-    "@storybook/addon-docs": "7.6.20",
-    "@storybook/addon-essentials": "7.6.20",
+    "@storybook/addon-docs": "^7.6.20",
+    "@storybook/addon-essentials": "^7.6.20",
     "@storybook/addon-links": "7.6.20",
-    "@storybook/html": "7.6.20",
+    "@storybook/html": "^7.6.20",
     "@storybook/html-webpack5": "^7.6.20",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^13.5.0",
     "@types/jest": "^30.0.0",
     "@types/jsdom": "^21.1.7",
     "@types/node": "^24.2.0",
-    "@typescript-eslint/eslint-plugin": "^8.39.0",
     "@typescript-eslint/parser": "^8.39.0",
+    "babel-jest": "^30.1.2",
     "babel-loader": "^10.0.0",
     "eslint": "^9.32.0",
     "eslint-import-resolver-typescript": "^4.4.4",
@@ -101,20 +109,19 @@
     "eslint-plugin-promise": "^7.2.1",
     "get-random-values": "^4.0.0",
     "globals": "^16.3.0",
-    "html-webpack-plugin": "^5.6.3",
-    "husky": "^9.1.7",
     "isomorphic-fetch": "^3.0.0",
-    "jest": "^30.0.5",
+    "jest": "^29.7.0",
     "jest-environment-jsdom": "^30.0.5",
     "jsdom": "^26.1.0",
-    "lint-staged": "^16.1.4",
     "neostandard": "^0.12.2",
     "nock": "^13.5.6",
+    "rdflib": "^2.3.0",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
+    "solid-logic": "^4.0.0",
     "storybook": "^7.6.20",
-    "ts-jest": "^29.4.1",
+    "terser-webpack-plugin": "^5.3.14",
     "typedoc": "^0.28.9",
     "typescript": "^5.9.2",
     "webpack": "^5.101.0",
@@ -122,16 +129,5 @@
   },
   "optionalDependencies": {
     "fsevents": "*"
-  },
-  "husky": {
-    "hooks": {
-      "pre-commit": "lint-staged",
-      "pre-push": "npm test"
-    }
-  },
-  "lint-staged": {
-    "src/**/*.(js|ts)": [
-      "eslint"
-    ]
   }
 }

@@ -1,0 +1,106 @@
+import * as debug from '../debug';
+import { schnorr } from '@noble/curves/secp256k1';
+import { bytesToHex } from '@noble/hashes/utils';
+import ns from '../ns';
+import { store } from 'solid-logic';
+import * as $rdf from 'rdflib';
+import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } from '../utils/keyHelpers/accessData';
+import { setAcl, keyContainerAclBody, keyAclBody } from '../utils/keyHelpers/acl';
+export function generatePrivateKey() {
+    return bytesToHex(schnorr.utils.randomPrivateKey());
+}
+export function generatePublicKey(privateKey) {
+    return bytesToHex(schnorr.getPublicKey(privateKey));
+}
+/**
+ * getPublicKey
+ * used for displaying messages in chat, therefore does not
+ * create a new key if not found
+ * @param webId
+ * @returns string | undefined
+ */
+export async function getPublicKey(webId) {
+    await store.fetcher.load(webId);
+    const publicKeyDoc = await pubKeyUrl(webId);
+    try {
+        await store.fetcher.load(publicKeyDoc); // url.href)
+        const key = store.any(webId, ns.solid('publicKey'));
+        return key === null || key === void 0 ? void 0 : key.value; // as NamedNode
+    }
+    catch (_err) {
+        return undefined;
+    }
+}
+export async function getPrivateKey(webId) {
+    await store.fetcher.load(webId);
+    // find keys url's
+    const publicKeyDoc = await pubKeyUrl(webId);
+    const privateKeyDoc = await privKeyUrl(webId);
+    // find key pair
+    const publicKey = await getExistingPublicKey(webId, publicKeyDoc);
+    let privateKey = await getExistingPrivateKey(webId, privateKeyDoc);
+    // is publicKey valid ?
+    let validPublicKey = true;
+    if (privateKey && (publicKey !== generatePublicKey(privateKey))) {
+        if (confirm('This is strange the publicKey is not valid for\n' + (webId === null || webId === void 0 ? void 0 : webId.uri) +
+            '\'shall we repair keeping the private key ?'))
+            validPublicKey = false;
+    }
+    // create key pair or repair publicKey
+    if (!privateKey || !publicKey || !validPublicKey) {
+        let del = [];
+        let add = [];
+        if (!privateKey) {
+            // add = []
+            privateKey = generatePrivateKey();
+            add = [$rdf.st(webId, ns.solid('privateKey'), $rdf.literal(privateKey), store.sym(privateKeyDoc))];
+            await saveKey(privateKeyDoc, [], add, webId.uri);
+        }
+        if (!publicKey || !validPublicKey) {
+            del = [];
+            // delete invalid public key
+            if (publicKey) {
+                del = [$rdf.st(webId, ns.solid('publicKey'), $rdf.lit(publicKey), store.sym(publicKeyDoc))];
+                debug.log('delete invalid publicKey ' + del);
+            }
+            // update new valid key
+            const newPublicKey = generatePublicKey(privateKey);
+            add = [$rdf.st(webId, ns.solid('publicKey'), $rdf.literal(newPublicKey), store.sym(publicKeyDoc))];
+            await saveKey(publicKeyDoc, del, add);
+        }
+        const keyContainer = privateKeyDoc.substring(0, privateKeyDoc.lastIndexOf('/') + 1);
+        await setAcl(keyContainer, keyContainerAclBody(webId.uri)); // includes DELETE and PUT
+    }
+    return privateKey;
+}
+const deleteKeyAcl = async (keyDoc) => {
+    await store.fetcher.load(keyDoc);
+    const keyAclDoc = store.any(store.sym(keyDoc), store.sym('http://www.iana.org/assignments/link-relations/acl'));
+    if (keyAclDoc) {
+        // delete READ only keyAclDoc. This is possible if the webId is an owner
+        try {
+            const response = await store.fetcher.webOperation('DELETE', keyAclDoc.value); // this may fail if webId is not an owner
+            debug.log('delete keyAcl' + keyAclDoc.value + ' ' + response.status); // should test 404 and 2xx
+        }
+        catch (err) {
+            if (err.response.status !== 404) {
+                throw new Error(err);
+            }
+            debug.log('delete keyAcl' + keyAclDoc.value + ' ' + err.response.status); // should test 404 and 2xx
+        }
+    }
+};
+/**
+ * delete acl if keydoc exists
+ * create/edit keyDoc
+ * set keyDoc acl
+ */
+async function saveKey(keyDoc, del, add, me = '') {
+    await deleteKeyAcl(keyDoc);
+    // save key
+    await store.updater.updateMany(del, add); // or a promise store.updater.update ?
+    // create READ only ACL
+    const aclBody = keyAclBody(keyDoc, me);
+    await setAcl(keyDoc, aclBody);
+}
+//# sourceMappingURL=keys.js.map

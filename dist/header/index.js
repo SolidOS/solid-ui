@@ -1,0 +1,260 @@
+import { icons } from '../index';
+import { authn, authSession } from 'solid-logic';
+import { loginStatusBox } from '../login/login';
+// import { loginStatusBox, authSession, currentUser } from '../authn/authn'
+import * as widgets from '../widgets';
+import { style } from '../style';
+import { emptyProfile } from './empty-profile';
+import { getPod, throttle } from '../utils/headerFooterHelpers';
+/**
+ * menu icons
+*/
+const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg';
+const DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg';
+/**
+ * Initialize header component, the header object returned depends on whether the user is authenticated.
+ * @param store the data store
+ * @param userMenuList a list of menu items when the user is logged in
+ * @param options allow the header to be customized with a personalized logo, help icon and a help menu list of links or buttons.
+ * @returns a header for an authenticated user with menu items given or a login screen
+ */
+export async function initHeader(store, userMenuList, options) {
+    const header = document.getElementById('PageHeader');
+    if (!header) {
+        return;
+    }
+    const pod = getPod();
+    rebuildHeader(header, store, pod, userMenuList, options)();
+    authSession.events.on('logout', rebuildHeader(header, store, pod, userMenuList, options));
+    authSession.events.on('login', rebuildHeader(header, store, pod, userMenuList, options));
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function rebuildHeader(header, store, pod, userMenuList, options) {
+    return async () => {
+        const user = authn.currentUser();
+        header.innerHTML = '';
+        header.appendChild(await createBanner(store, pod, user, userMenuList, options));
+    };
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export async function createBanner(store, pod, user, userMenuList, options) {
+    const podLink = document.createElement('a');
+    podLink.href = pod.uri;
+    podLink.setAttribute('style', style.headerBannerLink);
+    const image = document.createElement('img');
+    if (options) {
+        image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL;
+    }
+    image.setAttribute('style', style.headerBannerIcon);
+    podLink.appendChild(image);
+    const userMenu = user
+        ? await createUserMenu(store, user, userMenuList)
+        : createLoginSignUpButtons();
+    const banner = document.createElement('div');
+    banner.setAttribute('style', style.headerBanner);
+    banner.appendChild(podLink);
+    const leftSideOfHeader = document.createElement('div');
+    leftSideOfHeader.setAttribute('style', style.headerBannerRightMenu);
+    leftSideOfHeader.appendChild(userMenu);
+    if (options && options.helpMenuList) {
+        const helpMenu = createHelpMenu(options, options.helpMenuList);
+        leftSideOfHeader.appendChild(helpMenu);
+    }
+    banner.appendChild(leftSideOfHeader);
+    return banner;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createHelpMenu(options, helpMenuItems) {
+    if (!helpMenuItems)
+        return;
+    const helpMenuList = document.createElement('ul');
+    helpMenuList.setAttribute('style', style.headerUserMenuList);
+    helpMenuItems.forEach(function (menuItem) {
+        const menuItemType = menuItem.url ? 'url' : 'onclick';
+        if (menuItemType === 'url') {
+            helpMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
+        }
+        else {
+            helpMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem.onclick)));
+        }
+    });
+    const helpMenu = document.createElement('nav');
+    helpMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed);
+    helpMenu.setAttribute('aria-hidden', 'true');
+    helpMenu.setAttribute('id', 'helperNav');
+    helpMenu.appendChild(helpMenuList);
+    const helpMenuContainer = document.createElement('div');
+    helpMenuContainer.setAttribute('style', style.headerBannerUserMenu);
+    helpMenuContainer.appendChild(helpMenu);
+    const helpMenuTrigger = document.createElement('button');
+    helpMenuTrigger.setAttribute('style', style.headerUserMenuTrigger);
+    helpMenuTrigger.type = 'button';
+    const helpMenuIcon = document.createElement('img');
+    helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON;
+    helpMenuIcon.setAttribute('style', style.headerUserMenuTriggerImg);
+    helpMenuContainer.appendChild(helpMenuTrigger);
+    helpMenuTrigger.appendChild(helpMenuIcon);
+    const throttledMenuToggle = throttle((event) => toggleMenu(event, helpMenuTrigger, helpMenu), 50);
+    helpMenuTrigger.addEventListener('click', throttledMenuToggle);
+    let timer = setTimeout(() => null, 0);
+    helpMenuContainer.addEventListener('mouseover', event => {
+        clearTimeout(timer);
+        throttledMenuToggle(event);
+        const nav = document.getElementById('helperNav');
+        nav === null || nav === void 0 ? void 0 : nav.setAttribute('style', style.headerUserMenuNavigationMenu);
+    });
+    helpMenuContainer.addEventListener('mouseout', event => {
+        timer = setTimeout(() => throttledMenuToggle(event), 200);
+        const nav = document.getElementById('helperNav');
+        nav === null || nav === void 0 ? void 0 : nav.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed);
+    });
+    return helpMenuContainer;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createLoginSignUpButtons() {
+    const profileLoginButtonPre = document.createElement('div');
+    profileLoginButtonPre.setAttribute('style', style.headerBannerLogin);
+    profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}));
+    return profileLoginButtonPre;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuButton(label, onClick) {
+    const button = document.createElement('button');
+    button.setAttribute('style', style.headerUserMenuButton);
+    button.onmouseover = function () {
+        button.setAttribute('style', style.headerUserMenuButtonHover);
+    };
+    button.onmouseout = function () {
+        button.setAttribute('style', style.headerUserMenuButton);
+    };
+    button.addEventListener('click', onClick);
+    button.innerText = label;
+    return button;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuLink(label, href, target) {
+    const link = document.createElement('a');
+    link.setAttribute('style', style.headerUserMenuLink);
+    link.onmouseover = function () {
+        link.setAttribute('style', style.headerUserMenuLinkHover);
+    };
+    link.onmouseout = function () {
+        link.setAttribute('style', style.headerUserMenuLink);
+    };
+    link.href = href;
+    link.innerText = label;
+    if (target)
+        link.target = target;
+    return link;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export async function createUserMenu(store, user, userMenuList) {
+    const fetcher = store.fetcher;
+    if (fetcher) {
+        // Making sure that Profile is loaded before building menu
+        await fetcher.load(user);
+    }
+    const loggedInMenuList = document.createElement('ul');
+    loggedInMenuList.setAttribute('style', style.headerUserMenuList);
+    if (userMenuList) {
+        userMenuList.forEach(function (menuItem) {
+            const menuItemType = menuItem.url ? 'url' : 'onclick';
+            if (menuItemType === 'url') {
+                loggedInMenuList.appendChild(createUserMenuItem(createUserMenuLink(menuItem.label, menuItem.url, menuItem.target)));
+            }
+            else {
+                loggedInMenuList.appendChild(createUserMenuItem(createUserMenuButton(menuItem.label, menuItem.onclick)));
+            }
+        });
+    }
+    const loggedInMenu = document.createElement('nav');
+    loggedInMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed);
+    loggedInMenu.setAttribute('aria-hidden', 'true');
+    loggedInMenu.setAttribute('id', 'loggedInNav');
+    loggedInMenu.appendChild(loggedInMenuList);
+    const loggedInMenuTrigger = document.createElement('button');
+    loggedInMenuTrigger.setAttribute('style', style.headerUserMenuTrigger);
+    loggedInMenuTrigger.type = 'button';
+    const profileImg = getProfileImg(store, user);
+    if (typeof profileImg === 'string') {
+        loggedInMenuTrigger.innerHTML = profileImg;
+    }
+    else {
+        loggedInMenuTrigger.appendChild(profileImg);
+    }
+    const loggedInMenuContainer = document.createElement('div');
+    loggedInMenuContainer.setAttribute('style', style.headerBannerUserMenuNotDisplayed);
+    loggedInMenuContainer.appendChild(loggedInMenuTrigger);
+    loggedInMenuContainer.appendChild(loggedInMenu);
+    const throttledMenuToggle = throttle((event) => toggleMenu(event, loggedInMenuTrigger, loggedInMenu), 50);
+    loggedInMenuTrigger.addEventListener('click', throttledMenuToggle);
+    let timer = setTimeout(() => null, 0);
+    loggedInMenuContainer.addEventListener('mouseover', event => {
+        clearTimeout(timer);
+        throttledMenuToggle(event);
+        const nav = document.getElementById('loggedInNav');
+        nav === null || nav === void 0 ? void 0 : nav.setAttribute('style', style.headerUserMenuNavigationMenu);
+    });
+    loggedInMenuContainer.addEventListener('mouseout', event => {
+        timer = setTimeout(() => throttledMenuToggle(event), 200);
+        const nav = document.getElementById('loggedInNav');
+        nav === null || nav === void 0 ? void 0 : nav.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed);
+    });
+    return loggedInMenuContainer;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function createUserMenuItem(child) {
+    const menuProfileItem = document.createElement('li');
+    menuProfileItem.setAttribute('style', style.headerUserMenuListItem);
+    menuProfileItem.appendChild(child);
+    return menuProfileItem;
+}
+/**
+ * @ignore exporting this only for the unit test
+ */
+export function getProfileImg(store, user) {
+    let profileUrl = null;
+    try {
+        profileUrl = widgets.findImage(user);
+        if (!profileUrl) {
+            return emptyProfile;
+        }
+    }
+    catch {
+        return emptyProfile;
+    }
+    const profileImage = document.createElement('div');
+    profileImage.setAttribute('style', style.headerUserMenuPhoto);
+    profileImage.style.backgroundImage = `url(${profileUrl})`;
+    return profileImage;
+}
+/**
+ * @internal
+ */
+function toggleMenu(event, trigger, menu) {
+    const isExpanded = trigger.getAttribute('aria-expanded') === 'true';
+    const expand = event.type === 'mouseover';
+    const close = event.type === 'mouseout';
+    if ((isExpanded && expand) || (!isExpanded && close)) {
+        return;
+    }
+    trigger.setAttribute('aria-expanded', (!isExpanded).toString());
+    menu.setAttribute('aria-hidden', isExpanded.toString());
+}
+//# sourceMappingURL=index.js.map

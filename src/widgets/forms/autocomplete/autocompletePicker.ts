@@ -4,7 +4,7 @@
 **
 */
 import * as debug from '../../../debug'
-import * as style from '../../../style'
+import { style } from '../../../style'
 import styleConstants from '../../../styleConstants'
 import * as widgets from '../../../widgets'
 import { store } from 'solid-logic'
