@@ -2,13 +2,13 @@ import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
 
 const externalsBase = {
-  'fs': 'null',
+  fs: 'null',
   'node-fetch': 'fetch',
   'isomorphic-fetch': 'fetch',
   'text-encoding': 'TextEncoder',
   '@trust/webcrypto': 'crypto',
   // Removed @xmldom/xmldom and whatwg-url - use native browser APIs
-  'rdflib': '$rdf',
+  rdflib: '$rdf',
   'solid-logic': 'SolidLogic'
 }
 
@@ -28,8 +28,8 @@ const common = {
   resolve: {
     extensions: ['.ts', '.tsx', '.js', '.jsx'],
     extensionAlias: {
-    '.js': ['.js', '.ts'], 
-    '.mjs': ['.mjs', '.mts'],
+      '.js': ['.js', '.ts'],
+      '.mjs': ['.mjs', '.mts'],
     },
     fallback: { path: false }
   },
@@ -51,12 +51,12 @@ const common = {
           }
         }
       }, {
-      test: /\.sparql$/i,
-      type: 'asset/source'
-    }, {
-      test: /\.ttl$/i,
-      type: 'asset/source'
-    }]
+        test: /\.sparql$/i,
+        type: 'asset/source'
+      }, {
+        test: /\.ttl$/i,
+        type: 'asset/source'
+      }]
   }
 }
 
