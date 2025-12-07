@@ -132,8 +132,8 @@ Use modern JavaScript modules with `import` statements.
   <script type="module">
     // Import from CDN (esm.sh, unpkg, or jsdelivr)
     import * as $rdf from 'https://esm.sh/rdflib'
-    import * as SolidLogic from 'https://esm.sh/solid-logic'
-    import * as UI from 'https://esm.sh/solid-ui'
+    import * as SolidLogic from 'https://esm.sh/solid-logic@4.0.1'
+    import * as UI from 'https://esm.sh/solid-ui@3.0.1'
 
     // Get the logged-in user
     const webId = SolidLogic.authn.currentUser()
@@ -196,8 +196,8 @@ Use import maps for cleaner module specifiers:
   {
     "imports": {
       "rdflib": "https://esm.sh/rdflib",
-      "solid-logic": "https://esm.sh/solid-logic",
-      "solid-ui": "https://esm.sh/solid-ui"
+      "solid-logic": "https://esm.sh/solid-logic@4.0.1",
+      "solid-ui": "https://esm.sh/solid-ui@3.0.1"
     }
   }
   </script>
