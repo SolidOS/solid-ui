@@ -1,10 +1,10 @@
 export default {
-  buildTime: '2025-11-29T16:30:49Z',
-  commit: '3b4b51858bb74e075c3a9f4b2873791a5b4464a8',
+  buildTime: '2025-12-07T13:24:19Z',
+  commit: 'f8ab6a2d6055acf1dccf2e4f7f725631b8e68918',
   npmInfo: {
-    'solid-ui': '3.0.0',
+    'solid-ui': '3.0.1',
     npm: '10.8.2',
-    node: '20.19.5',
+    node: '20.19.6',
     acorn: '8.15.0',
     ada: '2.9.2',
     ares: '1.34.5',
@@ -16,14 +16,14 @@ export default {
     modules: '115',
     napi: '9',
     nghttp2: '1.61.0',
-    openssl: '3.0.16',
+    openssl: '3.0.17',
     simdutf: '6.4.2',
     tz: '2025b',
-    undici: '6.21.2',
+    undici: '6.22.0',
     unicode: '16.0',
     uv: '1.46.0',
-    uvwasi: '0.0.21',
-    v8: '11.3.244.8-node.30',
+    uvwasi: '0.0.23',
+    v8: '11.3.244.8-node.33',
     zlib: '1.3.1-470d3a2',
   }
 }
