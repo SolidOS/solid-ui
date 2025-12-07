@@ -12,6 +12,12 @@ const externalsBase = {
   'solid-logic': 'SolidLogic'
 }
 
+// ESM externals: keep imports
+const esmExternals = {
+  rdflib: 'rdflib',
+  'solid-logic': 'solid-logic' 
+}
+
 const common = {
   entry: './src/index.ts',
   output: {
@@ -101,14 +107,15 @@ const esmMinified = {
     environment: { module: true },
     clean: false
   },
-  externals: externalsBase,
+  externals: esmExternals,
   experiments: {
     outputModule: true
   },
   mode: 'production',
   optimization: {
     minimize: true,
-    minimizer: [new TerserPlugin({ extractComments: false })]
+    minimizer: [new TerserPlugin({ extractComments: false })],
+    concatenateModules: false
   }
 }
 
@@ -124,13 +131,14 @@ const esmUnminified = {
     environment: { module: true },
     clean: false
   },
-  externals: externalsBase,
+  externals: esmExternals,
   experiments: {
     outputModule: true
   },
   mode: 'production',
   optimization: {
-    minimize: false
+    minimize: false,
+    concatenateModules: false
   }
 }
 
