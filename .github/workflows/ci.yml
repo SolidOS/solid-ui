@@ -2,6 +2,7 @@ name: CI
 permissions:
   contents: write
   pull-requests: write
+  id-token: write
 on:
   push:
     branches:
@@ -74,6 +75,7 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
       - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
@@ -82,7 +84,6 @@ jobs:
       - uses: JS-DevTools/npm-publish@v4.1.2
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
   
   npm-publish-latest:
@@ -96,10 +97,10 @@ jobs:
       - uses: actions/setup-node@v6
         with:
           node-version: 20.x
+          registry-url: 'https://registry.npmjs.org'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
       - uses: JS-DevTools/npm-publish@v4.1.2
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           tag: latest
