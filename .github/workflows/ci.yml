@@ -68,6 +68,7 @@ jobs:
   npm-publish-build:
     needs: build
     runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -76,20 +77,19 @@ jobs:
         with:
           node-version: 20.x
           registry-url: 'https://registry.npmjs.org'
+      - run: npm i -g npm@latest
       - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.2
-        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
-        with:
-          tag: ${{ env.GITHUB_REF_SLUG }}
+      - name: Publish to npm
+        run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
   
   npm-publish-latest:
     needs: [build, npm-publish-build]
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -98,9 +98,8 @@ jobs:
         with:
           node-version: 20.x
           registry-url: 'https://registry.npmjs.org'
+      - run: npm i -g npm@latest
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.2
-        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
-        with:
-          tag: latest
+      - name: Publish to npm
+        run: npm publish --tag latest
