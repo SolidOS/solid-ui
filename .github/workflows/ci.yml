@@ -62,7 +62,7 @@ jobs:
         run: gh pr merge --auto --merge "$PR_URL" # Use Github CLI to merge automatically the PR
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} 
 
   npm-publish-build:
     needs: build
@@ -82,7 +82,6 @@ jobs:
       - uses: JS-DevTools/npm-publish@v4.1.2
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           tag: ${{ env.GITHUB_REF_SLUG }}
   
   npm-publish-latest:
@@ -101,5 +100,4 @@ jobs:
       - uses: JS-DevTools/npm-publish@v4.1.2
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
         with:
-          token: ${{ secrets.NPM_TOKEN }}
           tag: latest
