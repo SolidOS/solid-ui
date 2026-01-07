@@ -100,5 +100,7 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+      - name: Check npm version
+        run: npm --version
       - name: Publish to npm
         run: npm publish
