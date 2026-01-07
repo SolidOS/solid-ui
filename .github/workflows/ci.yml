@@ -83,6 +83,8 @@ jobs:
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+      - name: Check npm version
+        run: npm --version
       - name: Publish to npm
         run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
   
