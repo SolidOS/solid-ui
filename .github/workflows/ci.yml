@@ -70,6 +70,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+    permissions:
+      id-token: write  # Required for OIDC trusted publishing
+      contents: read
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -92,6 +95,9 @@ jobs:
     needs: [build, npm-publish-build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main' && github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+    permissions:
+      id-token: write  # Required for OIDC trusted publishing
+      contents: read
     steps:
       - uses: actions/download-artifact@v7
         with:
