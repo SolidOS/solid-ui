@@ -74,13 +74,26 @@ jobs:
       id-token: write  # Required for OIDC trusted publishing
       contents: read
     steps:
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v7
         with:
           name: build
+          path: .
+          merge-multiple: true
       - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
+      - name: Verify scripts are available
+        run: |
+          if [ ! -f .github/scripts/clear-npm-token.sh ]; then
+            echo "ERROR: Script not found. Listing .github directory:"
+            ls -la .github/ || echo ".github directory not found"
+            ls -la .github/scripts/ || echo ".github/scripts directory not found"
+            exit 1
+          fi
+          chmod +x .github/scripts/*.sh
+          echo "✓ Scripts are available and executable"
       - name: Clear npm token configuration
         run: bash .github/scripts/clear-npm-token.sh
       - uses: rlespinasse/github-slug-action@v4.x
@@ -96,7 +109,7 @@ jobs:
           echo "Testing npm publish authentication with dry-run..."
           echo "Note: OIDC tokens ARE available for pull_request events when the workflow"
           echo "has 'id-token: write' permission, allowing us to verify authentication."
-          npm publish --dry-run --tag ${{ env.GITHUB_REF_SLUG }} || {
+          npm publish --dry-run --access public --tag ${{ env.GITHUB_REF_SLUG }} || {
             echo "ERROR: npm publish dry-run failed"
             echo "This indicates OIDC authentication is not working correctly"
             exit 1
@@ -104,7 +117,7 @@ jobs:
           echo "✓ npm publish dry-run succeeded - OIDC authentication is working!"
       - name: Publish to npm
         if: github.event_name != 'pull_request'
-        run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
+        run: npm publish --access public --tag ${{ env.GITHUB_REF_SLUG }}
   
   npm-publish-latest:
     needs: [build, npm-publish-build]
@@ -114,15 +127,27 @@ jobs:
       id-token: write  # Required for OIDC trusted publishing
       contents: read
     steps:
+      - uses: actions/checkout@v6
       - uses: actions/download-artifact@v7
         with:
           name: build
+          path: .
+          merge-multiple: true
       - uses: actions/setup-node@v6
         with:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
           # OIDC will be used automatically when id-token: write is set
-         
+      - name: Verify scripts are available
+        run: |
+          if [ ! -f .github/scripts/clear-npm-token.sh ]; then
+            echo "ERROR: Script not found. Listing .github directory:"
+            ls -la .github/ || echo ".github directory not found"
+            ls -la .github/scripts/ || echo ".github/scripts directory not found"
+            exit 1
+          fi
+          chmod +x .github/scripts/*.sh
+          echo "✓ Scripts are available and executable"
       - name: Clear npm token configuration
         run: bash .github/scripts/clear-npm-token.sh
       - name: Disable pre- and post-publish actions
@@ -130,4 +155,4 @@ jobs:
       - name: Verify OIDC authentication
         run: bash .github/scripts/verify-oidc.sh
       - name: Publish to npm
-        run: npm publish
+        run: npm publish --access public
