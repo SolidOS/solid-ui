@@ -81,90 +81,21 @@ jobs:
         with:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
-          # OIDC will be used automatically when id-token: write is set
-          # Do not provide NODE_AUTH_TOKEN - OIDC will be used instead
-      - name: Clear NODE_AUTH_TOKEN and npm token config to force OIDC
-        run: |
-          # Remove any .npmrc file that might contain token auth
-          if [ -f "$HOME/.npmrc" ]; then
-            echo "Found .npmrc at $HOME/.npmrc, checking for token auth..."
-            if grep -q "_authToken" "$HOME/.npmrc"; then
-              echo "Removing token auth from .npmrc..."
-              sed -i '/_authToken/d' "$HOME/.npmrc" || true
-            fi
-          fi
-          # Clear npm config token settings
-          npm config delete //registry.npmjs.org/:_authToken || true
-          npm config delete _authToken || true
-          # Note: NODE_AUTH_TOKEN env var from secrets will still be available
-          # but npm should prefer OIDC when configured correctly
-          echo "Cleared npm token configuration"
+      - name: Clear npm token configuration
+        run: bash .github/scripts/clear-npm-token.sh
       - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
       - name: Verify OIDC authentication
-        run: |
-          echo "Workflow name: ${{ github.workflow }}"
-          echo "Workflow file: ${{ github.workflow_ref }}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Actor: ${{ github.actor }}"
-          echo "Event name: ${{ github.event_name }}"
-          # Check if NODE_AUTH_TOKEN is set (from repository secrets)
-          if [ -n "$NODE_AUTH_TOKEN" ]; then
-            echo "WARNING: NODE_AUTH_TOKEN secret is configured in repository"
-            echo "This will prevent OIDC from working. Please remove the NODE_AUTH_TOKEN secret"
-            echo "from repository Settings > Secrets and variables > Actions"
-            echo ""
-            echo "For now, we'll try to work around it by clearing npm config..."
-            # Don't exit - try to work around it
-          else
-            echo "✓ No NODE_AUTH_TOKEN secret found (good for OIDC)"
-          fi
-          # Check if ACTIONS_ID_TOKEN_REQUEST_TOKEN is available (required for OIDC)
-          if [ -z "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
-            echo "WARNING: ACTIONS_ID_TOKEN_REQUEST_TOKEN not set - OIDC may not work"
-          else
-            echo "✓ OIDC token request token is available"
-          fi
-      - name: Check npm and Node versions
-        run: |
-          echo "Node version: $(node --version)"
-          echo "npm version: $(npm --version)"
-          # Ensure npm is at least 10.0.0 for OIDC support
-          npm_version=$(npm --version | cut -d. -f1)
-          if [ "$npm_version" -lt 10 ]; then
-            echo "WARNING: npm version is less than 10.0.0, OIDC may not work properly"
-          fi
-      - name: Verify npm configuration before publish
-        run: |
-          echo "=== npm configuration ==="
-          npm config list
-          echo ""
-          echo "=== Checking for .npmrc ==="
-          if [ -f .npmrc ]; then
-            echo "Found .npmrc:"
-            cat .npmrc
-            # Check if it contains token auth (should not for OIDC)
-            if grep -q "_authToken" .npmrc; then
-              echo "WARNING: .npmrc contains _authToken - this will prevent OIDC"
-              echo "Removing token configuration..."
-              sed -i '/^\/\/registry\.npmjs\.org\/:_authToken/d' .npmrc || true
-              sed -i '/^_authToken/d' .npmrc || true
-            fi
-          else
-            echo "No .npmrc file found (this is expected for OIDC)"
-          fi
-          echo ""
-          echo "=== Environment variables ==="
-          env | grep -i "npm\|node" || echo "No npm/node env vars found"
+        run: bash .github/scripts/verify-oidc.sh
       - name: Test npm publish (dry-run) - PRs only
         if: github.event_name == 'pull_request'
         run: |
           echo "Testing npm publish authentication with dry-run..."
-          echo "This verifies OIDC authentication works without actually publishing"
+          echo "Note: OIDC tokens ARE available for pull_request events when the workflow"
+          echo "has 'id-token: write' permission, allowing us to verify authentication."
           npm publish --dry-run --tag ${{ env.GITHUB_REF_SLUG }} || {
             echo "ERROR: npm publish dry-run failed"
             echo "This indicates OIDC authentication is not working correctly"
@@ -191,80 +122,12 @@ jobs:
           node-version: 24.x
           registry-url: 'https://registry.npmjs.org'
           # OIDC will be used automatically when id-token: write is set
-          # Do not provide NODE_AUTH_TOKEN - OIDC will be used instead
-      - name: Clear NODE_AUTH_TOKEN and npm token config to force OIDC
-        run: |
-          # Remove any .npmrc file that might contain token auth
-          if [ -f "$HOME/.npmrc" ]; then
-            echo "Found .npmrc at $HOME/.npmrc, checking for token auth..."
-            if grep -q "_authToken" "$HOME/.npmrc"; then
-              echo "Removing token auth from .npmrc..."
-              sed -i '/_authToken/d' "$HOME/.npmrc" || true
-            fi
-          fi
-          # Clear npm config token settings
-          npm config delete //registry.npmjs.org/:_authToken || true
-          npm config delete _authToken || true
-          # Note: NODE_AUTH_TOKEN env var from secrets will still be available
-          # but npm should prefer OIDC when configured correctly
-          echo "Cleared npm token configuration"
-      - name: Verify OIDC authentication
-        run: |
-          echo "Workflow name: ${{ github.workflow }}"
-          echo "Workflow file: ${{ github.workflow_ref }}"
-          echo "Repository: ${{ github.repository }}"
-          echo "Ref: ${{ github.ref }}"
-          echo "Actor: ${{ github.actor }}"
-          echo "Event name: ${{ github.event_name }}"
-          # Check if NODE_AUTH_TOKEN is set (from repository secrets)
-          if [ -n "$NODE_AUTH_TOKEN" ]; then
-            echo "WARNING: NODE_AUTH_TOKEN secret is configured in repository"
-            echo "This will prevent OIDC from working. Please remove the NODE_AUTH_TOKEN secret"
-            echo "from repository Settings > Secrets and variables > Actions"
-            echo ""
-            echo "For now, we'll try to work around it by clearing npm config..."
-            # Don't exit - try to work around it
-          else
-            echo "✓ No NODE_AUTH_TOKEN secret found (good for OIDC)"
-          fi
-          # Check if ACTIONS_ID_TOKEN_REQUEST_TOKEN is available (required for OIDC)
-          if [ -z "$ACTIONS_ID_TOKEN_REQUEST_TOKEN" ]; then
-            echo "WARNING: ACTIONS_ID_TOKEN_REQUEST_TOKEN not set - OIDC may not work"
-          else
-            echo "✓ OIDC token request token is available"
-          fi
+         
+      - name: Clear npm token configuration
+        run: bash .github/scripts/clear-npm-token.sh
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - name: Check npm and Node versions
-        run: |
-          echo "Node version: $(node --version)"
-          echo "npm version: $(npm --version)"
-          # Ensure npm is at least 10.0.0 for OIDC support
-          npm_version=$(npm --version | cut -d. -f1)
-          if [ "$npm_version" -lt 10 ]; then
-            echo "WARNING: npm version is less than 10.0.0, OIDC may not work properly"
-          fi
-      - name: Verify npm configuration before publish
-        run: |
-          echo "=== npm configuration ==="
-          npm config list
-          echo ""
-          echo "=== Checking for .npmrc ==="
-          if [ -f .npmrc ]; then
-            echo "Found .npmrc:"
-            cat .npmrc
-            # Check if it contains token auth (should not for OIDC)
-            if grep -q "_authToken" .npmrc; then
-              echo "WARNING: .npmrc contains _authToken - this will prevent OIDC"
-              echo "Removing token configuration..."
-              sed -i '/^\/\/registry\.npmjs\.org\/:_authToken/d' .npmrc || true
-              sed -i '/^_authToken/d' .npmrc || true
-            fi
-          else
-            echo "No .npmrc file found (this is expected for OIDC)"
-          fi
-          echo ""
-          echo "=== Environment variables ==="
-          env | grep -i "npm\|node" || echo "No npm/node env vars found"
+      - name: Verify OIDC authentication
+        run: bash .github/scripts/verify-oidc.sh
       - name: Publish to npm
         run: npm publish
