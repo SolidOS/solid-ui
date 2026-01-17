@@ -2,7 +2,7 @@
 // to avoid using style sheets which are document-global
 // and make programmable style toggling with selection, drag over, etc easier
 // These must all end with semicolon so they can be appended to.
-// 
+//
 // PHASE 1: Hybrid mode - CSS variables with fallbacks
 // CSS variables (--sui-*) are provided by themes/foundation/variables.css
 // Fallback values preserve original appearance when themes aren't loaded
@@ -12,7 +12,7 @@ import styleConstants from './styleConstants'
 export const style = { // styleModule
 
   checkboxStyle: 'color: var(--sui-text, black); font-size: 100%; padding-left: 0.5em; padding-right: 0.5em;',
-  checkboxInputStyle: 'font-size: 150%; height: 1.2em; width: 1.2em; background-color: var(--sui-bg-input, #eef); border-radius: var(--sui-border-radius-sm, 0.2em); margin: 0.1em;',
+  checkboxInputStyle: 'font-size: 100%; height: 1em; width: 1em; background-color: var(--sui-bg-input, #eef); border-radius: var(--sui-border-radius-sm, 0.2em); margin: 0.1em;',
 
   fieldLabelStyle: 'color: var(--sui-text-link, #3B5998); text-decoration: none;',
   formSelectStyle:

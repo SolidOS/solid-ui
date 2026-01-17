@@ -1,5 +1,6 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
 
 const externalsBase = {
   fs: 'null',
@@ -63,7 +64,14 @@ const common = {
         test: /\.ttl$/i,
         type: 'asset/source'
       }]
-  }
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        { from: 'src/themes', to: 'themes' }
+      ]
+    })
+  ]
 }
 
 // UMD Minified, rdflib external
