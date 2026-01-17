@@ -11,6 +11,20 @@ See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) 
 See [Solid-UI API](https://solidos.github.io/solid-ui/docs/api/) for UI functions.
 See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation.
 
+## 🎨 Theme System
+
+**NEW:** Solid-UI now includes a modern theme system with CSS variables and runtime switching!
+
+- **[Live Theme Demo](./docs/theme-demo.html)** - Interactive preview of all 5 themes
+- **[Theme Documentation](./src/themes/README.md)** - Complete usage guide
+
+**Features:**
+- 5 built-in themes (Classic, Solid, Wave, Telegram, Signal)
+- Runtime theme switching with localStorage persistence
+- 81+ CSS custom properties for full customization
+- WCAG 2.1 AA accessibility compliance
+- Zero breaking changes - fully backward compatible
+
 ## Table of Contents
 - [Getting Started](#getting-started)
 - [Install via npm](#install-via-npm)

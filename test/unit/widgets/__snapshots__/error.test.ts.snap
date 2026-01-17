@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`errorMessageBlock creates an error message div 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(255, 238, 238);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(255, 238, 238);"
 >
   my error message
   <button
@@ -20,7 +20,7 @@ exports[`errorMessageBlock creates an error message div 1`] = `
 
 exports[`errorMessageBlock escapes the HTML 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(255, 238, 238);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(255, 238, 238);"
 >
   my &lt;script&gt; kiddie &lt;/script&gt; message
   <button
@@ -38,7 +38,7 @@ exports[`errorMessageBlock escapes the HTML 1`] = `
 
 exports[`errorMessageBlock sets the background color 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(0, 255, 255);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(0, 255, 255);"
 >
   my colored message
   <button

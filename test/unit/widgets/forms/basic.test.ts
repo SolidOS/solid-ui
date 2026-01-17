@@ -208,7 +208,7 @@ describe('basicField', () => {
     inputElement.value = '555-1234'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;color: green;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);color: green;')
   })
 
   it('goes red if value doesnt match pattern', () => {
@@ -237,7 +237,7 @@ describe('basicField', () => {
     inputElement.value = 'not a valid phone number'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;color: red;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);color: red;')
   })
 
   it('handles change if value doesnt match pattern', () => {
@@ -648,7 +648,7 @@ describe('basicField', () => {
       callbackFunction
     )
     const localStyle = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(localStyle).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;text-align: right;')
+    expect(localStyle).toEqual('background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);text-align: right;')
   })
 
   it('Defaults to textInputStyle', () => {

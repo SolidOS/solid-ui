@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solid-UI Theme System Test</title>
+  <style id="base-styles">
+    /* Base styles */
+    * { box-sizing: border-box; }
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      margin: 0;
+      padding: 20px;
+      background: var(--sui-bg, #f7f8fc);
+      color: var(--sui-text, #2d3748);
+      transition: background 0.3s, color 0.3s;
+    }
+    .container { max-width: 900px; margin: 0 auto; }
+    .header {
+      background: var(--sui-gradient, linear-gradient(135deg, #667eea, #9f7aea));
+      color: white;
+      padding: 30px;
+      border-radius: var(--sui-border-radius, 0.5em);
+      margin-bottom: 20px;
+      box-shadow: var(--sui-shadow-colored, 0 4px 20px rgba(102, 126, 234, 0.3));
+    }
+    .header h1 { margin: 0 0 10px 0; }
+    .header p { margin: 0; opacity: 0.9; }
+    
+    .card {
+      background: var(--sui-bg-panel, white);
+      padding: 25px;
+      border-radius: var(--sui-border-radius, 0.5em);
+      box-shadow: var(--sui-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+      margin-bottom: 20px;
+    }
+    h2 { margin-top: 0; color: var(--sui-text, #2d3748); }
+    
+    .theme-buttons {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 12px;
+      margin: 20px 0;
+    }
+    button {
+      background: var(--sui-primary, #805ad5);
+      color: var(--sui-text-on-primary, white);
+      border: 2px solid transparent;
+      padding: 12px 20px;
+      border-radius: var(--sui-border-radius-sm, 0.3em);
+      cursor: pointer;
+      font-size: 15px;
+      font-weight: 500;
+      transition: all 0.2s ease;
+      min-height: 44px;
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.08));
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--sui-shadow, 0 4px 12px rgba(0, 0, 0, 0.15));
+    }
+    button:active { transform: translateY(0); }
+    button.active {
+      background: var(--sui-accent, #9f7aea);
+      border-color: var(--sui-text-on-primary, white);
+      font-weight: 700;
+    }
+    button:focus-visible {
+      outline: 2px solid var(--sui-focus-color, #667eea);
+      outline-offset: 2px;
+    }
+    
+    .input-group { margin-bottom: 20px; }
+    label {
+      display: block;
+      color: var(--sui-text-secondary, #4a5568);
+      margin-bottom: 8px;
+      font-size: 14px;
+      font-weight: 500;
+    }
+    input[type="text"], select, textarea {
+      background: var(--sui-bg-input, #eef);
+      border: 1px solid var(--sui-border-color, #e2e8f0);
+      border-radius: var(--sui-border-radius-sm, 0.3em);
+      padding: 10px 12px;
+      width: 100%;
+      font-size: 14px;
+      min-height: 44px;
+      transition: border-color 0.2s, box-shadow 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--sui-primary, #805ad5);
+      box-shadow: 0 0 0 3px var(--sui-bg-active, rgba(128, 90, 213, 0.1));
+    }
+    
+    .status {
+      padding: 15px;
+      background: var(--sui-bg-hover, #f7f8fc);
+      border-left: 4px solid var(--sui-primary, #805ad5);
+      border-radius: var(--sui-border-radius-sm, 0.3em);
+      font-size: 14px;
+      margin-top: 15px;
+    }
+    
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 12px;
+      margin-top: 15px;
+    }
+    .color-box {
+      padding: 30px 15px;
+      border-radius: var(--sui-border-radius-sm, 0.3em);
+      text-align: center;
+      font-size: 13px;
+      font-weight: 600;
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0, 0, 0, 0.08));
+      transition: transform 0.2s;
+    }
+    .color-box:hover { transform: scale(1.05); }
+    .primary { background: var(--sui-primary, #805ad5); color: white; }
+    .accent { background: var(--sui-accent, #9f7aea); color: white; }
+    .success { background: var(--sui-success, #48bb78); color: white; }
+    .warning { background: var(--sui-warning, orange); color: white; }
+    .error { background: var(--sui-error, red); color: white; }
+    .info { background: var(--sui-info, #4299e1); color: white; }
+    
+    .button-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      gap: 10px;
+    }
+    .btn-accent { background: var(--sui-accent, #9f7aea); }
+    .btn-success { background: var(--sui-success, #48bb78); }
+    .btn-warning { background: var(--sui-warning, orange); }
+    .btn-error { background: var(--sui-error, red); }
+    
+    .info-box {
+      background: var(--sui-bg-hover, #f0f2f5);
+      padding: 15px;
+      border-radius: var(--sui-border-radius-sm, 0.3em);
+      margin-top: 15px;
+      font-size: 13px;
+      color: var(--sui-text-secondary, #4a5568);
+    }
+  </style>
+  
+  <!-- Theme CSS will be injected here -->
+  <style id="theme-styles"></style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>🎨 Solid-UI Theme System Test</h1>
+      <p>Phase 1: CSS Variables & Runtime Theme Switching</p>
+    </div>
+
+    <div class="card">
+      <h2>🌈 Theme Selector</h2>
+      <p>Click a button to switch themes. Your preference is saved to localStorage!</p>
+      <div class="theme-buttons">
+        <button onclick="switchTheme('classic')" id="btn-classic">Classic</button>
+        <button onclick="switchTheme('default')" id="btn-default">Solid Purple</button>
+        <button onclick="switchTheme('wave')" id="btn-wave">Wave Green</button>
+        <button onclick="switchTheme('telegram')" id="btn-telegram">Telegram Blue</button>
+        <button onclick="switchTheme('signal')" id="btn-signal">Signal Blue</button>
+      </div>
+      <div class="status">
+        <strong>Current theme:</strong> <span id="current-theme">Loading...</span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>📝 Form Components</h2>
+      
+      <div class="input-group">
+        <label for="text-input">Text Input</label>
+        <input type="text" id="text-input" placeholder="Type something here...">
+      </div>
+
+      <div class="input-group">
+        <label for="select-input">Select Dropdown</label>
+        <select id="select-input">
+          <option>Option 1</option>
+          <option>Option 2</option>
+          <option>Option 3</option>
+        </select>
+      </div>
+
+      <div class="input-group">
+        <label for="textarea-input">Textarea</label>
+        <textarea id="textarea-input" rows="3" placeholder="Enter multiple lines..."></textarea>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🔘 Buttons</h2>
+      <div class="button-grid">
+        <button>Primary</button>
+        <button class="btn-accent">Accent</button>
+        <button class="btn-success">Success</button>
+        <button class="btn-warning">Warning</button>
+        <button class="btn-error">Error</button>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>🎨 Color Palette</h2>
+      <p>Colors from active theme's CSS variables:</p>
+      <div class="color-grid">
+        <div class="color-box primary">Primary</div>
+        <div class="color-box accent">Accent</div>
+        <div class="color-box success">Success</div>
+        <div class="color-box warning">Warning</div>
+        <div class="color-box error">Error</div>
+        <div class="color-box info">Info</div>
+      </div>
+      
+      <div class="info-box">
+        <strong>Variables count:</strong> 81 CSS custom properties defined<br>
+        <strong>Browser support:</strong> Chrome 49+, Firefox 31+, Safari 9.1+
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const STORAGE_KEY = 'solid-ui-theme';
+    
+    // Embedded theme CSS (from your actual theme files)
+    const themes = {
+      classic: `
+        :root {
+          --sui-primary: #3B5998;
+          --sui-accent: #01c9ea;
+          --sui-gradient: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);
+          --sui-bg: #ffffff;
+          --sui-bg-panel: #ffffff;
+          --sui-bg-input: #eef;
+          --sui-bg-hover: #eef;
+          --sui-bg-active: #dde;
+          --sui-text: #000000;
+          --sui-text-secondary: #333333;
+          --sui-text-muted: #888888;
+          --sui-text-link: #3B5998;
+          --sui-text-on-primary: #ffffff;
+          --sui-border-color: #88c;
+          --sui-border-radius: 0.2em;
+          --sui-border-radius-sm: 0.2em;
+          --sui-shadow: 0.5em 0.9em #888;
+          --sui-shadow-sm: 0 1px 2px #888;
+          --sui-shadow-colored: 0.5em 0.9em #888;
+          --sui-success: green;
+          --sui-warning: orange;
+          --sui-error: red;
+          --sui-info: #01c9ea;
+          --sui-focus-color: #3B5998;
+        }
+      `,
+      default: `
+        :root {
+          --sui-primary: #805ad5;
+          --sui-accent: #9f7aea;
+          --sui-gradient: linear-gradient(135deg, #667eea, #9f7aea);
+          --sui-bg: #f7f8fc;
+          --sui-bg-panel: #ffffff;
+          --sui-bg-input: #ffffff;
+          --sui-bg-hover: #f7f8fc;
+          --sui-bg-active: #ede9fe;
+          --sui-text: #2d3748;
+          --sui-text-secondary: #4a5568;
+          --sui-text-muted: #a0aec0;
+          --sui-text-link: #805ad5;
+          --sui-text-on-primary: #ffffff;
+          --sui-border-color: #e2e8f0;
+          --sui-border-radius: 0.5em;
+          --sui-border-radius-sm: 0.3em;
+          --sui-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+          --sui-shadow-colored: 0 4px 20px rgba(102, 126, 234, 0.3);
+          --sui-success: #48bb78;
+          --sui-warning: #ed8936;
+          --sui-error: #f56565;
+          --sui-info: #4299e1;
+          --sui-focus-color: #667eea;
+        }
+      `,
+      wave: `
+        :root {
+          --sui-primary: #128c7e;
+          --sui-accent: #25d366;
+          --sui-gradient: linear-gradient(135deg, #128c7e, #075e54);
+          --sui-bg: #efeae2;
+          --sui-bg-panel: #ffffff;
+          --sui-bg-input: #ffffff;
+          --sui-bg-hover: #f0f2f5;
+          --sui-bg-active: #d9fdd3;
+          --sui-text: #111b21;
+          --sui-text-secondary: #667781;
+          --sui-text-muted: #8696a0;
+          --sui-text-link: #128c7e;
+          --sui-text-on-primary: #ffffff;
+          --sui-border-color: #e9edef;
+          --sui-border-radius: 0.5em;
+          --sui-border-radius-sm: 0.3em;
+          --sui-shadow: 0 2px 8px rgba(18, 140, 126, 0.2);
+          --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+          --sui-shadow-colored: 0 2px 8px rgba(18, 140, 126, 0.4);
+          --sui-success: #25d366;
+          --sui-warning: #e8b923;
+          --sui-error: #dd3e3e;
+          --sui-info: #00a5f4;
+          --sui-focus-color: #128c7e;
+        }
+      `,
+      telegram: `
+        :root {
+          --sui-primary: #0088cc;
+          --sui-accent: #54a9eb;
+          --sui-gradient: linear-gradient(135deg, #0088cc, #0078b8);
+          --sui-bg: #f4f4f5;
+          --sui-bg-panel: #ffffff;
+          --sui-bg-input: #ffffff;
+          --sui-bg-hover: #f0f0f1;
+          --sui-bg-active: #e8f4fd;
+          --sui-text: #000000;
+          --sui-text-secondary: #707579;
+          --sui-text-muted: #a2acb4;
+          --sui-text-link: #0088cc;
+          --sui-text-on-primary: #ffffff;
+          --sui-border-color: #dadce0;
+          --sui-border-radius: 0.5em;
+          --sui-border-radius-sm: 0.3em;
+          --sui-shadow: 0 2px 8px rgba(0, 136, 204, 0.2);
+          --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+          --sui-shadow-colored: 0 2px 8px rgba(0, 136, 204, 0.4);
+          --sui-success: #00c73e;
+          --sui-warning: #ff9500;
+          --sui-error: #ff3b30;
+          --sui-info: #0088cc;
+          --sui-focus-color: #0088cc;
+        }
+      `,
+      signal: `
+        :root {
+          --sui-primary: #2c6bed;
+          --sui-accent: #5e94f5;
+          --sui-gradient: linear-gradient(135deg, #2c6bed, #1851c4);
+          --sui-bg: #f6f6f6;
+          --sui-bg-panel: #ffffff;
+          --sui-bg-input: #ffffff;
+          --sui-bg-hover: #f0f0f0;
+          --sui-bg-active: #e8f1fd;
+          --sui-text: #1b1b1b;
+          --sui-text-secondary: #5e5e5e;
+          --sui-text-muted: #8e8e93;
+          --sui-text-link: #2c6bed;
+          --sui-text-on-primary: #ffffff;
+          --sui-border-color: #d4d4d4;
+          --sui-border-radius: 0.5em;
+          --sui-border-radius-sm: 0.3em;
+          --sui-shadow: 0 2px 8px rgba(44, 107, 237, 0.2);
+          --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+          --sui-shadow-colored: 0 2px 8px rgba(44, 107, 237, 0.4);
+          --sui-success: #00b433;
+          --sui-warning: #ff9500;
+          --sui-error: #e83535;
+          --sui-info: #2c6bed;
+          --sui-focus-color: #2c6bed;
+        }
+      `
+    };
+
+    function switchTheme(themeName) {
+      const themeStyle = document.getElementById('theme-styles');
+      themeStyle.textContent = themes[themeName];
+      localStorage.setItem(STORAGE_KEY, themeName);
+      updateUI(themeName);
+    }
+
+    function updateUI(themeName) {
+      const formatted = themeName.charAt(0).toUpperCase() + themeName.slice(1);
+      document.getElementById('current-theme').textContent = formatted;
+      
+      document.querySelectorAll('.theme-buttons button').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      const activeBtn = document.getElementById('btn-' + themeName);
+      if (activeBtn) activeBtn.classList.add('active');
+    }
+
+    function loadSavedTheme() {
+      const savedTheme = localStorage.getItem(STORAGE_KEY) || 'classic';
+      const themeStyle = document.getElementById('theme-styles');
+      themeStyle.textContent = themes[savedTheme];
+      updateUI(savedTheme);
+    }
+
+    // Initialize on page load
+    loadSavedTheme();
+    
+    console.log('✅ Solid-UI Theme System loaded');
+    console.log('📦 5 themes available:', Object.keys(themes));
+    console.log('💾 Theme persistence: localStorage');
+  </script>
+</body>
+</html>

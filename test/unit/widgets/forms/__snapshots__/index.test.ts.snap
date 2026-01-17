@@ -1,4 +1,4 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`Comment runs 1`] = `
 <div>
@@ -10,7 +10,7 @@ exports[`Comment runs 1`] = `
 
 exports[`Form field runs 1`] = `
 <div
-  style="padding-left: 2em; border: 0.05em solid rgb(136, 136, 136); border-radius: 0.2em; display: flex; flex-direction: column;"
+  style="padding-left: 2em; border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #888888); border-radius: var(--sui-border-radius-sm, 0.2em); display: flex; flex-direction: column;"
 />
 `;
 
@@ -30,7 +30,7 @@ exports[`TristateField runs 1`] = `
 >
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="padding: 0.3em; vertical-align: middle; width: 8em;"
   >
     Fn
   </div>
@@ -38,7 +38,7 @@ exports[`TristateField runs 1`] = `
     class="formFieldValue"
   >
     <button
-      style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: rgb(238, 238, 255); border-radius: 0.2em; margin: 0.1em;"
+      style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: var(--sui-bg-input, #eef); border-radius: var(--sui-border-radius-sm, 0.2em); margin: 0.1em;"
     >
       -
     </button>

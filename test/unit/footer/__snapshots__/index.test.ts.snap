@@ -1,8 +1,8 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Jest Snapshot v1, https://goo.gl/fbAQLP
 
 exports[`createControllerInfoBlock makes use of options 1`] = `
 <div
-  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;"
+  style="border-top: solid 1px var(--sui-border-color, #ccc); font-size: 0.9em; padding: var(--sui-space-sm, 0.5em) var(--sui-space-lg, 1.5em);"
 >
   <span />
   <a
@@ -22,7 +22,7 @@ exports[`createControllerInfoBlock makes use of options 1`] = `
 
 exports[`createControllerInfoBlock runs createControllerInfoBlock 1`] = `
 <div
-  style="border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;"
+  style="border-top: solid 1px var(--sui-border-color, #ccc); font-size: 0.9em; padding: var(--sui-space-sm, 0.5em) var(--sui-space-lg, 1.5em);"
 >
   <span />
   <a

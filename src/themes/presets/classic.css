@@ -1,0 +1,69 @@
+/**
+ * Classic Theme - Preserves Original solid-ui Appearance
+ * 
+ * This theme maintains backward compatibility by using the exact
+ * colors and styling from the original solid-ui implementation.
+ * Use this as the default to ensure no visual changes during migration.
+ */
+
+:root {
+  /* ========== Primary Colors (Original) ========== */
+  --sui-primary: #3B5998;
+  --sui-primary-dark: #2d4373;
+  --sui-primary-light: #7C4DFF;
+  --sui-accent: #01c9ea;
+  
+  /* ========== Gradients (Original) ========== */
+  --sui-gradient-start: #7C4DFF;
+  --sui-gradient-end: #01c9ea;
+  --sui-gradient: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);
+  
+  /* ========== Backgrounds (Original) ========== */
+  --sui-bg: #ffffff;
+  --sui-bg-panel: #ffffff;
+  --sui-bg-input: #eef;
+  --sui-bg-hover: #eef;
+  --sui-bg-active: #dde;
+  --sui-bg-button: #fff;
+  --sui-bg-button-hover: #eef;
+  
+  /* ========== Text Colors (Original) ========== */
+  --sui-text: #000000;
+  --sui-text-secondary: #333333;
+  --sui-text-muted: #888888;
+  --sui-text-link: #3B5998;
+  --sui-text-on-primary: #ffffff;
+  
+  /* ========== Borders (Original) ========== */
+  --sui-border-color: #88c;
+  --sui-border-color-dark: #888;
+  --sui-border-width: 0.05em;
+  --sui-border: var(--sui-border-width) solid var(--sui-border-color);
+  
+  /* ========== Border Radius (Original) ========== */
+  --sui-border-radius: 0.2em;
+  --sui-border-radius-sm: 0.2em;
+  --sui-border-radius-lg: 1em;
+  --sui-border-radius-full: 50%;
+  
+  /* ========== Shadows (Original - minimal) ========== */
+  --sui-shadow-sm: 0 1px 2px #888;
+  --sui-shadow: 0.5em 0.9em #888;
+  --sui-shadow-lg: 0.7em 1.1em #888;
+  --sui-shadow-colored: 0.5em 0.9em #888;
+  
+  /* ========== Forms (Original) ========== */
+  --sui-form-border-color: #88c;
+  --sui-form-group-border: var(--sui-border-width) solid var(--sui-form-border-color);
+  
+  /* ========== Status Colors (Original) ========== */
+  --sui-success: green;
+  --sui-warning: orange;
+  --sui-error: red;
+  --sui-info: #01c9ea;
+  
+  /* ========== Header (Original) ========== */
+  --sui-header-gradient: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);
+  
+  /* Keep all other variables from foundation/variables.css */
+}
