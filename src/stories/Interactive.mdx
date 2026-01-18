@@ -1,0 +1,63 @@
+import * as UI from '../../src/index'
+import * as InteractiveStories from './Interactive.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+
+import { action } from "@storybook/addon-actions";
+
+<Meta of={InteractiveStories} />
+
+## Ask name
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#askname)
+
+<Canvas>
+  <Story of={InteractiveStories.AskName} />
+</Canvas>
+
+## Attachment list
+
+Component that displays a list of resources, for instance the attachments of a message, or the various documents related to a meeting.
+Accepts dropping URLs onto it to add attachments to it.
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#attachmentlist)
+
+<Canvas>
+  <Story of={InteractiveStories.AttachmentList} />
+</Canvas>
+
+## personTR
+
+A TR to represent a draggable person, etc in a list
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#persontr)
+
+<Canvas>
+  <Story of={InteractiveStories.PersonTr} />
+</Canvas>
+
+## renderAsDIV
+
+A Div to represent a draggable person, etc in a list
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#persontr)
+
+<Canvas>
+  <Story of={InteractiveStories.RenderAsDiv} />
+</Canvas>
+
+## selectorPanel
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#selectorpanel)
+
+<Canvas>
+  <Story of={InteractiveStories.SelectorPanel} />
+</Canvas>
+
+## selectorPanelRefresh
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#selectorpanelrefresh)
+
+<Canvas>
+  <Story of={InteractiveStories.SelectorPanelRefresh} />
+</Canvas>

@@ -1,8 +1,9 @@
 import * as UI from '../../src/index'
+import * as HeaderStories from './Header.stories';
 
-import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { Canvas, Meta, Story } from "@storybook/blocks";
 
-<Meta title="Header" />
+<Meta of={HeaderStories} />
 
 ## Header
 
@@ -17,10 +18,5 @@ To experience the full behaviour of the header, you need to log in. This can be 
 [the example page](http://solidos.github.io/solid-ui/examples/header).
 
 <Canvas>
-  <Story name="header" decorators={[headerDecorator]}>
-    {() => {
-      const options = {};
-      UI.initHeader(SolidLogic.store, options);
-    }}
-  </Story>
+  <Story of={HeaderStories.Header} />
 </Canvas>
