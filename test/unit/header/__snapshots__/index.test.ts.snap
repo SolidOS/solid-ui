@@ -2,7 +2,7 @@
 
 exports[`createBanner check customized logo... 1`] = `
 <div
-  style="box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);"
+  style="background: var(--sui-bg-header, white); box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);"
 >
   <a
     href="https://test.com"
@@ -90,7 +90,7 @@ exports[`createBanner check customized logo... 1`] = `
         style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
       >
         <ul
-          style="undefined"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
             style="border-bottom: solid 1px var(--sui-text, #000000);"
@@ -112,8 +112,51 @@ exports[`createBanner check customized logo... 1`] = `
         style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
       >
         <ul
-          style="undefined"
+          style="list-style: none; margin: 0; padding: 0;"
         >
+          <li
+            style="undefined font-weight: bold; padding: 0.5em 1em; color: #666; font-size: 0.9em;"
+          >
+            🎨 Themes
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-top: 1px solid #ddd; margin: 0.5em 0;"
+          />
           <li
             style="border-bottom: solid 1px var(--sui-text, #000000);"
           >
@@ -140,7 +183,7 @@ exports[`createBanner check customized logo... 1`] = `
 
 exports[`createBanner creates a link 1`] = `
 <div
-  style="box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);"
+  style="background: var(--sui-bg-header, white); box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);"
 >
   <a
     href="https://test.com"
@@ -228,7 +271,7 @@ exports[`createBanner creates a link 1`] = `
         style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
       >
         <ul
-          style="undefined"
+          style="list-style: none; margin: 0; padding: 0;"
         >
           <li
             style="border-bottom: solid 1px var(--sui-text, #000000);"
@@ -250,8 +293,51 @@ exports[`createBanner creates a link 1`] = `
         style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
       >
         <ul
-          style="undefined"
+          style="list-style: none; margin: 0; padding: 0;"
         >
+          <li
+            style="undefined font-weight: bold; padding: 0.5em 1em; color: #666; font-size: 0.9em;"
+          >
+            🎨 Themes
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-bottom: solid 1px var(--sui-text, #000000);"
+          >
+            <button
+              style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+            />
+          </li>
+          <li
+            style="border-top: 1px solid #ddd; margin: 0.5em 0;"
+          />
           <li
             style="border-bottom: solid 1px var(--sui-text, #000000);"
           >
@@ -286,8 +372,52 @@ exports[`createHelpMenu creates a menu.... 1`] = `
     style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
   >
     <ul
-      style="undefined"
-    />
+      style="list-style: none; margin: 0; padding: 0;"
+    >
+      <li
+        style="undefined font-weight: bold; padding: 0.5em 1em; color: #666; font-size: 0.9em;"
+      >
+        🎨 Themes
+      </li>
+      <li
+        style="border-bottom: solid 1px var(--sui-text, #000000);"
+      >
+        <button
+          style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+        />
+      </li>
+      <li
+        style="border-bottom: solid 1px var(--sui-text, #000000);"
+      >
+        <button
+          style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+        />
+      </li>
+      <li
+        style="border-bottom: solid 1px var(--sui-text, #000000);"
+      >
+        <button
+          style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+        />
+      </li>
+      <li
+        style="border-bottom: solid 1px var(--sui-text, #000000);"
+      >
+        <button
+          style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+        />
+      </li>
+      <li
+        style="border-bottom: solid 1px var(--sui-text, #000000);"
+      >
+        <button
+          style="background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;"
+        />
+      </li>
+      <li
+        style="border-top: 1px solid #ddd; margin: 0.5em 0;"
+      />
+    </ul>
   </nav>
   <button
     style="background: none; border: 0; cursor: pointer; width: var(--sui-header-height, 60px); height: var(--sui-header-height, 60px);"
@@ -400,7 +530,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
     style="background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;"
   >
     <ul
-      style="undefined"
+      style="list-style: none; margin: 0; padding: 0;"
     >
       <li
         style="border-bottom: solid 1px var(--sui-text, #000000);"

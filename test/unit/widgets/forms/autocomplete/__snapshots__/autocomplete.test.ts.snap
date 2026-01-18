@@ -69,7 +69,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
@@ -80,7 +80,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
@@ -91,7 +91,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>
@@ -160,7 +160,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
@@ -171,7 +171,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
@@ -182,7 +182,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>
@@ -286,7 +286,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
@@ -297,7 +297,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
@@ -308,7 +308,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>

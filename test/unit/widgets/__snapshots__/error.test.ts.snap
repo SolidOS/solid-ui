@@ -6,12 +6,12 @@ exports[`errorMessageBlock creates an error message div 1`] = `
 >
   my error message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>
@@ -24,12 +24,12 @@ exports[`errorMessageBlock escapes the HTML 1`] = `
 >
   my &lt;script&gt; kiddie &lt;/script&gt; message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>
@@ -42,12 +42,12 @@ exports[`errorMessageBlock sets the background color 1`] = `
 >
   my colored message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>
