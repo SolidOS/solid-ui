@@ -21,6 +21,7 @@
   /* ========== Backgrounds ========== */
   --sui-bg: #f7f8fc;
   --sui-bg-panel: #ffffff;
+  --sui-bg-header: #ffffff;
   --sui-bg-input: #eef;
   --sui-bg-hover: #f7f8fc;
   --sui-bg-active: #ede9fe;
@@ -89,6 +90,11 @@
   --sui-button-padding-lg: 1em 4em;
   --sui-button-margin: 0.3em;
   
+  /* ========== Icon Sizes ========== */
+  --sui-icon-size: 1.5em;        /* Standard icons and buttons */
+  --sui-avatar-size: 2.5em;      /* Person/contact avatars */
+  --sui-icon-class-size: 3em;    /* Class/type icons */
+  
   /* ========== ACL Groups (preserve current colors) ========== */
   --sui-group-default: #888;
   --sui-group-1: green;
@@ -124,4 +130,34 @@
   --sui-focus-width: 2px;
   --sui-focus-offset: 2px;
   --sui-touch-target-min: 44px;
+}
+
+/* ========== Responsive Adjustments ========== */
+/* Mobile: Smaller base font and tighter spacing */
+@media (max-width: 768px) {
+  :root {
+    --sui-font-size-base: 0.9em;
+    --sui-font-size-sm: 0.8em;
+    --sui-font-size-xs: 0.7em;
+    --sui-space-md: 0.8em;
+    --sui-space-lg: 1.2em;
+    --sui-space-xl: 1.6em;
+    --sui-space-2xl: 2.4em;
+  }
+}
+
+/* Tablet: Slightly smaller than desktop */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --sui-font-size-base: 0.95em;
+    --sui-space-md: 0.9em;
+    --sui-space-lg: 1.35em;
+  }
+}
+
+/* Desktop: Use default values (already defined above) */
+@media (min-width: 1025px) {
+  :root {
+    /* Desktop uses the base values defined above */
+  }
 }

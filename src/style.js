@@ -24,9 +24,9 @@ export const style = { // styleModule
   buttonStyle:
       'background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em);',
   commentStyle: 'padding: var(--sui-button-padding, 0.7em); border: none; font-size: 100%; white-space: pre-wrap;',
-  iconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);',
+  iconStyle: 'width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);',
   smallButtonStyle: 'margin: 0.2em; width: 1em; height: 1em;',
-  classIconStyle: 'width: 3em; height: 3em; margin: 0.1em; border-radius: var(--sui-border-radius-sm, 0.2em); border: 0.1em solid var(--sui-group-1, green); padding: 0.2em; background-color: #efe;',
+  classIconStyle: 'width: var(--sui-icon-class-size, 3em); height: var(--sui-icon-class-size, 3em); margin: 0.1em; border-radius: var(--sui-border-radius-sm, 0.2em); border: 0.1em solid var(--sui-group-1, green); padding: 0.2em; background-color: #efe;',
   confirmPopupStyle: 'padding: var(--sui-button-padding, 0.7em); border-radius: var(--sui-border-radius-sm, 0.2em); border: 0.1em solid var(--sui-warning, orange); background-color: var(--sui-bg-panel, white); box-shadow: var(--sui-shadow, 0.5em 0.9em #888);',
   messageBodyStyle:
     'white-space: pre-wrap; width: 99%; font-size: 100%; border: 0.07em solid var(--sui-border-color, #eee); border-radius: var(--sui-border-radius-sm, 0.2em); padding: 0.3em 0.5em; margin: 0.1em;',
@@ -44,12 +44,12 @@ export const style = { // styleModule
   signInBackground: 'background-color: var(--sui-bg-active, #efe);',
 
   // Forms
-  heading1Style: 'font-size: 180%; font-weight: bold; color: var(--sui-text-muted, #888888); padding: var(--sui-space-sm, 0.5em); margin: 0.7em 0;',
-  heading2Style: 'font-size: 130%; font-weight: bold; color: var(--sui-text-muted, #888888); padding: 0.4em; margin: 0.7em 0;',
-  heading3Style: 'font-size: 120%; font-weight: bold; color: var(--sui-text-muted, #888888); padding: 0.3em; margin: 0.7em 0;',
-  heading4Style: 'font-size: 110%; font-weight: bold; color: var(--sui-text-muted, #888888); padding: 0.2em; margin: 0.7em 0;',
+  heading1Style: 'font-size: 180%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: var(--sui-space-sm, 0.5em); margin: 0.7em 0;',
+  heading2Style: 'font-size: 130%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.4em; margin: 0.7em 0;',
+  heading3Style: 'font-size: 120%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.3em; margin: 0.7em 0;',
+  heading4Style: 'font-size: 110%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.2em; margin: 0.7em 0;',
 
-  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: var(--sui-text-muted, #888888); padding: 0.2em; margin: 0.7em 0;',
+  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.2em; margin: 0.7em 0;',
   formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;',
   formGroupStyle: [`padding-left: 0; border: 0 solid var(--sui-form-border-color, ${styleConstants.formBorderColor}); border-radius: var(--sui-border-radius-sm, 0.2em);`,
     `padding-left: 2em; border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, ${styleConstants.formBorderColor}); border-radius: var(--sui-border-radius-sm, 0.2em);`,
@@ -61,10 +61,16 @@ export const style = { // styleModule
   formFieldNameBoxStyle: `padding: 0.3em; vertical-align: middle; width: ${styleConstants.formFieldNameBoxWidth};`,
   multilineTextInputStyle: 'font-size: 100%; white-space: pre-wrap; background-color: var(--sui-bg-input, #eef); border: 0.07em solid var(--sui-border-color-dark, gray); padding: 1em 0.5em; margin: 1em;',
 
+  // Panes
+  folderPaneStyle: 'border-top: solid 1px var(--sui-border-color, #777); border-bottom: solid 1px var(--sui-border-color, #777); margin-top: var(--sui-space-md, 0.5em); margin-bottom: var(--sui-space-md, 0.5em); background-color: var(--sui-bg-panel, white); color: var(--sui-text, black); font-family: var(--sui-font-family, sans-serif);',
+  sidebarComponentStyle: 'padding: var(--sui-space-md, 0.5em); width: 100%; background-color: var(--sui-bg-panel, white); color: var(--sui-text, black); font-family: var(--sui-font-family, sans-serif);',
+  sidebarStyle: 'overflow-x: auto; overflow-y: auto; border-radius: var(--sui-border-radius, 0.5em); border: 0.1em solid var(--sui-border-color, white); background-color: var(--sui-bg-panel, white);',
+  sourcePaneStyle: 'font-family: var(--sui-font-family-mono, monospace); font-size: 100%; width: 100%; max-width: 60em; margin: 1em 0.2em 1em 0.2em; padding: var(--sui-space-lg, 1em); border: 0.1em solid var(--sui-border-color, #888); border-radius: var(--sui-border-radius, 0.5em); background-color: var(--sui-bg-panel, white); color: var(--sui-text, black);',
+
   // Buttons
-  renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
-  imageDivStyle: 'width:2.5em; padding:0.5em; height: 2.5em;',
-  linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
+  renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: var(--sui-avatar-size, 2.5em); padding: 1em;',
+  imageDivStyle: 'width: var(--sui-avatar-size, 2.5em); padding: 0.5em; height: var(--sui-avatar-size, 2.5em);',
+  linkDivStyle: 'width: var(--sui-icon-size, 2em); padding: 0.5em; height: 4em;',
 
   // ACL
   aclControlBoxContainer: 'margin: 1em;',
@@ -98,12 +104,13 @@ export const style = { // styleModule
   headerUserMenuTriggerImg: 'border-radius: var(--sui-border-radius-full, 50%); height: 56px; width: 28px !important;',
   headerUserMenuButton: 'background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%;',
   headerUserMenuButtonHover: 'background: none; border: 0; color: var(--sui-text, black); cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: var(--sui-space-md, 1em); width: 100%; background-image: var(--sui-header-gradient, linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%));',
+  headerUserMenuList: 'list-style: none; margin: 0; padding: 0;',
   headerUserMenuListDisplay: 'list-style: none; margin: 0; padding: 0; display:true;',
   headerUserMenuNavigationMenu: 'background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: true;',
   headerUserMenuNavigationMenuNotDisplayed: 'background: var(--sui-bg-panel, white); border: solid 1px var(--sui-text, #000000); border-right: 0; position: absolute; right: 0; top: var(--sui-header-height, 60px); width: 200px; z-index: var(--sui-z-dropdown, 1); display: none;',
   headerUserMenuListItem: 'border-bottom: solid 1px var(--sui-text, #000000);',
   headerUserMenuPhoto: 'border-radius: var(--sui-border-radius-full, 50%); background-position: center; background-repeat: no-repeat; background-size: cover; height: 50px; width: 50px;',
-  headerBanner: 'box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);',
+  headerBanner: 'background: var(--sui-bg-header, white); box-shadow: var(--sui-header-shadow, 0px 1px 4px #000000); display: flex; justify-content: space-between; padding: 0 var(--sui-space-lg, 1.5em);',
   headerBannerRightMenu: 'display: flex;',
   headerBannerLogin: 'margin-left: auto;',
   allChildrenVisible: 'display: true;',
@@ -133,7 +140,7 @@ export const style = { // styleModule
   restoreStyle: 'background-color: var(--sui-bg-panel, white);',
 
   // errors
-  errorCancelButton: 'width: 2em; height: 2em; align: right;',
+  errorCancelButton: 'width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em); align: right;',
   errorMessageBlockStyle: 'margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black);',
 
   // pad

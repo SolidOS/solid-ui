@@ -90,19 +90,54 @@
 }
 
 /* ========== Touch Targets ========== */
-button,
-a,
-input[type="checkbox"],
-input[type="radio"],
-select {
-  min-height: var(--sui-touch-target-min, 44px);
-  min-width: var(--sui-touch-target-min, 44px);
+/* Mobile/tablet: 44px minimum for touch targets */
+@media (max-width: 1024px) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: var(--sui-touch-target-min, 44px);
+    min-width: var(--sui-touch-target-min, 44px);
+  }
+}
+
+/* Desktop: smaller targets are acceptable with precise mouse control */
+@media (min-width: 1025px) {
+  button,
+  a,
+  select {
+    min-height: var(--sui-touch-target-min-desktop, 32px);
+    min-width: var(--sui-touch-target-min-desktop, 32px);
+  }
+  
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: auto;
+    min-width: auto;
+  }
 }
 
 /* Allow smaller targets when explicitly sized */
 .small-touch-target {
   min-height: auto;
   min-width: auto;
+}
+
+/* ========== Heading Styles ========== */
+/* Apply theme colors to headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sui-primary, #7C4DFF);
+}
+
+/* Override for specific contexts where headings should use text color */
+.use-text-color h1,
+.use-text-color h2,
+.use-text-color h3,
+.use-text-color h4,
+.use-text-color h5,
+.use-text-color h6 {
+  color: var(--sui-text, #333);
 }
 
 /* ========== Dark Mode Support ========== */

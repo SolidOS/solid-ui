@@ -11,7 +11,6 @@
   --sui-primary-dark: #075e54;
   --sui-primary-light: #25d366;
   --sui-accent: #25d366;
-  --sui-light: #d9fdd3;
   
   /* ========== Gradients ========== */
   --sui-gradient-start: #128c7e;
@@ -21,6 +20,7 @@
   /* ========== Backgrounds ========== */
   --sui-bg: #efeae2;
   --sui-bg-panel: #ffffff;
+  --sui-bg-header: #d9fdd3;
   --sui-bg-input: #ffffff;
   --sui-bg-hover: #f0f2f5;
   --sui-bg-active: #d9fdd3;

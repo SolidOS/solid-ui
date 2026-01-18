@@ -141,12 +141,16 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
             try {
               await themeLoader.loadTheme(theme.name)
               console.log(`Theme switched to: ${theme.label}`)
-              // Refresh menu to update checkmark
+              // Update checkmarks in all theme buttons
               setTimeout(() => {
-                const nav = document.getElementById('helperNav')
-                if (nav) {
-                  nav.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
-                }
+                const newCurrentTheme = themeLoader.getCurrentTheme()
+                helpMenuList.querySelectorAll('button').forEach((btn, idx) => {
+                  // Theme buttons are first 5 buttons (after the label)
+                  if (idx < themes.length) {
+                    const themeInfo = themes[idx]
+                    btn.textContent = themeInfo.label + (themeInfo.name === newCurrentTheme ? ' ✓' : '')
+                  }
+                })
               }, 100)
             } catch (error) {
               console.error('Failed to switch theme:', error)
