@@ -9,11 +9,11 @@ const DEFAULT_THEME = 'classic'
 class ThemeLoader {
   constructor () {
     this.themes = {
-      classic: 'themes/presets/classic.css',
-      default: 'themes/presets/default.css',
-      wave: 'themes/presets/wave.css',
-      telegram: 'themes/presets/telegram.css',
-      signal: 'themes/presets/signal.css'
+      classic: 'theme-classic.css',
+      default: 'theme-default.css',
+      wave: 'theme-wave.css',
+      telegram: 'theme-telegram.css',
+      signal: 'theme-signal.css'
     }
 
     this.currentTheme = this.getSavedTheme()
@@ -47,12 +47,12 @@ class ThemeLoader {
    */
   async loadFoundation () {
     // Variables
-    const variablesLink = this.createLinkElement('solid-ui-variables', 'themes/foundation/variables.css')
+    const variablesLink = this.createLinkElement('solid-ui-variables', 'theme-variables.css')
     document.head.insertBefore(variablesLink, document.head.firstChild)
     this.linkElements.variables = variablesLink
 
     // Accessibility
-    const a11yLink = this.createLinkElement('solid-ui-accessibility', 'themes/foundation/accessibility.css')
+    const a11yLink = this.createLinkElement('solid-ui-accessibility', 'theme-accessibility.css')
     document.head.insertBefore(a11yLink, document.head.firstChild)
     this.linkElements.accessibility = a11yLink
 
