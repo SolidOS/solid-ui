@@ -74,7 +74,6 @@ export const style = { // styleModule
 
   // ACL
   aclControlBoxContainer: 'margin: 1em;',
-  aclControlBoxHeader: 'font-size: var(--sui-space-md, 1em);',
   aclControlBoxHeader: 'font-size: 120%; margin: 0 0 1rem;',
   aclControlBoxStatus: 'display: none; margin: 1rem 0;',
   aclControlBoxStatusRevealed: 'display: block;',

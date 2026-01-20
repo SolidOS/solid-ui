@@ -37,6 +37,7 @@ class ThemeLoader {
 
       this.initialized = true
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error('Failed to initialize theme system:', error)
       // Continue without themes - use inline styles as fallback
     }
@@ -91,6 +92,7 @@ class ThemeLoader {
       // Emit event for listeners
       this.emitThemeChange(themeName)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.error(`Failed to load theme "${themeName}":`, error)
       throw error
     }
@@ -133,7 +135,9 @@ class ThemeLoader {
    */
   resolveThemePath (path) {
     // Use webpack public path if available (set by mashlib/build config)
+    // eslint-disable-next-line camelcase
     if (typeof __webpack_public_path__ !== 'undefined') {
+      // eslint-disable-next-line camelcase, no-undef
       return __webpack_public_path__ + path
     }
 
@@ -191,6 +195,7 @@ class ThemeLoader {
     try {
       localStorage.setItem(STORAGE_KEY, themeName)
     } catch (error) {
+      // eslint-disable-next-line no-console
       console.warn('Failed to save theme preference:', error)
     }
   }

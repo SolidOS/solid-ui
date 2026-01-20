@@ -16,7 +16,7 @@ const externalsBase = {
 // ESM externals: keep imports
 const esmExternals = {
   rdflib: 'rdflib',
-  'solid-logic': 'solid-logic' 
+  'solid-logic': 'solid-logic'
 }
 
 const common = {
