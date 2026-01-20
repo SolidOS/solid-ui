@@ -132,23 +132,29 @@ class ThemeLoader {
    * @private
    */
   resolveThemePath (path) {
-    // In development, path might need adjustment
-    // In production (dist), themes should be copied alongside
+    // Use webpack public path if available (set by mashlib/build config)
     if (typeof __webpack_public_path__ !== 'undefined') {
       return __webpack_public_path__ + path
     }
 
-    // Try to find solid-ui base path
+    // Use global base path if set by mashlib
+    if (typeof window !== 'undefined' && window.solid && window.solid.basePath) {
+      return window.solid.basePath + path
+    }
+
+    // Try to find mashlib or solid-ui base path from script tags
     const scripts = document.getElementsByTagName('script')
     for (const script of scripts) {
-      if (script.src && script.src.includes('solid-ui')) {
+      if (script.src && (script.src.includes('mashlib') || script.src.includes('solid-ui'))) {
         const baseUrl = script.src.substring(0, script.src.lastIndexOf('/') + 1)
         return baseUrl + path
       }
     }
 
-    // Fallback to relative path
-    return path
+    // Fallback: use absolute path from origin root
+    // If themes are at a different path, set window.solid.basePath in mashlib init
+    const origin = window.location.origin
+    return `${origin}/${path}`
   }
 
   /**
