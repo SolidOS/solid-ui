@@ -28,7 +28,7 @@ jobs:
       - run: npm run build
       - run: npm run doc
       - name: Save build
-        if: matrix.node-version == '20'
+        if: matrix.node-version == 20
         uses: actions/upload-artifact@v6
         with:
           name: build
