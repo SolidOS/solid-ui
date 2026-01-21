@@ -93,6 +93,12 @@ jobs:
         run: npm --version
       - name: Check npm configuration
         run: npm config list
+      - name: Debug repository information
+        run: |
+          echo "GitHub Repository: ${{ github.repository }}"
+          echo "GitHub Repository Owner: ${{ github.repository_owner }}"
+          echo "GitHub Repository Name: ${{ github.event.repository.name }}"
+          cat package.json | grep -A 2 '"repository"'
       - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
