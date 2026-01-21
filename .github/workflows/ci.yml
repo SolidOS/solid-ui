@@ -1,7 +1,5 @@
 name: CI
-permissions:
-  contents: write
-  pull-requests: write
+
 on:
   push:
     branches:
@@ -10,6 +8,10 @@ on:
     branches:
       - main
   workflow_dispatch:
+
+permissions:
+  id-token: write  # Required for OIDC
+  contents: read
 
 jobs:
   build:
