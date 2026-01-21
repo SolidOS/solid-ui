@@ -67,6 +67,9 @@ jobs:
   npm-publish-build:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -80,15 +83,17 @@ jobs:
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.4
+      - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
-        with:
-          tag: ${{ env.GITHUB_REF_SLUG }}
+        run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
   
   npm-publish-latest:
     needs: [build, npm-publish-build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
       - uses: actions/download-artifact@v7
         with:
@@ -99,7 +104,6 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.4
+      - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
-        with:
-          tag: latest
+        run: npm publish --tag latest
