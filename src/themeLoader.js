@@ -134,31 +134,30 @@ class ThemeLoader {
    * @private
    */
   resolveThemePath (path) {
-    // Use webpack public path if available (set by mashlib/build config)
-    // eslint-disable-next-line camelcase
-    if (typeof __webpack_public_path__ !== 'undefined') {
-      // eslint-disable-next-line camelcase, no-undef
-      return __webpack_public_path__ + path
-    }
-
     // Use global base path if set by mashlib
     if (typeof window !== 'undefined' && window.solid && window.solid.basePath) {
-      return window.solid.basePath + path
+      const resolvedPath = window.solid.basePath + path
+      // eslint-disable-next-line no-console
+      console.log('🎨 resolveThemePath (basePath):', resolvedPath, 'from', window.solid.basePath)
+      return resolvedPath
     }
 
-    // Try to find mashlib or solid-ui base path from script tags
+    // Fallback: find mashlib or solid-ui base path from script tags
     const scripts = document.getElementsByTagName('script')
     for (const script of scripts) {
       if (script.src && (script.src.includes('mashlib') || script.src.includes('solid-ui'))) {
         const baseUrl = script.src.substring(0, script.src.lastIndexOf('/') + 1)
-        return baseUrl + path
+        const resolvedPath = baseUrl + path
+        // eslint-disable-next-line no-console
+        console.log('🎨 resolveThemePath (script tag):', resolvedPath, 'from', script.src)
+        return resolvedPath
       }
     }
 
-    // Fallback: use absolute path from origin root
-    // If themes are at a different path, set window.solid.basePath in mashlib init
-    const origin = window.location.origin
-    return `${origin}/${path}`
+    // Should not reach here if mashlib initialized properly
+    // eslint-disable-next-line no-console
+    console.error('🎨 resolveThemePath failed: no basePath set and no mashlib/solid-ui script found')
+    return path
   }
 
   /**
@@ -223,13 +222,7 @@ class ThemeLoader {
 // Create singleton instance
 export const themeLoader = new ThemeLoader()
 
-// Auto-initialize on load (can be disabled if manual control needed)
-if (typeof window !== 'undefined') {
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => themeLoader.init())
-  } else {
-    themeLoader.init()
-  }
-}
+// Note: Auto-initialization is disabled to allow mashlib to set basePath first
+// Mashlib will call themeLoader.init() after setting window.solid.basePath
 
 export default themeLoader
