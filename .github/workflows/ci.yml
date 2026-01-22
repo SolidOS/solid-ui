@@ -81,14 +81,6 @@ jobs:
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - name: Clear npm authentication cache
-        run: |
-          rm -rf ~/.npm/_cacache || true
-          rm -f ~/.npmrc || true
-      - name: Verify npm version
-        run: npm --version
-      - name: Check npm configuration
-        run: npm config list
       - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
