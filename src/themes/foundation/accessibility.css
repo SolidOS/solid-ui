@@ -1,0 +1,147 @@
+/**
+ * Accessibility Features for Solid-UI
+ * WCAG 2.1 Level AA compliance
+ */
+
+/* ========== Screen Reader Only ========== */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.sr-only-focusable:focus {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: inherit;
+  margin: inherit;
+  overflow: visible;
+  clip: auto;
+  white-space: normal;
+}
+
+/* ========== Focus Indicators ========== */
+:focus-visible {
+  outline: var(--sui-focus-width, 2px) solid var(--sui-focus-color, #667eea);
+  outline-offset: var(--sui-focus-offset, 2px);
+}
+
+/* Don't hide focus for mouse users who might need it */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* ========== Skip Links ========== */
+.skip-link {
+  position: absolute;
+  top: -40px;
+  left: 0;
+  background: var(--sui-primary);
+  color: white;
+  padding: 0.5em 1em;
+  text-decoration: none;
+  z-index: var(--sui-z-tooltip, 200);
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+/* ========== High Contrast Mode ========== */
+@media (prefers-contrast: high) {
+  :root {
+    --sui-border-color: #000;
+    --sui-border-color-dark: #000;
+    --sui-text: #000;
+    --sui-bg-panel: #fff;
+    --sui-bg: #fff;
+    --sui-focus-color: #000;
+  }
+  
+  button,
+  input,
+  select,
+  textarea {
+    border: 2px solid currentColor !important;
+  }
+  
+  a {
+    text-decoration: underline;
+  }
+}
+
+/* ========== Reduced Motion ========== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* ========== Touch Targets ========== */
+/* Mobile/tablet: 44px minimum for touch targets */
+@media (max-width: 1024px) {
+  button,
+  a,
+  input[type="checkbox"],
+  input[type="radio"],
+  select {
+    min-height: var(--sui-touch-target-min, 44px);
+    min-width: var(--sui-touch-target-min, 44px);
+  }
+}
+
+/* Desktop: smaller targets are acceptable with precise mouse control */
+@media (min-width: 1025px) {
+  button,
+  a,
+  select {
+    min-height: var(--sui-touch-target-min-desktop, 32px);
+    min-width: var(--sui-touch-target-min-desktop, 32px);
+  }
+  
+  input[type="checkbox"],
+  input[type="radio"] {
+    min-height: auto;
+    min-width: auto;
+  }
+}
+
+/* Allow smaller targets when explicitly sized */
+.small-touch-target {
+  min-height: auto;
+  min-width: auto;
+}
+
+/* ========== Heading Styles ========== */
+/* Apply theme colors to headings */
+h1, h2, h3, h4, h5, h6 {
+  color: var(--sui-primary, #7C4DFF);
+}
+
+/* Override for specific contexts where headings should use text color */
+.use-text-color h1,
+.use-text-color h2,
+.use-text-color h3,
+.use-text-color h4,
+.use-text-color h5,
+.use-text-color h6 {
+  color: var(--sui-text, #333);
+}
+
+/* ========== Dark Mode Support ========== */
+@media (prefers-color-scheme: dark) {
+  /* Dark mode variables can be defined here or in a dark theme preset */
+  /* For now, themes will handle dark mode explicitly */
+}

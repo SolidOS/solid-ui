@@ -28,6 +28,7 @@ describe('Index', () => {
       'style',
       'table',
       'tabs',
+      'themeLoader',
       'utils',
       'widgets'
     ])

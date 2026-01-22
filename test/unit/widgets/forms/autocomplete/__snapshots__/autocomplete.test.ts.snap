@@ -5,7 +5,7 @@ exports[`autocompleteField adds the autocomplete field to the container, if prov
   <div>
     <div
       class="formFieldName"
-      style="padding: 0.3em; vertical-align: middle; width:8em;"
+      style="padding: 0.3em; vertical-align: middle; width: 8em;"
     >
       <a
         href="http://www.w3.org/ns/solid/terms#publicId"
@@ -25,7 +25,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="padding: 0.3em; vertical-align: middle; width: 8em;"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
@@ -49,13 +49,13 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
             style="max-width: 30em; margin: 0.5em;"
           >
             <tr
-              style=""
+              style="border: 0.2em solid var(--sui-warning, straw);"
             >
               <td>
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);"
                   type="text"
                 />
               </td>
@@ -64,34 +64,34 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em);"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em);"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em); display: none;"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>
@@ -116,7 +116,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="padding: 0.3em; vertical-align: middle; width: 8em;"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
@@ -140,13 +140,13 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
             style="max-width: 30em; margin: 0.5em;"
           >
             <tr
-              style=""
+              style="border: 0.2em solid var(--sui-warning, straw);"
             >
               <td>
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);"
                   type="text"
                 />
               </td>
@@ -155,34 +155,34 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em); display: none;"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em); display: none;"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em); display: none;"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>
@@ -209,13 +209,13 @@ exports[`autocompleteField on inpt fetches data (fixing wikidata timeout issue) 
   style="max-width: 30em; margin: 0.5em;"
 >
   <tr
-    style=""
+    style="border: 0.2em solid var(--sui-warning, straw);"
   >
     <td>
       <input
         data-testid="autocomplete-input"
         size="60"
-        style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
+        style="background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);"
         type="text"
       />
     </td>
@@ -242,7 +242,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="padding: 0.3em; vertical-align: middle; width: 8em;"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
@@ -266,13 +266,13 @@ exports[`autocompleteField typing more search term till unique selects the whole
             style="max-width: 30em; margin: 0.5em;"
           >
             <tr
-              style=""
+              style="border: 0.2em solid var(--sui-warning, straw);"
             >
               <td>
                 <input
                   data-testid="autocomplete-input"
                   size="60"
-                  style="background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;"
+                  style="background-color: var(--sui-bg-input, #eef); padding: var(--sui-input-padding, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-form-border-color, #88c); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-input-margin, 0.4em);"
                   type="text"
                 />
               </td>
@@ -281,34 +281,34 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em);"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180158.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Continue"
           />
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em);"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-            style="width: 2em; height: 2em; opacity: 0.3;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
             title="Cancel"
           />
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: var(--sui-bg-button, #fff); padding: var(--sui-button-padding, 0.7em); border: 0.01em solid var(--sui-border-color, white); border-radius: var(--sui-border-radius-sm, 0.2em); font-size: 100%; margin: var(--sui-button-margin, 0.3em); display: none;"
           type="button"
         >
           <img
             src="https://solidos.github.io/solid-ui/src/icons/noun_253504.svg"
-            style="width: 2em; height: 2em;"
+            style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em);"
             title="Edit"
           />
         </button>

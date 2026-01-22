@@ -1,5 +1,6 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
 
 const externalsBase = {
   fs: 'null',
@@ -15,7 +16,7 @@ const externalsBase = {
 // ESM externals: keep imports
 const esmExternals = {
   rdflib: 'rdflib',
-  'solid-logic': 'solid-logic' 
+  'solid-logic': 'solid-logic'
 }
 
 const common = {
@@ -63,7 +64,23 @@ const common = {
         test: /\.ttl$/i,
         type: 'asset/source'
       }]
-  }
+  },
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        // Copy foundation CSS to dist root with prefixed names (avoids npm Windows nested dir bug)
+        { from: 'src/themes/foundation/variables.css', to: 'theme-variables.css' },
+        { from: 'src/themes/foundation/accessibility.css', to: 'theme-accessibility.css' },
+        // Copy theme presets to dist root with prefixed names
+        { from: 'src/themes/presets/classic.css', to: 'theme-classic.css' },
+        { from: 'src/themes/presets/default.css', to: 'theme-default.css' },
+        { from: 'src/themes/presets/signal.css', to: 'theme-signal.css' },
+        { from: 'src/themes/presets/telegram.css', to: 'theme-telegram.css' },
+        { from: 'src/themes/presets/wave.css', to: 'theme-wave.css' },
+        { from: 'src/themes/README.md', to: 'themes-README.md' }
+      ]
+    })
+  ]
 }
 
 // UMD Minified, rdflib external

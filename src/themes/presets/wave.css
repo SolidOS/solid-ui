@@ -1,0 +1,65 @@
+/**
+ * Wave Theme - WhatsApp-style Green
+ * 
+ * Inspired by solid-chat's "Wave" theme.
+ * Clean green design reminiscent of WhatsApp.
+ */
+
+:root {
+  /* ========== Primary Colors ========== */
+  --sui-primary: #128c7e;
+  --sui-primary-dark: #075e54;
+  --sui-primary-light: #25d366;
+  --sui-accent: #25d366;
+  
+  /* ========== Gradients ========== */
+  --sui-gradient-start: #128c7e;
+  --sui-gradient-end: #075e54;
+  --sui-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* ========== Backgrounds ========== */
+  --sui-bg: #efeae2;
+  --sui-bg-panel: #ffffff;
+  --sui-bg-header: #d9fdd3;
+  --sui-bg-input: #ffffff;
+  --sui-bg-hover: #f0f2f5;
+  --sui-bg-active: #d9fdd3;
+  --sui-bg-button: #ffffff;
+  --sui-bg-button-hover: #f0f2f5;
+  
+  /* ========== Text Colors ========== */
+  --sui-text: #111b21;
+  --sui-text-secondary: #667781;
+  --sui-text-muted: #8696a0;
+  --sui-text-link: #128c7e;
+  --sui-text-on-primary: #ffffff;
+  
+  /* ========== Borders ========== */
+  --sui-border-color: #e9edef;
+  --sui-border-color-dark: #d1d7db;
+  --sui-border-width: 0.05em;
+  --sui-border: var(--sui-border-width) solid var(--sui-border-color);
+  
+  /* ========== Border Radius ========== */
+  --sui-border-radius: 0.5em;
+  --sui-border-radius-sm: 0.3em;
+  --sui-border-radius-lg: 1em;
+  --sui-border-radius-full: 50%;
+  
+  /* ========== Shadows ========== */
+  --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --sui-shadow: 0 2px 8px rgba(18, 140, 126, 0.2);
+  --sui-shadow-lg: 0 4px 12px rgba(18, 140, 126, 0.3);
+  --sui-shadow-colored: 0 2px 8px rgba(18, 140, 126, 0.4);
+  
+  /* ========== Status Colors ========== */
+  --sui-success: #25d366;
+  --sui-warning: #e8b923;
+  --sui-error: #dd3e3e;
+  --sui-info: #00a5f4;
+  
+  /* ========== Header ========== */
+  --sui-header-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* All other variables inherit from foundation/variables.css */
+}

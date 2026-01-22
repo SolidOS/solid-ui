@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Theme Integration Test - SolidoS Ecosystem</title>
+  
+  <!-- Load theme foundation -->
+  <link rel="stylesheet" href="../src/themes/foundation/variables.css">
+  <link rel="stylesheet" href="../src/themes/foundation/accessibility.css">
+  
+  <!-- Default theme (can be switched) -->
+  <link rel="stylesheet" href="../src/themes/presets/classic.css" id="solid-ui-theme">
+  
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: var(--sui-font-family, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif);
+      margin: 0;
+      padding: 0;
+      background: var(--sui-bg, #f5f5f5);
+      color: var(--sui-text, #333);
+    }
+    
+    .test-header {
+      background: linear-gradient(135deg, var(--sui-gradient-start, #667eea), var(--sui-gradient-end, #9f7aea));
+      color: white;
+      padding: 2rem;
+      box-shadow: var(--sui-shadow, 0 4px 12px rgba(0,0,0,0.15));
+    }
+    
+    .test-header h1 {
+      margin: 0 0 0.5rem 0;
+      font-size: 2rem;
+    }
+    
+    .test-header p {
+      margin: 0;
+      opacity: 0.9;
+    }
+    
+    .theme-controls {
+      background: var(--sui-bg-panel, white);
+      padding: 1.5rem;
+      margin: 1rem;
+      border-radius: var(--sui-border-radius, 0.5em);
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0,0,0,0.08));
+    }
+    
+    .theme-controls h2 {
+      margin: 0 0 1rem 0;
+      color: var(--sui-text, #333);
+      font-size: 1.25rem;
+    }
+    
+    .theme-selector {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    
+    .theme-button {
+      padding: 0.75rem 1.5rem;
+      border: 2px solid var(--sui-border, #e2e8f0);
+      border-radius: var(--sui-border-radius, 0.5em);
+      background: var(--sui-bg-input, white);
+      color: var(--sui-text, #333);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 500;
+    }
+    
+    .theme-button:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--sui-shadow, 0 4px 12px rgba(0,0,0,0.15));
+      border-color: var(--sui-primary, #805ad5);
+    }
+    
+    .theme-button.active {
+      background: var(--sui-primary, #805ad5);
+      color: white;
+      border-color: var(--sui-primary, #805ad5);
+    }
+    
+    .test-section {
+      margin: 1rem;
+      background: var(--sui-bg-panel, white);
+      padding: 1.5rem;
+      border-radius: var(--sui-border-radius, 0.5em);
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0,0,0,0.08));
+    }
+    
+    .test-section h3 {
+      margin: 0 0 1rem 0;
+      color: var(--sui-text, #333);
+      font-size: 1.1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 1px solid var(--sui-border, #e2e8f0);
+    }
+    
+    .component-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+    
+    .component-demo {
+      padding: 1rem;
+      border: 1px solid var(--sui-border, #e2e8f0);
+      border-radius: var(--sui-border-radius-sm, 0.2em);
+      background: var(--sui-bg, #f5f5f5);
+    }
+    
+    .component-demo h4 {
+      margin: 0 0 0.75rem 0;
+      font-size: 0.9rem;
+      color: var(--sui-text-secondary, #666);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    
+    /* Test solid-ui component styles */
+    .test-input {
+      background-color: var(--sui-bg-input, #eef);
+      padding: var(--sui-space-sm, 0.5em);
+      border: 1px solid var(--sui-border, #88c);
+      border-radius: var(--sui-border-radius-sm, 0.2em);
+      font-size: 1rem;
+      width: 100%;
+      margin: 0.5em 0;
+      font-family: inherit;
+    }
+    
+    .test-button {
+      background: var(--sui-bg-button, white);
+      padding: var(--sui-space-sm, 0.7em) var(--sui-space-md, 1em);
+      border: 1px solid var(--sui-border, #ddd);
+      border-radius: var(--sui-border-radius, 0.5em);
+      font-size: 1rem;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    
+    .test-button:hover {
+      background: var(--sui-bg-button-hover, #f0f0f0);
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0,0,0,0.08));
+    }
+    
+    .test-button.primary {
+      background: var(--sui-primary, #3B5998);
+      color: white;
+      border-color: var(--sui-primary, #3B5998);
+    }
+    
+    .test-button.primary:hover {
+      background: var(--sui-primary-hover, #2d4373);
+    }
+    
+    .test-panel {
+      background: var(--sui-bg-panel, white);
+      padding: var(--sui-space-md, 1em);
+      border: 1px solid var(--sui-border, #ddd);
+      border-radius: var(--sui-border-radius, 0.5em);
+      margin: 0.5em 0;
+    }
+    
+    .test-message {
+      background: var(--sui-bg-message, white);
+      padding: var(--sui-space-sm, 0.75em);
+      border-left: 3px solid var(--sui-primary, #805ad5);
+      border-radius: var(--sui-border-radius-sm, 0.2em);
+      margin: 0.5em 0;
+      box-shadow: var(--sui-shadow-sm, 0 1px 2px rgba(0,0,0,0.08));
+    }
+    
+    .variable-inspector {
+      background: #f8f9fa;
+      padding: 1rem;
+      border-radius: var(--sui-border-radius-sm, 0.2em);
+      font-family: 'Monaco', 'Courier New', monospace;
+      font-size: 0.85rem;
+      max-height: 300px;
+      overflow-y: auto;
+      margin-top: 1rem;
+    }
+    
+    .variable-inspector .variable {
+      display: grid;
+      grid-template-columns: 250px 1fr;
+      gap: 1rem;
+      padding: 0.25rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+    
+    .variable-inspector .variable-name {
+      color: #d73a49;
+      font-weight: 600;
+    }
+    
+    .variable-inspector .variable-value {
+      color: #005cc5;
+    }
+    
+    .status-indicator {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 1rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-left: 0.5rem;
+    }
+    
+    .status-indicator.pass {
+      background: #d4edda;
+      color: #155724;
+    }
+    
+    .status-indicator.fail {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    
+    .pane-container {
+      border: 1px solid var(--sui-border, #ddd);
+      border-radius: var(--sui-border-radius, 0.5em);
+      padding: 1rem;
+      margin: 0.5rem 0;
+      background: var(--sui-bg-pane, white);
+    }
+  </style>
+</head>
+<body>
+  
+  <div class="test-header">
+    <h1>🎨 Theme Integration Test</h1>
+    <p>Testing solid-ui theme system across the SolidoS ecosystem</p>
+  </div>
+  
+  <div class="theme-controls">
+    <h2>Theme Selector</h2>
+    <div class="theme-selector">
+      <button class="theme-button active" data-theme="classic">Classic</button>
+      <button class="theme-button" data-theme="default">Default (Purple)</button>
+      <button class="theme-button" data-theme="wave">Wave (Green)</button>
+      <button class="theme-button" data-theme="telegram">Telegram (Blue)</button>
+      <button class="theme-button" data-theme="signal">Signal (Dark)</button>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>CSS Variables Status <span class="status-indicator pass" id="css-vars-status">✓ Loaded</span></h3>
+    <p>Verifying that CSS custom properties are properly defined and accessible:</p>
+    <div class="variable-inspector" id="variable-inspector">
+      <!-- Will be populated by JavaScript -->
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Core UI Components (solid-ui)</h3>
+    <div class="component-grid">
+      
+      <div class="component-demo">
+        <h4>Text Inputs</h4>
+        <input type="text" class="test-input" placeholder="Text input field" />
+        <input type="text" class="test-input" placeholder="Another input" />
+      </div>
+      
+      <div class="component-demo">
+        <h4>Buttons</h4>
+        <button class="test-button">Default Button</button>
+        <button class="test-button primary">Primary Button</button>
+      </div>
+      
+      <div class="component-demo">
+        <h4>Panels</h4>
+        <div class="test-panel">
+          <strong>Panel Content</strong>
+          <p style="margin: 0.5em 0 0 0;">This is a test panel using CSS variables</p>
+        </div>
+      </div>
+      
+      <div class="component-demo">
+        <h4>Messages</h4>
+        <div class="test-message">
+          <strong>Message Component</strong>
+          <p style="margin: 0.5em 0 0 0;">Using CSS variables for theming</p>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Heading Styles (H1-H4) - Theme Color Integration</h3>
+    <p>All headings now use <code>var(--sui-primary)</code> for color - should change with each theme</p>
+    <div style="padding: 1rem; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em); margin-top: 1rem;">
+      <h1 style="font-size: 180%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: var(--sui-space-sm, 0.5em); margin: 0.7em 0;">
+        H1 Heading - 180% - Primary Theme Color
+      </h1>
+      <h2 style="font-size: 130%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.4em; margin: 0.7em 0;">
+        H2 Heading - 130% - Primary Theme Color
+      </h2>
+      <h3 style="font-size: 120%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.3em; margin: 0.7em 0;">
+        H3 Heading - 120% - Primary Theme Color
+      </h3>
+      <h4 style="font-size: 110%; font-weight: bold; color: var(--sui-primary, #7C4DFF); padding: 0.2em; margin: 0.7em 0;">
+        H4 Heading - 110% - Primary Theme Color
+      </h4>
+      <p style="font-size: 100%; margin: 0.5em 0; color: var(--sui-text, #333);">
+        Regular paragraph text (100%) - uses --sui-text for contrast
+      </p>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Section Borders and Spacing</h3>
+    <p>Testing section styling similar to basicPreferences.ts and editProfile.view.ts</p>
+    <div style="border: 0.3em solid var(--sui-primary, #7C4DFF); border-radius: var(--sui-border-radius, 0.5em); padding: var(--sui-space-md, 0.7em); margin-top: var(--sui-space-md, 0.7em); background: var(--sui-bg-panel, white);">
+      <h3 style="font-size: 120%; font-weight: bold; color: var(--sui-primary, #7C4DFF); margin: 0 0 0.5em 0;">
+        Section with Primary Border
+      </h3>
+      <p style="margin: 0; color: var(--sui-text, #333);">
+        This section uses <code>--sui-primary</code> for border color, <code>--sui-border-radius</code> for rounded corners, 
+        and <code>--sui-space-md</code> for padding. All values change with the theme.
+      </p>
+      <div style="padding: var(--sui-space-md, 0.7em); margin-top: var(--sui-space-md, 0.7em); background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        <strong>Nested content area</strong> with theme-aware background and spacing
+      </div>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Icon Sizes - Responsive Touch Targets</h3>
+    <p>Testing new icon size variables with responsive accessibility</p>
+    <div class="component-grid">
+      <div class="component-demo">
+        <h4>Standard Icons (--sui-icon-size)</h4>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); background: var(--sui-primary, #805ad5); border-radius: var(--sui-border-radius-lg, 1em);"></div>
+          <span>1.5em standard icon</span>
+        </div>
+      </div>
+      
+      <div class="component-demo">
+        <h4>Avatar Icons (--sui-avatar-size)</h4>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="width: var(--sui-avatar-size, 2.5em); height: var(--sui-avatar-size, 2.5em); background: var(--sui-primary, #805ad5); border-radius: 50%;"></div>
+          <span>2.5em avatar</span>
+        </div>
+      </div>
+      
+      <div class="component-demo">
+        <h4>Class Icons (--sui-icon-class-size)</h4>
+        <div style="display: flex; gap: 0.5rem; align-items: center;">
+          <div style="width: var(--sui-icon-class-size, 3em); height: var(--sui-icon-class-size, 3em); background: var(--sui-primary, #805ad5); border-radius: var(--sui-border-radius-sm, 0.2em);"></div>
+          <span>3em class icon</span>
+        </div>
+      </div>
+    </div>
+    <p style="margin-top: 1rem; padding: 0.75rem; background: #fff3cd; border-left: 3px solid #ffc107; border-radius: var(--sui-border-radius-sm, 0.2em);">
+      <strong>Responsive Note:</strong> Touch targets are 44px on mobile (≤1024px) and 32px/auto on desktop (≥1025px) for better accessibility.
+    </p>
+  </div>
+  
+  <div class="test-section">
+    <h3>Responsive Typography and Spacing</h3>
+    <p>Testing responsive font sizes and spacing adjustments</p>
+    <div style="padding: 1rem; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+      <p><strong>Font sizes scale responsively:</strong></p>
+      <ul style="list-style: none; padding-left: 0;">
+        <li style="padding: 0.25em 0;">📱 <strong>Mobile (≤768px):</strong> base 0.9em, tighter spacing</li>
+        <li style="padding: 0.25em 0;">📟 <strong>Tablet (769-1024px):</strong> base 0.95em, moderate spacing</li>
+        <li style="padding: 0.25em 0;">💻 <strong>Desktop (≥1025px):</strong> base 1em, standard spacing</li>
+      </ul>
+      <p style="margin-top: 1em;">
+        <code>--sui-space-md</code> = <strong style="color: var(--sui-primary, #805ad5);">
+          <span id="space-md-value"></span>
+        </strong>
+      </p>
+    </div>
+  </div>
+
+  <div class="test-section">
+    <h3>Pane Integration Tests</h3>
+    <p><strong>Note:</strong> These sections verify that external panes inherit the theme system from solid-ui.</p>
+    
+    <div class="pane-container">
+      <h4>📁 Folder Pane (folder-pane)</h4>
+      <p>Status: <span class="status-indicator pass">Ready for testing</span></p>
+      <p>Uses <code>UI.style.folderPaneStyle</code> from solid-ui - should automatically inherit themes</p>
+      <div id="folder-pane-demo" style="padding: 1em; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        <em>Folder pane content would render here (requires full integration)</em>
+      </div>
+    </div>
+    
+    <div class="pane-container">
+      <h4>💬 Chat Pane (chat-pane)</h4>
+      <p>Status: <span class="status-indicator pass">Ready for testing</span></p>
+      <p>Uses <code>UI.style</code> properties from solid-ui - should automatically inherit themes</p>
+      <div id="chat-pane-demo" style="padding: 1em; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        <em>Chat pane content would render here (requires full integration)</em>
+      </div>
+    </div>
+    
+    <div class="pane-container">
+      <h4>📝 Source Pane (source-pane)</h4>
+      <p>Status: <span class="status-indicator pass">Ready for testing</span></p>
+      <p>Uses solid-ui components - should automatically inherit themes</p>
+      <div id="source-pane-demo" style="padding: 1em; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        <em>Source pane content would render here (requires full integration)</em>
+      </div>
+    </div>
+  </div>
+  
+  <div class="test-section">
+    <h3>Theme Propagation Checklist</h3>
+    <ul style="list-style: none; padding: 0;">
+      <li style="padding: 0.5em; margin: 0.25em 0; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        ✅ <strong>CSS variables defined</strong> - Foundation loaded
+      </li>
+      <li style="padding: 0.5em; margin: 0.25em 0; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        ✅ <strong>Theme switching works</strong> - Runtime theme changes functional
+      </li>
+      <li style="padding: 0.5em; margin: 0.25em 0; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        ⏳ <strong>Panes use UI.style</strong> - Requires pane package installation
+      </li>
+      <li style="padding: 0.5em; margin: 0.25em 0; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        ⏳ <strong>Theme persists</strong> - localStorage integration (requires themeLoader.js)
+      </li>
+      <li style="padding: 0.5em; margin: 0.25em 0; background: var(--sui-bg, #f5f5f5); border-radius: var(--sui-border-radius-sm, 0.2em);">
+        ⏳ <strong>No visual regressions</strong> - Classic theme matches original
+      </li>
+    </ul>
+  </div>
+  
+  <script>
+    // Theme switching functionality
+    const themeButtons = document.querySelectorAll('.theme-button');
+    const themeLink = document.getElementById('solid-ui-theme');
+    
+    themeButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const theme = button.dataset.theme;
+        
+        // Update theme link
+        themeLink.href = `../src/themes/presets/${theme}.css`;
+        
+        // Update active state
+        themeButtons.forEach(btn => btn.classList.remove('active'));
+        button.classList.add('active');
+        
+        // Log change
+        console.log(`Theme switched to: ${theme}`);
+        
+        // Re-inspect variables
+        setTimeout(inspectCSSVariables, 100);
+      });
+    });
+    
+    // CSS Variables Inspector
+    function inspectCSSVariables() {
+      const inspector = document.getElementById('variable-inspector');
+      const rootStyles = getComputedStyle(document.documentElement);
+      
+      const variables = [
+        // Primary Colors
+        '--sui-primary',
+        '--sui-primary-dark',
+        '--sui-primary-light',
+        '--sui-accent',
+        
+        // Gradients
+        '--sui-gradient-start',
+        '--sui-gradient-end',
+        '--sui-gradient',
+        
+        // Backgrounds
+        '--sui-bg',
+        '--sui-bg-panel',
+        '--sui-bg-header',
+        '--sui-bg-input',
+        '--sui-bg-hover',
+        '--sui-bg-active',
+        '--sui-bg-button',
+        '--sui-bg-button-hover',
+        
+        // Text Colors
+        '--sui-text',
+        '--sui-text-secondary',
+        '--sui-text-muted',
+        '--sui-text-link',
+        '--sui-text-on-primary',
+        
+        // Borders
+        '--sui-border-color',
+        '--sui-border-color-dark',
+        '--sui-border-width',
+        '--sui-border',
+        
+        // Border Radius
+        '--sui-border-radius',
+        '--sui-border-radius-sm',
+        '--sui-border-radius-lg',
+        '--sui-border-radius-full',
+        
+        // Shadows
+        '--sui-shadow-sm',
+        '--sui-shadow',
+        '--sui-shadow-lg',
+        '--sui-shadow-colored',
+        
+        // Spacing
+        '--sui-space-xs',
+        '--sui-space-sm',
+        '--sui-space-md',
+        '--sui-space-lg',
+        '--sui-space-xl',
+        '--sui-space-2xl',
+        
+        // Typography
+        '--sui-font-family',
+        '--sui-font-family-mono',
+        '--sui-font-size-xs',
+        '--sui-font-size-sm',
+        '--sui-font-size-base',
+        '--sui-font-size-lg',
+        '--sui-font-size-xl',
+        '--sui-line-height',
+        
+        // Forms
+        '--sui-form-border-color',
+        '--sui-input-padding',
+        '--sui-input-margin',
+        
+        // Buttons
+        '--sui-button-padding',
+        '--sui-button-padding-sm',
+        '--sui-button-margin',
+        
+        // Icon Sizes
+        '--sui-icon-size',
+        '--sui-avatar-size',
+        '--sui-icon-class-size',
+        
+        // Status Colors
+        '--sui-success',
+        '--sui-warning',
+        '--sui-error',
+        '--sui-info',
+        
+        // Header
+        '--sui-header-gradient',
+        '--sui-header-height',
+        '--sui-header-shadow',
+        
+        // Transitions
+        '--sui-transition-fast',
+        '--sui-transition',
+        '--sui-transition-slow',
+        
+        // Accessibility
+        '--sui-focus-color',
+        '--sui-focus-width',
+        '--sui-touch-target-min'
+      ];
+      
+      let html = '';
+      let hasVariables = false;
+      
+      variables.forEach(varName => {
+        const value = rootStyles.getPropertyValue(varName).trim();
+        if (value) {
+          hasVariables = true;
+          html += `
+            <div class="variable">
+              <span class="variable-name">${varName}</span>
+              <span class="variable-value">${value}</span>
+            </div>
+          `;
+        }
+      });
+      
+      if (!hasVariables) {
+        html = '<p style="color: #721c24;">⚠️ No CSS variables detected. Theme foundation may not be loaded.</p>';
+        document.getElementById('css-vars-status').textContent = '✗ Not Found';
+        document.getElementById('css-vars-status').className = 'status-indicator fail';
+      } else {
+        document.getElementById('css-vars-status').textContent = '✓ Loaded';
+        document.getElementById('css-vars-status').className = 'status-indicator pass';
+      }
+      
+      inspector.innerHTML = html;
+      
+      // Update space-md display
+      const spaceMdValue = rootStyles.getPropertyValue('--sui-space-md').trim();
+      const spaceMdElement = document.getElementById('space-md-value');
+      if (spaceMdElement) {
+        spaceMdElement.textContent = spaceMdValue || '1em (default)';
+      }
+    }
+    
+    // Run inspector on load
+    document.addEventListener('DOMContentLoaded', inspectCSSVariables);
+    
+    // Log test info
+    console.log('🎨 Theme Integration Test Ready');
+    console.log('---');
+    console.log('This page tests:');
+    console.log('1. CSS variable foundation loading');
+    console.log('2. Theme preset switching');
+    console.log('3. Component styling with CSS variables');
+    console.log('4. Preparation for pane integration');
+    console.log('---');
+    console.log('Next steps:');
+    console.log('- Link local solid-ui build to pane packages');
+    console.log('- Test actual pane rendering with themes');
+    console.log('- Verify no visual regressions in classic theme');
+  </script>
+  
+</body>
+</html>

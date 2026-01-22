@@ -1,0 +1,65 @@
+/**
+ * Telegram Theme - Messenger-style Blue
+ * 
+ * Inspired by solid-chat's "Telegram" theme.
+ * Clean blue design reminiscent of Telegram/Messenger.
+ */
+
+:root {
+  /* ========== Primary Colors ========== */
+  --sui-primary: #0088cc;
+  --sui-primary-dark: #0078b8;
+  --sui-primary-light: #54a9eb;
+  --sui-accent: #54a9eb;
+  
+  /* ========== Gradients ========== */
+  --sui-gradient-start: #0088cc;
+  --sui-gradient-end: #0078b8;
+  --sui-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* ========== Backgrounds ========== */
+  --sui-bg: #f4f4f5;
+  --sui-bg-panel: #ffffff;
+  --sui-bg-header: #d4e9f7;
+  --sui-bg-input: #ffffff;
+  --sui-bg-hover: #f0f0f1;
+  --sui-bg-active: #e8f4fd;
+  --sui-bg-button: #ffffff;
+  --sui-bg-button-hover: #f0f0f1;
+  
+  /* ========== Text Colors ========== */
+  --sui-text: #000000;
+  --sui-text-secondary: #707579;
+  --sui-text-muted: #a2acb4;
+  --sui-text-link: #0088cc;
+  --sui-text-on-primary: #ffffff;
+  
+  /* ========== Borders ========== */
+  --sui-border-color: #dadce0;
+  --sui-border-color-dark: #c6c9cc;
+  --sui-border-width: 0.05em;
+  --sui-border: var(--sui-border-width) solid var(--sui-border-color);
+  
+  /* ========== Border Radius ========== */
+  --sui-border-radius: 0.5em;
+  --sui-border-radius-sm: 0.3em;
+  --sui-border-radius-lg: 1em;
+  --sui-border-radius-full: 50%;
+  
+  /* ========== Shadows ========== */
+  --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --sui-shadow: 0 2px 8px rgba(0, 136, 204, 0.2);
+  --sui-shadow-lg: 0 4px 12px rgba(0, 136, 204, 0.3);
+  --sui-shadow-colored: 0 2px 8px rgba(0, 136, 204, 0.4);
+  
+  /* ========== Status Colors ========== */
+  --sui-success: #00c73e;
+  --sui-warning: #ff9500;
+  --sui-error: #ff3b30;
+  --sui-info: #0088cc;
+  
+  /* ========== Header ========== */
+  --sui-header-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* All other variables inherit from foundation/variables.css */
+}

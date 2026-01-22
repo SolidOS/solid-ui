@@ -112,6 +112,64 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
   if (!helpMenuItems) return
   const helpMenuList = document.createElement('ul')
   helpMenuList.setAttribute('style', style.headerUserMenuList)
+
+  // Add theme selector submenu at the top
+  try {
+    const themeLoader = (globalThis as any).UI?.themeLoader || (window as any).UI?.themeLoader
+    if (themeLoader) {
+      // Add theme label
+      const themeLabel = document.createElement('li')
+      themeLabel.setAttribute('style', style.headerUserMenuItem + ' font-weight: bold; padding: 0.5em 1em; color: #666; font-size: 0.9em;')
+      themeLabel.textContent = '🎨 Themes'
+      helpMenuList.appendChild(themeLabel)
+
+      // Add theme options
+      const themes = [
+        { name: 'classic', label: '📘 Classic', icon: '📘' },
+        { name: 'default', label: '💜 Default', icon: '💜' },
+        { name: 'wave', label: '💚 Wave', icon: '💚' },
+        { name: 'telegram', label: '💙 Telegram', icon: '💙' },
+        { name: 'signal', label: '🔵 Signal', icon: '🔵' }
+      ]
+
+      const currentTheme = themeLoader.getCurrentTheme()
+
+      themes.forEach(theme => {
+        const themeButton = createUserMenuButton(
+          theme.label + (theme.name === currentTheme ? ' ✓' : ''),
+          async () => {
+            try {
+              await themeLoader.loadTheme(theme.name)
+              console.log(`Theme switched to: ${theme.label}`)
+              // Update checkmarks in all theme buttons
+              setTimeout(() => {
+                const newCurrentTheme = themeLoader.getCurrentTheme()
+                helpMenuList.querySelectorAll('button').forEach((btn, idx) => {
+                  // Theme buttons are first 5 buttons (after the label)
+                  if (idx < themes.length) {
+                    const themeInfo = themes[idx]
+                    btn.textContent = themeInfo.label + (themeInfo.name === newCurrentTheme ? ' ✓' : '')
+                  }
+                })
+              }, 100)
+            } catch (error) {
+              console.error('Failed to switch theme:', error)
+            }
+          }
+        )
+        helpMenuList.appendChild(createUserMenuItem(themeButton))
+      })
+
+      // Add separator
+      const separator = document.createElement('li')
+      separator.setAttribute('style', 'border-top: 1px solid #ddd; margin: 0.5em 0;')
+      helpMenuList.appendChild(separator)
+    }
+  } catch (error) {
+    console.warn('Theme loader not available', error)
+  }
+
+  // Add regular help menu items
   helpMenuItems.forEach(function (menuItem) {
     const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
     if (menuItemType === 'url') {

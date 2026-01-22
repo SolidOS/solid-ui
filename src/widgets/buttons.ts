@@ -558,7 +558,7 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
   if (iconURI) {
     const img = button.appendChild(dom.createElement('img'))
     img.setAttribute('src', iconURI)
-    img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
+    img.setAttribute('style', style.iconStyle)
     img.title = text
     button.setAttribute('style', style.buttonStyle)
   } else {
@@ -716,9 +716,9 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   // const image = td1.appendChild(dom.createElement('img'))
   const image = options.image || faviconOrDefault(dom, obj)
 
-  td1.setAttribute('style', 'vertical-align: middle; width:2.5em; padding:0.5em; height: 2.5em;')
+  td1.setAttribute('style', 'vertical-align: middle; width: var(--sui-avatar-size, 2.5em); padding: 0.5em; height: var(--sui-avatar-size, 2.5em);')
   td2.setAttribute('style', 'vertical-align: middle; text-align:left;')
-  td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
+  td3.setAttribute('style', 'vertical-align: middle; width: var(--sui-icon-size, 2em); padding: 0.5em; height: 4em;')
   td1.appendChild(image)
 
   if (options.title) {

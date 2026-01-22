@@ -1,0 +1,65 @@
+/**
+ * Signal Theme - Privacy-focused Dark Blue
+ * 
+ * Inspired by solid-chat's "Signal" theme.
+ * Clean, professional design with Signal's color palette.
+ */
+
+:root {
+  /* ========== Primary Colors ========== */
+  --sui-primary: #2c6bed;
+  --sui-primary-dark: #1851c4;
+  --sui-primary-light: #5e94f5;
+  --sui-accent: #5e94f5;
+  
+  /* ========== Gradients ========== */
+  --sui-gradient-start: #2c6bed;
+  --sui-gradient-end: #1851c4;
+  --sui-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* ========== Backgrounds ========== */
+  --sui-bg: #f6f6f6;
+  --sui-bg-panel: #ffffff;
+  --sui-bg-header: #d9e6fc;
+  --sui-bg-input: #ffffff;
+  --sui-bg-hover: #f0f0f0;
+  --sui-bg-active: #e8f1fd;
+  --sui-bg-button: #ffffff;
+  --sui-bg-button-hover: #f0f0f0;
+  
+  /* ========== Text Colors ========== */
+  --sui-text: #1b1b1b;
+  --sui-text-secondary: #5e5e5e;
+  --sui-text-muted: #8e8e93;
+  --sui-text-link: #2c6bed;
+  --sui-text-on-primary: #ffffff;
+  
+  /* ========== Borders ========== */
+  --sui-border-color: #d4d4d4;
+  --sui-border-color-dark: #b8b8b8;
+  --sui-border-width: 0.05em;
+  --sui-border: var(--sui-border-width) solid var(--sui-border-color);
+  
+  /* ========== Border Radius ========== */
+  --sui-border-radius: 0.5em;
+  --sui-border-radius-sm: 0.3em;
+  --sui-border-radius-lg: 1em;
+  --sui-border-radius-full: 50%;
+  
+  /* ========== Shadows ========== */
+  --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --sui-shadow: 0 2px 8px rgba(44, 107, 237, 0.2);
+  --sui-shadow-lg: 0 4px 12px rgba(44, 107, 237, 0.3);
+  --sui-shadow-colored: 0 2px 8px rgba(44, 107, 237, 0.4);
+  
+  /* ========== Status Colors ========== */
+  --sui-success: #00b433;
+  --sui-warning: #ff9500;
+  --sui-error: #e83535;
+  --sui-info: #2c6bed;
+  
+  /* ========== Header ========== */
+  --sui-header-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* All other variables inherit from foundation/variables.css */
+}

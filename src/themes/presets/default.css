@@ -1,0 +1,65 @@
+/**
+ * Default (Solid) Theme - Modern Purple Gradient
+ * 
+ * Inspired by solid-chat's "Solid" theme.
+ * Modern, clean design with purple gradient and improved spacing.
+ */
+
+:root {
+  /* ========== Primary Colors ========== */
+  --sui-primary: #805ad5;
+  --sui-primary-dark: #667eea;
+  --sui-primary-light: #9f7aea;
+  --sui-accent: #9f7aea;
+  
+  /* ========== Gradients ========== */
+  --sui-gradient-start: #667eea;
+  --sui-gradient-end: #9f7aea;
+  --sui-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* ========== Backgrounds ========== */
+  --sui-bg: #f7f8fc;
+  --sui-bg-panel: #ffffff;
+  --sui-bg-header: #e9d8fd;
+  --sui-bg-input: #ffffff;
+  --sui-bg-hover: #f7f8fc;
+  --sui-bg-active: #ede9fe;
+  --sui-bg-button: #ffffff;
+  --sui-bg-button-hover: #f7f8fc;
+  
+  /* ========== Text Colors ========== */
+  --sui-text: #2d3748;
+  --sui-text-secondary: #4a5568;
+  --sui-text-muted: #a0aec0;
+  --sui-text-link: #805ad5;
+  --sui-text-on-primary: #ffffff;
+  
+  /* ========== Borders ========== */
+  --sui-border-color: #e2e8f0;
+  --sui-border-color-dark: #cbd5e0;
+  --sui-border-width: 0.05em;
+  --sui-border: var(--sui-border-width) solid var(--sui-border-color);
+  
+  /* ========== Border Radius ========== */
+  --sui-border-radius: 0.5em;
+  --sui-border-radius-sm: 0.3em;
+  --sui-border-radius-lg: 1em;
+  --sui-border-radius-full: 50%;
+  
+  /* ========== Shadows ========== */
+  --sui-shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.08);
+  --sui-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  --sui-shadow-lg: 0 8px 24px rgba(0, 0, 0, 0.2);
+  --sui-shadow-colored: 0 4px 20px rgba(102, 126, 234, 0.3);
+  
+  /* ========== Status Colors ========== */
+  --sui-success: #48bb78;
+  --sui-warning: #ed8936;
+  --sui-error: #f56565;
+  --sui-info: #4299e1;
+  
+  /* ========== Header ========== */
+  --sui-header-gradient: linear-gradient(135deg, var(--sui-gradient-start), var(--sui-gradient-end));
+  
+  /* All other variables inherit from foundation/variables.css */
+}

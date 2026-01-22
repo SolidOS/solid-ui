@@ -60,6 +60,8 @@ import * as preferences from './preferences'
 // @ts-ignore
 import { style } from './style'
 // @ts-ignore
+import { themeLoader } from './themeLoader'
+// @ts-ignore
 import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
@@ -92,6 +94,7 @@ if (typeof window !== 'undefined') {
     participation,
     preferences,
     style,
+    themeLoader,
     table,
     tabs,
     utils,
@@ -121,6 +124,7 @@ export {
   participation,
   preferences,
   style,
+  themeLoader,
   table,
   tabs,
   utils,

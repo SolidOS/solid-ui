@@ -2,16 +2,16 @@
 
 exports[`errorMessageBlock creates an error message div 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(255, 238, 238);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(255, 238, 238);"
 >
   my error message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>
@@ -20,16 +20,16 @@ exports[`errorMessageBlock creates an error message div 1`] = `
 
 exports[`errorMessageBlock escapes the HTML 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(255, 238, 238);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(255, 238, 238);"
 >
   my &lt;script&gt; kiddie &lt;/script&gt; message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>
@@ -38,16 +38,16 @@ exports[`errorMessageBlock escapes the HTML 1`] = `
 
 exports[`errorMessageBlock sets the background color 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; color: black; background-color: rgb(0, 255, 255);"
+  style="margin: 0.1em; padding: var(--sui-space-sm, 0.5em); border: var(--sui-border-width, 0.05em) solid var(--sui-border-color-dark, gray); color: var(--sui-text, black); background-color: rgb(0, 255, 255);"
 >
   my colored message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: var(--sui-icon-size, 2em); height: var(--sui-icon-size, 2em);"
     type="button"
   >
     <img
       src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
-      style="width: 2em; height: 2em; opacity: 0.3;"
+      style="width: var(--sui-icon-size, 1.5em); height: var(--sui-icon-size, 1.5em); margin: 0.1em; border-radius: var(--sui-border-radius-lg, 1em); opacity: 0.3;"
       title="Cancel"
     />
   </button>

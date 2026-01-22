@@ -13,7 +13,7 @@ exports[`Comment deals with custom style 1`] = `
 exports[`Comment deals with missing container 1`] = `
 <div>
   <p
-    style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"
+    style="padding: var(--sui-button-padding, 0.7em); border: none; font-size: 100%; white-space: pre-wrap;"
   >
     &lt;http://example.com/#bla&gt;
   </p>
@@ -23,7 +23,7 @@ exports[`Comment deals with missing container 1`] = `
 exports[`Comment deals with missing content 1`] = `
 <div>
   <p
-    style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"
+    style="padding: var(--sui-button-padding, 0.7em); border: none; font-size: 100%; white-space: pre-wrap;"
   >
     Error: No contents in comment field.
   </p>
@@ -41,7 +41,7 @@ exports[`Comment deals with missing field params in non-bottom field type 1`] = 
 exports[`Comment runs 1`] = `
 <div>
   <p
-    style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"
+    style="padding: var(--sui-button-padding, 0.7em); border: none; font-size: 100%; white-space: pre-wrap;"
   >
     &lt;http://example.com/#bla&gt;
   </p>

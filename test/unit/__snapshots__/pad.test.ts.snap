@@ -2,11 +2,11 @@
 
 exports[`notepad runs 1`] = `
 <table
-  style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
+  style="padding: var(--sui-space-md, 1em); overflow: auto; resize: horizontal; min-width: 40em;"
 >
   <tr>
     <input
-      style="font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
+      style="font-size: 100%; font-family: var(--sui-font-family-mono, monospace); width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
       type="text"
     />
   </tr>
@@ -15,11 +15,11 @@ exports[`notepad runs 1`] = `
 
 exports[`notepad status area ... 1`] = `
 <table
-  style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
+  style="padding: var(--sui-space-md, 1em); overflow: auto; resize: horizontal; min-width: 40em;"
 >
   <tr>
     <input
-      style="font-size: 100%; font-family: monospace; width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
+      style="font-size: 100%; font-family: var(--sui-font-family-mono, monospace); width: 100%; border: none; white-space: pre-wrap;text-indent: 0em;"
       type="text"
     />
   </tr>
