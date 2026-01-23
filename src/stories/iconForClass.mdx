@@ -1,6 +1,7 @@
 import * as UI from '../../src/index'
+import * as IconForClassStories from './iconForClass.stories';
 
-import { Canvas, Meta, Story } from "@storybook/addon-docs";
+import { Canvas, Meta, Story } from "@storybook/blocks";
 
 export const iconDecorator = (Story) => {
   const items = Story();
@@ -13,7 +14,7 @@ export const iconDecorator = (Story) => {
           </table>`;
 };
 
-<Meta title="iconForClass" />
+<Meta of={IconForClassStories} />
 
 # iconForClass
 
@@ -24,12 +25,5 @@ Best logo or avatar or photo etc to represent someone or some group etc
 ## for solid:AppProviderClass
 
 <Canvas withSource="open">
-  <Story name="for solid:AppProviderClass" decorators={[iconDecorator]}>
-    {() =>
-      Object.keys(UI.widgets.iconForClass).map((className) => {
-        const icon = UI.widgets.iconForClass[className];
-        return { className, icon };
-      })
-    }
-  </Story>
+  <Story of={IconForClassStories.ForSolidAppProviderClass} />
 </Canvas>
