@@ -71,7 +71,7 @@
     "mime-types": "^3.0.2",
     "pane-registry": "^3.0.0",
     "solid-namespace": "^0.5.4",
-    "uuid": "^11.1.0"
+    "uuid": "^13.0.0"
   },
   "peerDependencies": {
     "rdflib": "^2.3.0",
