@@ -10,7 +10,9 @@ export default {
   transform: {
     '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.mjs' }],
   },
-  transformIgnorePatterns: ['/node_modules/(?!lit-html).+\\.js'],
+  transformIgnorePatterns: [
+    '<rootDir>/node_modules/(?!(lit-html|@exodus/bytes|uuid|jsdom|parse5)/)',
+  ],
   setupFilesAfterEnv: ['./test/helpers/setup.ts'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/__mocks__'],
