@@ -1,6 +1,4 @@
-import {
-  imageDivStyle
-} from '../style'
+import { style } from '../style'
 
 /**
  * Wraps a Div in a TR/RD
@@ -60,7 +58,7 @@ export const addClickListenerToElement = (div: HTMLDivElement, onClickFunction: 
 export const createImageDiv = (dom: HTMLDocument, div: HTMLDivElement, image: HTMLImageElement | HTMLObjectElement) => {
   const imageDiv = div.appendChild(dom.createElement('div'))
 
-  imageDiv.setAttribute('style', imageDivStyle)
+  imageDiv.setAttribute('style', style.imageDivStyle)
   imageDiv.appendChild(image)
   image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
 }

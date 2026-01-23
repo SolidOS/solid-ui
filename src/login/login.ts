@@ -43,9 +43,9 @@ import {
   WebOperationError
 } from 'solid-logic'
 import * as debug from '../debug'
-import * as style from '../style'
+import { style } from '../style'
 import { alert } from '../log'
-import * as ns from '../ns.js'
+import ns from '../ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
@@ -636,7 +636,7 @@ export function loginStatusBox (
         me = null
         try {
           alert(message)
-        } catch (e) {
+        } catch (_e) {
           window.alert(message)
         }
         box.refresh()
@@ -716,7 +716,7 @@ authSession.events.on('logout', async () => {
           await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
         }
       }
-    } catch (err) {
+    } catch (_err) {
       // Do nothing
     }
   }

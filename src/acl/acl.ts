@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import * as ns from '../ns'
+import ns from '../ns'
 import { solidLogicSingleton, ACL_LINK } from 'solid-logic'
 import * as utils from '../utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'

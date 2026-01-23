@@ -9,7 +9,7 @@ import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
-import * as style from '../style'
+import { style } from '../style'
 import { emptyProfile } from './empty-profile'
 import { getPod, throttle } from '../utils/headerFooterHelpers'
 

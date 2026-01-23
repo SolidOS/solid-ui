@@ -1,5 +1,5 @@
 import { store } from 'solid-logic'
-import * as ns from '../../ns'
+import ns from '../../ns'
 import { NamedNode } from 'rdflib'
 // Will rename this file later. We will probably be using solid-logic anyway
 // moved it out so I can mock

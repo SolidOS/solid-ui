@@ -5,10 +5,10 @@ permissions:
 on:
   push:
     branches:
-      - "**"
+      - main
   pull_request:
     branches:
-      - "**"  
+      - main
   workflow_dispatch:
 
 jobs:
@@ -17,11 +17,10 @@ jobs:
     strategy:
       matrix:
         node-version:
-          - 18.x
           - 20.x
           - 22.x
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
@@ -32,7 +31,7 @@ jobs:
       - run: npm run doc
       - name: Save build
         if: matrix.node-version == '20.x'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v6
         with:
           name: build
           path: |
@@ -45,7 +44,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: build
       - uses: peaceiris/actions-gh-pages@v4
@@ -69,18 +68,18 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: build
       - uses: actions/setup-node@v6
         with:
           node-version: 20.x
-      - uses: rlespinasse/github-slug-action@v3.x
+      - uses: rlespinasse/github-slug-action@v4.x
       - name: Append commit hash to package version
         run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.0
+      - uses: JS-DevTools/npm-publish@v4.1.4
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         with:
           token: ${{ secrets.NPM_TOKEN }}
@@ -91,7 +90,7 @@ jobs:
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v5
+      - uses: actions/download-artifact@v7
         with:
           name: build
       - uses: actions/setup-node@v6
@@ -99,7 +98,7 @@ jobs:
           node-version: 20.x
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v4.1.0
+      - uses: JS-DevTools/npm-publish@v4.1.4
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]' 
         with:
           token: ${{ secrets.NPM_TOKEN }}

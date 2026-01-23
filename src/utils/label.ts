@@ -1,6 +1,6 @@
 import * as log from '../log'
 import { store } from 'solid-logic'
-import * as ns from '../ns'
+import ns from '../ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 
 const UI = { log, ns, rdf }
@@ -60,7 +60,7 @@ export function label (thing, initialCap = false): string {
       .split('/')
       .map(decodeURIComponent)
       .join('/') // If it is properly encoded
-  } catch (e) {
+  } catch (_e) {
     // try individual decoding of ASCII code points
     for (let i = s.length - 3; i > 0; i--) {
       const hex = '0123456789abcefABCDEF' // The while upacks multiple layers of encoding

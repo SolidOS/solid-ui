@@ -6,7 +6,7 @@ import {
   basicField
 } from '../../../../src/widgets/forms/basic'
 import ns from '../../../../src/ns'
-import { textInputStyle } from '../../../../src/style'
+import { style } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
 import { store } from 'solid-logic'
 
@@ -647,8 +647,8 @@ describe('basicField', () => {
       doc,
       callbackFunction
     )
-    const style = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(style).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;text-align: right;')
+    const localStyle = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
+    expect(localStyle).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;text-align: right;')
   })
 
   it('Defaults to textInputStyle', () => {
@@ -671,8 +671,8 @@ describe('basicField', () => {
       doc,
       callbackFunction
     )
-    const style = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(style).toEqual(textInputStyle)
+    const inputStyle = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
+    expect(inputStyle).toEqual(style.textInputStyle)
   })
 
   it('Can read type from fieldParams', () => {

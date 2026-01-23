@@ -1,6 +1,6 @@
 import * as debug from '../debug'
-import { secp256k1 } from '@noble/curves/secp256k1.js'
-import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js'
+import { schnorr } from '@noble/curves/secp256k1'
+import { bytesToHex } from '@noble/hashes/utils'
 import * as ns from '../ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
@@ -9,11 +9,11 @@ import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } fr
 import { setAcl, keyContainerAclBody, keyAclBody } from '../utils/keyHelpers/acl'
 
 export function generatePrivateKey (): string {
-  return bytesToHex(secp256k1.utils.randomSecretKey())
+  return bytesToHex(schnorr.utils.randomPrivateKey())
 }
 
 export function generatePublicKey (privateKey: string): string {
-  return bytesToHex(secp256k1.getPublicKey(hexToBytes(privateKey)))
+  return bytesToHex(schnorr.getPublicKey(privateKey))
 }
 
 /**
@@ -30,7 +30,7 @@ export async function getPublicKey (webId: NamedNode) {
     await store.fetcher.load(publicKeyDoc) // url.href)
     const key = store.any(webId, ns.solid('publicKey'))
     return key?.value // as NamedNode
-  } catch (err) {
+  } catch (_err) {
     return undefined
   }
 }

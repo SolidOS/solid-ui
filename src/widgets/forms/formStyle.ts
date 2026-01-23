@@ -1,4 +1,4 @@
-import * as ns from '../../ns'
+import ns from '../../ns'
 import { Node } from 'rdflib'
 import { store } from 'solid-logic'
 import { fieldParams } from './fieldParams'
@@ -6,8 +6,6 @@ import { fieldParams } from './fieldParams'
 import { mostSpecificClassURI } from './fieldFunction'
 
 const STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#'
-
-/* eslint-disable no-console */
 
 export function setFieldStyle (ele:HTMLElement, field:Node) {
   const classUri = mostSpecificClassURI(field)
@@ -29,7 +27,7 @@ export function setFieldStyle (ele:HTMLElement, field:Node) {
         const cssAttribute = st.predicate.uri.slice(STYLE_URI_PREFIX.length)
         try {
           ele.style[cssAttribute] = st.object.value
-        } catch (err) {
+        } catch (_err) {
           console.warn(`setFieldStyle: Error setting element style ${cssAttribute} to "${st.object.value}"`)
           console.warn(`setFieldStyle:   ... Element tagName was "${ele.tagName || '???'}"`)
         }

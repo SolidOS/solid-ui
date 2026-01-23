@@ -5,13 +5,13 @@
  * @packageDocumentation
  */
 
-import * as ns from '../ns'
+import ns from '../ns'
 import * as utils from '../utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
 import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
-import * as style from '../style'
+import { style } from '../style'
 import { log, warn } from '../debug'
 
 let global: Window = window
