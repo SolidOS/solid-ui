@@ -7,9 +7,9 @@
   "sideEffects": false,
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/solid-ui.esm.js",
-      "require": "./dist/solid-ui.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/solid-ui.js"
     }
   },
   "files": [
