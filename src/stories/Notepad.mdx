@@ -1,0 +1,54 @@
+import * as UI from '../../src/index'
+import * as NotepadStories from './Notepad.stories';
+
+import { Canvas, Meta, Story } from '@storybook/blocks'
+import { rawJsonDecorator } from './decorators'
+
+<Meta of={NotepadStories} />
+
+## notepad: Creates a notepad
+
+In this first example we'll see how you can create a notepad. This method creates input fields
+which allow you to provide a notepad component to your application.
+
+The inputs will be stored to [https://example-user.inrupt.net/public/example-notepad/index.ttl#this](https://example-user.inrupt.net/public/example-notepad/index.ttl#this)
+
+<Canvas>
+  <Story of={NotepadStories.Notepad} />
+</Canvas>
+
+## manageParticipation: Creates the table to display the participants
+
+<Canvas>
+  <Story of={NotepadStories.ManageParticipation} />
+</Canvas>
+
+## notepadToHTML: Converts a Turtle file to an HTML
+
+This method converts a pad.ttl document to HTML.
+
+<Canvas>
+  <Story of={NotepadStories.NotepadToHtml} />
+</Canvas>
+
+## lightColorHash : Determines a color to be used for a participants notepad entry
+
+This method returns a hex value for setting the color of the input box of the notepad. It does this by hashing the uri passed in as an argument. Ideally this would be the uri of the person logged in.
+
+<Canvas>
+  <Story of={NotepadStories.LightColorHash} />
+</Canvas>
+
+## renderParticipants: Creates a table of participants on a given notepad document
+
+Creates the table with the list of participants that have contributed to the given pad that is passed in. This gets called from manageParticipation, but can be used on it's own as well.
+
+<Canvas>
+  <Story of={NotepadStories.RenderParticipants} />
+</Canvas>
+
+## participationObject: Contains the subject, pad and URI for the participants
+
+<Canvas>
+  <Story of={NotepadStories.ParticipationObject} />
+</Canvas>
