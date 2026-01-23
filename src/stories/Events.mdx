@@ -1,0 +1,17 @@
+import * as UI from '../../src/index'
+import * as EventsStories from './Events.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+import { action } from "@storybook/addon-actions";
+
+<Meta of={EventsStories} />
+
+## openHrefInOutlineMode
+
+Event Handler for links within solid apps.
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#openhrefinoutlinemode)
+
+<Canvas withSource="open">
+  <Story of={EventsStories.OpenHrefInOutlineMode} />
+</Canvas>

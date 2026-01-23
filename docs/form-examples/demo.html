@@ -246,6 +246,25 @@ ex:form
             </td>
             <td class="output"></td>
           </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A field for entering a URI as a named node
+# (stores as RDF resource, not string literal)
+
+ex:form
+   a ui:NamedNodeURIField ;
+   ui:label "Homepage" ;
+   ui:property foaf:homepage .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>ex:this foaf:homepage &lt;https://example.org/alice&gt; .</pre>
+            </td>
+            <td class="output"></td>
+          </tr>
         </tbody>
       </table>
     </div>
