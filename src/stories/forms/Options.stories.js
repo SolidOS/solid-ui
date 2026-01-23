@@ -1,88 +1,103 @@
-import * as UI from '../../../src/index'
+import * as UI from "../../../src/index";
 
-import { Canvas, Meta, Story } from "@storybook/addon-docs";
 import { action } from "@storybook/addon-actions";
 
-<Meta title="Forms/Options" />
+export default {
+  title: "Forms/Options",
+};
 
-## UI.widgets.field[UI.ns.ui('Options').uri], using RDF types
-
-<Canvas>
-  <Story name="using RDF types">
-    {() => {
+export const UsingRdfTypes = {
+  /* UI to display in case subject is a house: */
+  render:
+    /* UI to display in case subject is a cow: */
+    // Subject is a cow, so it should display [UI for cows]
+    // FIXME: https://github.com/solidos/solid-ui/issues/239
+    () => {
       const container = document.createElement("div");
       const already = {};
       const subject = $rdf.namedNode("http://first.example/#this");
-      const exampleOptionsField = $rdf.namedNode("http://first.example/#exampleOptionsField");
+      const exampleOptionsField = $rdf.namedNode(
+        "http://first.example/#exampleOptionsField",
+      );
       const store = $rdf.namedNode("http://first.example/#store");
-      /* UI to display in case subject is a house: */
+
       SolidLogic.store.add(
         exampleOptionsField,
         UI.ns.ui("case"),
         $rdf.namedNode("http://first.example/#if-subject-is-house"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#if-subject-is-house"),
         UI.ns.ui("for"),
         $rdf.namedNode("http://first.example/#house"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#if-subject-is-house"),
         UI.ns.ui("use"),
         $rdf.namedNode("http://first.example/#number-of-bedrooms"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#number-of-bedrooms"),
         UI.ns.rdf("type"),
-        UI.ns.ui("Comment")
+        UI.ns.ui("Comment"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#number-of-bedrooms"),
         UI.ns.ui("contents"),
-        "[UI for houses]"
+        "[UI for houses]",
       );
-      /* UI to display in case subject is a cow: */
+
       SolidLogic.store.add(
         exampleOptionsField,
         UI.ns.ui("case"),
         $rdf.namedNode("http://first.example/#if-subject-is-cow"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#if-subject-is-cow"),
         UI.ns.ui("for"),
         $rdf.namedNode("http://first.example/#cow"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#if-subject-is-cow"),
         UI.ns.ui("use"),
         $rdf.namedNode("http://first.example/#number-of-legs"),
-        $rdf.namedNode("http://first.example/")
+        $rdf.namedNode("http://first.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#number-of-legs"),
         UI.ns.rdf("type"),
-        UI.ns.ui("Comment")
+        UI.ns.ui("Comment"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://first.example/#number-of-legs"),
         UI.ns.ui("contents"),
-        "[UI for cows]"
+        "[UI for cows]",
       );
+
       SolidLogic.store.add(
         subject,
         UI.ns.rdf("type"),
         $rdf.namedNode("http://first.example/#cow"),
-        $rdf.namedNode("http://first.example/")
-      ); // Subject is a cow, so it should display [UI for cows]
+        $rdf.namedNode("http://first.example/"),
+      );
+
       document.outlineManager = {
-        // FIXME: https://github.com/solidos/solid-ui/issues/239
         appendPropertyTRs: () => {},
       };
+
       UI.widgets.field[UI.ns.ui("Options").uri](
         document,
         container,
@@ -90,106 +105,123 @@ import { action } from "@storybook/addon-actions";
         subject,
         exampleOptionsField,
         store,
-        action("callback")
+        action("callback"),
       );
+
       return container;
-    }}
-  </Story>
-</Canvas>
+    },
 
-## UI.widgets.field[UI.ns.ui('Options').uri], using dependingOn
+  name: "using RDF types",
+};
 
-<Canvas>
-  <Story name="depending on">
-    {() => {
+export const DependingOn = {
+  /* This form depends on persona: */
+  render:
+    /* UI to display in case subject is developer: */
+    /* UI to display in case subject is power user: */
+    /* Subject is both a developer and a power user, so it should display both [UI for developers] and [UI for
+         power users] */
+    // FIXME: https://github.com/solidos/solid-ui/issues/239
+    () => {
       const container = document.createElement("div");
       const already = {};
       const subject = $rdf.namedNode("http://second.example/#this");
-      const exampleOptionsField = $rdf.namedNode("http://second.example/#exampleOptionsField");
+      const exampleOptionsField = $rdf.namedNode(
+        "http://second.example/#exampleOptionsField",
+      );
       const store = $rdf.namedNode("http://second.example/#store");
-      /* This form depends on persona: */
+
       SolidLogic.store.add(
         exampleOptionsField,
         UI.ns.ui("dependingOn"),
         $rdf.namedNode("http://second.example/#persona"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
-      /* UI to display in case subject is developer: */
+
       SolidLogic.store.add(
         exampleOptionsField,
         UI.ns.ui("case"),
         $rdf.namedNode("http://second.example/#if-subject-is-developer"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#if-subject-is-developer"),
         UI.ns.ui("for"),
         $rdf.namedNode("http://second.example/#developer"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#if-subject-is-developer"),
         UI.ns.ui("use"),
         $rdf.namedNode("http://second.example/#ui-for-developers"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#ui-for-developers"),
         UI.ns.rdf("type"),
-        UI.ns.ui("Comment")
+        UI.ns.ui("Comment"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#ui-for-developers"),
         UI.ns.ui("contents"),
-        "[UI for developers]"
+        "[UI for developers]",
       );
-      /* UI to display in case subject is power user: */
+
       SolidLogic.store.add(
         exampleOptionsField,
         UI.ns.ui("case"),
         $rdf.namedNode("http://second.example/#if-subject-is-power-user"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#if-subject-is-power-user"),
         UI.ns.ui("for"),
         $rdf.namedNode("http://second.example/#power-user"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#if-subject-is-power-user"),
         UI.ns.ui("use"),
         $rdf.namedNode("http://second.example/#ui-for-power-users"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#ui-for-power-users"),
         UI.ns.rdf("type"),
-        UI.ns.ui("Comment")
+        UI.ns.ui("Comment"),
       );
+
       SolidLogic.store.add(
         $rdf.namedNode("http://second.example/#ui-for-power-users"),
         UI.ns.ui("contents"),
-        "[UI for power users]"
+        "[UI for power users]",
       );
-      /* Subject is both a developer and a power user, so it should display both [UI for developers] and [UI for
-       power users] */
+
       SolidLogic.store.add(
         subject,
         $rdf.namedNode("http://second.example/#persona"),
         $rdf.namedNode("http://second.example/#developer"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       SolidLogic.store.add(
         subject,
         $rdf.namedNode("http://second.example/#persona"),
         $rdf.namedNode("http://second.example/#power-user"),
-        $rdf.namedNode("http://second.example/")
+        $rdf.namedNode("http://second.example/"),
       );
+
       document.outlineManager = {
-        // FIXME: https://github.com/solidos/solid-ui/issues/239
         appendPropertyTRs: () => {},
       };
+
       UI.widgets.field[UI.ns.ui("Options").uri](
         document,
         container,
@@ -197,9 +229,11 @@ import { action } from "@storybook/addon-actions";
         subject,
         exampleOptionsField,
         store,
-        action("callback")
+        action("callback"),
       );
+
       return container;
-    }}
-  </Story>
-</Canvas>
+    },
+
+  name: "depending on",
+};
