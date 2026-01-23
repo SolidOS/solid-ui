@@ -12904,11 +12904,11 @@ function _taggedTemplateLiteral(e, t) {
 // EXTERNAL MODULE: ./node_modules/escape-html/index.js
 var escape_html = __webpack_require__(580);
 var escape_html_default = /*#__PURE__*/__webpack_require__.n(escape_html);
-;// ./node_modules/uuid/dist/esm-browser/native.js
+;// ./node_modules/uuid/dist/native.js
 const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-/* harmony default export */ const esm_browser_native = ({ randomUUID });
+/* harmony default export */ const dist_native = ({ randomUUID });
 
-;// ./node_modules/uuid/dist/esm-browser/rng.js
+;// ./node_modules/uuid/dist/rng.js
 let getRandomValues;
 const rnds8 = new Uint8Array(16);
 function rng() {
@@ -12921,7 +12921,7 @@ function rng() {
     return getRandomValues(rnds8);
 }
 
-;// ./node_modules/uuid/dist/esm-browser/stringify.js
+;// ./node_modules/uuid/dist/stringify.js
 
 const byteToHex = [];
 for (let i = 0; i < 256; ++i) {
@@ -12956,16 +12956,13 @@ function stringify(arr, offset = 0) {
     }
     return uuid;
 }
-/* harmony default export */ const esm_browser_stringify = ((/* unused pure expression or super */ null && (stringify)));
+/* harmony default export */ const dist_stringify = ((/* unused pure expression or super */ null && (stringify)));
 
-;// ./node_modules/uuid/dist/esm-browser/v4.js
+;// ./node_modules/uuid/dist/v4.js
 
 
 
-function v4(options, buf, offset) {
-    if (esm_browser_native.randomUUID && !buf && !options) {
-        return esm_browser_native.randomUUID();
-    }
+function _v4(options, buf, offset) {
     options = options || {};
     const rnds = options.random ?? options.rng?.() ?? rng();
     if (rnds.length < 16) {
@@ -12985,7 +12982,13 @@ function v4(options, buf, offset) {
     }
     return unsafeStringify(rnds);
 }
-/* harmony default export */ const esm_browser_v4 = (v4);
+function v4(options, buf, offset) {
+    if (dist_native.randomUUID && !buf && !options) {
+        return dist_native.randomUUID();
+    }
+    return _v4(options, buf, offset);
+}
+/* harmony default export */ const dist_v4 = (v4);
 
 ;// ./src/widgets/peoplePicker.js
 
@@ -13109,7 +13112,7 @@ var PeoplePicker = /*#__PURE__*/function () {
       var _indexes = indexes(book),
         groupIndex = _indexes.groupIndex,
         groupContainer = _indexes.groupContainer;
-      var group = external_$rdf_.sym("".concat(groupContainer.uri).concat(esm_browser_v4().slice(0, 8), ".ttl#this"));
+      var group = external_$rdf_.sym("".concat(groupContainer.uri).concat(dist_v4().slice(0, 8), ".ttl#this"));
       var name = defaultNewGroupName || 'Untitled Group';
 
       // NOTE that order matters here.  Unfortunately this type of update is

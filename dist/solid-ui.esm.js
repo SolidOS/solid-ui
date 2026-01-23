@@ -1461,6 +1461,119 @@ function _createCurveFields(type, CURVE, curveOpts = {}, FpFnLE) {
 
 /***/ },
 
+/***/ 630
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   Od: () => (/* binding */ verifySignature),
+/* harmony export */   YJ: () => (/* binding */ getBlankMsg),
+/* harmony export */   vt: () => (/* binding */ signMsg),
+/* harmony export */   yv: () => (/* binding */ SEC)
+/* harmony export */ });
+/* unused harmony exports utf8Decoder, utf8Encoder, serializeMsg, getMsgHash */
+/* harmony import */ var _noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4329);
+/* harmony import */ var _noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4976);
+/* harmony import */ var _noble_hashes_sha256__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8226);
+
+
+
+
+// import {utf8Encoder} from './utils'
+// import { getPublicKey } from './keys'
+
+var utf8Decoder = new TextDecoder('utf-8');
+var utf8Encoder = new TextEncoder();
+var SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
+// export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey, key
+
+/* export enum Kind {
+  Metadata = 0,
+  Text = 1,
+  RecommendRelay = 2,
+  Contacts = 3,
+  EncryptedDirectMessage = 4,
+  EventDeletion = 5,
+  Reaction = 7,
+  BadgeAward = 8,
+  ChannelCreation = 40,
+  ChannelMetadata = 41,
+  ChannelMessage = 42,
+  ChannelHideMessage = 43,
+  ChannelMuteUser = 44,
+  Report = 1984,
+  ZapRequest = 9734,
+  Zap = 9735,
+  RelayList = 10002,
+  ClientAuth = 22242,
+  BadgeDefinition = 30008,
+  ProfileBadge = 30009,
+  Article = 30023
+} */
+
+function getBlankMsg() {
+  return {
+    id: '',
+    created: '',
+    dateDeleted: '',
+    // TODO to remove if not used
+    content: '',
+    maker: '',
+    sig: '' // TODO to remove if not used
+  };
+}
+
+/* export function finishMsg (t: MsgTemplate, privateKey: string): Message {
+  // to update to chat message triples
+  const message = t as Message
+  // message.pubkey = getPublicKey(privateKey)
+  message.id = getMsgHash(message)
+  message.sig = signMsg(message, privateKey)
+  return message
+} */
+
+function serializeMsg(msg) {
+  // to update to chat messages triples
+  /* if (!validateMsg(msg))
+    throw new Error("can't serialize message with wrong or missing properties") */
+
+  return JSON.stringify(msg);
+}
+function getMsgHash(message) {
+  var msgHash = (0,_noble_hashes_sha256__WEBPACK_IMPORTED_MODULE_2__/* .sha256 */ .sc)(utf8Encoder.encode(serializeMsg(message)));
+  return (0,_noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__/* .bytesToHex */ .My)(msgHash);
+}
+
+// const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
+
+/* export function validateMsg<T> (message: T): message is T & UnsignedMsg {
+  if (!isRecord(message)) return false
+  if (typeof message.kind !== 'number') return false
+  if (typeof message.content !== 'string') return false
+  if (typeof message.created_at !== 'number') return false
+  if (typeof message.pubkey !== 'string') return false
+  if (!message.pubkey.match(/^[a-f0-9]{64}$/)) return false
+
+  if (!Array.isArray(message.tags)) return false
+  for (let i = 0; i < message.tags.length; i++) {
+    let tag = message.tags[i]
+    if (!Array.isArray(tag)) return false
+    for (let j = 0; j < tag.length; j++) {
+      if (typeof tag[j] === 'object') return false
+    }
+  }
+
+  return true
+} */
+
+function verifySignature(sig, message, pubKey) {
+  return _noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__/* .schnorr */ .ko.verify(sig, getMsgHash(message), pubKey);
+}
+function signMsg(message, key) {
+  return (0,_noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__/* .bytesToHex */ .My)(_noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__/* .schnorr */ .ko.sign(getMsgHash(message), key));
+}
+
+/***/ },
+
 /***/ 675
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
@@ -2954,51 +3067,6 @@ module.exports = function mimeScore (mimeType, source = 'default') {
 
   return facetScore + sourceScore + typeScore + lengthScore
 }
-
-
-/***/ },
-
-/***/ 1060
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   k: () => (/* binding */ unsafeStringify)
-/* harmony export */ });
-
-const byteToHex = [];
-for (let i = 0; i < 256; ++i) {
-    byteToHex.push((i + 0x100).toString(16).slice(1));
-}
-function unsafeStringify(arr, offset = 0) {
-    return (byteToHex[arr[offset + 0]] +
-        byteToHex[arr[offset + 1]] +
-        byteToHex[arr[offset + 2]] +
-        byteToHex[arr[offset + 3]] +
-        '-' +
-        byteToHex[arr[offset + 4]] +
-        byteToHex[arr[offset + 5]] +
-        '-' +
-        byteToHex[arr[offset + 6]] +
-        byteToHex[arr[offset + 7]] +
-        '-' +
-        byteToHex[arr[offset + 8]] +
-        byteToHex[arr[offset + 9]] +
-        '-' +
-        byteToHex[arr[offset + 10]] +
-        byteToHex[arr[offset + 11]] +
-        byteToHex[arr[offset + 12]] +
-        byteToHex[arr[offset + 13]] +
-        byteToHex[arr[offset + 14]] +
-        byteToHex[arr[offset + 15]]).toLowerCase();
-}
-function stringify(arr, offset = 0) {
-    const uuid = unsafeStringify(arr, offset);
-    if (!validate(uuid)) {
-        throw TypeError('Stringified UUID is invalid');
-    }
-    return uuid;
-}
-/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (stringify)));
 
 
 /***/ },
@@ -8558,7 +8626,7 @@ function toPrimitive(t, r) {
 /* harmony import */ var solid_logic__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3138);
 /* harmony import */ var _ns__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(1795);
 /* harmony import */ var rdflib__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(4961);
-/* harmony import */ var _signature__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(8249);
+/* harmony import */ var _signature__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(630);
 /* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(6855);
 
 
@@ -9419,7 +9487,7 @@ function _arrayLikeToArray(r, a) {
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(386);
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_18__ = __webpack_require__(3291);
 /* harmony import */ var _widgets__WEBPACK_IMPORTED_MODULE_19__ = __webpack_require__(3468);
-/* harmony import */ var _signature__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(8249);
+/* harmony import */ var _signature__WEBPACK_IMPORTED_MODULE_20__ = __webpack_require__(630);
 /* harmony import */ var _keys__WEBPACK_IMPORTED_MODULE_21__ = __webpack_require__(6855);
 
 
@@ -11804,6 +11872,27 @@ function _setPrototypeOf(t, e) {
 
 /***/ },
 
+/***/ 3689
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (/* binding */ rng)
+/* harmony export */ });
+let getRandomValues;
+const rnds8 = new Uint8Array(16);
+function rng() {
+    if (!getRandomValues) {
+        if (typeof crypto === 'undefined' || !crypto.getRandomValues) {
+            throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+        }
+        getRandomValues = crypto.getRandomValues.bind(crypto);
+    }
+    return getRandomValues(rnds8);
+}
+
+
+/***/ },
+
 /***/ 3693
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
@@ -13271,18 +13360,6 @@ function setInternals(window, document) {
 
 /***/ },
 
-/***/ 4210
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ randomUUID });
-
-
-/***/ },
-
 /***/ 4243
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -13294,6 +13371,49 @@ const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.
 function _arrayWithoutHoles(r) {
   if (Array.isArray(r)) return (0,_arrayLikeToArray_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)(r);
 }
+
+
+/***/ },
+
+/***/ 4296
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7697);
+/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3689);
+/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8249);
+
+
+
+function _v4(options, buf, offset) {
+    options = options || {};
+    const rnds = options.random ?? options.rng?.() ?? (0,_rng_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A)();
+    if (rnds.length < 16) {
+        throw new Error('Random bytes length must be >= 16');
+    }
+    rnds[6] = (rnds[6] & 0x0f) | 0x40;
+    rnds[8] = (rnds[8] & 0x3f) | 0x80;
+    if (buf) {
+        offset = offset || 0;
+        if (offset < 0 || offset + 16 > buf.length) {
+            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
+        }
+        for (let i = 0; i < 16; ++i) {
+            buf[offset + i] = rnds[i];
+        }
+        return buf;
+    }
+    return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__/* .unsafeStringify */ .k)(rnds);
+}
+function v4(options, buf, offset) {
+    if (_native_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.randomUUID && !buf && !options) {
+        return _native_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.randomUUID();
+    }
+    return _v4(options, buf, offset);
+}
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
 
 
 /***/ },
@@ -16197,7 +16317,7 @@ function _getProspectiveHolder() {
 /* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(2901);
 /* harmony import */ var escape_html__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(580);
 /* harmony import */ var escape_html__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(escape_html__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(6235);
+/* harmony import */ var uuid__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4296);
 /* harmony import */ var rdflib__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(4961);
 /* harmony import */ var _debug__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(7423);
 /* harmony import */ var _dragAndDrop__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(386);
@@ -17134,46 +17254,6 @@ var media = {
   cameraCaptureControl: _media_capture__WEBPACK_IMPORTED_MODULE_0__/* .cameraCaptureControl */ .V,
   cameraButton: _media_capture__WEBPACK_IMPORTED_MODULE_0__/* .cameraButton */ .Y
 };
-
-/***/ },
-
-/***/ 6235
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* harmony import */ var _native_js__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4210);
-/* harmony import */ var _rng_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(6984);
-/* harmony import */ var _stringify_js__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1060);
-
-
-
-function v4(options, buf, offset) {
-    if (_native_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.randomUUID && !buf && !options) {
-        return _native_js__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A.randomUUID();
-    }
-    options = options || {};
-    const rnds = options.random ?? options.rng?.() ?? (0,_rng_js__WEBPACK_IMPORTED_MODULE_1__/* ["default"] */ .A)();
-    if (rnds.length < 16) {
-        throw new Error('Random bytes length must be >= 16');
-    }
-    rnds[6] = (rnds[6] & 0x0f) | 0x40;
-    rnds[8] = (rnds[8] & 0x3f) | 0x80;
-    if (buf) {
-        offset = offset || 0;
-        if (offset < 0 || offset + 16 > buf.length) {
-            throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
-        }
-        for (let i = 0; i < 16; ++i) {
-            buf[offset + i] = rnds[i];
-        }
-        return buf;
-    }
-    return (0,_stringify_js__WEBPACK_IMPORTED_MODULE_2__/* .unsafeStringify */ .k)(rnds);
-}
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (v4);
-
 
 /***/ },
 
@@ -20102,27 +20182,6 @@ function _saveKey() {
 
 /***/ },
 
-/***/ 6984
-(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   A: () => (/* binding */ rng)
-/* harmony export */ });
-let getRandomValues;
-const rnds8 = new Uint8Array(16);
-function rng() {
-    if (!getRandomValues) {
-        if (typeof crypto === 'undefined' || !crypto.getRandomValues) {
-            throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-        }
-        getRandomValues = crypto.getRandomValues.bind(crypto);
-    }
-    return getRandomValues(rnds8);
-}
-
-
-/***/ },
-
 /***/ 6986
 (__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
@@ -21506,6 +21565,18 @@ function setFieldStyle(ele, field) {
     });
   }
 }
+
+/***/ },
+
+/***/ 7697
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   A: () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = ({ randomUUID });
+
 
 /***/ },
 
@@ -22901,115 +22972,47 @@ const sha224 = (/* unused pure expression or super */ null && (sha224n));
 /***/ },
 
 /***/ 8249
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+(__unused_webpack___webpack_module__, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   Od: () => (/* binding */ verifySignature),
-/* harmony export */   YJ: () => (/* binding */ getBlankMsg),
-/* harmony export */   vt: () => (/* binding */ signMsg),
-/* harmony export */   yv: () => (/* binding */ SEC)
+/* harmony export */   k: () => (/* binding */ unsafeStringify)
 /* harmony export */ });
-/* unused harmony exports utf8Decoder, utf8Encoder, serializeMsg, getMsgHash */
-/* harmony import */ var _noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4329);
-/* harmony import */ var _noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(4976);
-/* harmony import */ var _noble_hashes_sha256__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8226);
 
-
-
-
-// import {utf8Encoder} from './utils'
-// import { getPublicKey } from './keys'
-
-var utf8Decoder = new TextDecoder('utf-8');
-var utf8Encoder = new TextEncoder();
-var SEC = 'https://w3id.org/security#'; // Proof, VerificationMethod
-// export const CERT = 'http://www.w3.org/ns/auth/cert#' // PrivateKey, PublicKey, key
-
-/* export enum Kind {
-  Metadata = 0,
-  Text = 1,
-  RecommendRelay = 2,
-  Contacts = 3,
-  EncryptedDirectMessage = 4,
-  EventDeletion = 5,
-  Reaction = 7,
-  BadgeAward = 8,
-  ChannelCreation = 40,
-  ChannelMetadata = 41,
-  ChannelMessage = 42,
-  ChannelHideMessage = 43,
-  ChannelMuteUser = 44,
-  Report = 1984,
-  ZapRequest = 9734,
-  Zap = 9735,
-  RelayList = 10002,
-  ClientAuth = 22242,
-  BadgeDefinition = 30008,
-  ProfileBadge = 30009,
-  Article = 30023
-} */
-
-function getBlankMsg() {
-  return {
-    id: '',
-    created: '',
-    dateDeleted: '',
-    // TODO to remove if not used
-    content: '',
-    maker: '',
-    sig: '' // TODO to remove if not used
-  };
+const byteToHex = [];
+for (let i = 0; i < 256; ++i) {
+    byteToHex.push((i + 0x100).toString(16).slice(1));
 }
-
-/* export function finishMsg (t: MsgTemplate, privateKey: string): Message {
-  // to update to chat message triples
-  const message = t as Message
-  // message.pubkey = getPublicKey(privateKey)
-  message.id = getMsgHash(message)
-  message.sig = signMsg(message, privateKey)
-  return message
-} */
-
-function serializeMsg(msg) {
-  // to update to chat messages triples
-  /* if (!validateMsg(msg))
-    throw new Error("can't serialize message with wrong or missing properties") */
-
-  return JSON.stringify(msg);
+function unsafeStringify(arr, offset = 0) {
+    return (byteToHex[arr[offset + 0]] +
+        byteToHex[arr[offset + 1]] +
+        byteToHex[arr[offset + 2]] +
+        byteToHex[arr[offset + 3]] +
+        '-' +
+        byteToHex[arr[offset + 4]] +
+        byteToHex[arr[offset + 5]] +
+        '-' +
+        byteToHex[arr[offset + 6]] +
+        byteToHex[arr[offset + 7]] +
+        '-' +
+        byteToHex[arr[offset + 8]] +
+        byteToHex[arr[offset + 9]] +
+        '-' +
+        byteToHex[arr[offset + 10]] +
+        byteToHex[arr[offset + 11]] +
+        byteToHex[arr[offset + 12]] +
+        byteToHex[arr[offset + 13]] +
+        byteToHex[arr[offset + 14]] +
+        byteToHex[arr[offset + 15]]).toLowerCase();
 }
-function getMsgHash(message) {
-  var msgHash = (0,_noble_hashes_sha256__WEBPACK_IMPORTED_MODULE_2__/* .sha256 */ .sc)(utf8Encoder.encode(serializeMsg(message)));
-  return (0,_noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__/* .bytesToHex */ .My)(msgHash);
-}
-
-// const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
-
-/* export function validateMsg<T> (message: T): message is T & UnsignedMsg {
-  if (!isRecord(message)) return false
-  if (typeof message.kind !== 'number') return false
-  if (typeof message.content !== 'string') return false
-  if (typeof message.created_at !== 'number') return false
-  if (typeof message.pubkey !== 'string') return false
-  if (!message.pubkey.match(/^[a-f0-9]{64}$/)) return false
-
-  if (!Array.isArray(message.tags)) return false
-  for (let i = 0; i < message.tags.length; i++) {
-    let tag = message.tags[i]
-    if (!Array.isArray(tag)) return false
-    for (let j = 0; j < tag.length; j++) {
-      if (typeof tag[j] === 'object') return false
+function stringify(arr, offset = 0) {
+    const uuid = unsafeStringify(arr, offset);
+    if (!validate(uuid)) {
+        throw TypeError('Stringified UUID is invalid');
     }
-  }
-
-  return true
-} */
-
-function verifySignature(sig, message, pubKey) {
-  return _noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__/* .schnorr */ .ko.verify(sig, getMsgHash(message), pubKey);
+    return uuid;
 }
-function signMsg(message, key) {
-  return (0,_noble_hashes_utils__WEBPACK_IMPORTED_MODULE_1__/* .bytesToHex */ .My)(_noble_curves_secp256k1__WEBPACK_IMPORTED_MODULE_0__/* .schnorr */ .ko.sign(getMsgHash(message), key));
-}
+/* unused harmony default export */ var __WEBPACK_DEFAULT_EXPORT__ = ((/* unused pure expression or super */ null && (stringify)));
+
 
 /***/ },
 

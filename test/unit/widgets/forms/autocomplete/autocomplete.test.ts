@@ -96,10 +96,25 @@ async function wait (ms) {
   })
 }
 
+// Helper to set up default nock mocks for wikidata queries
+async function setupWikidataMock () {
+  const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
+  return nock('https://query.wikidata.org')
+    .persist()
+    .get(/^\/sparql/)
+    .reply(200, fakeResponse, { 'Content-Type': 'application/sparql-results+json' })
+}
+
 describe('autocompleteField', () => {
   let result
   beforeEach(() => {
-    // fetch.resetMocks();
+    nock.cleanAll()
+    nock.disableNetConnect()
+  })
+
+  afterEach(() => {
+    nock.cleanAll()
+    nock.enableNetConnect()
   })
 
   it('exists as a function', () => {
@@ -186,6 +201,7 @@ describe('autocompleteField', () => {
   })
 
   it('makes Cancel button appear when user inputs something', async () => {
+    await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
@@ -212,6 +228,7 @@ describe('autocompleteField', () => {
   })
 
   it('makes Cancel button work when user inputs something', async () => {
+    await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
@@ -244,6 +261,7 @@ describe('autocompleteField', () => {
   })
 
   it('on inpt fetches data (fixing wikidata timeout issue) making green table', async () => {
+    await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
@@ -258,11 +276,6 @@ describe('autocompleteField', () => {
       callbackFunction
     )
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
-    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
-
-    nock('https://query.wikidata.org')
-      .get(/^\/sparql/)
-      .reply(200, fakeResponse) // replyWithFile?
 
     inputElement.value = 'mass'
 
@@ -270,13 +283,14 @@ describe('autocompleteField', () => {
     inputElement.dispatchEvent(event1)
 
     const table = await findByTestId(result, 'autocomplete-table')
-    await waitFor(() => expect(table.children.length).toEqual(4))
+    await waitFor(() => expect(table.children.length).toEqual(4), { timeout: 5000 })
     expect(table.children.length).toBeGreaterThan(1)
     expect(table).toMatchSnapshot()
     expect(table.children[1].style.color).toEqual('rgb(0, 136, 0)') // green as all loaded
   })
 
   it('typing more search term till unique selects the whole name and sets the accecpt button active', async () => {
+    await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
@@ -291,11 +305,6 @@ describe('autocompleteField', () => {
       callbackFunction
     )
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
-    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
-
-    nock('https://query.wikidata.org')
-      .get(/^\/sparql/)
-      .reply(200, fakeResponse) // replyWithFile?
 
     inputElement.value = 'mass'
 
@@ -324,6 +333,7 @@ describe('autocompleteField', () => {
   })
 
   it('clicking on row of greenn table then accecpt button saves data', async () => {
+    await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
     const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
@@ -338,11 +348,6 @@ describe('autocompleteField', () => {
       callbackFunction
     )
     const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
-    const fakeResponse = await getFileContent('test/unit/widgets/forms/autocomplete/broken-sparql-response-small.txt')
-
-    nock('https://query.wikidata.org')
-      .get(/^\/sparql/)
-      .reply(200, fakeResponse) // replyWithFile?
 
     inputElement.value = 'mass'
 
