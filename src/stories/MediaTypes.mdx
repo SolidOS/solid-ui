@@ -1,0 +1,31 @@
+import * as UI from '../../src/index'
+import * as MediaTypesStories from './MediaTypes.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+import { rawJsonDecorator } from "./decorators";
+
+<Meta of={MediaTypesStories} />
+
+## isAudio
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#isaudio)
+
+<Canvas withSource="open">
+  <Story of={MediaTypesStories.IsAudio} />
+</Canvas>
+
+## isVideo
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#isvideo)
+
+<Canvas withSource="open">
+  <Story of={MediaTypesStories.IsVideo} />
+</Canvas>
+
+## isImage
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#isvideo)
+
+<Canvas withSource="open">
+  <Story of={MediaTypesStories.IsImage} />
+</Canvas>

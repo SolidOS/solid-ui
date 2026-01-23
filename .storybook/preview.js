@@ -8,6 +8,4 @@ if (typeof window !== 'undefined') {
   window.SolidLogic = solidLogic
 }
 
-export const parameters = {
-  actions: { argTypesRegex: '^on[A-Z].*' },
-}
+export const parameters = {}

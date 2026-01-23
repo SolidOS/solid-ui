@@ -1,0 +1,32 @@
+import * as UI from '../../src/index'
+import * as DisplayStories from './Display.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+
+<Meta of={DisplayStories} />
+
+## complain
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#complain)
+
+<Canvas>
+  <Story of={DisplayStories.Complain} />
+</Canvas>
+
+## errorMessageBlock
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_error_.html#errormessageblock)
+
+<Canvas>
+  <Story of={DisplayStories.ErrorMessageBlock} />
+</Canvas>
+
+## setName
+
+Sets the best name we have and looks up a better one
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#setname)
+
+<Canvas>
+  <Story of={DisplayStories.SetName} />
+</Canvas>
