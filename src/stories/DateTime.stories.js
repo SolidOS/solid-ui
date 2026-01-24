@@ -1,56 +1,56 @@
-import * as UI from "../../src/index";
+import * as UI from '../../src/index'
 
 export default {
-  title: "Date & Time",
-};
+  title: 'Date & Time',
+}
 
 export const FormatDateTime = {
   render: () =>
     UI.widgets.formatDateTime(
       new Date(),
-      "{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}",
+      '{FullYear}-{Month}-{Date}T{Hours}:{Minutes}:{Seconds}.{Milliseconds}'
     ),
 
-  name: "formatDateTime",
-};
+  name: 'formatDateTime',
+}
 
 export const FormatDateTimeDate = {
-  render: () => UI.widgets.formatDateTime(new Date(), "{Date}.{Month}.{Year}"),
-  name: "formatDateTime date",
-};
+  render: () => UI.widgets.formatDateTime(new Date(), '{Date}.{Month}.{Year}'),
+  name: 'formatDateTime date',
+}
 
 export const FormatDateTimeTime = {
   render: () =>
-    UI.widgets.formatDateTime(new Date(), "{Hours}:{Minutes}:{Seconds}"),
-  name: "formatDateTime time",
-};
+    UI.widgets.formatDateTime(new Date(), '{Hours}:{Minutes}:{Seconds}'),
+  name: 'formatDateTime time',
+}
 
 export const ShortDateNotTodayWithoutTime = {
-  render: () => UI.widgets.shortDate("2020-01-01T15:43", true),
-  name: "shortDate (not today & without time)",
-};
+  render: () => UI.widgets.shortDate('2020-01-01T15:43', true),
+  name: 'shortDate (not today & without time)',
+}
 
 export const ShortDateWithTimeButNotToday = {
-  render: () => UI.widgets.shortDate("2020-01-01T15:43", false),
-  name: "shortDate (with time, but not today)",
-};
+  render: () => UI.widgets.shortDate('2020-01-01T15:43', false),
+  name: 'shortDate (with time, but not today)',
+}
 
 export const ShortDateTodayWithoutTime = {
   render: () => UI.widgets.shortDate(new Date().toISOString(), true),
-  name: "shortDate (today & without time)",
-};
+  name: 'shortDate (today & without time)',
+}
 
 export const ShortDateTodayWithTime = {
   render: () => UI.widgets.shortDate(new Date().toISOString(), false),
-  name: "shortDate (today & with time)",
-};
+  name: 'shortDate (today & with time)',
+}
 
 export const ShortTime = {
   render: () => UI.widgets.shortTime(),
-  name: "shortTime",
-};
+  name: 'shortTime',
+}
 
 export const Timestamp = {
   render: () => UI.widgets.timestamp(),
-  name: "timestamp",
-};
+  name: 'timestamp',
+}
