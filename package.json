@@ -65,8 +65,8 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
-    "@noble/curves": "^1.9.6",
-    "@noble/hashes": "^1.8.0",
+    "@noble/curves": "^2.0.1",
+    "@noble/hashes": "^2.0.1",
     "escape-html": "^1.0.3",
     "mime-types": "^3.0.2",
     "pane-registry": "^3.0.0",

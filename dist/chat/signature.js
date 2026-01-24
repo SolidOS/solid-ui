@@ -1,6 +1,6 @@
-import { schnorr } from '@noble/curves/secp256k1';
-import { bytesToHex } from '@noble/hashes/utils';
-import { sha256 } from '@noble/hashes/sha256';
+import { schnorr } from '@noble/curves/secp256k1.js';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
+import { sha256 } from '@noble/hashes/sha2.js';
 // import {utf8Encoder} from './utils'
 // import { getPublicKey } from './keys'
 export const utf8Decoder = new TextDecoder('utf-8');
@@ -55,9 +55,9 @@ export function getMsgHash(message) {
   return true
 } */
 export function verifySignature(sig, message, pubKey) {
-    return schnorr.verify(sig, getMsgHash(message), pubKey);
+    return schnorr.verify(hexToBytes(sig), hexToBytes(getMsgHash(message)), hexToBytes(pubKey));
 }
 export function signMsg(message, key) {
-    return bytesToHex(schnorr.sign(getMsgHash(message), key));
+    return bytesToHex(schnorr.sign(hexToBytes(getMsgHash(message)), hexToBytes(key)));
 }
 //# sourceMappingURL=signature.js.map

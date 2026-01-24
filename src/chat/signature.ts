@@ -1,6 +1,6 @@
-import { schnorr } from '@noble/curves/secp256k1'
-import { bytesToHex } from '@noble/hashes/utils'
-import { sha256 } from '@noble/hashes/sha256'
+import { schnorr } from '@noble/curves/secp256k1.js'
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js'
+import { sha256 } from '@noble/hashes/sha2.js'
 
 // import {utf8Encoder} from './utils'
 // import { getPublicKey } from './keys'
@@ -110,14 +110,14 @@ export function getMsgHash (message: UnsignedMsg) {
 
 export function verifySignature (sig: string, message: Message, pubKey: string): boolean {
   return schnorr.verify(
-    sig,
-    getMsgHash(message),
-    pubKey
+    hexToBytes(sig),
+    hexToBytes(getMsgHash(message)),
+    hexToBytes(pubKey)
   )
 }
 
 export function signMsg (message: UnsignedMsg, key: string): string {
   return bytesToHex(
-    schnorr.sign(getMsgHash(message), key)
+    schnorr.sign(hexToBytes(getMsgHash(message)), hexToBytes(key))
   )
 }

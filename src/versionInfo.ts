@@ -1,6 +1,6 @@
 export default {
-  buildTime: '2026-01-24T13:54:26Z',
-  commit: '278075f2969173e4bddb6963fbb2e6b0c59a0176',
+  buildTime: '2026-01-24T14:40:18Z',
+  commit: '3851e575d9ac80bed856dbfd5a7050fec2bcff5c',
   npmInfo: {
     'solid-ui': '3.0.1',
     npm: '10.8.2',

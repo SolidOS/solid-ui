@@ -1,16 +1,16 @@
 import * as debug from '../debug';
-import { schnorr } from '@noble/curves/secp256k1';
-import { bytesToHex } from '@noble/hashes/utils';
+import { schnorr } from '@noble/curves/secp256k1.js';
+import { bytesToHex, hexToBytes } from '@noble/hashes/utils.js';
 import ns from '../ns';
 import { store } from 'solid-logic';
 import * as $rdf from 'rdflib';
 import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } from '../utils/keyHelpers/accessData';
 import { setAcl, keyContainerAclBody, keyAclBody } from '../utils/keyHelpers/acl';
 export function generatePrivateKey() {
-    return bytesToHex(schnorr.utils.randomPrivateKey());
+    return bytesToHex(schnorr.utils.randomSecretKey());
 }
 export function generatePublicKey(privateKey) {
-    return bytesToHex(schnorr.getPublicKey(privateKey));
+    return bytesToHex(schnorr.getPublicKey(hexToBytes(privateKey)));
 }
 /**
  * getPublicKey
