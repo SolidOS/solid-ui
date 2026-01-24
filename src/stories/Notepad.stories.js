@@ -1,6 +1,5 @@
 import * as UI from '../../src/index'
 
-import { rawJsonDecorator } from './decorators'
 
 export default {
   title: 'Notepad',
