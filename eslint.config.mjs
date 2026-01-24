@@ -16,6 +16,7 @@ export default [
       'dist/**',
       'lib/**',
       'examples/**',
+      'src/stories/**',
       '*.js'
     ],
   },

@@ -1,15 +1,15 @@
-import * as UI from "../../src/index";
+import * as UI from '../../src/index'
 
 export default {
-  title: "Matrix",
-};
+  title: 'Matrix',
+}
 
 export const ForQuery = {
   render: () => {
-    const testDocURI = "https://pod.example/";
-    const testDoc = $rdf.sym(testDocURI);
-    const kb = SolidLogic.store;
-    kb.removeMany(undefined, undefined, undefined, testDoc);
+    const testDocURI = 'https://pod.example/'
+    const testDoc = $rdf.sym(testDocURI)
+    const kb = SolidLogic.store
+    kb.removeMany(undefined, undefined, undefined, testDoc)
 
     const turtle = `@prefix :  <#>.
 @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
@@ -29,34 +29,34 @@ export const ForQuery = {
 :r2 dc:author :a2;
     sched:cell
           [ sched:availabilty sched:Maybe; cal:dtstart "2015-01-01" ] .
-`;
+`
 
-    $rdf.parse(turtle, kb, testDocURI, "text/turtle");
-    const SCHED = $rdf.Namespace("http://www.w3.org/ns/pim/schedule#");
-    const DC = $rdf.Namespace("http://purl.org/dc/elements/1.1/");
-    const ICAL = $rdf.Namespace("http://www.w3.org/2002/12/cal/ical#");
-    const invitation = kb.sym(`${testDocURI}#event1`);
-    var query = new $rdf.Query("Responses");
+    $rdf.parse(turtle, kb, testDocURI, 'text/turtle')
+    const SCHED = $rdf.Namespace('http://www.w3.org/ns/pim/schedule#')
+    const DC = $rdf.Namespace('http://purl.org/dc/elements/1.1/')
+    const ICAL = $rdf.Namespace('http://www.w3.org/2002/12/cal/ical#')
+    const invitation = kb.sym(`${testDocURI}#event1`)
+    const query = new $rdf.Query('Responses')
 
     const variables = {
-      time: $rdf.variable("time"),
-      author: $rdf.variable("author"),
-      availabilty: $rdf.variable("value"),
-      response: $rdf.variable("response"),
-      cell: $rdf.variable("cell"),
-    };
+      time: $rdf.variable('time'),
+      author: $rdf.variable('author'),
+      availabilty: $rdf.variable('value'),
+      response: $rdf.variable('response'),
+      cell: $rdf.variable('cell'),
+    }
 
-    query.pat.add(invitation, SCHED("response"), variables.response);
-    query.pat.add(variables.response, DC("author"), variables.author);
-    query.pat.add(variables.response, SCHED("cell"), variables.cell);
-    query.pat.add(variables.cell, SCHED("availabilty"), variables.availabilty);
-    query.pat.add(variables.cell, ICAL("dtstart"), variables.time);
+    query.pat.add(invitation, SCHED('response'), variables.response)
+    query.pat.add(variables.response, DC('author'), variables.author)
+    query.pat.add(variables.response, SCHED('cell'), variables.cell)
+    query.pat.add(variables.cell, SCHED('availabilty'), variables.availabilty)
+    query.pat.add(variables.cell, ICAL('dtstart'), variables.time)
 
     const options = {
       cellFunction: (cell, x, y, value) => {
-        cell.textContent = value ? UI.utils.label(value) : "-";
+        cell.textContent = value ? UI.utils.label(value) : '-'
       },
-    };
+    }
 
     return UI.matrix.matrixForQuery(
       document,
@@ -65,9 +65,9 @@ export const ForQuery = {
       variables.author,
       variables.availabilty,
       options,
-      function () {},
-    );
+      function () {}
+    )
   },
 
-  name: "for query",
-};
+  name: 'for query',
+}
