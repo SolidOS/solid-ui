@@ -11,7 +11,7 @@ export default {
     '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.mjs' }],
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(lit-html|@exodus/bytes|uuid|jsdom|parse5)/)',
+    '<rootDir>/node_modules/(?!(lit-html|@noble/curves|@noble/hashes|@exodus/bytes|uuid|jsdom|parse5)/)',
   ],
   setupFilesAfterEnv: ['./test/helpers/setup.ts'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
