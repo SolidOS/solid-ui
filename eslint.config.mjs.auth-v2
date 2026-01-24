@@ -1,0 +1,74 @@
+import typescriptEslint from "@typescript-eslint/eslint-plugin";
+import typescriptEslintRecommended from "@typescript-eslint/eslint-plugin/configs/recommended"; // Import the recommended config
+import globals from "globals";
+import tsParser from "@typescript-eslint/parser";
+import promise from 'eslint-plugin-promise';
+import promiseRecommended from 'eslint-plugin-promise/recommended'; // Import promise config
+import n from 'eslint-plugin-n';
+import nRecommendedTs from 'eslint-plugin-n/configs/recommended-typescript';
+import importPlugin from 'eslint-plugin-import'; // Import import plugin
+import importRecommended from 'eslint-plugin-import/config/recommended'; // Import import config
+
+export default [
+    {
+        ignores: ["**/dist"],
+    },
+    {
+        plugins: {
+            "@typescript-eslint": typescriptEslint,
+            promise: promise,
+            n: n,
+            import: importPlugin, // Add import plugin
+        },
+        languageOptions: {
+            globals: {
+                ...globals.browser,
+                ...globals.node,
+                Atomics: "readonly",
+                SharedArrayBuffer: "readonly",
+            },
+            parser: tsParser,
+        },
+        files: ["src/**/*", "test/**/*"],
+    },
+    // spread the configuration files into the final config
+    typescriptEslintRecommended,
+    promiseRecommended,
+    nRecommendedTs,
+    importRecommended, // Add import config
+    {
+        rules: {
+            "no-unused-vars": ["warn", {
+                argsIgnorePattern: "^_",
+                varsIgnorePattern: "^_",
+            }],
+            "@typescript-eslint/no-unused-vars": ["warn", {
+                argsIgnorePattern: "^_",
+                varsIgnorePattern: "^_",
+            }],
+            "promise/param-names": "error",
+            "n/no-callback-literal": "error",
+            // Remove rules added by the extends and not needed
+            "@typescript-eslint/no-explicit-any": "off",
+            "@typescript-eslint/explicit-module-boundary-types": "off",
+            "no-var": "warn",
+            "n/no-unsupported-features/es-syntax": "off",
+            // import rules
+            'import/no-unresolved': 'off', // Because of the types conflict
+            'import/named': 'warn',
+            'import/default': 'warn',
+            'import/namespace': 'warn',
+            'import/no-absolute-path': 'warn',
+            'import/no-dynamic-require': 'warn',
+            'import/no-webpack-loader-syntax': 'warn',
+            'import/no-self-import': 'warn',
+            'import/no-useless-path-segments': 'warn',
+            'import/export': 'warn',
+            'import/no-named-as-default': 'warn',
+            'import/no-named-as-default-member': 'warn',
+            'import/no-deprecated': 'warn',
+            'import/no-extraneous-dependencies': 'warn',
+            'import/no-mutable-exports': 'warn'
+        },
+    }
+];
