@@ -24253,10 +24253,19 @@ function tabWidget(options) {
     });
     var tab = selectedTab1 || selectedTab0 || tabContainer.children[0];
     var clickMe = tab.firstChild;
-    // @ts-ignore
-    if (clickMe) clickMe.click();
+    if (clickMe !== null && clickMe !== void 0 && clickMe.click) {
+      clickMe.click();
+    } else if (tab instanceof HTMLElement) {
+      tab.click();
+    }
   } else if (!options.startEmpty) {
-    tabContainer.children[0].firstChild.click(); // Open first tab
+    var firstTab = tabContainer.children[0];
+    var clickTarget = firstTab === null || firstTab === void 0 ? void 0 : firstTab.firstChild;
+    if (clickTarget !== null && clickTarget !== void 0 && clickTarget.click) {
+      clickTarget.click();
+    } else if (firstTab instanceof HTMLElement) {
+      firstTab.click(); // Open first tab
+    }
   }
   return rootElement;
   function addCancelButton(tabContainer) {

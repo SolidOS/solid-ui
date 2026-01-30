@@ -192,12 +192,22 @@ export function tabWidget(options) {
             tab.subject.uri === selectedTabURI);
         const tab = selectedTab1 || selectedTab0 || tabContainer.children[0];
         const clickMe = tab.firstChild;
-        // @ts-ignore
-        if (clickMe)
+        if (clickMe === null || clickMe === void 0 ? void 0 : clickMe.click) {
             clickMe.click();
+        }
+        else if (tab instanceof HTMLElement) {
+            tab.click();
+        }
     }
     else if (!options.startEmpty) {
-        tabContainer.children[0].firstChild.click(); // Open first tab
+        const firstTab = tabContainer.children[0];
+        const clickTarget = firstTab === null || firstTab === void 0 ? void 0 : firstTab.firstChild;
+        if (clickTarget === null || clickTarget === void 0 ? void 0 : clickTarget.click) {
+            clickTarget.click();
+        }
+        else if (firstTab instanceof HTMLElement) {
+            firstTab.click(); // Open first tab
+        }
     }
     return rootElement;
     function addCancelButton(tabContainer) {
