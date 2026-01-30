@@ -25186,7 +25186,7 @@ function _toConsumableArray(r) {
   /**
    * Default signup endpoints (list of identity providers)
    */
-  signupEndpoint: 'https://solidproject.org/use-solid/',
+  signupEndpoint: 'https://solidproject.org/get_a_pod',
   /**
    * Default height of the Signup popup window, in pixels
    */
