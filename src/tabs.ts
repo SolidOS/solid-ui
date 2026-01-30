@@ -238,11 +238,20 @@ export function tabWidget (options: TabWidgetOptions) {
       )
 
     const tab = selectedTab1 || selectedTab0 || (tabContainer.children[0] as HTMLButtonElement)
-    const clickMe = tab.firstChild
-    // @ts-ignore
-    if (clickMe) clickMe.click()
+    const clickMe = tab.firstChild as HTMLElement | null
+    if (clickMe?.click) {
+      clickMe.click()
+    } else if (tab instanceof HTMLElement) {
+      tab.click()
+    }
   } else if (!options.startEmpty) {
-    (tabContainer.children[0].firstChild as HTMLButtonElement).click() // Open first tab
+    const firstTab = tabContainer.children[0]
+    const clickTarget = firstTab?.firstChild as HTMLElement | null
+    if (clickTarget?.click) {
+      clickTarget.click()
+    } else if (firstTab instanceof HTMLElement) {
+      firstTab.click() // Open first tab
+    }
   }
   return rootElement
 
