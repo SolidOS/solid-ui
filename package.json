@@ -92,7 +92,7 @@
     "@storybook/addon-links": "8.6.15",
     "@storybook/addon-mdx-gfm": "8.6.15",
     "@storybook/addon-webpack5-compiler-swc": "^1.0.6",
-    "@storybook/html": "8.6.15",
+    "@storybook/html": "9.1.17",
     "@storybook/html-webpack5": "8.6.15",
     "@testing-library/dom": "^10.4.1",
     "@testing-library/user-event": "^13.5.0",
