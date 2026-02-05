@@ -4091,7 +4091,7 @@ function attachmentList(dom, subject, div) {
   var attachmentRight = attachmentOne.appendChild(dom.createElement('td'));
   var attachmentTable = attachmentRight.appendChild(dom.createElement('table'));
   attachmentTable.appendChild(dom.createElement('tr')) // attachmentTableTop
-  ;
+;
   attachmentOuter.refresh = refresh; // Participate in downstream changes
   // ;(attachmentTable as any).refresh = refresh   <- outer should be best?
 
@@ -4936,7 +4936,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   }
   if (!kb.updater.editable(doc.uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;
+;
     field.style = style.textInputStyleUneditable + paramStyle;
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none'; // clutter
@@ -12826,7 +12826,7 @@ function cameraCaptureControl(dom, store, getImageDoc, doneCallback) {
     // if (!confirm('Save picture to ' + destination + ' ?')) return
     src_debug/* log */.Rm('Putting ' + blob.size + ' bytes of ' + contentType + ' to ' + destination)
     // @@ TODO Remove casting
-    ;
+;
     store.fetcher.webOperation('PUT', destination.uri, {
       data: blob,
       contentType: contentType
