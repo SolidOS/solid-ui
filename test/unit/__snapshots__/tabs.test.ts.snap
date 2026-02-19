@@ -8,7 +8,7 @@ exports[`tabWidget minimal setup of options renders content for first tab 1`] = 
     style="height: 100%; width: 100%;"
   >
     <main
-      style="flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: #e7e7db; padding: 1em;"
+      style="display: grid; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: #e7e7db; padding: 1em;"
     />
   </div>
   <div
