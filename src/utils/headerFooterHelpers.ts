@@ -2,6 +2,7 @@
     Copied from mashlib/src/global/metadata.ts
  */
 import { IndexedFormula, LiveStore, NamedNode, parse, sym } from 'rdflib'
+import { authn, store } from 'solid-logic'
 import { ns } from '..'
 
 /* @ts-ignore  no-console */
@@ -15,7 +16,16 @@ type ThrottleOptions = {
  * @ignore exporting this only for the unit test
  */
 export function getPod (): NamedNode {
-  // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
+  // Try to get pod from logged-in user's pim:storage
+  const user = authn.currentUser()
+  if (user) {
+    // Look up pim:storage from user's profile
+    const storages = store.each(user, ns.space('storage'), null, user.doc())
+    if (storages.length > 0) {
+      return storages[0] as NamedNode
+    }
+  }
+  // Fallback to origin-based (subdomain pattern) for backwards compatibility
   return sym(document.location.origin).site()
 }
 /**
