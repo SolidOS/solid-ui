@@ -736,7 +736,7 @@ field[ns.ui('Classifier').uri] = function (
   if (selectElement && selectElement.querySelector && selectElement.querySelector('select')) {
     const select = selectElement.querySelector('select');
     if (select && !kb.updater.editable(dataDoc.uri)) {
-      select.readOnly = true;
+      select.disabled = true;
       select.style = style.textInputStyleUneditable;
     }
   }
