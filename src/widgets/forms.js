@@ -733,11 +733,13 @@ field[ns.ui('Classifier').uri] = function (
     checkOptions
   )
   // Set readonly if not editable
-  if (selectElement && selectElement.querySelector && selectElement.querySelector('select')) {
-    const select = selectElement.querySelector('select');
-    if (select && !kb.updater.editable(dataDoc.uri)) {
-      select.disabled = true;
-      select.style = style.textInputStyleUneditable;
+  if (selectElement && selectElement.querySelectorAll) {
+    const selects = selectElement.querySelectorAll('select')
+    if (selects.length && !kb.updater.editable(dataDoc.uri)) {
+      selects.forEach(select => {
+        select.readOnly = true
+        select.style = style.textInputStyleUneditable
+      })
     }
   }
   selectBox.appendChild(selectElement)
