@@ -712,19 +712,7 @@ field[ns.ui('Classifier').uri] = function (
     if (!ok) return callbackFunction(ok, body)
     return callbackFunction(ok, body)
   }
-  // Create container for label and select
-  const outerBox = dom.createElement('div')
-  outerBox.setAttribute('class', 'classifierBox')
-  // Render label
-  const labelDiv = dom.createElement('div')
-  labelDiv.setAttribute('class', 'formFieldName classifierBox-label')
-  // Use fieldLabel to render ui:label if present
-  labelDiv.appendChild(fieldLabel(dom, category, form))
-  outerBox.appendChild(labelDiv)
-  // Render select
-  const selectBox = dom.createElement('div')
-  selectBox.setAttribute('class', 'formFieldValue classifierBox-selectBox')
-  const selectElement = makeSelectForNestedCategory(
+  const box = makeSelectForNestedCategory(
     dom,
     kb,
     subject,
@@ -732,18 +720,8 @@ field[ns.ui('Classifier').uri] = function (
     dataDoc,
     checkOptions
   )
-  // Set readonly if not editable
-  if (selectElement && selectElement.querySelector && selectElement.querySelector('select')) {
-    const select = selectElement.querySelector('select');
-    if (select && !kb.updater.editable(dataDoc.uri)) {
-      select.readOnly = true;
-      select.style = style.textInputStyleUneditable;
-    }
-  }
-  selectBox.appendChild(selectElement)
-  outerBox.appendChild(selectBox)
-  if (container) container.appendChild(outerBox)
-  return outerBox
+  if (container) container.appendChild(box)
+  return box
 }
 
 /**         Choice field
