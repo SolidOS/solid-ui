@@ -8,10 +8,10 @@ export default {
   },
   testPathIgnorePatterns: ['/node_modules/', '/dist/'],
   transform: {
-    '^.+\\.[tj]sx?$': ['babel-jest', { configFile: './babel.config.mjs' }],
+    '^.+\\.(mjs|[tj]sx?)$': ['babel-jest', { configFile: './babel.config.mjs' }],
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(lit-html|@noble/curves|@noble/hashes|@exodus/bytes|uuid|jsdom|parse5)/)',
+    '<rootDir>/node_modules/(?!(lit-html|@noble/curves|@noble/hashes|@exodus/bytes|uuid|jsdom|parse5|@asamuzakjp/css-color|@csstools)/)',
   ],
   setupFilesAfterEnv: ['./test/helpers/setup.ts'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
