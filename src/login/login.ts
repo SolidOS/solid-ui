@@ -75,6 +75,82 @@ function formatDynamicError (error: unknown, contextLabel: string): string {
   return `${contextLabel}: ${name}${status} - ${message}`
 }
 
+function guessPreferencesFileUri (me: NamedNode): string {
+  return me.uri
+    .replace('/profile/', '/')
+    .replace('/public/', '/')
+    .split('/')
+    .slice(0, -1)
+    .join('/') + '/Settings/Preferences.ttl'
+}
+
+function getMissingPreferencesFileUri (context: AuthenticationContext, err: unknown): string | null {
+  const responseUrl = (err as any)?.response?.url
+  if (typeof responseUrl === 'string' && responseUrl) {
+    return responseUrl
+  }
+  if (context.me) {
+    const pointer = store.any(
+      context.me,
+      ns.space('preferencesFile'),
+      undefined,
+      context.me.doc ? context.me.doc() : undefined
+    ) as NamedNode | null
+    if (pointer?.uri) {
+      return pointer.uri
+    }
+    return guessPreferencesFileUri(context.me as NamedNode)
+  }
+  return null
+}
+
+async function createPreferencesFile (context: AuthenticationContext, uri: string): Promise<void> {
+  if (!store.fetcher) {
+    throw new Error('Cannot create preferences file: store has no fetcher')
+  }
+  const initialData = '# Preferences file created by solid-ui\n'
+  await store.fetcher.webOperation('PUT', uri, {
+    data: initialData,
+    contentType: 'text/turtle'
+  })
+  if (!context.me) {
+    throw new Error('Cannot reload preferences file: no logged-in WebID')
+  }
+  context.preferencesFile = await loadPreferences(context.me as NamedNode)
+  context.preferencesFileError = undefined
+}
+
+function offerCreatePreferencesFile (
+  context: AuthenticationContext,
+  uri: string,
+  baseMessage: string
+): void {
+  if (context.div && context.dom) {
+    const box = context.dom.createElement('div')
+    box.appendChild(widgets.errorMessageBlock(context.dom, `${baseMessage} Create it now?`))
+    const createButton = context.dom.createElement('button')
+    createButton.textContent = 'Create preferences file'
+    createButton.setAttribute('style', style.buttonStyle)
+    createButton.addEventListener('click', () => {
+      createButton.disabled = true
+      createPreferencesFile(context, uri)
+        .then(() => {
+          box.appendChild(widgets.errorMessageBlock(context.dom as HTMLDocument, `Preferences file created: ${uri}`, '#dfd'))
+        })
+        .catch(error => {
+          const message = formatDynamicError(error, 'Failed to create preferences file')
+          box.appendChild(widgets.errorMessageBlock(context.dom as HTMLDocument, message))
+          debug.error(message)
+          createButton.disabled = false
+        })
+    })
+    box.appendChild(createButton)
+    context.div.appendChild(box)
+    return
+  }
+  debug.warn(`${baseMessage} You can create it at: ${uri}`)
+}
+
 /**
  * Resolves with the logged in user's WebID
  *
@@ -137,6 +213,7 @@ export async function ensureLoadedPreferences (
     context = await ensureLoadedProfile(context)
     if (!context.me) {
       context.preferencesFileError = 'Not logged in, so preferences were not loaded.'
+      debug.log('not logged in, no preferences loaded')
       return context
     }
 
@@ -180,6 +257,10 @@ export async function ensureLoadedPreferences (
         m2 = 'Your preferences file was not found (404). It may not exist yet.'
         context.preferencesFileError = m2
         debug.warn(m2)
+        const missingPreferencesFileUri = getMissingPreferencesFileUri(context, err)
+        if (missingPreferencesFileUri) {
+          offerCreatePreferencesFile(context, missingPreferencesFileUri, m2)
+        }
         return context
       }
       m2 = formatDynamicError(err, 'Error reading your preferences file')
