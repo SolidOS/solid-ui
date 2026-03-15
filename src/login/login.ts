@@ -65,6 +65,16 @@ const {
   deleteTypeIndexRegistration
 } = solidLogicSingleton.typeIndex
 
+function formatDynamicError (error: unknown, contextLabel: string): string {
+  const e = error as any
+  const name = e?.name || 'Error'
+  const status = typeof e?.status === 'number' ? ` (HTTP ${e.status})` : ''
+  const message = e?.message
+    ? String(e.message)
+    : (typeof error === 'string' ? error : 'No additional details provided')
+  return `${contextLabel}: ${name}${status} - ${message}`
+}
+
 /**
  * Resolves with the logged in user's WebID
  *
@@ -125,6 +135,10 @@ export async function ensureLoadedPreferences (
   } */
   try {
     context = await ensureLoadedProfile(context)
+    if (!context.me) {
+      context.preferencesFileError = 'Not logged in, so preferences were not loaded.'
+      return context
+    }
 
     // console.log('back in Solid UI after logInLoadProfile', context)
     const preferencesFile = await loadPreferences(context.me as NamedNode)
@@ -137,30 +151,47 @@ export async function ensureLoadedPreferences (
     if (err instanceof UnauthorizedError) {
       m2 =
         'Oops — you are not authenticated (properly logged in), so SolidOS cannot read your preferences file. Try logging out and then logging back in.'
+      context.preferencesFileError = m2
       alert(m2)
+      return context
     } else if (err instanceof CrossOriginForbiddenError) {
-      m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
+      m2 = `Unauthorized: preference file request was blocked for origin ${window.location.origin}.`
       context.preferencesFileError = m2
       return context
     } else if (err instanceof SameOriginForbiddenError) {
       m2 =
-        'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+        'You are not authorized to read your preference file from this app context.'
+      context.preferencesFileError = m2
       debug.warn(m2)
       return context
     } else if (err instanceof NotEditableError) {
       m2 =
-        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+        'You are not authorized to edit your preference file from this app context.'
+      context.preferencesFileError = m2
       debug.warn(m2)
       return context
     } else if (err instanceof WebOperationError) {
-      m2 =
-        'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      m2 = formatDynamicError(err, 'Preference file web operation failed')
+      context.preferencesFileError = m2
       debug.warn(m2)
+      return context
     } else if (err instanceof FetchError) {
-      m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
+      if (err.status === 404) {
+        m2 = 'Your preferences file was not found (404). It may not exist yet.'
+        context.preferencesFileError = m2
+        debug.warn(m2)
+        return context
+      }
+      m2 = formatDynamicError(err, 'Error reading your preferences file')
+      context.preferencesFileError = m2
+      debug.warn(m2)
       alert(m2)
+      return context
     } else {
-      throw new Error(`(via loadPrefs) ${err}`)
+      m2 = formatDynamicError(err, 'Unexpected error while loading preferences')
+      context.preferencesFileError = m2
+      debug.error(m2)
+      return context
     }
   }
   return context
@@ -183,14 +214,17 @@ export async function ensureLoadedProfile (
   try {
     const logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
-      throw new Error('Could not log in')
+      const message = 'Could not log in; skipping profile load.'
+      debug.log(message)
+      return context
     }
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
+    const message = formatDynamicError(err, 'Unable to load your profile')
     if (context.div && context.dom) {
-      context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, message))
     }
-    throw new Error(`Can't log in: ${err}`)
+    throw new Error(message)
   }
   return context
 }
@@ -1049,8 +1083,12 @@ export function newAppInstance (
 export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
     const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
-    if (!preferencesFile || preferencesFileError) {
+    if (preferencesFileError) {
       throw new Error(preferencesFileError)
+    }
+    if (!preferencesFile) {
+      const authState = me ? `logged in as ${me.value || me.uri}` : 'not logged in'
+      throw new Error(`Preferences file unavailable (${authState})`)
     }
     return solidLogicSingleton.store.each(
       me,
@@ -1059,7 +1097,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
       preferencesFile.doc()
     ) as NamedNode[]
   } catch (error) {
-    debug.warn('Unable to fetch your preferences - this was the error: ', error)
+    debug.warn(formatDynamicError(error, 'Unable to fetch your preferences'))
   }
   return []
 }
