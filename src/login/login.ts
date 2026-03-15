@@ -155,7 +155,7 @@ export async function ensureLoadedPreferences (
       alert(m2)
       return context
     } else if (err instanceof CrossOriginForbiddenError) {
-      m2 = `Unauthorized: preference file request was blocked for origin ${window.location.origin}.`
+      m2 = `Blocked by origin: preference file request from ${window.location.origin} was forbidden. Ensure this app origin is trusted/allowed for your preferences file.`
       context.preferencesFileError = m2
       return context
     } else if (err instanceof SameOriginForbiddenError) {
