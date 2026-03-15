@@ -191,7 +191,12 @@ export function basicField (
   field.addEventListener(
     'change',
     function (_e) {
-      if (deferWhileFocused && dom.activeElement === field) return
+      if (deferWhileFocused && dom.activeElement === field) {
+        if (field.dataset) {
+          field.dataset.deferredChange = 'true'
+        }
+        return
+      }
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
       const disabledForSave = !deferWhileFocused
@@ -270,6 +275,21 @@ export function basicField (
         }
         callbackFunction(ok, body)
       })
+    },
+    true
+  )
+  field.addEventListener(
+    'blur',
+    function (_e) {
+      if (
+        deferWhileFocused &&
+        field.dataset &&
+        field.dataset.deferredChange === 'true'
+      ) {
+        delete field.dataset.deferredChange
+        const event = new Event('change', { bubbles: true })
+        field.dispatchEvent(event)
+      }
     },
     true
   )
