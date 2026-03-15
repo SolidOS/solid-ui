@@ -211,7 +211,7 @@ export async function ensureLoadedProfile (
       (
         err instanceof CrossOriginForbiddenError ||
         err instanceof SameOriginForbiddenError ||
-        /status:\s*403|forbidden/i.test(message) ||
+        /status:\s*403\b|forbidden/i.test(message) ||
         /cancel/i.test(message)
       )
     if (isNonFatalProfileSideLoadFailure) {
