@@ -216,7 +216,7 @@ export async function ensureLoadedProfile (
     if (!logInContext.me) {
       const message = 'Could not log in; skipping profile load.'
       debug.log(message)
-      return context
+      throw new Error(message)
     }
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
