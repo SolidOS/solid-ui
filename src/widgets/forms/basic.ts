@@ -194,9 +194,10 @@ export function basicField (
       if (deferWhileFocused && dom.activeElement === field) return
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
-      // Always disable during async save to prevent duplicate/overlapping updates,
-      // including for date/datetime-local fields.
-      field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+      const disabledForSave = !deferWhileFocused
+      if (disabledForSave) {
+        field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+      }
       field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
