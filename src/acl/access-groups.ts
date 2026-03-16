@@ -258,7 +258,7 @@ export class AccessGroups {
       }
       return this.handleDroppedUri(uri, combo, true)
     } else if (!agent) {
-      const detectedTypes = Object.keys(this.store.findTypeURIs(sym(uri)))
+      const detectedTypes = Object.keys(this.store.findTypeURIs(thing))
       const typeDetails = detectedTypes.length > 0
         ? ` Detected RDF types: ${detectedTypes.join(', ')}`
         : ' No RDF type was detected for this URI.'
