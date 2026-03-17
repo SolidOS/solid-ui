@@ -81,7 +81,7 @@ function guessPreferencesFileUri (me: NamedNode): string {
     .replace('/public/', '/')
     .split('/')
     .slice(0, -1)
-    .join('/') + '/Settings/Preferences.ttl'
+    .join('/') + '/settings/prefs.ttl'
 }
 
 function getMissingPreferencesFileUri (context: AuthenticationContext, err: unknown): string | null {
@@ -104,51 +104,84 @@ function getMissingPreferencesFileUri (context: AuthenticationContext, err: unkn
   return null
 }
 
-async function createPreferencesFile (context: AuthenticationContext, uri: string): Promise<void> {
+async function ensurePreferencesFileRowInProfile (
+  me: NamedNode,
+  prefsNode: NamedNode,
+  profileDoc: NamedNode
+): Promise<void> {
+  const existingPreferencesFile = store.any(me, ns.space('preferencesFile'), undefined, profileDoc)
+
+  if (existingPreferencesFile && existingPreferencesFile.equals(prefsNode)) {
+    return
+  }
+
+  if (!store.updater) {
+    throw new Error('Cannot create preferences file: store has no updater')
+  }
+
+  const deletions = existingPreferencesFile
+    ? [st(me, ns.space('preferencesFile'), existingPreferencesFile, profileDoc)]
+    : []
+  const insertions = [st(me, ns.space('preferencesFile'), prefsNode, profileDoc)]
+
+  await new Promise<void>((resolve, reject) => {
+    store.updater!.update(deletions as any, insertions as any, (_uri, ok, body) => {
+      if (ok) {
+        resolve()
+      } else {
+        reject(new Error(body || 'Unable to update preferencesFile in WebID profile'))
+      }
+    })
+  })
+}
+
+function buildPreferencesFileTurtle (me: NamedNode): string {
+  const mbox = store.any(me, ns.foaf('mbox'))
+  const mboxLine = mbox ? `\n<${me.uri}> foaf:mbox <${mbox.value}> .\n` : '\n'
+
+  return (
+    '@prefix dct: <http://purl.org/dc/terms/>.\n' +
+    '@prefix pim: <http://www.w3.org/ns/pim/space#>.\n' +
+    '@prefix foaf: <http://xmlns.com/foaf/0.1/>.\n' +
+    '@prefix solid: <http://www.w3.org/ns/solid/terms#>.\n\n' +
+    '<>\n' +
+    '  a pim:ConfigurationFile;\n\n' +
+    '  dct:title "Preferences file" .\n' +
+    mboxLine +
+    `<${me.uri}>\n` +
+    '  solid:publicTypeIndex <publicTypeIndex.ttl> ;\n' +
+    '  solid:privateTypeIndex <privateTypeIndex.ttl> .\n'
+  )
+}
+
+async function writePreferencesFileDocument (uri: string, data: string): Promise<void> {
   if (!store.fetcher) {
     throw new Error('Cannot create preferences file: store has no fetcher')
   }
-  const initialData = '# Preferences file created by solid-ui\n'
+
   await store.fetcher.webOperation('PUT', uri, {
-    data: initialData,
+    data,
     contentType: 'text/turtle'
   })
-  if (!context.me) {
-    throw new Error('Cannot reload preferences file: no logged-in WebID')
-  }
-  context.preferencesFile = await loadPreferences(context.me as NamedNode)
-  context.preferencesFileError = undefined
 }
 
-function offerCreatePreferencesFile (
-  context: AuthenticationContext,
-  uri: string,
-  baseMessage: string
-): void {
-  if (context.div && context.dom) {
-    const box = context.dom.createElement('div')
-    box.appendChild(widgets.errorMessageBlock(context.dom, `${baseMessage} Create it now?`))
-    const createButton = context.dom.createElement('button')
-    createButton.textContent = 'Create preferences file'
-    createButton.setAttribute('style', style.buttonStyle)
-    createButton.addEventListener('click', () => {
-      createButton.disabled = true
-      createPreferencesFile(context, uri)
-        .then(() => {
-          box.appendChild(widgets.errorMessageBlock(context.dom as HTMLDocument, `Preferences file created: ${uri}`, '#dfd'))
-        })
-        .catch(error => {
-          const message = formatDynamicError(error, 'Failed to create preferences file')
-          box.appendChild(widgets.errorMessageBlock(context.dom as HTMLDocument, message))
-          debug.error(message)
-          createButton.disabled = false
-        })
-    })
-    box.appendChild(createButton)
-    context.div.appendChild(box)
-    return
+async function createPreferencesFile (context: AuthenticationContext, uri: string): Promise<void> {
+  const me = (context.me as NamedNode) || authn.currentUser()
+  if (!me) {
+    throw new Error('Cannot create preferences file: no logged-in WebID')
   }
-  debug.warn(`${baseMessage} You can create it at: ${uri}`)
+  context.me = me
+
+  const profileDoc = me.doc()
+  const prefsNode = store.sym(uri)
+
+  await ensurePreferencesFileRowInProfile(me, prefsNode, profileDoc)
+
+  const prefsTurtle = buildPreferencesFileTurtle(me)
+  await writePreferencesFileDocument(uri, prefsTurtle)
+
+  context.preferencesFile = await loadPreferences(me)
+  context.preferencesFileError = undefined
 }
 
 /**
@@ -255,12 +288,24 @@ export async function ensureLoadedPreferences (
     } else if (err instanceof FetchError) {
       if (err.status === 404) {
         m2 = 'Your preferences file was not found (404). It may not exist yet.'
-        context.preferencesFileError = m2
         debug.warn(m2)
         const missingPreferencesFileUri = getMissingPreferencesFileUri(context, err)
         if (missingPreferencesFileUri) {
-          offerCreatePreferencesFile(context, missingPreferencesFileUri, m2)
+          try {
+            await createPreferencesFile(context, missingPreferencesFileUri)
+            debug.log(`Preferences file created automatically: ${missingPreferencesFileUri}`)
+            return context
+          } catch (createError) {
+            const message = formatDynamicError(createError, 'Failed to create preferences file automatically')
+            context.preferencesFileError = message
+            debug.error(message)
+            if (context.div && context.dom) {
+              context.div.appendChild(widgets.errorMessageBlock(context.dom, message))
+            }
+            return context
+          }
         }
+        context.preferencesFileError = m2
         return context
       }
       m2 = formatDynamicError(err, 'Error reading your preferences file')
