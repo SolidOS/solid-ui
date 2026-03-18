@@ -63,33 +63,14 @@ jobs:
           PR_URL: ${{github.event.pull_request.html_url}}
           GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
 
-  npm-publish-build:
+  npm-publish-dev:
     needs: build
-    runs-on: ubuntu-latest
-    permissions:
-      id-token: write  # Required for OIDC
-      contents: read
-    steps:
-      - uses: actions/download-artifact@v8
-        with:
-          name: build
-      - uses: actions/setup-node@v6
-        with:
-          node-version: 22
-          registry-url: 'https://registry.npmjs.org'
-      - name: Update npm to latest (required for OIDC)
-        run: npm install -g npm@latest
-      - uses: rlespinasse/github-slug-action@v4.x
-      - name: Append commit hash to package version
-        run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
-      - name: Disable pre- and post-publish actions
-        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - name: Publish to npm
-        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
-        run: npm publish --tag ${{ env.GITHUB_REF_SLUG }}
-  
+    uses: SolidOS/solidos/.github/workflows/publish-prerelease.yml@main
+    with:
+      node_version: 22
+
   npm-publish-latest:
-    needs: [build, npm-publish-build]
+    needs: [build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     permissions:
