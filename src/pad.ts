@@ -210,7 +210,7 @@ export function notepad(
         }, 1000)
       } else {
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        log("    removePart was deleteing :'" + del)
+        log("    removePart was deleting :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response
           ? (response as any).status
