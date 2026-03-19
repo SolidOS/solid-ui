@@ -216,7 +216,7 @@ export function notepad(
           ? (response as any).status
           : ' [no response field] '
         complain(
-          'Error ' + res + ' saving changes: ' + (errorMessage as any).true
+          'Error ' + res + ' saving changes: ' + String(errorMessage)
         ) // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
       }
