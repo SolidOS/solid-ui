@@ -210,13 +210,13 @@ export function notepad(
         }, 1000)
       } else {
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        log("    removePart was deleteing :'" + del)
+        log("    removePart was deleting :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response
           ? (response as any).status
           : ' [no response field] '
         complain(
-          'Error ' + res + ' saving changes: ' + (errorMessage as any).true
+          'Error ' + res + ' saving changes: ' + String(errorMessage)
         ) // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
       }
@@ -349,7 +349,8 @@ export function notepad(
       // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
-          throw new Error(
+          // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
+          console.warn(
             "Out of order, last sent expected '" +
               old +
               "' but found '" +
