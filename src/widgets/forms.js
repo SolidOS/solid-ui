@@ -1879,7 +1879,14 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
   refresh()
   if (!editable) return box
 
+  let isUpdating = false // Prevent concurrent updates on double-click
+
   const boxHandler = function (_e) {
+    if (isUpdating) {
+      return // Ignore clicks while update is in progress
+    }
+    isUpdating = true
+    input.disabled = true // Disable button to provide user feedback
     colorCarrier.style.color = '#bbb' // grey -- not saved yet
     const toDelete = input.state === true ? ins : input.state === false ? del : []
     input.newState =
@@ -1900,6 +1907,8 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
       success,
       errorBody
     ) {
+      isUpdating = false
+      input.disabled = false
       if (!success) {
         if (toDelete.why) {
           const hmmm = kb.holds(
