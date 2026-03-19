@@ -349,7 +349,8 @@ export function notepad(
       // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
-          throw new Error(
+          // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
+          console.warn(
             "Out of order, last sent expected '" +
               old +
               "' but found '" +
