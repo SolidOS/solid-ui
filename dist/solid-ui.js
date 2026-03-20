@@ -4913,6 +4913,8 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.style = inputStyle;
   rhs.appendChild(field);
   field.setAttribute('type', params.type ? params.type : 'text');
+  var fieldType = (field.getAttribute('type') || '').toLowerCase();
+  var deferWhileFocused = fieldType === 'date' || fieldType === 'datetime-local';
   var size = kb.anyJS(form, src_ns.ui('size')) || styleConstants.textInputSize || 20;
   field.setAttribute('size', size);
   var maxLength = kb.any(form, src_ns.ui('maxLength'));
@@ -4951,9 +4953,18 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     }
   }, true);
   field.addEventListener('change', function (_e) {
+    if (deferWhileFocused && dom.activeElement === field) {
+      if (field.dataset) {
+        field.dataset.deferredChange = 'true';
+      }
+      return;
+    }
     // i.e. lose focus with changed data
     if (params.pattern && !field.value.match(params.pattern)) return;
-    field.disabled = true; // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+    var disabledForSave = !deferWhileFocused;
+    if (disabledForSave) {
+      field.disabled = true; // See if this stops getting two dates from fumbling, e.g., the chrome datepicker.
+    }
     field.setAttribute('style', inputStyle + 'color: gray;'); // pending
     var ds = kb.statementsMatching(subject, property); // remove any multiple values
     var result;
@@ -5021,13 +5032,24 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
     updateMany(ds, is, function (uri, ok, body) {
       // kb.updater.update(ds, is, function (uri, ok, body) {
       if (ok) {
-        field.disabled = false;
+        if (disabledForSave) {
+          field.disabled = false;
+        }
         field.setAttribute('style', inputStyle);
       } else {
         box.appendChild(errorMessageBlock(dom, body));
       }
       callbackFunction(ok, body);
     });
+  }, true);
+  field.addEventListener('blur', function (_e) {
+    if (deferWhileFocused && field.dataset && field.dataset.deferredChange === 'true') {
+      delete field.dataset.deferredChange;
+      var event = new Event('change', {
+        bubbles: true
+      });
+      field.dispatchEvent(event);
+    }
   }, true);
   return box;
 }
