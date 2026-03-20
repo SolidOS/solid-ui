@@ -201,7 +201,7 @@ export function basicField (
       if (params.pattern && !field.value.match(params.pattern)) return
       const disabledForSave = !deferWhileFocused
       if (disabledForSave) {
-        field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+        field.disabled = true // See if this stops getting two dates from fumbling, e.g., the chrome datepicker.
       }
       field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
