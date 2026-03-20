@@ -11454,6 +11454,8 @@ var AccessGroups = /*#__PURE__*/function () {
           thing,
           _this$_store,
           message,
+          detectedTypes,
+          typeDetails,
           error,
           _args4 = arguments,
           _t2;
@@ -11487,7 +11489,9 @@ var AccessGroups = /*#__PURE__*/function () {
                 _context4.next = 6;
                 break;
               }
-              error = "   Error: Drop fails to drop appropriate thing! ".concat(uri);
+              detectedTypes = Object.keys(this.store.findTypeURIs(thing));
+              typeDetails = detectedTypes.length > 0 ? "Detected RDF types: ".concat(detectedTypes.join(', ')) : 'No RDF type was detected for this URI.';
+              error = "Error: Failed to add access target: ".concat(uri, " is not a recognized ACL target type.") + " Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes." + ' Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.' + typeDetails;
               src_debug/* error */.z3(error);
               return _context4.abrupt("return", Promise.reject(new Error(error)));
             case 6:
