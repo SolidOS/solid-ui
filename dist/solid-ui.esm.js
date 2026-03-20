@@ -4576,9 +4576,33 @@ _forms_fieldFunction__WEBPACK_IMPORTED_MODULE_4__/* .field */ .ZZ[_ns__WEBPACK_I
     if (!ok) return callbackFunction(ok, body);
     return callbackFunction(ok, body);
   };
-  var box = makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, checkOptions);
-  if (container) container.appendChild(box);
-  return box;
+  // Create container for label and select
+  var outerBox = dom.createElement('div');
+  outerBox.setAttribute('class', 'classifierBox');
+  // Render label
+  var labelDiv = dom.createElement('div');
+  labelDiv.setAttribute('class', 'formFieldName classifierBox-label');
+  // Use fieldLabel to render ui:label if present
+  labelDiv.appendChild((0,_forms_basic__WEBPACK_IMPORTED_MODULE_8__/* .fieldLabel */ .bk)(dom, category, form));
+  outerBox.appendChild(labelDiv);
+  // Render select
+  var selectBox = dom.createElement('div');
+  selectBox.setAttribute('class', 'formFieldValue classifierBox-selectBox');
+  var selectElement = makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, checkOptions);
+  // Set readonly if not editable
+  if (selectElement && selectElement.querySelectorAll) {
+    var selects = selectElement.querySelectorAll('select');
+    if (selects.length && !kb.updater.editable(dataDoc.uri)) {
+      selects.forEach(function (select) {
+        select.readOnly = true;
+        select.style = _style__WEBPACK_IMPORTED_MODULE_10__/* .style */ .i.textInputStyleUneditable;
+      });
+    }
+  }
+  selectBox.appendChild(selectElement);
+  outerBox.appendChild(selectBox);
+  if (container) container.appendChild(outerBox);
+  return outerBox;
 };
 
 /**         Choice field
@@ -18748,7 +18772,7 @@ function tabWidget(options) {
     _getColors2 = (0,_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__/* ["default"] */ .A)(_getColors, 2),
     selectedColor = _getColors2[0],
     color = _getColors2[1];
-  var bodyMainStyle = "flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
+  var bodyMainStyle = "display: grid; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ".concat(selectedColor, "; padding: 1em;");
   var rootElement = dom.createElement('div'); // 20200117a
 
   rootElement.setAttribute('style', _style__WEBPACK_IMPORTED_MODULE_9__/* .style */ .i.tabsRootElement);

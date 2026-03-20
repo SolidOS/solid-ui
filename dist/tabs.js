@@ -149,7 +149,7 @@ export function tabWidget(options) {
     const vertical = orientation & 1;
     const onClose = options.onClose;
     const [selectedColor, color] = getColors(backgroundColor);
-    const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`;
+    const bodyMainStyle = `display: grid; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`;
     const rootElement = dom.createElement('div'); // 20200117a
     rootElement.setAttribute('style', style.tabsRootElement);
     rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse' : '');
