@@ -21933,8 +21933,8 @@ function notepad(dom, padDoc, subject, me, options) {
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
-  *
-  */
+   *
+   */
   var complain = function complain(message) {
     var upstream = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : false;
     (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)(message);
@@ -21946,6 +21946,7 @@ function notepad(dom, padDoc, subject, me, options) {
   // @@ TODO need to refactor so that we don't have to type cast
   var clearStatus = function clearStatus(_upsteam) {
     if (options.statusArea) {
+      ;
       options.statusArea.innerHTML = '';
     }
   };
@@ -21977,7 +21978,7 @@ function notepad(dom, padDoc, subject, me, options) {
     var next = kb.any(chunk, PAD('next'));
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('You can\'t delete the only line.');
+      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)("You can't delete the only line.");
       return;
     }
     var del = kb.statementsMatching(chunk, undefined, undefined, padDoc).concat(kb.statementsMatching(undefined, undefined, chunk, padDoc));
@@ -22019,10 +22020,10 @@ function notepad(dom, padDoc, subject, me, options) {
         }, 1000);
       } else {
         (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('    removePart FAILED ' + chunk + ': ' + errorMessage);
-        (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('    removePart was deleteing :\'' + del);
+        (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)("    removePart was deleting :'" + del);
         setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
         var res = response ? response.status : ' [no response field] ';
-        complain('Error ' + res + ' saving changes: ' + errorMessage["true"]); // upstream,
+        complain('Error ' + res + ' saving changes: ' + String(errorMessage)); // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
       }
     });
@@ -22039,7 +22040,7 @@ function notepad(dom, padDoc, subject, me, options) {
     }
     updater.update(del, ins, function (uri, ok, errorBody) {
       if (!ok) {
-        (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('Indent change FAILED \'' + newIndent + '\' for ' + padDoc + ': ' + errorBody);
+        (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)("Indent change FAILED '" + newIndent + "' for " + padDoc + ': ' + errorBody);
         setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
         updater.requestDownstreamAction(padDoc, reloadAndSync);
       } else {
@@ -22048,6 +22049,7 @@ function notepad(dom, padDoc, subject, me, options) {
     });
   };
   var addListeners = function addListeners(part, chunk) {
+    var inputDebounceTimer = null;
     part.addEventListener('keydown', function (event) {
       if (!updater) {
         throw new Error('no updater');
@@ -22056,8 +22058,8 @@ function notepad(dom, padDoc, subject, me, options) {
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
         case 13:
-          // Return
           {
+            // Return
             var before = event.shiftKey;
             (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('enter'); // Shift-return inserts before -- only way to add to top of pad.
             if (before) {
@@ -22104,8 +22106,8 @@ function notepad(dom, padDoc, subject, me, options) {
           }
           break;
         case 9:
-          // Tab
           {
+            // Tab
             var delta = event.shiftKey ? -1 : 1;
             changeIndent(part, chunk, delta);
             event.preventDefault(); // default is to highlight next field
@@ -22148,7 +22150,8 @@ function notepad(dom, padDoc, subject, me, options) {
       // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
-          throw new Error('Out of order, last sent expected \'' + old + '\' but found \'' + part.lastSent + '\'');
+          // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
+          console.warn("Out of order, last sent expected '" + old + "' but found '" + part.lastSent + "'");
         }
       }
       part.lastSent = newOne;
@@ -22168,7 +22171,7 @@ function notepad(dom, padDoc, subject, me, options) {
       updater.update(del, ins, function (uri, ok, errorBody, xhr) {
         if (!ok) {
           // alert("clash " + errorBody);
-          (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('    patch FAILED ' + xhr.status + ' for \'' + old + '\' -> \'' + newOne + '\': ' + errorBody);
+          (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('    patch FAILED ' + xhr.status + " for '" + old + "' -> '" + newOne + "': " + errorBody);
           if (xhr.status === 409) {
             // Conflict -  @@ we assume someone else
             setPartStyle(part, 'color: black;  background-color: #fdd;');
@@ -22179,15 +22182,28 @@ function notepad(dom, padDoc, subject, me, options) {
             }, 1000);
           } else {
             setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed pink
-            part.state = 0;
-            complain('    Error ' + xhr.status + ' sending data: ' + errorBody, true);
-            (0,_utils__WEBPACK_IMPORTED_MODULE_4__.beep)(1.0, 128); // Other
-            // @@@   Do soemthing more serious with other errors eg auth, etc
+            var status = xhr === null || xhr === void 0 ? void 0 : xhr.status;
+            if (!status || status === 502 || status === 503) {
+              // Transient server error – retry after a short delay
+              part.lastSent = undefined;
+              part.state = 0;
+              setTimeout(function () {
+                if (part.state === 0 || part.state === undefined) {
+                  part.state = 1;
+                  _updateStore(part);
+                }
+              }, 2000);
+            } else {
+              part.state = 0;
+              complain('    Error ' + status + ' sending data: ' + errorBody, true);
+              (0,_utils__WEBPACK_IMPORTED_MODULE_4__.beep)(1.0, 128); // Other
+              // @@@   Do something more serious with other errors eg auth, etc
+            }
           }
         } else {
           clearStatus(true); // upstream
           setPartStyle(part); // synced
-          (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ');
+          (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)("    Patch ok '" + old + "' -> '" + newOne + "' ");
           if (part.state === 4) {
             //  delete me
             part.state = 3;
@@ -22207,7 +22223,7 @@ function notepad(dom, padDoc, subject, me, options) {
     part.addEventListener('input', function inputChangeListener(_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true); // grey out - not synced
-      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('Input event state ' + part.state + ' value \'' + part.value + '\'');
+      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('Input event state ' + part.state + " value '" + part.value + "'");
       switch (part.state) {
         case 3:
           // being deleted
@@ -22223,8 +22239,15 @@ function notepad(dom, padDoc, subject, me, options) {
           return;
         case 0:
         case undefined:
-          part.state = 1; // being upadted
-          _updateStore(part);
+          // Debounce: wait for a pause in typing before sending PATCH
+          if (inputDebounceTimer !== null) clearTimeout(inputDebounceTimer);
+          inputDebounceTimer = setTimeout(function () {
+            inputDebounceTimer = null;
+            if (part.state === 0 || part.state === undefined) {
+              part.state = 1; // being updated
+              _updateStore(part);
+            }
+          }, 400);
       }
     }); // listener
   }; // addlisteners
@@ -22254,13 +22277,13 @@ function notepad(dom, padDoc, subject, me, options) {
       addListeners(part, chunk);
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff');
-      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)('Note can\'t add listeners - not logged in');
+      (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)("Note can't add listeners - not logged in");
     }
     return part;
   };
 
   /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
-  */
+   */
   var _newChunk = function newChunk(ele, before) {
     // element of chunk being split
     var kb = store;
@@ -22385,6 +22408,7 @@ function notepad(dom, padDoc, subject, me, options) {
       var msg = 'Pad: Inconsistent data - NEXT pointers: ' + kb.each(subject, PAD('next')).length;
       (0,_debug__WEBPACK_IMPORTED_MODULE_5__/* .log */ .Rm)(msg);
       if (options.statusArea) {
+        ;
         options.statusArea.textContent += msg;
       }
       return;

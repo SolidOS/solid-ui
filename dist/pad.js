@@ -72,18 +72,21 @@ export function notepad(dom, padDoc, subject, me, options) {
         }
     }
     /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
-    *
-    */
+     *
+     */
     const complain = function (message, upstream = false) {
         log(message);
         if (options.statusArea) {
             ;
-            (upstream ? upstreamStatus : downstreamStatus).appendChild(errorMessageBlock(dom, message, 'pink'));
+            (upstream
+                ? upstreamStatus
+                : downstreamStatus).appendChild(errorMessageBlock(dom, message, 'pink'));
         }
     };
     // @@ TODO need to refactor so that we don't have to type cast
     const clearStatus = function (_upsteam) {
         if (options.statusArea) {
+            ;
             options.statusArea.innerHTML = '';
         }
     };
@@ -122,7 +125,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         const next = kb.any(chunk, PAD('next'));
         if (prev.sameTerm(subject) && next.sameTerm(subject)) {
             // Last one
-            log('You can\'t delete the only line.');
+            log("You can't delete the only line.");
             return;
         }
         const del = kb
@@ -167,10 +170,12 @@ export function notepad(dom, padDoc, subject, me, options) {
             }
             else {
                 log('    removePart FAILED ' + chunk + ': ' + errorMessage);
-                log('    removePart was deleteing :\'' + del);
+                log("    removePart was deleting :'" + del);
                 setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
-                const res = response ? response.status : ' [no response field] ';
-                complain('Error ' + res + ' saving changes: ' + errorMessage.true); // upstream,
+                const res = response
+                    ? response.status
+                    : ' [no response field] ';
+                complain('Error ' + res + ' saving changes: ' + String(errorMessage)); // upstream,
                 // updater.requestDownstreamAction(padDoc, reloadAndSync);
             }
         });
@@ -187,9 +192,9 @@ export function notepad(dom, padDoc, subject, me, options) {
         }
         updater.update(del, ins, function (uri, ok, errorBody) {
             if (!ok) {
-                log('Indent change FAILED \'' +
+                log("Indent change FAILED '" +
                     newIndent +
-                    '\' for ' +
+                    "' for " +
                     padDoc +
                     ': ' +
                     errorBody);
@@ -202,6 +207,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         });
     };
     const addListeners = function (part, chunk) {
+        let inputDebounceTimer = null;
         part.addEventListener('keydown', function (event) {
             if (!updater) {
                 throw new Error('no updater');
@@ -209,28 +215,27 @@ export function notepad(dom, padDoc, subject, me, options) {
             let queueProperty, queue;
             //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
             switch (event.keyCode) {
-                case 13: // Return
-                    {
-                        const before = event.shiftKey;
-                        log('enter'); // Shift-return inserts before -- only way to add to top of pad.
-                        if (before) {
-                            queue = kb.any(undefined, PAD('next'), chunk);
-                            queueProperty = 'newlinesAfter';
-                        }
-                        else {
-                            queue = kb.any(chunk, PAD('next'));
-                            queueProperty = 'newlinesBefore';
-                        }
-                        queue[queueProperty] = queue[queueProperty] || 0;
-                        queue[queueProperty] += 1;
-                        if (queue[queueProperty] > 1) {
-                            log('    queueing newline queue = ' + queue[queueProperty]);
-                            return;
-                        }
-                        log('    go ahead line before ' + queue[queueProperty]);
-                        newChunk(part, before); // was document.activeElement
-                        break;
+                case 13: { // Return
+                    const before = event.shiftKey;
+                    log('enter'); // Shift-return inserts before -- only way to add to top of pad.
+                    if (before) {
+                        queue = kb.any(undefined, PAD('next'), chunk);
+                        queueProperty = 'newlinesAfter';
                     }
+                    else {
+                        queue = kb.any(chunk, PAD('next'));
+                        queueProperty = 'newlinesBefore';
+                    }
+                    queue[queueProperty] = queue[queueProperty] || 0;
+                    queue[queueProperty] += 1;
+                    if (queue[queueProperty] > 1) {
+                        log('    queueing newline queue = ' + queue[queueProperty]);
+                        return;
+                    }
+                    log('    go ahead line before ' + queue[queueProperty]);
+                    newChunk(part, before); // was document.activeElement
+                    break;
+                }
                 case 8: // Delete
                     if (part.value.length === 0) {
                         log('Delete key line ' + chunk.uri.slice(-4) + ' state ' + part.state);
@@ -253,13 +258,12 @@ export function notepad(dom, padDoc, subject, me, options) {
                         }
                     }
                     break;
-                case 9: // Tab
-                    {
-                        const delta = event.shiftKey ? -1 : 1;
-                        changeIndent(part, chunk, delta);
-                        event.preventDefault(); // default is to highlight next field
-                        break;
-                    }
+                case 9: { // Tab
+                    const delta = event.shiftKey ? -1 : 1;
+                    changeIndent(part, chunk, delta);
+                    event.preventDefault(); // default is to highlight next field
+                    break;
+                }
                 case 27: // ESC
                     log('escape');
                     updater.requestDownstreamAction(padDoc, reloadAndSync);
@@ -293,11 +297,12 @@ export function notepad(dom, padDoc, subject, me, options) {
             // DEBUGGING ONLY
             if (part.lastSent) {
                 if (old !== part.lastSent) {
-                    throw new Error('Out of order, last sent expected \'' +
+                    // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
+                    console.warn("Out of order, last sent expected '" +
                         old +
-                        '\' but found \'' +
+                        "' but found '" +
                         part.lastSent +
-                        '\'');
+                        "'");
                 }
             }
             part.lastSent = newOne;
@@ -318,11 +323,11 @@ export function notepad(dom, padDoc, subject, me, options) {
                     // alert("clash " + errorBody);
                     log('    patch FAILED ' +
                         xhr.status +
-                        ' for \'' +
+                        " for '" +
                         old +
-                        '\' -> \'' +
+                        "' -> '" +
                         newOne +
-                        '\': ' +
+                        "': " +
                         errorBody);
                     if (xhr.status === 409) {
                         // Conflict -  @@ we assume someone else
@@ -335,16 +340,30 @@ export function notepad(dom, padDoc, subject, me, options) {
                     }
                     else {
                         setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed pink
-                        part.state = 0;
-                        complain('    Error ' + xhr.status + ' sending data: ' + errorBody, true);
-                        beep(1.0, 128); // Other
-                        // @@@   Do soemthing more serious with other errors eg auth, etc
+                        const status = xhr === null || xhr === void 0 ? void 0 : xhr.status;
+                        if (!status || status === 502 || status === 503) {
+                            // Transient server error – retry after a short delay
+                            part.lastSent = undefined;
+                            part.state = 0;
+                            setTimeout(() => {
+                                if (part.state === 0 || part.state === undefined) {
+                                    part.state = 1;
+                                    updateStore(part);
+                                }
+                            }, 2000);
+                        }
+                        else {
+                            part.state = 0;
+                            complain('    Error ' + status + ' sending data: ' + errorBody, true);
+                            beep(1.0, 128); // Other
+                            // @@@   Do something more serious with other errors eg auth, etc
+                        }
                     }
                 }
                 else {
                     clearStatus(true); // upstream
                     setPartStyle(part); // synced
-                    log('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ');
+                    log("    Patch ok '" + old + "' -> '" + newOne + "' ");
                     if (part.state === 4) {
                         //  delete me
                         part.state = 3;
@@ -367,7 +386,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         part.addEventListener('input', function inputChangeListener(_event) {
             // debug.log("input changed "+part.value);
             setPartStyle(part, undefined, true); // grey out - not synced
-            log('Input event state ' + part.state + ' value \'' + part.value + '\'');
+            log('Input event state ' + part.state + " value '" + part.value + "'");
             switch (part.state) {
                 case 3: // being deleted
                     return;
@@ -380,8 +399,16 @@ export function notepad(dom, padDoc, subject, me, options) {
                     return;
                 case 0:
                 case undefined:
-                    part.state = 1; // being upadted
-                    updateStore(part);
+                    // Debounce: wait for a pause in typing before sending PATCH
+                    if (inputDebounceTimer !== null)
+                        clearTimeout(inputDebounceTimer);
+                    inputDebounceTimer = setTimeout(() => {
+                        inputDebounceTimer = null;
+                        if (part.state === 0 || part.state === undefined) {
+                            part.state = 1; // being updated
+                            updateStore(part);
+                        }
+                    }, 400);
             }
         }); // listener
     }; // addlisteners
@@ -413,12 +440,12 @@ export function notepad(dom, padDoc, subject, me, options) {
         }
         else {
             setPartStyle(part, 'color: #222; background-color: #fff');
-            log('Note can\'t add listeners - not logged in');
+            log("Note can't add listeners - not logged in");
         }
         return part;
     };
     /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
-    */
+     */
     const newChunk = function (ele, before) {
         // element of chunk being split
         const kb = store;
@@ -554,7 +581,9 @@ export function notepad(dom, padDoc, subject, me, options) {
                 kb.each(subject, PAD('next')).length;
             log(msg);
             if (options.statusArea) {
-                options.statusArea.textContent += msg;
+                ;
+                options.statusArea.textContent +=
+                    msg;
             }
             return;
         }
@@ -744,24 +773,28 @@ export function notepadToHTML(pad, kb) {
             html += '</ul>\n';
         }
     }
-    chunks.forEach(chunk => {
+    chunks.forEach((chunk) => {
         const indent = kb.anyJS(chunk, PAD('indent'));
         const rawContent = kb.anyJS(chunk, ns.sioc('content'));
         if (!rawContent)
             return; // seed chunk is dummy
         const content = xmlEncode(rawContent);
-        if (indent < 0) { // negative indent levels represent heading levels
+        if (indent < 0) {
+            // negative indent levels represent heading levels
             decreaseLevel(0);
             const h = indent >= -3 ? 4 + indent : 1; // -1 -> h4, -2 -> h3
             html += `\n<h${h}>${content}</h${h}>\n`;
         }
-        else { // >= 0
-            if (indent > 0) { // Lists
+        else {
+            // >= 0
+            if (indent > 0) {
+                // Lists
                 decreaseLevel(indent);
                 increaseLevel(indent);
                 html += `<li>${content}</li>\n`;
             }
-            else { // indent 0
+            else {
+                // indent 0
                 decreaseLevel(indent);
                 html += `<p>${content}</p>\n`;
             }
