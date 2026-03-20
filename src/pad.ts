@@ -11,7 +11,12 @@ import { beep } from './utils'
 import { log } from './debug'
 import { solidLogicSingleton } from 'solid-logic'
 import { style } from './style'
-export { renderParticipants, participationObject, manageParticipation, recordParticipation } from './participation'
+export {
+  renderParticipants,
+  participationObject,
+  manageParticipation,
+  recordParticipation
+} from './participation'
 
 const store = solidLogicSingleton.store
 
@@ -41,7 +46,7 @@ class NotepadPart extends HTMLElement {
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-export function lightColorHash (author?: NamedNode): string {
+export function lightColorHash(author?: NamedNode): string {
   const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
@@ -61,7 +66,13 @@ export function lightColorHash (author?: NamedNode): string {
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
  */
-export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNode, me: NamedNode, options?: notepadOptions) {
+export function notepad(
+  dom: HTMLDocument,
+  padDoc: NamedNode,
+  subject: NamedNode,
+  me: NamedNode,
+  options?: notepadOptions
+) {
   options = options || {}
   const exists = options.exists
   const table: any = dom.createElement('table')
@@ -92,22 +103,29 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     }
   }
   /* @@ TODO want to look into this, it seems upstream should be a boolean and default to false ?
-  *
-  */
+   *
+   */
   const complain = function (message: string, upstream: boolean = false) {
     log(message)
     if ((options as notepadOptions).statusArea) {
-      ; (upstream ? upstreamStatus as HTMLElement : downstreamStatus as HTMLElement).appendChild(errorMessageBlock(dom, message, 'pink'))
+      ;(upstream
+        ? (upstreamStatus as HTMLElement)
+        : (downstreamStatus as HTMLElement)
+      ).appendChild(errorMessageBlock(dom, message, 'pink'))
     }
   }
   // @@ TODO need to refactor so that we don't have to type cast
   const clearStatus = function (_upsteam?: any) {
     if ((options as notepadOptions).statusArea) {
-      ((options as notepadOptions).statusArea as HTMLElement).innerHTML = ''
+      ;((options as notepadOptions).statusArea as HTMLElement).innerHTML = ''
     }
   }
 
-  const setPartStyle = function (part: NotepadPart, colors?: string, pending?: any) {
+  const setPartStyle = function (
+    part: NotepadPart,
+    colors?: string,
+    pending?: any
+  ) {
     const chunk = part.subject
     colors = colors || ''
     const baseStyle = style.baseStyle
@@ -146,7 +164,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     const next: any = kb.any(chunk as any, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      log('You can\'t delete the only line.')
+      log("You can't delete the only line.")
       return
     }
 
@@ -192,10 +210,14 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         }, 1000)
       } else {
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        log('    removePart was deleteing :\'' + del)
+        log("    removePart was deleting :'" + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
-        const res = response ? (response as any).status : ' [no response field] '
-        complain('Error ' + res + ' saving changes: ' + (errorMessage as any).true) // upstream,
+        const res = response
+          ? (response as any).status
+          : ' [no response field] '
+        complain(
+          'Error ' + res + ' saving changes: ' + String(errorMessage)
+        ) // upstream,
         // updater.requestDownstreamAction(padDoc, reloadAndSync);
       }
     })
@@ -213,12 +235,12 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     updater.update(del, ins as any, function (uri, ok, errorBody) {
       if (!ok) {
         log(
-          'Indent change FAILED \'' +
-          newIndent +
-          '\' for ' +
-          padDoc +
-          ': ' +
-          errorBody
+          "Indent change FAILED '" +
+            newIndent +
+            "' for " +
+            padDoc +
+            ': ' +
+            errorBody
         )
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         updater.requestDownstreamAction(padDoc, reloadAndSync)
@@ -229,6 +251,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   }
 
   const addListeners = function (part: any, chunk: any) {
+    let inputDebounceTimer: ReturnType<typeof setTimeout> | null = null
     part.addEventListener('keydown', function (event) {
       if (!updater) {
         throw new Error('no updater')
@@ -237,8 +260,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       let queueProperty, queue
       //  up 38; down 40; left 37; right 39     tab 9; shift 16; escape 27
       switch (event.keyCode) {
-        case 13: // Return
-        {
+        case 13: { // Return
           const before: NotepadElement = event.shiftKey
           log('enter') // Shift-return inserts before -- only way to add to top of pad.
           if (before) {
@@ -283,8 +305,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
             }
           }
           break
-        case 9: // Tab
-        {
+        case 9: { // Tab
           const delta = event.shiftKey ? -1 : 1
           changeIndent(part, chunk, delta)
           event.preventDefault() // default is to highlight next field
@@ -328,12 +349,13 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       // DEBUGGING ONLY
       if (part.lastSent) {
         if (old !== part.lastSent) {
-          throw new Error(
-            'Out of order, last sent expected \'' +
-            old +
-            '\' but found \'' +
-            part.lastSent +
-            '\''
+          // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
+          console.warn(
+            "Out of order, last sent expected '" +
+              old +
+              "' but found '" +
+              part.lastSent +
+              "'"
           )
         }
       }
@@ -357,13 +379,13 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           // alert("clash " + errorBody);
           log(
             '    patch FAILED ' +
-            (xhr as any).status +
-            ' for \'' +
-            old +
-            '\' -> \'' +
-            newOne +
-            '\': ' +
-            errorBody
+              (xhr as any).status +
+              " for '" +
+              old +
+              "' -> '" +
+              newOne +
+              "': " +
+              errorBody
           )
           if ((xhr as any).status === 409) {
             // Conflict -  @@ we assume someone else
@@ -375,18 +397,31 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
             }, 1000)
           } else {
             setPartStyle(part, 'color: black;  background-color: #fdd;') // failed pink
-            part.state = 0
-            complain(
-              '    Error ' + (xhr as any).status + ' sending data: ' + errorBody,
-              true
-            )
-            beep(1.0, 128) // Other
-            // @@@   Do soemthing more serious with other errors eg auth, etc
+            const status = (xhr as any)?.status
+            if (!status || status === 502 || status === 503) {
+              // Transient server error – retry after a short delay
+              part.lastSent = undefined
+              part.state = 0
+              setTimeout(() => {
+                if (part.state === 0 || part.state === undefined) {
+                  part.state = 1
+                  updateStore(part)
+                }
+              }, 2000)
+            } else {
+              part.state = 0
+              complain(
+                '    Error ' + status + ' sending data: ' + errorBody,
+                true
+              )
+              beep(1.0, 128) // Other
+              // @@@   Do something more serious with other errors eg auth, etc
+            }
           }
         } else {
           clearStatus(true) // upstream
           setPartStyle(part) // synced
-          log('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ')
+          log("    Patch ok '" + old + "' -> '" + newOne + "' ")
 
           if (part.state === 4) {
             //  delete me
@@ -405,12 +440,10 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       })
     }
 
-    part.addEventListener('input', function inputChangeListener (_event) {
+    part.addEventListener('input', function inputChangeListener(_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
-      log(
-        'Input event state ' + part.state + ' value \'' + part.value + '\''
-      )
+      log('Input event state ' + part.state + " value '" + part.value + "'")
       switch (part.state) {
         case 3: // being deleted
           return
@@ -423,14 +456,25 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           return
         case 0:
         case undefined:
-          part.state = 1 // being upadted
-          updateStore(part)
+          // Debounce: wait for a pause in typing before sending PATCH
+          if (inputDebounceTimer !== null) clearTimeout(inputDebounceTimer)
+          inputDebounceTimer = setTimeout(() => {
+            inputDebounceTimer = null
+            if (part.state === 0 || part.state === undefined) {
+              part.state = 1 // being updated
+              updateStore(part)
+            }
+          }, 400)
       }
     }) // listener
   } // addlisteners
 
   // @@ TODO Need to research before as it appears to be used as an Element and a boolean
-  const newPartAfter = function (tr1: HTMLTableElement, chunk: String, before?: NotepadElement | boolean) {
+  const newPartAfter = function (
+    tr1: HTMLTableElement,
+    chunk: String,
+    before?: NotepadElement | boolean
+  ) {
     // @@ take chunk and add listeners
     let text: any = kb.any(chunk as any, ns.sioc('content'))
     text = text ? text.value : ''
@@ -454,13 +498,13 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
       addListeners(part, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
-      log('Note can\'t add listeners - not logged in')
+      log("Note can't add listeners - not logged in")
     }
     return part
   }
 
   /* @@ TODO we need to look at indent, it can be a Number or an Object this doesn't seem correct.
-  */
+   */
   const newChunk = function (ele?: NotepadElement, before?: NotepadElement) {
     // element of chunk being split
     const kb = store
@@ -523,15 +567,13 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         if (queueProperty) {
           log(
             '    Fresh chunk ' +
-            label +
-            ' updated, queue = ' +
-            queue[queueProperty]
+              label +
+              ' updated, queue = ' +
+              queue[queueProperty]
           )
           queue[queueProperty] -= 1
           if (queue[queueProperty] > 0) {
-            log(
-              '    Implementing queued newlines = ' + next.newLinesBefore
-            )
+            log('    Implementing queued newlines = ' + next.newLinesBefore)
             newChunk(newPart, before)
           }
         }
@@ -542,7 +584,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
   const consistencyCheck = function () {
     const found: { [uri: string]: boolean } = {}
     let failed = 0
-    function complain2 (msg) {
+    function complain2(msg) {
       complain(msg)
       failed++
     }
@@ -554,7 +596,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     // var chunk = kb.the(subject, PAD('next'))
     let prev = subject
     let chunk
-    for (; ;) {
+    for (;;) {
       chunk = kb.the(prev, PAD('next'))
       if (!chunk) {
         complain2('No next pointer from ' + prev)
@@ -610,7 +652,8 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
         kb.each(subject, PAD('next')).length
       log(msg)
       if ((options as notepadOptions).statusArea) {
-        ((options as notepadOptions).statusArea as HTMLElement).textContent += msg
+        ;((options as notepadOptions).statusArea as HTMLElement).textContent +=
+          msg
       }
       return
     }
@@ -711,7 +754,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           if ((xhr as any).status === 0) {
             complain(
               'Network error refreshing the pad. Retrying in ' +
-              retryTimeout / 1000
+                retryTimeout / 1000
             )
             reloading = true
             retryTimeout = retryTimeout * 2
@@ -719,11 +762,11 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
           } else {
             complain(
               'Error ' +
-              (xhr as any).status +
-              'refreshing the pad:' +
-              message +
-              '. Stopped. ' +
-              padDoc
+                (xhr as any).status +
+                'refreshing the pad:' +
+                message +
+                '. Stopped. ' +
+                padDoc
             )
           }
         }
@@ -761,15 +804,23 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
     if (!updater) {
       throw new Error('no updater')
     }
-    updater.update([], insertables, function (uri: string | null | undefined, ok: boolean, errorBody?: string) {
-      if (!ok) {
-        complain(errorBody || '')
-      } else {
-        log('Initial pad created')
-        newChunk() // Add a first chunck
-        // getResults();
+    updater.update(
+      [],
+      insertables,
+      function (
+        uri: string | null | undefined,
+        ok: boolean,
+        errorBody?: string
+      ) {
+        if (!ok) {
+          complain(errorBody || '')
+        } else {
+          log('Initial pad created')
+          newChunk() // Add a first chunck
+          // getResults();
+        }
       }
-    })
+    )
   }
   return table
 }
@@ -780,7 +831,7 @@ export function notepad (dom: HTMLDocument, padDoc: NamedNode, subject: NamedNod
  */
 
 // @ignore exporting this only for the unit test
-export function getChunks (subject: NamedNode, kb: IndexedFormula) {
+export function getChunks(subject: NamedNode, kb: IndexedFormula) {
   const chunks: any[] = []
   for (
     let chunk: any = kb.the(subject, PAD('next'));
@@ -796,7 +847,7 @@ export function getChunks (subject: NamedNode, kb: IndexedFormula) {
  *  Encode content to be put in XML or HTML elements
  */
 // @ignore exporting this only for the unit test
-export function xmlEncode (str) {
+export function xmlEncode(str) {
   return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 }
 
@@ -805,7 +856,7 @@ export function xmlEncode (str) {
  *   @param { } pad - the notepad
  *   @param {store} pad - the data store
  */
-export function notepadToHTML (pad: any, kb: IndexedFormula) {
+export function notepadToHTML(pad: any, kb: IndexedFormula) {
   const chunks = getChunks(pad, kb)
   let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))
@@ -815,32 +866,36 @@ export function notepadToHTML (pad: any, kb: IndexedFormula) {
   html += '  </head>\n  <body>\n'
   let level = 0
 
-  function increaseLevel (indent) {
+  function increaseLevel(indent) {
     for (; level < indent; level++) {
       html += '<ul>\n'
     }
   }
 
-  function decreaseLevel (indent) {
+  function decreaseLevel(indent) {
     for (; level > indent; level--) {
       html += '</ul>\n'
     }
   }
-  chunks.forEach(chunk => {
+  chunks.forEach((chunk) => {
     const indent = kb.anyJS(chunk, PAD('indent'))
     const rawContent = kb.anyJS(chunk, ns.sioc('content'))
     if (!rawContent) return // seed chunk is dummy
     const content = xmlEncode(rawContent)
-    if (indent < 0) { // negative indent levels represent heading levels
+    if (indent < 0) {
+      // negative indent levels represent heading levels
       decreaseLevel(0)
       const h = indent >= -3 ? 4 + indent : 1 // -1 -> h4, -2 -> h3
       html += `\n<h${h}>${content}</h${h}>\n`
-    } else { // >= 0
-      if (indent > 0) { // Lists
+    } else {
+      // >= 0
+      if (indent > 0) {
+        // Lists
         decreaseLevel(indent)
         increaseLevel(indent)
         html += `<li>${content}</li>\n`
-      } else { // indent 0
+      } else {
+        // indent 0
         decreaseLevel(indent)
         html += `<p>${content}</p>\n`
       }
