@@ -8,6 +8,9 @@
  * It currently traverses the FOAF graph up to 3 degrees of separation (friends of friends of friends) 
  * to find people, and also loads contacts from any linked address books. The search is performed 
  * client-side on the discovered set of people, allowing for fast filtering as the user types.
+ * Below the name of each person, a label indicates whether they are a direct friend, a contact 
+ * from an address book, or just a person discovered through the FOAF graph. Contacts take precedence 
+ * over friends, and friends take precedence over people when determining the label.
  * Configurable options include a click handler for when a person is selected, otherwise it
  * opens their profile in the same window.
  *
