@@ -18,6 +18,7 @@
 // export widgets with the same name)
 
 export * from './peoplePicker'
+export * from './peopleSearch'
 export * from './dragAndDrop'
 export * from './buttons'
 export * from './buttons/iconLinks'

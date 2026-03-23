@@ -67,6 +67,7 @@
   "dependencies": {
     "@noble/curves": "^2.0.1",
     "@noble/hashes": "^2.0.1",
+    "@solid-data-modules/contacts-rdflib": "^0.7.1",
     "escape-html": "^1.0.3",
     "mime-types": "^3.0.2",
     "pane-registry": "^3.0.2",
