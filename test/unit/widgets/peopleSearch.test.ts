@@ -210,7 +210,7 @@ describe('createPeopleSearch', () => {
     personRow?.dispatchEvent(new Event('click'))
 
     expect(openSpy).toHaveBeenCalledTimes(1)
-    expect(openSpy).toHaveBeenCalledWith('https://alice.example/profile/card#me', '_blank')
+    expect(openSpy).toHaveBeenCalledWith('https://alice.example/profile/card#me', '_blank', 'noopener,noreferrer')
     expect(dropdown.style.display).toBe('none')
 
     openSpy.mockRestore()

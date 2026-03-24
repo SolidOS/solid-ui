@@ -18,7 +18,7 @@
  *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
  *
  */
-import { NamedNode } from 'rdflib'
+import { NamedNode, type LiveStore } from 'rdflib'
 import ContactsModuleRdfLib, { type AddressBook } from '@solid-data-modules/contacts-rdflib'
 import * as debug from '../debug'
 import { ns } from '..'
@@ -36,7 +36,12 @@ type PersonEntry = {
   relationshipLabel: 'Friend' | 'People' | 'Contact'
 }
 
-export const createPeopleSearch = function (dom, kb, me: NamedNode | null, onClickHandler?: (person: PersonEntry) => void) {
+export const createPeopleSearch = function (
+  dom: HTMLDocument,
+  kb: LiveStore,
+  me: NamedNode | null,
+  onClickHandler?: (person: PersonEntry) => void
+): HTMLFormElement {
   const contactsModule = new ContactsModuleRdfLib({
     store: kb,
     fetcher: kb.fetcher,
@@ -353,7 +358,7 @@ export const createPeopleSearch = function (dom, kb, me: NamedNode | null, onCli
     const contactNode = new NamedNode(contactUri)
     const webIdPromise = kb.fetcher.load(contactNode.doc())
       .then(function () {
-        const webIdNode = kb.any(contactNode, ns.vcard('url'), undefined, contactNode.doc())
+        const webIdNode = kb.any(contactNode, ns.vcard('url'), undefined, contactNode.doc()) as NamedNode | null
         if (!webIdNode) return null
 
         return kb.anyValue(webIdNode, ns.vcard('value'), undefined, contactNode.doc()) || null
