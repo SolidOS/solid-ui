@@ -50,8 +50,8 @@ export const createPeopleSearch = function (
 
   // Add responsive styles for people search
   const styleId = 'people-search-styles'
-  if (!document.getElementById(styleId)) {
-    const style = document.createElement('style')
+  if (!dom.getElementById(styleId)) {
+    const style = dom.createElement('style')
     style.id = styleId
     style.textContent = `
       .people-search-input {
@@ -72,7 +72,8 @@ export const createPeopleSearch = function (
         }
       }
     `
-    document.head.appendChild(style)
+    const styleContainer = dom.head || dom.documentElement || dom.body
+    styleContainer?.appendChild(style)
   }
 
   const searchForm = dom.createElement('form')
