@@ -132,7 +132,10 @@ export const createPeopleSearch = function (dom, kb, me: NamedNode | null, onCli
         if (onClickHandler) {
           onClickHandler(person)
         } else {
-          window.open(person.webId, '_blank')
+          const newWindow = window.open(person.webId, '_blank', 'noopener,noreferrer')
+          if (newWindow) {
+            newWindow.opener = null
+          }
         }
         searchDiv.style.display = 'none'
       })
