@@ -244,6 +244,7 @@ describe('createPeopleSearch', () => {
     const input = form.querySelector('input') as HTMLInputElement
     const label = form.querySelector('label') as HTMLLabelElement
     const dropdown = form.querySelector('.people-search-dropdown') as HTMLDivElement
+    const liveRegion = form.querySelector('div[role="status"]') as HTMLDivElement
 
     expect(label).not.toBeNull()
     expect(label.textContent).toBe('Search for people')
@@ -253,11 +254,14 @@ describe('createPeopleSearch', () => {
     expect(input.getAttribute('aria-labelledby')).toBe(label.id)
     expect(input.getAttribute('aria-controls')).toBe(dropdown.id)
     expect(input.getAttribute('aria-expanded')).toBe('false')
+    expect(liveRegion).not.toBeNull()
+    expect(typeof liveRegion.textContent).toBe('string')
 
     await openDropdown(form)
 
     const personRow = rowFor(form, 'https://alice.example/profile/card#me')
     expect(dropdown.getAttribute('role')).toBe('listbox')
+    expect(dropdown.getAttribute('aria-busy')).toBe('false')
     expect(input.getAttribute('aria-expanded')).toBe('true')
     expect(personRow?.getAttribute('role')).toBe('option')
     expect(personRow?.id).toContain('-option-')
@@ -294,16 +298,21 @@ describe('createPeopleSearch', () => {
     const input = form.querySelector('input') as HTMLInputElement
     const dropdown = form.querySelector('.people-search-dropdown') as HTMLDivElement
     const aliceRow = rowFor(form, 'https://alice.example/profile/card#me') as HTMLDivElement
+    const bobRow = rowFor(form, 'https://bob.example/profile/card#me') as HTMLDivElement
 
     keyDown(input, 'ArrowDown')
     expect(input.getAttribute('aria-activedescendant')).toBe(aliceRow.id)
     expect(aliceRow.getAttribute('aria-selected')).toBe('true')
 
+    keyDown(input, 'ArrowUp')
+    expect(input.getAttribute('aria-activedescendant')).toBe(bobRow.id)
+    expect(bobRow.getAttribute('aria-selected')).toBe('true')
+
     keyDown(input, 'Enter')
     expect(onClickHandler).toHaveBeenCalledTimes(1)
     expect(onClickHandler).toHaveBeenCalledWith({
-      name: 'Alice Example',
-      webId: 'https://alice.example/profile/card#me',
+      name: 'Bob Stone',
+      webId: 'https://bob.example/profile/card#me',
       relationshipLabel: 'Contact'
     })
     expect(dropdown.style.display).toBe('none')
@@ -313,6 +322,50 @@ describe('createPeopleSearch', () => {
     keyDown(input, 'Escape')
     expect(dropdown.style.display).toBe('none')
     expect(input.getAttribute('aria-expanded')).toBe('false')
+  })
+
+  it('supports Home/End navigation and closes on Tab', async () => {
+    mockReadAddressBook.mockResolvedValue({
+      contacts: [
+        {
+          uri: 'https://pod.example/contacts/1#this',
+          name: 'Alice Example'
+        },
+        {
+          uri: 'https://pod.example/contacts/2#this',
+          name: 'Bob Stone'
+        }
+      ]
+    })
+
+    const kb = makeKb({
+      contactWebIdsByCardUri: {
+        'https://pod.example/contacts/1#this': 'https://alice.example/profile/card#me',
+        'https://pod.example/contacts/2#this': 'https://bob.example/profile/card#me'
+      }
+    })
+    const me = new NamedNode('https://user-11.example/profile/card#me')
+
+    const form = createPeopleSearch(document, kb as any, me)
+    document.body.appendChild(form)
+
+    await openDropdown(form)
+
+    const input = form.querySelector('input') as HTMLInputElement
+    const dropdown = form.querySelector('.people-search-dropdown') as HTMLDivElement
+    const aliceRow = rowFor(form, 'https://alice.example/profile/card#me') as HTMLDivElement
+    const bobRow = rowFor(form, 'https://bob.example/profile/card#me') as HTMLDivElement
+
+    keyDown(input, 'End')
+    expect(input.getAttribute('aria-activedescendant')).toBe(bobRow.id)
+
+    keyDown(input, 'Home')
+    expect(input.getAttribute('aria-activedescendant')).toBe(aliceRow.id)
+
+    keyDown(input, 'Tab')
+    expect(dropdown.style.display).toBe('none')
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+    expect(input.getAttribute('aria-activedescendant')).toBeNull()
   })
 
   it('matches names by tokenized, case-insensitive words', async () => {
@@ -426,5 +479,20 @@ describe('createPeopleSearch', () => {
     await setSearchQuery(form, 'thiswillnotmatch')
 
     expect(dropdown.textContent).toContain('No contacts match that name.')
+  })
+
+  it('updates hidden live status text for no-match state', async () => {
+    const kb = makeKb()
+    const me = new NamedNode('https://user-10.example/profile/card#me')
+
+    const form = createPeopleSearch(document, kb as any, me)
+    document.body.appendChild(form)
+
+    const liveRegion = form.querySelector('div[role="status"]') as HTMLDivElement
+
+    await openDropdown(form)
+    await setSearchQuery(form, 'no-person-will-match-this')
+
+    expect(liveRegion.textContent).toContain('No contacts match that name.')
   })
 })

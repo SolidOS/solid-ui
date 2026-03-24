@@ -133,13 +133,21 @@ export const createPeopleSearch = function (
   warmupHint.style.color = '#666'
   warmupHint.textContent = 'Warming up contacts…'
 
+  const liveStatus = searchForm.appendChild(dom.createElement('div'))
+  liveStatus.className = 'people-search-sr-only'
+  liveStatus.setAttribute('role', 'status')
+  liveStatus.setAttribute('aria-live', 'polite')
+
     const discoveredPeople = new Map<string, PersonEntry>()
     const personRows = new Map<string, HTMLDivElement>()
     const status = searchDiv.appendChild(dom.createElement('p'))
     status.style.margin = '5px 0'
     status.style.color = '#666'
-    status.setAttribute('role', 'status')
-    status.setAttribute('aria-live', 'polite')
+
+  const setStatusText = function (text: string) {
+    status.textContent = text
+    liveStatus.textContent = text
+  }
 
     let activeRow: HTMLDivElement | null = null
 
@@ -163,6 +171,9 @@ export const createPeopleSearch = function (
       if (activeRow) {
         activeRow.style.backgroundColor = '#f0f0f0'
         activeRow.setAttribute('aria-selected', 'true')
+        if (typeof activeRow.scrollIntoView === 'function') {
+          activeRow.scrollIntoView({ block: 'nearest' })
+        }
         if (activeRow.id) {
           searchInput.setAttribute('aria-activedescendant', activeRow.id)
         }
@@ -527,7 +538,8 @@ export const createPeopleSearch = function (
     }
 
     discoveryStarted = true
-    status.textContent = 'Searching...'
+    searchDiv.setAttribute('aria-busy', 'true')
+    setStatusText('Searching...')
     warmupHint.style.display = 'block'
 
     discoveryPromise = (async function () {
@@ -563,15 +575,16 @@ export const createPeopleSearch = function (
       }
     })()
       .catch(() => {
-        status.textContent = 'Unable to load contacts.'
+        setStatusText('Unable to load contacts.')
       })
       .finally(() => {
         discoveryStarted = false
+        searchDiv.setAttribute('aria-busy', 'false')
         warmupHint.style.display = 'none'
         if (discoveredPeople.size === 0) {
-          status.textContent = me ? 'No contacts found.' : 'Sign in to search contacts.'
+          setStatusText(me ? 'No contacts found.' : 'Sign in to search contacts.')
         } else {
-          status.textContent = ''
+          setStatusText('')
         }
       })
 
@@ -584,7 +597,7 @@ export const createPeopleSearch = function (
 
     const visibleCount = updateVisibleRows(query.trim())
     if (!me) {
-      status.textContent = 'Sign in to search contacts.'
+      setStatusText('Sign in to search contacts.')
       return
     }
 
@@ -595,13 +608,13 @@ export const createPeopleSearch = function (
     if (searchId !== activeSearchId) return
 
     if (visibleCount > 0) {
-      status.textContent = discoveryStarted ? 'Searching...' : ''
+      setStatusText(discoveryStarted ? 'Searching...' : '')
       return
     }
 
-    status.textContent = discoveryStarted
+    setStatusText(discoveryStarted
       ? 'Searching...'
-      : 'No contacts match that name.'
+      : 'No contacts match that name.')
   }
 
   const onInputHandler = function () {
@@ -622,9 +635,28 @@ export const createPeopleSearch = function (
   const onKeyDownHandler = function (event: KeyboardEvent) {
     const visibleRows = getVisibleRows()
 
+    if (event.key === 'Tab') {
+      setActiveRow(null)
+      setDropdownOpen(false)
+      return
+    }
+
     if (event.key === 'Escape') {
       setActiveRow(null)
       setDropdownOpen(false)
+      return
+    }
+
+    if (event.key === 'Home' || event.key === 'End') {
+      if (visibleRows.length === 0) {
+        return
+      }
+      event.preventDefault()
+      if (searchDiv.style.display === 'none') {
+        setDropdownOpen(true)
+      }
+      const targetIndex = event.key === 'Home' ? 0 : visibleRows.length - 1
+      setActiveRow(visibleRows[targetIndex])
       return
     }
 
@@ -639,7 +671,7 @@ export const createPeopleSearch = function (
       const currentIndex = activeRow ? visibleRows.indexOf(activeRow) : -1
       const nextIndex = event.key === 'ArrowDown'
         ? Math.min(currentIndex + 1, visibleRows.length - 1)
-        : Math.max(currentIndex - 1, 0)
+        : (currentIndex <= 0 ? visibleRows.length - 1 : currentIndex - 1)
       setActiveRow(visibleRows[nextIndex])
       return
     }
