@@ -295,7 +295,7 @@ export const createPeopleSearch = function (
         visibleCount += 1
       }
     }
-    sortVisibleRows()
+    scheduleSortVisibleRows()
     ensureActiveRowIsVisible()
     return visibleCount
   }
@@ -617,8 +617,18 @@ export const createPeopleSearch = function (
       : 'No contacts match that name.')
   }
 
+  let inputSearchQueued = false
   const onInputHandler = function () {
-    void runSearch(searchInput.value)
+    if (inputSearchQueued) {
+      return
+    }
+    inputSearchQueued = true
+
+    const flushInputSearch = function () {
+      inputSearchQueued = false
+      void runSearch(searchInput.value)
+    }
+    setTimeout(flushInputSearch, 0)
   }
 
   const onFocusHandler = function () {
