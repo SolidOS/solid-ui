@@ -289,21 +289,25 @@ export const createPeopleSearch = function (dom, kb, me: NamedNode | null, onCli
         return nextContacts
       }
 
-      const contacts = kb.each(current, ns.foaf('knows')) as NamedNode[]
+      const contacts = kb.each(current, ns.foaf('knows'))
       for (const contact of contacts) {
-        const contactName = nameFor(contact)
-        if (contact.value !== me.value && contactName && !emitted.has(contact.value)) {
-          emitted.add(contact.value)
+        if (contact.termType !== 'NamedNode') {
+          continue
+        }
+        const namedContact = contact as NamedNode
+        const contactName = nameFor(namedContact)
+        if (namedContact.value !== me.value && contactName && !emitted.has(namedContact.value)) {
+          emitted.add(namedContact.value)
           await onPerson({
             name: contactName,
-            webId: contact.value,
+            webId: namedContact.value,
             relationshipLabel: depth === 0 ? 'Friend' : 'People'
           })
         }
 
-        if (contact instanceof NamedNode && !visited.has(contact.value)) {
-          visited.add(contact.value)
-          nextContacts.push({ person: contact, depth: depth + 1 })
+        if (!visited.has(namedContact.value)) {
+          visited.add(namedContact.value)
+          nextContacts.push({ person: namedContact, depth: depth + 1 })
         }
       }
 
