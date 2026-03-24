@@ -111,6 +111,10 @@ const setSearchQuery = async function (form: HTMLFormElement, query: string) {
   await flushDiscovery()
 }
 
+const keyDown = function (element: HTMLElement, key: string) {
+  element.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true }))
+}
+
 const rowFor = function (form: HTMLFormElement, webId: string) {
   return form.querySelector(`div[title="${webId}"]`) as HTMLDivElement | null
 }
@@ -228,6 +232,87 @@ describe('createPeopleSearch', () => {
 
     expect(dropdown.style.display).toBe('block')
     expect(dropdown.textContent).toContain('Sign in to search contacts.')
+  })
+
+  it('applies combobox/listbox accessibility attributes', async () => {
+    const kb = makeKb()
+    const me = new NamedNode('https://user-8.example/profile/card#me')
+
+    const form = createPeopleSearch(document, kb as any, me)
+    document.body.appendChild(form)
+
+    const input = form.querySelector('input') as HTMLInputElement
+    const label = form.querySelector('label') as HTMLLabelElement
+    const dropdown = form.querySelector('.people-search-dropdown') as HTMLDivElement
+
+    expect(label).not.toBeNull()
+    expect(label.textContent).toBe('Search for people')
+    expect(input.getAttribute('role')).toBe('combobox')
+    expect(input.getAttribute('aria-autocomplete')).toBe('list')
+    expect(input.getAttribute('aria-haspopup')).toBe('listbox')
+    expect(input.getAttribute('aria-labelledby')).toBe(label.id)
+    expect(input.getAttribute('aria-controls')).toBe(dropdown.id)
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+
+    await openDropdown(form)
+
+    const personRow = rowFor(form, 'https://alice.example/profile/card#me')
+    expect(dropdown.getAttribute('role')).toBe('listbox')
+    expect(input.getAttribute('aria-expanded')).toBe('true')
+    expect(personRow?.getAttribute('role')).toBe('option')
+    expect(personRow?.id).toContain('-option-')
+  })
+
+  it('supports keyboard navigation and selection from the input', async () => {
+    mockReadAddressBook.mockResolvedValue({
+      contacts: [
+        {
+          uri: 'https://pod.example/contacts/1#this',
+          name: 'Alice Example'
+        },
+        {
+          uri: 'https://pod.example/contacts/2#this',
+          name: 'Bob Stone'
+        }
+      ]
+    })
+
+    const kb = makeKb({
+      contactWebIdsByCardUri: {
+        'https://pod.example/contacts/1#this': 'https://alice.example/profile/card#me',
+        'https://pod.example/contacts/2#this': 'https://bob.example/profile/card#me'
+      }
+    })
+    const me = new NamedNode('https://user-9.example/profile/card#me')
+    const onClickHandler = jest.fn()
+
+    const form = createPeopleSearch(document, kb as any, me, onClickHandler)
+    document.body.appendChild(form)
+
+    await openDropdown(form)
+
+    const input = form.querySelector('input') as HTMLInputElement
+    const dropdown = form.querySelector('.people-search-dropdown') as HTMLDivElement
+    const aliceRow = rowFor(form, 'https://alice.example/profile/card#me') as HTMLDivElement
+
+    keyDown(input, 'ArrowDown')
+    expect(input.getAttribute('aria-activedescendant')).toBe(aliceRow.id)
+    expect(aliceRow.getAttribute('aria-selected')).toBe('true')
+
+    keyDown(input, 'Enter')
+    expect(onClickHandler).toHaveBeenCalledTimes(1)
+    expect(onClickHandler).toHaveBeenCalledWith({
+      name: 'Alice Example',
+      webId: 'https://alice.example/profile/card#me',
+      relationshipLabel: 'Contact'
+    })
+    expect(dropdown.style.display).toBe('none')
+    expect(input.getAttribute('aria-expanded')).toBe('false')
+
+    await openDropdown(form)
+    keyDown(input, 'Escape')
+    expect(dropdown.style.display).toBe('none')
+    expect(input.getAttribute('aria-expanded')).toBe('false')
   })
 
   it('matches names by tokenized, case-insensitive words', async () => {

@@ -26,6 +26,7 @@ import { ns } from '..'
 const PEOPLE_SEARCH_CONCURRENCY = 6
 const CONTACT_CARD_CONCURRENCY = 8
 const MAX_FOAF_DISTANCE = 3
+let peopleSearchInstanceCounter = 0
 const addressBookListCache = new Map<string, Promise<string[]>>()
 const addressBookCache = new Map<string, Promise<AddressBook>>()
 const contactWebIdCache = new Map<string, Promise<string | null>>()
@@ -42,6 +43,12 @@ export const createPeopleSearch = function (
   me: NamedNode | null,
   onClickHandler?: (person: PersonEntry) => void
 ): HTMLFormElement {
+  peopleSearchInstanceCounter += 1
+  const instanceId = `people-search-${peopleSearchInstanceCounter}`
+  const inputId = `${instanceId}-input`
+  const labelId = `${instanceId}-label`
+  const listboxId = `${instanceId}-listbox`
+
   const contactsModule = new ContactsModuleRdfLib({
     store: kb,
     fetcher: kb.fetcher,
@@ -65,6 +72,17 @@ export const createPeopleSearch = function (
         width: max(28%, 280px);
         max-width: 80%;
       }
+      .people-search-sr-only {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        padding: 0;
+        margin: -1px;
+        overflow: hidden;
+        clip: rect(0, 0, 0, 0);
+        white-space: nowrap;
+        border: 0;
+      }
       @media (max-width: 600px) {
         .people-search-input,
         .people-search-dropdown {
@@ -77,13 +95,29 @@ export const createPeopleSearch = function (
   }
 
   const searchForm = dom.createElement('form')
+  const searchLabel = searchForm.appendChild(dom.createElement('label'))
+  searchLabel.id = labelId
+  searchLabel.htmlFor = inputId
+  searchLabel.className = 'people-search-sr-only'
+  searchLabel.textContent = 'Search for people'
+
   const searchInput = searchForm.appendChild(dom.createElement('input'))
+  searchInput.id = inputId
   searchInput.type = 'text'
   searchInput.placeholder = 'Search for people...'
   searchInput.className = 'people-search-input'
+  searchInput.setAttribute('role', 'combobox')
+  searchInput.setAttribute('aria-autocomplete', 'list')
+  searchInput.setAttribute('aria-haspopup', 'listbox')
+  searchInput.setAttribute('aria-expanded', 'false')
+  searchInput.setAttribute('aria-labelledby', labelId)
+  searchInput.setAttribute('aria-controls', listboxId)
 
   const searchDiv = searchForm.appendChild(dom.createElement('div'))
+  searchDiv.id = listboxId
   searchDiv.className = 'people-search-dropdown'
+  searchDiv.setAttribute('role', 'listbox')
+  searchDiv.setAttribute('aria-label', 'People search results')
   searchDiv.style.display = 'none'
   searchDiv.style.border = '1px solid #ccc'
   searchDiv.style.marginTop = '5px'
@@ -104,6 +138,58 @@ export const createPeopleSearch = function (
     const status = searchDiv.appendChild(dom.createElement('p'))
     status.style.margin = '5px 0'
     status.style.color = '#666'
+    status.setAttribute('role', 'status')
+    status.setAttribute('aria-live', 'polite')
+
+    let activeRow: HTMLDivElement | null = null
+
+    const setDropdownOpen = function (isOpen: boolean) {
+      searchDiv.style.display = isOpen ? 'block' : 'none'
+      searchInput.setAttribute('aria-expanded', isOpen ? 'true' : 'false')
+    }
+
+    const getVisibleRows = function (): HTMLDivElement[] {
+      return Array.from(personRows.values()).filter(row => row.style.display !== 'none')
+    }
+
+    const setActiveRow = function (row: HTMLDivElement | null) {
+      if (activeRow) {
+        activeRow.style.backgroundColor = 'white'
+        activeRow.setAttribute('aria-selected', 'false')
+      }
+
+      activeRow = row
+
+      if (activeRow) {
+        activeRow.style.backgroundColor = '#f0f0f0'
+        activeRow.setAttribute('aria-selected', 'true')
+        if (activeRow.id) {
+          searchInput.setAttribute('aria-activedescendant', activeRow.id)
+        }
+      } else {
+        searchInput.removeAttribute('aria-activedescendant')
+      }
+    }
+
+    const ensureActiveRowIsVisible = function () {
+      if (!activeRow) return
+      if (activeRow.style.display === 'none') {
+        setActiveRow(null)
+      }
+    }
+
+    const selectPerson = function (person: PersonEntry) {
+      if (onClickHandler) {
+        onClickHandler(person)
+      } else {
+        const newWindow = window.open(person.webId, '_blank', 'noopener,noreferrer')
+        if (newWindow) {
+          newWindow.opener = null
+        }
+      }
+      setActiveRow(null)
+      setDropdownOpen(false)
+    }
 
     const addPersonRow = function (person: PersonEntry) {
       const existingRow = personRows.get(person.webId)
@@ -121,6 +207,7 @@ export const createPeopleSearch = function (
       }
 
       const personElement = dom.createElement('div')
+      const optionIdSafeWebId = person.webId.replace(/[^a-zA-Z0-9_-]/g, '_')
       const nameElement = personElement.appendChild(dom.createElement('div'))
       const labelElement = personElement.appendChild(dom.createElement('div'))
 
@@ -128,6 +215,9 @@ export const createPeopleSearch = function (
       labelElement.textContent = person.relationshipLabel
 
       personElement.title = person.webId
+      personElement.id = `${instanceId}-option-${optionIdSafeWebId}`
+      personElement.setAttribute('role', 'option')
+      personElement.setAttribute('aria-selected', 'false')
       personElement.style.cursor = 'pointer'
       personElement.style.margin = '5px 0'
       personElement.style.padding = '2px 4px'
@@ -135,21 +225,15 @@ export const createPeopleSearch = function (
       labelElement.style.color = '#666'
 
       personElement.addEventListener('click', function () {
-        if (onClickHandler) {
-          onClickHandler(person)
-        } else {
-          const newWindow = window.open(person.webId, '_blank', 'noopener,noreferrer')
-          if (newWindow) {
-            newWindow.opener = null
-          }
-        }
-        searchDiv.style.display = 'none'
+        selectPerson(person)
       })
       personElement.addEventListener('mouseover', function () {
-        personElement.style.backgroundColor = '#f0f0f0'
+        setActiveRow(personElement)
       })
       personElement.addEventListener('mouseout', function () {
-        personElement.style.backgroundColor = 'white'
+        if (activeRow !== personElement) {
+          personElement.style.backgroundColor = 'white'
+        }
       })
       searchDiv.appendChild(personElement)
       personRows.set(person.webId, personElement)
@@ -201,6 +285,7 @@ export const createPeopleSearch = function (
       }
     }
     sortVisibleRows()
+    ensureActiveRowIsVisible()
     return visibleCount
   }
 
@@ -209,6 +294,7 @@ export const createPeopleSearch = function (
     const isVisible = matchesNameWords(person.name, query)
     row.style.display = isVisible ? 'block' : 'none'
     scheduleSortVisibleRows()
+    ensureActiveRowIsVisible()
     return isVisible
   }
 
@@ -494,7 +580,7 @@ export const createPeopleSearch = function (
 
   const runSearch = async function (query: string) {
     const searchId = ++activeSearchId
-    searchDiv.style.display = 'block'
+    setDropdownOpen(true)
 
     const visibleCount = updateVisibleRows(query.trim())
     if (!me) {
@@ -528,13 +614,49 @@ export const createPeopleSearch = function (
 
   const onBlurHandler = function () {
     setTimeout(() => {
-      searchDiv.style.display = 'none'
+      setActiveRow(null)
+      setDropdownOpen(false)
     }, 200)
+  }
+
+  const onKeyDownHandler = function (event: KeyboardEvent) {
+    const visibleRows = getVisibleRows()
+
+    if (event.key === 'Escape') {
+      setActiveRow(null)
+      setDropdownOpen(false)
+      return
+    }
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault()
+      if (searchDiv.style.display === 'none') {
+        setDropdownOpen(true)
+      }
+      if (visibleRows.length === 0) {
+        return
+      }
+      const currentIndex = activeRow ? visibleRows.indexOf(activeRow) : -1
+      const nextIndex = event.key === 'ArrowDown'
+        ? Math.min(currentIndex + 1, visibleRows.length - 1)
+        : Math.max(currentIndex - 1, 0)
+      setActiveRow(visibleRows[nextIndex])
+      return
+    }
+
+    if (event.key === 'Enter' && activeRow) {
+      event.preventDefault()
+      const selectedPerson = discoveredPeople.get(activeRow.title)
+      if (selectedPerson) {
+        selectPerson(selectedPerson)
+      }
+    }
   }
 
   searchInput.addEventListener('input', onInputHandler)
   searchInput.addEventListener('focus', onFocusHandler)
   searchInput.addEventListener('blur', onBlurHandler)
+  searchInput.addEventListener('keydown', onKeyDownHandler)
 
   searchForm.addEventListener('submit', function (event) {
     event.preventDefault()
