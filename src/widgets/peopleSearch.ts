@@ -15,7 +15,7 @@
  * opens their profile in a new tab or window.
  *
  * Assumptions
- *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
+ *   - Assumes that the user has a type index entry for vcard:AddressBook. If this assumption is not met, no address book contacts will be discovered.
  *
  */
 import { NamedNode } from 'rdflib'
