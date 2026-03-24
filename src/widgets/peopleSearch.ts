@@ -11,8 +11,8 @@
  * Below the name of each person, a label indicates whether they are a direct friend, a contact 
  * from an address book, or just a person discovered through the FOAF graph. Contacts take precedence 
  * over friends, and friends take precedence over people when determining the label.
- * Configurable options include a click handler for when a person is selected, otherwise it
- * opens their profile in the same window.
+ * Configurable options include a click handler for when a person is selected; otherwise, it
+ * opens their profile in a new tab or window.
  *
  * Assumptions
  *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
