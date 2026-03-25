@@ -1,13 +1,9 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { cameraCaptureControl, cameraButton } from '../../src/media/media-capture'
 import { graph } from 'rdflib'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 
@@ -23,7 +19,7 @@ describe('cameraCaptureControl', () => {
         () => {},
         () => {}
       )
-    }).toThrowError('navigator.mediaDevices not available')
+    }).toThrow('navigator.mediaDevices not available')
   })
 })
 

@@ -1,0 +1,36 @@
+import * as UI from '../../src/index'
+import * as DomManipulationStories from './DomManipulation.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+
+<Meta of={DomManipulationStories} />
+
+## addStyleSheet
+
+Stick a stylesheet link the document if not already there
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#addstylesheet)
+
+<Canvas withSource="open">
+  <Story of={DomManipulationStories.AddStyleSheet} />
+</Canvas>
+
+## clearElement
+
+Remove all the children of an HTML element
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#clearelement)
+
+<Canvas withSource="open">
+  <Story of={DomManipulationStories.ClearElement} />
+</Canvas>
+
+## refreshTree
+
+Refresh a DOM tree recursively
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#refreshtree)
+
+<Canvas withSource="open">
+  <Story of={DomManipulationStories.RefreshTree} />
+</Canvas>

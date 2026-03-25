@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { DataBrowserContext } from 'pane-registry'
 import { sym, graph, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
@@ -9,10 +9,6 @@ import {
 } from '../../../src/acl/acl-control'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 
@@ -99,7 +95,7 @@ describe('shortNameForFolder', () => {
   it('works with protocol root', () => {
     // Note: I'm not certain this is actually by design, it might be
     // that the intended behaviour was that the domain root would get
-    // labeled '/'. See https://github.com/solid/solid-ui/issues/196
+    // labeled '/'. See https://github.com/solidos/solid-ui/issues/196
     expect(shortNameForFolder(namedNode('http://'))).toEqual('/')
   })
 })

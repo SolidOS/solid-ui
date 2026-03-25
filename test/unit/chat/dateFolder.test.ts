@@ -1,12 +1,8 @@
-import { silenceDebugMessages } from '../../helpers/setup'
-import DateFolder from '../../../src/chat/dateFolder'
+import { silenceDebugMessages } from '../helpers/debugger'
+import { DateFolder } from '../../../src/chat/dateFolder'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('DateFolder', () => {
   it('exists', () => {

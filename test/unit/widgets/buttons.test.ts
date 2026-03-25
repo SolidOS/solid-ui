@@ -1,5 +1,7 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM, DOMWindow } from 'jsdom'
+import { getByRole } from '@testing-library/dom'
+import userEvent from '@testing-library/user-event'
 import {
   addStyleSheet,
   allClassURIs,
@@ -8,6 +10,8 @@ import {
   button,
   cancelButton,
   clearElement,
+  createLinkDiv,
+  createNameDiv,
   complain,
   continueButton,
   defaultAnnotationStore,
@@ -23,12 +27,13 @@ import {
   isImage,
   isVideo,
   linkButton,
-  linkIcon,
   openHrefInOutlineMode,
   personTR,
   propertyTriage,
   refreshTree,
   removeButton,
+  renderAsDiv,
+  RenderAsDivOptions,
   selectorPanel,
   selectorPanelRefresh,
   setImage,
@@ -39,23 +44,22 @@ import {
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
-import { foaf, rdf, sioc, vcard } from '../../../src/ns'
+import ns from '../../../src/ns'
 // @ts-ignore
-import { iconBase } from '../../../src/iconBase'
+import { icons } from '../../../src/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
-import { solidLogicSingleton } from '../../../src/logic'
-
+import { solidLogicSingleton } from 'solid-logic'
+import { style } from '../../../src/style'
+const { iconBase } = icons
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 let window: DOMWindow
 let dom: HTMLDocument
 let element: HTMLDivElement
+let image: HTMLImageElement
+let obj: NamedNode
 let event: Event
 let clickEvent: Event
 
@@ -64,6 +68,8 @@ beforeEach(() => {
   dom = window.document
   element = dom.createElement('div')
   event = new window.Event('test')
+  image = dom.createElement('img')
+  obj = new NamedNode('https://test.test#')
   clickEvent = new window.Event('click')
   dom.dispatchEvent(event)
 })
@@ -119,17 +125,8 @@ describe('button', () => {
   it('runs', () => {
     const iconURI = ''
     const text = 'txt'
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
-  })
-  it('has the style class from JSS', () => {
-    const iconURI = ''
-    const text = 'txt'
-    const handler = () => {
-    }
-    const buttonElt = button(domWithHead(), iconURI, text, handler)
-    expect(buttonElt.classList[0]).toEqual(expect.stringMatching(/^textButton-\d-\d-\d$/))
   })
   it('calls the callback when you click it', (done) => {
     const iconURI = ''
@@ -140,6 +137,7 @@ describe('button', () => {
     const buttonElt = button(domWithHead(), iconURI, text, handler)
     buttonElt.dispatchEvent(clickEvent)
   })
+
   it('text button with upper-cased caption', () => {
     const buttonElt = button(domWithHead(), undefined, 'Click me', () => {})
     expect(buttonElt.innerHTML).toBe('CLICK ME')
@@ -151,8 +149,7 @@ describe('cancelButton', () => {
     expect(cancelButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(cancelButton(dom, handler)).toBeTruthy()
   })
 })
@@ -180,12 +177,62 @@ describe('continueButton', () => {
     expect(continueButton).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(continueButton(dom, handler)).toBeTruthy()
   })
 })
+describe('createLinkDiv', () => {
+  const obj = namedNode('https://test.com/#name')
+  const options: RenderAsDivOptions = {
+    deleteFunction: () => {},
+    link: true
+  }
 
+  it('adds a div to the element provided', () => {
+    createLinkDiv(dom, element, obj, options)
+    expect(element.children.length).toBeGreaterThan(0)
+  })
+  it('makes the element draggable', () => {
+    createLinkDiv(dom, element, obj, options)
+    expect(element.getAttribute('draggable')).toEqual('true')
+  })
+  it('adds the style....', () => {
+    const options = {}
+    createLinkDiv(dom, element, obj, options)
+    expect(element.children[0].getAttribute('style')).toEqual(style.linkDivStyle)
+  })
+
+  it.skip('adds the deleteFunction of .... deleteButton with Check', () => {
+    createLinkDiv(dom, element, obj, options)
+    const deleteImg = getByRole(element, 'button')
+    expect(deleteImg.nodeName).toEqual('IMG')
+    expect(deleteImg.getAttribute('title')).toEqual('Remove this one')
+  })
+
+  it('adds the link icon and link for the uri if link option is true', () => {
+    const options = {
+      link: true
+    }
+    // testing-library dom need to check solid-panes
+    createLinkDiv(dom, element, obj, options)
+    expect(element.children[0].children[0].nodeName).toEqual('A')
+  })
+})
+
+describe('createNameDiv', () => {
+  const obj = namedNode('https://test.com/#name')
+
+  it('adds a div to the element with textContent equal to Something', () => {
+    createNameDiv(dom, element, 'Something', obj)
+    expect(element.children.length).toBeGreaterThan(0)
+    expect(element.children[0].textContent).toEqual('Something')
+  })
+
+  it('uses the name from the obj if no title is given', () => {
+    createNameDiv(dom, element, undefined, obj)
+    expect(element.children[0].textContent).toEqual('name')
+  })
+})
 describe('defaultAnnotationStore', () => {
   it('exists', () => {
     expect(defaultAnnotationStore).toBeInstanceOf(Function)
@@ -202,8 +249,7 @@ describe('deleteButtonWithCheck', () => {
   it('runs', () => {
     const container = element
     const noun = ''
-    const deleteFunction = () => {
-    }
+    const deleteFunction = () => {}
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
   })
 })
@@ -227,30 +273,32 @@ describe('findImage', () => {
   it('exists', () => {
     expect(findImage).toBeInstanceOf(Function)
   })
-  it('handles foaf(Agent)', () => expect(findImage(foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
-  it('handles rdf(Resource)', () => expect(findImage(rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles foaf(Agent)', () =>
+    expect(findImage(ns.foaf('Agent'))).toEqual(iconBase + 'noun_98053.svg'))
+  it('handles rdf(Resource)', () =>
+    expect(findImage(ns.rdf('Resource'))).toEqual(iconBase + 'noun_98053.svg'))
   it('handles sioc(avatar)', () => {
-    store.add(subject, sioc('avatar'), imageObject, subject.doc())
+    store.add(subject, ns.sioc('avatar'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles sioc(avatar)', () => {
-    store.add(subject, foaf('img'), imageObject, subject.doc())
+    store.add(subject, ns.foaf('img'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(logo)', () => {
-    store.add(subject, vcard('logo'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('logo'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(hasPhoto)', () => {
-    store.add(subject, vcard('hasPhoto'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('hasPhoto'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles vcard(photo)', () => {
-    store.add(subject, vcard('photo'), imageObject, subject.doc())
+    store.add(subject, ns.vcard('photo'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('handles foaf(depiction)', () => {
-    store.add(subject, foaf('depiction'), imageObject, subject.doc())
+    store.add(subject, ns.foaf('depiction'), imageObject, subject.doc())
     expect(findImage(subject)).toEqual(imageObject.uri)
   })
   it('returns null when nothing is found', () => expect(findImage(subject)).toBeNull())
@@ -261,7 +309,9 @@ describe('findImageFromURI', () => {
     expect(findImageFromURI).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    expect(findImageFromURI('')).toEqual('https://solid.github.io/solid-ui/src/icons/noun_10636_grey.svg')
+    expect(findImageFromURI('')).toEqual(
+      'https://solidos.github.io/solid-ui/src/icons/noun_10636_grey.svg'
+    )
   })
 })
 
@@ -270,8 +320,7 @@ describe('fileUploadButtonDiv', () => {
     expect(fileUploadButtonDiv).toBeInstanceOf(Function)
   })
   it('runs', () => {
-    const handler = () => {
-    }
+    const handler = () => {}
     expect(fileUploadButtonDiv(dom, handler)).toBeTruthy()
   })
 })
@@ -321,10 +370,17 @@ describe('index.twoLine[\'\']', () => {
 })
 describe('index.twoLine[\'http://www.w3.org/2000/10/swap/pim/qif#Transaction\']', () => {
   it('exists', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(Function)
+    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction']).toBeInstanceOf(
+      Function
+    )
   })
   it('runs', () => {
-    expect(index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](dom, sym('https://domain.tld/#test'))).toBeTruthy()
+    expect(
+      index.twoLine['http://www.w3.org/2000/10/swap/pim/qif#Transaction'](
+        dom,
+        sym('https://domain.tld/#test')
+      )
+    ).toBeTruthy()
   })
 })
 describe('index.twoLine[\'http://www.w3.org/ns/pim/trip#Trip\']', () => {
@@ -381,17 +437,6 @@ describe('linkButton', () => {
   })
 })
 
-describe('linkIcon', () => {
-  it('exists', () => {
-    expect(linkIcon).toBeInstanceOf(Function)
-  })
-  it('runs', () => {
-    const subject = sym('https://test.test#')
-    const iconURI = ''
-    expect(linkIcon(dom, subject, iconURI)).toBeTruthy()
-  })
-})
-
 describe('openHrefInOutlineMode', () => {
   it('exists', () => {
     expect(openHrefInOutlineMode).toBeInstanceOf(Function)
@@ -410,6 +455,36 @@ describe('personTR', () => {
     const obj = sym('https://test.test#')
     const options = {}
     expect(personTR(dom, pred, obj, options)).toBeTruthy()
+  })
+})
+
+describe('renderAsDiv ', () => {
+  it('is exposed on public API', () => {
+    expect(renderAsDiv).toBe(renderAsDiv)
+  })
+
+  it('uses the image given', () => {
+    image.setAttribute('alt', 'test')
+    const options = { image }
+    const element = renderAsDiv(dom, obj, options)
+    expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
+  })
+  it('the div is clickable if given true for the clickable option', () => {
+    const mockClickFunction = jest.fn()
+    const options = {
+      clickable: true,
+      onClickFunction: mockClickFunction
+    }
+    const element = renderAsDiv(dom, obj, options)
+    userEvent.click(element)
+    expect(mockClickFunction).toHaveBeenCalled()
+  })
+  it('wraps the div in a TR if wrapInATR option is set to true', () => {
+    const options = {
+      wrapInATR: true
+    }
+    const element = renderAsDiv(dom, obj, options)
+    expect(element.nodeName).toEqual('TR')
   })
 })
 
@@ -451,20 +526,21 @@ describe('selectorPanel', () => {
     const inverse = false
     const possible = [namedNode('https://domain.tld/#test')]
     const options = {}
-    const callbackFunction = () => {
-    }
-    const linkCallback = () => {
-    }
-    expect(selectorPanel(
-      dom,
-      kb,
-      type,
-      predicate,
-      inverse,
-      possible,
-      options,
-      callbackFunction,
-      linkCallback)).toBeTruthy()
+    const callbackFunction = () => {}
+    const linkCallback = () => {}
+    expect(
+      selectorPanel(
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+    ).toBeTruthy()
   })
 })
 
@@ -482,18 +558,20 @@ describe('selectorPanelRefresh', () => {
     const options = {}
     const callbackFunction = () => {}
     const linkCallback = () => {}
-    expect(selectorPanelRefresh(
-      list,
-      dom,
-      kb,
-      type,
-      predicate,
-      inverse,
-      possible,
-      options,
-      callbackFunction,
-      linkCallback
-    )).toBeTruthy()
+    expect(
+      selectorPanelRefresh(
+        list,
+        dom,
+        kb,
+        type,
+        predicate,
+        inverse,
+        possible,
+        options,
+        callbackFunction,
+        linkCallback
+      )
+    ).toBeTruthy()
   })
 })
 

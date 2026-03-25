@@ -3,27 +3,24 @@
  * @packageDocumentation
  */
 
-const UI = {
-  authn: require('../authn/authn'),
-  icons: require('../iconBase'),
-  ns: require('../ns'),
-  pad: require('../'),
-  rdf: require('rdflib'),
-  store: require('../logic').solidLogicSingleton.store,
-  style: require('../style'),
-  widgets: require('../widgets')
-}
+import { icons } from '../iconBase'
+import { store } from 'solid-logic'
+import { media } from '../media/index'
+import ns from '../ns'
+import * as login from '../login/login'
+import * as pad from '../pad'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
+import { style } from '../style'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 
-const utils = require('../utils')
-const $rdf = require('rdflib')
-
-// var buttonStyle = 'font-size: 100%; margin: 0.8em; padding:0.5em; background-color: white;'
+const UI = { icons, ns, media, pad, style, utils, widgets }
 
 /**
  * HTML component for a chat thread
  */
-module.exports = function thread (dom, kb, subject, messageStore, options) {
-  kb = kb || UI.store
+export function thread (dom, kb, subject, messageStore, options) {
+  kb = kb || store
   messageStore = messageStore.doc() // No hash
   const ns = UI.ns
   const WF = $rdf.Namespace('http://www.w3.org/2005/01/wf/flow#')
@@ -39,11 +36,11 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
 
   const div = dom.createElement('div')
   // eslint-disable-next-line prefer-const
-  let messageTable // Shared by initial build and addMessageFromBindings
+  let messageTable
 
   let me
 
-  const updater = UI.store.updater
+  const updater = store.updater
 
   const anchor = function (text, term) {
     // If there is no link return an element anyway
@@ -90,40 +87,14 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     form.appendChild(rhs)
     form.AJAR_date = '9999-01-01T00:00:00Z' // ISO format for field sort
 
-    const sendMessage = function () {
+    const sendMessage = async function () {
       // titlefield.setAttribute('class','pendingedit')
       // titlefield.disabled = true
       field.setAttribute('class', 'pendingedit')
       field.disabled = true
-      const sts = []
-      const now = new Date()
-      const timestamp = '' + now.getTime()
-      const dateStamp = $rdf.term(now)
-      // http://www.w3schools.com/jsref/jsref_obj_date.asp
-      const message = kb.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+      const { message, dateStamp, sts } = await appendMsg(field.value)
 
-      sts.push(
-        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
-      )
-      // sts.push(new $rdf.Statement(message, ns.dc('title'), kb.literal(titlefield.value), messageStore))
-      sts.push(
-        new $rdf.Statement(
-          message,
-          ns.sioc('content'),
-          kb.literal(field.value),
-          messageStore
-        )
-      )
-      sts.push(
-        new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
-      )
-      if (me) {
-        sts.push(
-          new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
-        )
-      }
-
-      const sendComplete = function (uri, success, body) {
+      const sendComplete = async function (uri, success, body) {
         if (!success) {
           form.appendChild(
             UI.widgets.errorMessageBlock(dom, 'Error writing message: ' + body)
@@ -131,7 +102,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
         } else {
           const bindings = {
             '?msg': message,
-            '?content': kb.literal(field.value),
+            '?content': store.literal(field.value),
             '?date': dateStamp,
             '?creator': me
           }
@@ -142,7 +113,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
           field.disabled = false
         }
       }
-      updater.update([], sts, sendComplete)
+      await updater.updateMany([], sts, sendComplete)
     }
     form.appendChild(dom.createElement('br'))
 
@@ -159,12 +130,12 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
 
       field.addEventListener(
         'keyup',
-        function (e) {
+        async function (e) {
           // User preference?
           if (e.keyCode === 13) {
             if (!e.altKey) {
               // Alt-Enter just adds a new line
-              sendMessage()
+              await sendMessage()
             }
           }
         },
@@ -182,8 +153,8 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       rhs.appendChild(sendButton)
     }
 
-    const context = { div: middle, dom: dom }
-    UI.authn.logIn(context).then(context => {
+    const context = { div: middle, dom }
+    login.ensureLoggedIn(context).then(context => {
       me = context.me
       turnOnInput()
     })
@@ -191,8 +162,46 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     return form
   }
 
+  const appendMsg = async function (fieldValue, oldMsg = {}, options = '') { // alain
+    const sts = []
+    const now = new Date()
+    const timestamp = '' + now.getTime()
+    const dateStamp = $rdf.term(now)
+    // http://www.w3schools.com/jsref/jsref_obj_date.asp
+    const message = store.sym(messageStore.uri + '#' + 'Msg' + timestamp)
+
+    if (options === 'edit' || options === 'delete') {
+      sts.push(
+        new $rdf.Statement(await mostRecentVersion(oldMsg), DCT('isReplacedBy'), message, messageStore)
+      )
+    } else {
+      sts.push(
+        new $rdf.Statement(subject, ns.wf('message'), message, messageStore)
+      )
+    }
+    // sts.push(new $rdf.Statement(message, ns.dc('title'), store.literal(titlefield.value), messageStore))
+    const msgBody = options !== 'delete' ? fieldValue : `message deleted\nby ${nick(me)}`
+    sts.push(
+      new $rdf.Statement(
+        message,
+        ns.sioc('content'),
+        store.literal(msgBody),
+        messageStore
+      )
+    )
+    sts.push(
+      new $rdf.Statement(message, DCT('created'), dateStamp, messageStore)
+    )
+    if (me) {
+      sts.push(
+        new $rdf.Statement(message, ns.foaf('maker'), me, messageStore)
+      )
+    }
+    return { message, dateStamp, sts }
+  }
+
   function nick (person) {
-    const s = UI.store.any(person, UI.ns.foaf('nick'))
+    const s = store.any(person, UI.ns.foaf('nick'))
     if (s) return '' + s.value
     return '' + utils.label(person)
   }
@@ -200,7 +209,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   function creatorAndDate (td1, creator, date, message) {
     const nickAnchor = td1.appendChild(anchor(nick(creator), creator))
     if (creator.uri) {
-      UI.store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
+      store.fetcher.nowOrWhenFetched(creator.doc(), undefined, function (
         _ok,
         _body
       ) {
@@ -221,7 +230,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
         displayed[ele.AJAR_subject.uri] = true
       }
     }
-    const messages = kb.each(about, ns.wf('message'))
+    const messages = store.each(about, ns.wf('message'))
     const stored = {}
     messages.forEach(function (m) {
       stored[m.uri] = true
@@ -230,8 +239,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       }
     })
 
-    // eslint-disable-next-line space-in-parens
-    for (ele = messageTable.firstChild; ele; ) {
+    for (ele = messageTable.firstChild; ele;) {
       ele2 = ele.nextSibling
       if (ele.AJAR_subject && !stored[ele.AJAR_subject.uri]) {
         messageTable.removeChild(ele)
@@ -239,11 +247,23 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
       ele = ele2
     }
   }
-  const deleteMessage = function (message) {
-    const deletions = kb
-      .statementsMatching(message)
-      .concat(kb.statementsMatching(undefined, undefined, message))
-    updater.update(deletions, [], function (uri, ok, body) {
+
+  const mostRecentVersion = function (message) {
+    let msg = message
+    // const listMsg = []
+    while (msg) {
+      message = msg
+      // listMsg.push(msg)
+      msg = store.statementsMatching(message, DCT('isReplacedBy'))
+    }
+    return message
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  async function deleteMessage (message) { // alain: must delete message and all linked with isReplacedBy
+    // alain: check that me is not the author and ask for confirmation.
+    const deletions = await store.connectedStatements(message, messageStore)
+    await updater.updateMany(deletions, [], function (uri, ok, body) {
       if (!ok) {
         announce.error('Cant delete messages:' + body)
       } else {
@@ -252,17 +272,17 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     })
   }
 
-  var addMessage = function (message) {
+  const addMessage = async function (message) {
     const bindings = {
       '?msg': message,
-      '?creator': kb.any(message, ns.foaf('maker')),
-      '?date': kb.any(message, DCT('created')),
-      '?content': kb.any(message, ns.sioc('content'))
+      '?creator': store.any(message, ns.foaf('maker')),
+      '?date': store.any(message, DCT('created')),
+      '?content': store.any(message, ns.sioc('content'))
     }
-    renderMessage(bindings, true) // fresh from elsewhere
+    await renderMessage(bindings, true) // fresh from elsewhere
   }
 
-  var renderMessage = function (bindings, fresh) {
+  const renderMessage = async function (bindings, fresh) {
     const creator = bindings['?creator']
     const message = bindings['?msg']
     const date = bindings['?date']
@@ -319,7 +339,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
     delButton.setAttribute('style', 'color: red;')
     delButton.addEventListener(
       'click',
-      function (_event) {
+      async function (_event) {
         td3.removeChild(delButton) // Ask -- are you sure?
         const cancelButton = dom.createElement('button')
         cancelButton.textContent = 'cancel'
@@ -332,14 +352,18 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
           },
           false
         )
-        var sureButton = dom.createElement('button')
+        const sureButton = dom.createElement('button')
         sureButton.textContent = 'Delete message'
         td3.appendChild(sureButton).addEventListener(
           'click',
-          function (_event) {
+          async function (_event) { // alain: test for delete or edit depending on me = maker
             td3.removeChild(sureButton)
             td3.removeChild(cancelButton)
-            deleteMessage(message)
+            // deleteMessage(message) // alain or sendMessage(message, 'delete' or 'edit') //alain
+            if (me.value === store.any(message, ns.foaf('maker')).value) {
+              const { sts } = await appendMsg() // alain
+              await updater.updateMany([], sts) // alain
+            }
           },
           false
         )
@@ -382,7 +406,7 @@ module.exports = function thread (dom, kb, subject, messageStore, options) {
   function doneQuery () {
     messageTable.fresh = true // any new are fresh and so will be greenish
   }
-  kb.query(query, renderMessage, undefined, doneQuery)
+  store.query(query, renderMessage, undefined, doneQuery)
   div.refresh = function () {
     syncMessages(subject, messageTable)
   }

@@ -1,18 +1,17 @@
 /**
  * Functions for rendering the ACL User Interface.
- * See https://github.com/solid/userguide/blob/main/views/sharing/userguide.md#view
+ * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
  * for a screenshot.
  * @packageDocumentation
  */
 
 import ns from '../ns'
-import utils from '../utils.js'
+import * as utils from '../utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
-import { IndexedFormula, NamedNode } from 'rdflib'
+import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
-import { getClasses } from '../jss'
-import { styles } from './styles'
+import { style } from '../style'
 import { log, warn } from '../debug'
 
 let global: Window = window
@@ -108,7 +107,7 @@ export function shortNameForFolder (x: NamedNode): string {
     str = str.slice(slash + 1)
   }
   // Return the folder's filename, or '/' if nothing found
-  // (but see https://github.com/solid/solid-ui/issues/196
+  // (but see https://github.com/solidos/solid-ui/issues/196
   // regarding whether this happens at the domain root or
   // not)
   return str || '/'
@@ -120,30 +119,29 @@ export function shortNameForFolder (x: NamedNode): string {
  * Presumably the '5' is a version number of some sort,
  * but all we know is it was already called ACLControlBox5
  * when it was introduced into solid-ui in
- * https://github.com/solid/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
+ * https://github.com/solidos/solid-ui/commit/948b874bd93e7bf5160e6e224821b888f07d15f3#diff-4192a29f38a0ababd563b36b47eba5bbR54
  */
 export function ACLControlBox5 (
   subject: NamedNode,
   context: DataBrowserContext,
   noun: string,
-  kb: IndexedFormula
+  kb: Store
 ): HTMLElement {
   const dom = context.dom
   const doc = subject.doc() // The ACL is actually to the doc describing the thing
-  const classes = getClasses(dom.head, styles).classes
 
   const container = dom.createElement('div')
-  container.classList.add(classes.aclControlBoxContainer)
+  container.setAttribute('style', style.aclControlBoxContainer)
 
   const header = container.appendChild(dom.createElement('h1'))
   header.textContent = `Sharing for ${noun} ${utils.label(subject)}`
-  header.classList.add(classes.aclControlBoxHeader)
+  header.setAttribute('style', style.aclControlBoxHeader)
 
   const status = container.appendChild(dom.createElement('div'))
-  status.classList.add(classes.aclControlBoxStatus)
+  status.setAttribute('style', style.aclControlBoxStatus)
 
   try {
-    loadController(doc, kb, subject, noun, context, classes, dom, status)
+    loadController(doc, kb, subject, noun, context, dom, status)
       .then(controller => container.appendChild(controller.render()))
   } catch (error) {
     status.innerText = error
@@ -154,11 +152,10 @@ export function ACLControlBox5 (
 
 async function loadController (
   doc: NamedNode,
-  kb: IndexedFormula,
+  kb: Store,
   subject: NamedNode,
   noun: string,
   context: DataBrowserContext,
-  classes: Record<string, string>,
   dom: HTMLDocument,
   status: HTMLElement
 ): Promise<AccessController> {
@@ -187,8 +184,8 @@ async function loadController (
     return resolve(getController())
 
     function getController (prospectiveDefaultHolder?: NamedNode) {
-      return new AccessController(subject, noun, context, status, classes, targetIsProtected, targetDoc as NamedNode, targetACLDoc as NamedNode, defaultHolder as NamedNode,
-        defaultACLDoc as NamedNode, prospectiveDefaultHolder, kb, dom)
+      return new AccessController(subject, noun, context, status, targetIsProtected, targetDoc as NamedNode, targetACLDoc as NamedNode, defaultHolder as NamedNode,
+        defaultACLDoc as NamedNode, prospectiveDefaultHolder, kb, dom as HTMLDocument)
     }
   }))
 }
@@ -200,16 +197,16 @@ function getDirectory (doc: NamedNode): string | null {
   return (q >= 0 && p < q + 2) || p < 0 ? null : str.slice(0, p + 1)
 }
 
-function isStorage (doc: NamedNode, aclDoc: NamedNode, store: IndexedFormula): boolean {
+function isStorage (doc: NamedNode, aclDoc: NamedNode, store: Store): boolean {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
-  // @@ hopefully fixed as part of https://github.com/solid/data-interoperability-panel/issues/10
+  // @@ hopefully fixed as part of https://github.com/solidos/data-interoperability-panel/issues/10
   return store.holds(doc, ns.rdf('type'), ns.space('Storage'), aclDoc)
 }
 
 function hasProtectedAcl (targetDoc: NamedNode): boolean {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
-  // Hopefully we'll find a better, standardized solution to this - https://github.com/solid/specification/issues/37
+  // Hopefully we'll find a better, standardized solution to this - https://github.com/solidos/specification/issues/37
   return targetDoc.uri === targetDoc.site().uri
 }
 

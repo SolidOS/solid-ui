@@ -1,0 +1,272 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta name="generator" content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 15.17), see www.w3.org"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=us-ascii" />
+
+    <title>Form fields</title>
+
+    <link type="text/css" rel="stylesheet" href="../style/demo-style.css" />
+
+    <!-- used for production ready documentation -->
+    <!-- note: one does not need whole mashlib, solid-ui is sufficient also -->
+    <script type="text/javascript" src="https://solidos.github.io/mashlib/dist/mashlib.js"></script> 
+    <!-- to use only solid-ui -->
+    <!--<script type="text/javascript" src="https://solidos.github.io/solid-ui/dist/solid-ui.js"></script>-->
+    
+    <!-- used for local development -->
+    <!-- make sure to use the latest build version by running npm run build-form-examples first -->
+    <!-- <script type="text/javascript" src="solid-ui.js"></script> -->
+    <script type="text/javascript" src="test-form.js"></script>
+  </head>
+
+  <body>
+  
+    <h1>Form fields</h1>
+    <pre id="Prolog" style="display: none">
+    @prefix foaf:  &lt;http://xmlns.com/foaf/0.1/&gt;.
+    @prefix sched: &lt;http://www.w3.org/ns/pim/schedule#&gt;.
+    @prefix cal:   &lt;http://www.w3.org/2002/12/cal/ical#&gt;.
+    @prefix dc:    &lt;http://purl.org/dc/elements/1.1/&gt;.
+    @prefix rdfs:  &lt;http://www.w3.org/2000/01/rdf-schema#&gt;.
+    @prefix ui:    &lt;http://www.w3.org/ns/ui#&gt;.
+    @prefix trip:  &lt;http://www.w3.org/ns/pim/trip#&gt;.
+    @prefix vcard: &lt;http://www.w3.org/2006/vcard/ns#&gt;.
+    @prefix xsd:   &lt;http://www.w3.org/2001/XMLSchema#&gt;.
+    @prefix ex: &lt;#&gt;.  # Things in the examples
+    @prefix : &lt;#&gt;.
+</pre
+    >
+
+    <div>
+      <table
+        style="border-collapse: collapse; border: 0.1em solid gray"
+        summary="Table of input data values and UI outputs generated"
+      >
+        <tbody>
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one text field
+
+ex:form
+    a ui:SingleLineTextField; ui:label "name";
+    ui:property vcard:fn .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>
+ex:this vcard:fn  "Alice" .
+</pre
+              >
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one text field
+
+ex:form
+   a ui:MultiLineTextField ;
+   ui:property rdfs:comment .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>
+ex:this rdfs:comment "Here we made a comment" .
+          </pre
+              >
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one boolean field
+
+ ex:form
+   a ui:BooleanField ;
+   ui:property ex:allDay .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>
+ex:this ex:allDay true .
+</pre
+              >
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# one Tristate field
+
+ex:form
+     a ui:TristateField ;
+     ui:property ex:allDay .
+  </pre
+              >
+            </td>
+            <td class="target">
+              <pre>
+# Commented oout so there is no value true or false:
+# ex:this ex:allDay true .</pre
+              >
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one integer field
+
+ ex:form
+   a ui:IntegerField ;
+   ui:property foaf:age .
+</pre
+              >
+            </td>
+            <td class="target"><pre>ex:this foaf:age 6 .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one decimal field
+
+ ex:form
+   a ui:DecimalField ;
+   ui:property ex:price .
+</pre
+              >
+            </td>
+            <td class="target"><pre>ex:this ex:price 12.47 .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one floating point field
+
+ex:form
+   a ui:FloatField ;
+   ui:property ex:weight .
+        </pre
+              >
+            </td>
+            <td class="target"><pre> ex:this ex:weight  1.56769e23 .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+    # A simple form with one color field
+ ex:form
+   a ui:ColorField ;
+   ui:property ui:backgroundColor .
+  </pre
+              >
+            </td>
+            <td class="target"><pre>ex:this ui:backgroundColor "#ffccff" .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A simple form with one date field
+
+ex:form
+   a ui:DateField;
+   ui:property cal:starts .
+    </pre
+              >
+            </td>
+            <td class="target"><pre>ex:this cal:starts "2021-10-12"^^xsd:date .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A  date-time field
+ ex:form
+     a ui:DateTimeField ;
+     ui:property cal:starts .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre> ex:this cal:starts "2021-10-12T12:34:23Z"^^xsd:dateTime .</pre>
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+  # A simple form with one phone field
+
+ex:form
+   a ui:PhoneField ;
+   ui:property vcard:hasPhone . # @@ check
+    </pre
+              >
+            </td>
+            <td class="target"><pre>ex:this vcard:hasPhone  &lt;tel:+1-55-555-1212&gt; .</pre></td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+    # A simple form with one email address field
+
+ex:form
+   a ui:EmailField ;
+   ui:property vcard:hasEmail . # @@ chcek
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>ex:this vcard:hasEmail  &lt;mailto:info@example.com&gt; .</pre>
+            </td>
+            <td class="output"></td>
+          </tr>
+
+          <tr class="form-demo">
+            <td class="input">
+              <pre>
+# A field for entering a URI as a named node
+# (stores as RDF resource, not string literal)
+
+ex:form
+   a ui:NamedNodeURIField ;
+   ui:label "Homepage" ;
+   ui:property foaf:homepage .
+</pre
+              >
+            </td>
+            <td class="target">
+              <pre>ex:this foaf:homepage &lt;https://example.org/alice&gt; .</pre>
+            </td>
+            <td class="output"></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </body>
+</html>

@@ -1,17 +1,13 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { IndexedFormula, graph } from 'rdflib'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('AccessGroups', () => {

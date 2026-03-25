@@ -1,0 +1,69 @@
+import * as UI from '../../src/index'
+import * as ButtonsStories from './Buttons.stories';
+
+import { Canvas, Meta, Story } from '@storybook/blocks';
+import { action } from '@storybook/addon-actions'
+
+<Meta of={ButtonsStories} />
+
+## Button with text (no border)
+
+<Canvas>
+  <Story of={ButtonsStories.Primary} />
+
+  <Story of={ButtonsStories.Secondary} />
+</Canvas>
+
+## Button with text (needs border)
+
+<Canvas>
+  <Story of={ButtonsStories.PrimaryNeedsBorder} />
+
+  <Story of={ButtonsStories.SecondaryNeedsBorder} />
+</Canvas>
+
+## Continue & Cancel button
+
+<Canvas>
+  <Story of={ButtonsStories.ContinueButton} />
+
+  <Story of={ButtonsStories.CancelButton} />
+</Canvas>
+
+## Delete button
+
+<Canvas>
+  <Story of={ButtonsStories.DeleteButton} />
+</Canvas>
+
+## Button with icon
+
+<Canvas>
+  <Story of={ButtonsStories.ButtonWithIcon} />
+</Canvas>
+
+## File upload button
+
+<Canvas>
+  <Story of={ButtonsStories.FileUploadButton} />
+</Canvas>
+
+## Link button
+
+<Canvas>
+  <Story of={ButtonsStories.LinkButton} />
+</Canvas>
+
+## Link icon
+
+<Canvas>
+  <Story of={ButtonsStories.LinkIcon} />
+
+  <Story of={ButtonsStories.LinkCustomIcon} />
+</Canvas>
+
+## Remove button
+
+<Canvas>
+  <Story of={ButtonsStories.RemoveButton} />
+</Canvas>

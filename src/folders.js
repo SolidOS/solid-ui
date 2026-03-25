@@ -2,21 +2,18 @@
  *
  */
 /* global confirm */
+
 import * as debug from './debug'
+import { icons } from './iconBase'
+import { solidLogicSingleton } from 'solid-logic'
+import ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import { style } from './style'
+import * as widgets from './widgets'
 
-const UI = {
-  icons: require('./iconBase'),
-  ns: require('./ns'),
-  rdf: require('rdflib'),
-  store: require('./logic').solidLogicSingleton.store,
-  widgets: require('./widgets'),
-  utils: require('./utils')
-}
+const UI = { icons, ns, rdf, style, widgets }
 
-const ns = UI.ns
-
-function deleteRecursive (kb, folder) {
-  // eslint-disable-next-line promise/param-names
+export function deleteRecursive (kb, folder) {
   return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
       const promises = kb.each(folder, ns.ldp('contains')).map(file => {
@@ -49,7 +46,6 @@ function deleteRecursive (kb, folder) {
  * @param action - returns a promise.  All the promises must be resolved
  */
 function forAllFiles (folder, kb, action) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     kb.fetcher.load(folder).then(function () {
       const promises = kb.each(folder, ns.ldp('contains')).map(file => {
@@ -67,8 +63,6 @@ function forAllFiles (folder, kb, action) {
   })
 }
 
-module.exports.deleteRecursive = deleteRecursive
-
 /** Delete Folder and contents
  *
  * @param {NamedNode} folder - The LDP container to be deleted
@@ -78,8 +72,8 @@ module.exports.deleteRecursive = deleteRecursive
  * @returns {DOMElement} - The control which has eben inserted in the
  */
 /* global document */
-module.exports.deleteFolder = function (folder, store, dom) {
-  store = store || UI.store
+export function deleteFolder (folder, store, dom) {
+  store = store || solidLogicSingleton.store
   if (typeof docuent !== 'undefined') {
     dom = dom || document
   }

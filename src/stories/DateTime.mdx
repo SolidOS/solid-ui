@@ -1,0 +1,64 @@
+import * as UI from '../../src/index'
+import * as DateTimeStories from './DateTime.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+
+<Meta of={DateTimeStories} />
+
+## formatDateTime
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#formatdatetime)
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.FormatDateTime} />
+</Canvas>
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.FormatDateTimeDate} />
+</Canvas>
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.FormatDateTimeTime} />
+</Canvas>
+
+## shortDate
+
+By default, converts e.g. '2020-02-19T19:35:28.557Z' to '19:35' if today is 19 Feb 2020, and to 'Feb 19' if not.
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#shortdate)
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.ShortDateNotTodayWithoutTime} />
+</Canvas>
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.ShortDateWithTimeButNotToday} />
+</Canvas>
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.ShortDateTodayWithoutTime} />
+</Canvas>
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.ShortDateTodayWithTime} />
+</Canvas>
+
+## shortTime
+
+Get a short string representation of the current time
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#shorttime)
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.ShortTime} />
+</Canvas>
+
+## timestamp
+
+Get a string representation of the current time
+
+[API docs](https://solidos.github.io/solid-ui/docs/api/modules/_widgets_buttons_.html#timestamp)
+
+<Canvas withSource="open">
+  <Story of={DateTimeStories.Timestamp} />
+</Canvas>

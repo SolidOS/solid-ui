@@ -1,17 +1,18 @@
-import { silenceDebugMessages } from '../helpers/setup'
-import { iconBase, originalIconBase } from '../../src/iconBase'
+import { silenceDebugMessages } from './helpers/debugger'
+import { icons } from '../../src/iconBase'
+
+const { iconBase, originalIconBase } = icons
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
 describe('iconBase', () => {
   it('exists', () => {
-    expect(iconBase).toEqual('https://solid.github.io/solid-ui/src/icons/')
+    expect(iconBase).toEqual('https://solidos.github.io/solid-ui/src/icons/')
   })
 })
 
 describe('originalIconBase', () => {
   it('exists', () => {
-    expect(originalIconBase).toEqual('https://solid.github.io/solid-ui/src/originalIcons/')
+    expect(originalIconBase).toEqual('https://solidos.github.io/solid-ui/src/originalIcons/')
   })
 })

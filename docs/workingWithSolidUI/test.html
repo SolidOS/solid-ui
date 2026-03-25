@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Solid-UI Test - Load and Display RDF Data</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+      background-color: #f5f5f5;
+    }
+    h1 {
+      color: #333;
+    }
+    #app {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+    .button-container {
+      margin: 20px 0;
+    }
+    button {
+      background-color: #7c4dff;
+      color: white;
+      border: none;
+      padding: 12px 24px;
+      font-size: 16px;
+      border-radius: 4px;
+      cursor: pointer;
+      margin-right: 10px;
+    }
+    button:hover {
+      background-color: #6a3de8;
+    }
+    button:disabled {
+      background-color: #ccc;
+      cursor: not-allowed;
+    }
+    #output {
+      margin-top: 20px;
+      padding: 15px;
+      background-color: #f9f9f9;
+      border: 1px solid #ddd;
+      border-radius: 4px;
+      min-height: 100px;
+      white-space: pre-wrap;
+      font-family: monospace;
+      font-size: 14px;
+    }
+    .loading {
+      color: #666;
+      font-style: italic;
+    }
+    .error {
+      color: #d32f2f;
+      font-weight: bold;
+    }
+    .success {
+      color: #388e3c;
+    }
+    .data-item {
+      margin: 10px 0;
+      padding: 10px;
+      background: white;
+      border-left: 3px solid #7c4dff;
+    }
+  </style>
+</head>
+<body>
+  <div id="app">
+    <h1>🎯 Solid-UI Test Page</h1>
+    <p>This page demonstrates loading RDF data into an RDF store and displaying it using solid-ui widgets.</p>
+    
+    <div class="button-container">
+      <button id="loadDataBtn">Load RDF Data</button>
+      <button id="displayDataBtn" disabled>Display Data</button>
+      <button id="clearBtn">Clear Output</button>
+    </div>
+    
+    <div id="output">Click "Load RDF Data" to begin...</div>
+  </div>
+
+  <!-- Load dependencies -->
+  <script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
+  <script src="./solid-logic.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/solid-ui/dist/solid-ui.min.js"></script>
+
+  <script>
+    // Access global variables
+    const $rdf = window.$rdf
+    const SolidLogic = window.SolidLogic
+    const UI = window.UI
+
+    // Use SolidLogic's global store (no need to create a new one)
+    const store = SolidLogic.store
+    
+    // Sample RDF data in Turtle format
+    const turtleData = `
+@prefix foaf: <http://xmlns.com/foaf/0.1/> .
+@prefix ex: <http://example.org/> .
+
+ex:alice a foaf:Person ;
+    foaf:name "Alice Smith" ;
+    foaf:mbox <mailto:alice@example.org> ;
+    foaf:knows ex:bob .
+
+ex:bob a foaf:Person ;
+    foaf:name "Bob Johnson" ;
+    foaf:mbox <mailto:bob@example.org> ;
+    foaf:knows ex:alice, ex:carol .
+
+ex:carol a foaf:Person ;
+    foaf:name "Carol Williams" ;
+    foaf:mbox <mailto:carol@example.org> .
+`
+
+    // Get DOM elements
+    const loadDataBtn = document.getElementById('loadDataBtn')
+    const displayDataBtn = document.getElementById('displayDataBtn')
+    const clearBtn = document.getElementById('clearBtn')
+    const output = document.getElementById('output')
+
+    let dataLoaded = false
+
+    // Load RDF data into store
+    loadDataBtn.addEventListener('click', async () => {
+      output.innerHTML = '<span class="loading">Loading RDF data...</span>'
+      loadDataBtn.disabled = true
+
+      try {
+        // Parse Turtle data into the store
+        const baseURI = 'http://example.org/'
+        $rdf.parse(turtleData, store, baseURI, 'text/turtle')
+        
+        output.innerHTML = '<span class="success">✓ RDF data loaded successfully!</span>\n\n'
+        output.innerHTML += `Store now contains ${store.statements.length} triples.\n\n`
+        output.innerHTML += 'Click "Display Data" to see the parsed information.'
+        
+        dataLoaded = true
+        displayDataBtn.disabled = false
+        loadDataBtn.textContent = 'Reload Data'
+      } catch (error) {
+        output.innerHTML = `<span class="error">✗ Error loading data: ${error.message}</span>`
+        console.error('Error:', error)
+      } finally {
+        loadDataBtn.disabled = false
+      }
+    })
+
+    // Display the loaded data
+    displayDataBtn.addEventListener('click', () => {
+      if (!dataLoaded) {
+        output.innerHTML = '<span class="error">Please load data first!</span>'
+        return
+      }
+
+      output.innerHTML = '<h3>📊 Loaded RDF Data:</h3>\n\n'
+
+      // Query for all people
+      const FOAF = $rdf.Namespace('http://xmlns.com/foaf/0.1/')
+      const EX = $rdf.Namespace('http://example.org/')
+      
+      // Find all persons
+      const people = store.each(null, $rdf.sym('http://www.w3.org/1999/02/22-rdf-syntax-ns#type'), FOAF('Person'))
+      
+      if (people.length === 0) {
+        output.innerHTML += '<span class="error">No people found in the data.</span>'
+        return
+      }
+
+      output.innerHTML += `Found ${people.length} person(s):\n\n`
+
+      people.forEach((person, index) => {
+        const name = store.any(person, FOAF('name'))
+        const email = store.any(person, FOAF('mbox'))
+        const knows = store.each(person, FOAF('knows'))
+        
+        const personDiv = document.createElement('div')
+        personDiv.className = 'data-item'
+        
+        let personInfo = `<strong>Person ${index + 1}:</strong> ${person.value}\n`
+        if (name) personInfo += `  Name: ${name.value}\n`
+        if (email) personInfo += `  Email: ${email.value}\n`
+        if (knows.length > 0) {
+          personInfo += `  Knows: ${knows.length} person(s)\n`
+          knows.forEach(friend => {
+            const friendName = store.any(friend, FOAF('name'))
+            personInfo += `    - ${friendName ? friendName.value : friend.value}\n`
+          })
+        }
+        
+        personDiv.innerHTML = `<pre>${personInfo}</pre>`
+        output.appendChild(personDiv)
+      })
+
+      // Add a button using solid-ui widgets
+      output.innerHTML += '\n<h3>🎨 Solid-UI Widget Demo:</h3>\n'
+      
+      const buttonContainer = document.createElement('div')
+      buttonContainer.style.margin = '10px 0'
+      
+      const solidButton = UI.widgets.button(
+        document,
+        'https://solidproject.org/assets/img/solid-emblem.svg',
+        'View All Triples',
+        () => {
+          alert(`Store contains ${store.statements.length} triples:\n\n` + 
+                store.statements.slice(0, 5).map(st => 
+                  `${st.subject.value} → ${st.predicate.value} → ${st.object.value}`
+                ).join('\n') + 
+                (store.statements.length > 5 ? '\n...' : ''))
+        }
+      )
+      
+      buttonContainer.appendChild(solidButton)
+      output.appendChild(buttonContainer)
+    })
+
+    // Clear output
+    clearBtn.addEventListener('click', () => {
+      output.innerHTML = 'Output cleared. Click "Load RDF Data" to begin...'
+      displayDataBtn.disabled = !dataLoaded
+    })
+
+    // Log success message
+    console.log('✓ All dependencies loaded successfully!')
+    console.log('- $rdf (rdflib):', typeof $rdf)
+    console.log('- SolidLogic:', typeof SolidLogic)
+    console.log('- UI (solid-ui):', typeof UI)
+  </script>
+</body>
+</html>

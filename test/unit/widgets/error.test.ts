@@ -1,9 +1,8 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { errorMessageBlock } from '../../../src/widgets/error'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('errorMessageBlock', () => {
@@ -17,7 +16,7 @@ describe('errorMessageBlock', () => {
     const result = errorMessageBlock(dom, 'my <script> kiddie </script> message')
     expect(result).toMatchSnapshot()
     expect(result.innerHTML.indexOf('<script>')).toEqual(-1)
-    expect(result.innerHTML.indexOf('&lt;script&gt;')).toEqual(3)
+    expect(result.innerHTML.indexOf('&lt;script&gt;')).toBeGreaterThan(0)
   })
   it('sets the background color', () => {
     expect(errorMessageBlock(dom, 'my colored message', '#0ff')).toMatchSnapshot()

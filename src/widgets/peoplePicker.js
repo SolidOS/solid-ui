@@ -6,26 +6,24 @@
  * organizations to take some action on.
  *
  * Assumptions
- *   - Assumes that the user has a type index entry for vcard:AddressBook.
+ *   - Assumes that the user has a type index entry for vcard:AddressBook. @@ bad assuption
  *
  */
 import escape from 'escape-html'
-import uuid from 'uuid'
+import { v4 as uuidv4 } from 'uuid'
 import * as rdf from 'rdflib'
 import * as debug from '../debug'
-
-// const webClient = require('solid-web-client')(rdf)
 
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
 import { iconBase } from '../iconBase'
 import ns from '../ns'
-import { solidLogicSingleton } from '../logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 
 export class PeoplePicker {
-  constructor (element, typeIndex, groupPickedCb, options) {
+  constructor (element, typeIndex, groupPickedCb, options) { // @@ can't expect typeindex to be passed
     this.options = options || {}
     this.element = element
     this.typeIndex = typeIndex
@@ -136,8 +134,8 @@ export class PeoplePicker {
           .then(function (_xhr) {
             return resolve({ book })
           })
-          .catch(function (err) {
-            return reject(new Error('Could not load address book ' + err))
+          .catch(function (errr) {
+            return reject(new Error('Could not load address book ' + errr))
           })
       })
     })
@@ -146,7 +144,7 @@ export class PeoplePicker {
   createNewGroup (book, defaultNewGroupName) {
     const { groupIndex, groupContainer } = indexes(book)
     const group = rdf.sym(
-      `${groupContainer.uri}${uuid.v4().slice(0, 8)}.ttl#this`
+      `${groupContainer.uri}${uuidv4().slice(0, 8)}.ttl#this`
     )
     const name = defaultNewGroupName || 'Untitled Group'
 

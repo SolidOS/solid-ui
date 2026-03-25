@@ -1,12 +1,8 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { create } from '../../src/create'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const div = dom.createElement('div')
 

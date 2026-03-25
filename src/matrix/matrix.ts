@@ -19,10 +19,10 @@
 //   Extra rows and columns are inserted as needed to hold new data points
 //   matrix.refresh() will re-run the query and adjust the display
 
-import utils from '../utils'
+import * as utils from '../utils'
 import * as $rdf from 'rdflib'
 import { MatrixOptions } from './types'
-import { solidLogicSingleton } from '../logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 

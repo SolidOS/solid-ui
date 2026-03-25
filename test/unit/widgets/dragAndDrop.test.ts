@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM } from 'jsdom'
 import {
   makeDropTarget,
@@ -8,7 +8,6 @@ import {
 import { fetcher } from 'rdflib'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 const element = dom.createElement('div')
 

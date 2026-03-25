@@ -1,0 +1,725 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta
+      name="generator"
+      content="HTML Tidy for Mac OS X (vers 31 October 2006 - Apple Inc. build 17.1), see www.w3.org"
+    />
+
+    <title>solid-ui: Introduction using forms</title>
+    <style type="text/css">
+      /*<![CDATA[*/
+      body {
+        font-family: Trebuchet MS, Palatino, sans-serif;
+        color: black;
+        background: white;
+      }
+      p,
+      ul,
+      ol {
+        text-indent: 0em;
+        margin-left: 4em; /* a bit of white space */
+      }
+      pre {
+        margin-left: 5em;
+        background-color: #eee;
+        padding: 0.5em;
+      }
+
+      li {
+        text-indent: 0;
+      }
+      h1 {
+        text-align: center;
+      }
+      h2 {
+        font-style: bold;
+        margin-left: 1em;
+      }
+      h3 {
+        font-style: bold;
+        margin-left: 2em;
+      }
+      h4 {
+        font-style: italic;
+        margin-left: 3em;
+      }
+      h4.class {
+        color: #070;
+      }
+      address {
+        text-align: right;
+      }
+      a:link,
+      a:active {
+        color: #00e;
+        background: transparent;
+        text-decoration: none;
+      }
+
+      a:visited {
+        color: #529;
+        background: transparent;
+      }
+      div.intro {
+        margin-left: 5%;
+        margin-right: 5%;
+        font-style: italic;
+      }
+      pre {
+        font-family: monospace;
+      }
+      tt {
+        font-family: monospace;
+        font-size: 120%;
+      }
+      a:link img,
+      a:visited img {
+        border-style: none;
+      }
+      ul.toc {
+        list-style: disc;
+        list-style: none;
+      }
+      div.issue {
+        padding: 0.5em;
+        border: none;
+        margin-right: 5%;
+      }
+      table {
+        border-collapse: collapse;
+        margin: 1em;
+      }
+      table.parameters {
+        background-color: #dddddd;
+        margin-left: 4em;
+      } /*  background-color: #ddddff; */
+      table.properties {
+        background-color: #ddddff;
+        margin-left: 4em;
+      } /*  background-color: #ddddff; */
+      td {
+        padding: 0.5em;
+        border: 0.1em solid white;
+        margin: 0;
+      }
+      /*]]>*/
+    </style>
+  </head>
+
+  <body>
+    <h2>Using Forms in the UI ontology</h2>
+
+    <p>
+      The User Interface ontology at <tt>http://www.w3.org/ns/ui</tt> defines
+      RDF terms for describing forms. The
+      <tt><a href="https://github.com/solidos/solid-ui">solid-ui</a></tt> project
+      provides functions to use these forms within your web application to
+      create a quick user interface solution. This document describes how.
+    </p>
+
+    <p>
+      The form system allows you to define a user interface declaratively in
+      RDF. In your web app, you then:
+    </p>
+
+    <ol>
+      <li>make sure the ontology files are loaded</li>
+
+      <li>load the file with the form itself</li>
+
+      <li>
+        call
+        <tt
+          >UI.widgets.appendForm(dom, container, {}, subject, form, doc,
+          callback)</tt
+        >
+      </li>
+    </ol>
+
+    <p>where</p>
+
+    <table class="parameters">
+      <tr>
+        <td>dom</td>
+
+        <td>is the DOM HTMLDocument object, a/k/a document</td>
+      </tr>
+
+      <tr>
+        <td>container</td>
+
+        <td>is a DOM element to contain the form</td>
+      </tr>
+
+      <tr>
+        <td>{}</td>
+
+        <td>are unused at present</td>
+      </tr>
+
+      <tr>
+        <td>subject</td>
+
+        <td>is the RDF thing about which data will be stored</td>
+      </tr>
+
+      <tr>
+        <td>form</td>
+
+        <td>is the RDF object in the store for the form</td>
+      </tr>
+
+      <tr>
+        <td>doc</td>
+
+        <td>
+          is the RDF document on the web where the data will be stored. Often,
+          <tt>subject.doc()</tt>
+        </td>
+      </tr>
+
+      <tr>
+        <td>callback</td>
+
+        <td>
+          is a function taking an error flag and a message (if the error flag is
+          true)
+        </td>
+      </tr>
+    </table>
+
+    If the form is a complex form, as the user adds more data, more form UI will
+    be created. The data in each field is saved back to the web the moment the
+    user has entered it. There is no general Save Button.
+
+    <p>
+      There is a form form for editing forms. It is in the form ontology itself.
+    </p>
+
+    <p>
+      You can of course go and write other implementations of the form system
+      using your favorite user interface language.
+    </p>
+
+    <h4>Go to the source</h4>
+
+    <ul>
+      <li>
+        <a href="https://www.w3.org/ns/ui.n3">The ontology (source file)</a>
+      </li>
+
+      <li>
+        <a
+          href="https://github.com/solidos/solid-ui/blob/main/src/widgets/forms.js"
+        >
+          The implementation code</a
+        >
+      </li>
+    </ul>
+
+    <h2>Form field types</h2>
+
+    <p>
+      Form fields may be named or blank nodes in your file; the form system does
+      not care. It is often useful to name them to keep track of them.
+    </p>
+
+    <p>
+      Below, all Field Classes and Properties are in the UI namespace,
+      <tt><a href="http://www.w3.org/ns/ui#">http://www.w3.org/ns/ui#</a></tt
+      >, except the data types, like Integer, which are in the normal
+      <a href="http://www.w3.org/2001/XMLSchema#">XSD</a>
+      namespace.
+    </p>
+
+    <p>
+      Here are some properties which you can use with any field (except the
+      documentation fields).
+    </p>
+
+    <table class="properties">
+      <tr>
+        <td>label</td>
+        <td>String</td>
+        <td>
+          A label for the form field. This is the prompt for the user, e.g.,
+          "Name", "Employer".  If the label is not given in the form, the
+          system will make one from a label of the property in the ontology.
+        </td>
+      </tr>
+
+      <tr>
+        <td>property</td>
+        <td>rdf:Property</td>
+        <td>
+          When the user enters the data, it is stored in the web as a triple
+          with this property as its predicate.
+        </td>
+      </tr>
+
+      <tr>
+        <td>default</td>
+        <td>[according to field type] Optional</td>
+        <td>
+          The input control is set to this value by default. It is easiest for
+          the user to enter this value. (This value is <b>not</b> automatically
+          stored by the form system if the user does not select or enter it in
+          some way.
+        </td>
+      </tr>
+
+      <tr>
+        <td>suppressEmptyUneditable</td>
+        <td>Boolean</td>
+        <td>
+          Setting this flag (on a single form field not a structure) means that when the user is just reading the data, not
+          editing it, the fields with blank data will be removed completely.
+          This avoid things like a blank field for a region in an address when there isn't one given.
+          This can make the UX much cleaner.  Defaults to false.
+        </td>
+      </tr>
+    </table>
+
+    <p>
+      Other properties are given for each field type.
+    </p>
+
+    <h4 class="class">Form</h4>
+
+    <p>
+      The form itself has a collection of fields. The <tt>parts</tt> property
+      gives an order list of the fields in each form.
+    </p>
+
+    <table class="properties">
+      <tr>
+        <td>parts</td>
+
+        <td>rdf:Collection (aka List, Array) of Field</td>
+
+        <td>The parts of the form in the order in which they are</td>
+      </tr>
+
+      <tr>
+        <td><i>part</i></td>
+
+        <td>Field (Obsolete)</td>
+
+        <td>
+          A field which is a part of the form or group. This property is
+          obsolete. Use parts.
+        </td>
+      </tr>
+    </table>
+
+    If you use the obsolete "part" method for listing the parts of a form, then
+    each field needs an additional property:
+
+    <table class="properties">
+      <tr>
+        <td>sequence</td>
+
+        <td>Integer</td>
+
+        <td>The parts of the form in the order in which they are</td>
+      </tr>
+    </table>
+
+    For each part, declare its type, and the extra data that type requires, as
+    below.
+
+    <h4 class="class">Group</h4>
+
+    <p>
+      Group is a field which is just a collection of other fields. It is in fact
+      interchangeable with Form.
+    </p>
+
+    <h3>Single Value fields - Numeric</h3>
+    These prompt the user for a single value. They typically take default
+    values, and min and max values.
+
+    <h4 class="class">BooleanField</h4>
+
+    <p>A checkbox on the form, stored an RDF boolean true or false value.</p>
+
+    <h4 class="class">TriStateField</h4>
+
+    <p>
+      A checkbox on the form, stores an RDF boolean true or false value, or no
+      value if the box is left in its third, blank state.
+    </p>
+
+    <h4 class="class">IntegerField</h4>
+
+    <p>An RDF integer value</p>
+
+    <h4 class="class">DecimalField</h4>
+
+    <p>An RDF decimal value. Useful for monetary amounts</p>
+
+    <h4 class="class">FloatField</h4>
+
+    <p>A floating point number</p>
+
+    <h3>Single Value fields: Special Types</h3>
+
+    <h4 class="class">ColorField</h4>
+
+    <p>
+      A color picker is used, and generates a string which is a CSS_compatible
+      color in a string like <tt>#ffeebb</tt>
+    </p>
+
+    <h4 class="class">DateField</h4>
+
+    <p>
+      Uses a date picker on a good browser. Leaves an RDF date literal as its
+      value.
+    </p>
+
+    <h4 class="class">DateTimeField</h4>
+
+    <p>Leaves an RDF dateTime literal as its value.</p>
+
+    <h4 class="class">PhoneField</h4>
+
+    <p>Leaves as its value a named node with a <tt>tel:</tt> scheme URI</p>
+
+    <h4 class="class">EmailField</h4>
+
+    <p>Leaves as its value a named node with a '<tt>mailto:</tt>' scheme URI</p>
+
+    <h3>Single Value fields - Text</h3>
+
+    <h4 class="class">SingleLineTextField</h4>
+
+    <h4 class="class">NamedNodeURIField</h4>
+
+    <p>
+      A NamedNodeURIField is like a SingleLineTextField, except that the
+      value it generates is not a literal string but an RDF named node with
+      the given URI. Use this when users need to provide explicit URIs to things,
+      storing them as proper RDF resources rather than text values.
+    </p>
+
+    <p>
+      Unlike PhoneField or EmailField which add URI scheme prefixes (<tt>tel:</tt>
+      or <tt>mailto:</tt>), the NamedNodeURIField stores the URI exactly as
+      entered by the user.
+    </p>
+
+    <h4 class="class">MultiLineTextField</h4>
+
+    <h3>Complex fields</h3>
+
+    <h4 class="class">Group</h4>
+
+    <p>
+      A group is simply a static set of fields of any type. Its properties are
+      the same as for Form.
+    </p>
+
+    <table class="properties">
+      <tr>
+        <td>weight</td>
+
+        <td>xsd:integer</td>
+        <td>0:lighter than normal, 1: Normal, 2,3: heavier than normal</td>
+      </tr>
+      <tr>
+        <td>parts</td>
+        <td>rdf:Collection</td>
+        <td>
+          The form fields, forms, in the group
+        </td>
+      </tr>
+    </table>
+
+
+
+    <h4 class="class">Choice</h4>
+
+    <p>The user choses an item from a class.</p>
+
+    <table class="properties">
+      <tr>
+        <td>from</td>
+
+        <td>rdfs:Class</td>
+
+        <td>The selected thing must be a member of this class, e.g., Person.</td>
+      </tr>
+
+      <tr>
+        <td>property</td>
+
+        <td>rdf:Property</td>
+
+        <td>
+          When the item is found, the new data links it from the subject with
+          this property, e.g., friend.
+        </td>
+      </tr>
+
+      <tr>
+        <td>canMintNew</td>
+        <td>xsd:Boolean</td>
+        <td>
+          If the user doesn't find the thing they want, can they introduce an
+          item of that class by filling in a form about it? [Boolean]
+        </td>
+      </tr>
+    </table>
+
+    <p>If a new thing is minted, that will be done with a form which is a
+    <tt>ui:creationForm</tt> for the class.</p>
+
+    <h4 class="class">Multiple</h4>
+
+    <p>
+      When the subject can have several of the same thing, like friends or
+      phone numbers, then the Multiple field allows this. The user clicks on the
+      green plus icon, and is prompted for a subform for the related thing. The
+      user can also delete existing ones.
+    </p>
+
+    <p>
+      For each new thing, the system generates an arbitrary (timestamp) URI
+      within the file where the data is being stored. The subform is then about
+      that thing; the subject of the subform is not the subject of the original
+      form. It is the field, or the address, and so on.
+    </p>
+
+
+    <table class="properties">
+      <tr>
+        <td>ordered</td>
+        <td>Boolean</td>
+        <td>If true, the user has an ordered array of things, and the data is in an RDF collection.
+          If false, the UI is irrelevant and the data is a series of arcs.</td>
+      </tr>
+      <tr>
+        <td>property</td>
+        <td>rdf:Property</td>
+        <td>The API details or query endpoint and query details to be used to search the item in
+          the databasse.</td>
+      </tr>
+      <tr>
+        <td>reverse</td>
+        <td>Boolean</td>
+        <td>If set, the form will write data triple like <tt>X P S</tt> instead of the normal <tt>S P X</tt>.
+         </td>
+      </tr>
+      <tr>
+        <td>part</td>
+        <td>Form</td>
+        <td>The form to be used for each one.
+         </td>
+      </tr>
+    </table>
+
+
+
+
+    <h4 class="class">Classifier</h4>
+
+    <table class="properties">
+      <tr>
+        <td>category</td>
+
+        <td>rdfs:Class</td>
+
+        <td>
+          The object will already be in this class. The user will select
+          subclasses of this class.
+        </td>
+      </tr>
+    </table>
+    <p>
+    This form field leverages the ontology heavily. It pulls the subclasses of
+    the given class, and makes a pop-up menu for the user to chose one. If and
+    only if the ontology says that the class is a disjoint union
+    (owl:disjointUnionOf) of the subclasses, then the user interface will only
+    allow the user to pick one. If the user picks a subclass, and the ontology
+    shows that that subclass has its own subclasses, then the user will be
+    prompted to pick one of those, to (if they like) further refine the
+    selection. And so on.
+  </p>
+    <p>
+      The classifier pops a menu to allow the user to select a set of values to
+      classify the subject.
+    </p>
+
+    <h4 class="class">Options</h4>
+
+    <p>
+      An Options field is the 'case statement' of the form system. It will
+      choose at runtime a subfield depending on a property, often the type, of
+      the subject. Often used after a classifier.
+    </p>
+
+    <table class="properties">
+      <tr>
+        <th>Options property</th>
+
+        <th>range</th>
+
+        <th>significance</th>
+      </tr>
+
+      <tr>
+        <td>dependingOn</td>
+
+        <td>rdf:Property</td>
+
+        <td>The predicate in the data used to select the case.</td>
+      </tr>
+
+      <tr>
+        <td>case</td>
+
+        <td>Case</td>
+
+        <td>A case object, with for x use y. (2 or more cases)</td>
+      </tr>
+    </table>
+
+    <p>and for each case:</p>
+
+    <table class="properties">
+      <tr>
+        <th>Case property</th>
+
+        <th>range</th>
+
+        <th>significance</th>
+      </tr>
+
+      <tr>
+        <td>for</td>
+
+        <td>[The range of the dependingOn property]</td>
+
+        <td>The value this case applies to</td>
+      </tr>
+
+      <tr>
+        <td>use</td>
+
+        <td>Field</td>
+
+        <td>sub form to be used in case the value matches the "for"</td>
+      </tr>
+    </table>
+
+    <h4 class="class" id="Autocomplete">Autocomplete</h4>
+
+    <p>The autocomplete field alllows the user to select one
+      out of a large number of existing choices, by typing enough of its
+      name to be unambiguous.
+    </p>
+
+  <p>The field stores two triples,one of the given <tt>property</tt> linking to the
+  object the user has selcted, and the other stoting the name of that object,
+  as seen in the completed feld, using the <tt>labelProperty</tt>.
+  </p>
+
+  <p>The field must specify a <tt>dataSource</tt> which gives the paramters
+    and form of the query make over the net.
+  </p>
+
+  <table class="properties">
+
+    <tr>
+      <td>labelProperty</td>
+      <td>rdf:Property</td>
+      <td>The property which will be used to store the name of the selected thing as a separate triple</td>
+    </tr>
+    <tr>
+      <td>dataSource</td>
+      <td>DataSource</td>
+      <td>The API details or query endpint and query details to be usde to search of the itemn in
+        the databasse.</td>
+    </tr>
+    <tr>
+      <td>targetClass</td>
+      <td>rdfs:Class</td>
+      <td>Is tyhis is specified, it be used to replace any occurrences of
+         "$(targetClass)" in the query template.  this allows different instances
+         of AutocompleteField to share the same DataSource, by specifying different values for <tt>targetClass</tt>.</td>
+    </tr>
+
+  </table>
+
+    <h3>Documentation fields</h3>
+
+    <h4 class="class">Heading</h4>
+
+    <p>
+      Help the user find parts of a long form, or just for a title of a short
+      form.
+    </p>
+
+    <table class="properties">
+      <tr>
+        <td>contents</td>
+
+        <td>String</td>
+
+        <td>The text content of the heading</td>
+      </tr>
+      <tr>
+        <td>suppressIfUneditable</td>
+        <td>Boolean</td>
+        <td>If data is uneditable,ie read-only mode, hide this comment</td>
+      </tr>
+    </table>
+
+<p>The <tt>suppressIfUneditable</tt> flag allow you to make a form which
+  is much cleaner and simpler when the user is just reading information,
+  not editing it.</p>
+
+    <h4 class="class">Comment</h4>
+
+    <p>
+      Use comments in the form to help users understand what is going on, what
+      their options are, and what the fields mean.
+    </p>
+
+    <table class="properties">
+      <tr>
+        <td>contents</td>
+
+        <td>String</td>
+        <td>
+          The text content of the comment. (This should be displayed by form
+          systems as <tt>pre-wrap</tt> mode.)
+        </td>
+        <tr>
+          <td>suppressIfUneditable</td>
+          <td>Boolean</td>
+          <td>If data is uneditable,ie read-only mode, hide this comment</td>
+        </tr>
+
+      </tr>
+    </table>
+
+    <h2>Conclusion</h2>
+
+    <p>
+      The form language and the form implementation in solid-ui can't do
+      everything, but it can handle a pretty wide selection of tasks in common
+      daily life at home and at work. It can be vary efficient as developers can
+      reuse material between forms. Users can even generate their own forms.
+    </p>
+    <p>
+    Future directions include separate implementations of the form UI code in
+    for various platforms, and using various UI frameworks. There may also be
+    extensions of the system with new field types, more options for setting style
+    from various sources, etc.
+  </p>
+  </body>
+</html>

@@ -5,5 +5,7 @@ src/versionInfo.ts
 .idea
 .vscode
 coverage
-Documentation/api
+docs/api
 examples/storybook
+.history/
+docs/form-examples/solid-ui.js

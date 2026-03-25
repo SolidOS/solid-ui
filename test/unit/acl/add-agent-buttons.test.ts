@@ -1,16 +1,12 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 function instantiateAddAgentButtons () {
@@ -168,7 +164,7 @@ describe('When "Add App" button is clicked', () => {
     expect(bar.childNodes.length).toEqual(3)
     // Adds a third element to list, for reason I cannot understand - This does
     // not happen when I "manually test" it, ie run it in the browser
-    // https://github.com/solid/solid-ui/issues/236
+    // https://github.com/solidos/solid-ui/issues/236
   })
   it('Bar still contains the button that was clicked', () => {
     expect(getButtonName(bar.childNodes[0])).toEqual(barButtons[buttonIndex])

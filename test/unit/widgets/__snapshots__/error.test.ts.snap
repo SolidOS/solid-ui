@@ -1,25 +1,55 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`errorMessageBlock creates an error message div 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  style="margin: 0.1em; padding: 0.5em; color: black; border: 0.05em solid gray; background-color: rgb(255, 238, 238);"
 >
   my error message
+  <button
+    style="width: 2em; height: 2em;"
+    type="button"
+  >
+    <img
+      src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
+      style="width: 2em; height: 2em; opacity: 0.3;"
+      title="Cancel"
+    />
+  </button>
 </div>
 `;
 
 exports[`errorMessageBlock escapes the HTML 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  style="margin: 0.1em; padding: 0.5em; color: black; border: 0.05em solid gray; background-color: rgb(255, 238, 238);"
 >
   my &lt;script&gt; kiddie &lt;/script&gt; message
+  <button
+    style="width: 2em; height: 2em;"
+    type="button"
+  >
+    <img
+      src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
+      style="width: 2em; height: 2em; opacity: 0.3;"
+      title="Cancel"
+    />
+  </button>
 </div>
 `;
 
 exports[`errorMessageBlock sets the background color 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #0ff; color:black;"
+  style="margin: 0.1em; padding: 0.5em; color: black; border: 0.05em solid gray; background-color: rgb(0, 255, 255);"
 >
   my colored message
+  <button
+    style="width: 2em; height: 2em;"
+    type="button"
+  >
+    <img
+      src="https://solidos.github.io/solid-ui/src/icons/noun_1180156.svg"
+      style="width: 2em; height: 2em; opacity: 0.3;"
+      title="Cancel"
+    />
+  </button>
 </div>
 `;

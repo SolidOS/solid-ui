@@ -1,16 +1,12 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { instantiateAccessController } from '../helpers/instantiateAccessController'
 import { AccessController } from '../../../src/acl/access-controller'
 import { JSDOM } from 'jsdom'
-import { solidLogicSingleton } from '../../../src/logic'
+import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('AccessController', () => {
@@ -61,6 +57,9 @@ describe('AccessController#save', () => {
     expect(instantiateAccessController(dom, store).save).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    expect(instantiateAccessController(dom, store).save()).resolves.toEqual(undefined)
+    const jsdomAlert = window.alert // remember the jsdom alert
+    window.alert = () => {} // provide an empty implementation for window.alert
+    expect(instantiateAccessController(dom, store).save()).rejects.toThrow('ACL file save rejected : no acl:Write')
+    window.alert = jsdomAlert
   })
 })

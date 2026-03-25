@@ -1,0 +1,114 @@
+########### used for https://solidos.github.io/solid-ui/docs/form-examples/structures3.html #####
+
+@prefix ui: <http://www.w3.org/ns/ui#>.
+@prefix skos: <http://www.w3.org/2004/02/skos/core#>.
+@prefix So: <https://timea.solidcommunity.net/HelloWorld/data/SolidHelloWorldOntology#>.
+@prefix schema: <http://schema.org/>.
+@prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>.
+
+@prefix : <#>.
+
+:this
+    schema:name "Solid example applications form" ;
+    a ui:Form ;
+    ui:parts (
+       :projects
+      ).
+
+:projects a ui:Choice; 
+      ui:label "Select project:"@en;
+      ui:canMintNew :true; 
+      ui:use :projectCreationForm;
+      ui:property skos:hasTopConcept;
+      ui:from So:Example-Application .
+
+
+:projectCreationForm a ui:Form; 
+      schema:name "Form for creating a new Project" ;
+      ui:parts ( 
+            :projectName
+            :projectDescription
+            :projectAuthor
+            :linksHeading
+            :linkToDemo
+            :linkToRepo
+            :linkToTutorial
+            :techStackHeading
+            :solidTechStack
+            :semWebTechStack
+            :genericTechStack
+            :useCaseHeading
+            :showcasesUseCase 
+      ).
+
+# Project Name
+:projectName a ui:SingleLineTextField; 
+            ui:size 12; 
+            ui:property skos:prefLabel;
+            ui:label "Name of project"@en.
+
+# Project Description
+:projectDescription a ui:SingleLineTextField; 
+            ui:size 100; 
+            ui:property skos:definition;
+            ui:label "Short description"@en.
+
+# Project Author
+:projectAuthor a ui:SingleLineTextField; 
+            ui:size 100; 
+            ui:property So:author;
+            ui:label "Author"@en.
+
+# ------------ project links ------------- #
+:linksHeading a ui:Heading; ui:contents "Project links"@en.
+
+# Link to where the Demo is working/deployed
+:linkToDemo a ui:SingleLineTextField; 
+            ui:size 100; 
+            ui:property So:linkToDemo;
+            ui:label "Link to demo"@en.
+
+# Link to repository
+:linkToRepo a ui:SingleLineTextField; 
+            ui:size 100; 
+            ui:property So:linkToRepo;
+            ui:label "Link to repository"@en.
+
+# Link to tutorial
+:linkToTutorial a ui:SingleLineTextField; 
+            ui:size 100; 
+            ui:property So:linkToTutorial;
+            ui:label "Link to tutorial"@en.
+
+
+# ------------ project tech stack ------------- #
+:techStackHeading a ui:Heading; ui:contents "Technical stack"@en.
+
+# drop down for solid tech stack
+:solidTechStack a ui:Choice; 
+      ui:label "Solid libraries used:"@en;
+      ui:property So:usesSolidLibrary;
+      ui:from So:Solid-Library.
+
+# drop down for semantic web tech stack
+:semWebTechStack a ui:Choice; 
+      ui:label "Semantic Web libraries used:"@en;
+      ui:property So:usesSemWebLibrary;
+      ui:from So:Semantic-Web-Library.
+
+# drop down for tech stack
+:genericTechStack a ui:Choice; 
+      ui:label "Generic technical stack used:"@en;
+      ui:property So:usesCodeStack;
+      ui:from So:Code-Stack.
+
+# ------------ project use cases -------------- #
+:useCaseHeading a ui:Heading; ui:contents "Use cases"@en.
+
+# drop down for use cases
+:showcasesUseCase a ui:Choice; 
+      ui:label "Select use case:"@en;
+      ui:property So:showcasesUseCase;
+      ui:from So:Technical-Use-Case.
+
+# END

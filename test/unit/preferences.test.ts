@@ -1,15 +1,9 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
-import Preferences from '../../src/preferences'
+import * as Preferences from '../../src/preferences'
 import { sym } from 'rdflib'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
 

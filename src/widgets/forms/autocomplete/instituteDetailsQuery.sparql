@@ -1,0 +1,36 @@
+prefix vcard: <http://www.w3.org/2006/vcard/ns#>
+CONSTRUCT
+{  wd:Q49108 vcard:fn ?itemLabel.
+wd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .
+wd:Q49108 schema:logo ?logo;
+   schema:image ?image;
+   schema:logo  ?sealImage;
+   schema:subOrganization  ?subsidiary .
+      ?subsidiary rdfs:label ?subsidiaryLabel .
+ ?supersidiary schema:subOrganization wd:Q49108 .
+      ?supersidiary rdfs:label ?supersidiaryLabel .
+  wd:Q49108 schema:location ?location .
+     ?location  schema:elevation  ?elevation .
+     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .
+     ?location wdt:P625 ?coordinates .
+     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .
+}
+WHERE
+{  optional {wd:Q49108 rdfs:label ?itemLabel} .
+  optional {wd:Q49108 wdt:P154 ?logo .}
+  optional {wd:Q49108 wdt:P31 ?klass .}
+  optional {wd:Q49108 wdt:P158  ?sealImage .}
+  optional {wd:Q49108 wdt:P18 ?image .}
+
+  optional { wd:Q49108       wdt:P355 ?subsidiary . }
+  optional { ?supersidiary   wdt:P355 wd:Q49108. }
+
+  optional { wd:Q49108 wdt:P276 ?location .
+
+    optional { ?location  schema:eleveation  ?elevation }
+    optional { ?location  wdt:P131  ?region }
+    optional { ?location wdt:P625 ?coordinates }
+    optional {  ?location  wdt:P17  ?country }
+  }
+  SERVICE wikibase:label { bd:serviceParam wikibase:language "fr,en,de,it". }
+}

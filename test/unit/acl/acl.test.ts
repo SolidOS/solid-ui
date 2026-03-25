@@ -1,6 +1,5 @@
-import { ACL_LINK } from 'solid-logic'
-import { silenceDebugMessages } from '../../helpers/setup'
-import { solidLogicSingleton } from '../../../src/logic'
+import { ACL_LINK, solidLogicSingleton } from 'solid-logic'
+import { silenceDebugMessages } from '../helpers/debugger'
 import {
   ACLbyCombination,
   ACLToString,
@@ -39,10 +38,6 @@ import { createGraphFromTurtle } from '../helpers/createGraphFromTurtle'
 import { createAgentMapFromTurtle } from '../helpers/createAgentMapFromTurtle'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('ACLbyCombination', () => {
   it('exists', () => {
@@ -160,10 +155,10 @@ describe('getACL', () => {
           switch (doc) {
             case DEFAULT_RESOURCE_DOC:
               solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
-              // eslint-disable-next-line node/no-callback-literal
+              // eslint-disable-next-line n/no-callback-literal
               return callback(true)
             case DEFAULT_RESOURCE_ACL:
-              // eslint-disable-next-line node/no-callback-literal
+              // eslint-disable-next-line n/no-callback-literal
               return callback(true)
           }
         }
@@ -178,7 +173,7 @@ describe('getACL', () => {
         solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => {
           solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
           solidLogicSingleton.store.fetcher.nonexistent[DEFAULT_RESOURCE_ACL.uri] = true
-          // eslint-disable-next-line node/no-callback-literal
+          // eslint-disable-next-line n/no-callback-literal
           return callback(true)
         }
         getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
@@ -195,10 +190,10 @@ describe('getACL', () => {
           switch (doc) {
             case DEFAULT_RESOURCE_DOC:
               solidLogicSingleton.store.add(DEFAULT_RESOURCE_DOC, ACL_LINK, DEFAULT_RESOURCE_ACL, DEFAULT_RESOURCE_DOC)
-              // eslint-disable-next-line node/no-callback-literal
+              // eslint-disable-next-line n/no-callback-literal
               return callback(true)
             case DEFAULT_RESOURCE_ACL:
-              // eslint-disable-next-line node/no-callback-literal
+              // eslint-disable-next-line n/no-callback-literal
               return callback(false, errorMessage, { status: 500 })
           }
         }
@@ -211,7 +206,7 @@ describe('getACL', () => {
 
   describe('no ACL link for resource', () => {
     beforeEach(() => {
-      // eslint-disable-next-line node/no-callback-literal
+      // eslint-disable-next-line n/no-callback-literal
       solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(true)
       getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
     })
@@ -221,7 +216,7 @@ describe('getACL', () => {
 
   describe('failed response for doc', () => {
     beforeEach(() => {
-      // eslint-disable-next-line node/no-callback-literal
+      // eslint-disable-next-line n/no-callback-literal
       solidLogicSingleton.store.fetcher.nowOrWhenFetched = (doc, options, callback) => callback(false, 'Failed response')
       getACL(DEFAULT_RESOURCE_DOC, callbackFunction)
     })

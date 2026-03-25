@@ -1,18 +1,15 @@
-import { silenceDebugMessages } from '../../../helpers/setup'
+import { silenceDebugMessages } from '../../helpers/debugger'
 import { lit, namedNode } from 'rdflib'
 import {
   fieldLabel,
   fieldStore,
   basicField
 } from '../../../../src/widgets/forms/basic'
-import { store, ns } from '../../../../src/'
-import { textInputStyle } from '../../../../src/style'
+import ns from '../../../../src/ns'
+import { style } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
+import { store } from 'solid-logic'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 silenceDebugMessages()
 afterEach(clearStore)
 
@@ -97,7 +94,7 @@ describe('basicField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), namedNode('http://example.com/#some-property'), namedNode('http://example.com/'))
 
     const result = basicField(
@@ -118,7 +115,7 @@ describe('basicField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), namedNode('http://example.com/#some-property'), namedNode('http://example.com/'))
 
     basicField(
@@ -140,7 +137,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
@@ -166,7 +163,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
@@ -193,7 +190,7 @@ describe('basicField', () => {
     const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -211,7 +208,7 @@ describe('basicField', () => {
     inputElement.value = '555-1234'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; color: green;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;color: green;')
   })
 
   it('goes red if value doesnt match pattern', () => {
@@ -222,7 +219,7 @@ describe('basicField', () => {
     const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -240,7 +237,7 @@ describe('basicField', () => {
     inputElement.value = 'not a valid phone number'
     const event = new Event('keyup')
     inputElement.dispatchEvent(event)
-    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c;  border-radius:0.2em; font-size: 100%; margin:0.2em; color: red;')
+    expect(inputElement.getAttribute('style')).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;color: red;')
   })
 
   it('handles change if value doesnt match pattern', () => {
@@ -251,7 +248,7 @@ describe('basicField', () => {
     const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -278,7 +275,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('http://example.com/#initial-value'), doc)
 
@@ -298,6 +295,126 @@ describe('basicField', () => {
     expect(store.updater.updated).toEqual(true)
   })
 
+  it('defers date change while focused', () => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const formType = ns.ui('DateField')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(form, ns.rdf('type'), formType, doc)
+    store.add(subject, property, '2026-03-15', doc)
+
+    const originalUpdate = store.updater.update
+    const updateSpy = jest.fn((_deletes, _inserts, onDone) => {
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    })
+    store.updater.update = updateSpy as any
+
+    try {
+      const result = basicField(
+        document,
+        container,
+        already,
+        subject,
+        form,
+        doc,
+        callbackFunction
+      )
+      const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+      inputElement.focus()
+      inputElement.value = '2026-03-16'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(updateSpy).not.toHaveBeenCalled()
+    } finally {
+      store.updater.update = originalUpdate
+      container.remove()
+    }
+  })
+
+  it('does not disable DateField during save', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const formType = ns.ui('DateField')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(form, ns.rdf('type'), formType, doc)
+    store.add(subject, property, '2026-03-15', doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+
+    const originalUpdate = store.updater.update
+    store.updater.update = ((_deletes, _inserts, onDone) => {
+      expect(inputElement.disabled).toEqual(false)
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    }) as any
+
+    try {
+      inputElement.value = '2026-03-16'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(inputElement.disabled).toEqual(false)
+    } finally {
+      store.updater.update = originalUpdate
+    }
+  })
+
+  it('disables non-date input during save and reenables on success', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(subject, property, namedNode('http://example.com/#initial-value'), doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+
+    const originalUpdate = store.updater.update
+    store.updater.update = ((_deletes, _inserts, onDone) => {
+      expect(inputElement.disabled).toEqual(true)
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    }) as any
+
+    try {
+      inputElement.value = 'changed value'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(inputElement.disabled).toEqual(false)
+    } finally {
+      store.updater.update = originalUpdate
+    }
+  })
+
   it('calls updater on change for a NamedNodeUriField', () => {
     const container = document.createElement('div')
     const already = {}
@@ -306,7 +423,7 @@ describe('basicField', () => {
     const formType = ns.ui('NamedNodeURIField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(subject, property, namedNode('http://example.com/#initial-value'), doc)
@@ -335,7 +452,7 @@ describe('basicField', () => {
     const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(subject, property, namedNode('tel:11111'), doc)
@@ -364,7 +481,7 @@ describe('basicField', () => {
     const formType = ns.ui('FloatField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(subject, property, 1.1111, doc)
@@ -392,7 +509,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
 
     const result = basicField(
@@ -420,7 +537,7 @@ describe('basicField', () => {
     const property = namedNode('http://example.com/#some-property')
     const doc1 = namedNode('http://example.com/1')
     const doc2 = namedNode('http://example.com/2')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc1)
     store.add(form, ns.rdf('type'), formType, doc1)
     store.add(subject, property, 1.1111, doc1)
@@ -450,7 +567,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, 1.1111, doc)
 
@@ -478,7 +595,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, 1.1111, doc)
 
@@ -507,7 +624,7 @@ describe('basicField', () => {
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
     const doc2 = namedNode('http://example.com/2')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, 1.1111, doc)
     store.add(subject, property, 1.1111, doc2)
@@ -535,7 +652,7 @@ describe('basicField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const doc = undefined
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), namedNode('http://example.com/#some-property'), namedNode('http://example.com/'))
     // Let it derive the correct doc from this:
     store.add(subject, namedNode('http://example.com/#some-property'), namedNode('http://example.com/#o1'), namedNode('http://why1.com/'))
@@ -551,7 +668,7 @@ describe('basicField', () => {
     )
     // From the fact that it's picking up the 'http://example.com/#o1' object
     // and that apparently it didn't error on line
-    // https://github.com/solid/solid-ui/blob/660ab45/src/widgets/forms/basic.ts#L135
+    // https://github.com/solidos/solid-ui/blob/660ab45/src/widgets/forms/basic.ts#L135
     // we can conclude that it successfully chose namedNode('http://why1.com/')
     // as the value for `doc`.
     expect((result.childNodes[1].childNodes[0] as HTMLInputElement).value).toEqual('http://example.com/#o1')
@@ -564,7 +681,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, 'current value', doc)
 
@@ -587,7 +704,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('http://example.com/#current-value'), doc)
 
@@ -611,7 +728,7 @@ describe('basicField', () => {
     const formType = namedNode('http://www.w3.org/ns/ui#PhoneField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -636,7 +753,7 @@ describe('basicField', () => {
     const formType = ns.ui('FloatField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -650,8 +767,8 @@ describe('basicField', () => {
       doc,
       callbackFunction
     )
-    const style = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(style).toEqual('text-align: right')
+    const localStyle = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
+    expect(localStyle).toEqual('background-color: #eef; padding: 0.5em;  border: .05em solid #88c; border-radius:0.2em; font-size: 100%; margin:0.4em;text-align: right;')
   })
 
   it('Defaults to textInputStyle', () => {
@@ -661,7 +778,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
@@ -674,8 +791,8 @@ describe('basicField', () => {
       doc,
       callbackFunction
     )
-    const style = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
-    expect(style).toEqual(textInputStyle)
+    const inputStyle = (result.childNodes[1].childNodes[0] as HTMLInputElement).getAttribute('style')
+    expect(inputStyle).toEqual(style.textInputStyle)
   })
 
   it('Can read type from fieldParams', () => {
@@ -686,7 +803,7 @@ describe('basicField', () => {
     const formType = ns.ui('TimeField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -711,7 +828,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
@@ -736,7 +853,7 @@ describe('basicField', () => {
     const formType = ns.ui('TimeField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.ui('size'), 30, doc)
@@ -755,7 +872,8 @@ describe('basicField', () => {
     expect(size).toEqual('30')
   })
 
-  it('Can read size from fieldParams', () => {
+  // It comes from the style module now not fieldParams
+  it.skip('Can read size from fieldParams', () => {
     const container = document.createElement('div')
     const already = {}
     const subject = namedNode('http://example.com/#this')
@@ -763,7 +881,7 @@ describe('basicField', () => {
     const formType = ns.ui('TimeField')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -788,7 +906,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
@@ -812,7 +930,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://example.com/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.ui('maxLength'), 100, doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
@@ -837,7 +955,7 @@ describe('basicField', () => {
     const form = namedNode('http://example.com/#form')
     const property = namedNode('http://example.com/#some-property')
     const doc = namedNode('http://not.editable/')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(subject, property, 'set in stone', doc)
 
@@ -859,7 +977,7 @@ describe('basicField', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solid/solid-ui/issues/263
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     const result = basicField(
       document,
       container,

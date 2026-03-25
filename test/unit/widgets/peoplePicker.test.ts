@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 
 // SHARON IS WORKING ON THIS FILE
 // NOT DOING ANYTHING FOR NOW AS SHE WILL CLEAN IT UP LATER
@@ -17,7 +17,6 @@ it.skip('only here to make tests run', () => null)
 // } from '../../../src/widgets/peoplePicker'
 // import ns from '../../../src/ns'
 // jest.mock('rdflib')
-// jest.mock('solid-auth-client')
 // const kb = require('../../../src/store')
 // const fetcher = kb.fetcher
 //

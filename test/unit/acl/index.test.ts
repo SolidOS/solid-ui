@@ -1,14 +1,9 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import * as Acl from '../../../src/acl/acl'
 import * as AclControl from '../../../src/acl/acl-control'
 import { acl, aclControl } from '../../../src/acl/index'
 
 silenceDebugMessages()
-
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('acl related APIs', () => {
   it('exports some methods in the acl module', () => {

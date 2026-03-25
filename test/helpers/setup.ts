@@ -1,16 +1,36 @@
 import { toContainGraph } from '../custom-matchers/toContainGraph'
 import { toEqualGraph } from '../custom-matchers/toEqualGraph'
-import { error, log, trace, warn } from '../../src/debug'
+import 'isomorphic-fetch'
+import { TextEncoder, TextDecoder } from 'util'
+import { TransformStream, ReadableStream, WritableStream } from 'stream/web'
 
-// We don't want to output debug messages to console as part of the tests
-jest.mock('../../src/debug')
+// https://stackoverflow.com/questions/52612122/how-to-use-jest-to-test-functions-using-crypto-or-window-mscrypto
 
-export function silenceDebugMessages () {
-  ;(log as any).mockImplementation(() => null)
-  ;(warn as any).mockImplementation(() => null)
-  ;(error as any).mockImplementation(() => null)
-  ;(trace as any).mockImplementation(() => null)
+import crypto from 'crypto'
+global.crypto = {
+  getRandomValues: function (buffer) {
+    return crypto.randomFillSync(buffer)
+  }
 }
+
+global.TextEncoder = TextEncoder
+global.TextDecoder = TextDecoder
+global.TransformStream = TransformStream
+global.ReadableStream = ReadableStream
+global.WritableStream = WritableStream
+
+// Node provides MessagePort via worker_threads; jsdom/undici expects it in global scope
+try {
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  const { MessageChannel, MessagePort } = require('worker_threads')
+  global.MessageChannel = MessageChannel
+  global.MessagePort = MessagePort
+} catch (err) {
+  // worker_threads not available (older Node), ignore
+}
+
+// Mock external dependencies that solid-logic expects
+jest.mock('$rdf', () => require('rdflib'), { virtual: true })
 
 // adding custom matchers
 expect.extend({

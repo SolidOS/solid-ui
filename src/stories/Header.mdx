@@ -1,0 +1,22 @@
+import * as UI from '../../src/index'
+import * as HeaderStories from './Header.stories';
+
+import { Canvas, Meta, Story } from "@storybook/blocks";
+
+<Meta of={HeaderStories} />
+
+## Header
+
+<div id="PageHeader" />
+
+export const headerDecorator = (Story) => {
+  setTimeout(() => Story(), 1);
+  return '<div>The above <code>div<code> with ID "PageHeader" is replaced by the header component</div>';
+};
+
+To experience the full behaviour of the header, you need to log in. This can be done at
+[the example page](http://solidos.github.io/solid-ui/examples/header).
+
+<Canvas>
+  <Story of={HeaderStories.Header} />
+</Canvas>

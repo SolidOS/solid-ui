@@ -14,27 +14,25 @@
 //
 
 import * as debug from './debug'
+import { icons } from './iconBase'
+import { store } from 'solid-logic'
+import * as log from './log'
+import ns from './ns'
+import * as rdf from 'rdflib' // pull in first avoid cross-refs
+import * as utils from './utils'
+import * as widgets from './widgets'
 
-const UI = {
-  icons: require('./iconBase'),
-  log: require('./log'),
-  ns: require('./ns'),
-  store: require('./logic').solidLogicSingleton.store,
-  widgets: require('./widgets')
-}
-
-const utils = require('./utils')
-const $rdf = require('rdflib')
+const UI = { icons, log, ns, utils, widgets }
 
 // UI.widgets.renderTableViewPane
-module.exports = function renderTableViewPane (doc, options) {
+export function renderTableViewPane (doc, options) {
   const sourceDocument = options.sourceDocument
   const tableClass = options.tableClass
   const givenQuery = options.query
 
   const RDFS_LITERAL = 'http://www.w3.org/2000/01/rdf-schema#Literal'
   const ns = UI.ns
-  const kb = UI.store
+  const kb = store
   const rowsLookup = {} //  Persistent mapping of subject URI to dom TR
 
   // Predicates that are never made into columns:
@@ -109,8 +107,9 @@ module.exports = function renderTableViewPane (doc, options) {
   }
 
   // A specifically asked-for query
+  let table
   if (givenQuery) {
-    var table = renderTableForQuery(givenQuery)
+    table = renderTableForQuery(givenQuery)
     // lastQuery = givenQuery
     tableDiv.appendChild(table)
   } else {
@@ -159,13 +158,13 @@ module.exports = function renderTableViewPane (doc, options) {
     title.appendChild(doc.createTextNode('Edit SPARQL query'))
 
     var inputbox = doc.createElement('textarea')
-    inputbox.value = $rdf.queryToSPARQL(lastQuery)
+    inputbox.value = rdf.queryToSPARQL(lastQuery)
 
     dialog.appendChild(title)
     dialog.appendChild(inputbox)
 
     dialog.appendChild(createActionButton('Query', function () {
-      var query = $rdf.SPARQLToQuery(inputbox.value)
+      var query = rdf.SPARQLToQuery(inputbox.value)
       updateTable(query)
       closeDialog(dialog)
     }))
@@ -267,7 +266,7 @@ module.exports = function renderTableViewPane (doc, options) {
   // object.
 
   function generateQuery (type) {
-    const query = new $rdf.Query()
+    const query = new rdf.Query()
     const rowVar = kb.variable(keyVariable.slice(1)) // don't pass '?'
 
     addSelectToQuery(query, type)
@@ -1414,7 +1413,7 @@ module.exports = function renderTableViewPane (doc, options) {
         span.appendChild(doc.createTextNode(']'))
         return span
       } else {
-        return doc.createTextNode("unknown termtype '" + obj.termType + "'!")
+        return doc.createTextNode('unknown termtype \'' + obj.termType + '\'!')
       }
     }
   }
@@ -1440,7 +1439,7 @@ module.exports = function renderTableViewPane (doc, options) {
     for (let i = 0; i < columns.length; ++i) {
       const column = columns[i]
       const td = doc.createElement('td')
-      var orig
+      let orig
 
       const columnKey = column.getKey()
 

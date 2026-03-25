@@ -4,15 +4,15 @@
  * @packageDocumentation
  */
 
-import { fetcher, IndexedFormula, NamedNode, sym } from 'rdflib'
+import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
-import widgets from '../widgets'
+import * as widgets from '../widgets'
 import ns from '../ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
 import * as debug from '../debug'
-import { LiveStore } from 'pane-registry'
+import { style } from '../style'
 
 const ACL = ns.acl
 
@@ -51,7 +51,7 @@ export interface AccessGroupsOptions {
 
 /**
  * Renders the table of Owners, Editors, Posters, Submitters, Viewers
- * for https://github.com/solid/userguide/blob/main/views/sharing/userguide.md
+ * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 export class AccessGroups {
   private readonly defaults: boolean
@@ -59,27 +59,22 @@ export class AccessGroups {
   public aclMap: AgentMapMap
   private readonly addAgentButton: AddAgentButtons
   private readonly rootElement: HTMLElement
-  private _store: LiveStore
+  private _store: Store // @@ was LiveStore but does not need to be connected to web
 
   constructor (
     private doc: NamedNode,
     private aclDoc: NamedNode,
     public controller: AccessController,
-    store: IndexedFormula,
-    private options: AccessGroupsOptions = {}
+    store: Store, // @@ was LiveStore
+    private _options: AccessGroupsOptions = {}
   ) {
-    this.defaults = options.defaults || false
-    fetcher(store, {})
-
-    // The store will already have an updater at this point:
-    // store.updater = new UpdateManager(store)
-
-    this._store = store as LiveStore // TODO hacky, find a better solution
+    this.defaults = this._options.defaults || false
+    this._store = store
     this.aclMap = readACL(doc, aclDoc, store, this.defaults)
     this.byCombo = ACLbyCombination(this.aclMap)
     this.addAgentButton = new AddAgentButtons(this)
     this.rootElement = this.controller.dom.createElement('div')
-    this.rootElement.classList.add(this.controller.classes.accessGroupList)
+    this.rootElement.setAttribute('style', style.accessGroupList)
   }
 
   public get store () {
@@ -114,7 +109,7 @@ export class AccessGroups {
 
   private renderGroup (comboIndex: number, combo: string): HTMLElement {
     const groupRow = this.controller.dom.createElement('div')
-    groupRow.classList.add(this.controller.classes.accessGroupListItem)
+    groupRow.setAttribute('style', style.accessGroupListItem)
     widgets.makeDropTarget(groupRow, (uris) => this.handleDroppedUris(uris, combo)
       .then(() => this.controller.render())
       .catch(error => this.controller.renderStatus(error)))
@@ -125,13 +120,59 @@ export class AccessGroups {
 
   private renderGroupElements (comboIndex, combo): HTMLElement[] {
     const groupNameColumn = this.controller.dom.createElement('div')
-    groupNameColumn.classList.add(this.controller.classes.group)
-    groupNameColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupNameColumn.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      switch (comboIndex) {
+        case 1:
+          groupNameColumn.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupNameColumn.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupNameColumn.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupNameColumn.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupNameColumn.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupNameColumn.setAttribute('style', style.group13)
+          break
+        default:
+          groupNameColumn.setAttribute('style', style.group)
+      }
+    }
     groupNameColumn.innerText = COLLOQUIAL[comboIndex] || ktToList(comboIndex)
 
     const groupAgentsColumn = this.controller.dom.createElement('div')
-    groupAgentsColumn.classList.add(this.controller.classes.group)
-    groupAgentsColumn.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupAgentsColumn.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      switch (comboIndex) {
+        case 1:
+          groupAgentsColumn.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupAgentsColumn.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupAgentsColumn.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupAgentsColumn.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupAgentsColumn.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupAgentsColumn.setAttribute('style', style.group13)
+          break
+        default:
+          groupAgentsColumn.setAttribute('style', style.group)
+      }
+    }
     const groupAgentsTable = groupAgentsColumn.appendChild(this.controller.dom.createElement('table'))
     const combos = this.byCombo[combo] || []
     combos
@@ -139,8 +180,31 @@ export class AccessGroups {
       .forEach(agentElement => groupAgentsTable.appendChild(agentElement))
 
     const groupDescriptionElement = this.controller.dom.createElement('div')
-    groupDescriptionElement.classList.add(this.controller.classes.group)
-    groupDescriptionElement.classList.toggle(this.controller.classes[`group-${comboIndex}`], this.controller.isEditable)
+    groupDescriptionElement.setAttribute('style', style.group)
+    if (this.controller.isEditable) {
+      switch (comboIndex) {
+        case 1:
+          groupDescriptionElement.setAttribute('style', style.group1)
+          break
+        case 2:
+          groupDescriptionElement.setAttribute('style', style.group2)
+          break
+        case 3:
+          groupDescriptionElement.setAttribute('style', style.group3)
+          break
+        case 5:
+          groupDescriptionElement.setAttribute('style', style.group5)
+          break
+        case 9:
+          groupDescriptionElement.setAttribute('style', style.group9)
+          break
+        case 13:
+          groupDescriptionElement.setAttribute('style', style.group13)
+          break
+        default:
+          groupDescriptionElement.setAttribute('style', style.group)
+      }
+    }
     groupDescriptionElement.innerText = EXPLANATION[comboIndex] || 'Unusual combination'
 
     return [groupNameColumn, groupAgentsColumn, groupDescriptionElement]
@@ -186,7 +250,7 @@ export class AccessGroups {
     if (!agent && !secondAttempt) {
       debug.log(`   Not obvious: looking up dropped thing ${thing}`)
       try {
-        await this._store.fetcher.load(thing.doc())
+        await this._store?.fetcher?.load(thing.doc())
       } catch (error) {
         const message = `Ignore error looking up dropped thing: ${error}`
         debug.error(message)
@@ -194,7 +258,15 @@ export class AccessGroups {
       }
       return this.handleDroppedUri(uri, combo, true)
     } else if (!agent) {
-      const error = `   Error: Drop fails to drop appropriate thing! ${uri}`
+      const detectedTypes = Object.keys(this.store.findTypeURIs(thing))
+      const typeDetails = detectedTypes.length > 0
+        ? `Detected RDF types: ${detectedTypes.join(', ')}`
+        : 'No RDF type was detected for this URI.'
+      const error =
+        `Error: Failed to add access target: ${uri} is not a recognized ACL target type.` +
+        ` Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes.` +
+        ' Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.' +
+        typeDetails
       debug.error(error)
       return Promise.reject(new Error(error))
     }
@@ -256,7 +328,7 @@ function findAgent (uri, kb): PartialAgentTriple | null {
   // An Origin URI is one like https://fred.github.io eith no trailing slash
   if (uri.startsWith('http') && uri.split('/').length === 3) {
     // there is no third slash
-    return { pred: 'origin', obj: obj } // The only way to know an origin alas
+    return { pred: 'origin', obj } // The only way to know an origin alas
   }
   // @@ This is an almighty kludge needed because drag and drop adds extra slashes to origins
   if (
@@ -269,10 +341,10 @@ function findAgent (uri, kb): PartialAgentTriple | null {
     return { pred: 'origin', obj: sym(uri.slice(0, -1)) } // Fix a URI where the drag and drop system has added a spurious slash
   }
 
-  if (ns.vcard('WebID').uri in types) return { pred: 'agent', obj: obj }
+  if (ns.vcard('WebID').uri in types) return { pred: 'agent', obj }
 
   if (ns.vcard('Group').uri in types) {
-    return { pred: 'agentGroup', obj: obj } // @@ note vcard membership not RDFs
+    return { pred: 'agentGroup', obj } // @@ note vcard membership not RDFs
   }
   if (
     obj.sameTerm(ns.foaf('Agent')) ||
@@ -280,7 +352,7 @@ function findAgent (uri, kb): PartialAgentTriple | null {
     obj.sameTerm(ns.rdf('Resource')) ||
     obj.sameTerm(ns.owl('Thing'))
   ) {
-    return { pred: 'agentClass', obj: obj }
+    return { pred: 'agentClass', obj }
   }
   if (
     ns.vcard('Individual').uri in types ||
@@ -289,13 +361,13 @@ function findAgent (uri, kb): PartialAgentTriple | null {
   ) {
     const pref = kb.any(obj, ns.foaf('preferredURI'))
     if (pref) return { pred: 'agent', obj: sym(pref) }
-    return { pred: 'agent', obj: obj }
+    return { pred: 'agent', obj }
   }
   if (ns.solid('AppProvider').uri in types) {
-    return { pred: 'origin', obj: obj }
+    return { pred: 'origin', obj }
   }
   if (ns.solid('AppProviderClass').uri in types) {
-    return { pred: 'originClass', obj: obj }
+    return { pred: 'originClass', obj }
   }
   debug.log('    Triage fails for ' + uri)
   return null

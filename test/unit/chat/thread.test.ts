@@ -1,13 +1,9 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM } from 'jsdom'
-import thread from '../../../src/chat/thread'
+import { thread } from '../../../src/chat/thread'
 import { graph, sym } from 'rdflib'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document
 
 describe('Thread', () => {

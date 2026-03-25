@@ -1,40 +1,35 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import * as Index from '../../src/index'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 silenceDebugMessages()
 
 describe('Index', () => {
   it('exists', () => {
-    expect(Object.keys(Index)).toEqual([
-      'ns',
+    expect(Object.keys(Index).sort()).toEqual([
       'acl',
       'aclControl',
-      'authn',
       'create',
+      'createTypes',
+      'dom',
       'icons',
+      'infiniteMessageArea',
+      'initFooter',
+      'initHeader',
+      'language',
+      'log',
+      'login',
       'matrix',
       'media',
       'messageArea',
-      'infiniteMessageArea',
-      'preferences',
-      'solidLogicSingleton',
-      'style',
-      'table',
-      'utils',
-      'widgets',
-      'versionInfo',
-      'initHeader',
-      'dom',
-      'store',
-      'rdf',
-      'log',
+      'ns',
       'pad',
       'participation',
-      'tabs'
+      'preferences',
+      'style',
+      'table',
+      'tabs',
+      'utils',
+      'widgets'
     ])
   })
   // make sure none of them are undefined:

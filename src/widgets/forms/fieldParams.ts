@@ -1,5 +1,5 @@
 import ns from '../../ns'
-import { commentStyle, formHeadingStyle } from '../../style'
+import { style } from '../../style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute
@@ -28,6 +28,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
   [ns.ui('ColorField').uri]: {
     size: 9,
     type: 'color',
+    style: 'height: 3em;', // around 1.5em is padding
     dt: 'color',
     pattern: /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
   }, // https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/color
@@ -41,7 +42,7 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
 
   [ns.ui('DateTimeField').uri]: {
     size: 20,
-    type: 'date',
+    type: 'datetime-local', // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime
     dt: 'dateTime',
     pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
   },
@@ -55,21 +56,21 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
 
   [ns.ui('IntegerField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'integer',
     pattern: /^\s*-?[0-9]+\s*$/
   },
 
   [ns.ui('DecimalField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'decimal',
     pattern: /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
   },
 
   [ns.ui('FloatField').uri]: {
     size: 12,
-    style: 'text-align: right',
+    style: 'text-align: right;',
     dt: 'float',
     pattern: /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
   },
@@ -96,15 +97,19 @@ export const fieldParams: { [ fieldUri: string ]: FieldParamsObject } = {
     pattern: /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
   },
 
+  [ns.ui('Group').uri]: {
+    style: style.formGroupStyle
+  },
+
   /**
    * Non-interactive fields
    */
   [ns.ui('Comment').uri]: {
     element: 'p',
-    style: commentStyle // was `padding: 0.1em 1.5em; color: ${formHeadingColor}; white-space: pre-wrap;`
+    style: style.commentStyle
   },
   [ns.ui('Heading').uri]: {
     element: 'h3',
-    style: formHeadingStyle // was: `font-size: 110%; font-weight: bold; color: ${formHeadingColor}; padding: 0.2em;`
+    style: style.formHeadingStyle
   }
 }

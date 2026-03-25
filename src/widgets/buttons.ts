@@ -1,12 +1,17 @@
+/*  Buttons
+*/
 import { IndexedFormula, NamedNode, st, sym, uri, Util } from 'rdflib'
-import { iconBase, originalIconBase } from '../iconBase'
+import { icons } from '../iconBase'
 import ns from '../ns'
-import style from '../style'
+import { style } from '../style'
 import * as debug from '../debug'
 import { info } from '../log'
-import { getClasses } from '../jss'
-import { uploadFiles } from './dragAndDrop.js'
-import { solidLogicSingleton } from '../logic'
+import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
+import { store } from 'solid-logic'
+import * as utils from '../utils'
+import { errorMessageBlock } from './error'
+import { addClickListenerToElement, createImageDiv, wrapDivInATR } from './widgetHelpers'
+import { linkIcon, createLinkForURI } from './buttons/iconLinks'
 
 /**
  * UI Widgets such as buttons
@@ -15,12 +20,7 @@ import { solidLogicSingleton } from '../logic'
 
 /* global alert */
 
-const utils = require('../utils')
-
-const error = require('./error')
-const dragAndDrop = require('./dragAndDrop')
-
-const store = solidLogicSingleton.store
+const { iconBase } = icons
 
 const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
 const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
@@ -36,6 +36,19 @@ export type ButtonWidgetOptions = {
   buttonColor?: ButtonType,
   needsBorder?: boolean
 }
+
+export type RenderAsDivOptions = {
+  image?: HTMLImageElement,
+  title?: string,
+  deleteFunction?: () => void,
+  link?: boolean,
+  noun?: string,
+  draggable?: boolean,
+  clickable?: boolean,
+  onClickFunction?: () => void,
+  wrapInATR?: boolean
+}
+
 function getStatusArea (context?: StatusAreaContext) {
   let box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
@@ -62,7 +75,7 @@ export function complain (context?: StatusAreaContext, err?: string) {
   if (!err) return // only if error
   const ele = getStatusArea(context)
   debug.log('Complaint: ' + err)
-  if (ele) ele.appendChild(error.errorMessageBlock((context && context.dom) || document, err))
+  if (ele) ele.appendChild(errorMessageBlock((context && context.dom) || document, err))
   else alert(err)
 }
 
@@ -338,7 +351,7 @@ export function findImage (thing: NamedNode): string {
     kb.any(thing, ns.vcard('hasPhoto')) ||
     kb.any(thing, ns.vcard('photo')) ||
     kb.any(thing, ns.foaf('depiction'))
-  return image ? (image as any).uri : null
+  return image ? (image as any).uri : null as any
 }
 
 /**
@@ -435,6 +448,62 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   }
 }
 
+/* Two-option dialog pop-up
+*/
+
+function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFunction) {
+  function removePopup () {
+    refererenceElement.parentElement.removeChild(refererenceElement)
+  }
+  function removePopupAndDoDeletion () {
+    removePopup()
+    deleteFunction()
+  }
+  const popup = dom.createElement('div')
+  popup.style = style.confirmPopupStyle
+  popup.style.position = 'absolute'
+  popup.style.top = '-1em' // try leaving original button clear
+
+  popup.style.display = 'grid'
+  popup.style.gridTemplateColumns = 'auto auto'
+  const affirm = dom.createElement('div')
+  affirm.style.gridColumn = '1/2'
+  affirm.style.gridRow = '1' // @@ sigh; TS. could pass number in fact
+  const cancel = dom.createElement('div')
+  cancel.style.gridColumn = '1/2'
+  cancel.style.gridRow = '2'
+
+  const xButton = cancelButton(dom, removePopup)
+  popup.appendChild(xButton)
+  xButton.style.gridColumn = '1'
+  xButton.style.gridRow = '2'
+
+  const cancelPrompt = popup.appendChild(dom.createElement('button'))
+  cancelPrompt.style = style.buttonStyle
+  cancelPrompt.style.gridRow = '2'
+  cancelPrompt.style.gridColumn = '2'
+  cancelPrompt.textContent = 'Cancel' // @@ I18n
+
+  const affirmIcon = button(dom, icons.iconBase + 'noun_925021.svg', 'Delete it') // trashcan
+  popup.appendChild(affirmIcon)
+  affirmIcon.style.gridRow = '1'
+  affirmIcon.style.gridColumn = '1'
+
+  const sureButtonElt = popup.appendChild(dom.createElement('button'))
+  sureButtonElt.style = style.buttonStyle
+  sureButtonElt.style.gridRow = '1'
+  sureButtonElt.style.gridColumn = '2'
+  sureButtonElt.textContent = prompt
+  popup.appendChild(sureButtonElt)
+
+  affirmIcon.addEventListener('click', removePopupAndDoDeletion)
+  sureButtonElt.addEventListener('click', removePopupAndDoDeletion)
+
+  // xButton.addEventListener('click', removePopup)
+  cancelPrompt.addEventListener('click', removePopup)
+
+  return popup
+}
 /**
  * Delete button with a check you really mean it
  * @@ Supress check if command key held down?
@@ -445,98 +514,30 @@ export function deleteButtonWithCheck (
   noun: string,
   deleteFunction: () => any
 ) {
+  function createPopup () {
+    const refererenceElement = dom.createElement('div')
+    container.insertBefore(refererenceElement, deleteButton)
+    refererenceElement.style.position = 'relative' // Needed as reference for popup
+    refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction))
+  }
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
+  const deleteButton = dom.createElement('img')
+  deleteButton.setAttribute('src', minusIconURI)
 
-  // var delButton = dom.createElement('button')
+  deleteButton.setAttribute('style', style.smallButtonStyle) // @@tsc - would set deleteButton.style
+  deleteButton.style.float = 'right' // Historically this has alwaus floated right
 
-  const img = dom.createElement('img')
-  img.setAttribute('src', minusIconURI) //  plus sign
-  img.setAttribute('style', 'margin: 0.2em; width: 1em; height:1em')
-  img.title = 'Remove this ' + noun
-  const deleteButtonElt = img
+  const prompt = 'Remove this ' + noun
+  deleteButton.title = prompt
+  // @@ In an ideal world, make use of hover an accessibility option
+  deleteButton.classList.add('hoverControlHide')
 
-  container.appendChild(deleteButtonElt)
-  container.setAttribute('class', 'hoverControl') // See tabbedtab.css (sigh global CSS)
-  deleteButtonElt.setAttribute('class', 'hoverControlHide')
-  // delButton.setAttribute('style', 'color: red; margin-right: 0.3em; foat:right; text-align:right')
-  deleteButtonElt.addEventListener(
-    'click',
-    function (_event) {
-      container.removeChild(deleteButtonElt) // Ask -- are you sure?
-      const cancelButtonElt = dom.createElement('button')
-      // cancelButton.textContent = 'cancel'
-      cancelButtonElt.setAttribute('style', style.buttonStyle)
-      const img = cancelButtonElt.appendChild(dom.createElement('img'))
-      img.setAttribute('src', cancelIconURI)
-      img.setAttribute('style', style.buttonStyle)
+  deleteButton.addEventListener('click', createPopup)
 
-      container.appendChild(cancelButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          container.removeChild(sureButtonElt)
-          container.removeChild(cancelButtonElt)
-          container.appendChild(deleteButtonElt)
-        },
-        false
-      )
-      const sureButtonElt = dom.createElement('button')
-      sureButtonElt.textContent = 'Delete ' + noun
-      sureButtonElt.setAttribute('style', style.buttonStyle)
-      container.appendChild(sureButtonElt).addEventListener(
-        'click',
-        function (_event) {
-          container.removeChild(sureButtonElt)
-          container.removeChild(cancelButtonElt)
-          deleteFunction()
-        },
-        false
-      )
-    },
-    false
-  )
-  return deleteButtonElt
-}
-
-/**
- * Get the button style, based on options.
- * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
- */
-function getButtonStyle (options: ButtonWidgetOptions = {}) {
-  // default to primary color
-  const color: string = (options.buttonColor === 'Secondary') ? '#01c9ea' : '#7c4dff'
-  let backgroundColor: string = color
-  let fontColor: string = '#ffffff'
-  let borderColor: string = color
-  // default to primary color
-  let hoverBackgroundColor: string = (options.buttonColor === 'Secondary') ? '#37cde6' : '#9f7dff'
-  let hoverFontColor: string = fontColor
-  if (options.needsBorder) {
-    backgroundColor = '#ffffff'
-    fontColor = color
-    borderColor = color
-    hoverBackgroundColor = color
-    hoverFontColor = backgroundColor
-  }
-
-  return {
-    'background-color': `${backgroundColor}`,
-    color: `${fontColor}`,
-    'font-family': 'Raleway, Roboto, sans-serif',
-    'border-radius': '0.25em',
-    'border-color': `${borderColor}`,
-    border: '1px solid',
-    cursor: 'pointer',
-    'font-size': '.8em',
-    'text-decoration': 'none',
-    padding: '0.5em 4em',
-    transition: '0.25s all ease-in-out',
-    outline: 'none',
-    '&:hover': {
-      'background-color': `${hoverBackgroundColor}`,
-      color: `${hoverFontColor}`,
-      transition: '0.25s all ease-in-out'
-    }
-  }
+  container.classList.add('hoverControl')
+  container.appendChild(deleteButton)
+  deleteButton.setAttribute('data-testid', 'deleteButtonWithCheck')
+  return deleteButton // or button div?  caller may change size of image
 }
 
 /*  Make a button
@@ -549,7 +550,7 @@ function getButtonStyle (options: ButtonWidgetOptions = {}) {
  * @returns <dDomElement> - the button
  */
 export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
-  handler?: (event: any) => void,
+  handler?: (_event: any) => void,
   options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
   const button = dom.createElement('button')
   button.setAttribute('type', 'button')
@@ -562,13 +563,53 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
     button.setAttribute('style', style.buttonStyle)
   } else {
     button.textContent = text.toLocaleUpperCase()
-    const style = getButtonStyle(options)
-    const { classes } = getClasses(dom.head, {
-      textButton: style
-    })
 
-    button.classList.add(classes.textButton)
+    button.onmouseover = function () {
+      if (options.buttonColor === 'Secondary') {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.secondaryButtonNoBorderHover)
+        } else {
+          button.setAttribute('style', style.secondaryButtonHover)
+        }
+      } else {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.primaryButtonNoBorderHover)
+        } else {
+          button.setAttribute('style', style.primaryButtonHover)
+        }
+      }
+    }
+    button.onmouseout = function () {
+      if (options.buttonColor === 'Secondary') {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.secondaryButtonNoBorder)
+        } else {
+          button.setAttribute('style', style.secondaryButton)
+        }
+      } else {
+        if (options.needsBorder) {
+          button.setAttribute('style', style.primaryButtonNoBorder)
+        } else {
+          button.setAttribute('style', style.primaryButton)
+        }
+      }
+    }
+
+    if (options.buttonColor === 'Secondary') {
+      if (options.needsBorder) {
+        button.setAttribute('style', style.secondaryButtonNoBorder)
+      } else {
+        button.setAttribute('style', style.secondaryButton)
+      }
+    } else {
+      if (options.needsBorder) {
+        button.setAttribute('style', style.primaryButtonNoBorder)
+      } else {
+        button.setAttribute('style', style.primaryButton)
+      }
+    }
   }
+
   if (handler) {
     button.addEventListener('click', handler, false)
   }
@@ -582,8 +623,12 @@ export function button (dom: HTMLDocument, iconURI: string | undefined, text: st
  *
  * @returns <dDomElement> - the button
  */
-export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) {
-  return button(dom, cancelIconURI, 'Cancel', handler)
+export function cancelButton (dom: HTMLDocument, handler: (_event?: any) => void) {
+  const b = button(dom, cancelIconURI, 'Cancel', handler)
+  if (b.firstChild) { // sigh for tsc
+    (b.firstChild as HTMLElement).style.opacity = '0.3' // Black X is too harsh: current language is grey X
+  }
+  return b
 }
 
 /*  Make a continue button
@@ -593,7 +638,7 @@ export function cancelButton (dom: HTMLDocument, handler: (event: any) => void) 
  *
  * @returns <dDomElement> - the button
  */
-export function continueButton (dom: HTMLDocument, handler: (event: any) => void) {
+export function continueButton (dom: HTMLDocument, handler: (_event: any) => void) {
   return button(dom, checkIconURI, 'Continue', handler)
 }
 
@@ -610,7 +655,6 @@ export function askName (
   predicate?: NamedNode,
   theClass?: NamedNode,
   noun?: string) {
-  // eslint-disable-next-line promise/param-names
   return new Promise(function (resolve, _reject) {
     const form = dom.createElement('div') // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
@@ -652,27 +696,6 @@ export function askName (
     }))
     namefield.focus()
   }) // Promise
-}
-
-// ////////////////////////////////////////////////////////////////
-
-/**
- * A little link icon
- */
-export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: string): HTMLElement {
-  const anchor = dom.createElement('a')
-  anchor.setAttribute('href', subject.uri)
-  if (subject.uri.startsWith('http')) {
-    // If diff web page
-    anchor.setAttribute('target', '_blank') // open in a new tab or window
-  } // as mailboxes and mail messages do not need new browser window
-  const img = anchor.appendChild(dom.createElement('img'))
-  img.setAttribute(
-    'src',
-    iconURI || originalIconBase + 'go-to-this.png'
-  )
-  img.setAttribute('style', 'margin: 0.3em;')
-  return anchor
 }
 
 /**
@@ -717,11 +740,74 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
     if (options.draggable !== false) {
       // default is on
       image.setAttribute('draggable', 'false') // Stop the image being dragged instead - just the TR
-      dragAndDrop.makeDraggable(tr, obj)
+      makeDraggable(tr, obj)
     }
   }
   ;(tr as any).subject = obj
   return tr
+}
+
+/* A helper function for renderAsDiv
+*  creates the NameDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+*  @internal exporting this only for unit tests
+*/
+export function createNameDiv (dom: HTMLDocument, div: HTMLDivElement, title: string | undefined, obj: NamedNode) {
+  const nameDiv = div.appendChild(dom.createElement('div'))
+  if (title) {
+    nameDiv.textContent = title
+  } else {
+    setName(nameDiv, obj) // This is async
+  }
+}
+/* A helper function for renderAsDiv
+*  creates the linkDiv for the person
+*  Note: could not move it to the helper file because they call exported functions
+*  from buttons
+* @internal exporting this only for unit tests
+*/
+export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: NamedNode, options: RenderAsDivOptions) {
+  const linkDiv = div.appendChild(dom.createElement('div'))
+  linkDiv.setAttribute('style', style.linkDivStyle)
+
+  if (options.deleteFunction) {
+    deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction)
+  }
+
+  if (obj.uri) {
+    // blank nodes need not apply
+    if (options.link !== false) {
+      createLinkForURI(dom, linkDiv, obj)
+    }
+
+    makeDraggable(div, obj)
+  }
+}
+/**
+ * A Div to represent a draggable person, etc in a list
+ * configurable to add an onClick listener
+ */
+export function renderAsDiv (dom: HTMLDocument, obj: NamedNode, options: RenderAsDivOptions): HTMLElement {
+  const div = dom.createElement('div')
+  div.setAttribute('style', style.renderAsDivStyle)
+
+  options = options || {}
+  const image = options.image || faviconOrDefault(dom, obj)
+  createImageDiv(dom, div, image)
+  createNameDiv(dom, div, options.title, obj)
+  createLinkDiv(dom, div, obj, options)
+
+  if (options.clickable && options.onClickFunction) {
+    addClickListenerToElement(div, options.onClickFunction)
+  }
+
+  // to be compatible with the SolidOS table layout
+  if (options.wrapInATR) {
+    const tr = wrapDivInATR(dom, div, obj)
+    return tr
+  }
+  return div
 }
 
 /**
@@ -779,7 +865,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
 
   function createNewRow (target) {
     const theTarget = target
-    const opt: any = { noun: noun }
+    const opt: any = { noun }
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)
@@ -864,8 +950,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     // paperclip.style = buttonStyle // @@ needed?  default has white background
     attachmentLeft.appendChild(paperclip)
     const fhandler = options.uploadFolder ? droppedFileHandler : null
-    dragAndDrop.makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
-    dragAndDrop.makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
+    makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
 
     if (options.uploadFolder) { // Addd an explicit file upload button as well
       const buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler)
@@ -893,6 +979,7 @@ export function openHrefInOutlineMode (e: Event) {
   const dom = window.document
   if ((dom as any).outlineManager) {
     // @@ TODO Remove the use of document as a global object
+    // TODO fix dependency cycle to solid-panes by calling outlineManager
     ;(dom as any).outlineManager.GotoSubject(store.sym(uri), true, undefined, true, undefined)
   } else if (window && (window as any).panes && (window as any).panes.getOutliner) {
     // @@ TODO Remove the use of window as a global object
@@ -910,7 +997,7 @@ export function openHrefInOutlineMode (e: Event) {
  *
  * @@ Todo: make it a personal preference.
  */
-export function defaultAnnotationStore (subject) {
+export function defaultAnnotationStore (subject:NamedNode):NamedNode | undefined {
   if (subject.uri === undefined) return undefined
   let s = subject.uri
   if (s.slice(0, 7) !== 'http://') return undefined
@@ -1012,6 +1099,7 @@ export function linkButton (dom: HTMLDocument, object: NamedNode): HTMLElement {
   b.textContent = 'Goto ' + utils.label(object)
   b.addEventListener('click', function (_event) {
     // b.parentNode.removeChild(b)
+    // TODO fix dependency cycle to solid-panes by calling outlineManager
     ;(dom as any).outlineManager.GotoSubject(object, true, undefined, true, undefined)
   }, true)
   return b
@@ -1075,8 +1163,8 @@ export function selectorPanel (
   inverse: boolean,
   possible: NamedNode[],
   options: { connectIcon?: string },
-  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
-  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
+  callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void,
+  linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void
 ) {
   return selectorPanelRefresh(
     dom.createElement('div'),
@@ -1101,8 +1189,8 @@ export function selectorPanelRefresh (
   inverse: boolean,
   possible: NamedNode[],
   options: { connectIcon?: string },
-  callbackFunction: (x: NamedNode, e: Event, selected: boolean) => void,
-  linkCallback: (x: NamedNode, e: Event, inverse: boolean, setStyleFunction: () => void) => void
+  callbackFunction: (_x: NamedNode, _e: Event, _selected: boolean) => void,
+  linkCallback: (_x: NamedNode, _e: Event, _inverse: boolean, _setStyleFunction: () => void) => void
 ) {
   const style0 =
     'border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;'
@@ -1205,7 +1293,7 @@ function twoLineDefault (dom: HTMLDocument, x: NamedNode): HTMLElement {
  * Find a function that can create a widget for a given class
  * @param c The RDF class for which we want a widget generator function
  */
-function twoLineWidgetForClass (c: NamedNode): (dom: HTMLDocument, x: NamedNode) => HTMLElement {
+function twoLineWidgetForClass (c: NamedNode): (_dom: HTMLDocument, _x: NamedNode) => HTMLElement {
   let widget = index.twoLine[c.uri]
   const kb = store
   if (widget) return widget
@@ -1337,7 +1425,7 @@ export function isImage (file?: NamedNode, kind?: string): boolean {
 // See https://developer.mozilla.org/en-US/docs/Web/API/File/Using_files_from_web_applications
 export function fileUploadButtonDiv (
   dom: HTMLDocument,
-  droppedFileHandler: (files: FileList) => void
+  droppedFileHandler: (_files: FileList) => void
 ) {
   const div = dom.createElement('div')
   const input = div.appendChild(dom.createElement('input'))
@@ -1369,7 +1457,7 @@ export function fileUploadButtonDiv (
       }
     )
   )
-  dragAndDrop.makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
+  makeDropTarget(buttonElt, null, droppedFileHandler) // Can also just drop on button
   return div
 }
 

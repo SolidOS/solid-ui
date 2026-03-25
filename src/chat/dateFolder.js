@@ -1,18 +1,26 @@
 /**
  * Contains the [[DateFolder]] class
- * @packageDocumentation
+ * This tracks data stored in dated folders and sub-folders
+ *
  */
-
 import * as debug from '../debug'
+import { store } from 'solid-logic'
+import ns from '../ns'
+import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 
-const kb = require('../logic').solidLogicSingleton.store
-const ns = require('../ns.js')
-const $rdf = require('rdflib')
+export async function emptyLeaf (leafDocument) {
+  await store.fetcher.load(leafDocument)
+  // files can have seealso links. skip ones with no leafObjects with a date
+  return !(
+    store.statementsMatching(null, ns.dct('created'), null, leafDocument)
+      .length > 0
+  )
+}
 
 /**
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
-module.exports = class DateFolder {
+export class DateFolder {
   constructor (rootThing, leafFileName, membershipProperty) {
     this.root = rootThing
     this.rootFolder = rootThing.dir()
@@ -28,7 +36,7 @@ module.exports = class DateFolder {
     const isoDate = date.toISOString() // Like "2018-05-07T17:42:46.576Z"
     let path = isoDate.split('T')[0].replace(/-/g, '/') //  Like "2018/05/07"
     path = this.root.dir().uri + path + '/' + this.leafFileName
-    return kb.sym(path)
+    return store.sym(path)
   }
 
   /* Generate a date object from the leaf file name
@@ -39,12 +47,11 @@ module.exports = class DateFolder {
     // let date = new Date(str + 'Z') // GMT - but fails in FF - invalid format :-(
     const date = new Date(str) // not explicitly UTC but is assumed so in spec
     // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
-    debug.log('Date for ' + doc + ':' + date.toISOString())
+    // debug.log('Date for ' + doc + ':' + date.toISOString())
     return date
   }
 
   async loadPrevious (date, backwards) {
-    const thisDateFolder = this
     async function previousPeriod (file, level) {
       function younger (x) {
         if (backwards ? x.uri >= file.uri : x.uri <= file.uri) return false // later than we want or same -- looking for different
@@ -59,50 +66,67 @@ module.exports = class DateFolder {
         return true
       }
 
-      async function lastNonEmpty (siblings) {
+      function lastOrFirst (siblings) {
         siblings = siblings.filter(suitable)
         siblings.sort() // chronological order
         if (!backwards) siblings.reverse()
-        if (level !== 3) return siblings.pop() // only length chck final leverl
-        while (siblings.length) {
-          const folder = siblings.pop()
-          const leafDocument = kb.sym(folder.uri + thisDateFolder.leafFileName)
-          await kb.fetcher.load(leafDocument)
-          // files can have seealso links. skip ones with no leafObjects with a date
-          if (
-            kb.statementsMatching(null, ns.dct('created'), null, leafDocument)
-              .length > 0
-          ) {
-            return folder
-          }
-        }
-        return null
+        return siblings.pop() // date folder
       }
       // debug.log('  previousPeriod level' + level + ' file ' + file)
       const parent = file.dir()
-      await kb.fetcher.load(parent)
-      let siblings = kb.each(parent, ns.ldp('contains'))
-      siblings = siblings.filter(younger)
-      const folder = await lastNonEmpty(siblings)
-      if (folder) return folder
-
-      if (level === 0) return null // 3:day, 2:month, 1: year  0: no
+      try {
+        await store.fetcher.load(parent)
+        let siblings = store.each(parent, ns.ldp('contains'))
+        siblings = siblings.filter(younger)
+        const folder = lastOrFirst(siblings)
+        if (folder) return folder
+        // debug.log(' parent no suitable offspring ' + parent)
+      } catch (err) {
+        if (err.response && err.response.status && err.response.status === 404) {
+          debug.log('Error 404 for chat parent file ' + parent)
+        } else {
+          debug.log('*** Error NON 404 for chat parent file ' + parent)
+          // statusTR.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+          throw (new Error(`*** ${err.message} for chat folder ${parent}`))
+        }
+      }
+      if (level === 0) {
+        // debug.log('loadPrevious:  returning as level is zero')
+        return null // 3:day, 2:month, 1: year  0: no
+      }
 
       const uncle = await previousPeriod(parent, level - 1)
-      if (!uncle) return null // reached first ever
-      await kb.fetcher.load(uncle)
-      const cousins = kb.each(uncle, ns.ldp('contains'))
-      const result = await lastNonEmpty(cousins)
+      if (!uncle) {
+        // debug.log('   previousPeriod: nothing left before. ', parent)
+        return null // reached first ever
+      }
+      await store.fetcher.load(uncle)
+      const cousins = store.each(uncle, ns.ldp('contains'))
+      const result = lastOrFirst(cousins)
+      // debug.log('   previousPeriod: returning cousins at level ' + level, cousins)
+      // debug.log('   previousPeriod: returning result at level ' + level, result)
+
       return result
     } // previousPeriod
 
-    const folder = this.leafDocumentFromDate(date).dir()
-    const found = await previousPeriod(folder, 3)
-    if (found) {
-      const doc = kb.sym(found.uri + this.leafFileName)
-      return this.dateFromLeafDocument(doc)
+    let folder = this.leafDocumentFromDate(date).dir()
+    while (true) {
+      const found = await previousPeriod(folder, 3)
+      if (found) {
+        const leafDocument = store.sym(found.uri + this.leafFileName)
+        const nextDate = this.dateFromLeafDocument(leafDocument)
+        if (!await emptyLeaf(leafDocument)) {
+          return nextDate
+        } else {
+          // debug.log('  loadPrevious: skipping empty ' + leafDocument)
+          date = nextDate
+          folder = this.leafDocumentFromDate(date).dir()
+          // debug.log('    loadPrevious: moved back to ' + folder)
+        }
+      } else {
+        return null // no more left
+      }
     }
-    return null
   } // loadPrevious
 
   async firstLeaf (backwards) {
@@ -118,7 +142,7 @@ module.exports = class DateFolder {
         if (!'0123456789'.includes(tail[0])) return false // not numeric
         return true
       }
-      debug.log('            parent ' + parent)
+      // debug.log('            parent ' + parent)
       delete folderFetcher.requested[parent.uri]
       // try {
       await folderFetcher.load(parent, { force: true }) // Force fetch as will have changed
@@ -158,9 +182,9 @@ module.exports = class DateFolder {
     ])
     sortMe.sort()
     if (backwards) sortMe.reverse()
-    debug.log(
+    /* debug.log(
       (backwards ? 'Latest' : 'Earliest') + ' leafObject is ' + sortMe[0][1]
-    )
+    ) */
     return sortMe[0][1]
   } // firstleafObject
 } // class

@@ -1,36 +1,32 @@
 /* Drag and drop common functionality
+ *
+ * It is easy to make something draggable, or to make it a drag target!
+ * Just call the functions below. In a Solid world, any part of the UI which
+ * represents one thing which has a URI, should be made draggable using makeDraggable.
+ * Any list of things should typically allow you to drag new members of the list
+ * onto it.
+ * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
+ * desktop. You may want to upload it into the pod.
  */
 import * as debug from '../debug'
-
-const mime = require('mime-types')
+import * as mime from 'mime-types'
+import { style } from '../style'
 
 /* global FileReader alert */
-module.exports = {
-  makeDropTarget: makeDropTarget,
-  makeDraggable: makeDraggable,
-  uploadFiles: uploadFiles
-}
-// const UI = require('../index.js') // this package
 
-function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
+export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragoverListener = function (e) {
-    e.preventDefault() // Neeed else drop does not work [sic]
+    e.preventDefault() // Need this; otherwise, drop does not work.
     e.dataTransfer.dropEffect = 'copy'
   }
 
   const dragenterListener = function (e) {
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
-    if (this.style) {
+    if (this.localStyle) {
       //  necessary not sure when
       if (!this.savedStyle) {
-        this.savedStyle = {}
-        this.savedStyle.border = this.style.border
-        this.savedStyle.backgroundColor = this.style.backgroundColor
-        this.savedStyle.borderRadius = this.style.borderRadius
+        this.savedStyle = style.dragEvent
       }
-      this.style.backgroundColor = '#ccc'
-      this.style.border = '0.25em dashed black'
-      this.style.borderRadius = '0.3em'
     }
 
     e.dataTransfer.dropEffect = 'link'
@@ -39,12 +35,9 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
   const dragleaveListener = function (e) {
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
-      this.style.border = this.savedStyle.border
-      this.style.backgroundColor = this.savedStyle.backgroundColor
-      this.style.borderRadius = this.savedStyle.borderRadius
+      this.localStyle = this.savedStyle
     } else {
-      this.style.backgroundColor = 'white'
-      this.style.border = '0em solid black'
+      this.localStyle = style.dropEvent
     }
   }
 
@@ -88,7 +81,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
       }
       if (uris === null && text && text.slice(0, 4) === 'http') {
         uris = text
-        debug.log("Waring: Poor man's drop: using text for URI") // chrome disables text/uri-list??
+        debug.log('Waring: Poor man\'s drop: using text for URI') // chrome disables text/uri-list??
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
@@ -99,7 +92,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     if (uris) {
       droppedURIHandler(uris)
     }
-    this.style.backgroundColor = 'white' // restore style
+    this.localStyle = style.restoreStyle // restore style
     return false
   } // dropListener
 
@@ -119,7 +112,7 @@ function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 //
 // Possibly later set the drag image too?
 //
-function makeDraggable (tr, obj) {
+export function makeDraggable (tr, obj) {
   tr.setAttribute('draggable', 'true') // Stop the image being dragged instead - just the TR
 
   tr.addEventListener(
@@ -170,7 +163,7 @@ function makeDraggable (tr, obj) {
 **                              With file object an final URI as params
 */
 
-function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
   for (let i = 0; files[i]; i++) {
     const f = files[i]
     debug.log(
@@ -206,7 +199,7 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
         } else {
           const extension = mime.extension(theFile.type)
           // Note not simple: eg .mp3 => audio/mpeg; .mpga => audio/mpeg; audio/mp3 => .mp3
-          if (!theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
+          if (extension && extension !== 'false' && !theFile.name.endsWith('.' + extension) && // Not already has preferred extension? and ...
             theFile.type !== mime.lookup(theFile.name)) { // the mime type of this ext is not the right one?
             suffix = '_.' + extension
             // console.log('MIME TYPE MISMATCH: ' + mime.lookup(theFile.name) + ': adding extension: ' + suffix)
@@ -223,8 +216,8 @@ function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
 
         fetcher
           .webOperation('PUT', destURI, {
-            data: data,
-            contentType: contentType
+            data,
+            contentType
           })
           .then(
             _response => {

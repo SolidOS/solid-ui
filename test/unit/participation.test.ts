@@ -1,17 +1,12 @@
-import widgets from '../../src/widgets'
+import * as widgets from '../../src/widgets'
 import { JSDOM } from 'jsdom'
 import * as participation from '../../src/pad'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
-
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
-describe('renderPartipants', () => {
+describe('renderParticipants', () => {
   it('exists', () => {
-    expect((participation as any).renderPartipants).toBeInstanceOf(Function)
+    expect((participation as any).renderParticipants).toBeInstanceOf(Function)
   })
   it('runs', () => {
     const table = dom.createElement('table')
@@ -21,7 +16,7 @@ describe('renderPartipants', () => {
     const me = 'webId'
     const options = {}
     expect(
-      (participation as any).renderPartipants(dom, table, padDoc, subject, me, options)
+      (participation as any).renderParticipants(dom, table, padDoc, subject, me, options)
     ).toMatchSnapshot()
   })
   it('returns without crashing when a person is not returned', () => {
@@ -34,7 +29,7 @@ describe('renderPartipants', () => {
     const me = 'webId'
     const options = {}
     expect(
-      (participation as any).renderPartipants(dom, table, padDoc, subject, me, options)
+      (participation as any).renderParticipants(dom, table, padDoc, subject, me, options)
     ).toMatchSnapshot()
   })
 })

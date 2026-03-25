@@ -1,0 +1,15 @@
+########### used for https://solidos.github.io/solid-ui/docs/form-examples/structures2.html #####
+
+@prefix : <#>.
+@prefix schema: <http://schema.org/>.
+@prefix solid: <http://www.w3.org/ns/solid/terms#>.
+@prefix wikidata: <http://www.wikidata.org/entity/>.
+
+wikidata:Q875914 schema:name "Kreischberg"@en.
+
+:org1
+    a schema:Corporation, wikidata:Q6881511;
+    schema:name "Kreischberg", "kreischberg";
+    schema:uri <https://www.nasa.gov>;
+    solid:publicId wikidata:Q875914 .
+

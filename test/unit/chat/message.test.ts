@@ -1,16 +1,49 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import {
   elementForImageURI,
   creatorAndDate,
   creatorAndDateHorizontal,
-  renderMessage
+  renderMessageRow
 } from '../../../src/chat/message'
+import { store } from 'solid-logic'
+
+const bindings = {
+  '?creator': {
+    value: {
+      termType: ''
+    }
+  },
+  '?date': {
+    value: ''
+  },
+  doc: () => '',
+  '?content': {
+    value: ''
+  },
+  sameTerm: () => ''
+}
+
+store.any = jest.fn()
+store.the = jest.fn()
+
+jest.mock('../../../src/widgets', () => {
+  const originalModule = jest.requireActual('../../../src/widgets')
+  return {
+    __esModule: true,
+    ...originalModule,
+    setImage: () => '',
+    shortDate: () => ''
+  }
+})
+
+jest.mock('../../../src/chat/chatLogic', () => {
+  return {
+    mostRecentVersion: jest.fn(() => ''),
+    originalVersion: jest.fn(() => bindings)
+  }
+})
 
 silenceDebugMessages()
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 
 describe('elementForImageURI', () => {
   it('exists', () => {
@@ -62,33 +95,34 @@ describe('creatorAndDateHorizontal', () => {
   })
 })
 
-describe('renderMessage', () => {
-  it('exists', () => {
-    expect(renderMessage).toBeInstanceOf(Function)
+describe('renderMessageRow', () => {
+  it('exists', async () => {
+    expect(await renderMessageRow).toBeInstanceOf(Function)
   })
-  it.skip('runs', () => {
+  it.skip('runs', async () => {
+    // first store.any should return creator
+    // the second should return a date
+    // third shoudl return latestVersionCreator
+    // content
+    // signature
+    // created
+    //
+    /* @ts-ignore */
+    store.any.mockReturnValueOnce('creator')
+      .mockReturnValueOnce('date')
+      .mockReturnValueOnce('latestVersion')
+      .mockReturnValueOnce({ value: 'content' })
+      .mockReturnValueOnce('signature')
+      .mockReturnValueOnce('created')
+      /* @ts-ignore */
+    store.the.mockReturnValue('test')
     const messageTable = {
       appendChild: () => {}
     }
-    const bindings = {
-      '?creator': {
-        value: {
-          termType: ''
-        }
-      },
-      '?date': {
-        value: ''
-      },
-      '?msg': {
-        doc: () => ''
-      },
-      '?content': {
-        value: ''
-      }
-    }
+
     const fresh = {}
     const options = {}
     const userContext = {}
-    expect(renderMessage(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
+    expect(await renderMessageRow(messageTable, bindings, fresh, options, userContext)).toBeInstanceOf(HTMLTableRowElement)
   })
 })

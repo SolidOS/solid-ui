@@ -22,34 +22,33 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 
 If you would like to know more about the solid Solid project, please see
-https://github.com/solid/solid
+https://github.com/solidos/solid
 */
 'use strict'
 /**
  * Provides a Solid client helper object (which exposes various static modules).
- * @module solidUi.js
- * @main solidUi.js
+ * @module UI.js
+ * @main UI.js
  */
 
 /**
- * @class SolidUi
+ * @class UI
  * @static
  */
 
 // REMOVE @ts-ignore as you migrate files to TypeScript
-import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
 import ns from './ns'
 import { acl, aclControl } from './acl/index'
-import { authn } from './authn/index'
 import { create } from './create/index'
 // @ts-ignore
-import icons from './iconBase'
+import { icons } from './iconBase'
+import * as language from './widgets/forms/autocomplete/language'
 import * as log from './log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'
 // @ts-ignore
-import messageArea from './messageArea'
+import { messageArea } from './messageArea'
 // @ts-ignore
 import { infiniteMessageArea } from './chat/infinite'
 // @ts-ignore
@@ -57,34 +56,34 @@ import * as pad from './pad'
 // @ts-ignore
 import * as participation from './participation'
 // @ts-ignore
-import preferences from './preferences'
+import * as preferences from './preferences'
 // @ts-ignore
-import { solidLogicSingleton } from './logic'
+import { style } from './style'
 // @ts-ignore
-import style from './style'
-// @ts-ignore
-import table from './table'
+import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
-import utils from './utils'
-import widgets from './widgets'
-import versionInfo from './versionInfo'
+import * as utils from './utils'
+import * as login from './login/login'
+import * as widgets from './widgets/index'
 import { initHeader } from './header'
+import { initFooter } from './footer'
+import * as createTypes from './create/types'
 
 const dom = window ? window.document : null // Idea that UI.dom can be adapted in non-browser environments
-const store = solidLogicSingleton.store
 
 if (typeof window !== 'undefined') {
   ;(<any>window).UI = {
     ns,
-    rdf,
     acl,
     aclControl,
-    authn,
     create,
+    createTypes,
     dom,
     icons,
+    language,
     log,
+    login,
     matrix,
     media,
     messageArea,
@@ -92,28 +91,28 @@ if (typeof window !== 'undefined') {
     pad,
     participation,
     preferences,
-    solidLogicSingleton,
-    store,
     style,
     table,
     tabs,
     utils,
     widgets,
-    versionInfo,
-    initHeader
+    initHeader,
+    initFooter
   } // Simpler access by non-node scripts
 }
 
+// this variables are directly used in the storybook
 export {
   ns,
-  rdf,
   acl,
   aclControl,
-  authn,
   create,
+  createTypes,
   dom,
   icons,
+  language,
   log,
+  login,
   matrix,
   media,
   messageArea,
@@ -121,13 +120,13 @@ export {
   pad,
   participation,
   preferences,
-  solidLogicSingleton,
-  store,
   style,
   table,
   tabs,
   utils,
   widgets,
-  versionInfo,
-  initHeader
+  initHeader,
+  initFooter
 }
+// uses in solid-panes
+export type { CreateContext, NewAppInstanceOptions } from './create/types'

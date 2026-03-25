@@ -1,0 +1,22 @@
+import * as UI from '../../../src/index'
+import * as FormsStories from './Forms.stories';
+
+import { Canvas, Meta, Story } from '@storybook/blocks'
+
+<Meta of={FormsStories} />
+
+## appendForm
+
+### trivial / Comment field
+
+This example shows a trivial use of the `appendForm` function, in conjunction with a Comment field.
+
+<Canvas>
+  <Story of={FormsStories.TrivialCommentField} />
+</Canvas>
+
+### live
+
+<Canvas>
+  <Story of={FormsStories.Live} />
+</Canvas>

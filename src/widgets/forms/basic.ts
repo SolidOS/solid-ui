@@ -1,14 +1,39 @@
-import { st, BlankNode, Literal, Node, NamedNode, Variable } from 'rdflib'
-import { solidLogicSingleton } from '../../logic'
+import { BlankNode, Literal, NamedNode, Node, st, Store, Variable } from 'rdflib'
+import { solidLogicSingleton } from 'solid-logic'
 import ns from '../../ns'
-import { textInputStyle, textInputBackgroundColorUneditable, textInputStyleUneditable } from '../../style'
+import { style } from '../../style'
+import styleConstants from '../../styleConstants'
 import { label } from '../../utils'
-
 import { errorMessageBlock } from '../error'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 
 const store = solidLogicSingleton.store
+
+/*  Style and create a name, value pair
+*/
+export function renderNameValuePair (dom: HTMLDocument, kb: Store, box: HTMLElement, form: NamedNode, label?: string):HTMLElement {
+  // const property = kb.any(form, ns.ui('property'))
+  box.style.display = 'flex'
+  box.style.flexDirection = 'row'
+  const lhs = box.appendChild(dom.createElement('div'))
+  lhs.style.width = styleConstants.formFieldNameBoxWidth
+  const rhs = box.appendChild(dom.createElement('div'))
+
+  lhs.setAttribute('class', 'formFieldName')
+  lhs.setAttribute('style', style.formFieldNameBoxStyle)
+  rhs.setAttribute('class', 'formFieldValue')
+  if (label) {
+    lhs.appendChild(dom.createTextNode(label))
+  } else if (kb.any(form, ns.ui('property'))) { // Assume more space for error on right
+    lhs.appendChild(fieldLabel(dom, kb.any(form, ns.ui('property')) as NamedNode, form))
+  } else {
+    rhs.appendChild(errorMessageBlock(dom, 'No property or label given for form field: ' + form))
+    lhs.appendChild(dom.createTextNode('???'))
+  }
+  return rhs
+}
+
 /**
  * Create an anchor element with a label as the anchor text.
  *
@@ -75,7 +100,7 @@ export function fieldStore (subject: NamedNode | BlankNode | Variable, predicate
  *
  * @returns The HTML widget created
  */
-// eslint-disable-next-line complexity
+
 export function basicField (
   dom: HTMLDocument,
   container: HTMLElement | undefined,
@@ -83,49 +108,42 @@ export function basicField (
   subject: NamedNode | BlankNode | Variable,
   form: NamedNode,
   doc: NamedNode | undefined,
-  callbackFunction: (ok: boolean, errorMessage: string) => void
+  callbackFunction: (_ok: boolean, _errorMessage: string) => void
 ): HTMLElement {
   const kb = store
   const formDoc = form.doc ? form.doc() : null // @@ if blank no way to know
 
-  const box = dom.createElement('tr')
-  if (container) container.appendChild(box)
-  const lhs = dom.createElement('td')
-  lhs.setAttribute('class', 'formFieldName')
-  lhs.setAttribute('style', '  vertical-align: middle;')
-  box.appendChild(lhs)
-  const rhs = dom.createElement('td')
-  rhs.setAttribute('class', 'formFieldValue')
-  box.appendChild(rhs)
+  const box = dom.createElement('div')
 
   const property = kb.any(form, ns.ui('property'))
+  if (container) container.appendChild(box)
   if (!property) {
-    box.appendChild(
-      dom.createTextNode('Error: No property given for text field: ' + form)
+    return box.appendChild(
+      errorMessageBlock(dom, 'Error: No property given for text field: ' + form)
     )
-    return box
   }
+  const rhs = renderNameValuePair(dom, kb, box, form)
+
   // It can be cleaner to just remove empty fields if you can't edit them anyway
   const suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc)
 
-  lhs.appendChild(fieldLabel(dom, property as any, form))
   const uri = mostSpecificClassURI(form)
   let params = fieldParams[uri]
-  if (params === undefined) params = {} // non-bottom field types can do this
-  const style = params.style || textInputStyle
-  // box.appendChild(dom.createTextNode(' uri='+uri+', pattern='+ params.pattern))
+  if (params === undefined) params = { style: '' } // non-bottom field types can do this
+  const paramStyle = params.style || ''
+  const inputStyle = style.textInputStyle + paramStyle
   const field = dom.createElement('input')
-  ;(field as any).style = textInputStyle // Do we have to override length etc?
+  ;(field as any).style = inputStyle
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
+  const fieldType = (field.getAttribute('type') || '').toLowerCase()
+  const deferWhileFocused = fieldType === 'date' || fieldType === 'datetime-local'
 
-  const size = kb.any(form, ns.ui('size')) // Form has precedence
-  field.setAttribute(
-    'size',
-    size ? '' + size : params.size ? '' + params.size : '20'
-  )
+  const size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20
+  field.setAttribute('size', size)
+
   const maxLength = kb.any(form, ns.ui('maxLength'))
-  field.setAttribute('maxLength', maxLength ? '' + maxLength : '4096')
+  field.setAttribute('maxLength', maxLength ? '' + maxLength : styleConstants.basicMaxLength)
 
   doc = doc || fieldStore(subject, property as any, doc)
 
@@ -141,14 +159,13 @@ export function basicField (
     /* istanbul ignore next */
     field.value = obj.value || obj.value || ''
   }
-  field.setAttribute('style', style)
+  field.setAttribute('style', inputStyle)
   if (!kb.updater) {
     throw new Error('kb has no updater')
   }
   if (!kb.updater.editable((doc as NamedNode).uri)) {
     field.readOnly = true // was: disabled. readOnly is better
-    ;(field as any).style = textInputStyleUneditable
-    // backgroundColor = textInputBackgroundColorUneditable
+    ;(field as any).style = style.textInputStyleUneditable + paramStyle
     if (suppressEmptyUneditable && field.value === '') {
       box.style.display = 'none' // clutter
     }
@@ -162,7 +179,7 @@ export function basicField (
       if (params.pattern) {
         field.setAttribute(
           'style',
-          style +
+          inputStyle +
             (field.value.match(params.pattern)
               ? 'color: green;'
               : 'color: red;')
@@ -174,10 +191,19 @@ export function basicField (
   field.addEventListener(
     'change',
     function (_e) {
+      if (deferWhileFocused && dom.activeElement === field) {
+        if (field.dataset) {
+          field.dataset.deferredChange = 'true'
+        }
+        return
+      }
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
-      field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
-      field.setAttribute('style', style + 'color: gray;') // pending
+      const disabledForSave = !deferWhileFocused
+      if (disabledForSave) {
+        field.disabled = true // See if this stops getting two dates from fumbling, e.g., the chrome datepicker.
+      }
+      field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
       if (params.namedNode) {
@@ -240,13 +266,30 @@ export function basicField (
       updateMany(ds, is as any, function (uri, ok, body) {
         // kb.updater.update(ds, is, function (uri, ok, body) {
         if (ok) {
-          field.disabled = false
-          field.setAttribute('style', style)
+          if (disabledForSave) {
+            field.disabled = false
+          }
+          field.setAttribute('style', inputStyle)
         } else {
           box.appendChild(errorMessageBlock(dom, body))
         }
         callbackFunction(ok, body)
       })
+    },
+    true
+  )
+  field.addEventListener(
+    'blur',
+    function (_e) {
+      if (
+        deferWhileFocused &&
+        field.dataset &&
+        field.dataset.deferredChange === 'true'
+      ) {
+        delete field.dataset.deferredChange
+        const event = new Event('change', { bubbles: true })
+        field.dispatchEvent(event)
+      }
     },
     true
   )

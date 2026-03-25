@@ -1,22 +1,4 @@
-// Jest Snapshot v1, https://goo.gl/fbAQLP
-
-exports[`BooleanField runs 1`] = `
-<div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
->
-  No property to boolean field: &lt;http://example.com/#form&gt;
-</div>
-`;
-
-exports[`Classifier runs 1`] = `
-<span>
-  <div
-    style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
-  >
-    Can't do multiple selector with no subclasses of category: &lt;http://example.com/#bla&gt;
-  </div>
-</span>
-`;
+// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
 
 exports[`Comment runs 1`] = `
 <div>
@@ -28,7 +10,7 @@ exports[`Comment runs 1`] = `
 
 exports[`Form field runs 1`] = `
 <div
-  style="padding-left: 2em; border: 0.05em solid #888888;"
+  style="padding-left: 2em; border: 0.05em solid rgb(136, 136, 136); border-radius: 0.2em; display: flex; flex-direction: column;"
 />
 `;
 
@@ -44,8 +26,22 @@ exports[`Options field runs 1`] = `<div />`;
 
 exports[`TristateField runs 1`] = `
 <div
-  style="margin: 0.1em; padding: 0.5em; border: 0.05em solid gray; background-color: #fee; color:black;"
+  style="display: flex; flex-direction: row;"
 >
-  No property to boolean field: &lt;http://example.com/#form&gt;
+  <div
+    class="formFieldName"
+    style="padding: 0.3em; vertical-align: middle; width:8em;"
+  >
+    Fn
+  </div>
+  <div
+    class="formFieldValue"
+  >
+    <button
+      style="font-size: 150%; height: 1.2em; width: 1.2em; background-color: rgb(238, 238, 255); border-radius: 0.2em; margin: 0.1em;"
+    >
+      -
+    </button>
+  </div>
 </div>
 `;

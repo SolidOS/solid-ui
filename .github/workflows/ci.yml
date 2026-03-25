@@ -7,28 +7,27 @@ on:
   pull_request:
     branches:
       - main
+  workflow_dispatch:
 
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        node-version:
-          - 12.x
-          - 14.x
-          - 15.x
+        node-version: [22, 24]
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v6
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v1
+        uses: actions/setup-node@v6
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
       - run: npm test
+      - run: npm run build
       - run: npm run doc
       - name: Save build
-        if: matrix.node-version == '14.x'
-        uses: actions/upload-artifact@v2
+        if: matrix.node-version == 22
+        uses: actions/upload-artifact@v7
         with:
           name: build
           path: |
@@ -37,52 +36,58 @@ jobs:
           retention-days: 1
 
   gh-pages:
-    needs: test
+    needs: build
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v8
         with:
           name: build
-      - run: rm .gitignore
-      - uses: peaceiris/actions-gh-pages@v3
+      - uses: peaceiris/actions-gh-pages@v4
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: .
 
-  npm-publish-build:
-    needs: test
+  dependabot:
+    name: 'Dependabot'
+    needs: build # After the E2E and build jobs, if one of them fails, it won't merge the PR.
     runs-on: ubuntu-latest
+    if: ${{ github.actor == 'dependabot[bot]' && github.event_name == 'pull_request'}} # Detect that the PR author is dependabot
+    permissions:
+      contents: write
+      pull-requests: write
     steps:
-      - uses: actions/download-artifact@v2
-        with:
-          name: build
-      - uses: actions/setup-node@v1
-        with:
-          node-version: 14.x
-      - uses: rlespinasse/github-slug-action@v3.x
-      - name: Append commit hash to package version
-        run: 'sed -i -E "s/(\"version\": *\"[^\"]+)/\1-${GITHUB_SHA_SHORT}/" package.json'
-      - name: Disable pre- and post-publish actions
-        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: ${{ env.GITHUB_REF_SLUG }}
+      - name: Enable auto-merge for Dependabot PRs
+        run: gh pr merge --auto --merge "$PR_URL" # Use Github CLI to merge automatically the PR
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+
+  npm-publish-dev:
+    needs: build
+    uses: SolidOS/solidos/.github/workflows/publish-prerelease.yml@main
+    with:
+      node_version: 22
+
   npm-publish-latest:
-    needs: test
+    needs: [build]
     runs-on: ubuntu-latest
     if: github.ref == 'refs/heads/main'
+    permissions:
+      id-token: write  # Required for OIDC
+      contents: read
     steps:
-      - uses: actions/download-artifact@v2
+      - uses: actions/download-artifact@v8
         with:
           name: build
-      - uses: actions/setup-node@v1
+      - uses: actions/setup-node@v6
         with:
-          node-version: 14.x
+          node-version: 22
+          registry-url: 'https://registry.npmjs.org'
+      - name: Update npm to latest (required for OIDC)
+        run: npm install -g npm@latest
       - name: Disable pre- and post-publish actions
         run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
-      - uses: JS-DevTools/npm-publish@v1
-        with:
-          token: ${{ secrets.NPM_TOKEN }}
-          tag: latest
+      - name: Publish to npm
+        if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
+        run: npm publish --tag latest

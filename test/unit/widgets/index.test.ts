@@ -1,4 +1,4 @@
-import { silenceDebugMessages } from '../../helpers/setup'
+import { silenceDebugMessages } from '../helpers/debugger'
 import * as DragAndDrop from '../../../src/widgets/dragAndDrop'
 import * as Error from '../../../src/widgets/error'
 import * as Buttons from '../../../src/widgets/buttons'
@@ -8,10 +8,6 @@ import * as Index from '../../../src/widgets/index'
 
 silenceDebugMessages()
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
 describe('index', () => {
   it('contains all exports from DragAndDrop', () => {
     for (const k in DragAndDrop) {

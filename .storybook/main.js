@@ -1,23 +1,42 @@
-module.exports = {
-  stories: [
-    "../src/**/*.stories.@(js|jsx|ts|tsx|mdx)"
-  ],
+export default {
+  stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|ts|tsx)'],
+
   addons: [
-    "@storybook/addon-links",
-    "@storybook/addon-essentials"
+    '@storybook/addon-links',
+    '@storybook/addon-essentials',
+    '@storybook/addon-mdx-gfm',
+    '@storybook/addon-webpack5-compiler-swc'
   ],
-  webpackFinal: async (config) => {
-    config.externals = {
-      'fs': 'null',
-      'node-uuid': 'null',
-      'node-fetch': 'fetch',
-      'isomorphic-fetch': 'fetch',
-      'xmldom': 'window',
-      'text-encoding': 'TextEncoder',
-      'whatwg-url': 'window',
-      '@trust/webcrypto': 'crypto'
-    }
-    // Return the altered config
-    return config;
+
+  framework: {
+    name: '@storybook/html-webpack5',
+    options: {}
   },
-};
+
+  docs: {
+    autodocs: true
+  },
+  webpackFinal: async (config) => {
+    // For Storybook, we DON'T externalize rdflib and solid-logic
+    // Instead, we let webpack bundle them from node_modules
+
+    // Handle Node.js modules for browser
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      path: false,
+      fs: false,
+      crypto: false,
+      stream: false,
+      util: false,
+      buffer: false
+    }
+
+    // Alias $rdf to rdflib for solid-logic compatibility
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      $rdf: 'rdflib'
+    }
+
+    return config
+  }
+}

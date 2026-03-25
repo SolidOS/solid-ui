@@ -1,11 +1,10 @@
-import { silenceDebugMessages } from '../../helpers/setup'
-import * as Styles from '../../../src/acl/styles'
+import { silenceDebugMessages } from '../helpers/debugger'
+import { style } from '../../../src/style'
 
 silenceDebugMessages()
-jest.mock('solid-auth-client')
 
-describe('Styles', () => {
+describe('Style', () => {
   it('exists', () => {
-    expect(typeof Styles).toEqual('object')
+    expect(typeof style).toEqual('object')
   })
 })

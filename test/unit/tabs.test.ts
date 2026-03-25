@@ -1,18 +1,15 @@
-import { silenceDebugMessages } from '../helpers/setup'
+import { silenceDebugMessages } from './helpers/debugger'
 import { tabs } from '../../src/index'
 import { tabWidget } from '../../src/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { clearStore } from './helpers/clearStore'
 import { label } from '../../src/utils'
-import { solidLogicSingleton } from '../../src/logic'
-// @ts-ignore
-import { meeting, rdfs } from '../../src/ns'
+import { solidLogicSingleton } from 'solid-logic'
 
-jest.mock('solid-auth-client', () => ({
-  currentSession: () => Promise.resolve(),
-  trackSession: () => null
-}))
+// @ts-ignore
+import ns from '../../src/ns'
+
 const store = solidLogicSingleton.store
 
 silenceDebugMessages()
@@ -39,9 +36,9 @@ describe('tabWidget', () => {
 
   describe('minimal setup of options', () => {
     beforeAll(() => {
-      const predicate = meeting('toolList')
+      const predicate = ns.meeting('toolList')
       store.add(subject, predicate, new Collection([item1, item2]), subject.doc())
-      store.add(item1, rdfs('label'), lit('Item 1'), subject.doc())
+      store.add(item1, ns.rdfs('label'), lit('Item 1'), subject.doc())
 
       tabWidgetElement = tabs.tabWidget({
         dom,
@@ -126,7 +123,7 @@ describe('tabWidget', () => {
       tabWidgetElement = tabs.tabWidget({ backgroundColor: '#ff0000', ...minimalOptions })
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style['background-color']).toEqual('rgb(178, 0, 0)')
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style.color).toEqual('rgb(255, 255, 255)')
-      expect(tabWidgetElement.bodyContainer.querySelector('main').style['border-color']).toEqual('#b20000')
+      expect(tabWidgetElement.bodyContainer.querySelector('main').style['border-color']).toEqual('rgb(178, 0, 0)')
     })
 
     it('considers lighter colors and set color of text accordingly', () => {
@@ -158,7 +155,7 @@ describe('tabWidget', () => {
     afterAll(clearStore)
 
     it('allows for tabs to be fetched from triples instead of a collection', () => {
-      const predicate = meeting('toolList')
+      const predicate = ns.meeting('toolList')
       store.add(subject, predicate, item1, subject.doc())
       store.add(subject, predicate, item2, subject.doc())
       store.add(subject, predicate, item3, subject.doc())
@@ -226,9 +223,8 @@ describe('tabWidget', () => {
         expect(subject).toBe(item2)
       })
       tabWidgetElement = tabs.tabWidget({ renderTabSettings: renderTabSettingsSpy, ...minimalOptions })
-      const event = new window.Event('click');
-      (event as any).altKey = true // a bit of a hack, but works
-      tabWidgetElement.tabContainer.children[1].children[0].dispatchEvent(event)
+      const event = new window.Event('click')
+      tabWidgetElement.tabContainer.children[1].children[1].dispatchEvent(event)
       expect(renderTabSettingsSpy).toHaveBeenCalled()
     })
   })
@@ -242,7 +238,7 @@ describe('tabWidget', () => {
       tabWidgetElement = tabs.tabWidget({
         renderMain,
         renderTab,
-        selectedTab: item2.uri,
+        selectedTab: item2,
         ...minimalOptions
       })
     })
