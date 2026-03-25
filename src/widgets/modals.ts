@@ -12,16 +12,16 @@ export type ListItem = {
   link: string
 }
 
-// Two functions that need to be implemented to use the modal
-// When the user clicks the button, open the modal
+// Two functions that need to be implemented to use the modal.
+// When the user clicks the button, open the modal.
 /* Click handler on the button to display it.
 btn.onclick = function() {
   modal.style.display = "block";
 }
 
-// When the user clicks anywhere outside of the modal, close it
-Window click handler so that the modal will close
-even if the user doesn't click close
+// When the user clicks anywhere outside of the modal, close it.
+// Window click handler so that the modal will close
+// even if the user doesn't click close.
 window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
@@ -70,7 +70,7 @@ const createListItems = (dom: HTMLDocument, list: ListItem) => {
   const link: HTMLAnchorElement = dom.createElement('a')
   link.setAttribute('style', modalStyles.anchorStyle)
   link.href = list.link
-  link.innerHTML = list.label
+  link.textContent = list.label
   li.appendChild(link)
   return li
 }
@@ -84,8 +84,9 @@ const createUnOrderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
   })
   return ul
 }
-export const createWindow = (dom: HTMLDocument, listOfLinks: ListItem[], options: ModalWidgetStyleOptions) => {
-  const modal = createModal(dom, options)
+export const createWindow = (dom: HTMLDocument, listOfLinks: ListItem[], options?: ModalWidgetStyleOptions) => {
+  const modalOptions = (options ?? {}) as ModalWidgetStyleOptions
+  const modal = createModal(dom, modalOptions)
   const modalContent = createModalContent(dom)
   const closeButton = createCloseButton(dom)
   const ul = createUnOrderedList(dom, listOfLinks)

@@ -1,6 +1,6 @@
 /**
- * Get the button style, based on options.
- * See https://design.inrupt.com/atomic-core/?cat=Atoms#Buttons
+ * Get the modal styles, based on options such as position and background overlay.
+ * See https://design.inrupt.com/atomic-core/?cat=Organisms#Modals for modal design guidelines.
  */
 export type ModalWidgetStyleOptions = {
   topPosition?: string,
