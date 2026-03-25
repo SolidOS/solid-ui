@@ -41,7 +41,10 @@ const createModalContent = (dom: HTMLDocument) => {
 }
 
 const createCloseButton = (dom: HTMLDocument, modal: HTMLDivElement) => {
-  const closeButton: HTMLSpanElement = dom.createElement('span')
+  const closeButton: HTMLButtonElement = dom.createElement('button')
+  closeButton.setAttribute('type', 'button')
+  closeButton.setAttribute('aria-label', 'Close modal')
+  closeButton.textContent = 'x'
   closeButton.addEventListener('click', () => closeClickHandler(modal))
   closeButton.addEventListener('mouseenter', () => {
     closeButton.setAttribute('style', style.modalCloseStyleHover)
@@ -55,7 +58,6 @@ const createCloseButton = (dom: HTMLDocument, modal: HTMLDivElement) => {
   closeButton.addEventListener('blur', () => {
     closeButton.setAttribute('style', style.modalCloseStyle)
   })
-  closeButton.setAttribute('tabindex', '0')
   closeButton.setAttribute('style', style.modalCloseStyle)
   return closeButton
 }
@@ -71,7 +73,7 @@ const createListItems = (dom: HTMLDocument, list: ListItem) => {
   return li
 }
 
-const createUnOrderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
+const createUnorderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
   const ul: HTMLUListElement = dom.createElement('ul')
   ul.setAttribute('style', style.modalUnorderedListStyle)
   listOfLinks.forEach(list => {
@@ -80,12 +82,14 @@ const createUnOrderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
   })
   return ul
 }
-export const createWindow = (dom: HTMLDocument, listOfLinks: ListItem[], options: ModalWidgetStyleOptions) => {
+export const createListModal = (dom: HTMLDocument, listOfLinks: ListItem[], options: ModalWidgetStyleOptions) => {
   const modal = createModal(dom, options)
   const modalContent = createModalContent(dom)
   const closeButton = createCloseButton(dom, modal)
-  const ul = createUnOrderedList(dom, listOfLinks)
+  const ul = createUnorderedList(dom, listOfLinks)
   modalContent.appendChild(closeButton)
   modalContent.appendChild(ul)
   modal.appendChild(modalContent)
+
+  return modal
 }
