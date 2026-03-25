@@ -5,7 +5,8 @@
 export type ModalWidgetStyleOptions = {
   topPosition?: string,
   leftPosition?: string,
-  withGreyedBackground?: boolean
+  withGreyedBackground?: boolean,
+  ariaLabel?: string
 }
 
 export const getModalStyle = (options: ModalWidgetStyleOptions = {}) => {
