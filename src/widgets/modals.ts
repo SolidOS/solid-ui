@@ -23,11 +23,8 @@ window.onclick = function(event) {
   if (event.target == modal) {
     modal.style.display = "none";
   } */
-const closeClickHandler = () => {
-  const modal: HTMLDivElement | null = document.querySelector('.modal')
-  if (modal) {
-    modal.style.display = 'none'
-  }
+const closeClickHandler = (modal: HTMLDivElement) => {
+  modal.style.display = 'none'
 }
 
 const createModal = (dom: HTMLDocument, options: ModalWidgetStyleOptions) => {
@@ -43,9 +40,9 @@ const createModalContent = (dom: HTMLDocument) => {
   return modalContent
 }
 
-const createCloseButton = (dom: HTMLDocument) => {
+const createCloseButton = (dom: HTMLDocument, modal: HTMLDivElement) => {
   const closeButton: HTMLSpanElement = dom.createElement('span')
-  closeButton.addEventListener('click', closeClickHandler)
+  closeButton.addEventListener('click', () => closeClickHandler(modal))
   closeButton.addEventListener('mouseenter', () => {
     closeButton.setAttribute('style', style.modalCloseStyleHover)
   })
@@ -86,7 +83,7 @@ const createUnOrderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
 export const createWindow = (dom: HTMLDocument, listOfLinks: ListItem[], options: ModalWidgetStyleOptions) => {
   const modal = createModal(dom, options)
   const modalContent = createModalContent(dom)
-  const closeButton = createCloseButton(dom)
+  const closeButton = createCloseButton(dom, modal)
   const ul = createUnOrderedList(dom, listOfLinks)
   modalContent.appendChild(closeButton)
   modalContent.appendChild(ul)
