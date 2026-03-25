@@ -1,11 +1,8 @@
 import {
   ModalWidgetStyleOptions,
-  modalStyles,
-  getModalStyle,
-  getModalContentStyle,
-  getModalCloseStyle
+  getModalStyle
 } from './modalsStyle'
-import { getClasses } from '../jss'
+import { style } from '../style'
 
 export type ListItem = {
   label: string,
@@ -35,40 +32,42 @@ const closeClickHandler = () => {
 
 const createModal = (dom: HTMLDocument, options: ModalWidgetStyleOptions) => {
   const modal = dom.createElement('div')
-  const style = getModalStyle(options)
-  const { classes } = getClasses(dom.head, {
-    modal: style
-  })
-  modal.classList.add(classes.modal)
+  modal.classList.add('modal')
+  modal.setAttribute('style', getModalStyle(options))
   return modal
 }
 
 const createModalContent = (dom: HTMLDocument) => {
   const modalContent: HTMLDivElement = dom.createElement('div')
-  const style = getModalContentStyle()
-  const { classes } = getClasses(dom.head, {
-    modalContent: style
-  })
-  modalContent.classList.add(classes.modalContent)
+  modalContent.setAttribute('style', style.modalContentStyle)
   return modalContent
 }
 
 const createCloseButton = (dom: HTMLDocument) => {
   const closeButton: HTMLSpanElement = dom.createElement('span')
   closeButton.addEventListener('click', closeClickHandler)
-  const style = getModalCloseStyle()
-  const { classes } = getClasses(dom.head, {
-    close: style
+  closeButton.addEventListener('mouseenter', () => {
+    closeButton.setAttribute('style', style.modalCloseStyleHover)
   })
-  closeButton.classList.add(classes.close)
+  closeButton.addEventListener('mouseleave', () => {
+    closeButton.setAttribute('style', style.modalCloseStyle)
+  })
+  closeButton.addEventListener('focus', () => {
+    closeButton.setAttribute('style', style.modalCloseStyleFocus)
+  })
+  closeButton.addEventListener('blur', () => {
+    closeButton.setAttribute('style', style.modalCloseStyle)
+  })
+  closeButton.setAttribute('tabindex', '0')
+  closeButton.setAttribute('style', style.modalCloseStyle)
   return closeButton
 }
 
 const createListItems = (dom: HTMLDocument, list: ListItem) => {
   const li:HTMLLIElement = dom.createElement('li')
-  li.setAttribute('style', modalStyles.listItemStyle)
+  li.setAttribute('style', style.modalListItemStyle)
   const link: HTMLAnchorElement = dom.createElement('a')
-  link.setAttribute('style', modalStyles.anchorStyle)
+  link.setAttribute('style', style.modalAnchorStyle)
   link.href = list.link
   link.innerHTML = list.label
   li.appendChild(link)
@@ -77,7 +76,7 @@ const createListItems = (dom: HTMLDocument, list: ListItem) => {
 
 const createUnOrderedList = (dom: HTMLDocument, listOfLinks: ListItem[]) => {
   const ul: HTMLUListElement = dom.createElement('ul')
-  ul.setAttribute('style', modalStyles.unorderedListStyle)
+  ul.setAttribute('style', style.modalUnorderedListStyle)
   listOfLinks.forEach(list => {
     const li = createListItems(dom, list)
     ul.appendChild(li)
