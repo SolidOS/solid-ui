@@ -264,7 +264,7 @@ export class AccessGroups {
         : 'No RDF type was detected for this URI.'
       const error =
         `Error: Failed to add access target: ${uri} is not a recognized ACL target type.` +
-        ` Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes.` +
+        ' Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes.' +
         ' Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.' +
         typeDetails
       debug.error(error)
