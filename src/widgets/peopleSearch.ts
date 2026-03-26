@@ -18,7 +18,7 @@
  *   - Assumes that the user has a type index entry for vcard:AddressBook. If this assumption is not met, no address book contacts will be discovered.
  *
  */
-import { NamedNode, type LiveStore } from 'rdflib'
+import { NamedNode, graph, parse, type LiveStore } from 'rdflib'
 import ContactsModuleRdfLib, { type AddressBook } from '@solid-data-modules/contacts-rdflib'
 import * as debug from '../debug'
 import { ns } from '..'
@@ -26,6 +26,8 @@ import { ns } from '..'
 const PEOPLE_SEARCH_CONCURRENCY = 6
 const CONTACT_CARD_CONCURRENCY = 8
 const MAX_FOAF_DISTANCE = 3
+const CATALOG_URL = 'https://raw.githubusercontent.com/solid/catalog/refs/heads/main/catalog-data.ttl'
+const CATALOG_VOCAB = 'http://example.org#'
 let peopleSearchInstanceCounter = 0
 const addressBookListCache = new Map<string, Promise<string[]>>()
 const addressBookCache = new Map<string, Promise<AddressBook>>()
@@ -35,6 +37,68 @@ type PersonEntry = {
   name: string,
   webId: string,
   relationshipLabel: 'Friend' | 'People' | 'Contact'
+}
+
+const catalogTerm = function (localName: string): NamedNode {
+  return new NamedNode(`${CATALOG_VOCAB}${localName}`)
+}
+
+const fetchCatalogPeople = async function (): Promise<PersonEntry[]> {
+  if (typeof fetch !== 'function') {
+    return []
+  }
+
+  try {
+    const response = await fetch(CATALOG_URL, {
+      headers: {
+        accept: 'text/turtle'
+      }
+    })
+
+    if (!response.ok) {
+      debug.warn(`[Catalog] Failed to fetch ${CATALOG_URL}: ${response.status}`)
+      return []
+    }
+
+    const turtle = await response.text()
+    const store = graph()
+    parse(turtle, store, CATALOG_URL, 'text/turtle')
+
+    const personType = catalogTerm('Person')
+    const webIdPredicate = catalogTerm('webid')
+    const namePredicate = catalogTerm('name')
+    const catalogPeople = new Map<string, PersonEntry>()
+
+    const personStatements = store.statementsMatching(undefined, ns.rdf('type'), personType)
+    for (const statement of personStatements) {
+      const subject = statement.subject
+      const webIdNode = store.any(subject, webIdPredicate)
+      if (!webIdNode || webIdNode.termType !== 'NamedNode') {
+        continue
+      }
+
+      const webId = webIdNode.value
+      if (!webId) {
+        continue
+      }
+
+      const name = store.anyValue(subject, namePredicate)
+      if (!name) {
+        continue
+      }
+
+      catalogPeople.set(webId, {
+        name,
+        webId,
+        relationshipLabel: 'People'
+      })
+    }
+
+    return Array.from(catalogPeople.values())
+  } catch (error) {
+    debug.warn('[Catalog] Error fetching people from catalog:', error)
+    return []
+  }
 }
 
 export const createPeopleSearch = function (
@@ -528,6 +592,15 @@ export const createPeopleSearch = function (
     }
   }
 
+  const discoverCatalogPeople = async function (
+    onPerson: (person: PersonEntry) => void | Promise<void>
+  ) {
+    const catalogPeople = await fetchCatalogPeople()
+    for (const person of catalogPeople) {
+      await onPerson(person)
+    }
+  }
+
   let activeSearchId = 0
   let discoveryStarted = false
   let discoveryPromise: Promise<void> | null = null
@@ -569,7 +642,15 @@ export const createPeopleSearch = function (
         }
       })
 
-      const results = await Promise.allSettled([contactsPromise, peoplePromise])
+      const catalogPromise = discoverCatalogPeople(function (person) {
+        try {
+          renderPerson(person)
+        } catch (error) {
+          debug.error('[Discovery] Error in catalog callback:', error)
+        }
+      })
+
+      const results = await Promise.allSettled([contactsPromise, peoplePromise, catalogPromise])
       if (results.every(result => result.status === 'rejected')) {
         throw new Error('Unable to load contacts.')
       }

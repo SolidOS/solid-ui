@@ -5,6 +5,7 @@ import { createPeopleSearch } from '../../../src/widgets/peopleSearch'
 const mockListAddressBooks = jest.fn()
 const mockReadAddressBook = jest.fn()
 let bookCounter = 0
+let fetchMock: jest.Mock
 
 jest.mock('@solid-data-modules/contacts-rdflib', () => ({
   __esModule: true,
@@ -128,6 +129,12 @@ describe('createPeopleSearch', () => {
   beforeEach(() => {
     document.body.innerHTML = ''
     jest.clearAllMocks()
+    fetchMock = jest.fn().mockResolvedValue({
+      ok: false,
+      status: 404,
+      text: jest.fn().mockResolvedValue('')
+    })
+    ;(globalThis as any).fetch = fetchMock
     bookCounter += 1
     const defaultBookUri = `https://pod.example/address-book-${bookCounter}.ttl`
 
@@ -494,5 +501,34 @@ describe('createPeopleSearch', () => {
     await setSearchQuery(form, 'no-person-will-match-this')
 
     expect(liveRegion.textContent).toContain('No contacts match that name.')
+  })
+
+  it('includes people discovered from the Solid catalog', async () => {
+    mockListAddressBooks.mockResolvedValue({ publicUris: [], privateUris: [] })
+    fetchMock.mockResolvedValue({
+      ok: true,
+      status: 200,
+      text: jest.fn().mockResolvedValue(`
+        @prefix ex: <http://example.org#> .
+        @prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+        <https://catalog-person.example/profile/card#me> a ex:Person ;
+          ex:name "Catalog Person" ;
+          ex:webid <https://catalog-person.example/profile/card#me> ;
+          ex:modified "2025-10-12T16:39:56.789Z"^^xsd:dateTime .
+      `)
+    })
+
+    const kb = makeKb()
+    const me = new NamedNode('https://user-12.example/profile/card#me')
+
+    const form = createPeopleSearch(document, kb as any, me)
+    document.body.appendChild(form)
+
+    await openDropdown(form)
+
+    const catalogRow = rowFor(form, 'https://catalog-person.example/profile/card#me')
+    expect(catalogRow).not.toBeNull()
+    expect(rowLabel(catalogRow)).toBe('People')
   })
 })
