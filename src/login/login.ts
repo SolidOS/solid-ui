@@ -1047,10 +1047,15 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
+  const currentUser = authn.currentUser()
+  if (!currentUser) {
+    return []
+  }
+
   try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError)
+      return []
     }
     return solidLogicSingleton.store.each(
       me,
