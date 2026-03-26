@@ -1055,7 +1055,7 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
     const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError)
+      throw new Error(preferencesFileError || 'Unable to load user preferences file.')
     }
     return solidLogicSingleton.store.each(
       me,
