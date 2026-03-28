@@ -11,6 +11,191 @@
 return /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
+/***/ 423
+(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   R8: () => (/* binding */ warn),
+/* harmony export */   Rm: () => (/* binding */ log),
+/* harmony export */   uP: () => (/* binding */ trace),
+/* harmony export */   z3: () => (/* binding */ error)
+/* harmony export */ });
+function log() {
+  var _console;
+  (_console = console).log.apply(_console, arguments);
+}
+function warn() {
+  var _console2;
+  (_console2 = console).warn.apply(_console2, arguments);
+}
+function error() {
+  var _console3;
+  (_console3 = console).error.apply(_console3, arguments);
+}
+function trace() {
+  var _console4;
+  (_console4 = console).trace.apply(_console4, arguments);
+}
+
+/***/ },
+
+/***/ 378
+(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   LN: () => (/* binding */ iconBase),
+/* harmony export */   Pt: () => (/* binding */ icons),
+/* harmony export */   i1: () => (/* binding */ originalIconBase)
+/* harmony export */ });
+/* harmony import */ var _debug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(423);
+/* module decorator */ module = __webpack_require__.hmd(module);
+// Works in FF extension - what about browserify??
+// 2021-04-08 Convert to TS
+
+/* The Firefox case is left for historical record, as we don't currenly
+ * have a FF extension for mashlib, but we could.  This is sthepoint to
+ * hack the place it can find its icons internally
+ *
+ * The $SolidTestEnvironment is important and is used for
+ * example when testing on localhost to specify a place the icons be found
+ * in your test set up.
+ *
+ * You can also use it if you want to just run a mashlib whhich takes its
+ * icons seved by other than github.
+ */
+
+
+// Do not export. Always us this module to find the icons, as they vary
+var iconsOnGithub = 'https://solidos.github.io/solid-ui/src'; // changed org 2022-05
+
+var icons = module.scriptURI // Firefox extension
+? {
+  iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/',
+  originalIconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
+} : typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase // Test environemnt
+? {
+  iconBase: $SolidTestEnvironment.iconBase,
+  originalIconBase: $SolidTestEnvironment.originalIconBase
+} : {
+  // Normal case:
+  iconBase: iconsOnGithub + '/icons/',
+  originalIconBase: iconsOnGithub + '/originalIcons/'
+};
+(0,_debug__WEBPACK_IMPORTED_MODULE_0__/* .log */ .Rm)('   icons.iconBase is set to : ' + icons.iconBase);
+
+// allow tests etc  named-import this directly from this module
+var iconBase = icons.iconBase;
+var originalIconBase = icons.originalIconBase;
+
+/***/ },
+
+/***/ 580
+(module) {
+
+"use strict";
+/*!
+ * escape-html
+ * Copyright(c) 2012-2013 TJ Holowaychuk
+ * Copyright(c) 2015 Andreas Lubbe
+ * Copyright(c) 2015 Tiancheng "Timothy" Gu
+ * MIT Licensed
+ */
+
+
+
+/**
+ * Module variables.
+ * @private
+ */
+
+var matchHtmlRegExp = /["'&<>]/;
+
+/**
+ * Module exports.
+ * @public
+ */
+
+module.exports = escapeHtml;
+
+/**
+ * Escape special characters in the given string of html.
+ *
+ * @param  {string} string The string to escape for inserting into HTML
+ * @return {string}
+ * @public
+ */
+
+function escapeHtml(string) {
+  var str = '' + string;
+  var match = matchHtmlRegExp.exec(str);
+
+  if (!match) {
+    return str;
+  }
+
+  var escape;
+  var html = '';
+  var index = 0;
+  var lastIndex = 0;
+
+  for (index = match.index; index < str.length; index++) {
+    switch (str.charCodeAt(index)) {
+      case 34: // "
+        escape = '&quot;';
+        break;
+      case 38: // &
+        escape = '&amp;';
+        break;
+      case 39: // '
+        escape = '&#39;';
+        break;
+      case 60: // <
+        escape = '&lt;';
+        break;
+      case 62: // >
+        escape = '&gt;';
+        break;
+      default:
+        continue;
+    }
+
+    if (lastIndex !== index) {
+      html += str.substring(lastIndex, index);
+    }
+
+    lastIndex = index + 1;
+    html += escape;
+  }
+
+  return lastIndex !== index
+    ? html + str.substring(lastIndex, index)
+    : html;
+}
+
+
+/***/ },
+
+/***/ 598
+(module, __unused_webpack_exports, __webpack_require__) {
+
+/*!
+ * mime-db
+ * Copyright(c) 2014 Jonathan Ong
+ * Copyright(c) 2015-2022 Douglas Christopher Wilson
+ * MIT Licensed
+ */
+
+/**
+ * Module exports.
+ */
+
+module.exports = __webpack_require__(813)
+
+
+/***/ },
+
 /***/ 49
 (__unused_webpack_module, exports, __webpack_require__) {
 
@@ -230,88 +415,67 @@ function _preferredTypeLegacy (ext, type0, type1) {
 
 /***/ },
 
-/***/ 172
+/***/ 983
 (module) {
 
-function _OverloadYield(e, d) {
-  this.v = e, this.k = d;
+// 'mime-score' back-ported to CommonJS
+
+// Score RFC facets (see https://tools.ietf.org/html/rfc6838#section-3)
+var FACET_SCORES = {
+  'prs.': 100,
+  'x-': 200,
+  'x.': 300,
+  'vnd.': 400,
+  default: 900
 }
-module.exports = _OverloadYield, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
-/***/ },
-
-/***/ 264
-(module) {
-
-"use strict";
-module.exports = __WEBPACK_EXTERNAL_MODULE__264__;
-
-/***/ },
-
-/***/ 373
-(module) {
-
-function _regeneratorKeys(e) {
-  var n = Object(e),
-    r = [];
-  for (var t in n) r.unshift(t);
-  return function e() {
-    for (; r.length;) if ((t = r.pop()) in n) return e.value = t, e.done = !1, e;
-    return e.done = !0, e;
-  };
+// Score mime source (Logic originally from `jshttp/mime-types` module)
+var SOURCE_SCORES = {
+  nginx: 10,
+  apache: 20,
+  iana: 40,
+  default: 30 // definitions added by `jshttp/mime-db` project?
 }
-module.exports = _regeneratorKeys, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
-/***/ },
+var TYPE_SCORES = {
+  // prefer application/xml over text/xml
+  // prefer application/rtf over text/rtf
+  application: 1,
 
-/***/ 378
-(module, __webpack_exports__, __webpack_require__) {
+  // prefer font/woff over application/font-woff
+  font: 2,
 
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   LN: () => (/* binding */ iconBase),
-/* harmony export */   Pt: () => (/* binding */ icons),
-/* harmony export */   i1: () => (/* binding */ originalIconBase)
-/* harmony export */ });
-/* harmony import */ var _debug__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(423);
-/* module decorator */ module = __webpack_require__.hmd(module);
-// Works in FF extension - what about browserify??
-// 2021-04-08 Convert to TS
+  // prefer video/mp4 over audio/mp4 over application/mp4
+  // See https://www.rfc-editor.org/rfc/rfc4337.html#section-2
+  audio: 2,
+  video: 3,
 
-/* The Firefox case is left for historical record, as we don't currenly
- * have a FF extension for mashlib, but we could.  This is sthepoint to
- * hack the place it can find its icons internally
- *
- * The $SolidTestEnvironment is important and is used for
- * example when testing on localhost to specify a place the icons be found
- * in your test set up.
- *
- * You can also use it if you want to just run a mashlib whhich takes its
- * icons seved by other than github.
+  default: 0
+}
+
+/**
+ * Get each component of the score for a mime type.  The sum of these is the
+ * total score.  The higher the score, the more "official" the type.
  */
+module.exports = function mimeScore (mimeType, source = 'default') {
+  if (mimeType === 'application/octet-stream') {
+    return 0
+  }
 
+  const [type, subtype] = mimeType.split('/')
 
-// Do not export. Always us this module to find the icons, as they vary
-var iconsOnGithub = 'https://solidos.github.io/solid-ui/src'; // changed org 2022-05
+  const facet = subtype.replace(/(\.|x-).*/, '$1')
 
-var icons = module.scriptURI // Firefox extension
-? {
-  iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/icons/',
-  originalIconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf('/')) + '/originalIcons/'
-} : typeof $SolidTestEnvironment !== 'undefined' && $SolidTestEnvironment.iconBase // Test environemnt
-? {
-  iconBase: $SolidTestEnvironment.iconBase,
-  originalIconBase: $SolidTestEnvironment.originalIconBase
-} : {
-  // Normal case:
-  iconBase: iconsOnGithub + '/icons/',
-  originalIconBase: iconsOnGithub + '/originalIcons/'
-};
-(0,_debug__WEBPACK_IMPORTED_MODULE_0__/* .log */ .Rm)('   icons.iconBase is set to : ' + icons.iconBase);
+  const facetScore = FACET_SCORES[facet] || FACET_SCORES.default
+  const sourceScore = SOURCE_SCORES[source] || SOURCE_SCORES.default
+  const typeScore = TYPE_SCORES[type] || TYPE_SCORES.default
 
-// allow tests etc  named-import this directly from this module
-var iconBase = icons.iconBase;
-var originalIconBase = icons.originalIconBase;
+  // All else being equal prefer shorter types
+  const lengthScore = 1 - mimeType.length / 100
+
+  return facetScore + sourceScore + typeScore + lengthScore
+}
+
 
 /***/ },
 
@@ -404,280 +568,11 @@ module.exports = vocab
 
 /***/ },
 
-/***/ 423
-(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   R8: () => (/* binding */ warn),
-/* harmony export */   Rm: () => (/* binding */ log),
-/* harmony export */   uP: () => (/* binding */ trace),
-/* harmony export */   z3: () => (/* binding */ error)
-/* harmony export */ });
-function log() {
-  var _console;
-  (_console = console).log.apply(_console, arguments);
-}
-function warn() {
-  var _console2;
-  (_console2 = console).warn.apply(_console2, arguments);
-}
-function error() {
-  var _console3;
-  (_console3 = console).error.apply(_console3, arguments);
-}
-function trace() {
-  var _console4;
-  (_console4 = console).trace.apply(_console4, arguments);
-}
-
-/***/ },
-
-/***/ 466
-() {
-
-/* (ignored) */
-
-/***/ },
-
-/***/ 546
-(module) {
-
-function _regeneratorDefine(e, r, n, t) {
-  var i = Object.defineProperty;
-  try {
-    i({}, "", {});
-  } catch (e) {
-    i = 0;
-  }
-  module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
-    function o(r, n) {
-      _regeneratorDefine(e, r, function (e) {
-        return this._invoke(r, n, e);
-      });
-    }
-    r ? i ? i(e, r, {
-      value: n,
-      enumerable: !t,
-      configurable: !t,
-      writable: !t
-    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
-}
-module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 579
-(module, __unused_webpack_exports, __webpack_require__) {
-
-var _typeof = (__webpack_require__(738)["default"]);
-function _regeneratorValues(e) {
-  if (null != e) {
-    var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"],
-      r = 0;
-    if (t) return t.call(e);
-    if ("function" == typeof e.next) return e;
-    if (!isNaN(e.length)) return {
-      next: function next() {
-        return e && r >= e.length && (e = void 0), {
-          value: e && e[r++],
-          done: !e
-        };
-      }
-    };
-  }
-  throw new TypeError(_typeof(e) + " is not iterable");
-}
-module.exports = _regeneratorValues, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 580
+/***/ 264
 (module) {
 
 "use strict";
-/*!
- * escape-html
- * Copyright(c) 2012-2013 TJ Holowaychuk
- * Copyright(c) 2015 Andreas Lubbe
- * Copyright(c) 2015 Tiancheng "Timothy" Gu
- * MIT Licensed
- */
-
-
-
-/**
- * Module variables.
- * @private
- */
-
-var matchHtmlRegExp = /["'&<>]/;
-
-/**
- * Module exports.
- * @public
- */
-
-module.exports = escapeHtml;
-
-/**
- * Escape special characters in the given string of html.
- *
- * @param  {string} string The string to escape for inserting into HTML
- * @return {string}
- * @public
- */
-
-function escapeHtml(string) {
-  var str = '' + string;
-  var match = matchHtmlRegExp.exec(str);
-
-  if (!match) {
-    return str;
-  }
-
-  var escape;
-  var html = '';
-  var index = 0;
-  var lastIndex = 0;
-
-  for (index = match.index; index < str.length; index++) {
-    switch (str.charCodeAt(index)) {
-      case 34: // "
-        escape = '&quot;';
-        break;
-      case 38: // &
-        escape = '&amp;';
-        break;
-      case 39: // '
-        escape = '&#39;';
-        break;
-      case 60: // <
-        escape = '&lt;';
-        break;
-      case 62: // >
-        escape = '&gt;';
-        break;
-      default:
-        continue;
-    }
-
-    if (lastIndex !== index) {
-      html += str.substring(lastIndex, index);
-    }
-
-    lastIndex = index + 1;
-    html += escape;
-  }
-
-  return lastIndex !== index
-    ? html + str.substring(lastIndex, index)
-    : html;
-}
-
-
-/***/ },
-
-/***/ 598
-(module, __unused_webpack_exports, __webpack_require__) {
-
-/*!
- * mime-db
- * Copyright(c) 2014 Jonathan Ong
- * Copyright(c) 2015-2022 Douglas Christopher Wilson
- * MIT Licensed
- */
-
-/**
- * Module exports.
- */
-
-module.exports = __webpack_require__(813)
-
-
-/***/ },
-
-/***/ 633
-(module, __unused_webpack_exports, __webpack_require__) {
-
-var OverloadYield = __webpack_require__(172);
-var regenerator = __webpack_require__(993);
-var regeneratorAsync = __webpack_require__(869);
-var regeneratorAsyncGen = __webpack_require__(887);
-var regeneratorAsyncIterator = __webpack_require__(791);
-var regeneratorKeys = __webpack_require__(373);
-var regeneratorValues = __webpack_require__(579);
-function _regeneratorRuntime() {
-  "use strict";
-
-  var r = regenerator(),
-    e = r.m(_regeneratorRuntime),
-    t = (Object.getPrototypeOf ? Object.getPrototypeOf(e) : e.__proto__).constructor;
-  function n(r) {
-    var e = "function" == typeof r && r.constructor;
-    return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name));
-  }
-  var o = {
-    "throw": 1,
-    "return": 2,
-    "break": 3,
-    "continue": 3
-  };
-  function a(r) {
-    var e, t;
-    return function (n) {
-      e || (e = {
-        stop: function stop() {
-          return t(n.a, 2);
-        },
-        "catch": function _catch() {
-          return n.v;
-        },
-        abrupt: function abrupt(r, e) {
-          return t(n.a, o[r], e);
-        },
-        delegateYield: function delegateYield(r, o, a) {
-          return e.resultName = o, t(n.d, regeneratorValues(r), a);
-        },
-        finish: function finish(r) {
-          return t(n.f, r);
-        }
-      }, t = function t(r, _t, o) {
-        n.p = e.prev, n.n = e.next;
-        try {
-          return r(_t, o);
-        } finally {
-          e.next = n.n;
-        }
-      }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n;
-      try {
-        return r.call(this, e);
-      } finally {
-        n.p = e.prev, n.n = e.next;
-      }
-    };
-  }
-  return (module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
-    return {
-      wrap: function wrap(e, t, n, o) {
-        return r.w(a(e), t, n, o && o.reverse());
-      },
-      isGeneratorFunction: n,
-      mark: r.m,
-      awrap: function awrap(r, e) {
-        return new OverloadYield(r, e);
-      },
-      AsyncIterator: regeneratorAsyncIterator,
-      async: function async(r, e, t, o, u) {
-        return (n(e) ? regeneratorAsyncGen : regeneratorAsync)(a(r), e, t, o, u);
-      },
-      keys: regeneratorKeys,
-      values: regeneratorValues
-    };
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports)();
-}
-module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
+module.exports = __WEBPACK_EXTERNAL_MODULE__264__;
 
 /***/ },
 
@@ -689,178 +584,20 @@ module.exports = __WEBPACK_EXTERNAL_MODULE__663__;
 
 /***/ },
 
-/***/ 738
+/***/ 466
+() {
+
+/* (ignored) */
+
+/***/ },
+
+/***/ 172
 (module) {
 
-function _typeof(o) {
-  "@babel/helpers - typeof";
-
-  return module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
-    return typeof o;
-  } : function (o) {
-    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
-  }, module.exports.__esModule = true, module.exports["default"] = module.exports, _typeof(o);
+function _OverloadYield(e, d) {
+  this.v = e, this.k = d;
 }
-module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 756
-(module, __unused_webpack_exports, __webpack_require__) {
-
-// TODO(Babel 8): Remove this file.
-
-var runtime = __webpack_require__(633)();
-module.exports = runtime;
-
-// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
-try {
-  regeneratorRuntime = runtime;
-} catch (accidentalStrictMode) {
-  if (typeof globalThis === "object") {
-    globalThis.regeneratorRuntime = runtime;
-  } else {
-    Function("r", "regeneratorRuntime = r")(runtime);
-  }
-}
-
-
-/***/ },
-
-/***/ 791
-(module, __unused_webpack_exports, __webpack_require__) {
-
-var OverloadYield = __webpack_require__(172);
-var regeneratorDefine = __webpack_require__(546);
-function AsyncIterator(t, e) {
-  function n(r, o, i, f) {
-    try {
-      var c = t[r](o),
-        u = c.value;
-      return u instanceof OverloadYield ? e.resolve(u.v).then(function (t) {
-        n("next", t, i, f);
-      }, function (t) {
-        n("throw", t, i, f);
-      }) : e.resolve(u).then(function (t) {
-        c.value = t, i(c);
-      }, function (t) {
-        return n("throw", t, i, f);
-      });
-    } catch (t) {
-      f(t);
-    }
-  }
-  var r;
-  this.next || (regeneratorDefine(AsyncIterator.prototype), regeneratorDefine(AsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () {
-    return this;
-  })), regeneratorDefine(this, "_invoke", function (t, o, i) {
-    function f() {
-      return new e(function (e, r) {
-        n(t, i, e, r);
-      });
-    }
-    return r = r ? r.then(f, f) : f();
-  }, !0);
-}
-module.exports = AsyncIterator, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 813
-(module) {
-
-"use strict";
-module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec":{"source":"iana"},"application/3gpdash-qoe-report+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/3gpp-ims+xml":{"source":"iana","compressible":true},"application/3gpphal+json":{"source":"iana","compressible":true},"application/3gpphalforms+json":{"source":"iana","compressible":true},"application/a2l":{"source":"iana"},"application/ace+cbor":{"source":"iana"},"application/ace+json":{"source":"iana","compressible":true},"application/ace-groupcomm+cbor":{"source":"iana"},"application/ace-trl+cbor":{"source":"iana"},"application/activemessage":{"source":"iana"},"application/activity+json":{"source":"iana","compressible":true},"application/aif+cbor":{"source":"iana"},"application/aif+json":{"source":"iana","compressible":true},"application/alto-cdni+json":{"source":"iana","compressible":true},"application/alto-cdnifilter+json":{"source":"iana","compressible":true},"application/alto-costmap+json":{"source":"iana","compressible":true},"application/alto-costmapfilter+json":{"source":"iana","compressible":true},"application/alto-directory+json":{"source":"iana","compressible":true},"application/alto-endpointcost+json":{"source":"iana","compressible":true},"application/alto-endpointcostparams+json":{"source":"iana","compressible":true},"application/alto-endpointprop+json":{"source":"iana","compressible":true},"application/alto-endpointpropparams+json":{"source":"iana","compressible":true},"application/alto-error+json":{"source":"iana","compressible":true},"application/alto-networkmap+json":{"source":"iana","compressible":true},"application/alto-networkmapfilter+json":{"source":"iana","compressible":true},"application/alto-propmap+json":{"source":"iana","compressible":true},"application/alto-propmapparams+json":{"source":"iana","compressible":true},"application/alto-tips+json":{"source":"iana","compressible":true},"application/alto-tipsparams+json":{"source":"iana","compressible":true},"application/alto-updatestreamcontrol+json":{"source":"iana","compressible":true},"application/alto-updatestreamparams+json":{"source":"iana","compressible":true},"application/aml":{"source":"iana"},"application/andrew-inset":{"source":"iana","extensions":["ez"]},"application/appinstaller":{"compressible":false,"extensions":["appinstaller"]},"application/applefile":{"source":"iana"},"application/applixware":{"source":"apache","extensions":["aw"]},"application/appx":{"compressible":false,"extensions":["appx"]},"application/appxbundle":{"compressible":false,"extensions":["appxbundle"]},"application/at+jwt":{"source":"iana"},"application/atf":{"source":"iana"},"application/atfx":{"source":"iana"},"application/atom+xml":{"source":"iana","compressible":true,"extensions":["atom"]},"application/atomcat+xml":{"source":"iana","compressible":true,"extensions":["atomcat"]},"application/atomdeleted+xml":{"source":"iana","compressible":true,"extensions":["atomdeleted"]},"application/atomicmail":{"source":"iana"},"application/atomsvc+xml":{"source":"iana","compressible":true,"extensions":["atomsvc"]},"application/atsc-dwd+xml":{"source":"iana","compressible":true,"extensions":["dwd"]},"application/atsc-dynamic-event-message":{"source":"iana"},"application/atsc-held+xml":{"source":"iana","compressible":true,"extensions":["held"]},"application/atsc-rdt+json":{"source":"iana","compressible":true},"application/atsc-rsat+xml":{"source":"iana","compressible":true,"extensions":["rsat"]},"application/atxml":{"source":"iana"},"application/auth-policy+xml":{"source":"iana","compressible":true},"application/automationml-aml+xml":{"source":"iana","compressible":true,"extensions":["aml"]},"application/automationml-amlx+zip":{"source":"iana","compressible":false,"extensions":["amlx"]},"application/bacnet-xdd+zip":{"source":"iana","compressible":false},"application/batch-smtp":{"source":"iana"},"application/bdoc":{"compressible":false,"extensions":["bdoc"]},"application/beep+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/bufr":{"source":"iana"},"application/c2pa":{"source":"iana"},"application/calendar+json":{"source":"iana","compressible":true},"application/calendar+xml":{"source":"iana","compressible":true,"extensions":["xcs"]},"application/call-completion":{"source":"iana"},"application/cals-1840":{"source":"iana"},"application/captive+json":{"source":"iana","compressible":true},"application/cbor":{"source":"iana"},"application/cbor-seq":{"source":"iana"},"application/cccex":{"source":"iana"},"application/ccmp+xml":{"source":"iana","compressible":true},"application/ccxml+xml":{"source":"iana","compressible":true,"extensions":["ccxml"]},"application/cda+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/cdfx+xml":{"source":"iana","compressible":true,"extensions":["cdfx"]},"application/cdmi-capability":{"source":"iana","extensions":["cdmia"]},"application/cdmi-container":{"source":"iana","extensions":["cdmic"]},"application/cdmi-domain":{"source":"iana","extensions":["cdmid"]},"application/cdmi-object":{"source":"iana","extensions":["cdmio"]},"application/cdmi-queue":{"source":"iana","extensions":["cdmiq"]},"application/cdni":{"source":"iana"},"application/ce+cbor":{"source":"iana"},"application/cea":{"source":"iana"},"application/cea-2018+xml":{"source":"iana","compressible":true},"application/cellml+xml":{"source":"iana","compressible":true},"application/cfw":{"source":"iana"},"application/cid-edhoc+cbor-seq":{"source":"iana"},"application/city+json":{"source":"iana","compressible":true},"application/city+json-seq":{"source":"iana"},"application/clr":{"source":"iana"},"application/clue+xml":{"source":"iana","compressible":true},"application/clue_info+xml":{"source":"iana","compressible":true},"application/cms":{"source":"iana"},"application/cnrp+xml":{"source":"iana","compressible":true},"application/coap-eap":{"source":"iana"},"application/coap-group+json":{"source":"iana","compressible":true},"application/coap-payload":{"source":"iana"},"application/commonground":{"source":"iana"},"application/concise-problem-details+cbor":{"source":"iana"},"application/conference-info+xml":{"source":"iana","compressible":true},"application/cose":{"source":"iana"},"application/cose-key":{"source":"iana"},"application/cose-key-set":{"source":"iana"},"application/cose-x509":{"source":"iana"},"application/cpl+xml":{"source":"iana","compressible":true,"extensions":["cpl"]},"application/csrattrs":{"source":"iana"},"application/csta+xml":{"source":"iana","compressible":true},"application/cstadata+xml":{"source":"iana","compressible":true},"application/csvm+json":{"source":"iana","compressible":true},"application/cu-seeme":{"source":"apache","extensions":["cu"]},"application/cwl":{"source":"iana","extensions":["cwl"]},"application/cwl+json":{"source":"iana","compressible":true},"application/cwl+yaml":{"source":"iana"},"application/cwt":{"source":"iana"},"application/cybercash":{"source":"iana"},"application/dart":{"compressible":true},"application/dash+xml":{"source":"iana","compressible":true,"extensions":["mpd"]},"application/dash-patch+xml":{"source":"iana","compressible":true,"extensions":["mpp"]},"application/dashdelta":{"source":"iana"},"application/davmount+xml":{"source":"iana","compressible":true,"extensions":["davmount"]},"application/dca-rft":{"source":"iana"},"application/dcd":{"source":"iana"},"application/dec-dx":{"source":"iana"},"application/dialog-info+xml":{"source":"iana","compressible":true},"application/dicom":{"source":"iana","extensions":["dcm"]},"application/dicom+json":{"source":"iana","compressible":true},"application/dicom+xml":{"source":"iana","compressible":true},"application/dii":{"source":"iana"},"application/dit":{"source":"iana"},"application/dns":{"source":"iana"},"application/dns+json":{"source":"iana","compressible":true},"application/dns-message":{"source":"iana"},"application/docbook+xml":{"source":"apache","compressible":true,"extensions":["dbk"]},"application/dots+cbor":{"source":"iana"},"application/dpop+jwt":{"source":"iana"},"application/dskpp+xml":{"source":"iana","compressible":true},"application/dssc+der":{"source":"iana","extensions":["dssc"]},"application/dssc+xml":{"source":"iana","compressible":true,"extensions":["xdssc"]},"application/dvcs":{"source":"iana"},"application/eat+cwt":{"source":"iana"},"application/eat+jwt":{"source":"iana"},"application/eat-bun+cbor":{"source":"iana"},"application/eat-bun+json":{"source":"iana","compressible":true},"application/eat-ucs+cbor":{"source":"iana"},"application/eat-ucs+json":{"source":"iana","compressible":true},"application/ecmascript":{"source":"apache","compressible":true,"extensions":["ecma"]},"application/edhoc+cbor-seq":{"source":"iana"},"application/edi-consent":{"source":"iana"},"application/edi-x12":{"source":"iana","compressible":false},"application/edifact":{"source":"iana","compressible":false},"application/efi":{"source":"iana"},"application/elm+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/elm+xml":{"source":"iana","compressible":true},"application/emergencycalldata.cap+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/emergencycalldata.comment+xml":{"source":"iana","compressible":true},"application/emergencycalldata.control+xml":{"source":"iana","compressible":true},"application/emergencycalldata.deviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.ecall.msd":{"source":"iana"},"application/emergencycalldata.legacyesn+json":{"source":"iana","compressible":true},"application/emergencycalldata.providerinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.serviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.subscriberinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.veds+xml":{"source":"iana","compressible":true},"application/emma+xml":{"source":"iana","compressible":true,"extensions":["emma"]},"application/emotionml+xml":{"source":"iana","compressible":true,"extensions":["emotionml"]},"application/encaprtp":{"source":"iana"},"application/entity-statement+jwt":{"source":"iana"},"application/epp+xml":{"source":"iana","compressible":true},"application/epub+zip":{"source":"iana","compressible":false,"extensions":["epub"]},"application/eshop":{"source":"iana"},"application/exi":{"source":"iana","extensions":["exi"]},"application/expect-ct-report+json":{"source":"iana","compressible":true},"application/express":{"source":"iana","extensions":["exp"]},"application/fastinfoset":{"source":"iana"},"application/fastsoap":{"source":"iana"},"application/fdf":{"source":"iana","extensions":["fdf"]},"application/fdt+xml":{"source":"iana","compressible":true,"extensions":["fdt"]},"application/fhir+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/fhir+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/fido.trusted-apps+json":{"compressible":true},"application/fits":{"source":"iana"},"application/flexfec":{"source":"iana"},"application/font-sfnt":{"source":"iana"},"application/font-tdpfr":{"source":"iana","extensions":["pfr"]},"application/font-woff":{"source":"iana","compressible":false},"application/framework-attributes+xml":{"source":"iana","compressible":true},"application/geo+json":{"source":"iana","compressible":true,"extensions":["geojson"]},"application/geo+json-seq":{"source":"iana"},"application/geopackage+sqlite3":{"source":"iana"},"application/geopose+json":{"source":"iana","compressible":true},"application/geoxacml+json":{"source":"iana","compressible":true},"application/geoxacml+xml":{"source":"iana","compressible":true},"application/gltf-buffer":{"source":"iana"},"application/gml+xml":{"source":"iana","compressible":true,"extensions":["gml"]},"application/gnap-binding-jws":{"source":"iana"},"application/gnap-binding-jwsd":{"source":"iana"},"application/gnap-binding-rotation-jws":{"source":"iana"},"application/gnap-binding-rotation-jwsd":{"source":"iana"},"application/gpx+xml":{"source":"apache","compressible":true,"extensions":["gpx"]},"application/grib":{"source":"iana"},"application/gxf":{"source":"apache","extensions":["gxf"]},"application/gzip":{"source":"iana","compressible":false,"extensions":["gz"]},"application/h224":{"source":"iana"},"application/held+xml":{"source":"iana","compressible":true},"application/hjson":{"extensions":["hjson"]},"application/hl7v2+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/http":{"source":"iana"},"application/hyperstudio":{"source":"iana","extensions":["stk"]},"application/ibe-key-request+xml":{"source":"iana","compressible":true},"application/ibe-pkg-reply+xml":{"source":"iana","compressible":true},"application/ibe-pp-data":{"source":"iana"},"application/iges":{"source":"iana"},"application/im-iscomposing+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/index":{"source":"iana"},"application/index.cmd":{"source":"iana"},"application/index.obj":{"source":"iana"},"application/index.response":{"source":"iana"},"application/index.vnd":{"source":"iana"},"application/inkml+xml":{"source":"iana","compressible":true,"extensions":["ink","inkml"]},"application/iotp":{"source":"iana"},"application/ipfix":{"source":"iana","extensions":["ipfix"]},"application/ipp":{"source":"iana"},"application/isup":{"source":"iana"},"application/its+xml":{"source":"iana","compressible":true,"extensions":["its"]},"application/java-archive":{"source":"iana","compressible":false,"extensions":["jar","war","ear"]},"application/java-serialized-object":{"source":"apache","compressible":false,"extensions":["ser"]},"application/java-vm":{"source":"apache","compressible":false,"extensions":["class"]},"application/javascript":{"source":"apache","charset":"UTF-8","compressible":true,"extensions":["js"]},"application/jf2feed+json":{"source":"iana","compressible":true},"application/jose":{"source":"iana"},"application/jose+json":{"source":"iana","compressible":true},"application/jrd+json":{"source":"iana","compressible":true},"application/jscalendar+json":{"source":"iana","compressible":true},"application/jscontact+json":{"source":"iana","compressible":true},"application/json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["json","map"]},"application/json-patch+json":{"source":"iana","compressible":true},"application/json-seq":{"source":"iana"},"application/json5":{"extensions":["json5"]},"application/jsonml+json":{"source":"apache","compressible":true,"extensions":["jsonml"]},"application/jsonpath":{"source":"iana"},"application/jwk+json":{"source":"iana","compressible":true},"application/jwk-set+json":{"source":"iana","compressible":true},"application/jwk-set+jwt":{"source":"iana"},"application/jwt":{"source":"iana"},"application/kpml-request+xml":{"source":"iana","compressible":true},"application/kpml-response+xml":{"source":"iana","compressible":true},"application/ld+json":{"source":"iana","compressible":true,"extensions":["jsonld"]},"application/lgr+xml":{"source":"iana","compressible":true,"extensions":["lgr"]},"application/link-format":{"source":"iana"},"application/linkset":{"source":"iana"},"application/linkset+json":{"source":"iana","compressible":true},"application/load-control+xml":{"source":"iana","compressible":true},"application/logout+jwt":{"source":"iana"},"application/lost+xml":{"source":"iana","compressible":true,"extensions":["lostxml"]},"application/lostsync+xml":{"source":"iana","compressible":true},"application/lpf+zip":{"source":"iana","compressible":false},"application/lxf":{"source":"iana"},"application/mac-binhex40":{"source":"iana","extensions":["hqx"]},"application/mac-compactpro":{"source":"apache","extensions":["cpt"]},"application/macwriteii":{"source":"iana"},"application/mads+xml":{"source":"iana","compressible":true,"extensions":["mads"]},"application/manifest+json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["webmanifest"]},"application/marc":{"source":"iana","extensions":["mrc"]},"application/marcxml+xml":{"source":"iana","compressible":true,"extensions":["mrcx"]},"application/mathematica":{"source":"iana","extensions":["ma","nb","mb"]},"application/mathml+xml":{"source":"iana","compressible":true,"extensions":["mathml"]},"application/mathml-content+xml":{"source":"iana","compressible":true},"application/mathml-presentation+xml":{"source":"iana","compressible":true},"application/mbms-associated-procedure-description+xml":{"source":"iana","compressible":true},"application/mbms-deregister+xml":{"source":"iana","compressible":true},"application/mbms-envelope+xml":{"source":"iana","compressible":true},"application/mbms-msk+xml":{"source":"iana","compressible":true},"application/mbms-msk-response+xml":{"source":"iana","compressible":true},"application/mbms-protection-description+xml":{"source":"iana","compressible":true},"application/mbms-reception-report+xml":{"source":"iana","compressible":true},"application/mbms-register+xml":{"source":"iana","compressible":true},"application/mbms-register-response+xml":{"source":"iana","compressible":true},"application/mbms-schedule+xml":{"source":"iana","compressible":true},"application/mbms-user-service-description+xml":{"source":"iana","compressible":true},"application/mbox":{"source":"iana","extensions":["mbox"]},"application/media-policy-dataset+xml":{"source":"iana","compressible":true,"extensions":["mpf"]},"application/media_control+xml":{"source":"iana","compressible":true},"application/mediaservercontrol+xml":{"source":"iana","compressible":true,"extensions":["mscml"]},"application/merge-patch+json":{"source":"iana","compressible":true},"application/metalink+xml":{"source":"apache","compressible":true,"extensions":["metalink"]},"application/metalink4+xml":{"source":"iana","compressible":true,"extensions":["meta4"]},"application/mets+xml":{"source":"iana","compressible":true,"extensions":["mets"]},"application/mf4":{"source":"iana"},"application/mikey":{"source":"iana"},"application/mipc":{"source":"iana"},"application/missing-blocks+cbor-seq":{"source":"iana"},"application/mmt-aei+xml":{"source":"iana","compressible":true,"extensions":["maei"]},"application/mmt-usd+xml":{"source":"iana","compressible":true,"extensions":["musd"]},"application/mods+xml":{"source":"iana","compressible":true,"extensions":["mods"]},"application/moss-keys":{"source":"iana"},"application/moss-signature":{"source":"iana"},"application/mosskey-data":{"source":"iana"},"application/mosskey-request":{"source":"iana"},"application/mp21":{"source":"iana","extensions":["m21","mp21"]},"application/mp4":{"source":"iana","extensions":["mp4","mpg4","mp4s","m4p"]},"application/mpeg4-generic":{"source":"iana"},"application/mpeg4-iod":{"source":"iana"},"application/mpeg4-iod-xmt":{"source":"iana"},"application/mrb-consumer+xml":{"source":"iana","compressible":true},"application/mrb-publish+xml":{"source":"iana","compressible":true},"application/msc-ivr+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msc-mixer+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msix":{"compressible":false,"extensions":["msix"]},"application/msixbundle":{"compressible":false,"extensions":["msixbundle"]},"application/msword":{"source":"iana","compressible":false,"extensions":["doc","dot"]},"application/mud+json":{"source":"iana","compressible":true},"application/multipart-core":{"source":"iana"},"application/mxf":{"source":"iana","extensions":["mxf"]},"application/n-quads":{"source":"iana","extensions":["nq"]},"application/n-triples":{"source":"iana","extensions":["nt"]},"application/nasdata":{"source":"iana"},"application/news-checkgroups":{"source":"iana","charset":"US-ASCII"},"application/news-groupinfo":{"source":"iana","charset":"US-ASCII"},"application/news-transmission":{"source":"iana"},"application/nlsml+xml":{"source":"iana","compressible":true},"application/node":{"source":"iana","extensions":["cjs"]},"application/nss":{"source":"iana"},"application/oauth-authz-req+jwt":{"source":"iana"},"application/oblivious-dns-message":{"source":"iana"},"application/ocsp-request":{"source":"iana"},"application/ocsp-response":{"source":"iana"},"application/octet-stream":{"source":"iana","compressible":true,"extensions":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"]},"application/oda":{"source":"iana","extensions":["oda"]},"application/odm+xml":{"source":"iana","compressible":true},"application/odx":{"source":"iana"},"application/oebps-package+xml":{"source":"iana","compressible":true,"extensions":["opf"]},"application/ogg":{"source":"iana","compressible":false,"extensions":["ogx"]},"application/ohttp-keys":{"source":"iana"},"application/omdoc+xml":{"source":"apache","compressible":true,"extensions":["omdoc"]},"application/onenote":{"source":"apache","extensions":["onetoc","onetoc2","onetmp","onepkg","one","onea"]},"application/opc-nodeset+xml":{"source":"iana","compressible":true},"application/oscore":{"source":"iana"},"application/oxps":{"source":"iana","extensions":["oxps"]},"application/p21":{"source":"iana"},"application/p21+zip":{"source":"iana","compressible":false},"application/p2p-overlay+xml":{"source":"iana","compressible":true,"extensions":["relo"]},"application/parityfec":{"source":"iana"},"application/passport":{"source":"iana"},"application/patch-ops-error+xml":{"source":"iana","compressible":true,"extensions":["xer"]},"application/pdf":{"source":"iana","compressible":false,"extensions":["pdf"]},"application/pdx":{"source":"iana"},"application/pem-certificate-chain":{"source":"iana"},"application/pgp-encrypted":{"source":"iana","compressible":false,"extensions":["pgp"]},"application/pgp-keys":{"source":"iana","extensions":["asc"]},"application/pgp-signature":{"source":"iana","extensions":["sig","asc"]},"application/pics-rules":{"source":"apache","extensions":["prf"]},"application/pidf+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pidf-diff+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pkcs10":{"source":"iana","extensions":["p10"]},"application/pkcs12":{"source":"iana"},"application/pkcs7-mime":{"source":"iana","extensions":["p7m","p7c"]},"application/pkcs7-signature":{"source":"iana","extensions":["p7s"]},"application/pkcs8":{"source":"iana","extensions":["p8"]},"application/pkcs8-encrypted":{"source":"iana"},"application/pkix-attr-cert":{"source":"iana","extensions":["ac"]},"application/pkix-cert":{"source":"iana","extensions":["cer"]},"application/pkix-crl":{"source":"iana","extensions":["crl"]},"application/pkix-pkipath":{"source":"iana","extensions":["pkipath"]},"application/pkixcmp":{"source":"iana","extensions":["pki"]},"application/pls+xml":{"source":"iana","compressible":true,"extensions":["pls"]},"application/poc-settings+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/postscript":{"source":"iana","compressible":true,"extensions":["ai","eps","ps"]},"application/ppsp-tracker+json":{"source":"iana","compressible":true},"application/private-token-issuer-directory":{"source":"iana"},"application/private-token-request":{"source":"iana"},"application/private-token-response":{"source":"iana"},"application/problem+json":{"source":"iana","compressible":true},"application/problem+xml":{"source":"iana","compressible":true},"application/provenance+xml":{"source":"iana","compressible":true,"extensions":["provx"]},"application/provided-claims+jwt":{"source":"iana"},"application/prs.alvestrand.titrax-sheet":{"source":"iana"},"application/prs.cww":{"source":"iana","extensions":["cww"]},"application/prs.cyn":{"source":"iana","charset":"7-BIT"},"application/prs.hpub+zip":{"source":"iana","compressible":false},"application/prs.implied-document+xml":{"source":"iana","compressible":true},"application/prs.implied-executable":{"source":"iana"},"application/prs.implied-object+json":{"source":"iana","compressible":true},"application/prs.implied-object+json-seq":{"source":"iana"},"application/prs.implied-object+yaml":{"source":"iana"},"application/prs.implied-structure":{"source":"iana"},"application/prs.mayfile":{"source":"iana"},"application/prs.nprend":{"source":"iana"},"application/prs.plucker":{"source":"iana"},"application/prs.rdf-xml-crypt":{"source":"iana"},"application/prs.vcfbzip2":{"source":"iana"},"application/prs.xsf+xml":{"source":"iana","compressible":true,"extensions":["xsf"]},"application/pskc+xml":{"source":"iana","compressible":true,"extensions":["pskcxml"]},"application/pvd+json":{"source":"iana","compressible":true},"application/qsig":{"source":"iana"},"application/raml+yaml":{"compressible":true,"extensions":["raml"]},"application/raptorfec":{"source":"iana"},"application/rdap+json":{"source":"iana","compressible":true},"application/rdf+xml":{"source":"iana","compressible":true,"extensions":["rdf","owl"]},"application/reginfo+xml":{"source":"iana","compressible":true,"extensions":["rif"]},"application/relax-ng-compact-syntax":{"source":"iana","extensions":["rnc"]},"application/remote-printing":{"source":"apache"},"application/reputon+json":{"source":"iana","compressible":true},"application/resolve-response+jwt":{"source":"iana"},"application/resource-lists+xml":{"source":"iana","compressible":true,"extensions":["rl"]},"application/resource-lists-diff+xml":{"source":"iana","compressible":true,"extensions":["rld"]},"application/rfc+xml":{"source":"iana","compressible":true},"application/riscos":{"source":"iana"},"application/rlmi+xml":{"source":"iana","compressible":true},"application/rls-services+xml":{"source":"iana","compressible":true,"extensions":["rs"]},"application/route-apd+xml":{"source":"iana","compressible":true,"extensions":["rapd"]},"application/route-s-tsid+xml":{"source":"iana","compressible":true,"extensions":["sls"]},"application/route-usd+xml":{"source":"iana","compressible":true,"extensions":["rusd"]},"application/rpki-checklist":{"source":"iana"},"application/rpki-ghostbusters":{"source":"iana","extensions":["gbr"]},"application/rpki-manifest":{"source":"iana","extensions":["mft"]},"application/rpki-publication":{"source":"iana"},"application/rpki-roa":{"source":"iana","extensions":["roa"]},"application/rpki-signed-tal":{"source":"iana"},"application/rpki-updown":{"source":"iana"},"application/rsd+xml":{"source":"apache","compressible":true,"extensions":["rsd"]},"application/rss+xml":{"source":"apache","compressible":true,"extensions":["rss"]},"application/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"application/rtploopback":{"source":"iana"},"application/rtx":{"source":"iana"},"application/samlassertion+xml":{"source":"iana","compressible":true},"application/samlmetadata+xml":{"source":"iana","compressible":true},"application/sarif+json":{"source":"iana","compressible":true},"application/sarif-external-properties+json":{"source":"iana","compressible":true},"application/sbe":{"source":"iana"},"application/sbml+xml":{"source":"iana","compressible":true,"extensions":["sbml"]},"application/scaip+xml":{"source":"iana","compressible":true},"application/scim+json":{"source":"iana","compressible":true},"application/scvp-cv-request":{"source":"iana","extensions":["scq"]},"application/scvp-cv-response":{"source":"iana","extensions":["scs"]},"application/scvp-vp-request":{"source":"iana","extensions":["spq"]},"application/scvp-vp-response":{"source":"iana","extensions":["spp"]},"application/sdp":{"source":"iana","extensions":["sdp"]},"application/secevent+jwt":{"source":"iana"},"application/senml+cbor":{"source":"iana"},"application/senml+json":{"source":"iana","compressible":true},"application/senml+xml":{"source":"iana","compressible":true,"extensions":["senmlx"]},"application/senml-etch+cbor":{"source":"iana"},"application/senml-etch+json":{"source":"iana","compressible":true},"application/senml-exi":{"source":"iana"},"application/sensml+cbor":{"source":"iana"},"application/sensml+json":{"source":"iana","compressible":true},"application/sensml+xml":{"source":"iana","compressible":true,"extensions":["sensmlx"]},"application/sensml-exi":{"source":"iana"},"application/sep+xml":{"source":"iana","compressible":true},"application/sep-exi":{"source":"iana"},"application/session-info":{"source":"iana"},"application/set-payment":{"source":"iana"},"application/set-payment-initiation":{"source":"iana","extensions":["setpay"]},"application/set-registration":{"source":"iana"},"application/set-registration-initiation":{"source":"iana","extensions":["setreg"]},"application/sgml":{"source":"iana"},"application/sgml-open-catalog":{"source":"iana"},"application/shf+xml":{"source":"iana","compressible":true,"extensions":["shf"]},"application/sieve":{"source":"iana","extensions":["siv","sieve"]},"application/simple-filter+xml":{"source":"iana","compressible":true},"application/simple-message-summary":{"source":"iana"},"application/simplesymbolcontainer":{"source":"iana"},"application/sipc":{"source":"iana"},"application/slate":{"source":"iana"},"application/smil":{"source":"apache"},"application/smil+xml":{"source":"iana","compressible":true,"extensions":["smi","smil"]},"application/smpte336m":{"source":"iana"},"application/soap+fastinfoset":{"source":"iana"},"application/soap+xml":{"source":"iana","compressible":true},"application/sparql-query":{"source":"iana","extensions":["rq"]},"application/sparql-results+xml":{"source":"iana","compressible":true,"extensions":["srx"]},"application/spdx+json":{"source":"iana","compressible":true},"application/spirits-event+xml":{"source":"iana","compressible":true},"application/sql":{"source":"iana","extensions":["sql"]},"application/srgs":{"source":"iana","extensions":["gram"]},"application/srgs+xml":{"source":"iana","compressible":true,"extensions":["grxml"]},"application/sru+xml":{"source":"iana","compressible":true,"extensions":["sru"]},"application/ssdl+xml":{"source":"apache","compressible":true,"extensions":["ssdl"]},"application/sslkeylogfile":{"source":"iana"},"application/ssml+xml":{"source":"iana","compressible":true,"extensions":["ssml"]},"application/st2110-41":{"source":"iana"},"application/stix+json":{"source":"iana","compressible":true},"application/stratum":{"source":"iana"},"application/swid+cbor":{"source":"iana"},"application/swid+xml":{"source":"iana","compressible":true,"extensions":["swidtag"]},"application/tamp-apex-update":{"source":"iana"},"application/tamp-apex-update-confirm":{"source":"iana"},"application/tamp-community-update":{"source":"iana"},"application/tamp-community-update-confirm":{"source":"iana"},"application/tamp-error":{"source":"iana"},"application/tamp-sequence-adjust":{"source":"iana"},"application/tamp-sequence-adjust-confirm":{"source":"iana"},"application/tamp-status-query":{"source":"iana"},"application/tamp-status-response":{"source":"iana"},"application/tamp-update":{"source":"iana"},"application/tamp-update-confirm":{"source":"iana"},"application/tar":{"compressible":true},"application/taxii+json":{"source":"iana","compressible":true},"application/td+json":{"source":"iana","compressible":true},"application/tei+xml":{"source":"iana","compressible":true,"extensions":["tei","teicorpus"]},"application/tetra_isi":{"source":"iana"},"application/thraud+xml":{"source":"iana","compressible":true,"extensions":["tfi"]},"application/timestamp-query":{"source":"iana"},"application/timestamp-reply":{"source":"iana"},"application/timestamped-data":{"source":"iana","extensions":["tsd"]},"application/tlsrpt+gzip":{"source":"iana"},"application/tlsrpt+json":{"source":"iana","compressible":true},"application/tm+json":{"source":"iana","compressible":true},"application/tnauthlist":{"source":"iana"},"application/toc+cbor":{"source":"iana"},"application/token-introspection+jwt":{"source":"iana"},"application/toml":{"source":"iana","compressible":true,"extensions":["toml"]},"application/trickle-ice-sdpfrag":{"source":"iana"},"application/trig":{"source":"iana","extensions":["trig"]},"application/trust-chain+json":{"source":"iana","compressible":true},"application/trust-mark+jwt":{"source":"iana"},"application/trust-mark-delegation+jwt":{"source":"iana"},"application/ttml+xml":{"source":"iana","compressible":true,"extensions":["ttml"]},"application/tve-trigger":{"source":"iana"},"application/tzif":{"source":"iana"},"application/tzif-leap":{"source":"iana"},"application/ubjson":{"compressible":false,"extensions":["ubj"]},"application/uccs+cbor":{"source":"iana"},"application/ujcs+json":{"source":"iana","compressible":true},"application/ulpfec":{"source":"iana"},"application/urc-grpsheet+xml":{"source":"iana","compressible":true},"application/urc-ressheet+xml":{"source":"iana","compressible":true,"extensions":["rsheet"]},"application/urc-targetdesc+xml":{"source":"iana","compressible":true,"extensions":["td"]},"application/urc-uisocketdesc+xml":{"source":"iana","compressible":true},"application/vc":{"source":"iana"},"application/vc+cose":{"source":"iana"},"application/vc+jwt":{"source":"iana"},"application/vcard+json":{"source":"iana","compressible":true},"application/vcard+xml":{"source":"iana","compressible":true},"application/vemmi":{"source":"iana"},"application/vividence.scriptfile":{"source":"apache"},"application/vnd.1000minds.decision-model+xml":{"source":"iana","compressible":true,"extensions":["1km"]},"application/vnd.1ob":{"source":"iana"},"application/vnd.3gpp-prose+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3a+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ach+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ch+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc8+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-v2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gnas":{"source":"iana"},"application/vnd.3gpp.5gsa2x":{"source":"iana"},"application/vnd.3gpp.5gsa2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gsv2x":{"source":"iana"},"application/vnd.3gpp.5gsv2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.access-transfer-events+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.bsf+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.crs+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.current-location-discovery+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gmop+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gtpc":{"source":"iana"},"application/vnd.3gpp.interworking-data":{"source":"iana"},"application/vnd.3gpp.lpp":{"source":"iana"},"application/vnd.3gpp.mc-signalling-ear":{"source":"iana"},"application/vnd.3gpp.mcdata-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-msgstore-ctrl-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-payload":{"source":"iana"},"application/vnd.3gpp.mcdata-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-signalling":{"source":"iana"},"application/vnd.3gpp.mcdata-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-floor-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-signed+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-init-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-transmission-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mid-call+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ngap":{"source":"iana"},"application/vnd.3gpp.pfcp":{"source":"iana"},"application/vnd.3gpp.pic-bw-large":{"source":"iana","extensions":["plb"]},"application/vnd.3gpp.pic-bw-small":{"source":"iana","extensions":["psb"]},"application/vnd.3gpp.pic-bw-var":{"source":"iana","extensions":["pvb"]},"application/vnd.3gpp.pinapp-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.s1ap":{"source":"iana"},"application/vnd.3gpp.seal-group-doc+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-network-qos-management-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-ue-config-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-unicast-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-user-profile-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.sms":{"source":"iana"},"application/vnd.3gpp.sms+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-ext+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.state-and-event-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ussd+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.v2x":{"source":"iana"},"application/vnd.3gpp.vae-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.bcmcsinfo+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.sms":{"source":"iana"},"application/vnd.3gpp2.tcap":{"source":"iana","extensions":["tcap"]},"application/vnd.3lightssoftware.imagescal":{"source":"iana"},"application/vnd.3m.post-it-notes":{"source":"iana","extensions":["pwn"]},"application/vnd.accpac.simply.aso":{"source":"iana","extensions":["aso"]},"application/vnd.accpac.simply.imp":{"source":"iana","extensions":["imp"]},"application/vnd.acm.addressxfer+json":{"source":"iana","compressible":true},"application/vnd.acm.chatbot+json":{"source":"iana","compressible":true},"application/vnd.acucobol":{"source":"iana","extensions":["acu"]},"application/vnd.acucorp":{"source":"iana","extensions":["atc","acutc"]},"application/vnd.adobe.air-application-installer-package+zip":{"source":"apache","compressible":false,"extensions":["air"]},"application/vnd.adobe.flash.movie":{"source":"iana"},"application/vnd.adobe.formscentral.fcdt":{"source":"iana","extensions":["fcdt"]},"application/vnd.adobe.fxp":{"source":"iana","extensions":["fxp","fxpl"]},"application/vnd.adobe.partial-upload":{"source":"iana"},"application/vnd.adobe.xdp+xml":{"source":"iana","compressible":true,"extensions":["xdp"]},"application/vnd.adobe.xfdf":{"source":"apache","extensions":["xfdf"]},"application/vnd.aether.imp":{"source":"iana"},"application/vnd.afpc.afplinedata":{"source":"iana"},"application/vnd.afpc.afplinedata-pagedef":{"source":"iana"},"application/vnd.afpc.cmoca-cmresource":{"source":"iana"},"application/vnd.afpc.foca-charset":{"source":"iana"},"application/vnd.afpc.foca-codedfont":{"source":"iana"},"application/vnd.afpc.foca-codepage":{"source":"iana"},"application/vnd.afpc.modca":{"source":"iana"},"application/vnd.afpc.modca-cmtable":{"source":"iana"},"application/vnd.afpc.modca-formdef":{"source":"iana"},"application/vnd.afpc.modca-mediummap":{"source":"iana"},"application/vnd.afpc.modca-objectcontainer":{"source":"iana"},"application/vnd.afpc.modca-overlay":{"source":"iana"},"application/vnd.afpc.modca-pagesegment":{"source":"iana"},"application/vnd.age":{"source":"iana","extensions":["age"]},"application/vnd.ah-barcode":{"source":"apache"},"application/vnd.ahead.space":{"source":"iana","extensions":["ahead"]},"application/vnd.airzip.filesecure.azf":{"source":"iana","extensions":["azf"]},"application/vnd.airzip.filesecure.azs":{"source":"iana","extensions":["azs"]},"application/vnd.amadeus+json":{"source":"iana","compressible":true},"application/vnd.amazon.ebook":{"source":"apache","extensions":["azw"]},"application/vnd.amazon.mobi8-ebook":{"source":"iana"},"application/vnd.americandynamics.acc":{"source":"iana","extensions":["acc"]},"application/vnd.amiga.ami":{"source":"iana","extensions":["ami"]},"application/vnd.amundsen.maze+xml":{"source":"iana","compressible":true},"application/vnd.android.ota":{"source":"iana"},"application/vnd.android.package-archive":{"source":"apache","compressible":false,"extensions":["apk"]},"application/vnd.anki":{"source":"iana"},"application/vnd.anser-web-certificate-issue-initiation":{"source":"iana","extensions":["cii"]},"application/vnd.anser-web-funds-transfer-initiation":{"source":"apache","extensions":["fti"]},"application/vnd.antix.game-component":{"source":"iana","extensions":["atx"]},"application/vnd.apache.arrow.file":{"source":"iana"},"application/vnd.apache.arrow.stream":{"source":"iana"},"application/vnd.apache.parquet":{"source":"iana"},"application/vnd.apache.thrift.binary":{"source":"iana"},"application/vnd.apache.thrift.compact":{"source":"iana"},"application/vnd.apache.thrift.json":{"source":"iana"},"application/vnd.apexlang":{"source":"iana"},"application/vnd.api+json":{"source":"iana","compressible":true},"application/vnd.aplextor.warrp+json":{"source":"iana","compressible":true},"application/vnd.apothekende.reservation+json":{"source":"iana","compressible":true},"application/vnd.apple.installer+xml":{"source":"iana","compressible":true,"extensions":["mpkg"]},"application/vnd.apple.keynote":{"source":"iana","extensions":["key"]},"application/vnd.apple.mpegurl":{"source":"iana","extensions":["m3u8"]},"application/vnd.apple.numbers":{"source":"iana","extensions":["numbers"]},"application/vnd.apple.pages":{"source":"iana","extensions":["pages"]},"application/vnd.apple.pkpass":{"compressible":false,"extensions":["pkpass"]},"application/vnd.arastra.swi":{"source":"apache"},"application/vnd.aristanetworks.swi":{"source":"iana","extensions":["swi"]},"application/vnd.artisan+json":{"source":"iana","compressible":true},"application/vnd.artsquare":{"source":"iana"},"application/vnd.astraea-software.iota":{"source":"iana","extensions":["iota"]},"application/vnd.audiograph":{"source":"iana","extensions":["aep"]},"application/vnd.autodesk.fbx":{"extensions":["fbx"]},"application/vnd.autopackage":{"source":"iana"},"application/vnd.avalon+json":{"source":"iana","compressible":true},"application/vnd.avistar+xml":{"source":"iana","compressible":true},"application/vnd.balsamiq.bmml+xml":{"source":"iana","compressible":true,"extensions":["bmml"]},"application/vnd.balsamiq.bmpr":{"source":"iana"},"application/vnd.banana-accounting":{"source":"iana"},"application/vnd.bbf.usp.error":{"source":"iana"},"application/vnd.bbf.usp.msg":{"source":"iana"},"application/vnd.bbf.usp.msg+json":{"source":"iana","compressible":true},"application/vnd.bekitzur-stech+json":{"source":"iana","compressible":true},"application/vnd.belightsoft.lhzd+zip":{"source":"iana","compressible":false},"application/vnd.belightsoft.lhzl+zip":{"source":"iana","compressible":false},"application/vnd.bint.med-content":{"source":"iana"},"application/vnd.biopax.rdf+xml":{"source":"iana","compressible":true},"application/vnd.blink-idb-value-wrapper":{"source":"iana"},"application/vnd.blueice.multipass":{"source":"iana","extensions":["mpm"]},"application/vnd.bluetooth.ep.oob":{"source":"iana"},"application/vnd.bluetooth.le.oob":{"source":"iana"},"application/vnd.bmi":{"source":"iana","extensions":["bmi"]},"application/vnd.bpf":{"source":"iana"},"application/vnd.bpf3":{"source":"iana"},"application/vnd.businessobjects":{"source":"iana","extensions":["rep"]},"application/vnd.byu.uapi+json":{"source":"iana","compressible":true},"application/vnd.bzip3":{"source":"iana"},"application/vnd.c3voc.schedule+xml":{"source":"iana","compressible":true},"application/vnd.cab-jscript":{"source":"iana"},"application/vnd.canon-cpdl":{"source":"iana"},"application/vnd.canon-lips":{"source":"iana"},"application/vnd.capasystems-pg+json":{"source":"iana","compressible":true},"application/vnd.cendio.thinlinc.clientconf":{"source":"iana"},"application/vnd.century-systems.tcp_stream":{"source":"iana"},"application/vnd.chemdraw+xml":{"source":"iana","compressible":true,"extensions":["cdxml"]},"application/vnd.chess-pgn":{"source":"iana"},"application/vnd.chipnuts.karaoke-mmd":{"source":"iana","extensions":["mmd"]},"application/vnd.ciedi":{"source":"iana"},"application/vnd.cinderella":{"source":"iana","extensions":["cdy"]},"application/vnd.cirpack.isdn-ext":{"source":"iana"},"application/vnd.citationstyles.style+xml":{"source":"iana","compressible":true,"extensions":["csl"]},"application/vnd.claymore":{"source":"iana","extensions":["cla"]},"application/vnd.cloanto.rp9":{"source":"iana","extensions":["rp9"]},"application/vnd.clonk.c4group":{"source":"iana","extensions":["c4g","c4d","c4f","c4p","c4u"]},"application/vnd.cluetrust.cartomobile-config":{"source":"iana","extensions":["c11amc"]},"application/vnd.cluetrust.cartomobile-config-pkg":{"source":"iana","extensions":["c11amz"]},"application/vnd.cncf.helm.chart.content.v1.tar+gzip":{"source":"iana"},"application/vnd.cncf.helm.chart.provenance.v1.prov":{"source":"iana"},"application/vnd.cncf.helm.config.v1+json":{"source":"iana","compressible":true},"application/vnd.coffeescript":{"source":"iana"},"application/vnd.collabio.xodocuments.document":{"source":"iana"},"application/vnd.collabio.xodocuments.document-template":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation-template":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet-template":{"source":"iana"},"application/vnd.collection+json":{"source":"iana","compressible":true},"application/vnd.collection.doc+json":{"source":"iana","compressible":true},"application/vnd.collection.next+json":{"source":"iana","compressible":true},"application/vnd.comicbook+zip":{"source":"iana","compressible":false},"application/vnd.comicbook-rar":{"source":"iana"},"application/vnd.commerce-battelle":{"source":"iana"},"application/vnd.commonspace":{"source":"iana","extensions":["csp"]},"application/vnd.contact.cmsg":{"source":"iana","extensions":["cdbcmsg"]},"application/vnd.coreos.ignition+json":{"source":"iana","compressible":true},"application/vnd.cosmocaller":{"source":"iana","extensions":["cmc"]},"application/vnd.crick.clicker":{"source":"iana","extensions":["clkx"]},"application/vnd.crick.clicker.keyboard":{"source":"iana","extensions":["clkk"]},"application/vnd.crick.clicker.palette":{"source":"iana","extensions":["clkp"]},"application/vnd.crick.clicker.template":{"source":"iana","extensions":["clkt"]},"application/vnd.crick.clicker.wordbank":{"source":"iana","extensions":["clkw"]},"application/vnd.criticaltools.wbs+xml":{"source":"iana","compressible":true,"extensions":["wbs"]},"application/vnd.cryptii.pipe+json":{"source":"iana","compressible":true},"application/vnd.crypto-shade-file":{"source":"iana"},"application/vnd.cryptomator.encrypted":{"source":"iana"},"application/vnd.cryptomator.vault":{"source":"iana"},"application/vnd.ctc-posml":{"source":"iana","extensions":["pml"]},"application/vnd.ctct.ws+xml":{"source":"iana","compressible":true},"application/vnd.cups-pdf":{"source":"iana"},"application/vnd.cups-postscript":{"source":"iana"},"application/vnd.cups-ppd":{"source":"iana","extensions":["ppd"]},"application/vnd.cups-raster":{"source":"iana"},"application/vnd.cups-raw":{"source":"iana"},"application/vnd.curl":{"source":"iana"},"application/vnd.curl.car":{"source":"apache","extensions":["car"]},"application/vnd.curl.pcurl":{"source":"apache","extensions":["pcurl"]},"application/vnd.cyan.dean.root+xml":{"source":"iana","compressible":true},"application/vnd.cybank":{"source":"iana"},"application/vnd.cyclonedx+json":{"source":"iana","compressible":true},"application/vnd.cyclonedx+xml":{"source":"iana","compressible":true},"application/vnd.d2l.coursepackage1p0+zip":{"source":"iana","compressible":false},"application/vnd.d3m-dataset":{"source":"iana"},"application/vnd.d3m-problem":{"source":"iana"},"application/vnd.dart":{"source":"iana","compressible":true,"extensions":["dart"]},"application/vnd.data-vision.rdz":{"source":"iana","extensions":["rdz"]},"application/vnd.datalog":{"source":"iana"},"application/vnd.datapackage+json":{"source":"iana","compressible":true},"application/vnd.dataresource+json":{"source":"iana","compressible":true},"application/vnd.dbf":{"source":"iana","extensions":["dbf"]},"application/vnd.dcmp+xml":{"source":"iana","compressible":true,"extensions":["dcmp"]},"application/vnd.debian.binary-package":{"source":"iana"},"application/vnd.dece.data":{"source":"iana","extensions":["uvf","uvvf","uvd","uvvd"]},"application/vnd.dece.ttml+xml":{"source":"iana","compressible":true,"extensions":["uvt","uvvt"]},"application/vnd.dece.unspecified":{"source":"iana","extensions":["uvx","uvvx"]},"application/vnd.dece.zip":{"source":"iana","extensions":["uvz","uvvz"]},"application/vnd.denovo.fcselayout-link":{"source":"iana","extensions":["fe_launch"]},"application/vnd.desmume.movie":{"source":"iana"},"application/vnd.dir-bi.plate-dl-nosuffix":{"source":"iana"},"application/vnd.dm.delegation+xml":{"source":"iana","compressible":true},"application/vnd.dna":{"source":"iana","extensions":["dna"]},"application/vnd.document+json":{"source":"iana","compressible":true},"application/vnd.dolby.mlp":{"source":"apache","extensions":["mlp"]},"application/vnd.dolby.mobile.1":{"source":"iana"},"application/vnd.dolby.mobile.2":{"source":"iana"},"application/vnd.doremir.scorecloud-binary-document":{"source":"iana"},"application/vnd.dpgraph":{"source":"iana","extensions":["dpg"]},"application/vnd.dreamfactory":{"source":"iana","extensions":["dfac"]},"application/vnd.drive+json":{"source":"iana","compressible":true},"application/vnd.ds-keypoint":{"source":"apache","extensions":["kpxx"]},"application/vnd.dtg.local":{"source":"iana"},"application/vnd.dtg.local.flash":{"source":"iana"},"application/vnd.dtg.local.html":{"source":"iana"},"application/vnd.dvb.ait":{"source":"iana","extensions":["ait"]},"application/vnd.dvb.dvbisl+xml":{"source":"iana","compressible":true},"application/vnd.dvb.dvbj":{"source":"iana"},"application/vnd.dvb.esgcontainer":{"source":"iana"},"application/vnd.dvb.ipdcdftnotifaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess2":{"source":"iana"},"application/vnd.dvb.ipdcesgpdd":{"source":"iana"},"application/vnd.dvb.ipdcroaming":{"source":"iana"},"application/vnd.dvb.iptv.alfec-base":{"source":"iana"},"application/vnd.dvb.iptv.alfec-enhancement":{"source":"iana"},"application/vnd.dvb.notif-aggregate-root+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-container+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-generic+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-msglist+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-request+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-response+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-init+xml":{"source":"iana","compressible":true},"application/vnd.dvb.pfr":{"source":"iana"},"application/vnd.dvb.service":{"source":"iana","extensions":["svc"]},"application/vnd.dxr":{"source":"iana"},"application/vnd.dynageo":{"source":"iana","extensions":["geo"]},"application/vnd.dzr":{"source":"iana"},"application/vnd.easykaraoke.cdgdownload":{"source":"iana"},"application/vnd.ecdis-update":{"source":"iana"},"application/vnd.ecip.rlp":{"source":"iana"},"application/vnd.eclipse.ditto+json":{"source":"iana","compressible":true},"application/vnd.ecowin.chart":{"source":"iana","extensions":["mag"]},"application/vnd.ecowin.filerequest":{"source":"iana"},"application/vnd.ecowin.fileupdate":{"source":"iana"},"application/vnd.ecowin.series":{"source":"iana"},"application/vnd.ecowin.seriesrequest":{"source":"iana"},"application/vnd.ecowin.seriesupdate":{"source":"iana"},"application/vnd.efi.img":{"source":"iana"},"application/vnd.efi.iso":{"source":"iana"},"application/vnd.eln+zip":{"source":"iana","compressible":false},"application/vnd.emclient.accessrequest+xml":{"source":"iana","compressible":true},"application/vnd.enliven":{"source":"iana","extensions":["nml"]},"application/vnd.enphase.envoy":{"source":"iana"},"application/vnd.eprints.data+xml":{"source":"iana","compressible":true},"application/vnd.epson.esf":{"source":"iana","extensions":["esf"]},"application/vnd.epson.msf":{"source":"iana","extensions":["msf"]},"application/vnd.epson.quickanime":{"source":"iana","extensions":["qam"]},"application/vnd.epson.salt":{"source":"iana","extensions":["slt"]},"application/vnd.epson.ssf":{"source":"iana","extensions":["ssf"]},"application/vnd.ericsson.quickcall":{"source":"iana"},"application/vnd.erofs":{"source":"iana"},"application/vnd.espass-espass+zip":{"source":"iana","compressible":false},"application/vnd.eszigno3+xml":{"source":"iana","compressible":true,"extensions":["es3","et3"]},"application/vnd.etsi.aoc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.asic-e+zip":{"source":"iana","compressible":false},"application/vnd.etsi.asic-s+zip":{"source":"iana","compressible":false},"application/vnd.etsi.cug+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvcommand+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-bc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-cod+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-npvr+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvservice+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsync+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvueprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mcid+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mheg5":{"source":"iana"},"application/vnd.etsi.overload-control-policy-dataset+xml":{"source":"iana","compressible":true},"application/vnd.etsi.pstn+xml":{"source":"iana","compressible":true},"application/vnd.etsi.sci+xml":{"source":"iana","compressible":true},"application/vnd.etsi.simservs+xml":{"source":"iana","compressible":true},"application/vnd.etsi.timestamp-token":{"source":"iana"},"application/vnd.etsi.tsl+xml":{"source":"iana","compressible":true},"application/vnd.etsi.tsl.der":{"source":"iana"},"application/vnd.eu.kasparian.car+json":{"source":"iana","compressible":true},"application/vnd.eudora.data":{"source":"iana"},"application/vnd.evolv.ecig.profile":{"source":"iana"},"application/vnd.evolv.ecig.settings":{"source":"iana"},"application/vnd.evolv.ecig.theme":{"source":"iana"},"application/vnd.exstream-empower+zip":{"source":"iana","compressible":false},"application/vnd.exstream-package":{"source":"iana"},"application/vnd.ezpix-album":{"source":"iana","extensions":["ez2"]},"application/vnd.ezpix-package":{"source":"iana","extensions":["ez3"]},"application/vnd.f-secure.mobile":{"source":"iana"},"application/vnd.familysearch.gedcom+zip":{"source":"iana","compressible":false},"application/vnd.fastcopy-disk-image":{"source":"iana"},"application/vnd.fdf":{"source":"apache","extensions":["fdf"]},"application/vnd.fdsn.mseed":{"source":"iana","extensions":["mseed"]},"application/vnd.fdsn.seed":{"source":"iana","extensions":["seed","dataless"]},"application/vnd.fdsn.stationxml+xml":{"source":"iana","charset":"XML-BASED","compressible":true},"application/vnd.ffsns":{"source":"iana"},"application/vnd.ficlab.flb+zip":{"source":"iana","compressible":false},"application/vnd.filmit.zfc":{"source":"iana"},"application/vnd.fints":{"source":"iana"},"application/vnd.firemonkeys.cloudcell":{"source":"iana"},"application/vnd.flographit":{"source":"iana","extensions":["gph"]},"application/vnd.fluxtime.clip":{"source":"iana","extensions":["ftc"]},"application/vnd.font-fontforge-sfd":{"source":"iana"},"application/vnd.framemaker":{"source":"iana","extensions":["fm","frame","maker","book"]},"application/vnd.freelog.comic":{"source":"iana"},"application/vnd.frogans.fnc":{"source":"apache","extensions":["fnc"]},"application/vnd.frogans.ltf":{"source":"apache","extensions":["ltf"]},"application/vnd.fsc.weblaunch":{"source":"iana","extensions":["fsc"]},"application/vnd.fujifilm.fb.docuworks":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.binder":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.container":{"source":"iana"},"application/vnd.fujifilm.fb.jfi+xml":{"source":"iana","compressible":true},"application/vnd.fujitsu.oasys":{"source":"iana","extensions":["oas"]},"application/vnd.fujitsu.oasys2":{"source":"iana","extensions":["oa2"]},"application/vnd.fujitsu.oasys3":{"source":"iana","extensions":["oa3"]},"application/vnd.fujitsu.oasysgp":{"source":"iana","extensions":["fg5"]},"application/vnd.fujitsu.oasysprs":{"source":"iana","extensions":["bh2"]},"application/vnd.fujixerox.art-ex":{"source":"iana"},"application/vnd.fujixerox.art4":{"source":"iana"},"application/vnd.fujixerox.ddd":{"source":"iana","extensions":["ddd"]},"application/vnd.fujixerox.docuworks":{"source":"iana","extensions":["xdw"]},"application/vnd.fujixerox.docuworks.binder":{"source":"iana","extensions":["xbd"]},"application/vnd.fujixerox.docuworks.container":{"source":"iana"},"application/vnd.fujixerox.hbpl":{"source":"iana"},"application/vnd.fut-misnet":{"source":"iana"},"application/vnd.futoin+cbor":{"source":"iana"},"application/vnd.futoin+json":{"source":"iana","compressible":true},"application/vnd.fuzzysheet":{"source":"iana","extensions":["fzs"]},"application/vnd.ga4gh.passport+jwt":{"source":"iana"},"application/vnd.genomatix.tuxedo":{"source":"iana","extensions":["txd"]},"application/vnd.genozip":{"source":"iana"},"application/vnd.gentics.grd+json":{"source":"iana","compressible":true},"application/vnd.gentoo.catmetadata+xml":{"source":"iana","compressible":true},"application/vnd.gentoo.ebuild":{"source":"iana"},"application/vnd.gentoo.eclass":{"source":"iana"},"application/vnd.gentoo.gpkg":{"source":"iana"},"application/vnd.gentoo.manifest":{"source":"iana"},"application/vnd.gentoo.pkgmetadata+xml":{"source":"iana","compressible":true},"application/vnd.gentoo.xpak":{"source":"iana"},"application/vnd.geo+json":{"source":"apache","compressible":true},"application/vnd.geocube+xml":{"source":"apache","compressible":true},"application/vnd.geogebra.file":{"source":"iana","extensions":["ggb"]},"application/vnd.geogebra.pinboard":{"source":"iana"},"application/vnd.geogebra.slides":{"source":"iana","extensions":["ggs"]},"application/vnd.geogebra.tool":{"source":"iana","extensions":["ggt"]},"application/vnd.geometry-explorer":{"source":"iana","extensions":["gex","gre"]},"application/vnd.geonext":{"source":"iana","extensions":["gxt"]},"application/vnd.geoplan":{"source":"iana","extensions":["g2w"]},"application/vnd.geospace":{"source":"iana","extensions":["g3w"]},"application/vnd.gerber":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt-response":{"source":"iana"},"application/vnd.gmx":{"source":"iana","extensions":["gmx"]},"application/vnd.gnu.taler.exchange+json":{"source":"iana","compressible":true},"application/vnd.gnu.taler.merchant+json":{"source":"iana","compressible":true},"application/vnd.google-apps.audio":{},"application/vnd.google-apps.document":{"compressible":false,"extensions":["gdoc"]},"application/vnd.google-apps.drawing":{"compressible":false,"extensions":["gdraw"]},"application/vnd.google-apps.drive-sdk":{"compressible":false},"application/vnd.google-apps.file":{},"application/vnd.google-apps.folder":{"compressible":false},"application/vnd.google-apps.form":{"compressible":false,"extensions":["gform"]},"application/vnd.google-apps.fusiontable":{},"application/vnd.google-apps.jam":{"compressible":false,"extensions":["gjam"]},"application/vnd.google-apps.mail-layout":{},"application/vnd.google-apps.map":{"compressible":false,"extensions":["gmap"]},"application/vnd.google-apps.photo":{},"application/vnd.google-apps.presentation":{"compressible":false,"extensions":["gslides"]},"application/vnd.google-apps.script":{"compressible":false,"extensions":["gscript"]},"application/vnd.google-apps.shortcut":{},"application/vnd.google-apps.site":{"compressible":false,"extensions":["gsite"]},"application/vnd.google-apps.spreadsheet":{"compressible":false,"extensions":["gsheet"]},"application/vnd.google-apps.unknown":{},"application/vnd.google-apps.video":{},"application/vnd.google-earth.kml+xml":{"source":"iana","compressible":true,"extensions":["kml"]},"application/vnd.google-earth.kmz":{"source":"iana","compressible":false,"extensions":["kmz"]},"application/vnd.gov.sk.e-form+xml":{"source":"apache","compressible":true},"application/vnd.gov.sk.e-form+zip":{"source":"iana","compressible":false},"application/vnd.gov.sk.xmldatacontainer+xml":{"source":"iana","compressible":true,"extensions":["xdcf"]},"application/vnd.gpxsee.map+xml":{"source":"iana","compressible":true},"application/vnd.grafeq":{"source":"iana","extensions":["gqf","gqs"]},"application/vnd.gridmp":{"source":"iana"},"application/vnd.groove-account":{"source":"iana","extensions":["gac"]},"application/vnd.groove-help":{"source":"iana","extensions":["ghf"]},"application/vnd.groove-identity-message":{"source":"iana","extensions":["gim"]},"application/vnd.groove-injector":{"source":"iana","extensions":["grv"]},"application/vnd.groove-tool-message":{"source":"iana","extensions":["gtm"]},"application/vnd.groove-tool-template":{"source":"iana","extensions":["tpl"]},"application/vnd.groove-vcard":{"source":"iana","extensions":["vcg"]},"application/vnd.hal+json":{"source":"iana","compressible":true},"application/vnd.hal+xml":{"source":"iana","compressible":true,"extensions":["hal"]},"application/vnd.handheld-entertainment+xml":{"source":"iana","compressible":true,"extensions":["zmm"]},"application/vnd.hbci":{"source":"iana","extensions":["hbci"]},"application/vnd.hc+json":{"source":"iana","compressible":true},"application/vnd.hcl-bireports":{"source":"iana"},"application/vnd.hdt":{"source":"iana"},"application/vnd.heroku+json":{"source":"iana","compressible":true},"application/vnd.hhe.lesson-player":{"source":"iana","extensions":["les"]},"application/vnd.hp-hpgl":{"source":"iana","extensions":["hpgl"]},"application/vnd.hp-hpid":{"source":"iana","extensions":["hpid"]},"application/vnd.hp-hps":{"source":"iana","extensions":["hps"]},"application/vnd.hp-jlyt":{"source":"iana","extensions":["jlt"]},"application/vnd.hp-pcl":{"source":"iana","extensions":["pcl"]},"application/vnd.hp-pclxl":{"source":"iana","extensions":["pclxl"]},"application/vnd.hsl":{"source":"iana"},"application/vnd.httphone":{"source":"iana"},"application/vnd.hydrostatix.sof-data":{"source":"iana","extensions":["sfd-hdstx"]},"application/vnd.hyper+json":{"source":"iana","compressible":true},"application/vnd.hyper-item+json":{"source":"iana","compressible":true},"application/vnd.hyperdrive+json":{"source":"iana","compressible":true},"application/vnd.hzn-3d-crossword":{"source":"iana"},"application/vnd.ibm.afplinedata":{"source":"apache"},"application/vnd.ibm.electronic-media":{"source":"iana"},"application/vnd.ibm.minipay":{"source":"iana","extensions":["mpy"]},"application/vnd.ibm.modcap":{"source":"apache","extensions":["afp","listafp","list3820"]},"application/vnd.ibm.rights-management":{"source":"iana","extensions":["irm"]},"application/vnd.ibm.secure-container":{"source":"iana","extensions":["sc"]},"application/vnd.iccprofile":{"source":"iana","extensions":["icc","icm"]},"application/vnd.ieee.1905":{"source":"iana"},"application/vnd.igloader":{"source":"iana","extensions":["igl"]},"application/vnd.imagemeter.folder+zip":{"source":"iana","compressible":false},"application/vnd.imagemeter.image+zip":{"source":"iana","compressible":false},"application/vnd.immervision-ivp":{"source":"iana","extensions":["ivp"]},"application/vnd.immervision-ivu":{"source":"iana","extensions":["ivu"]},"application/vnd.ims.imsccv1p1":{"source":"iana"},"application/vnd.ims.imsccv1p2":{"source":"iana"},"application/vnd.ims.imsccv1p3":{"source":"iana"},"application/vnd.ims.lis.v2.result+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolconsumerprofile+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy.id+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings.simple+json":{"source":"iana","compressible":true},"application/vnd.informedcontrol.rms+xml":{"source":"iana","compressible":true},"application/vnd.informix-visionary":{"source":"apache"},"application/vnd.infotech.project":{"source":"iana"},"application/vnd.infotech.project+xml":{"source":"iana","compressible":true},"application/vnd.innopath.wamp.notification":{"source":"iana"},"application/vnd.insors.igm":{"source":"iana","extensions":["igm"]},"application/vnd.intercon.formnet":{"source":"iana","extensions":["xpw","xpx"]},"application/vnd.intergeo":{"source":"iana","extensions":["i2g"]},"application/vnd.intertrust.digibox":{"source":"iana"},"application/vnd.intertrust.nncp":{"source":"iana"},"application/vnd.intu.qbo":{"source":"iana","extensions":["qbo"]},"application/vnd.intu.qfx":{"source":"iana","extensions":["qfx"]},"application/vnd.ipfs.ipns-record":{"source":"iana"},"application/vnd.ipld.car":{"source":"iana"},"application/vnd.ipld.dag-cbor":{"source":"iana"},"application/vnd.ipld.dag-json":{"source":"iana"},"application/vnd.ipld.raw":{"source":"iana"},"application/vnd.iptc.g2.catalogitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.conceptitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.knowledgeitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsmessage+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.packageitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.planningitem+xml":{"source":"iana","compressible":true},"application/vnd.ipunplugged.rcprofile":{"source":"iana","extensions":["rcprofile"]},"application/vnd.irepository.package+xml":{"source":"iana","compressible":true,"extensions":["irp"]},"application/vnd.is-xpr":{"source":"iana","extensions":["xpr"]},"application/vnd.isac.fcs":{"source":"iana","extensions":["fcs"]},"application/vnd.iso11783-10+zip":{"source":"iana","compressible":false},"application/vnd.jam":{"source":"iana","extensions":["jam"]},"application/vnd.japannet-directory-service":{"source":"iana"},"application/vnd.japannet-jpnstore-wakeup":{"source":"iana"},"application/vnd.japannet-payment-wakeup":{"source":"iana"},"application/vnd.japannet-registration":{"source":"iana"},"application/vnd.japannet-registration-wakeup":{"source":"iana"},"application/vnd.japannet-setstore-wakeup":{"source":"iana"},"application/vnd.japannet-verification":{"source":"iana"},"application/vnd.japannet-verification-wakeup":{"source":"iana"},"application/vnd.jcp.javame.midlet-rms":{"source":"iana","extensions":["rms"]},"application/vnd.jisp":{"source":"iana","extensions":["jisp"]},"application/vnd.joost.joda-archive":{"source":"iana","extensions":["joda"]},"application/vnd.jsk.isdn-ngn":{"source":"iana"},"application/vnd.kahootz":{"source":"iana","extensions":["ktz","ktr"]},"application/vnd.kde.karbon":{"source":"iana","extensions":["karbon"]},"application/vnd.kde.kchart":{"source":"iana","extensions":["chrt"]},"application/vnd.kde.kformula":{"source":"iana","extensions":["kfo"]},"application/vnd.kde.kivio":{"source":"iana","extensions":["flw"]},"application/vnd.kde.kontour":{"source":"iana","extensions":["kon"]},"application/vnd.kde.kpresenter":{"source":"iana","extensions":["kpr","kpt"]},"application/vnd.kde.kspread":{"source":"iana","extensions":["ksp"]},"application/vnd.kde.kword":{"source":"iana","extensions":["kwd","kwt"]},"application/vnd.kdl":{"source":"iana"},"application/vnd.kenameaapp":{"source":"iana","extensions":["htke"]},"application/vnd.keyman.kmp+zip":{"source":"iana","compressible":false},"application/vnd.keyman.kmx":{"source":"iana"},"application/vnd.kidspiration":{"source":"iana","extensions":["kia"]},"application/vnd.kinar":{"source":"iana","extensions":["kne","knp"]},"application/vnd.koan":{"source":"iana","extensions":["skp","skd","skt","skm"]},"application/vnd.kodak-descriptor":{"source":"iana","extensions":["sse"]},"application/vnd.las":{"source":"iana"},"application/vnd.las.las+json":{"source":"iana","compressible":true},"application/vnd.las.las+xml":{"source":"iana","compressible":true,"extensions":["lasxml"]},"application/vnd.laszip":{"source":"iana"},"application/vnd.ldev.productlicensing":{"source":"iana"},"application/vnd.leap+json":{"source":"iana","compressible":true},"application/vnd.liberty-request+xml":{"source":"iana","compressible":true},"application/vnd.llamagraphics.life-balance.desktop":{"source":"iana","extensions":["lbd"]},"application/vnd.llamagraphics.life-balance.exchange+xml":{"source":"iana","compressible":true,"extensions":["lbe"]},"application/vnd.logipipe.circuit+zip":{"source":"iana","compressible":false},"application/vnd.loom":{"source":"iana"},"application/vnd.lotus-1-2-3":{"source":"iana","extensions":["123"]},"application/vnd.lotus-approach":{"source":"iana","extensions":["apr"]},"application/vnd.lotus-freelance":{"source":"iana","extensions":["pre"]},"application/vnd.lotus-notes":{"source":"iana","extensions":["nsf"]},"application/vnd.lotus-organizer":{"source":"iana","extensions":["org"]},"application/vnd.lotus-screencam":{"source":"iana","extensions":["scm"]},"application/vnd.lotus-wordpro":{"source":"iana","extensions":["lwp"]},"application/vnd.macports.portpkg":{"source":"iana","extensions":["portpkg"]},"application/vnd.mapbox-vector-tile":{"source":"iana","extensions":["mvt"]},"application/vnd.marlin.drm.actiontoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.conftoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.license+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.mdcf":{"source":"iana"},"application/vnd.mason+json":{"source":"iana","compressible":true},"application/vnd.maxar.archive.3tz+zip":{"source":"iana","compressible":false},"application/vnd.maxmind.maxmind-db":{"source":"iana"},"application/vnd.mcd":{"source":"iana","extensions":["mcd"]},"application/vnd.mdl":{"source":"iana"},"application/vnd.mdl-mbsdf":{"source":"iana"},"application/vnd.medcalcdata":{"source":"iana","extensions":["mc1"]},"application/vnd.mediastation.cdkey":{"source":"iana","extensions":["cdkey"]},"application/vnd.medicalholodeck.recordxr":{"source":"iana"},"application/vnd.meridian-slingshot":{"source":"iana"},"application/vnd.mermaid":{"source":"iana"},"application/vnd.mfer":{"source":"iana","extensions":["mwf"]},"application/vnd.mfmp":{"source":"iana","extensions":["mfm"]},"application/vnd.micro+json":{"source":"iana","compressible":true},"application/vnd.micrografx.flo":{"source":"iana","extensions":["flo"]},"application/vnd.micrografx.igx":{"source":"iana","extensions":["igx"]},"application/vnd.microsoft.portable-executable":{"source":"iana"},"application/vnd.microsoft.windows.thumbnail-cache":{"source":"iana"},"application/vnd.miele+json":{"source":"iana","compressible":true},"application/vnd.mif":{"source":"iana","extensions":["mif"]},"application/vnd.minisoft-hp3000-save":{"source":"iana"},"application/vnd.mitsubishi.misty-guard.trustweb":{"source":"iana"},"application/vnd.mobius.daf":{"source":"iana","extensions":["daf"]},"application/vnd.mobius.dis":{"source":"iana","extensions":["dis"]},"application/vnd.mobius.mbk":{"source":"iana","extensions":["mbk"]},"application/vnd.mobius.mqy":{"source":"iana","extensions":["mqy"]},"application/vnd.mobius.msl":{"source":"iana","extensions":["msl"]},"application/vnd.mobius.plc":{"source":"iana","extensions":["plc"]},"application/vnd.mobius.txf":{"source":"iana","extensions":["txf"]},"application/vnd.modl":{"source":"iana"},"application/vnd.mophun.application":{"source":"iana","extensions":["mpn"]},"application/vnd.mophun.certificate":{"source":"iana","extensions":["mpc"]},"application/vnd.motorola.flexsuite":{"source":"iana"},"application/vnd.motorola.flexsuite.adsi":{"source":"iana"},"application/vnd.motorola.flexsuite.fis":{"source":"iana"},"application/vnd.motorola.flexsuite.gotap":{"source":"iana"},"application/vnd.motorola.flexsuite.kmr":{"source":"iana"},"application/vnd.motorola.flexsuite.ttc":{"source":"iana"},"application/vnd.motorola.flexsuite.wem":{"source":"iana"},"application/vnd.motorola.iprm":{"source":"iana"},"application/vnd.mozilla.xul+xml":{"source":"iana","compressible":true,"extensions":["xul"]},"application/vnd.ms-3mfdocument":{"source":"iana"},"application/vnd.ms-artgalry":{"source":"iana","extensions":["cil"]},"application/vnd.ms-asf":{"source":"iana"},"application/vnd.ms-cab-compressed":{"source":"iana","extensions":["cab"]},"application/vnd.ms-color.iccprofile":{"source":"apache"},"application/vnd.ms-excel":{"source":"iana","compressible":false,"extensions":["xls","xlm","xla","xlc","xlt","xlw"]},"application/vnd.ms-excel.addin.macroenabled.12":{"source":"iana","extensions":["xlam"]},"application/vnd.ms-excel.sheet.binary.macroenabled.12":{"source":"iana","extensions":["xlsb"]},"application/vnd.ms-excel.sheet.macroenabled.12":{"source":"iana","extensions":["xlsm"]},"application/vnd.ms-excel.template.macroenabled.12":{"source":"iana","extensions":["xltm"]},"application/vnd.ms-fontobject":{"source":"iana","compressible":true,"extensions":["eot"]},"application/vnd.ms-htmlhelp":{"source":"iana","extensions":["chm"]},"application/vnd.ms-ims":{"source":"iana","extensions":["ims"]},"application/vnd.ms-lrm":{"source":"iana","extensions":["lrm"]},"application/vnd.ms-office.activex+xml":{"source":"iana","compressible":true},"application/vnd.ms-officetheme":{"source":"iana","extensions":["thmx"]},"application/vnd.ms-opentype":{"source":"apache","compressible":true},"application/vnd.ms-outlook":{"compressible":false,"extensions":["msg"]},"application/vnd.ms-package.obfuscated-opentype":{"source":"apache"},"application/vnd.ms-pki.seccat":{"source":"apache","extensions":["cat"]},"application/vnd.ms-pki.stl":{"source":"apache","extensions":["stl"]},"application/vnd.ms-playready.initiator+xml":{"source":"iana","compressible":true},"application/vnd.ms-powerpoint":{"source":"iana","compressible":false,"extensions":["ppt","pps","pot"]},"application/vnd.ms-powerpoint.addin.macroenabled.12":{"source":"iana","extensions":["ppam"]},"application/vnd.ms-powerpoint.presentation.macroenabled.12":{"source":"iana","extensions":["pptm"]},"application/vnd.ms-powerpoint.slide.macroenabled.12":{"source":"iana","extensions":["sldm"]},"application/vnd.ms-powerpoint.slideshow.macroenabled.12":{"source":"iana","extensions":["ppsm"]},"application/vnd.ms-powerpoint.template.macroenabled.12":{"source":"iana","extensions":["potm"]},"application/vnd.ms-printdevicecapabilities+xml":{"source":"iana","compressible":true},"application/vnd.ms-printing.printticket+xml":{"source":"apache","compressible":true},"application/vnd.ms-printschematicket+xml":{"source":"iana","compressible":true},"application/vnd.ms-project":{"source":"iana","extensions":["mpp","mpt"]},"application/vnd.ms-tnef":{"source":"iana"},"application/vnd.ms-visio.viewer":{"extensions":["vdx"]},"application/vnd.ms-windows.devicepairing":{"source":"iana"},"application/vnd.ms-windows.nwprinting.oob":{"source":"iana"},"application/vnd.ms-windows.printerpairing":{"source":"iana"},"application/vnd.ms-windows.wsd.oob":{"source":"iana"},"application/vnd.ms-wmdrm.lic-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.lic-resp":{"source":"iana"},"application/vnd.ms-wmdrm.meter-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.meter-resp":{"source":"iana"},"application/vnd.ms-word.document.macroenabled.12":{"source":"iana","extensions":["docm"]},"application/vnd.ms-word.template.macroenabled.12":{"source":"iana","extensions":["dotm"]},"application/vnd.ms-works":{"source":"iana","extensions":["wps","wks","wcm","wdb"]},"application/vnd.ms-wpl":{"source":"iana","extensions":["wpl"]},"application/vnd.ms-xpsdocument":{"source":"iana","compressible":false,"extensions":["xps"]},"application/vnd.msa-disk-image":{"source":"iana"},"application/vnd.mseq":{"source":"iana","extensions":["mseq"]},"application/vnd.msgpack":{"source":"iana"},"application/vnd.msign":{"source":"iana"},"application/vnd.multiad.creator":{"source":"iana"},"application/vnd.multiad.creator.cif":{"source":"iana"},"application/vnd.music-niff":{"source":"iana"},"application/vnd.musician":{"source":"iana","extensions":["mus"]},"application/vnd.muvee.style":{"source":"iana","extensions":["msty"]},"application/vnd.mynfc":{"source":"iana","extensions":["taglet"]},"application/vnd.nacamar.ybrid+json":{"source":"iana","compressible":true},"application/vnd.nato.bindingdataobject+cbor":{"source":"iana"},"application/vnd.nato.bindingdataobject+json":{"source":"iana","compressible":true},"application/vnd.nato.bindingdataobject+xml":{"source":"iana","compressible":true,"extensions":["bdo"]},"application/vnd.nato.openxmlformats-package.iepd+zip":{"source":"iana","compressible":false},"application/vnd.ncd.control":{"source":"iana"},"application/vnd.ncd.reference":{"source":"iana"},"application/vnd.nearst.inv+json":{"source":"iana","compressible":true},"application/vnd.nebumind.line":{"source":"iana"},"application/vnd.nervana":{"source":"iana"},"application/vnd.netfpx":{"source":"iana"},"application/vnd.neurolanguage.nlu":{"source":"iana","extensions":["nlu"]},"application/vnd.nimn":{"source":"iana"},"application/vnd.nintendo.nitro.rom":{"source":"iana"},"application/vnd.nintendo.snes.rom":{"source":"iana"},"application/vnd.nitf":{"source":"iana","extensions":["ntf","nitf"]},"application/vnd.noblenet-directory":{"source":"iana","extensions":["nnd"]},"application/vnd.noblenet-sealer":{"source":"iana","extensions":["nns"]},"application/vnd.noblenet-web":{"source":"iana","extensions":["nnw"]},"application/vnd.nokia.catalogs":{"source":"iana"},"application/vnd.nokia.conml+wbxml":{"source":"iana"},"application/vnd.nokia.conml+xml":{"source":"iana","compressible":true},"application/vnd.nokia.iptv.config+xml":{"source":"iana","compressible":true},"application/vnd.nokia.isds-radio-presets":{"source":"iana"},"application/vnd.nokia.landmark+wbxml":{"source":"iana"},"application/vnd.nokia.landmark+xml":{"source":"iana","compressible":true},"application/vnd.nokia.landmarkcollection+xml":{"source":"iana","compressible":true},"application/vnd.nokia.n-gage.ac+xml":{"source":"iana","compressible":true,"extensions":["ac"]},"application/vnd.nokia.n-gage.data":{"source":"iana","extensions":["ngdat"]},"application/vnd.nokia.n-gage.symbian.install":{"source":"apache","extensions":["n-gage"]},"application/vnd.nokia.ncd":{"source":"iana"},"application/vnd.nokia.pcd+wbxml":{"source":"iana"},"application/vnd.nokia.pcd+xml":{"source":"iana","compressible":true},"application/vnd.nokia.radio-preset":{"source":"iana","extensions":["rpst"]},"application/vnd.nokia.radio-presets":{"source":"iana","extensions":["rpss"]},"application/vnd.novadigm.edm":{"source":"iana","extensions":["edm"]},"application/vnd.novadigm.edx":{"source":"iana","extensions":["edx"]},"application/vnd.novadigm.ext":{"source":"iana","extensions":["ext"]},"application/vnd.ntt-local.content-share":{"source":"iana"},"application/vnd.ntt-local.file-transfer":{"source":"iana"},"application/vnd.ntt-local.ogw_remote-access":{"source":"iana"},"application/vnd.ntt-local.sip-ta_remote":{"source":"iana"},"application/vnd.ntt-local.sip-ta_tcp_stream":{"source":"iana"},"application/vnd.oai.workflows":{"source":"iana"},"application/vnd.oai.workflows+json":{"source":"iana","compressible":true},"application/vnd.oai.workflows+yaml":{"source":"iana"},"application/vnd.oasis.opendocument.base":{"source":"iana"},"application/vnd.oasis.opendocument.chart":{"source":"iana","extensions":["odc"]},"application/vnd.oasis.opendocument.chart-template":{"source":"iana","extensions":["otc"]},"application/vnd.oasis.opendocument.database":{"source":"apache","extensions":["odb"]},"application/vnd.oasis.opendocument.formula":{"source":"iana","extensions":["odf"]},"application/vnd.oasis.opendocument.formula-template":{"source":"iana","extensions":["odft"]},"application/vnd.oasis.opendocument.graphics":{"source":"iana","compressible":false,"extensions":["odg"]},"application/vnd.oasis.opendocument.graphics-template":{"source":"iana","extensions":["otg"]},"application/vnd.oasis.opendocument.image":{"source":"iana","extensions":["odi"]},"application/vnd.oasis.opendocument.image-template":{"source":"iana","extensions":["oti"]},"application/vnd.oasis.opendocument.presentation":{"source":"iana","compressible":false,"extensions":["odp"]},"application/vnd.oasis.opendocument.presentation-template":{"source":"iana","extensions":["otp"]},"application/vnd.oasis.opendocument.spreadsheet":{"source":"iana","compressible":false,"extensions":["ods"]},"application/vnd.oasis.opendocument.spreadsheet-template":{"source":"iana","extensions":["ots"]},"application/vnd.oasis.opendocument.text":{"source":"iana","compressible":false,"extensions":["odt"]},"application/vnd.oasis.opendocument.text-master":{"source":"iana","extensions":["odm"]},"application/vnd.oasis.opendocument.text-master-template":{"source":"iana"},"application/vnd.oasis.opendocument.text-template":{"source":"iana","extensions":["ott"]},"application/vnd.oasis.opendocument.text-web":{"source":"iana","extensions":["oth"]},"application/vnd.obn":{"source":"iana"},"application/vnd.ocf+cbor":{"source":"iana"},"application/vnd.oci.image.manifest.v1+json":{"source":"iana","compressible":true},"application/vnd.oftn.l10n+json":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessdownload+xml":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessstreaming+xml":{"source":"iana","compressible":true},"application/vnd.oipf.cspg-hexbinary":{"source":"iana"},"application/vnd.oipf.dae.svg+xml":{"source":"iana","compressible":true},"application/vnd.oipf.dae.xhtml+xml":{"source":"iana","compressible":true},"application/vnd.oipf.mippvcontrolmessage+xml":{"source":"iana","compressible":true},"application/vnd.oipf.pae.gem":{"source":"iana"},"application/vnd.oipf.spdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.oipf.spdlist+xml":{"source":"iana","compressible":true},"application/vnd.oipf.ueprofile+xml":{"source":"iana","compressible":true},"application/vnd.oipf.userprofile+xml":{"source":"iana","compressible":true},"application/vnd.olpc-sugar":{"source":"iana","extensions":["xo"]},"application/vnd.oma-scws-config":{"source":"iana"},"application/vnd.oma-scws-http-request":{"source":"iana"},"application/vnd.oma-scws-http-response":{"source":"iana"},"application/vnd.oma.bcast.associated-procedure-parameter+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.drm-trigger+xml":{"source":"apache","compressible":true},"application/vnd.oma.bcast.imd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.ltkm":{"source":"iana"},"application/vnd.oma.bcast.notification+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.provisioningtrigger":{"source":"iana"},"application/vnd.oma.bcast.sgboot":{"source":"iana"},"application/vnd.oma.bcast.sgdd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sgdu":{"source":"iana"},"application/vnd.oma.bcast.simple-symbol-container":{"source":"iana"},"application/vnd.oma.bcast.smartcard-trigger+xml":{"source":"apache","compressible":true},"application/vnd.oma.bcast.sprov+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.stkm":{"source":"iana"},"application/vnd.oma.cab-address-book+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-feature-handler+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-pcc+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-subs-invite+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-user-prefs+xml":{"source":"iana","compressible":true},"application/vnd.oma.dcd":{"source":"iana"},"application/vnd.oma.dcdc":{"source":"iana"},"application/vnd.oma.dd2+xml":{"source":"iana","compressible":true,"extensions":["dd2"]},"application/vnd.oma.drm.risd+xml":{"source":"iana","compressible":true},"application/vnd.oma.group-usage-list+xml":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+cbor":{"source":"iana"},"application/vnd.oma.lwm2m+json":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+tlv":{"source":"iana"},"application/vnd.oma.pal+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.detailed-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.final-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.groups+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.invocation-descriptor+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.optimized-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.push":{"source":"iana"},"application/vnd.oma.scidm.messages+xml":{"source":"iana","compressible":true},"application/vnd.oma.xcap-directory+xml":{"source":"iana","compressible":true},"application/vnd.omads-email+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-file+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-folder+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omaloc-supl-init":{"source":"iana"},"application/vnd.onepager":{"source":"iana"},"application/vnd.onepagertamp":{"source":"iana"},"application/vnd.onepagertamx":{"source":"iana"},"application/vnd.onepagertat":{"source":"iana"},"application/vnd.onepagertatp":{"source":"iana"},"application/vnd.onepagertatx":{"source":"iana"},"application/vnd.onvif.metadata":{"source":"iana"},"application/vnd.openblox.game+xml":{"source":"iana","compressible":true,"extensions":["obgx"]},"application/vnd.openblox.game-binary":{"source":"iana"},"application/vnd.openeye.oeb":{"source":"iana"},"application/vnd.openofficeorg.extension":{"source":"apache","extensions":["oxt"]},"application/vnd.openstreetmap.data+xml":{"source":"iana","compressible":true,"extensions":["osm"]},"application/vnd.opentimestamps.ots":{"source":"iana"},"application/vnd.openvpi.dspx+json":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.custom-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.customxmlproperties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawing+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chart+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramcolors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramdata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramlayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramstyle+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.extended-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.commentauthors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.handoutmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesslide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presentation":{"source":"iana","compressible":false,"extensions":["pptx"]},"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slide":{"source":"iana","extensions":["sldx"]},"application/vnd.openxmlformats-officedocument.presentationml.slide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidelayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidemaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideshow":{"source":"iana","extensions":["ppsx"]},"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideupdateinfo+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tablestyles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tags+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.template":{"source":"iana","extensions":["potx"]},"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.viewprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.calcchain+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.chartsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.dialogsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.externallink+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcachedefinition+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcacherecords+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivottable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.querytable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionheaders+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionlog+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sharedstrings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":{"source":"iana","compressible":false,"extensions":["xlsx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheetmetadata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.tablesinglecells+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.template":{"source":"iana","extensions":["xltx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.usernames+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.volatiledependencies+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.theme+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.themeoverride+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.vmldrawing":{"source":"iana"},"application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document":{"source":"iana","compressible":false,"extensions":["docx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.glossary+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.fonttable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.template":{"source":"iana","extensions":["dotx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.websettings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.core-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.relationships+xml":{"source":"iana","compressible":true},"application/vnd.oracle.resource+json":{"source":"iana","compressible":true},"application/vnd.orange.indata":{"source":"iana"},"application/vnd.osa.netdeploy":{"source":"iana"},"application/vnd.osgeo.mapguide.package":{"source":"iana","extensions":["mgp"]},"application/vnd.osgi.bundle":{"source":"iana"},"application/vnd.osgi.dp":{"source":"iana","extensions":["dp"]},"application/vnd.osgi.subsystem":{"source":"iana","extensions":["esa"]},"application/vnd.otps.ct-kip+xml":{"source":"iana","compressible":true},"application/vnd.oxli.countgraph":{"source":"iana"},"application/vnd.pagerduty+json":{"source":"iana","compressible":true},"application/vnd.palm":{"source":"iana","extensions":["pdb","pqa","oprc"]},"application/vnd.panoply":{"source":"iana"},"application/vnd.paos.xml":{"source":"iana"},"application/vnd.patentdive":{"source":"iana"},"application/vnd.patientecommsdoc":{"source":"iana"},"application/vnd.pawaafile":{"source":"iana","extensions":["paw"]},"application/vnd.pcos":{"source":"iana"},"application/vnd.pg.format":{"source":"iana","extensions":["str"]},"application/vnd.pg.osasli":{"source":"iana","extensions":["ei6"]},"application/vnd.piaccess.application-licence":{"source":"iana"},"application/vnd.picsel":{"source":"iana","extensions":["efif"]},"application/vnd.pmi.widget":{"source":"iana","extensions":["wg"]},"application/vnd.poc.group-advertisement+xml":{"source":"iana","compressible":true},"application/vnd.pocketlearn":{"source":"iana","extensions":["plf"]},"application/vnd.powerbuilder6":{"source":"iana","extensions":["pbd"]},"application/vnd.powerbuilder6-s":{"source":"iana"},"application/vnd.powerbuilder7":{"source":"iana"},"application/vnd.powerbuilder7-s":{"source":"iana"},"application/vnd.powerbuilder75":{"source":"iana"},"application/vnd.powerbuilder75-s":{"source":"iana"},"application/vnd.preminet":{"source":"iana"},"application/vnd.previewsystems.box":{"source":"iana","extensions":["box"]},"application/vnd.procrate.brushset":{"extensions":["brushset"]},"application/vnd.procreate.brush":{"extensions":["brush"]},"application/vnd.procreate.dream":{"extensions":["drm"]},"application/vnd.proteus.magazine":{"source":"iana","extensions":["mgz"]},"application/vnd.psfs":{"source":"iana"},"application/vnd.pt.mundusmundi":{"source":"iana"},"application/vnd.publishare-delta-tree":{"source":"iana","extensions":["qps"]},"application/vnd.pvi.ptid1":{"source":"iana","extensions":["ptid"]},"application/vnd.pwg-multiplexed":{"source":"iana"},"application/vnd.pwg-xhtml-print+xml":{"source":"iana","compressible":true,"extensions":["xhtm"]},"application/vnd.qualcomm.brew-app-res":{"source":"iana"},"application/vnd.quarantainenet":{"source":"iana"},"application/vnd.quark.quarkxpress":{"source":"iana","extensions":["qxd","qxt","qwd","qwt","qxl","qxb"]},"application/vnd.quobject-quoxdocument":{"source":"iana"},"application/vnd.radisys.moml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conn+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-stream+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-base+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-detect+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-sendrecv+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-group+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-speech+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-transform+xml":{"source":"iana","compressible":true},"application/vnd.rainstor.data":{"source":"iana"},"application/vnd.rapid":{"source":"iana"},"application/vnd.rar":{"source":"iana","extensions":["rar"]},"application/vnd.realvnc.bed":{"source":"iana","extensions":["bed"]},"application/vnd.recordare.musicxml":{"source":"iana","extensions":["mxl"]},"application/vnd.recordare.musicxml+xml":{"source":"iana","compressible":true,"extensions":["musicxml"]},"application/vnd.relpipe":{"source":"iana"},"application/vnd.renlearn.rlprint":{"source":"iana"},"application/vnd.resilient.logic":{"source":"iana"},"application/vnd.restful+json":{"source":"iana","compressible":true},"application/vnd.rig.cryptonote":{"source":"iana","extensions":["cryptonote"]},"application/vnd.rim.cod":{"source":"apache","extensions":["cod"]},"application/vnd.rn-realmedia":{"source":"apache","extensions":["rm"]},"application/vnd.rn-realmedia-vbr":{"source":"apache","extensions":["rmvb"]},"application/vnd.route66.link66+xml":{"source":"iana","compressible":true,"extensions":["link66"]},"application/vnd.rs-274x":{"source":"iana"},"application/vnd.ruckus.download":{"source":"iana"},"application/vnd.s3sms":{"source":"iana"},"application/vnd.sailingtracker.track":{"source":"iana","extensions":["st"]},"application/vnd.sar":{"source":"iana"},"application/vnd.sbm.cid":{"source":"iana"},"application/vnd.sbm.mid2":{"source":"iana"},"application/vnd.scribus":{"source":"iana"},"application/vnd.sealed.3df":{"source":"iana"},"application/vnd.sealed.csf":{"source":"iana"},"application/vnd.sealed.doc":{"source":"iana"},"application/vnd.sealed.eml":{"source":"iana"},"application/vnd.sealed.mht":{"source":"iana"},"application/vnd.sealed.net":{"source":"iana"},"application/vnd.sealed.ppt":{"source":"iana"},"application/vnd.sealed.tiff":{"source":"iana"},"application/vnd.sealed.xls":{"source":"iana"},"application/vnd.sealedmedia.softseal.html":{"source":"iana"},"application/vnd.sealedmedia.softseal.pdf":{"source":"iana"},"application/vnd.seemail":{"source":"iana","extensions":["see"]},"application/vnd.seis+json":{"source":"iana","compressible":true},"application/vnd.sema":{"source":"iana","extensions":["sema"]},"application/vnd.semd":{"source":"iana","extensions":["semd"]},"application/vnd.semf":{"source":"iana","extensions":["semf"]},"application/vnd.shade-save-file":{"source":"iana"},"application/vnd.shana.informed.formdata":{"source":"iana","extensions":["ifm"]},"application/vnd.shana.informed.formtemplate":{"source":"iana","extensions":["itp"]},"application/vnd.shana.informed.interchange":{"source":"iana","extensions":["iif"]},"application/vnd.shana.informed.package":{"source":"iana","extensions":["ipk"]},"application/vnd.shootproof+json":{"source":"iana","compressible":true},"application/vnd.shopkick+json":{"source":"iana","compressible":true},"application/vnd.shp":{"source":"iana"},"application/vnd.shx":{"source":"iana"},"application/vnd.sigrok.session":{"source":"iana"},"application/vnd.simtech-mindmapper":{"source":"iana","extensions":["twd","twds"]},"application/vnd.siren+json":{"source":"iana","compressible":true},"application/vnd.sketchometry":{"source":"iana"},"application/vnd.smaf":{"source":"iana","extensions":["mmf"]},"application/vnd.smart.notebook":{"source":"iana"},"application/vnd.smart.teacher":{"source":"iana","extensions":["teacher"]},"application/vnd.smintio.portals.archive":{"source":"iana"},"application/vnd.snesdev-page-table":{"source":"iana"},"application/vnd.software602.filler.form+xml":{"source":"iana","compressible":true,"extensions":["fo"]},"application/vnd.software602.filler.form-xml-zip":{"source":"iana"},"application/vnd.solent.sdkm+xml":{"source":"iana","compressible":true,"extensions":["sdkm","sdkd"]},"application/vnd.spotfire.dxp":{"source":"iana","extensions":["dxp"]},"application/vnd.spotfire.sfs":{"source":"iana","extensions":["sfs"]},"application/vnd.sqlite3":{"source":"iana"},"application/vnd.sss-cod":{"source":"iana"},"application/vnd.sss-dtf":{"source":"iana"},"application/vnd.sss-ntf":{"source":"iana"},"application/vnd.stardivision.calc":{"source":"apache","extensions":["sdc"]},"application/vnd.stardivision.draw":{"source":"apache","extensions":["sda"]},"application/vnd.stardivision.impress":{"source":"apache","extensions":["sdd"]},"application/vnd.stardivision.math":{"source":"apache","extensions":["smf"]},"application/vnd.stardivision.writer":{"source":"apache","extensions":["sdw","vor"]},"application/vnd.stardivision.writer-global":{"source":"apache","extensions":["sgl"]},"application/vnd.stepmania.package":{"source":"iana","extensions":["smzip"]},"application/vnd.stepmania.stepchart":{"source":"iana","extensions":["sm"]},"application/vnd.street-stream":{"source":"iana"},"application/vnd.sun.wadl+xml":{"source":"iana","compressible":true,"extensions":["wadl"]},"application/vnd.sun.xml.calc":{"source":"apache","extensions":["sxc"]},"application/vnd.sun.xml.calc.template":{"source":"apache","extensions":["stc"]},"application/vnd.sun.xml.draw":{"source":"apache","extensions":["sxd"]},"application/vnd.sun.xml.draw.template":{"source":"apache","extensions":["std"]},"application/vnd.sun.xml.impress":{"source":"apache","extensions":["sxi"]},"application/vnd.sun.xml.impress.template":{"source":"apache","extensions":["sti"]},"application/vnd.sun.xml.math":{"source":"apache","extensions":["sxm"]},"application/vnd.sun.xml.writer":{"source":"apache","extensions":["sxw"]},"application/vnd.sun.xml.writer.global":{"source":"apache","extensions":["sxg"]},"application/vnd.sun.xml.writer.template":{"source":"apache","extensions":["stw"]},"application/vnd.sus-calendar":{"source":"iana","extensions":["sus","susp"]},"application/vnd.svd":{"source":"iana","extensions":["svd"]},"application/vnd.swiftview-ics":{"source":"iana"},"application/vnd.sybyl.mol2":{"source":"iana"},"application/vnd.sycle+xml":{"source":"iana","compressible":true},"application/vnd.syft+json":{"source":"iana","compressible":true},"application/vnd.symbian.install":{"source":"apache","extensions":["sis","sisx"]},"application/vnd.syncml+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xsm"]},"application/vnd.syncml.dm+wbxml":{"source":"iana","charset":"UTF-8","extensions":["bdm"]},"application/vnd.syncml.dm+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xdm"]},"application/vnd.syncml.dm.notification":{"source":"iana"},"application/vnd.syncml.dmddf+wbxml":{"source":"iana"},"application/vnd.syncml.dmddf+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["ddf"]},"application/vnd.syncml.dmtnds+wbxml":{"source":"iana"},"application/vnd.syncml.dmtnds+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.syncml.ds.notification":{"source":"iana"},"application/vnd.tableschema+json":{"source":"iana","compressible":true},"application/vnd.tao.intent-module-archive":{"source":"iana","extensions":["tao"]},"application/vnd.tcpdump.pcap":{"source":"iana","extensions":["pcap","cap","dmp"]},"application/vnd.think-cell.ppttc+json":{"source":"iana","compressible":true},"application/vnd.tmd.mediaflex.api+xml":{"source":"iana","compressible":true},"application/vnd.tml":{"source":"iana"},"application/vnd.tmobile-livetv":{"source":"iana","extensions":["tmo"]},"application/vnd.tri.onesource":{"source":"iana"},"application/vnd.trid.tpt":{"source":"iana","extensions":["tpt"]},"application/vnd.triscape.mxs":{"source":"iana","extensions":["mxs"]},"application/vnd.trueapp":{"source":"iana","extensions":["tra"]},"application/vnd.truedoc":{"source":"iana"},"application/vnd.ubisoft.webplayer":{"source":"iana"},"application/vnd.ufdl":{"source":"iana","extensions":["ufd","ufdl"]},"application/vnd.uic.osdm+json":{"source":"iana","compressible":true},"application/vnd.uiq.theme":{"source":"iana","extensions":["utz"]},"application/vnd.umajin":{"source":"iana","extensions":["umj"]},"application/vnd.unity":{"source":"iana","extensions":["unityweb"]},"application/vnd.uoml+xml":{"source":"iana","compressible":true,"extensions":["uoml","uo"]},"application/vnd.uplanet.alert":{"source":"iana"},"application/vnd.uplanet.alert-wbxml":{"source":"iana"},"application/vnd.uplanet.bearer-choice":{"source":"iana"},"application/vnd.uplanet.bearer-choice-wbxml":{"source":"iana"},"application/vnd.uplanet.cacheop":{"source":"iana"},"application/vnd.uplanet.cacheop-wbxml":{"source":"iana"},"application/vnd.uplanet.channel":{"source":"iana"},"application/vnd.uplanet.channel-wbxml":{"source":"iana"},"application/vnd.uplanet.list":{"source":"iana"},"application/vnd.uplanet.list-wbxml":{"source":"iana"},"application/vnd.uplanet.listcmd":{"source":"iana"},"application/vnd.uplanet.listcmd-wbxml":{"source":"iana"},"application/vnd.uplanet.signal":{"source":"iana"},"application/vnd.uri-map":{"source":"iana"},"application/vnd.valve.source.material":{"source":"iana"},"application/vnd.vcx":{"source":"iana","extensions":["vcx"]},"application/vnd.vd-study":{"source":"iana"},"application/vnd.vectorworks":{"source":"iana"},"application/vnd.vel+json":{"source":"iana","compressible":true},"application/vnd.veraison.tsm-report+cbor":{"source":"iana"},"application/vnd.veraison.tsm-report+json":{"source":"iana","compressible":true},"application/vnd.verimatrix.vcas":{"source":"iana"},"application/vnd.veritone.aion+json":{"source":"iana","compressible":true},"application/vnd.veryant.thin":{"source":"iana"},"application/vnd.ves.encrypted":{"source":"iana"},"application/vnd.vidsoft.vidconference":{"source":"iana"},"application/vnd.visio":{"source":"iana","extensions":["vsd","vst","vss","vsw","vsdx","vtx"]},"application/vnd.visionary":{"source":"iana","extensions":["vis"]},"application/vnd.vividence.scriptfile":{"source":"iana"},"application/vnd.vocalshaper.vsp4":{"source":"iana"},"application/vnd.vsf":{"source":"iana","extensions":["vsf"]},"application/vnd.wap.sic":{"source":"iana"},"application/vnd.wap.slc":{"source":"iana"},"application/vnd.wap.wbxml":{"source":"iana","charset":"UTF-8","extensions":["wbxml"]},"application/vnd.wap.wmlc":{"source":"iana","extensions":["wmlc"]},"application/vnd.wap.wmlscriptc":{"source":"iana","extensions":["wmlsc"]},"application/vnd.wasmflow.wafl":{"source":"iana"},"application/vnd.webturbo":{"source":"iana","extensions":["wtb"]},"application/vnd.wfa.dpp":{"source":"iana"},"application/vnd.wfa.p2p":{"source":"iana"},"application/vnd.wfa.wsc":{"source":"iana"},"application/vnd.windows.devicepairing":{"source":"iana"},"application/vnd.wmc":{"source":"iana"},"application/vnd.wmf.bootstrap":{"source":"iana"},"application/vnd.wolfram.mathematica":{"source":"iana"},"application/vnd.wolfram.mathematica.package":{"source":"iana"},"application/vnd.wolfram.player":{"source":"iana","extensions":["nbp"]},"application/vnd.wordlift":{"source":"iana"},"application/vnd.wordperfect":{"source":"iana","extensions":["wpd"]},"application/vnd.wqd":{"source":"iana","extensions":["wqd"]},"application/vnd.wrq-hp3000-labelled":{"source":"iana"},"application/vnd.wt.stf":{"source":"iana","extensions":["stf"]},"application/vnd.wv.csp+wbxml":{"source":"iana"},"application/vnd.wv.csp+xml":{"source":"iana","compressible":true},"application/vnd.wv.ssp+xml":{"source":"iana","compressible":true},"application/vnd.xacml+json":{"source":"iana","compressible":true},"application/vnd.xara":{"source":"iana","extensions":["xar"]},"application/vnd.xarin.cpj":{"source":"iana"},"application/vnd.xecrets-encrypted":{"source":"iana"},"application/vnd.xfdl":{"source":"iana","extensions":["xfdl"]},"application/vnd.xfdl.webform":{"source":"iana"},"application/vnd.xmi+xml":{"source":"iana","compressible":true},"application/vnd.xmpie.cpkg":{"source":"iana"},"application/vnd.xmpie.dpkg":{"source":"iana"},"application/vnd.xmpie.plan":{"source":"iana"},"application/vnd.xmpie.ppkg":{"source":"iana"},"application/vnd.xmpie.xlim":{"source":"iana"},"application/vnd.yamaha.hv-dic":{"source":"iana","extensions":["hvd"]},"application/vnd.yamaha.hv-script":{"source":"iana","extensions":["hvs"]},"application/vnd.yamaha.hv-voice":{"source":"iana","extensions":["hvp"]},"application/vnd.yamaha.openscoreformat":{"source":"iana","extensions":["osf"]},"application/vnd.yamaha.openscoreformat.osfpvg+xml":{"source":"iana","compressible":true,"extensions":["osfpvg"]},"application/vnd.yamaha.remote-setup":{"source":"iana"},"application/vnd.yamaha.smaf-audio":{"source":"iana","extensions":["saf"]},"application/vnd.yamaha.smaf-phrase":{"source":"iana","extensions":["spf"]},"application/vnd.yamaha.through-ngn":{"source":"iana"},"application/vnd.yamaha.tunnel-udpencap":{"source":"iana"},"application/vnd.yaoweme":{"source":"iana"},"application/vnd.yellowriver-custom-menu":{"source":"iana","extensions":["cmp"]},"application/vnd.zul":{"source":"iana","extensions":["zir","zirz"]},"application/vnd.zzazz.deck+xml":{"source":"iana","compressible":true,"extensions":["zaz"]},"application/voicexml+xml":{"source":"iana","compressible":true,"extensions":["vxml"]},"application/voucher-cms+json":{"source":"iana","compressible":true},"application/voucher-jws+json":{"source":"iana","compressible":true},"application/vp":{"source":"iana"},"application/vp+cose":{"source":"iana"},"application/vp+jwt":{"source":"iana"},"application/vq-rtcpxr":{"source":"iana"},"application/wasm":{"source":"iana","compressible":true,"extensions":["wasm"]},"application/watcherinfo+xml":{"source":"iana","compressible":true,"extensions":["wif"]},"application/webpush-options+json":{"source":"iana","compressible":true},"application/whoispp-query":{"source":"iana"},"application/whoispp-response":{"source":"iana"},"application/widget":{"source":"iana","extensions":["wgt"]},"application/winhlp":{"source":"apache","extensions":["hlp"]},"application/wita":{"source":"iana"},"application/wordperfect5.1":{"source":"iana"},"application/wsdl+xml":{"source":"iana","compressible":true,"extensions":["wsdl"]},"application/wspolicy+xml":{"source":"iana","compressible":true,"extensions":["wspolicy"]},"application/x-7z-compressed":{"source":"apache","compressible":false,"extensions":["7z"]},"application/x-abiword":{"source":"apache","extensions":["abw"]},"application/x-ace-compressed":{"source":"apache","extensions":["ace"]},"application/x-amf":{"source":"apache"},"application/x-apple-diskimage":{"source":"apache","extensions":["dmg"]},"application/x-arj":{"compressible":false,"extensions":["arj"]},"application/x-authorware-bin":{"source":"apache","extensions":["aab","x32","u32","vox"]},"application/x-authorware-map":{"source":"apache","extensions":["aam"]},"application/x-authorware-seg":{"source":"apache","extensions":["aas"]},"application/x-bcpio":{"source":"apache","extensions":["bcpio"]},"application/x-bdoc":{"compressible":false,"extensions":["bdoc"]},"application/x-bittorrent":{"source":"apache","extensions":["torrent"]},"application/x-blender":{"extensions":["blend"]},"application/x-blorb":{"source":"apache","extensions":["blb","blorb"]},"application/x-bzip":{"source":"apache","compressible":false,"extensions":["bz"]},"application/x-bzip2":{"source":"apache","compressible":false,"extensions":["bz2","boz"]},"application/x-cbr":{"source":"apache","extensions":["cbr","cba","cbt","cbz","cb7"]},"application/x-cdlink":{"source":"apache","extensions":["vcd"]},"application/x-cfs-compressed":{"source":"apache","extensions":["cfs"]},"application/x-chat":{"source":"apache","extensions":["chat"]},"application/x-chess-pgn":{"source":"apache","extensions":["pgn"]},"application/x-chrome-extension":{"extensions":["crx"]},"application/x-cocoa":{"source":"nginx","extensions":["cco"]},"application/x-compress":{"source":"apache"},"application/x-compressed":{"extensions":["rar"]},"application/x-conference":{"source":"apache","extensions":["nsc"]},"application/x-cpio":{"source":"apache","extensions":["cpio"]},"application/x-csh":{"source":"apache","extensions":["csh"]},"application/x-deb":{"compressible":false},"application/x-debian-package":{"source":"apache","extensions":["deb","udeb"]},"application/x-dgc-compressed":{"source":"apache","extensions":["dgc"]},"application/x-director":{"source":"apache","extensions":["dir","dcr","dxr","cst","cct","cxt","w3d","fgd","swa"]},"application/x-doom":{"source":"apache","extensions":["wad"]},"application/x-dtbncx+xml":{"source":"apache","compressible":true,"extensions":["ncx"]},"application/x-dtbook+xml":{"source":"apache","compressible":true,"extensions":["dtb"]},"application/x-dtbresource+xml":{"source":"apache","compressible":true,"extensions":["res"]},"application/x-dvi":{"source":"apache","compressible":false,"extensions":["dvi"]},"application/x-envoy":{"source":"apache","extensions":["evy"]},"application/x-eva":{"source":"apache","extensions":["eva"]},"application/x-font-bdf":{"source":"apache","extensions":["bdf"]},"application/x-font-dos":{"source":"apache"},"application/x-font-framemaker":{"source":"apache"},"application/x-font-ghostscript":{"source":"apache","extensions":["gsf"]},"application/x-font-libgrx":{"source":"apache"},"application/x-font-linux-psf":{"source":"apache","extensions":["psf"]},"application/x-font-pcf":{"source":"apache","extensions":["pcf"]},"application/x-font-snf":{"source":"apache","extensions":["snf"]},"application/x-font-speedo":{"source":"apache"},"application/x-font-sunos-news":{"source":"apache"},"application/x-font-type1":{"source":"apache","extensions":["pfa","pfb","pfm","afm"]},"application/x-font-vfont":{"source":"apache"},"application/x-freearc":{"source":"apache","extensions":["arc"]},"application/x-futuresplash":{"source":"apache","extensions":["spl"]},"application/x-gca-compressed":{"source":"apache","extensions":["gca"]},"application/x-glulx":{"source":"apache","extensions":["ulx"]},"application/x-gnumeric":{"source":"apache","extensions":["gnumeric"]},"application/x-gramps-xml":{"source":"apache","extensions":["gramps"]},"application/x-gtar":{"source":"apache","extensions":["gtar"]},"application/x-gzip":{"source":"apache"},"application/x-hdf":{"source":"apache","extensions":["hdf"]},"application/x-httpd-php":{"compressible":true,"extensions":["php"]},"application/x-install-instructions":{"source":"apache","extensions":["install"]},"application/x-ipynb+json":{"compressible":true,"extensions":["ipynb"]},"application/x-iso9660-image":{"source":"apache","extensions":["iso"]},"application/x-iwork-keynote-sffkey":{"extensions":["key"]},"application/x-iwork-numbers-sffnumbers":{"extensions":["numbers"]},"application/x-iwork-pages-sffpages":{"extensions":["pages"]},"application/x-java-archive-diff":{"source":"nginx","extensions":["jardiff"]},"application/x-java-jnlp-file":{"source":"apache","compressible":false,"extensions":["jnlp"]},"application/x-javascript":{"compressible":true},"application/x-keepass2":{"extensions":["kdbx"]},"application/x-latex":{"source":"apache","compressible":false,"extensions":["latex"]},"application/x-lua-bytecode":{"extensions":["luac"]},"application/x-lzh-compressed":{"source":"apache","extensions":["lzh","lha"]},"application/x-makeself":{"source":"nginx","extensions":["run"]},"application/x-mie":{"source":"apache","extensions":["mie"]},"application/x-mobipocket-ebook":{"source":"apache","extensions":["prc","mobi"]},"application/x-mpegurl":{"compressible":false},"application/x-ms-application":{"source":"apache","extensions":["application"]},"application/x-ms-shortcut":{"source":"apache","extensions":["lnk"]},"application/x-ms-wmd":{"source":"apache","extensions":["wmd"]},"application/x-ms-wmz":{"source":"apache","extensions":["wmz"]},"application/x-ms-xbap":{"source":"apache","extensions":["xbap"]},"application/x-msaccess":{"source":"apache","extensions":["mdb"]},"application/x-msbinder":{"source":"apache","extensions":["obd"]},"application/x-mscardfile":{"source":"apache","extensions":["crd"]},"application/x-msclip":{"source":"apache","extensions":["clp"]},"application/x-msdos-program":{"extensions":["exe"]},"application/x-msdownload":{"source":"apache","extensions":["exe","dll","com","bat","msi"]},"application/x-msmediaview":{"source":"apache","extensions":["mvb","m13","m14"]},"application/x-msmetafile":{"source":"apache","extensions":["wmf","wmz","emf","emz"]},"application/x-msmoney":{"source":"apache","extensions":["mny"]},"application/x-mspublisher":{"source":"apache","extensions":["pub"]},"application/x-msschedule":{"source":"apache","extensions":["scd"]},"application/x-msterminal":{"source":"apache","extensions":["trm"]},"application/x-mswrite":{"source":"apache","extensions":["wri"]},"application/x-netcdf":{"source":"apache","extensions":["nc","cdf"]},"application/x-ns-proxy-autoconfig":{"compressible":true,"extensions":["pac"]},"application/x-nzb":{"source":"apache","extensions":["nzb"]},"application/x-perl":{"source":"nginx","extensions":["pl","pm"]},"application/x-pilot":{"source":"nginx","extensions":["prc","pdb"]},"application/x-pkcs12":{"source":"apache","compressible":false,"extensions":["p12","pfx"]},"application/x-pkcs7-certificates":{"source":"apache","extensions":["p7b","spc"]},"application/x-pkcs7-certreqresp":{"source":"apache","extensions":["p7r"]},"application/x-pki-message":{"source":"iana"},"application/x-rar-compressed":{"source":"apache","compressible":false,"extensions":["rar"]},"application/x-redhat-package-manager":{"source":"nginx","extensions":["rpm"]},"application/x-research-info-systems":{"source":"apache","extensions":["ris"]},"application/x-sea":{"source":"nginx","extensions":["sea"]},"application/x-sh":{"source":"apache","compressible":true,"extensions":["sh"]},"application/x-shar":{"source":"apache","extensions":["shar"]},"application/x-shockwave-flash":{"source":"apache","compressible":false,"extensions":["swf"]},"application/x-silverlight-app":{"source":"apache","extensions":["xap"]},"application/x-sql":{"source":"apache","extensions":["sql"]},"application/x-stuffit":{"source":"apache","compressible":false,"extensions":["sit"]},"application/x-stuffitx":{"source":"apache","extensions":["sitx"]},"application/x-subrip":{"source":"apache","extensions":["srt"]},"application/x-sv4cpio":{"source":"apache","extensions":["sv4cpio"]},"application/x-sv4crc":{"source":"apache","extensions":["sv4crc"]},"application/x-t3vm-image":{"source":"apache","extensions":["t3"]},"application/x-tads":{"source":"apache","extensions":["gam"]},"application/x-tar":{"source":"apache","compressible":true,"extensions":["tar"]},"application/x-tcl":{"source":"apache","extensions":["tcl","tk"]},"application/x-tex":{"source":"apache","extensions":["tex"]},"application/x-tex-tfm":{"source":"apache","extensions":["tfm"]},"application/x-texinfo":{"source":"apache","extensions":["texinfo","texi"]},"application/x-tgif":{"source":"apache","extensions":["obj"]},"application/x-ustar":{"source":"apache","extensions":["ustar"]},"application/x-virtualbox-hdd":{"compressible":true,"extensions":["hdd"]},"application/x-virtualbox-ova":{"compressible":true,"extensions":["ova"]},"application/x-virtualbox-ovf":{"compressible":true,"extensions":["ovf"]},"application/x-virtualbox-vbox":{"compressible":true,"extensions":["vbox"]},"application/x-virtualbox-vbox-extpack":{"compressible":false,"extensions":["vbox-extpack"]},"application/x-virtualbox-vdi":{"compressible":true,"extensions":["vdi"]},"application/x-virtualbox-vhd":{"compressible":true,"extensions":["vhd"]},"application/x-virtualbox-vmdk":{"compressible":true,"extensions":["vmdk"]},"application/x-wais-source":{"source":"apache","extensions":["src"]},"application/x-web-app-manifest+json":{"compressible":true,"extensions":["webapp"]},"application/x-www-form-urlencoded":{"source":"iana","compressible":true},"application/x-x509-ca-cert":{"source":"iana","extensions":["der","crt","pem"]},"application/x-x509-ca-ra-cert":{"source":"iana"},"application/x-x509-next-ca-cert":{"source":"iana"},"application/x-xfig":{"source":"apache","extensions":["fig"]},"application/x-xliff+xml":{"source":"apache","compressible":true,"extensions":["xlf"]},"application/x-xpinstall":{"source":"apache","compressible":false,"extensions":["xpi"]},"application/x-xz":{"source":"apache","extensions":["xz"]},"application/x-zip-compressed":{"extensions":["zip"]},"application/x-zmachine":{"source":"apache","extensions":["z1","z2","z3","z4","z5","z6","z7","z8"]},"application/x400-bp":{"source":"iana"},"application/xacml+xml":{"source":"iana","compressible":true},"application/xaml+xml":{"source":"apache","compressible":true,"extensions":["xaml"]},"application/xcap-att+xml":{"source":"iana","compressible":true,"extensions":["xav"]},"application/xcap-caps+xml":{"source":"iana","compressible":true,"extensions":["xca"]},"application/xcap-diff+xml":{"source":"iana","compressible":true,"extensions":["xdf"]},"application/xcap-el+xml":{"source":"iana","compressible":true,"extensions":["xel"]},"application/xcap-error+xml":{"source":"iana","compressible":true},"application/xcap-ns+xml":{"source":"iana","compressible":true,"extensions":["xns"]},"application/xcon-conference-info+xml":{"source":"iana","compressible":true},"application/xcon-conference-info-diff+xml":{"source":"iana","compressible":true},"application/xenc+xml":{"source":"iana","compressible":true,"extensions":["xenc"]},"application/xfdf":{"source":"iana","extensions":["xfdf"]},"application/xhtml+xml":{"source":"iana","compressible":true,"extensions":["xhtml","xht"]},"application/xhtml-voice+xml":{"source":"apache","compressible":true},"application/xliff+xml":{"source":"iana","compressible":true,"extensions":["xlf"]},"application/xml":{"source":"iana","compressible":true,"extensions":["xml","xsl","xsd","rng"]},"application/xml-dtd":{"source":"iana","compressible":true,"extensions":["dtd"]},"application/xml-external-parsed-entity":{"source":"iana"},"application/xml-patch+xml":{"source":"iana","compressible":true},"application/xmpp+xml":{"source":"iana","compressible":true},"application/xop+xml":{"source":"iana","compressible":true,"extensions":["xop"]},"application/xproc+xml":{"source":"apache","compressible":true,"extensions":["xpl"]},"application/xslt+xml":{"source":"iana","compressible":true,"extensions":["xsl","xslt"]},"application/xspf+xml":{"source":"apache","compressible":true,"extensions":["xspf"]},"application/xv+xml":{"source":"iana","compressible":true,"extensions":["mxml","xhvml","xvml","xvm"]},"application/yaml":{"source":"iana"},"application/yang":{"source":"iana","extensions":["yang"]},"application/yang-data+cbor":{"source":"iana"},"application/yang-data+json":{"source":"iana","compressible":true},"application/yang-data+xml":{"source":"iana","compressible":true},"application/yang-patch+json":{"source":"iana","compressible":true},"application/yang-patch+xml":{"source":"iana","compressible":true},"application/yang-sid+json":{"source":"iana","compressible":true},"application/yin+xml":{"source":"iana","compressible":true,"extensions":["yin"]},"application/zip":{"source":"iana","compressible":false,"extensions":["zip"]},"application/zip+dotlottie":{"extensions":["lottie"]},"application/zlib":{"source":"iana"},"application/zstd":{"source":"iana"},"audio/1d-interleaved-parityfec":{"source":"iana"},"audio/32kadpcm":{"source":"iana"},"audio/3gpp":{"source":"iana","compressible":false,"extensions":["3gpp"]},"audio/3gpp2":{"source":"iana"},"audio/aac":{"source":"iana","extensions":["adts","aac"]},"audio/ac3":{"source":"iana"},"audio/adpcm":{"source":"apache","extensions":["adp"]},"audio/amr":{"source":"iana","extensions":["amr"]},"audio/amr-wb":{"source":"iana"},"audio/amr-wb+":{"source":"iana"},"audio/aptx":{"source":"iana"},"audio/asc":{"source":"iana"},"audio/atrac-advanced-lossless":{"source":"iana"},"audio/atrac-x":{"source":"iana"},"audio/atrac3":{"source":"iana"},"audio/basic":{"source":"iana","compressible":false,"extensions":["au","snd"]},"audio/bv16":{"source":"iana"},"audio/bv32":{"source":"iana"},"audio/clearmode":{"source":"iana"},"audio/cn":{"source":"iana"},"audio/dat12":{"source":"iana"},"audio/dls":{"source":"iana"},"audio/dsr-es201108":{"source":"iana"},"audio/dsr-es202050":{"source":"iana"},"audio/dsr-es202211":{"source":"iana"},"audio/dsr-es202212":{"source":"iana"},"audio/dv":{"source":"iana"},"audio/dvi4":{"source":"iana"},"audio/eac3":{"source":"iana"},"audio/encaprtp":{"source":"iana"},"audio/evrc":{"source":"iana"},"audio/evrc-qcp":{"source":"iana"},"audio/evrc0":{"source":"iana"},"audio/evrc1":{"source":"iana"},"audio/evrcb":{"source":"iana"},"audio/evrcb0":{"source":"iana"},"audio/evrcb1":{"source":"iana"},"audio/evrcnw":{"source":"iana"},"audio/evrcnw0":{"source":"iana"},"audio/evrcnw1":{"source":"iana"},"audio/evrcwb":{"source":"iana"},"audio/evrcwb0":{"source":"iana"},"audio/evrcwb1":{"source":"iana"},"audio/evs":{"source":"iana"},"audio/flac":{"source":"iana"},"audio/flexfec":{"source":"iana"},"audio/fwdred":{"source":"iana"},"audio/g711-0":{"source":"iana"},"audio/g719":{"source":"iana"},"audio/g722":{"source":"iana"},"audio/g7221":{"source":"iana"},"audio/g723":{"source":"iana"},"audio/g726-16":{"source":"iana"},"audio/g726-24":{"source":"iana"},"audio/g726-32":{"source":"iana"},"audio/g726-40":{"source":"iana"},"audio/g728":{"source":"iana"},"audio/g729":{"source":"iana"},"audio/g7291":{"source":"iana"},"audio/g729d":{"source":"iana"},"audio/g729e":{"source":"iana"},"audio/gsm":{"source":"iana"},"audio/gsm-efr":{"source":"iana"},"audio/gsm-hr-08":{"source":"iana"},"audio/ilbc":{"source":"iana"},"audio/ip-mr_v2.5":{"source":"iana"},"audio/isac":{"source":"apache"},"audio/l16":{"source":"iana"},"audio/l20":{"source":"iana"},"audio/l24":{"source":"iana","compressible":false},"audio/l8":{"source":"iana"},"audio/lpc":{"source":"iana"},"audio/matroska":{"source":"iana"},"audio/melp":{"source":"iana"},"audio/melp1200":{"source":"iana"},"audio/melp2400":{"source":"iana"},"audio/melp600":{"source":"iana"},"audio/mhas":{"source":"iana"},"audio/midi":{"source":"apache","extensions":["mid","midi","kar","rmi"]},"audio/midi-clip":{"source":"iana"},"audio/mobile-xmf":{"source":"iana","extensions":["mxmf"]},"audio/mp3":{"compressible":false,"extensions":["mp3"]},"audio/mp4":{"source":"iana","compressible":false,"extensions":["m4a","mp4a","m4b"]},"audio/mp4a-latm":{"source":"iana"},"audio/mpa":{"source":"iana"},"audio/mpa-robust":{"source":"iana"},"audio/mpeg":{"source":"iana","compressible":false,"extensions":["mpga","mp2","mp2a","mp3","m2a","m3a"]},"audio/mpeg4-generic":{"source":"iana"},"audio/musepack":{"source":"apache"},"audio/ogg":{"source":"iana","compressible":false,"extensions":["oga","ogg","spx","opus"]},"audio/opus":{"source":"iana"},"audio/parityfec":{"source":"iana"},"audio/pcma":{"source":"iana"},"audio/pcma-wb":{"source":"iana"},"audio/pcmu":{"source":"iana"},"audio/pcmu-wb":{"source":"iana"},"audio/prs.sid":{"source":"iana"},"audio/qcelp":{"source":"iana"},"audio/raptorfec":{"source":"iana"},"audio/red":{"source":"iana"},"audio/rtp-enc-aescm128":{"source":"iana"},"audio/rtp-midi":{"source":"iana"},"audio/rtploopback":{"source":"iana"},"audio/rtx":{"source":"iana"},"audio/s3m":{"source":"apache","extensions":["s3m"]},"audio/scip":{"source":"iana"},"audio/silk":{"source":"apache","extensions":["sil"]},"audio/smv":{"source":"iana"},"audio/smv-qcp":{"source":"iana"},"audio/smv0":{"source":"iana"},"audio/sofa":{"source":"iana"},"audio/sp-midi":{"source":"iana"},"audio/speex":{"source":"iana"},"audio/t140c":{"source":"iana"},"audio/t38":{"source":"iana"},"audio/telephone-event":{"source":"iana"},"audio/tetra_acelp":{"source":"iana"},"audio/tetra_acelp_bb":{"source":"iana"},"audio/tone":{"source":"iana"},"audio/tsvcis":{"source":"iana"},"audio/uemclip":{"source":"iana"},"audio/ulpfec":{"source":"iana"},"audio/usac":{"source":"iana"},"audio/vdvi":{"source":"iana"},"audio/vmr-wb":{"source":"iana"},"audio/vnd.3gpp.iufp":{"source":"iana"},"audio/vnd.4sb":{"source":"iana"},"audio/vnd.audiokoz":{"source":"iana"},"audio/vnd.celp":{"source":"iana"},"audio/vnd.cisco.nse":{"source":"iana"},"audio/vnd.cmles.radio-events":{"source":"iana"},"audio/vnd.cns.anp1":{"source":"iana"},"audio/vnd.cns.inf1":{"source":"iana"},"audio/vnd.dece.audio":{"source":"iana","extensions":["uva","uvva"]},"audio/vnd.digital-winds":{"source":"iana","extensions":["eol"]},"audio/vnd.dlna.adts":{"source":"iana"},"audio/vnd.dolby.heaac.1":{"source":"iana"},"audio/vnd.dolby.heaac.2":{"source":"iana"},"audio/vnd.dolby.mlp":{"source":"iana"},"audio/vnd.dolby.mps":{"source":"iana"},"audio/vnd.dolby.pl2":{"source":"iana"},"audio/vnd.dolby.pl2x":{"source":"iana"},"audio/vnd.dolby.pl2z":{"source":"iana"},"audio/vnd.dolby.pulse.1":{"source":"iana"},"audio/vnd.dra":{"source":"iana","extensions":["dra"]},"audio/vnd.dts":{"source":"iana","extensions":["dts"]},"audio/vnd.dts.hd":{"source":"iana","extensions":["dtshd"]},"audio/vnd.dts.uhd":{"source":"iana"},"audio/vnd.dvb.file":{"source":"iana"},"audio/vnd.everad.plj":{"source":"iana"},"audio/vnd.hns.audio":{"source":"iana"},"audio/vnd.lucent.voice":{"source":"iana","extensions":["lvp"]},"audio/vnd.ms-playready.media.pya":{"source":"iana","extensions":["pya"]},"audio/vnd.nokia.mobile-xmf":{"source":"iana"},"audio/vnd.nortel.vbk":{"source":"iana"},"audio/vnd.nuera.ecelp4800":{"source":"iana","extensions":["ecelp4800"]},"audio/vnd.nuera.ecelp7470":{"source":"iana","extensions":["ecelp7470"]},"audio/vnd.nuera.ecelp9600":{"source":"iana","extensions":["ecelp9600"]},"audio/vnd.octel.sbc":{"source":"iana"},"audio/vnd.presonus.multitrack":{"source":"iana"},"audio/vnd.qcelp":{"source":"apache"},"audio/vnd.rhetorex.32kadpcm":{"source":"iana"},"audio/vnd.rip":{"source":"iana","extensions":["rip"]},"audio/vnd.rn-realaudio":{"compressible":false},"audio/vnd.sealedmedia.softseal.mpeg":{"source":"iana"},"audio/vnd.vmx.cvsd":{"source":"iana"},"audio/vnd.wave":{"compressible":false},"audio/vorbis":{"source":"iana","compressible":false},"audio/vorbis-config":{"source":"iana"},"audio/wav":{"compressible":false,"extensions":["wav"]},"audio/wave":{"compressible":false,"extensions":["wav"]},"audio/webm":{"source":"apache","compressible":false,"extensions":["weba"]},"audio/x-aac":{"source":"apache","compressible":false,"extensions":["aac"]},"audio/x-aiff":{"source":"apache","extensions":["aif","aiff","aifc"]},"audio/x-caf":{"source":"apache","compressible":false,"extensions":["caf"]},"audio/x-flac":{"source":"apache","extensions":["flac"]},"audio/x-m4a":{"source":"nginx","extensions":["m4a"]},"audio/x-matroska":{"source":"apache","extensions":["mka"]},"audio/x-mpegurl":{"source":"apache","extensions":["m3u"]},"audio/x-ms-wax":{"source":"apache","extensions":["wax"]},"audio/x-ms-wma":{"source":"apache","extensions":["wma"]},"audio/x-pn-realaudio":{"source":"apache","extensions":["ram","ra"]},"audio/x-pn-realaudio-plugin":{"source":"apache","extensions":["rmp"]},"audio/x-realaudio":{"source":"nginx","extensions":["ra"]},"audio/x-tta":{"source":"apache"},"audio/x-wav":{"source":"apache","extensions":["wav"]},"audio/xm":{"source":"apache","extensions":["xm"]},"chemical/x-cdx":{"source":"apache","extensions":["cdx"]},"chemical/x-cif":{"source":"apache","extensions":["cif"]},"chemical/x-cmdf":{"source":"apache","extensions":["cmdf"]},"chemical/x-cml":{"source":"apache","extensions":["cml"]},"chemical/x-csml":{"source":"apache","extensions":["csml"]},"chemical/x-pdb":{"source":"apache"},"chemical/x-xyz":{"source":"apache","extensions":["xyz"]},"font/collection":{"source":"iana","extensions":["ttc"]},"font/otf":{"source":"iana","compressible":true,"extensions":["otf"]},"font/sfnt":{"source":"iana"},"font/ttf":{"source":"iana","compressible":true,"extensions":["ttf"]},"font/woff":{"source":"iana","extensions":["woff"]},"font/woff2":{"source":"iana","extensions":["woff2"]},"image/aces":{"source":"iana","extensions":["exr"]},"image/apng":{"source":"iana","compressible":false,"extensions":["apng"]},"image/avci":{"source":"iana","extensions":["avci"]},"image/avcs":{"source":"iana","extensions":["avcs"]},"image/avif":{"source":"iana","compressible":false,"extensions":["avif"]},"image/bmp":{"source":"iana","compressible":true,"extensions":["bmp","dib"]},"image/cgm":{"source":"iana","extensions":["cgm"]},"image/dicom-rle":{"source":"iana","extensions":["drle"]},"image/dpx":{"source":"iana","extensions":["dpx"]},"image/emf":{"source":"iana","extensions":["emf"]},"image/fits":{"source":"iana","extensions":["fits"]},"image/g3fax":{"source":"iana","extensions":["g3"]},"image/gif":{"source":"iana","compressible":false,"extensions":["gif"]},"image/heic":{"source":"iana","extensions":["heic"]},"image/heic-sequence":{"source":"iana","extensions":["heics"]},"image/heif":{"source":"iana","extensions":["heif"]},"image/heif-sequence":{"source":"iana","extensions":["heifs"]},"image/hej2k":{"source":"iana","extensions":["hej2"]},"image/ief":{"source":"iana","extensions":["ief"]},"image/j2c":{"source":"iana"},"image/jaii":{"source":"iana","extensions":["jaii"]},"image/jais":{"source":"iana","extensions":["jais"]},"image/jls":{"source":"iana","extensions":["jls"]},"image/jp2":{"source":"iana","compressible":false,"extensions":["jp2","jpg2"]},"image/jpeg":{"source":"iana","compressible":false,"extensions":["jpg","jpeg","jpe"]},"image/jph":{"source":"iana","extensions":["jph"]},"image/jphc":{"source":"iana","extensions":["jhc"]},"image/jpm":{"source":"iana","compressible":false,"extensions":["jpm","jpgm"]},"image/jpx":{"source":"iana","compressible":false,"extensions":["jpx","jpf"]},"image/jxl":{"source":"iana","extensions":["jxl"]},"image/jxr":{"source":"iana","extensions":["jxr"]},"image/jxra":{"source":"iana","extensions":["jxra"]},"image/jxrs":{"source":"iana","extensions":["jxrs"]},"image/jxs":{"source":"iana","extensions":["jxs"]},"image/jxsc":{"source":"iana","extensions":["jxsc"]},"image/jxsi":{"source":"iana","extensions":["jxsi"]},"image/jxss":{"source":"iana","extensions":["jxss"]},"image/ktx":{"source":"iana","extensions":["ktx"]},"image/ktx2":{"source":"iana","extensions":["ktx2"]},"image/naplps":{"source":"iana"},"image/pjpeg":{"compressible":false,"extensions":["jfif"]},"image/png":{"source":"iana","compressible":false,"extensions":["png"]},"image/prs.btif":{"source":"iana","extensions":["btif","btf"]},"image/prs.pti":{"source":"iana","extensions":["pti"]},"image/pwg-raster":{"source":"iana"},"image/sgi":{"source":"apache","extensions":["sgi"]},"image/svg+xml":{"source":"iana","compressible":true,"extensions":["svg","svgz"]},"image/t38":{"source":"iana","extensions":["t38"]},"image/tiff":{"source":"iana","compressible":false,"extensions":["tif","tiff"]},"image/tiff-fx":{"source":"iana","extensions":["tfx"]},"image/vnd.adobe.photoshop":{"source":"iana","compressible":true,"extensions":["psd"]},"image/vnd.airzip.accelerator.azv":{"source":"iana","extensions":["azv"]},"image/vnd.clip":{"source":"iana"},"image/vnd.cns.inf2":{"source":"iana"},"image/vnd.dece.graphic":{"source":"iana","extensions":["uvi","uvvi","uvg","uvvg"]},"image/vnd.djvu":{"source":"iana","extensions":["djvu","djv"]},"image/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"image/vnd.dwg":{"source":"iana","extensions":["dwg"]},"image/vnd.dxf":{"source":"iana","extensions":["dxf"]},"image/vnd.fastbidsheet":{"source":"iana","extensions":["fbs"]},"image/vnd.fpx":{"source":"iana","extensions":["fpx"]},"image/vnd.fst":{"source":"iana","extensions":["fst"]},"image/vnd.fujixerox.edmics-mmr":{"source":"iana","extensions":["mmr"]},"image/vnd.fujixerox.edmics-rlc":{"source":"iana","extensions":["rlc"]},"image/vnd.globalgraphics.pgb":{"source":"iana"},"image/vnd.microsoft.icon":{"source":"iana","compressible":true,"extensions":["ico"]},"image/vnd.mix":{"source":"iana"},"image/vnd.mozilla.apng":{"source":"iana"},"image/vnd.ms-dds":{"compressible":true,"extensions":["dds"]},"image/vnd.ms-modi":{"source":"iana","extensions":["mdi"]},"image/vnd.ms-photo":{"source":"apache","extensions":["wdp"]},"image/vnd.net-fpx":{"source":"iana","extensions":["npx"]},"image/vnd.pco.b16":{"source":"iana","extensions":["b16"]},"image/vnd.radiance":{"source":"iana"},"image/vnd.sealed.png":{"source":"iana"},"image/vnd.sealedmedia.softseal.gif":{"source":"iana"},"image/vnd.sealedmedia.softseal.jpg":{"source":"iana"},"image/vnd.svf":{"source":"iana"},"image/vnd.tencent.tap":{"source":"iana","extensions":["tap"]},"image/vnd.valve.source.texture":{"source":"iana","extensions":["vtf"]},"image/vnd.wap.wbmp":{"source":"iana","extensions":["wbmp"]},"image/vnd.xiff":{"source":"iana","extensions":["xif"]},"image/vnd.zbrush.pcx":{"source":"iana","extensions":["pcx"]},"image/webp":{"source":"iana","extensions":["webp"]},"image/wmf":{"source":"iana","extensions":["wmf"]},"image/x-3ds":{"source":"apache","extensions":["3ds"]},"image/x-adobe-dng":{"extensions":["dng"]},"image/x-cmu-raster":{"source":"apache","extensions":["ras"]},"image/x-cmx":{"source":"apache","extensions":["cmx"]},"image/x-emf":{"source":"iana"},"image/x-freehand":{"source":"apache","extensions":["fh","fhc","fh4","fh5","fh7"]},"image/x-icon":{"source":"apache","compressible":true,"extensions":["ico"]},"image/x-jng":{"source":"nginx","extensions":["jng"]},"image/x-mrsid-image":{"source":"apache","extensions":["sid"]},"image/x-ms-bmp":{"source":"nginx","compressible":true,"extensions":["bmp"]},"image/x-pcx":{"source":"apache","extensions":["pcx"]},"image/x-pict":{"source":"apache","extensions":["pic","pct"]},"image/x-portable-anymap":{"source":"apache","extensions":["pnm"]},"image/x-portable-bitmap":{"source":"apache","extensions":["pbm"]},"image/x-portable-graymap":{"source":"apache","extensions":["pgm"]},"image/x-portable-pixmap":{"source":"apache","extensions":["ppm"]},"image/x-rgb":{"source":"apache","extensions":["rgb"]},"image/x-tga":{"source":"apache","extensions":["tga"]},"image/x-wmf":{"source":"iana"},"image/x-xbitmap":{"source":"apache","extensions":["xbm"]},"image/x-xcf":{"compressible":false},"image/x-xpixmap":{"source":"apache","extensions":["xpm"]},"image/x-xwindowdump":{"source":"apache","extensions":["xwd"]},"message/bhttp":{"source":"iana"},"message/cpim":{"source":"iana"},"message/delivery-status":{"source":"iana"},"message/disposition-notification":{"source":"iana","extensions":["disposition-notification"]},"message/external-body":{"source":"iana"},"message/feedback-report":{"source":"iana"},"message/global":{"source":"iana","extensions":["u8msg"]},"message/global-delivery-status":{"source":"iana","extensions":["u8dsn"]},"message/global-disposition-notification":{"source":"iana","extensions":["u8mdn"]},"message/global-headers":{"source":"iana","extensions":["u8hdr"]},"message/http":{"source":"iana","compressible":false},"message/imdn+xml":{"source":"iana","compressible":true},"message/mls":{"source":"iana"},"message/news":{"source":"apache"},"message/ohttp-req":{"source":"iana"},"message/ohttp-res":{"source":"iana"},"message/partial":{"source":"iana","compressible":false},"message/rfc822":{"source":"iana","compressible":true,"extensions":["eml","mime","mht","mhtml"]},"message/s-http":{"source":"apache"},"message/sip":{"source":"iana"},"message/sipfrag":{"source":"iana"},"message/tracking-status":{"source":"iana"},"message/vnd.si.simp":{"source":"apache"},"message/vnd.wfa.wsc":{"source":"iana","extensions":["wsc"]},"model/3mf":{"source":"iana","extensions":["3mf"]},"model/e57":{"source":"iana"},"model/gltf+json":{"source":"iana","compressible":true,"extensions":["gltf"]},"model/gltf-binary":{"source":"iana","compressible":true,"extensions":["glb"]},"model/iges":{"source":"iana","compressible":false,"extensions":["igs","iges"]},"model/jt":{"source":"iana","extensions":["jt"]},"model/mesh":{"source":"iana","compressible":false,"extensions":["msh","mesh","silo"]},"model/mtl":{"source":"iana","extensions":["mtl"]},"model/obj":{"source":"iana","extensions":["obj"]},"model/prc":{"source":"iana","extensions":["prc"]},"model/step":{"source":"iana","extensions":["step","stp","stpnc","p21","210"]},"model/step+xml":{"source":"iana","compressible":true,"extensions":["stpx"]},"model/step+zip":{"source":"iana","compressible":false,"extensions":["stpz"]},"model/step-xml+zip":{"source":"iana","compressible":false,"extensions":["stpxz"]},"model/stl":{"source":"iana","extensions":["stl"]},"model/u3d":{"source":"iana","extensions":["u3d"]},"model/vnd.bary":{"source":"iana","extensions":["bary"]},"model/vnd.cld":{"source":"iana","extensions":["cld"]},"model/vnd.collada+xml":{"source":"iana","compressible":true,"extensions":["dae"]},"model/vnd.dwf":{"source":"iana","extensions":["dwf"]},"model/vnd.flatland.3dml":{"source":"iana"},"model/vnd.gdl":{"source":"iana","extensions":["gdl"]},"model/vnd.gs-gdl":{"source":"apache"},"model/vnd.gs.gdl":{"source":"iana"},"model/vnd.gtw":{"source":"iana","extensions":["gtw"]},"model/vnd.moml+xml":{"source":"iana","compressible":true},"model/vnd.mts":{"source":"iana","extensions":["mts"]},"model/vnd.opengex":{"source":"iana","extensions":["ogex"]},"model/vnd.parasolid.transmit.binary":{"source":"iana","extensions":["x_b"]},"model/vnd.parasolid.transmit.text":{"source":"iana","extensions":["x_t"]},"model/vnd.pytha.pyox":{"source":"iana","extensions":["pyo","pyox"]},"model/vnd.rosette.annotated-data-model":{"source":"iana"},"model/vnd.sap.vds":{"source":"iana","extensions":["vds"]},"model/vnd.usda":{"source":"iana","extensions":["usda"]},"model/vnd.usdz+zip":{"source":"iana","compressible":false,"extensions":["usdz"]},"model/vnd.valve.source.compiled-map":{"source":"iana","extensions":["bsp"]},"model/vnd.vtu":{"source":"iana","extensions":["vtu"]},"model/vrml":{"source":"iana","compressible":false,"extensions":["wrl","vrml"]},"model/x3d+binary":{"source":"apache","compressible":false,"extensions":["x3db","x3dbz"]},"model/x3d+fastinfoset":{"source":"iana","extensions":["x3db"]},"model/x3d+vrml":{"source":"apache","compressible":false,"extensions":["x3dv","x3dvz"]},"model/x3d+xml":{"source":"iana","compressible":true,"extensions":["x3d","x3dz"]},"model/x3d-vrml":{"source":"iana","extensions":["x3dv"]},"multipart/alternative":{"source":"iana","compressible":false},"multipart/appledouble":{"source":"iana"},"multipart/byteranges":{"source":"iana"},"multipart/digest":{"source":"iana"},"multipart/encrypted":{"source":"iana","compressible":false},"multipart/form-data":{"source":"iana","compressible":false},"multipart/header-set":{"source":"iana"},"multipart/mixed":{"source":"iana"},"multipart/multilingual":{"source":"iana"},"multipart/parallel":{"source":"iana"},"multipart/related":{"source":"iana","compressible":false},"multipart/report":{"source":"iana"},"multipart/signed":{"source":"iana","compressible":false},"multipart/vnd.bint.med-plus":{"source":"iana"},"multipart/voice-message":{"source":"iana"},"multipart/x-mixed-replace":{"source":"iana"},"text/1d-interleaved-parityfec":{"source":"iana"},"text/cache-manifest":{"source":"iana","compressible":true,"extensions":["appcache","manifest"]},"text/calendar":{"source":"iana","extensions":["ics","ifb"]},"text/calender":{"compressible":true},"text/cmd":{"compressible":true},"text/coffeescript":{"extensions":["coffee","litcoffee"]},"text/cql":{"source":"iana"},"text/cql-expression":{"source":"iana"},"text/cql-identifier":{"source":"iana"},"text/css":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["css"]},"text/csv":{"source":"iana","compressible":true,"extensions":["csv"]},"text/csv-schema":{"source":"iana"},"text/directory":{"source":"iana"},"text/dns":{"source":"iana"},"text/ecmascript":{"source":"apache"},"text/encaprtp":{"source":"iana"},"text/enriched":{"source":"iana"},"text/fhirpath":{"source":"iana"},"text/flexfec":{"source":"iana"},"text/fwdred":{"source":"iana"},"text/gff3":{"source":"iana"},"text/grammar-ref-list":{"source":"iana"},"text/hl7v2":{"source":"iana"},"text/html":{"source":"iana","compressible":true,"extensions":["html","htm","shtml"]},"text/jade":{"extensions":["jade"]},"text/javascript":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["js","mjs"]},"text/jcr-cnd":{"source":"iana"},"text/jsx":{"compressible":true,"extensions":["jsx"]},"text/less":{"compressible":true,"extensions":["less"]},"text/markdown":{"source":"iana","compressible":true,"extensions":["md","markdown"]},"text/mathml":{"source":"nginx","extensions":["mml"]},"text/mdx":{"compressible":true,"extensions":["mdx"]},"text/mizar":{"source":"iana"},"text/n3":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["n3"]},"text/parameters":{"source":"iana","charset":"UTF-8"},"text/parityfec":{"source":"iana"},"text/plain":{"source":"iana","compressible":true,"extensions":["txt","text","conf","def","list","log","in","ini"]},"text/provenance-notation":{"source":"iana","charset":"UTF-8"},"text/prs.fallenstein.rst":{"source":"iana"},"text/prs.lines.tag":{"source":"iana","extensions":["dsc"]},"text/prs.prop.logic":{"source":"iana"},"text/prs.texi":{"source":"iana"},"text/raptorfec":{"source":"iana"},"text/red":{"source":"iana"},"text/rfc822-headers":{"source":"iana"},"text/richtext":{"source":"iana","compressible":true,"extensions":["rtx"]},"text/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"text/rtp-enc-aescm128":{"source":"iana"},"text/rtploopback":{"source":"iana"},"text/rtx":{"source":"iana"},"text/sgml":{"source":"iana","extensions":["sgml","sgm"]},"text/shaclc":{"source":"iana"},"text/shex":{"source":"iana","extensions":["shex"]},"text/slim":{"extensions":["slim","slm"]},"text/spdx":{"source":"iana","extensions":["spdx"]},"text/strings":{"source":"iana"},"text/stylus":{"extensions":["stylus","styl"]},"text/t140":{"source":"iana"},"text/tab-separated-values":{"source":"iana","compressible":true,"extensions":["tsv"]},"text/troff":{"source":"iana","extensions":["t","tr","roff","man","me","ms"]},"text/turtle":{"source":"iana","charset":"UTF-8","extensions":["ttl"]},"text/ulpfec":{"source":"iana"},"text/uri-list":{"source":"iana","compressible":true,"extensions":["uri","uris","urls"]},"text/vcard":{"source":"iana","compressible":true,"extensions":["vcard"]},"text/vnd.a":{"source":"iana"},"text/vnd.abc":{"source":"iana"},"text/vnd.ascii-art":{"source":"iana"},"text/vnd.curl":{"source":"iana","extensions":["curl"]},"text/vnd.curl.dcurl":{"source":"apache","extensions":["dcurl"]},"text/vnd.curl.mcurl":{"source":"apache","extensions":["mcurl"]},"text/vnd.curl.scurl":{"source":"apache","extensions":["scurl"]},"text/vnd.debian.copyright":{"source":"iana","charset":"UTF-8"},"text/vnd.dmclientscript":{"source":"iana"},"text/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"text/vnd.esmertec.theme-descriptor":{"source":"iana","charset":"UTF-8"},"text/vnd.exchangeable":{"source":"iana"},"text/vnd.familysearch.gedcom":{"source":"iana","extensions":["ged"]},"text/vnd.ficlab.flt":{"source":"iana"},"text/vnd.fly":{"source":"iana","extensions":["fly"]},"text/vnd.fmi.flexstor":{"source":"iana","extensions":["flx"]},"text/vnd.gml":{"source":"iana"},"text/vnd.graphviz":{"source":"iana","extensions":["gv"]},"text/vnd.hans":{"source":"iana"},"text/vnd.hgl":{"source":"iana"},"text/vnd.in3d.3dml":{"source":"iana","extensions":["3dml"]},"text/vnd.in3d.spot":{"source":"iana","extensions":["spot"]},"text/vnd.iptc.newsml":{"source":"iana"},"text/vnd.iptc.nitf":{"source":"iana"},"text/vnd.latex-z":{"source":"iana"},"text/vnd.motorola.reflex":{"source":"iana"},"text/vnd.ms-mediapackage":{"source":"iana"},"text/vnd.net2phone.commcenter.command":{"source":"iana"},"text/vnd.radisys.msml-basic-layout":{"source":"iana"},"text/vnd.senx.warpscript":{"source":"iana"},"text/vnd.si.uricatalogue":{"source":"apache"},"text/vnd.sosi":{"source":"iana"},"text/vnd.sun.j2me.app-descriptor":{"source":"iana","charset":"UTF-8","extensions":["jad"]},"text/vnd.trolltech.linguist":{"source":"iana","charset":"UTF-8"},"text/vnd.vcf":{"source":"iana"},"text/vnd.wap.si":{"source":"iana"},"text/vnd.wap.sl":{"source":"iana"},"text/vnd.wap.wml":{"source":"iana","extensions":["wml"]},"text/vnd.wap.wmlscript":{"source":"iana","extensions":["wmls"]},"text/vnd.zoo.kcl":{"source":"iana"},"text/vtt":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["vtt"]},"text/wgsl":{"source":"iana","extensions":["wgsl"]},"text/x-asm":{"source":"apache","extensions":["s","asm"]},"text/x-c":{"source":"apache","extensions":["c","cc","cxx","cpp","h","hh","dic"]},"text/x-component":{"source":"nginx","extensions":["htc"]},"text/x-fortran":{"source":"apache","extensions":["f","for","f77","f90"]},"text/x-gwt-rpc":{"compressible":true},"text/x-handlebars-template":{"extensions":["hbs"]},"text/x-java-source":{"source":"apache","extensions":["java"]},"text/x-jquery-tmpl":{"compressible":true},"text/x-lua":{"extensions":["lua"]},"text/x-markdown":{"compressible":true,"extensions":["mkd"]},"text/x-nfo":{"source":"apache","extensions":["nfo"]},"text/x-opml":{"source":"apache","extensions":["opml"]},"text/x-org":{"compressible":true,"extensions":["org"]},"text/x-pascal":{"source":"apache","extensions":["p","pas"]},"text/x-processing":{"compressible":true,"extensions":["pde"]},"text/x-sass":{"extensions":["sass"]},"text/x-scss":{"extensions":["scss"]},"text/x-setext":{"source":"apache","extensions":["etx"]},"text/x-sfv":{"source":"apache","extensions":["sfv"]},"text/x-suse-ymp":{"compressible":true,"extensions":["ymp"]},"text/x-uuencode":{"source":"apache","extensions":["uu"]},"text/x-vcalendar":{"source":"apache","extensions":["vcs"]},"text/x-vcard":{"source":"apache","extensions":["vcf"]},"text/xml":{"source":"iana","compressible":true,"extensions":["xml"]},"text/xml-external-parsed-entity":{"source":"iana"},"text/yaml":{"compressible":true,"extensions":["yaml","yml"]},"video/1d-interleaved-parityfec":{"source":"iana"},"video/3gpp":{"source":"iana","extensions":["3gp","3gpp"]},"video/3gpp-tt":{"source":"iana"},"video/3gpp2":{"source":"iana","extensions":["3g2"]},"video/av1":{"source":"iana"},"video/bmpeg":{"source":"iana"},"video/bt656":{"source":"iana"},"video/celb":{"source":"iana"},"video/dv":{"source":"iana"},"video/encaprtp":{"source":"iana"},"video/evc":{"source":"iana"},"video/ffv1":{"source":"iana"},"video/flexfec":{"source":"iana"},"video/h261":{"source":"iana","extensions":["h261"]},"video/h263":{"source":"iana","extensions":["h263"]},"video/h263-1998":{"source":"iana"},"video/h263-2000":{"source":"iana"},"video/h264":{"source":"iana","extensions":["h264"]},"video/h264-rcdo":{"source":"iana"},"video/h264-svc":{"source":"iana"},"video/h265":{"source":"iana"},"video/h266":{"source":"iana"},"video/iso.segment":{"source":"iana","extensions":["m4s"]},"video/jpeg":{"source":"iana","extensions":["jpgv"]},"video/jpeg2000":{"source":"iana"},"video/jpm":{"source":"apache","extensions":["jpm","jpgm"]},"video/jxsv":{"source":"iana"},"video/lottie+json":{"source":"iana","compressible":true},"video/matroska":{"source":"iana"},"video/matroska-3d":{"source":"iana"},"video/mj2":{"source":"iana","extensions":["mj2","mjp2"]},"video/mp1s":{"source":"iana"},"video/mp2p":{"source":"iana"},"video/mp2t":{"source":"iana","extensions":["ts","m2t","m2ts","mts"]},"video/mp4":{"source":"iana","compressible":false,"extensions":["mp4","mp4v","mpg4"]},"video/mp4v-es":{"source":"iana"},"video/mpeg":{"source":"iana","compressible":false,"extensions":["mpeg","mpg","mpe","m1v","m2v"]},"video/mpeg4-generic":{"source":"iana"},"video/mpv":{"source":"iana"},"video/nv":{"source":"iana"},"video/ogg":{"source":"iana","compressible":false,"extensions":["ogv"]},"video/parityfec":{"source":"iana"},"video/pointer":{"source":"iana"},"video/quicktime":{"source":"iana","compressible":false,"extensions":["qt","mov"]},"video/raptorfec":{"source":"iana"},"video/raw":{"source":"iana"},"video/rtp-enc-aescm128":{"source":"iana"},"video/rtploopback":{"source":"iana"},"video/rtx":{"source":"iana"},"video/scip":{"source":"iana"},"video/smpte291":{"source":"iana"},"video/smpte292m":{"source":"iana"},"video/ulpfec":{"source":"iana"},"video/vc1":{"source":"iana"},"video/vc2":{"source":"iana"},"video/vnd.cctv":{"source":"iana"},"video/vnd.dece.hd":{"source":"iana","extensions":["uvh","uvvh"]},"video/vnd.dece.mobile":{"source":"iana","extensions":["uvm","uvvm"]},"video/vnd.dece.mp4":{"source":"iana"},"video/vnd.dece.pd":{"source":"iana","extensions":["uvp","uvvp"]},"video/vnd.dece.sd":{"source":"iana","extensions":["uvs","uvvs"]},"video/vnd.dece.video":{"source":"iana","extensions":["uvv","uvvv"]},"video/vnd.directv.mpeg":{"source":"iana"},"video/vnd.directv.mpeg-tts":{"source":"iana"},"video/vnd.dlna.mpeg-tts":{"source":"iana"},"video/vnd.dvb.file":{"source":"iana","extensions":["dvb"]},"video/vnd.fvt":{"source":"iana","extensions":["fvt"]},"video/vnd.hns.video":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.ttsavc":{"source":"iana"},"video/vnd.iptvforum.ttsmpeg2":{"source":"iana"},"video/vnd.motorola.video":{"source":"iana"},"video/vnd.motorola.videop":{"source":"iana"},"video/vnd.mpegurl":{"source":"iana","extensions":["mxu","m4u"]},"video/vnd.ms-playready.media.pyv":{"source":"iana","extensions":["pyv"]},"video/vnd.nokia.interleaved-multimedia":{"source":"iana"},"video/vnd.nokia.mp4vr":{"source":"iana"},"video/vnd.nokia.videovoip":{"source":"iana"},"video/vnd.objectvideo":{"source":"iana"},"video/vnd.planar":{"source":"iana"},"video/vnd.radgamettools.bink":{"source":"iana"},"video/vnd.radgamettools.smacker":{"source":"apache"},"video/vnd.sealed.mpeg1":{"source":"iana"},"video/vnd.sealed.mpeg4":{"source":"iana"},"video/vnd.sealed.swf":{"source":"iana"},"video/vnd.sealedmedia.softseal.mov":{"source":"iana"},"video/vnd.uvvu.mp4":{"source":"iana","extensions":["uvu","uvvu"]},"video/vnd.vivo":{"source":"iana","extensions":["viv"]},"video/vnd.youtube.yt":{"source":"iana"},"video/vp8":{"source":"iana"},"video/vp9":{"source":"iana"},"video/webm":{"source":"apache","compressible":false,"extensions":["webm"]},"video/x-f4v":{"source":"apache","extensions":["f4v"]},"video/x-fli":{"source":"apache","extensions":["fli"]},"video/x-flv":{"source":"apache","compressible":false,"extensions":["flv"]},"video/x-m4v":{"source":"apache","extensions":["m4v"]},"video/x-matroska":{"source":"apache","compressible":false,"extensions":["mkv","mk3d","mks"]},"video/x-mng":{"source":"apache","extensions":["mng"]},"video/x-ms-asf":{"source":"apache","extensions":["asf","asx"]},"video/x-ms-vob":{"source":"apache","extensions":["vob"]},"video/x-ms-wm":{"source":"apache","extensions":["wm"]},"video/x-ms-wmv":{"source":"apache","compressible":false,"extensions":["wmv"]},"video/x-ms-wmx":{"source":"apache","extensions":["wmx"]},"video/x-ms-wvx":{"source":"apache","extensions":["wvx"]},"video/x-msvideo":{"source":"apache","extensions":["avi"]},"video/x-sgi-movie":{"source":"apache","extensions":["movie"]},"video/x-smv":{"source":"apache","extensions":["smv"]},"x-conference/x-cooltalk":{"source":"apache","extensions":["ice"]},"x-shader/x-fragment":{"compressible":true},"x-shader/x-vertex":{"compressible":true}}');
-
-/***/ },
-
-/***/ 869
-(module, __unused_webpack_exports, __webpack_require__) {
-
-var regeneratorAsyncGen = __webpack_require__(887);
-function _regeneratorAsync(n, e, r, t, o) {
-  var a = regeneratorAsyncGen(n, e, r, t, o);
-  return a.next().then(function (n) {
-    return n.done ? n.value : a.next();
-  });
-}
-module.exports = _regeneratorAsync, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 887
-(module, __unused_webpack_exports, __webpack_require__) {
-
-var regenerator = __webpack_require__(993);
-var regeneratorAsyncIterator = __webpack_require__(791);
-function _regeneratorAsyncGen(r, e, t, o, n) {
-  return new regeneratorAsyncIterator(regenerator().w(r, e, t, o), n || Promise);
-}
-module.exports = _regeneratorAsyncGen, module.exports.__esModule = true, module.exports["default"] = module.exports;
-
-/***/ },
-
-/***/ 983
-(module) {
-
-// 'mime-score' back-ported to CommonJS
-
-// Score RFC facets (see https://tools.ietf.org/html/rfc6838#section-3)
-var FACET_SCORES = {
-  'prs.': 100,
-  'x-': 200,
-  'x.': 300,
-  'vnd.': 400,
-  default: 900
-}
-
-// Score mime source (Logic originally from `jshttp/mime-types` module)
-var SOURCE_SCORES = {
-  nginx: 10,
-  apache: 20,
-  iana: 40,
-  default: 30 // definitions added by `jshttp/mime-db` project?
-}
-
-var TYPE_SCORES = {
-  // prefer application/xml over text/xml
-  // prefer application/rtf over text/rtf
-  application: 1,
-
-  // prefer font/woff over application/font-woff
-  font: 2,
-
-  // prefer video/mp4 over audio/mp4 over application/mp4
-  // See https://www.rfc-editor.org/rfc/rfc4337.html#section-2
-  audio: 2,
-  video: 3,
-
-  default: 0
-}
-
-/**
- * Get each component of the score for a mime type.  The sum of these is the
- * total score.  The higher the score, the more "official" the type.
- */
-module.exports = function mimeScore (mimeType, source = 'default') {
-  if (mimeType === 'application/octet-stream') {
-    return 0
-  }
-
-  const [type, subtype] = mimeType.split('/')
-
-  const facet = subtype.replace(/(\.|x-).*/, '$1')
-
-  const facetScore = FACET_SCORES[facet] || FACET_SCORES.default
-  const sourceScore = SOURCE_SCORES[source] || SOURCE_SCORES.default
-  const typeScore = TYPE_SCORES[type] || TYPE_SCORES.default
-
-  // All else being equal prefer shorter types
-  const lengthScore = 1 - mimeType.length / 100
-
-  return facetScore + sourceScore + typeScore + lengthScore
-}
-
+module.exports = _OverloadYield, module.exports.__esModule = true, module.exports["default"] = module.exports;
 
 /***/ },
 
@@ -956,6 +693,269 @@ function _regenerator() {
   }, module.exports.__esModule = true, module.exports["default"] = module.exports)();
 }
 module.exports = _regenerator, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 869
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var regeneratorAsyncGen = __webpack_require__(887);
+function _regeneratorAsync(n, e, r, t, o) {
+  var a = regeneratorAsyncGen(n, e, r, t, o);
+  return a.next().then(function (n) {
+    return n.done ? n.value : a.next();
+  });
+}
+module.exports = _regeneratorAsync, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 887
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var regenerator = __webpack_require__(993);
+var regeneratorAsyncIterator = __webpack_require__(791);
+function _regeneratorAsyncGen(r, e, t, o, n) {
+  return new regeneratorAsyncIterator(regenerator().w(r, e, t, o), n || Promise);
+}
+module.exports = _regeneratorAsyncGen, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 791
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var OverloadYield = __webpack_require__(172);
+var regeneratorDefine = __webpack_require__(546);
+function AsyncIterator(t, e) {
+  function n(r, o, i, f) {
+    try {
+      var c = t[r](o),
+        u = c.value;
+      return u instanceof OverloadYield ? e.resolve(u.v).then(function (t) {
+        n("next", t, i, f);
+      }, function (t) {
+        n("throw", t, i, f);
+      }) : e.resolve(u).then(function (t) {
+        c.value = t, i(c);
+      }, function (t) {
+        return n("throw", t, i, f);
+      });
+    } catch (t) {
+      f(t);
+    }
+  }
+  var r;
+  this.next || (regeneratorDefine(AsyncIterator.prototype), regeneratorDefine(AsyncIterator.prototype, "function" == typeof Symbol && Symbol.asyncIterator || "@asyncIterator", function () {
+    return this;
+  })), regeneratorDefine(this, "_invoke", function (t, o, i) {
+    function f() {
+      return new e(function (e, r) {
+        n(t, i, e, r);
+      });
+    }
+    return r = r ? r.then(f, f) : f();
+  }, !0);
+}
+module.exports = AsyncIterator, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 546
+(module) {
+
+function _regeneratorDefine(e, r, n, t) {
+  var i = Object.defineProperty;
+  try {
+    i({}, "", {});
+  } catch (e) {
+    i = 0;
+  }
+  module.exports = _regeneratorDefine = function regeneratorDefine(e, r, n, t) {
+    function o(r, n) {
+      _regeneratorDefine(e, r, function (e) {
+        return this._invoke(r, n, e);
+      });
+    }
+    r ? i ? i(e, r, {
+      value: n,
+      enumerable: !t,
+      configurable: !t,
+      writable: !t
+    }) : e[r] = n : (o("next", 0), o("throw", 1), o("return", 2));
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports, _regeneratorDefine(e, r, n, t);
+}
+module.exports = _regeneratorDefine, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 373
+(module) {
+
+function _regeneratorKeys(e) {
+  var n = Object(e),
+    r = [];
+  for (var t in n) r.unshift(t);
+  return function e() {
+    for (; r.length;) if ((t = r.pop()) in n) return e.value = t, e.done = !1, e;
+    return e.done = !0, e;
+  };
+}
+module.exports = _regeneratorKeys, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 633
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var OverloadYield = __webpack_require__(172);
+var regenerator = __webpack_require__(993);
+var regeneratorAsync = __webpack_require__(869);
+var regeneratorAsyncGen = __webpack_require__(887);
+var regeneratorAsyncIterator = __webpack_require__(791);
+var regeneratorKeys = __webpack_require__(373);
+var regeneratorValues = __webpack_require__(579);
+function _regeneratorRuntime() {
+  "use strict";
+
+  var r = regenerator(),
+    e = r.m(_regeneratorRuntime),
+    t = (Object.getPrototypeOf ? Object.getPrototypeOf(e) : e.__proto__).constructor;
+  function n(r) {
+    var e = "function" == typeof r && r.constructor;
+    return !!e && (e === t || "GeneratorFunction" === (e.displayName || e.name));
+  }
+  var o = {
+    "throw": 1,
+    "return": 2,
+    "break": 3,
+    "continue": 3
+  };
+  function a(r) {
+    var e, t;
+    return function (n) {
+      e || (e = {
+        stop: function stop() {
+          return t(n.a, 2);
+        },
+        "catch": function _catch() {
+          return n.v;
+        },
+        abrupt: function abrupt(r, e) {
+          return t(n.a, o[r], e);
+        },
+        delegateYield: function delegateYield(r, o, a) {
+          return e.resultName = o, t(n.d, regeneratorValues(r), a);
+        },
+        finish: function finish(r) {
+          return t(n.f, r);
+        }
+      }, t = function t(r, _t, o) {
+        n.p = e.prev, n.n = e.next;
+        try {
+          return r(_t, o);
+        } finally {
+          e.next = n.n;
+        }
+      }), e.resultName && (e[e.resultName] = n.v, e.resultName = void 0), e.sent = n.v, e.next = n.n;
+      try {
+        return r.call(this, e);
+      } finally {
+        n.p = e.prev, n.n = e.next;
+      }
+    };
+  }
+  return (module.exports = _regeneratorRuntime = function _regeneratorRuntime() {
+    return {
+      wrap: function wrap(e, t, n, o) {
+        return r.w(a(e), t, n, o && o.reverse());
+      },
+      isGeneratorFunction: n,
+      mark: r.m,
+      awrap: function awrap(r, e) {
+        return new OverloadYield(r, e);
+      },
+      AsyncIterator: regeneratorAsyncIterator,
+      async: function async(r, e, t, o, u) {
+        return (n(e) ? regeneratorAsyncGen : regeneratorAsync)(a(r), e, t, o, u);
+      },
+      keys: regeneratorKeys,
+      values: regeneratorValues
+    };
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports)();
+}
+module.exports = _regeneratorRuntime, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 579
+(module, __unused_webpack_exports, __webpack_require__) {
+
+var _typeof = (__webpack_require__(738)["default"]);
+function _regeneratorValues(e) {
+  if (null != e) {
+    var t = e["function" == typeof Symbol && Symbol.iterator || "@@iterator"],
+      r = 0;
+    if (t) return t.call(e);
+    if ("function" == typeof e.next) return e;
+    if (!isNaN(e.length)) return {
+      next: function next() {
+        return e && r >= e.length && (e = void 0), {
+          value: e && e[r++],
+          done: !e
+        };
+      }
+    };
+  }
+  throw new TypeError(_typeof(e) + " is not iterable");
+}
+module.exports = _regeneratorValues, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 738
+(module) {
+
+function _typeof(o) {
+  "@babel/helpers - typeof";
+
+  return module.exports = _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (o) {
+    return typeof o;
+  } : function (o) {
+    return o && "function" == typeof Symbol && o.constructor === Symbol && o !== Symbol.prototype ? "symbol" : typeof o;
+  }, module.exports.__esModule = true, module.exports["default"] = module.exports, _typeof(o);
+}
+module.exports = _typeof, module.exports.__esModule = true, module.exports["default"] = module.exports;
+
+/***/ },
+
+/***/ 756
+(module, __unused_webpack_exports, __webpack_require__) {
+
+// TODO(Babel 8): Remove this file.
+
+var runtime = __webpack_require__(633)();
+module.exports = runtime;
+
+// Copied from https://github.com/facebook/regenerator/blob/main/packages/runtime/runtime.js#L736=
+try {
+  regeneratorRuntime = runtime;
+} catch (accidentalStrictMode) {
+  if (typeof globalThis === "object") {
+    globalThis.regeneratorRuntime = runtime;
+  } else {
+    Function("r", "regeneratorRuntime = r")(runtime);
+  }
+}
+
+
+/***/ },
+
+/***/ 813
+(module) {
+
+"use strict";
+module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec":{"source":"iana"},"application/3gpdash-qoe-report+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/3gpp-ims+xml":{"source":"iana","compressible":true},"application/3gpphal+json":{"source":"iana","compressible":true},"application/3gpphalforms+json":{"source":"iana","compressible":true},"application/a2l":{"source":"iana"},"application/ace+cbor":{"source":"iana"},"application/ace+json":{"source":"iana","compressible":true},"application/ace-groupcomm+cbor":{"source":"iana"},"application/ace-trl+cbor":{"source":"iana"},"application/activemessage":{"source":"iana"},"application/activity+json":{"source":"iana","compressible":true},"application/aif+cbor":{"source":"iana"},"application/aif+json":{"source":"iana","compressible":true},"application/alto-cdni+json":{"source":"iana","compressible":true},"application/alto-cdnifilter+json":{"source":"iana","compressible":true},"application/alto-costmap+json":{"source":"iana","compressible":true},"application/alto-costmapfilter+json":{"source":"iana","compressible":true},"application/alto-directory+json":{"source":"iana","compressible":true},"application/alto-endpointcost+json":{"source":"iana","compressible":true},"application/alto-endpointcostparams+json":{"source":"iana","compressible":true},"application/alto-endpointprop+json":{"source":"iana","compressible":true},"application/alto-endpointpropparams+json":{"source":"iana","compressible":true},"application/alto-error+json":{"source":"iana","compressible":true},"application/alto-networkmap+json":{"source":"iana","compressible":true},"application/alto-networkmapfilter+json":{"source":"iana","compressible":true},"application/alto-propmap+json":{"source":"iana","compressible":true},"application/alto-propmapparams+json":{"source":"iana","compressible":true},"application/alto-tips+json":{"source":"iana","compressible":true},"application/alto-tipsparams+json":{"source":"iana","compressible":true},"application/alto-updatestreamcontrol+json":{"source":"iana","compressible":true},"application/alto-updatestreamparams+json":{"source":"iana","compressible":true},"application/aml":{"source":"iana"},"application/andrew-inset":{"source":"iana","extensions":["ez"]},"application/appinstaller":{"compressible":false,"extensions":["appinstaller"]},"application/applefile":{"source":"iana"},"application/applixware":{"source":"apache","extensions":["aw"]},"application/appx":{"compressible":false,"extensions":["appx"]},"application/appxbundle":{"compressible":false,"extensions":["appxbundle"]},"application/at+jwt":{"source":"iana"},"application/atf":{"source":"iana"},"application/atfx":{"source":"iana"},"application/atom+xml":{"source":"iana","compressible":true,"extensions":["atom"]},"application/atomcat+xml":{"source":"iana","compressible":true,"extensions":["atomcat"]},"application/atomdeleted+xml":{"source":"iana","compressible":true,"extensions":["atomdeleted"]},"application/atomicmail":{"source":"iana"},"application/atomsvc+xml":{"source":"iana","compressible":true,"extensions":["atomsvc"]},"application/atsc-dwd+xml":{"source":"iana","compressible":true,"extensions":["dwd"]},"application/atsc-dynamic-event-message":{"source":"iana"},"application/atsc-held+xml":{"source":"iana","compressible":true,"extensions":["held"]},"application/atsc-rdt+json":{"source":"iana","compressible":true},"application/atsc-rsat+xml":{"source":"iana","compressible":true,"extensions":["rsat"]},"application/atxml":{"source":"iana"},"application/auth-policy+xml":{"source":"iana","compressible":true},"application/automationml-aml+xml":{"source":"iana","compressible":true,"extensions":["aml"]},"application/automationml-amlx+zip":{"source":"iana","compressible":false,"extensions":["amlx"]},"application/bacnet-xdd+zip":{"source":"iana","compressible":false},"application/batch-smtp":{"source":"iana"},"application/bdoc":{"compressible":false,"extensions":["bdoc"]},"application/beep+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/bufr":{"source":"iana"},"application/c2pa":{"source":"iana"},"application/calendar+json":{"source":"iana","compressible":true},"application/calendar+xml":{"source":"iana","compressible":true,"extensions":["xcs"]},"application/call-completion":{"source":"iana"},"application/cals-1840":{"source":"iana"},"application/captive+json":{"source":"iana","compressible":true},"application/cbor":{"source":"iana"},"application/cbor-seq":{"source":"iana"},"application/cccex":{"source":"iana"},"application/ccmp+xml":{"source":"iana","compressible":true},"application/ccxml+xml":{"source":"iana","compressible":true,"extensions":["ccxml"]},"application/cda+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/cdfx+xml":{"source":"iana","compressible":true,"extensions":["cdfx"]},"application/cdmi-capability":{"source":"iana","extensions":["cdmia"]},"application/cdmi-container":{"source":"iana","extensions":["cdmic"]},"application/cdmi-domain":{"source":"iana","extensions":["cdmid"]},"application/cdmi-object":{"source":"iana","extensions":["cdmio"]},"application/cdmi-queue":{"source":"iana","extensions":["cdmiq"]},"application/cdni":{"source":"iana"},"application/ce+cbor":{"source":"iana"},"application/cea":{"source":"iana"},"application/cea-2018+xml":{"source":"iana","compressible":true},"application/cellml+xml":{"source":"iana","compressible":true},"application/cfw":{"source":"iana"},"application/cid-edhoc+cbor-seq":{"source":"iana"},"application/city+json":{"source":"iana","compressible":true},"application/city+json-seq":{"source":"iana"},"application/clr":{"source":"iana"},"application/clue+xml":{"source":"iana","compressible":true},"application/clue_info+xml":{"source":"iana","compressible":true},"application/cms":{"source":"iana"},"application/cnrp+xml":{"source":"iana","compressible":true},"application/coap-eap":{"source":"iana"},"application/coap-group+json":{"source":"iana","compressible":true},"application/coap-payload":{"source":"iana"},"application/commonground":{"source":"iana"},"application/concise-problem-details+cbor":{"source":"iana"},"application/conference-info+xml":{"source":"iana","compressible":true},"application/cose":{"source":"iana"},"application/cose-key":{"source":"iana"},"application/cose-key-set":{"source":"iana"},"application/cose-x509":{"source":"iana"},"application/cpl+xml":{"source":"iana","compressible":true,"extensions":["cpl"]},"application/csrattrs":{"source":"iana"},"application/csta+xml":{"source":"iana","compressible":true},"application/cstadata+xml":{"source":"iana","compressible":true},"application/csvm+json":{"source":"iana","compressible":true},"application/cu-seeme":{"source":"apache","extensions":["cu"]},"application/cwl":{"source":"iana","extensions":["cwl"]},"application/cwl+json":{"source":"iana","compressible":true},"application/cwl+yaml":{"source":"iana"},"application/cwt":{"source":"iana"},"application/cybercash":{"source":"iana"},"application/dart":{"compressible":true},"application/dash+xml":{"source":"iana","compressible":true,"extensions":["mpd"]},"application/dash-patch+xml":{"source":"iana","compressible":true,"extensions":["mpp"]},"application/dashdelta":{"source":"iana"},"application/davmount+xml":{"source":"iana","compressible":true,"extensions":["davmount"]},"application/dca-rft":{"source":"iana"},"application/dcd":{"source":"iana"},"application/dec-dx":{"source":"iana"},"application/dialog-info+xml":{"source":"iana","compressible":true},"application/dicom":{"source":"iana","extensions":["dcm"]},"application/dicom+json":{"source":"iana","compressible":true},"application/dicom+xml":{"source":"iana","compressible":true},"application/dii":{"source":"iana"},"application/dit":{"source":"iana"},"application/dns":{"source":"iana"},"application/dns+json":{"source":"iana","compressible":true},"application/dns-message":{"source":"iana"},"application/docbook+xml":{"source":"apache","compressible":true,"extensions":["dbk"]},"application/dots+cbor":{"source":"iana"},"application/dpop+jwt":{"source":"iana"},"application/dskpp+xml":{"source":"iana","compressible":true},"application/dssc+der":{"source":"iana","extensions":["dssc"]},"application/dssc+xml":{"source":"iana","compressible":true,"extensions":["xdssc"]},"application/dvcs":{"source":"iana"},"application/eat+cwt":{"source":"iana"},"application/eat+jwt":{"source":"iana"},"application/eat-bun+cbor":{"source":"iana"},"application/eat-bun+json":{"source":"iana","compressible":true},"application/eat-ucs+cbor":{"source":"iana"},"application/eat-ucs+json":{"source":"iana","compressible":true},"application/ecmascript":{"source":"apache","compressible":true,"extensions":["ecma"]},"application/edhoc+cbor-seq":{"source":"iana"},"application/edi-consent":{"source":"iana"},"application/edi-x12":{"source":"iana","compressible":false},"application/edifact":{"source":"iana","compressible":false},"application/efi":{"source":"iana"},"application/elm+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/elm+xml":{"source":"iana","compressible":true},"application/emergencycalldata.cap+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/emergencycalldata.comment+xml":{"source":"iana","compressible":true},"application/emergencycalldata.control+xml":{"source":"iana","compressible":true},"application/emergencycalldata.deviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.ecall.msd":{"source":"iana"},"application/emergencycalldata.legacyesn+json":{"source":"iana","compressible":true},"application/emergencycalldata.providerinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.serviceinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.subscriberinfo+xml":{"source":"iana","compressible":true},"application/emergencycalldata.veds+xml":{"source":"iana","compressible":true},"application/emma+xml":{"source":"iana","compressible":true,"extensions":["emma"]},"application/emotionml+xml":{"source":"iana","compressible":true,"extensions":["emotionml"]},"application/encaprtp":{"source":"iana"},"application/entity-statement+jwt":{"source":"iana"},"application/epp+xml":{"source":"iana","compressible":true},"application/epub+zip":{"source":"iana","compressible":false,"extensions":["epub"]},"application/eshop":{"source":"iana"},"application/exi":{"source":"iana","extensions":["exi"]},"application/expect-ct-report+json":{"source":"iana","compressible":true},"application/express":{"source":"iana","extensions":["exp"]},"application/fastinfoset":{"source":"iana"},"application/fastsoap":{"source":"iana"},"application/fdf":{"source":"iana","extensions":["fdf"]},"application/fdt+xml":{"source":"iana","compressible":true,"extensions":["fdt"]},"application/fhir+json":{"source":"iana","charset":"UTF-8","compressible":true},"application/fhir+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/fido.trusted-apps+json":{"compressible":true},"application/fits":{"source":"iana"},"application/flexfec":{"source":"iana"},"application/font-sfnt":{"source":"iana"},"application/font-tdpfr":{"source":"iana","extensions":["pfr"]},"application/font-woff":{"source":"iana","compressible":false},"application/framework-attributes+xml":{"source":"iana","compressible":true},"application/geo+json":{"source":"iana","compressible":true,"extensions":["geojson"]},"application/geo+json-seq":{"source":"iana"},"application/geopackage+sqlite3":{"source":"iana"},"application/geopose+json":{"source":"iana","compressible":true},"application/geoxacml+json":{"source":"iana","compressible":true},"application/geoxacml+xml":{"source":"iana","compressible":true},"application/gltf-buffer":{"source":"iana"},"application/gml+xml":{"source":"iana","compressible":true,"extensions":["gml"]},"application/gnap-binding-jws":{"source":"iana"},"application/gnap-binding-jwsd":{"source":"iana"},"application/gnap-binding-rotation-jws":{"source":"iana"},"application/gnap-binding-rotation-jwsd":{"source":"iana"},"application/gpx+xml":{"source":"apache","compressible":true,"extensions":["gpx"]},"application/grib":{"source":"iana"},"application/gxf":{"source":"apache","extensions":["gxf"]},"application/gzip":{"source":"iana","compressible":false,"extensions":["gz"]},"application/h224":{"source":"iana"},"application/held+xml":{"source":"iana","compressible":true},"application/hjson":{"extensions":["hjson"]},"application/hl7v2+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/http":{"source":"iana"},"application/hyperstudio":{"source":"iana","extensions":["stk"]},"application/ibe-key-request+xml":{"source":"iana","compressible":true},"application/ibe-pkg-reply+xml":{"source":"iana","compressible":true},"application/ibe-pp-data":{"source":"iana"},"application/iges":{"source":"iana"},"application/im-iscomposing+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/index":{"source":"iana"},"application/index.cmd":{"source":"iana"},"application/index.obj":{"source":"iana"},"application/index.response":{"source":"iana"},"application/index.vnd":{"source":"iana"},"application/inkml+xml":{"source":"iana","compressible":true,"extensions":["ink","inkml"]},"application/iotp":{"source":"iana"},"application/ipfix":{"source":"iana","extensions":["ipfix"]},"application/ipp":{"source":"iana"},"application/isup":{"source":"iana"},"application/its+xml":{"source":"iana","compressible":true,"extensions":["its"]},"application/java-archive":{"source":"iana","compressible":false,"extensions":["jar","war","ear"]},"application/java-serialized-object":{"source":"apache","compressible":false,"extensions":["ser"]},"application/java-vm":{"source":"apache","compressible":false,"extensions":["class"]},"application/javascript":{"source":"apache","charset":"UTF-8","compressible":true,"extensions":["js"]},"application/jf2feed+json":{"source":"iana","compressible":true},"application/jose":{"source":"iana"},"application/jose+json":{"source":"iana","compressible":true},"application/jrd+json":{"source":"iana","compressible":true},"application/jscalendar+json":{"source":"iana","compressible":true},"application/jscontact+json":{"source":"iana","compressible":true},"application/json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["json","map"]},"application/json-patch+json":{"source":"iana","compressible":true},"application/json-seq":{"source":"iana"},"application/json5":{"extensions":["json5"]},"application/jsonml+json":{"source":"apache","compressible":true,"extensions":["jsonml"]},"application/jsonpath":{"source":"iana"},"application/jwk+json":{"source":"iana","compressible":true},"application/jwk-set+json":{"source":"iana","compressible":true},"application/jwk-set+jwt":{"source":"iana"},"application/jwt":{"source":"iana"},"application/kpml-request+xml":{"source":"iana","compressible":true},"application/kpml-response+xml":{"source":"iana","compressible":true},"application/ld+json":{"source":"iana","compressible":true,"extensions":["jsonld"]},"application/lgr+xml":{"source":"iana","compressible":true,"extensions":["lgr"]},"application/link-format":{"source":"iana"},"application/linkset":{"source":"iana"},"application/linkset+json":{"source":"iana","compressible":true},"application/load-control+xml":{"source":"iana","compressible":true},"application/logout+jwt":{"source":"iana"},"application/lost+xml":{"source":"iana","compressible":true,"extensions":["lostxml"]},"application/lostsync+xml":{"source":"iana","compressible":true},"application/lpf+zip":{"source":"iana","compressible":false},"application/lxf":{"source":"iana"},"application/mac-binhex40":{"source":"iana","extensions":["hqx"]},"application/mac-compactpro":{"source":"apache","extensions":["cpt"]},"application/macwriteii":{"source":"iana"},"application/mads+xml":{"source":"iana","compressible":true,"extensions":["mads"]},"application/manifest+json":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["webmanifest"]},"application/marc":{"source":"iana","extensions":["mrc"]},"application/marcxml+xml":{"source":"iana","compressible":true,"extensions":["mrcx"]},"application/mathematica":{"source":"iana","extensions":["ma","nb","mb"]},"application/mathml+xml":{"source":"iana","compressible":true,"extensions":["mathml"]},"application/mathml-content+xml":{"source":"iana","compressible":true},"application/mathml-presentation+xml":{"source":"iana","compressible":true},"application/mbms-associated-procedure-description+xml":{"source":"iana","compressible":true},"application/mbms-deregister+xml":{"source":"iana","compressible":true},"application/mbms-envelope+xml":{"source":"iana","compressible":true},"application/mbms-msk+xml":{"source":"iana","compressible":true},"application/mbms-msk-response+xml":{"source":"iana","compressible":true},"application/mbms-protection-description+xml":{"source":"iana","compressible":true},"application/mbms-reception-report+xml":{"source":"iana","compressible":true},"application/mbms-register+xml":{"source":"iana","compressible":true},"application/mbms-register-response+xml":{"source":"iana","compressible":true},"application/mbms-schedule+xml":{"source":"iana","compressible":true},"application/mbms-user-service-description+xml":{"source":"iana","compressible":true},"application/mbox":{"source":"iana","extensions":["mbox"]},"application/media-policy-dataset+xml":{"source":"iana","compressible":true,"extensions":["mpf"]},"application/media_control+xml":{"source":"iana","compressible":true},"application/mediaservercontrol+xml":{"source":"iana","compressible":true,"extensions":["mscml"]},"application/merge-patch+json":{"source":"iana","compressible":true},"application/metalink+xml":{"source":"apache","compressible":true,"extensions":["metalink"]},"application/metalink4+xml":{"source":"iana","compressible":true,"extensions":["meta4"]},"application/mets+xml":{"source":"iana","compressible":true,"extensions":["mets"]},"application/mf4":{"source":"iana"},"application/mikey":{"source":"iana"},"application/mipc":{"source":"iana"},"application/missing-blocks+cbor-seq":{"source":"iana"},"application/mmt-aei+xml":{"source":"iana","compressible":true,"extensions":["maei"]},"application/mmt-usd+xml":{"source":"iana","compressible":true,"extensions":["musd"]},"application/mods+xml":{"source":"iana","compressible":true,"extensions":["mods"]},"application/moss-keys":{"source":"iana"},"application/moss-signature":{"source":"iana"},"application/mosskey-data":{"source":"iana"},"application/mosskey-request":{"source":"iana"},"application/mp21":{"source":"iana","extensions":["m21","mp21"]},"application/mp4":{"source":"iana","extensions":["mp4","mpg4","mp4s","m4p"]},"application/mpeg4-generic":{"source":"iana"},"application/mpeg4-iod":{"source":"iana"},"application/mpeg4-iod-xmt":{"source":"iana"},"application/mrb-consumer+xml":{"source":"iana","compressible":true},"application/mrb-publish+xml":{"source":"iana","compressible":true},"application/msc-ivr+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msc-mixer+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/msix":{"compressible":false,"extensions":["msix"]},"application/msixbundle":{"compressible":false,"extensions":["msixbundle"]},"application/msword":{"source":"iana","compressible":false,"extensions":["doc","dot"]},"application/mud+json":{"source":"iana","compressible":true},"application/multipart-core":{"source":"iana"},"application/mxf":{"source":"iana","extensions":["mxf"]},"application/n-quads":{"source":"iana","extensions":["nq"]},"application/n-triples":{"source":"iana","extensions":["nt"]},"application/nasdata":{"source":"iana"},"application/news-checkgroups":{"source":"iana","charset":"US-ASCII"},"application/news-groupinfo":{"source":"iana","charset":"US-ASCII"},"application/news-transmission":{"source":"iana"},"application/nlsml+xml":{"source":"iana","compressible":true},"application/node":{"source":"iana","extensions":["cjs"]},"application/nss":{"source":"iana"},"application/oauth-authz-req+jwt":{"source":"iana"},"application/oblivious-dns-message":{"source":"iana"},"application/ocsp-request":{"source":"iana"},"application/ocsp-response":{"source":"iana"},"application/octet-stream":{"source":"iana","compressible":true,"extensions":["bin","dms","lrf","mar","so","dist","distz","pkg","bpk","dump","elc","deploy","exe","dll","deb","dmg","iso","img","msi","msp","msm","buffer"]},"application/oda":{"source":"iana","extensions":["oda"]},"application/odm+xml":{"source":"iana","compressible":true},"application/odx":{"source":"iana"},"application/oebps-package+xml":{"source":"iana","compressible":true,"extensions":["opf"]},"application/ogg":{"source":"iana","compressible":false,"extensions":["ogx"]},"application/ohttp-keys":{"source":"iana"},"application/omdoc+xml":{"source":"apache","compressible":true,"extensions":["omdoc"]},"application/onenote":{"source":"apache","extensions":["onetoc","onetoc2","onetmp","onepkg","one","onea"]},"application/opc-nodeset+xml":{"source":"iana","compressible":true},"application/oscore":{"source":"iana"},"application/oxps":{"source":"iana","extensions":["oxps"]},"application/p21":{"source":"iana"},"application/p21+zip":{"source":"iana","compressible":false},"application/p2p-overlay+xml":{"source":"iana","compressible":true,"extensions":["relo"]},"application/parityfec":{"source":"iana"},"application/passport":{"source":"iana"},"application/patch-ops-error+xml":{"source":"iana","compressible":true,"extensions":["xer"]},"application/pdf":{"source":"iana","compressible":false,"extensions":["pdf"]},"application/pdx":{"source":"iana"},"application/pem-certificate-chain":{"source":"iana"},"application/pgp-encrypted":{"source":"iana","compressible":false,"extensions":["pgp"]},"application/pgp-keys":{"source":"iana","extensions":["asc"]},"application/pgp-signature":{"source":"iana","extensions":["sig","asc"]},"application/pics-rules":{"source":"apache","extensions":["prf"]},"application/pidf+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pidf-diff+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/pkcs10":{"source":"iana","extensions":["p10"]},"application/pkcs12":{"source":"iana"},"application/pkcs7-mime":{"source":"iana","extensions":["p7m","p7c"]},"application/pkcs7-signature":{"source":"iana","extensions":["p7s"]},"application/pkcs8":{"source":"iana","extensions":["p8"]},"application/pkcs8-encrypted":{"source":"iana"},"application/pkix-attr-cert":{"source":"iana","extensions":["ac"]},"application/pkix-cert":{"source":"iana","extensions":["cer"]},"application/pkix-crl":{"source":"iana","extensions":["crl"]},"application/pkix-pkipath":{"source":"iana","extensions":["pkipath"]},"application/pkixcmp":{"source":"iana","extensions":["pki"]},"application/pls+xml":{"source":"iana","compressible":true,"extensions":["pls"]},"application/poc-settings+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/postscript":{"source":"iana","compressible":true,"extensions":["ai","eps","ps"]},"application/ppsp-tracker+json":{"source":"iana","compressible":true},"application/private-token-issuer-directory":{"source":"iana"},"application/private-token-request":{"source":"iana"},"application/private-token-response":{"source":"iana"},"application/problem+json":{"source":"iana","compressible":true},"application/problem+xml":{"source":"iana","compressible":true},"application/provenance+xml":{"source":"iana","compressible":true,"extensions":["provx"]},"application/provided-claims+jwt":{"source":"iana"},"application/prs.alvestrand.titrax-sheet":{"source":"iana"},"application/prs.cww":{"source":"iana","extensions":["cww"]},"application/prs.cyn":{"source":"iana","charset":"7-BIT"},"application/prs.hpub+zip":{"source":"iana","compressible":false},"application/prs.implied-document+xml":{"source":"iana","compressible":true},"application/prs.implied-executable":{"source":"iana"},"application/prs.implied-object+json":{"source":"iana","compressible":true},"application/prs.implied-object+json-seq":{"source":"iana"},"application/prs.implied-object+yaml":{"source":"iana"},"application/prs.implied-structure":{"source":"iana"},"application/prs.mayfile":{"source":"iana"},"application/prs.nprend":{"source":"iana"},"application/prs.plucker":{"source":"iana"},"application/prs.rdf-xml-crypt":{"source":"iana"},"application/prs.vcfbzip2":{"source":"iana"},"application/prs.xsf+xml":{"source":"iana","compressible":true,"extensions":["xsf"]},"application/pskc+xml":{"source":"iana","compressible":true,"extensions":["pskcxml"]},"application/pvd+json":{"source":"iana","compressible":true},"application/qsig":{"source":"iana"},"application/raml+yaml":{"compressible":true,"extensions":["raml"]},"application/raptorfec":{"source":"iana"},"application/rdap+json":{"source":"iana","compressible":true},"application/rdf+xml":{"source":"iana","compressible":true,"extensions":["rdf","owl"]},"application/reginfo+xml":{"source":"iana","compressible":true,"extensions":["rif"]},"application/relax-ng-compact-syntax":{"source":"iana","extensions":["rnc"]},"application/remote-printing":{"source":"apache"},"application/reputon+json":{"source":"iana","compressible":true},"application/resolve-response+jwt":{"source":"iana"},"application/resource-lists+xml":{"source":"iana","compressible":true,"extensions":["rl"]},"application/resource-lists-diff+xml":{"source":"iana","compressible":true,"extensions":["rld"]},"application/rfc+xml":{"source":"iana","compressible":true},"application/riscos":{"source":"iana"},"application/rlmi+xml":{"source":"iana","compressible":true},"application/rls-services+xml":{"source":"iana","compressible":true,"extensions":["rs"]},"application/route-apd+xml":{"source":"iana","compressible":true,"extensions":["rapd"]},"application/route-s-tsid+xml":{"source":"iana","compressible":true,"extensions":["sls"]},"application/route-usd+xml":{"source":"iana","compressible":true,"extensions":["rusd"]},"application/rpki-checklist":{"source":"iana"},"application/rpki-ghostbusters":{"source":"iana","extensions":["gbr"]},"application/rpki-manifest":{"source":"iana","extensions":["mft"]},"application/rpki-publication":{"source":"iana"},"application/rpki-roa":{"source":"iana","extensions":["roa"]},"application/rpki-signed-tal":{"source":"iana"},"application/rpki-updown":{"source":"iana"},"application/rsd+xml":{"source":"apache","compressible":true,"extensions":["rsd"]},"application/rss+xml":{"source":"apache","compressible":true,"extensions":["rss"]},"application/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"application/rtploopback":{"source":"iana"},"application/rtx":{"source":"iana"},"application/samlassertion+xml":{"source":"iana","compressible":true},"application/samlmetadata+xml":{"source":"iana","compressible":true},"application/sarif+json":{"source":"iana","compressible":true},"application/sarif-external-properties+json":{"source":"iana","compressible":true},"application/sbe":{"source":"iana"},"application/sbml+xml":{"source":"iana","compressible":true,"extensions":["sbml"]},"application/scaip+xml":{"source":"iana","compressible":true},"application/scim+json":{"source":"iana","compressible":true},"application/scvp-cv-request":{"source":"iana","extensions":["scq"]},"application/scvp-cv-response":{"source":"iana","extensions":["scs"]},"application/scvp-vp-request":{"source":"iana","extensions":["spq"]},"application/scvp-vp-response":{"source":"iana","extensions":["spp"]},"application/sdp":{"source":"iana","extensions":["sdp"]},"application/secevent+jwt":{"source":"iana"},"application/senml+cbor":{"source":"iana"},"application/senml+json":{"source":"iana","compressible":true},"application/senml+xml":{"source":"iana","compressible":true,"extensions":["senmlx"]},"application/senml-etch+cbor":{"source":"iana"},"application/senml-etch+json":{"source":"iana","compressible":true},"application/senml-exi":{"source":"iana"},"application/sensml+cbor":{"source":"iana"},"application/sensml+json":{"source":"iana","compressible":true},"application/sensml+xml":{"source":"iana","compressible":true,"extensions":["sensmlx"]},"application/sensml-exi":{"source":"iana"},"application/sep+xml":{"source":"iana","compressible":true},"application/sep-exi":{"source":"iana"},"application/session-info":{"source":"iana"},"application/set-payment":{"source":"iana"},"application/set-payment-initiation":{"source":"iana","extensions":["setpay"]},"application/set-registration":{"source":"iana"},"application/set-registration-initiation":{"source":"iana","extensions":["setreg"]},"application/sgml":{"source":"iana"},"application/sgml-open-catalog":{"source":"iana"},"application/shf+xml":{"source":"iana","compressible":true,"extensions":["shf"]},"application/sieve":{"source":"iana","extensions":["siv","sieve"]},"application/simple-filter+xml":{"source":"iana","compressible":true},"application/simple-message-summary":{"source":"iana"},"application/simplesymbolcontainer":{"source":"iana"},"application/sipc":{"source":"iana"},"application/slate":{"source":"iana"},"application/smil":{"source":"apache"},"application/smil+xml":{"source":"iana","compressible":true,"extensions":["smi","smil"]},"application/smpte336m":{"source":"iana"},"application/soap+fastinfoset":{"source":"iana"},"application/soap+xml":{"source":"iana","compressible":true},"application/sparql-query":{"source":"iana","extensions":["rq"]},"application/sparql-results+xml":{"source":"iana","compressible":true,"extensions":["srx"]},"application/spdx+json":{"source":"iana","compressible":true},"application/spirits-event+xml":{"source":"iana","compressible":true},"application/sql":{"source":"iana","extensions":["sql"]},"application/srgs":{"source":"iana","extensions":["gram"]},"application/srgs+xml":{"source":"iana","compressible":true,"extensions":["grxml"]},"application/sru+xml":{"source":"iana","compressible":true,"extensions":["sru"]},"application/ssdl+xml":{"source":"apache","compressible":true,"extensions":["ssdl"]},"application/sslkeylogfile":{"source":"iana"},"application/ssml+xml":{"source":"iana","compressible":true,"extensions":["ssml"]},"application/st2110-41":{"source":"iana"},"application/stix+json":{"source":"iana","compressible":true},"application/stratum":{"source":"iana"},"application/swid+cbor":{"source":"iana"},"application/swid+xml":{"source":"iana","compressible":true,"extensions":["swidtag"]},"application/tamp-apex-update":{"source":"iana"},"application/tamp-apex-update-confirm":{"source":"iana"},"application/tamp-community-update":{"source":"iana"},"application/tamp-community-update-confirm":{"source":"iana"},"application/tamp-error":{"source":"iana"},"application/tamp-sequence-adjust":{"source":"iana"},"application/tamp-sequence-adjust-confirm":{"source":"iana"},"application/tamp-status-query":{"source":"iana"},"application/tamp-status-response":{"source":"iana"},"application/tamp-update":{"source":"iana"},"application/tamp-update-confirm":{"source":"iana"},"application/tar":{"compressible":true},"application/taxii+json":{"source":"iana","compressible":true},"application/td+json":{"source":"iana","compressible":true},"application/tei+xml":{"source":"iana","compressible":true,"extensions":["tei","teicorpus"]},"application/tetra_isi":{"source":"iana"},"application/thraud+xml":{"source":"iana","compressible":true,"extensions":["tfi"]},"application/timestamp-query":{"source":"iana"},"application/timestamp-reply":{"source":"iana"},"application/timestamped-data":{"source":"iana","extensions":["tsd"]},"application/tlsrpt+gzip":{"source":"iana"},"application/tlsrpt+json":{"source":"iana","compressible":true},"application/tm+json":{"source":"iana","compressible":true},"application/tnauthlist":{"source":"iana"},"application/toc+cbor":{"source":"iana"},"application/token-introspection+jwt":{"source":"iana"},"application/toml":{"source":"iana","compressible":true,"extensions":["toml"]},"application/trickle-ice-sdpfrag":{"source":"iana"},"application/trig":{"source":"iana","extensions":["trig"]},"application/trust-chain+json":{"source":"iana","compressible":true},"application/trust-mark+jwt":{"source":"iana"},"application/trust-mark-delegation+jwt":{"source":"iana"},"application/ttml+xml":{"source":"iana","compressible":true,"extensions":["ttml"]},"application/tve-trigger":{"source":"iana"},"application/tzif":{"source":"iana"},"application/tzif-leap":{"source":"iana"},"application/ubjson":{"compressible":false,"extensions":["ubj"]},"application/uccs+cbor":{"source":"iana"},"application/ujcs+json":{"source":"iana","compressible":true},"application/ulpfec":{"source":"iana"},"application/urc-grpsheet+xml":{"source":"iana","compressible":true},"application/urc-ressheet+xml":{"source":"iana","compressible":true,"extensions":["rsheet"]},"application/urc-targetdesc+xml":{"source":"iana","compressible":true,"extensions":["td"]},"application/urc-uisocketdesc+xml":{"source":"iana","compressible":true},"application/vc":{"source":"iana"},"application/vc+cose":{"source":"iana"},"application/vc+jwt":{"source":"iana"},"application/vcard+json":{"source":"iana","compressible":true},"application/vcard+xml":{"source":"iana","compressible":true},"application/vemmi":{"source":"iana"},"application/vividence.scriptfile":{"source":"apache"},"application/vnd.1000minds.decision-model+xml":{"source":"iana","compressible":true,"extensions":["1km"]},"application/vnd.1ob":{"source":"iana"},"application/vnd.3gpp-prose+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3a+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ach+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc3ch+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-prose-pc8+xml":{"source":"iana","compressible":true},"application/vnd.3gpp-v2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gnas":{"source":"iana"},"application/vnd.3gpp.5gsa2x":{"source":"iana"},"application/vnd.3gpp.5gsa2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.5gsv2x":{"source":"iana"},"application/vnd.3gpp.5gsv2x-local-service-information":{"source":"iana"},"application/vnd.3gpp.access-transfer-events+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.bsf+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.crs+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.current-location-discovery+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gmop+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.gtpc":{"source":"iana"},"application/vnd.3gpp.interworking-data":{"source":"iana"},"application/vnd.3gpp.lpp":{"source":"iana"},"application/vnd.3gpp.mc-signalling-ear":{"source":"iana"},"application/vnd.3gpp.mcdata-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-msgstore-ctrl-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-payload":{"source":"iana"},"application/vnd.3gpp.mcdata-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-signalling":{"source":"iana"},"application/vnd.3gpp.mcdata-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcdata-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-floor-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-signed+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-ue-init-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcptt-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-affiliation-command+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-regroup+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-service-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-transmission-request+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-ue-config+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mcvideo-user-profile+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.mid-call+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ngap":{"source":"iana"},"application/vnd.3gpp.pfcp":{"source":"iana"},"application/vnd.3gpp.pic-bw-large":{"source":"iana","extensions":["plb"]},"application/vnd.3gpp.pic-bw-small":{"source":"iana","extensions":["psb"]},"application/vnd.3gpp.pic-bw-var":{"source":"iana","extensions":["pvb"]},"application/vnd.3gpp.pinapp-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.s1ap":{"source":"iana"},"application/vnd.3gpp.seal-group-doc+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-location-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-mbms-usage-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-network-qos-management-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-ue-config-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-unicast-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.seal-user-profile-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.sms":{"source":"iana"},"application/vnd.3gpp.sms+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-ext+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.srvcc-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.state-and-event-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.ussd+xml":{"source":"iana","compressible":true},"application/vnd.3gpp.v2x":{"source":"iana"},"application/vnd.3gpp.vae-info+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.bcmcsinfo+xml":{"source":"iana","compressible":true},"application/vnd.3gpp2.sms":{"source":"iana"},"application/vnd.3gpp2.tcap":{"source":"iana","extensions":["tcap"]},"application/vnd.3lightssoftware.imagescal":{"source":"iana"},"application/vnd.3m.post-it-notes":{"source":"iana","extensions":["pwn"]},"application/vnd.accpac.simply.aso":{"source":"iana","extensions":["aso"]},"application/vnd.accpac.simply.imp":{"source":"iana","extensions":["imp"]},"application/vnd.acm.addressxfer+json":{"source":"iana","compressible":true},"application/vnd.acm.chatbot+json":{"source":"iana","compressible":true},"application/vnd.acucobol":{"source":"iana","extensions":["acu"]},"application/vnd.acucorp":{"source":"iana","extensions":["atc","acutc"]},"application/vnd.adobe.air-application-installer-package+zip":{"source":"apache","compressible":false,"extensions":["air"]},"application/vnd.adobe.flash.movie":{"source":"iana"},"application/vnd.adobe.formscentral.fcdt":{"source":"iana","extensions":["fcdt"]},"application/vnd.adobe.fxp":{"source":"iana","extensions":["fxp","fxpl"]},"application/vnd.adobe.partial-upload":{"source":"iana"},"application/vnd.adobe.xdp+xml":{"source":"iana","compressible":true,"extensions":["xdp"]},"application/vnd.adobe.xfdf":{"source":"apache","extensions":["xfdf"]},"application/vnd.aether.imp":{"source":"iana"},"application/vnd.afpc.afplinedata":{"source":"iana"},"application/vnd.afpc.afplinedata-pagedef":{"source":"iana"},"application/vnd.afpc.cmoca-cmresource":{"source":"iana"},"application/vnd.afpc.foca-charset":{"source":"iana"},"application/vnd.afpc.foca-codedfont":{"source":"iana"},"application/vnd.afpc.foca-codepage":{"source":"iana"},"application/vnd.afpc.modca":{"source":"iana"},"application/vnd.afpc.modca-cmtable":{"source":"iana"},"application/vnd.afpc.modca-formdef":{"source":"iana"},"application/vnd.afpc.modca-mediummap":{"source":"iana"},"application/vnd.afpc.modca-objectcontainer":{"source":"iana"},"application/vnd.afpc.modca-overlay":{"source":"iana"},"application/vnd.afpc.modca-pagesegment":{"source":"iana"},"application/vnd.age":{"source":"iana","extensions":["age"]},"application/vnd.ah-barcode":{"source":"apache"},"application/vnd.ahead.space":{"source":"iana","extensions":["ahead"]},"application/vnd.airzip.filesecure.azf":{"source":"iana","extensions":["azf"]},"application/vnd.airzip.filesecure.azs":{"source":"iana","extensions":["azs"]},"application/vnd.amadeus+json":{"source":"iana","compressible":true},"application/vnd.amazon.ebook":{"source":"apache","extensions":["azw"]},"application/vnd.amazon.mobi8-ebook":{"source":"iana"},"application/vnd.americandynamics.acc":{"source":"iana","extensions":["acc"]},"application/vnd.amiga.ami":{"source":"iana","extensions":["ami"]},"application/vnd.amundsen.maze+xml":{"source":"iana","compressible":true},"application/vnd.android.ota":{"source":"iana"},"application/vnd.android.package-archive":{"source":"apache","compressible":false,"extensions":["apk"]},"application/vnd.anki":{"source":"iana"},"application/vnd.anser-web-certificate-issue-initiation":{"source":"iana","extensions":["cii"]},"application/vnd.anser-web-funds-transfer-initiation":{"source":"apache","extensions":["fti"]},"application/vnd.antix.game-component":{"source":"iana","extensions":["atx"]},"application/vnd.apache.arrow.file":{"source":"iana"},"application/vnd.apache.arrow.stream":{"source":"iana"},"application/vnd.apache.parquet":{"source":"iana"},"application/vnd.apache.thrift.binary":{"source":"iana"},"application/vnd.apache.thrift.compact":{"source":"iana"},"application/vnd.apache.thrift.json":{"source":"iana"},"application/vnd.apexlang":{"source":"iana"},"application/vnd.api+json":{"source":"iana","compressible":true},"application/vnd.aplextor.warrp+json":{"source":"iana","compressible":true},"application/vnd.apothekende.reservation+json":{"source":"iana","compressible":true},"application/vnd.apple.installer+xml":{"source":"iana","compressible":true,"extensions":["mpkg"]},"application/vnd.apple.keynote":{"source":"iana","extensions":["key"]},"application/vnd.apple.mpegurl":{"source":"iana","extensions":["m3u8"]},"application/vnd.apple.numbers":{"source":"iana","extensions":["numbers"]},"application/vnd.apple.pages":{"source":"iana","extensions":["pages"]},"application/vnd.apple.pkpass":{"compressible":false,"extensions":["pkpass"]},"application/vnd.arastra.swi":{"source":"apache"},"application/vnd.aristanetworks.swi":{"source":"iana","extensions":["swi"]},"application/vnd.artisan+json":{"source":"iana","compressible":true},"application/vnd.artsquare":{"source":"iana"},"application/vnd.astraea-software.iota":{"source":"iana","extensions":["iota"]},"application/vnd.audiograph":{"source":"iana","extensions":["aep"]},"application/vnd.autodesk.fbx":{"extensions":["fbx"]},"application/vnd.autopackage":{"source":"iana"},"application/vnd.avalon+json":{"source":"iana","compressible":true},"application/vnd.avistar+xml":{"source":"iana","compressible":true},"application/vnd.balsamiq.bmml+xml":{"source":"iana","compressible":true,"extensions":["bmml"]},"application/vnd.balsamiq.bmpr":{"source":"iana"},"application/vnd.banana-accounting":{"source":"iana"},"application/vnd.bbf.usp.error":{"source":"iana"},"application/vnd.bbf.usp.msg":{"source":"iana"},"application/vnd.bbf.usp.msg+json":{"source":"iana","compressible":true},"application/vnd.bekitzur-stech+json":{"source":"iana","compressible":true},"application/vnd.belightsoft.lhzd+zip":{"source":"iana","compressible":false},"application/vnd.belightsoft.lhzl+zip":{"source":"iana","compressible":false},"application/vnd.bint.med-content":{"source":"iana"},"application/vnd.biopax.rdf+xml":{"source":"iana","compressible":true},"application/vnd.blink-idb-value-wrapper":{"source":"iana"},"application/vnd.blueice.multipass":{"source":"iana","extensions":["mpm"]},"application/vnd.bluetooth.ep.oob":{"source":"iana"},"application/vnd.bluetooth.le.oob":{"source":"iana"},"application/vnd.bmi":{"source":"iana","extensions":["bmi"]},"application/vnd.bpf":{"source":"iana"},"application/vnd.bpf3":{"source":"iana"},"application/vnd.businessobjects":{"source":"iana","extensions":["rep"]},"application/vnd.byu.uapi+json":{"source":"iana","compressible":true},"application/vnd.bzip3":{"source":"iana"},"application/vnd.c3voc.schedule+xml":{"source":"iana","compressible":true},"application/vnd.cab-jscript":{"source":"iana"},"application/vnd.canon-cpdl":{"source":"iana"},"application/vnd.canon-lips":{"source":"iana"},"application/vnd.capasystems-pg+json":{"source":"iana","compressible":true},"application/vnd.cendio.thinlinc.clientconf":{"source":"iana"},"application/vnd.century-systems.tcp_stream":{"source":"iana"},"application/vnd.chemdraw+xml":{"source":"iana","compressible":true,"extensions":["cdxml"]},"application/vnd.chess-pgn":{"source":"iana"},"application/vnd.chipnuts.karaoke-mmd":{"source":"iana","extensions":["mmd"]},"application/vnd.ciedi":{"source":"iana"},"application/vnd.cinderella":{"source":"iana","extensions":["cdy"]},"application/vnd.cirpack.isdn-ext":{"source":"iana"},"application/vnd.citationstyles.style+xml":{"source":"iana","compressible":true,"extensions":["csl"]},"application/vnd.claymore":{"source":"iana","extensions":["cla"]},"application/vnd.cloanto.rp9":{"source":"iana","extensions":["rp9"]},"application/vnd.clonk.c4group":{"source":"iana","extensions":["c4g","c4d","c4f","c4p","c4u"]},"application/vnd.cluetrust.cartomobile-config":{"source":"iana","extensions":["c11amc"]},"application/vnd.cluetrust.cartomobile-config-pkg":{"source":"iana","extensions":["c11amz"]},"application/vnd.cncf.helm.chart.content.v1.tar+gzip":{"source":"iana"},"application/vnd.cncf.helm.chart.provenance.v1.prov":{"source":"iana"},"application/vnd.cncf.helm.config.v1+json":{"source":"iana","compressible":true},"application/vnd.coffeescript":{"source":"iana"},"application/vnd.collabio.xodocuments.document":{"source":"iana"},"application/vnd.collabio.xodocuments.document-template":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation":{"source":"iana"},"application/vnd.collabio.xodocuments.presentation-template":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet":{"source":"iana"},"application/vnd.collabio.xodocuments.spreadsheet-template":{"source":"iana"},"application/vnd.collection+json":{"source":"iana","compressible":true},"application/vnd.collection.doc+json":{"source":"iana","compressible":true},"application/vnd.collection.next+json":{"source":"iana","compressible":true},"application/vnd.comicbook+zip":{"source":"iana","compressible":false},"application/vnd.comicbook-rar":{"source":"iana"},"application/vnd.commerce-battelle":{"source":"iana"},"application/vnd.commonspace":{"source":"iana","extensions":["csp"]},"application/vnd.contact.cmsg":{"source":"iana","extensions":["cdbcmsg"]},"application/vnd.coreos.ignition+json":{"source":"iana","compressible":true},"application/vnd.cosmocaller":{"source":"iana","extensions":["cmc"]},"application/vnd.crick.clicker":{"source":"iana","extensions":["clkx"]},"application/vnd.crick.clicker.keyboard":{"source":"iana","extensions":["clkk"]},"application/vnd.crick.clicker.palette":{"source":"iana","extensions":["clkp"]},"application/vnd.crick.clicker.template":{"source":"iana","extensions":["clkt"]},"application/vnd.crick.clicker.wordbank":{"source":"iana","extensions":["clkw"]},"application/vnd.criticaltools.wbs+xml":{"source":"iana","compressible":true,"extensions":["wbs"]},"application/vnd.cryptii.pipe+json":{"source":"iana","compressible":true},"application/vnd.crypto-shade-file":{"source":"iana"},"application/vnd.cryptomator.encrypted":{"source":"iana"},"application/vnd.cryptomator.vault":{"source":"iana"},"application/vnd.ctc-posml":{"source":"iana","extensions":["pml"]},"application/vnd.ctct.ws+xml":{"source":"iana","compressible":true},"application/vnd.cups-pdf":{"source":"iana"},"application/vnd.cups-postscript":{"source":"iana"},"application/vnd.cups-ppd":{"source":"iana","extensions":["ppd"]},"application/vnd.cups-raster":{"source":"iana"},"application/vnd.cups-raw":{"source":"iana"},"application/vnd.curl":{"source":"iana"},"application/vnd.curl.car":{"source":"apache","extensions":["car"]},"application/vnd.curl.pcurl":{"source":"apache","extensions":["pcurl"]},"application/vnd.cyan.dean.root+xml":{"source":"iana","compressible":true},"application/vnd.cybank":{"source":"iana"},"application/vnd.cyclonedx+json":{"source":"iana","compressible":true},"application/vnd.cyclonedx+xml":{"source":"iana","compressible":true},"application/vnd.d2l.coursepackage1p0+zip":{"source":"iana","compressible":false},"application/vnd.d3m-dataset":{"source":"iana"},"application/vnd.d3m-problem":{"source":"iana"},"application/vnd.dart":{"source":"iana","compressible":true,"extensions":["dart"]},"application/vnd.data-vision.rdz":{"source":"iana","extensions":["rdz"]},"application/vnd.datalog":{"source":"iana"},"application/vnd.datapackage+json":{"source":"iana","compressible":true},"application/vnd.dataresource+json":{"source":"iana","compressible":true},"application/vnd.dbf":{"source":"iana","extensions":["dbf"]},"application/vnd.dcmp+xml":{"source":"iana","compressible":true,"extensions":["dcmp"]},"application/vnd.debian.binary-package":{"source":"iana"},"application/vnd.dece.data":{"source":"iana","extensions":["uvf","uvvf","uvd","uvvd"]},"application/vnd.dece.ttml+xml":{"source":"iana","compressible":true,"extensions":["uvt","uvvt"]},"application/vnd.dece.unspecified":{"source":"iana","extensions":["uvx","uvvx"]},"application/vnd.dece.zip":{"source":"iana","extensions":["uvz","uvvz"]},"application/vnd.denovo.fcselayout-link":{"source":"iana","extensions":["fe_launch"]},"application/vnd.desmume.movie":{"source":"iana"},"application/vnd.dir-bi.plate-dl-nosuffix":{"source":"iana"},"application/vnd.dm.delegation+xml":{"source":"iana","compressible":true},"application/vnd.dna":{"source":"iana","extensions":["dna"]},"application/vnd.document+json":{"source":"iana","compressible":true},"application/vnd.dolby.mlp":{"source":"apache","extensions":["mlp"]},"application/vnd.dolby.mobile.1":{"source":"iana"},"application/vnd.dolby.mobile.2":{"source":"iana"},"application/vnd.doremir.scorecloud-binary-document":{"source":"iana"},"application/vnd.dpgraph":{"source":"iana","extensions":["dpg"]},"application/vnd.dreamfactory":{"source":"iana","extensions":["dfac"]},"application/vnd.drive+json":{"source":"iana","compressible":true},"application/vnd.ds-keypoint":{"source":"apache","extensions":["kpxx"]},"application/vnd.dtg.local":{"source":"iana"},"application/vnd.dtg.local.flash":{"source":"iana"},"application/vnd.dtg.local.html":{"source":"iana"},"application/vnd.dvb.ait":{"source":"iana","extensions":["ait"]},"application/vnd.dvb.dvbisl+xml":{"source":"iana","compressible":true},"application/vnd.dvb.dvbj":{"source":"iana"},"application/vnd.dvb.esgcontainer":{"source":"iana"},"application/vnd.dvb.ipdcdftnotifaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess":{"source":"iana"},"application/vnd.dvb.ipdcesgaccess2":{"source":"iana"},"application/vnd.dvb.ipdcesgpdd":{"source":"iana"},"application/vnd.dvb.ipdcroaming":{"source":"iana"},"application/vnd.dvb.iptv.alfec-base":{"source":"iana"},"application/vnd.dvb.iptv.alfec-enhancement":{"source":"iana"},"application/vnd.dvb.notif-aggregate-root+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-container+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-generic+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-msglist+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-request+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-ia-registration-response+xml":{"source":"iana","compressible":true},"application/vnd.dvb.notif-init+xml":{"source":"iana","compressible":true},"application/vnd.dvb.pfr":{"source":"iana"},"application/vnd.dvb.service":{"source":"iana","extensions":["svc"]},"application/vnd.dxr":{"source":"iana"},"application/vnd.dynageo":{"source":"iana","extensions":["geo"]},"application/vnd.dzr":{"source":"iana"},"application/vnd.easykaraoke.cdgdownload":{"source":"iana"},"application/vnd.ecdis-update":{"source":"iana"},"application/vnd.ecip.rlp":{"source":"iana"},"application/vnd.eclipse.ditto+json":{"source":"iana","compressible":true},"application/vnd.ecowin.chart":{"source":"iana","extensions":["mag"]},"application/vnd.ecowin.filerequest":{"source":"iana"},"application/vnd.ecowin.fileupdate":{"source":"iana"},"application/vnd.ecowin.series":{"source":"iana"},"application/vnd.ecowin.seriesrequest":{"source":"iana"},"application/vnd.ecowin.seriesupdate":{"source":"iana"},"application/vnd.efi.img":{"source":"iana"},"application/vnd.efi.iso":{"source":"iana"},"application/vnd.eln+zip":{"source":"iana","compressible":false},"application/vnd.emclient.accessrequest+xml":{"source":"iana","compressible":true},"application/vnd.enliven":{"source":"iana","extensions":["nml"]},"application/vnd.enphase.envoy":{"source":"iana"},"application/vnd.eprints.data+xml":{"source":"iana","compressible":true},"application/vnd.epson.esf":{"source":"iana","extensions":["esf"]},"application/vnd.epson.msf":{"source":"iana","extensions":["msf"]},"application/vnd.epson.quickanime":{"source":"iana","extensions":["qam"]},"application/vnd.epson.salt":{"source":"iana","extensions":["slt"]},"application/vnd.epson.ssf":{"source":"iana","extensions":["ssf"]},"application/vnd.ericsson.quickcall":{"source":"iana"},"application/vnd.erofs":{"source":"iana"},"application/vnd.espass-espass+zip":{"source":"iana","compressible":false},"application/vnd.eszigno3+xml":{"source":"iana","compressible":true,"extensions":["es3","et3"]},"application/vnd.etsi.aoc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.asic-e+zip":{"source":"iana","compressible":false},"application/vnd.etsi.asic-s+zip":{"source":"iana","compressible":false},"application/vnd.etsi.cug+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvcommand+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-bc+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-cod+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsad-npvr+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvservice+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvsync+xml":{"source":"iana","compressible":true},"application/vnd.etsi.iptvueprofile+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mcid+xml":{"source":"iana","compressible":true},"application/vnd.etsi.mheg5":{"source":"iana"},"application/vnd.etsi.overload-control-policy-dataset+xml":{"source":"iana","compressible":true},"application/vnd.etsi.pstn+xml":{"source":"iana","compressible":true},"application/vnd.etsi.sci+xml":{"source":"iana","compressible":true},"application/vnd.etsi.simservs+xml":{"source":"iana","compressible":true},"application/vnd.etsi.timestamp-token":{"source":"iana"},"application/vnd.etsi.tsl+xml":{"source":"iana","compressible":true},"application/vnd.etsi.tsl.der":{"source":"iana"},"application/vnd.eu.kasparian.car+json":{"source":"iana","compressible":true},"application/vnd.eudora.data":{"source":"iana"},"application/vnd.evolv.ecig.profile":{"source":"iana"},"application/vnd.evolv.ecig.settings":{"source":"iana"},"application/vnd.evolv.ecig.theme":{"source":"iana"},"application/vnd.exstream-empower+zip":{"source":"iana","compressible":false},"application/vnd.exstream-package":{"source":"iana"},"application/vnd.ezpix-album":{"source":"iana","extensions":["ez2"]},"application/vnd.ezpix-package":{"source":"iana","extensions":["ez3"]},"application/vnd.f-secure.mobile":{"source":"iana"},"application/vnd.familysearch.gedcom+zip":{"source":"iana","compressible":false},"application/vnd.fastcopy-disk-image":{"source":"iana"},"application/vnd.fdf":{"source":"apache","extensions":["fdf"]},"application/vnd.fdsn.mseed":{"source":"iana","extensions":["mseed"]},"application/vnd.fdsn.seed":{"source":"iana","extensions":["seed","dataless"]},"application/vnd.fdsn.stationxml+xml":{"source":"iana","charset":"XML-BASED","compressible":true},"application/vnd.ffsns":{"source":"iana"},"application/vnd.ficlab.flb+zip":{"source":"iana","compressible":false},"application/vnd.filmit.zfc":{"source":"iana"},"application/vnd.fints":{"source":"iana"},"application/vnd.firemonkeys.cloudcell":{"source":"iana"},"application/vnd.flographit":{"source":"iana","extensions":["gph"]},"application/vnd.fluxtime.clip":{"source":"iana","extensions":["ftc"]},"application/vnd.font-fontforge-sfd":{"source":"iana"},"application/vnd.framemaker":{"source":"iana","extensions":["fm","frame","maker","book"]},"application/vnd.freelog.comic":{"source":"iana"},"application/vnd.frogans.fnc":{"source":"apache","extensions":["fnc"]},"application/vnd.frogans.ltf":{"source":"apache","extensions":["ltf"]},"application/vnd.fsc.weblaunch":{"source":"iana","extensions":["fsc"]},"application/vnd.fujifilm.fb.docuworks":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.binder":{"source":"iana"},"application/vnd.fujifilm.fb.docuworks.container":{"source":"iana"},"application/vnd.fujifilm.fb.jfi+xml":{"source":"iana","compressible":true},"application/vnd.fujitsu.oasys":{"source":"iana","extensions":["oas"]},"application/vnd.fujitsu.oasys2":{"source":"iana","extensions":["oa2"]},"application/vnd.fujitsu.oasys3":{"source":"iana","extensions":["oa3"]},"application/vnd.fujitsu.oasysgp":{"source":"iana","extensions":["fg5"]},"application/vnd.fujitsu.oasysprs":{"source":"iana","extensions":["bh2"]},"application/vnd.fujixerox.art-ex":{"source":"iana"},"application/vnd.fujixerox.art4":{"source":"iana"},"application/vnd.fujixerox.ddd":{"source":"iana","extensions":["ddd"]},"application/vnd.fujixerox.docuworks":{"source":"iana","extensions":["xdw"]},"application/vnd.fujixerox.docuworks.binder":{"source":"iana","extensions":["xbd"]},"application/vnd.fujixerox.docuworks.container":{"source":"iana"},"application/vnd.fujixerox.hbpl":{"source":"iana"},"application/vnd.fut-misnet":{"source":"iana"},"application/vnd.futoin+cbor":{"source":"iana"},"application/vnd.futoin+json":{"source":"iana","compressible":true},"application/vnd.fuzzysheet":{"source":"iana","extensions":["fzs"]},"application/vnd.ga4gh.passport+jwt":{"source":"iana"},"application/vnd.genomatix.tuxedo":{"source":"iana","extensions":["txd"]},"application/vnd.genozip":{"source":"iana"},"application/vnd.gentics.grd+json":{"source":"iana","compressible":true},"application/vnd.gentoo.catmetadata+xml":{"source":"iana","compressible":true},"application/vnd.gentoo.ebuild":{"source":"iana"},"application/vnd.gentoo.eclass":{"source":"iana"},"application/vnd.gentoo.gpkg":{"source":"iana"},"application/vnd.gentoo.manifest":{"source":"iana"},"application/vnd.gentoo.pkgmetadata+xml":{"source":"iana","compressible":true},"application/vnd.gentoo.xpak":{"source":"iana"},"application/vnd.geo+json":{"source":"apache","compressible":true},"application/vnd.geocube+xml":{"source":"apache","compressible":true},"application/vnd.geogebra.file":{"source":"iana","extensions":["ggb"]},"application/vnd.geogebra.pinboard":{"source":"iana"},"application/vnd.geogebra.slides":{"source":"iana","extensions":["ggs"]},"application/vnd.geogebra.tool":{"source":"iana","extensions":["ggt"]},"application/vnd.geometry-explorer":{"source":"iana","extensions":["gex","gre"]},"application/vnd.geonext":{"source":"iana","extensions":["gxt"]},"application/vnd.geoplan":{"source":"iana","extensions":["g2w"]},"application/vnd.geospace":{"source":"iana","extensions":["g3w"]},"application/vnd.gerber":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt":{"source":"iana"},"application/vnd.globalplatform.card-content-mgt-response":{"source":"iana"},"application/vnd.gmx":{"source":"iana","extensions":["gmx"]},"application/vnd.gnu.taler.exchange+json":{"source":"iana","compressible":true},"application/vnd.gnu.taler.merchant+json":{"source":"iana","compressible":true},"application/vnd.google-apps.audio":{},"application/vnd.google-apps.document":{"compressible":false,"extensions":["gdoc"]},"application/vnd.google-apps.drawing":{"compressible":false,"extensions":["gdraw"]},"application/vnd.google-apps.drive-sdk":{"compressible":false},"application/vnd.google-apps.file":{},"application/vnd.google-apps.folder":{"compressible":false},"application/vnd.google-apps.form":{"compressible":false,"extensions":["gform"]},"application/vnd.google-apps.fusiontable":{},"application/vnd.google-apps.jam":{"compressible":false,"extensions":["gjam"]},"application/vnd.google-apps.mail-layout":{},"application/vnd.google-apps.map":{"compressible":false,"extensions":["gmap"]},"application/vnd.google-apps.photo":{},"application/vnd.google-apps.presentation":{"compressible":false,"extensions":["gslides"]},"application/vnd.google-apps.script":{"compressible":false,"extensions":["gscript"]},"application/vnd.google-apps.shortcut":{},"application/vnd.google-apps.site":{"compressible":false,"extensions":["gsite"]},"application/vnd.google-apps.spreadsheet":{"compressible":false,"extensions":["gsheet"]},"application/vnd.google-apps.unknown":{},"application/vnd.google-apps.video":{},"application/vnd.google-earth.kml+xml":{"source":"iana","compressible":true,"extensions":["kml"]},"application/vnd.google-earth.kmz":{"source":"iana","compressible":false,"extensions":["kmz"]},"application/vnd.gov.sk.e-form+xml":{"source":"apache","compressible":true},"application/vnd.gov.sk.e-form+zip":{"source":"iana","compressible":false},"application/vnd.gov.sk.xmldatacontainer+xml":{"source":"iana","compressible":true,"extensions":["xdcf"]},"application/vnd.gpxsee.map+xml":{"source":"iana","compressible":true},"application/vnd.grafeq":{"source":"iana","extensions":["gqf","gqs"]},"application/vnd.gridmp":{"source":"iana"},"application/vnd.groove-account":{"source":"iana","extensions":["gac"]},"application/vnd.groove-help":{"source":"iana","extensions":["ghf"]},"application/vnd.groove-identity-message":{"source":"iana","extensions":["gim"]},"application/vnd.groove-injector":{"source":"iana","extensions":["grv"]},"application/vnd.groove-tool-message":{"source":"iana","extensions":["gtm"]},"application/vnd.groove-tool-template":{"source":"iana","extensions":["tpl"]},"application/vnd.groove-vcard":{"source":"iana","extensions":["vcg"]},"application/vnd.hal+json":{"source":"iana","compressible":true},"application/vnd.hal+xml":{"source":"iana","compressible":true,"extensions":["hal"]},"application/vnd.handheld-entertainment+xml":{"source":"iana","compressible":true,"extensions":["zmm"]},"application/vnd.hbci":{"source":"iana","extensions":["hbci"]},"application/vnd.hc+json":{"source":"iana","compressible":true},"application/vnd.hcl-bireports":{"source":"iana"},"application/vnd.hdt":{"source":"iana"},"application/vnd.heroku+json":{"source":"iana","compressible":true},"application/vnd.hhe.lesson-player":{"source":"iana","extensions":["les"]},"application/vnd.hp-hpgl":{"source":"iana","extensions":["hpgl"]},"application/vnd.hp-hpid":{"source":"iana","extensions":["hpid"]},"application/vnd.hp-hps":{"source":"iana","extensions":["hps"]},"application/vnd.hp-jlyt":{"source":"iana","extensions":["jlt"]},"application/vnd.hp-pcl":{"source":"iana","extensions":["pcl"]},"application/vnd.hp-pclxl":{"source":"iana","extensions":["pclxl"]},"application/vnd.hsl":{"source":"iana"},"application/vnd.httphone":{"source":"iana"},"application/vnd.hydrostatix.sof-data":{"source":"iana","extensions":["sfd-hdstx"]},"application/vnd.hyper+json":{"source":"iana","compressible":true},"application/vnd.hyper-item+json":{"source":"iana","compressible":true},"application/vnd.hyperdrive+json":{"source":"iana","compressible":true},"application/vnd.hzn-3d-crossword":{"source":"iana"},"application/vnd.ibm.afplinedata":{"source":"apache"},"application/vnd.ibm.electronic-media":{"source":"iana"},"application/vnd.ibm.minipay":{"source":"iana","extensions":["mpy"]},"application/vnd.ibm.modcap":{"source":"apache","extensions":["afp","listafp","list3820"]},"application/vnd.ibm.rights-management":{"source":"iana","extensions":["irm"]},"application/vnd.ibm.secure-container":{"source":"iana","extensions":["sc"]},"application/vnd.iccprofile":{"source":"iana","extensions":["icc","icm"]},"application/vnd.ieee.1905":{"source":"iana"},"application/vnd.igloader":{"source":"iana","extensions":["igl"]},"application/vnd.imagemeter.folder+zip":{"source":"iana","compressible":false},"application/vnd.imagemeter.image+zip":{"source":"iana","compressible":false},"application/vnd.immervision-ivp":{"source":"iana","extensions":["ivp"]},"application/vnd.immervision-ivu":{"source":"iana","extensions":["ivu"]},"application/vnd.ims.imsccv1p1":{"source":"iana"},"application/vnd.ims.imsccv1p2":{"source":"iana"},"application/vnd.ims.imsccv1p3":{"source":"iana"},"application/vnd.ims.lis.v2.result+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolconsumerprofile+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolproxy.id+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings+json":{"source":"iana","compressible":true},"application/vnd.ims.lti.v2.toolsettings.simple+json":{"source":"iana","compressible":true},"application/vnd.informedcontrol.rms+xml":{"source":"iana","compressible":true},"application/vnd.informix-visionary":{"source":"apache"},"application/vnd.infotech.project":{"source":"iana"},"application/vnd.infotech.project+xml":{"source":"iana","compressible":true},"application/vnd.innopath.wamp.notification":{"source":"iana"},"application/vnd.insors.igm":{"source":"iana","extensions":["igm"]},"application/vnd.intercon.formnet":{"source":"iana","extensions":["xpw","xpx"]},"application/vnd.intergeo":{"source":"iana","extensions":["i2g"]},"application/vnd.intertrust.digibox":{"source":"iana"},"application/vnd.intertrust.nncp":{"source":"iana"},"application/vnd.intu.qbo":{"source":"iana","extensions":["qbo"]},"application/vnd.intu.qfx":{"source":"iana","extensions":["qfx"]},"application/vnd.ipfs.ipns-record":{"source":"iana"},"application/vnd.ipld.car":{"source":"iana"},"application/vnd.ipld.dag-cbor":{"source":"iana"},"application/vnd.ipld.dag-json":{"source":"iana"},"application/vnd.ipld.raw":{"source":"iana"},"application/vnd.iptc.g2.catalogitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.conceptitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.knowledgeitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.newsmessage+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.packageitem+xml":{"source":"iana","compressible":true},"application/vnd.iptc.g2.planningitem+xml":{"source":"iana","compressible":true},"application/vnd.ipunplugged.rcprofile":{"source":"iana","extensions":["rcprofile"]},"application/vnd.irepository.package+xml":{"source":"iana","compressible":true,"extensions":["irp"]},"application/vnd.is-xpr":{"source":"iana","extensions":["xpr"]},"application/vnd.isac.fcs":{"source":"iana","extensions":["fcs"]},"application/vnd.iso11783-10+zip":{"source":"iana","compressible":false},"application/vnd.jam":{"source":"iana","extensions":["jam"]},"application/vnd.japannet-directory-service":{"source":"iana"},"application/vnd.japannet-jpnstore-wakeup":{"source":"iana"},"application/vnd.japannet-payment-wakeup":{"source":"iana"},"application/vnd.japannet-registration":{"source":"iana"},"application/vnd.japannet-registration-wakeup":{"source":"iana"},"application/vnd.japannet-setstore-wakeup":{"source":"iana"},"application/vnd.japannet-verification":{"source":"iana"},"application/vnd.japannet-verification-wakeup":{"source":"iana"},"application/vnd.jcp.javame.midlet-rms":{"source":"iana","extensions":["rms"]},"application/vnd.jisp":{"source":"iana","extensions":["jisp"]},"application/vnd.joost.joda-archive":{"source":"iana","extensions":["joda"]},"application/vnd.jsk.isdn-ngn":{"source":"iana"},"application/vnd.kahootz":{"source":"iana","extensions":["ktz","ktr"]},"application/vnd.kde.karbon":{"source":"iana","extensions":["karbon"]},"application/vnd.kde.kchart":{"source":"iana","extensions":["chrt"]},"application/vnd.kde.kformula":{"source":"iana","extensions":["kfo"]},"application/vnd.kde.kivio":{"source":"iana","extensions":["flw"]},"application/vnd.kde.kontour":{"source":"iana","extensions":["kon"]},"application/vnd.kde.kpresenter":{"source":"iana","extensions":["kpr","kpt"]},"application/vnd.kde.kspread":{"source":"iana","extensions":["ksp"]},"application/vnd.kde.kword":{"source":"iana","extensions":["kwd","kwt"]},"application/vnd.kdl":{"source":"iana"},"application/vnd.kenameaapp":{"source":"iana","extensions":["htke"]},"application/vnd.keyman.kmp+zip":{"source":"iana","compressible":false},"application/vnd.keyman.kmx":{"source":"iana"},"application/vnd.kidspiration":{"source":"iana","extensions":["kia"]},"application/vnd.kinar":{"source":"iana","extensions":["kne","knp"]},"application/vnd.koan":{"source":"iana","extensions":["skp","skd","skt","skm"]},"application/vnd.kodak-descriptor":{"source":"iana","extensions":["sse"]},"application/vnd.las":{"source":"iana"},"application/vnd.las.las+json":{"source":"iana","compressible":true},"application/vnd.las.las+xml":{"source":"iana","compressible":true,"extensions":["lasxml"]},"application/vnd.laszip":{"source":"iana"},"application/vnd.ldev.productlicensing":{"source":"iana"},"application/vnd.leap+json":{"source":"iana","compressible":true},"application/vnd.liberty-request+xml":{"source":"iana","compressible":true},"application/vnd.llamagraphics.life-balance.desktop":{"source":"iana","extensions":["lbd"]},"application/vnd.llamagraphics.life-balance.exchange+xml":{"source":"iana","compressible":true,"extensions":["lbe"]},"application/vnd.logipipe.circuit+zip":{"source":"iana","compressible":false},"application/vnd.loom":{"source":"iana"},"application/vnd.lotus-1-2-3":{"source":"iana","extensions":["123"]},"application/vnd.lotus-approach":{"source":"iana","extensions":["apr"]},"application/vnd.lotus-freelance":{"source":"iana","extensions":["pre"]},"application/vnd.lotus-notes":{"source":"iana","extensions":["nsf"]},"application/vnd.lotus-organizer":{"source":"iana","extensions":["org"]},"application/vnd.lotus-screencam":{"source":"iana","extensions":["scm"]},"application/vnd.lotus-wordpro":{"source":"iana","extensions":["lwp"]},"application/vnd.macports.portpkg":{"source":"iana","extensions":["portpkg"]},"application/vnd.mapbox-vector-tile":{"source":"iana","extensions":["mvt"]},"application/vnd.marlin.drm.actiontoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.conftoken+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.license+xml":{"source":"iana","compressible":true},"application/vnd.marlin.drm.mdcf":{"source":"iana"},"application/vnd.mason+json":{"source":"iana","compressible":true},"application/vnd.maxar.archive.3tz+zip":{"source":"iana","compressible":false},"application/vnd.maxmind.maxmind-db":{"source":"iana"},"application/vnd.mcd":{"source":"iana","extensions":["mcd"]},"application/vnd.mdl":{"source":"iana"},"application/vnd.mdl-mbsdf":{"source":"iana"},"application/vnd.medcalcdata":{"source":"iana","extensions":["mc1"]},"application/vnd.mediastation.cdkey":{"source":"iana","extensions":["cdkey"]},"application/vnd.medicalholodeck.recordxr":{"source":"iana"},"application/vnd.meridian-slingshot":{"source":"iana"},"application/vnd.mermaid":{"source":"iana"},"application/vnd.mfer":{"source":"iana","extensions":["mwf"]},"application/vnd.mfmp":{"source":"iana","extensions":["mfm"]},"application/vnd.micro+json":{"source":"iana","compressible":true},"application/vnd.micrografx.flo":{"source":"iana","extensions":["flo"]},"application/vnd.micrografx.igx":{"source":"iana","extensions":["igx"]},"application/vnd.microsoft.portable-executable":{"source":"iana"},"application/vnd.microsoft.windows.thumbnail-cache":{"source":"iana"},"application/vnd.miele+json":{"source":"iana","compressible":true},"application/vnd.mif":{"source":"iana","extensions":["mif"]},"application/vnd.minisoft-hp3000-save":{"source":"iana"},"application/vnd.mitsubishi.misty-guard.trustweb":{"source":"iana"},"application/vnd.mobius.daf":{"source":"iana","extensions":["daf"]},"application/vnd.mobius.dis":{"source":"iana","extensions":["dis"]},"application/vnd.mobius.mbk":{"source":"iana","extensions":["mbk"]},"application/vnd.mobius.mqy":{"source":"iana","extensions":["mqy"]},"application/vnd.mobius.msl":{"source":"iana","extensions":["msl"]},"application/vnd.mobius.plc":{"source":"iana","extensions":["plc"]},"application/vnd.mobius.txf":{"source":"iana","extensions":["txf"]},"application/vnd.modl":{"source":"iana"},"application/vnd.mophun.application":{"source":"iana","extensions":["mpn"]},"application/vnd.mophun.certificate":{"source":"iana","extensions":["mpc"]},"application/vnd.motorola.flexsuite":{"source":"iana"},"application/vnd.motorola.flexsuite.adsi":{"source":"iana"},"application/vnd.motorola.flexsuite.fis":{"source":"iana"},"application/vnd.motorola.flexsuite.gotap":{"source":"iana"},"application/vnd.motorola.flexsuite.kmr":{"source":"iana"},"application/vnd.motorola.flexsuite.ttc":{"source":"iana"},"application/vnd.motorola.flexsuite.wem":{"source":"iana"},"application/vnd.motorola.iprm":{"source":"iana"},"application/vnd.mozilla.xul+xml":{"source":"iana","compressible":true,"extensions":["xul"]},"application/vnd.ms-3mfdocument":{"source":"iana"},"application/vnd.ms-artgalry":{"source":"iana","extensions":["cil"]},"application/vnd.ms-asf":{"source":"iana"},"application/vnd.ms-cab-compressed":{"source":"iana","extensions":["cab"]},"application/vnd.ms-color.iccprofile":{"source":"apache"},"application/vnd.ms-excel":{"source":"iana","compressible":false,"extensions":["xls","xlm","xla","xlc","xlt","xlw"]},"application/vnd.ms-excel.addin.macroenabled.12":{"source":"iana","extensions":["xlam"]},"application/vnd.ms-excel.sheet.binary.macroenabled.12":{"source":"iana","extensions":["xlsb"]},"application/vnd.ms-excel.sheet.macroenabled.12":{"source":"iana","extensions":["xlsm"]},"application/vnd.ms-excel.template.macroenabled.12":{"source":"iana","extensions":["xltm"]},"application/vnd.ms-fontobject":{"source":"iana","compressible":true,"extensions":["eot"]},"application/vnd.ms-htmlhelp":{"source":"iana","extensions":["chm"]},"application/vnd.ms-ims":{"source":"iana","extensions":["ims"]},"application/vnd.ms-lrm":{"source":"iana","extensions":["lrm"]},"application/vnd.ms-office.activex+xml":{"source":"iana","compressible":true},"application/vnd.ms-officetheme":{"source":"iana","extensions":["thmx"]},"application/vnd.ms-opentype":{"source":"apache","compressible":true},"application/vnd.ms-outlook":{"compressible":false,"extensions":["msg"]},"application/vnd.ms-package.obfuscated-opentype":{"source":"apache"},"application/vnd.ms-pki.seccat":{"source":"apache","extensions":["cat"]},"application/vnd.ms-pki.stl":{"source":"apache","extensions":["stl"]},"application/vnd.ms-playready.initiator+xml":{"source":"iana","compressible":true},"application/vnd.ms-powerpoint":{"source":"iana","compressible":false,"extensions":["ppt","pps","pot"]},"application/vnd.ms-powerpoint.addin.macroenabled.12":{"source":"iana","extensions":["ppam"]},"application/vnd.ms-powerpoint.presentation.macroenabled.12":{"source":"iana","extensions":["pptm"]},"application/vnd.ms-powerpoint.slide.macroenabled.12":{"source":"iana","extensions":["sldm"]},"application/vnd.ms-powerpoint.slideshow.macroenabled.12":{"source":"iana","extensions":["ppsm"]},"application/vnd.ms-powerpoint.template.macroenabled.12":{"source":"iana","extensions":["potm"]},"application/vnd.ms-printdevicecapabilities+xml":{"source":"iana","compressible":true},"application/vnd.ms-printing.printticket+xml":{"source":"apache","compressible":true},"application/vnd.ms-printschematicket+xml":{"source":"iana","compressible":true},"application/vnd.ms-project":{"source":"iana","extensions":["mpp","mpt"]},"application/vnd.ms-tnef":{"source":"iana"},"application/vnd.ms-visio.viewer":{"extensions":["vdx"]},"application/vnd.ms-windows.devicepairing":{"source":"iana"},"application/vnd.ms-windows.nwprinting.oob":{"source":"iana"},"application/vnd.ms-windows.printerpairing":{"source":"iana"},"application/vnd.ms-windows.wsd.oob":{"source":"iana"},"application/vnd.ms-wmdrm.lic-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.lic-resp":{"source":"iana"},"application/vnd.ms-wmdrm.meter-chlg-req":{"source":"iana"},"application/vnd.ms-wmdrm.meter-resp":{"source":"iana"},"application/vnd.ms-word.document.macroenabled.12":{"source":"iana","extensions":["docm"]},"application/vnd.ms-word.template.macroenabled.12":{"source":"iana","extensions":["dotm"]},"application/vnd.ms-works":{"source":"iana","extensions":["wps","wks","wcm","wdb"]},"application/vnd.ms-wpl":{"source":"iana","extensions":["wpl"]},"application/vnd.ms-xpsdocument":{"source":"iana","compressible":false,"extensions":["xps"]},"application/vnd.msa-disk-image":{"source":"iana"},"application/vnd.mseq":{"source":"iana","extensions":["mseq"]},"application/vnd.msgpack":{"source":"iana"},"application/vnd.msign":{"source":"iana"},"application/vnd.multiad.creator":{"source":"iana"},"application/vnd.multiad.creator.cif":{"source":"iana"},"application/vnd.music-niff":{"source":"iana"},"application/vnd.musician":{"source":"iana","extensions":["mus"]},"application/vnd.muvee.style":{"source":"iana","extensions":["msty"]},"application/vnd.mynfc":{"source":"iana","extensions":["taglet"]},"application/vnd.nacamar.ybrid+json":{"source":"iana","compressible":true},"application/vnd.nato.bindingdataobject+cbor":{"source":"iana"},"application/vnd.nato.bindingdataobject+json":{"source":"iana","compressible":true},"application/vnd.nato.bindingdataobject+xml":{"source":"iana","compressible":true,"extensions":["bdo"]},"application/vnd.nato.openxmlformats-package.iepd+zip":{"source":"iana","compressible":false},"application/vnd.ncd.control":{"source":"iana"},"application/vnd.ncd.reference":{"source":"iana"},"application/vnd.nearst.inv+json":{"source":"iana","compressible":true},"application/vnd.nebumind.line":{"source":"iana"},"application/vnd.nervana":{"source":"iana"},"application/vnd.netfpx":{"source":"iana"},"application/vnd.neurolanguage.nlu":{"source":"iana","extensions":["nlu"]},"application/vnd.nimn":{"source":"iana"},"application/vnd.nintendo.nitro.rom":{"source":"iana"},"application/vnd.nintendo.snes.rom":{"source":"iana"},"application/vnd.nitf":{"source":"iana","extensions":["ntf","nitf"]},"application/vnd.noblenet-directory":{"source":"iana","extensions":["nnd"]},"application/vnd.noblenet-sealer":{"source":"iana","extensions":["nns"]},"application/vnd.noblenet-web":{"source":"iana","extensions":["nnw"]},"application/vnd.nokia.catalogs":{"source":"iana"},"application/vnd.nokia.conml+wbxml":{"source":"iana"},"application/vnd.nokia.conml+xml":{"source":"iana","compressible":true},"application/vnd.nokia.iptv.config+xml":{"source":"iana","compressible":true},"application/vnd.nokia.isds-radio-presets":{"source":"iana"},"application/vnd.nokia.landmark+wbxml":{"source":"iana"},"application/vnd.nokia.landmark+xml":{"source":"iana","compressible":true},"application/vnd.nokia.landmarkcollection+xml":{"source":"iana","compressible":true},"application/vnd.nokia.n-gage.ac+xml":{"source":"iana","compressible":true,"extensions":["ac"]},"application/vnd.nokia.n-gage.data":{"source":"iana","extensions":["ngdat"]},"application/vnd.nokia.n-gage.symbian.install":{"source":"apache","extensions":["n-gage"]},"application/vnd.nokia.ncd":{"source":"iana"},"application/vnd.nokia.pcd+wbxml":{"source":"iana"},"application/vnd.nokia.pcd+xml":{"source":"iana","compressible":true},"application/vnd.nokia.radio-preset":{"source":"iana","extensions":["rpst"]},"application/vnd.nokia.radio-presets":{"source":"iana","extensions":["rpss"]},"application/vnd.novadigm.edm":{"source":"iana","extensions":["edm"]},"application/vnd.novadigm.edx":{"source":"iana","extensions":["edx"]},"application/vnd.novadigm.ext":{"source":"iana","extensions":["ext"]},"application/vnd.ntt-local.content-share":{"source":"iana"},"application/vnd.ntt-local.file-transfer":{"source":"iana"},"application/vnd.ntt-local.ogw_remote-access":{"source":"iana"},"application/vnd.ntt-local.sip-ta_remote":{"source":"iana"},"application/vnd.ntt-local.sip-ta_tcp_stream":{"source":"iana"},"application/vnd.oai.workflows":{"source":"iana"},"application/vnd.oai.workflows+json":{"source":"iana","compressible":true},"application/vnd.oai.workflows+yaml":{"source":"iana"},"application/vnd.oasis.opendocument.base":{"source":"iana"},"application/vnd.oasis.opendocument.chart":{"source":"iana","extensions":["odc"]},"application/vnd.oasis.opendocument.chart-template":{"source":"iana","extensions":["otc"]},"application/vnd.oasis.opendocument.database":{"source":"apache","extensions":["odb"]},"application/vnd.oasis.opendocument.formula":{"source":"iana","extensions":["odf"]},"application/vnd.oasis.opendocument.formula-template":{"source":"iana","extensions":["odft"]},"application/vnd.oasis.opendocument.graphics":{"source":"iana","compressible":false,"extensions":["odg"]},"application/vnd.oasis.opendocument.graphics-template":{"source":"iana","extensions":["otg"]},"application/vnd.oasis.opendocument.image":{"source":"iana","extensions":["odi"]},"application/vnd.oasis.opendocument.image-template":{"source":"iana","extensions":["oti"]},"application/vnd.oasis.opendocument.presentation":{"source":"iana","compressible":false,"extensions":["odp"]},"application/vnd.oasis.opendocument.presentation-template":{"source":"iana","extensions":["otp"]},"application/vnd.oasis.opendocument.spreadsheet":{"source":"iana","compressible":false,"extensions":["ods"]},"application/vnd.oasis.opendocument.spreadsheet-template":{"source":"iana","extensions":["ots"]},"application/vnd.oasis.opendocument.text":{"source":"iana","compressible":false,"extensions":["odt"]},"application/vnd.oasis.opendocument.text-master":{"source":"iana","extensions":["odm"]},"application/vnd.oasis.opendocument.text-master-template":{"source":"iana"},"application/vnd.oasis.opendocument.text-template":{"source":"iana","extensions":["ott"]},"application/vnd.oasis.opendocument.text-web":{"source":"iana","extensions":["oth"]},"application/vnd.obn":{"source":"iana"},"application/vnd.ocf+cbor":{"source":"iana"},"application/vnd.oci.image.manifest.v1+json":{"source":"iana","compressible":true},"application/vnd.oftn.l10n+json":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessdownload+xml":{"source":"iana","compressible":true},"application/vnd.oipf.contentaccessstreaming+xml":{"source":"iana","compressible":true},"application/vnd.oipf.cspg-hexbinary":{"source":"iana"},"application/vnd.oipf.dae.svg+xml":{"source":"iana","compressible":true},"application/vnd.oipf.dae.xhtml+xml":{"source":"iana","compressible":true},"application/vnd.oipf.mippvcontrolmessage+xml":{"source":"iana","compressible":true},"application/vnd.oipf.pae.gem":{"source":"iana"},"application/vnd.oipf.spdiscovery+xml":{"source":"iana","compressible":true},"application/vnd.oipf.spdlist+xml":{"source":"iana","compressible":true},"application/vnd.oipf.ueprofile+xml":{"source":"iana","compressible":true},"application/vnd.oipf.userprofile+xml":{"source":"iana","compressible":true},"application/vnd.olpc-sugar":{"source":"iana","extensions":["xo"]},"application/vnd.oma-scws-config":{"source":"iana"},"application/vnd.oma-scws-http-request":{"source":"iana"},"application/vnd.oma-scws-http-response":{"source":"iana"},"application/vnd.oma.bcast.associated-procedure-parameter+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.drm-trigger+xml":{"source":"apache","compressible":true},"application/vnd.oma.bcast.imd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.ltkm":{"source":"iana"},"application/vnd.oma.bcast.notification+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.provisioningtrigger":{"source":"iana"},"application/vnd.oma.bcast.sgboot":{"source":"iana"},"application/vnd.oma.bcast.sgdd+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.sgdu":{"source":"iana"},"application/vnd.oma.bcast.simple-symbol-container":{"source":"iana"},"application/vnd.oma.bcast.smartcard-trigger+xml":{"source":"apache","compressible":true},"application/vnd.oma.bcast.sprov+xml":{"source":"iana","compressible":true},"application/vnd.oma.bcast.stkm":{"source":"iana"},"application/vnd.oma.cab-address-book+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-feature-handler+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-pcc+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-subs-invite+xml":{"source":"iana","compressible":true},"application/vnd.oma.cab-user-prefs+xml":{"source":"iana","compressible":true},"application/vnd.oma.dcd":{"source":"iana"},"application/vnd.oma.dcdc":{"source":"iana"},"application/vnd.oma.dd2+xml":{"source":"iana","compressible":true,"extensions":["dd2"]},"application/vnd.oma.drm.risd+xml":{"source":"iana","compressible":true},"application/vnd.oma.group-usage-list+xml":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+cbor":{"source":"iana"},"application/vnd.oma.lwm2m+json":{"source":"iana","compressible":true},"application/vnd.oma.lwm2m+tlv":{"source":"iana"},"application/vnd.oma.pal+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.detailed-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.final-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.groups+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.invocation-descriptor+xml":{"source":"iana","compressible":true},"application/vnd.oma.poc.optimized-progress-report+xml":{"source":"iana","compressible":true},"application/vnd.oma.push":{"source":"iana"},"application/vnd.oma.scidm.messages+xml":{"source":"iana","compressible":true},"application/vnd.oma.xcap-directory+xml":{"source":"iana","compressible":true},"application/vnd.omads-email+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-file+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omads-folder+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.omaloc-supl-init":{"source":"iana"},"application/vnd.onepager":{"source":"iana"},"application/vnd.onepagertamp":{"source":"iana"},"application/vnd.onepagertamx":{"source":"iana"},"application/vnd.onepagertat":{"source":"iana"},"application/vnd.onepagertatp":{"source":"iana"},"application/vnd.onepagertatx":{"source":"iana"},"application/vnd.onvif.metadata":{"source":"iana"},"application/vnd.openblox.game+xml":{"source":"iana","compressible":true,"extensions":["obgx"]},"application/vnd.openblox.game-binary":{"source":"iana"},"application/vnd.openeye.oeb":{"source":"iana"},"application/vnd.openofficeorg.extension":{"source":"apache","extensions":["oxt"]},"application/vnd.openstreetmap.data+xml":{"source":"iana","compressible":true,"extensions":["osm"]},"application/vnd.opentimestamps.ots":{"source":"iana"},"application/vnd.openvpi.dspx+json":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.custom-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.customxmlproperties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawing+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chart+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.chartshapes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramcolors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramdata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramlayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.drawingml.diagramstyle+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.extended-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.commentauthors+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.handoutmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesmaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.notesslide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presentation":{"source":"iana","compressible":false,"extensions":["pptx"]},"application/vnd.openxmlformats-officedocument.presentationml.presentation.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.presprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slide":{"source":"iana","extensions":["sldx"]},"application/vnd.openxmlformats-officedocument.presentationml.slide+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidelayout+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slidemaster+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideshow":{"source":"iana","extensions":["ppsx"]},"application/vnd.openxmlformats-officedocument.presentationml.slideshow.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.slideupdateinfo+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tablestyles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.tags+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.template":{"source":"iana","extensions":["potx"]},"application/vnd.openxmlformats-officedocument.presentationml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.presentationml.viewprops+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.calcchain+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.chartsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.connections+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.dialogsheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.externallink+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcachedefinition+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivotcacherecords+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.pivottable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.querytable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionheaders+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.revisionlog+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sharedstrings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":{"source":"iana","compressible":false,"extensions":["xlsx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.sheetmetadata+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.table+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.tablesinglecells+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.template":{"source":"iana","extensions":["xltx"]},"application/vnd.openxmlformats-officedocument.spreadsheetml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.usernames+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.volatiledependencies+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.spreadsheetml.worksheet+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.theme+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.themeoverride+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.vmldrawing":{"source":"iana"},"application/vnd.openxmlformats-officedocument.wordprocessingml.comments+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document":{"source":"iana","compressible":false,"extensions":["docx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.glossary+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.document.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.endnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.fonttable+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footer+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.footnotes+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.numbering+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.settings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.styles+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.template":{"source":"iana","extensions":["dotx"]},"application/vnd.openxmlformats-officedocument.wordprocessingml.template.main+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-officedocument.wordprocessingml.websettings+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.core-properties+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.digital-signature-xmlsignature+xml":{"source":"iana","compressible":true},"application/vnd.openxmlformats-package.relationships+xml":{"source":"iana","compressible":true},"application/vnd.oracle.resource+json":{"source":"iana","compressible":true},"application/vnd.orange.indata":{"source":"iana"},"application/vnd.osa.netdeploy":{"source":"iana"},"application/vnd.osgeo.mapguide.package":{"source":"iana","extensions":["mgp"]},"application/vnd.osgi.bundle":{"source":"iana"},"application/vnd.osgi.dp":{"source":"iana","extensions":["dp"]},"application/vnd.osgi.subsystem":{"source":"iana","extensions":["esa"]},"application/vnd.otps.ct-kip+xml":{"source":"iana","compressible":true},"application/vnd.oxli.countgraph":{"source":"iana"},"application/vnd.pagerduty+json":{"source":"iana","compressible":true},"application/vnd.palm":{"source":"iana","extensions":["pdb","pqa","oprc"]},"application/vnd.panoply":{"source":"iana"},"application/vnd.paos.xml":{"source":"iana"},"application/vnd.patentdive":{"source":"iana"},"application/vnd.patientecommsdoc":{"source":"iana"},"application/vnd.pawaafile":{"source":"iana","extensions":["paw"]},"application/vnd.pcos":{"source":"iana"},"application/vnd.pg.format":{"source":"iana","extensions":["str"]},"application/vnd.pg.osasli":{"source":"iana","extensions":["ei6"]},"application/vnd.piaccess.application-licence":{"source":"iana"},"application/vnd.picsel":{"source":"iana","extensions":["efif"]},"application/vnd.pmi.widget":{"source":"iana","extensions":["wg"]},"application/vnd.poc.group-advertisement+xml":{"source":"iana","compressible":true},"application/vnd.pocketlearn":{"source":"iana","extensions":["plf"]},"application/vnd.powerbuilder6":{"source":"iana","extensions":["pbd"]},"application/vnd.powerbuilder6-s":{"source":"iana"},"application/vnd.powerbuilder7":{"source":"iana"},"application/vnd.powerbuilder7-s":{"source":"iana"},"application/vnd.powerbuilder75":{"source":"iana"},"application/vnd.powerbuilder75-s":{"source":"iana"},"application/vnd.preminet":{"source":"iana"},"application/vnd.previewsystems.box":{"source":"iana","extensions":["box"]},"application/vnd.procrate.brushset":{"extensions":["brushset"]},"application/vnd.procreate.brush":{"extensions":["brush"]},"application/vnd.procreate.dream":{"extensions":["drm"]},"application/vnd.proteus.magazine":{"source":"iana","extensions":["mgz"]},"application/vnd.psfs":{"source":"iana"},"application/vnd.pt.mundusmundi":{"source":"iana"},"application/vnd.publishare-delta-tree":{"source":"iana","extensions":["qps"]},"application/vnd.pvi.ptid1":{"source":"iana","extensions":["ptid"]},"application/vnd.pwg-multiplexed":{"source":"iana"},"application/vnd.pwg-xhtml-print+xml":{"source":"iana","compressible":true,"extensions":["xhtm"]},"application/vnd.qualcomm.brew-app-res":{"source":"iana"},"application/vnd.quarantainenet":{"source":"iana"},"application/vnd.quark.quarkxpress":{"source":"iana","extensions":["qxd","qxt","qwd","qwt","qxl","qxb"]},"application/vnd.quobject-quoxdocument":{"source":"iana"},"application/vnd.radisys.moml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-conn+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-audit-stream+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-conf+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-base+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-detect+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-fax-sendrecv+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-group+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-speech+xml":{"source":"iana","compressible":true},"application/vnd.radisys.msml-dialog-transform+xml":{"source":"iana","compressible":true},"application/vnd.rainstor.data":{"source":"iana"},"application/vnd.rapid":{"source":"iana"},"application/vnd.rar":{"source":"iana","extensions":["rar"]},"application/vnd.realvnc.bed":{"source":"iana","extensions":["bed"]},"application/vnd.recordare.musicxml":{"source":"iana","extensions":["mxl"]},"application/vnd.recordare.musicxml+xml":{"source":"iana","compressible":true,"extensions":["musicxml"]},"application/vnd.relpipe":{"source":"iana"},"application/vnd.renlearn.rlprint":{"source":"iana"},"application/vnd.resilient.logic":{"source":"iana"},"application/vnd.restful+json":{"source":"iana","compressible":true},"application/vnd.rig.cryptonote":{"source":"iana","extensions":["cryptonote"]},"application/vnd.rim.cod":{"source":"apache","extensions":["cod"]},"application/vnd.rn-realmedia":{"source":"apache","extensions":["rm"]},"application/vnd.rn-realmedia-vbr":{"source":"apache","extensions":["rmvb"]},"application/vnd.route66.link66+xml":{"source":"iana","compressible":true,"extensions":["link66"]},"application/vnd.rs-274x":{"source":"iana"},"application/vnd.ruckus.download":{"source":"iana"},"application/vnd.s3sms":{"source":"iana"},"application/vnd.sailingtracker.track":{"source":"iana","extensions":["st"]},"application/vnd.sar":{"source":"iana"},"application/vnd.sbm.cid":{"source":"iana"},"application/vnd.sbm.mid2":{"source":"iana"},"application/vnd.scribus":{"source":"iana"},"application/vnd.sealed.3df":{"source":"iana"},"application/vnd.sealed.csf":{"source":"iana"},"application/vnd.sealed.doc":{"source":"iana"},"application/vnd.sealed.eml":{"source":"iana"},"application/vnd.sealed.mht":{"source":"iana"},"application/vnd.sealed.net":{"source":"iana"},"application/vnd.sealed.ppt":{"source":"iana"},"application/vnd.sealed.tiff":{"source":"iana"},"application/vnd.sealed.xls":{"source":"iana"},"application/vnd.sealedmedia.softseal.html":{"source":"iana"},"application/vnd.sealedmedia.softseal.pdf":{"source":"iana"},"application/vnd.seemail":{"source":"iana","extensions":["see"]},"application/vnd.seis+json":{"source":"iana","compressible":true},"application/vnd.sema":{"source":"iana","extensions":["sema"]},"application/vnd.semd":{"source":"iana","extensions":["semd"]},"application/vnd.semf":{"source":"iana","extensions":["semf"]},"application/vnd.shade-save-file":{"source":"iana"},"application/vnd.shana.informed.formdata":{"source":"iana","extensions":["ifm"]},"application/vnd.shana.informed.formtemplate":{"source":"iana","extensions":["itp"]},"application/vnd.shana.informed.interchange":{"source":"iana","extensions":["iif"]},"application/vnd.shana.informed.package":{"source":"iana","extensions":["ipk"]},"application/vnd.shootproof+json":{"source":"iana","compressible":true},"application/vnd.shopkick+json":{"source":"iana","compressible":true},"application/vnd.shp":{"source":"iana"},"application/vnd.shx":{"source":"iana"},"application/vnd.sigrok.session":{"source":"iana"},"application/vnd.simtech-mindmapper":{"source":"iana","extensions":["twd","twds"]},"application/vnd.siren+json":{"source":"iana","compressible":true},"application/vnd.sketchometry":{"source":"iana"},"application/vnd.smaf":{"source":"iana","extensions":["mmf"]},"application/vnd.smart.notebook":{"source":"iana"},"application/vnd.smart.teacher":{"source":"iana","extensions":["teacher"]},"application/vnd.smintio.portals.archive":{"source":"iana"},"application/vnd.snesdev-page-table":{"source":"iana"},"application/vnd.software602.filler.form+xml":{"source":"iana","compressible":true,"extensions":["fo"]},"application/vnd.software602.filler.form-xml-zip":{"source":"iana"},"application/vnd.solent.sdkm+xml":{"source":"iana","compressible":true,"extensions":["sdkm","sdkd"]},"application/vnd.spotfire.dxp":{"source":"iana","extensions":["dxp"]},"application/vnd.spotfire.sfs":{"source":"iana","extensions":["sfs"]},"application/vnd.sqlite3":{"source":"iana"},"application/vnd.sss-cod":{"source":"iana"},"application/vnd.sss-dtf":{"source":"iana"},"application/vnd.sss-ntf":{"source":"iana"},"application/vnd.stardivision.calc":{"source":"apache","extensions":["sdc"]},"application/vnd.stardivision.draw":{"source":"apache","extensions":["sda"]},"application/vnd.stardivision.impress":{"source":"apache","extensions":["sdd"]},"application/vnd.stardivision.math":{"source":"apache","extensions":["smf"]},"application/vnd.stardivision.writer":{"source":"apache","extensions":["sdw","vor"]},"application/vnd.stardivision.writer-global":{"source":"apache","extensions":["sgl"]},"application/vnd.stepmania.package":{"source":"iana","extensions":["smzip"]},"application/vnd.stepmania.stepchart":{"source":"iana","extensions":["sm"]},"application/vnd.street-stream":{"source":"iana"},"application/vnd.sun.wadl+xml":{"source":"iana","compressible":true,"extensions":["wadl"]},"application/vnd.sun.xml.calc":{"source":"apache","extensions":["sxc"]},"application/vnd.sun.xml.calc.template":{"source":"apache","extensions":["stc"]},"application/vnd.sun.xml.draw":{"source":"apache","extensions":["sxd"]},"application/vnd.sun.xml.draw.template":{"source":"apache","extensions":["std"]},"application/vnd.sun.xml.impress":{"source":"apache","extensions":["sxi"]},"application/vnd.sun.xml.impress.template":{"source":"apache","extensions":["sti"]},"application/vnd.sun.xml.math":{"source":"apache","extensions":["sxm"]},"application/vnd.sun.xml.writer":{"source":"apache","extensions":["sxw"]},"application/vnd.sun.xml.writer.global":{"source":"apache","extensions":["sxg"]},"application/vnd.sun.xml.writer.template":{"source":"apache","extensions":["stw"]},"application/vnd.sus-calendar":{"source":"iana","extensions":["sus","susp"]},"application/vnd.svd":{"source":"iana","extensions":["svd"]},"application/vnd.swiftview-ics":{"source":"iana"},"application/vnd.sybyl.mol2":{"source":"iana"},"application/vnd.sycle+xml":{"source":"iana","compressible":true},"application/vnd.syft+json":{"source":"iana","compressible":true},"application/vnd.symbian.install":{"source":"apache","extensions":["sis","sisx"]},"application/vnd.syncml+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xsm"]},"application/vnd.syncml.dm+wbxml":{"source":"iana","charset":"UTF-8","extensions":["bdm"]},"application/vnd.syncml.dm+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["xdm"]},"application/vnd.syncml.dm.notification":{"source":"iana"},"application/vnd.syncml.dmddf+wbxml":{"source":"iana"},"application/vnd.syncml.dmddf+xml":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["ddf"]},"application/vnd.syncml.dmtnds+wbxml":{"source":"iana"},"application/vnd.syncml.dmtnds+xml":{"source":"iana","charset":"UTF-8","compressible":true},"application/vnd.syncml.ds.notification":{"source":"iana"},"application/vnd.tableschema+json":{"source":"iana","compressible":true},"application/vnd.tao.intent-module-archive":{"source":"iana","extensions":["tao"]},"application/vnd.tcpdump.pcap":{"source":"iana","extensions":["pcap","cap","dmp"]},"application/vnd.think-cell.ppttc+json":{"source":"iana","compressible":true},"application/vnd.tmd.mediaflex.api+xml":{"source":"iana","compressible":true},"application/vnd.tml":{"source":"iana"},"application/vnd.tmobile-livetv":{"source":"iana","extensions":["tmo"]},"application/vnd.tri.onesource":{"source":"iana"},"application/vnd.trid.tpt":{"source":"iana","extensions":["tpt"]},"application/vnd.triscape.mxs":{"source":"iana","extensions":["mxs"]},"application/vnd.trueapp":{"source":"iana","extensions":["tra"]},"application/vnd.truedoc":{"source":"iana"},"application/vnd.ubisoft.webplayer":{"source":"iana"},"application/vnd.ufdl":{"source":"iana","extensions":["ufd","ufdl"]},"application/vnd.uic.osdm+json":{"source":"iana","compressible":true},"application/vnd.uiq.theme":{"source":"iana","extensions":["utz"]},"application/vnd.umajin":{"source":"iana","extensions":["umj"]},"application/vnd.unity":{"source":"iana","extensions":["unityweb"]},"application/vnd.uoml+xml":{"source":"iana","compressible":true,"extensions":["uoml","uo"]},"application/vnd.uplanet.alert":{"source":"iana"},"application/vnd.uplanet.alert-wbxml":{"source":"iana"},"application/vnd.uplanet.bearer-choice":{"source":"iana"},"application/vnd.uplanet.bearer-choice-wbxml":{"source":"iana"},"application/vnd.uplanet.cacheop":{"source":"iana"},"application/vnd.uplanet.cacheop-wbxml":{"source":"iana"},"application/vnd.uplanet.channel":{"source":"iana"},"application/vnd.uplanet.channel-wbxml":{"source":"iana"},"application/vnd.uplanet.list":{"source":"iana"},"application/vnd.uplanet.list-wbxml":{"source":"iana"},"application/vnd.uplanet.listcmd":{"source":"iana"},"application/vnd.uplanet.listcmd-wbxml":{"source":"iana"},"application/vnd.uplanet.signal":{"source":"iana"},"application/vnd.uri-map":{"source":"iana"},"application/vnd.valve.source.material":{"source":"iana"},"application/vnd.vcx":{"source":"iana","extensions":["vcx"]},"application/vnd.vd-study":{"source":"iana"},"application/vnd.vectorworks":{"source":"iana"},"application/vnd.vel+json":{"source":"iana","compressible":true},"application/vnd.veraison.tsm-report+cbor":{"source":"iana"},"application/vnd.veraison.tsm-report+json":{"source":"iana","compressible":true},"application/vnd.verimatrix.vcas":{"source":"iana"},"application/vnd.veritone.aion+json":{"source":"iana","compressible":true},"application/vnd.veryant.thin":{"source":"iana"},"application/vnd.ves.encrypted":{"source":"iana"},"application/vnd.vidsoft.vidconference":{"source":"iana"},"application/vnd.visio":{"source":"iana","extensions":["vsd","vst","vss","vsw","vsdx","vtx"]},"application/vnd.visionary":{"source":"iana","extensions":["vis"]},"application/vnd.vividence.scriptfile":{"source":"iana"},"application/vnd.vocalshaper.vsp4":{"source":"iana"},"application/vnd.vsf":{"source":"iana","extensions":["vsf"]},"application/vnd.wap.sic":{"source":"iana"},"application/vnd.wap.slc":{"source":"iana"},"application/vnd.wap.wbxml":{"source":"iana","charset":"UTF-8","extensions":["wbxml"]},"application/vnd.wap.wmlc":{"source":"iana","extensions":["wmlc"]},"application/vnd.wap.wmlscriptc":{"source":"iana","extensions":["wmlsc"]},"application/vnd.wasmflow.wafl":{"source":"iana"},"application/vnd.webturbo":{"source":"iana","extensions":["wtb"]},"application/vnd.wfa.dpp":{"source":"iana"},"application/vnd.wfa.p2p":{"source":"iana"},"application/vnd.wfa.wsc":{"source":"iana"},"application/vnd.windows.devicepairing":{"source":"iana"},"application/vnd.wmc":{"source":"iana"},"application/vnd.wmf.bootstrap":{"source":"iana"},"application/vnd.wolfram.mathematica":{"source":"iana"},"application/vnd.wolfram.mathematica.package":{"source":"iana"},"application/vnd.wolfram.player":{"source":"iana","extensions":["nbp"]},"application/vnd.wordlift":{"source":"iana"},"application/vnd.wordperfect":{"source":"iana","extensions":["wpd"]},"application/vnd.wqd":{"source":"iana","extensions":["wqd"]},"application/vnd.wrq-hp3000-labelled":{"source":"iana"},"application/vnd.wt.stf":{"source":"iana","extensions":["stf"]},"application/vnd.wv.csp+wbxml":{"source":"iana"},"application/vnd.wv.csp+xml":{"source":"iana","compressible":true},"application/vnd.wv.ssp+xml":{"source":"iana","compressible":true},"application/vnd.xacml+json":{"source":"iana","compressible":true},"application/vnd.xara":{"source":"iana","extensions":["xar"]},"application/vnd.xarin.cpj":{"source":"iana"},"application/vnd.xecrets-encrypted":{"source":"iana"},"application/vnd.xfdl":{"source":"iana","extensions":["xfdl"]},"application/vnd.xfdl.webform":{"source":"iana"},"application/vnd.xmi+xml":{"source":"iana","compressible":true},"application/vnd.xmpie.cpkg":{"source":"iana"},"application/vnd.xmpie.dpkg":{"source":"iana"},"application/vnd.xmpie.plan":{"source":"iana"},"application/vnd.xmpie.ppkg":{"source":"iana"},"application/vnd.xmpie.xlim":{"source":"iana"},"application/vnd.yamaha.hv-dic":{"source":"iana","extensions":["hvd"]},"application/vnd.yamaha.hv-script":{"source":"iana","extensions":["hvs"]},"application/vnd.yamaha.hv-voice":{"source":"iana","extensions":["hvp"]},"application/vnd.yamaha.openscoreformat":{"source":"iana","extensions":["osf"]},"application/vnd.yamaha.openscoreformat.osfpvg+xml":{"source":"iana","compressible":true,"extensions":["osfpvg"]},"application/vnd.yamaha.remote-setup":{"source":"iana"},"application/vnd.yamaha.smaf-audio":{"source":"iana","extensions":["saf"]},"application/vnd.yamaha.smaf-phrase":{"source":"iana","extensions":["spf"]},"application/vnd.yamaha.through-ngn":{"source":"iana"},"application/vnd.yamaha.tunnel-udpencap":{"source":"iana"},"application/vnd.yaoweme":{"source":"iana"},"application/vnd.yellowriver-custom-menu":{"source":"iana","extensions":["cmp"]},"application/vnd.zul":{"source":"iana","extensions":["zir","zirz"]},"application/vnd.zzazz.deck+xml":{"source":"iana","compressible":true,"extensions":["zaz"]},"application/voicexml+xml":{"source":"iana","compressible":true,"extensions":["vxml"]},"application/voucher-cms+json":{"source":"iana","compressible":true},"application/voucher-jws+json":{"source":"iana","compressible":true},"application/vp":{"source":"iana"},"application/vp+cose":{"source":"iana"},"application/vp+jwt":{"source":"iana"},"application/vq-rtcpxr":{"source":"iana"},"application/wasm":{"source":"iana","compressible":true,"extensions":["wasm"]},"application/watcherinfo+xml":{"source":"iana","compressible":true,"extensions":["wif"]},"application/webpush-options+json":{"source":"iana","compressible":true},"application/whoispp-query":{"source":"iana"},"application/whoispp-response":{"source":"iana"},"application/widget":{"source":"iana","extensions":["wgt"]},"application/winhlp":{"source":"apache","extensions":["hlp"]},"application/wita":{"source":"iana"},"application/wordperfect5.1":{"source":"iana"},"application/wsdl+xml":{"source":"iana","compressible":true,"extensions":["wsdl"]},"application/wspolicy+xml":{"source":"iana","compressible":true,"extensions":["wspolicy"]},"application/x-7z-compressed":{"source":"apache","compressible":false,"extensions":["7z"]},"application/x-abiword":{"source":"apache","extensions":["abw"]},"application/x-ace-compressed":{"source":"apache","extensions":["ace"]},"application/x-amf":{"source":"apache"},"application/x-apple-diskimage":{"source":"apache","extensions":["dmg"]},"application/x-arj":{"compressible":false,"extensions":["arj"]},"application/x-authorware-bin":{"source":"apache","extensions":["aab","x32","u32","vox"]},"application/x-authorware-map":{"source":"apache","extensions":["aam"]},"application/x-authorware-seg":{"source":"apache","extensions":["aas"]},"application/x-bcpio":{"source":"apache","extensions":["bcpio"]},"application/x-bdoc":{"compressible":false,"extensions":["bdoc"]},"application/x-bittorrent":{"source":"apache","extensions":["torrent"]},"application/x-blender":{"extensions":["blend"]},"application/x-blorb":{"source":"apache","extensions":["blb","blorb"]},"application/x-bzip":{"source":"apache","compressible":false,"extensions":["bz"]},"application/x-bzip2":{"source":"apache","compressible":false,"extensions":["bz2","boz"]},"application/x-cbr":{"source":"apache","extensions":["cbr","cba","cbt","cbz","cb7"]},"application/x-cdlink":{"source":"apache","extensions":["vcd"]},"application/x-cfs-compressed":{"source":"apache","extensions":["cfs"]},"application/x-chat":{"source":"apache","extensions":["chat"]},"application/x-chess-pgn":{"source":"apache","extensions":["pgn"]},"application/x-chrome-extension":{"extensions":["crx"]},"application/x-cocoa":{"source":"nginx","extensions":["cco"]},"application/x-compress":{"source":"apache"},"application/x-compressed":{"extensions":["rar"]},"application/x-conference":{"source":"apache","extensions":["nsc"]},"application/x-cpio":{"source":"apache","extensions":["cpio"]},"application/x-csh":{"source":"apache","extensions":["csh"]},"application/x-deb":{"compressible":false},"application/x-debian-package":{"source":"apache","extensions":["deb","udeb"]},"application/x-dgc-compressed":{"source":"apache","extensions":["dgc"]},"application/x-director":{"source":"apache","extensions":["dir","dcr","dxr","cst","cct","cxt","w3d","fgd","swa"]},"application/x-doom":{"source":"apache","extensions":["wad"]},"application/x-dtbncx+xml":{"source":"apache","compressible":true,"extensions":["ncx"]},"application/x-dtbook+xml":{"source":"apache","compressible":true,"extensions":["dtb"]},"application/x-dtbresource+xml":{"source":"apache","compressible":true,"extensions":["res"]},"application/x-dvi":{"source":"apache","compressible":false,"extensions":["dvi"]},"application/x-envoy":{"source":"apache","extensions":["evy"]},"application/x-eva":{"source":"apache","extensions":["eva"]},"application/x-font-bdf":{"source":"apache","extensions":["bdf"]},"application/x-font-dos":{"source":"apache"},"application/x-font-framemaker":{"source":"apache"},"application/x-font-ghostscript":{"source":"apache","extensions":["gsf"]},"application/x-font-libgrx":{"source":"apache"},"application/x-font-linux-psf":{"source":"apache","extensions":["psf"]},"application/x-font-pcf":{"source":"apache","extensions":["pcf"]},"application/x-font-snf":{"source":"apache","extensions":["snf"]},"application/x-font-speedo":{"source":"apache"},"application/x-font-sunos-news":{"source":"apache"},"application/x-font-type1":{"source":"apache","extensions":["pfa","pfb","pfm","afm"]},"application/x-font-vfont":{"source":"apache"},"application/x-freearc":{"source":"apache","extensions":["arc"]},"application/x-futuresplash":{"source":"apache","extensions":["spl"]},"application/x-gca-compressed":{"source":"apache","extensions":["gca"]},"application/x-glulx":{"source":"apache","extensions":["ulx"]},"application/x-gnumeric":{"source":"apache","extensions":["gnumeric"]},"application/x-gramps-xml":{"source":"apache","extensions":["gramps"]},"application/x-gtar":{"source":"apache","extensions":["gtar"]},"application/x-gzip":{"source":"apache"},"application/x-hdf":{"source":"apache","extensions":["hdf"]},"application/x-httpd-php":{"compressible":true,"extensions":["php"]},"application/x-install-instructions":{"source":"apache","extensions":["install"]},"application/x-ipynb+json":{"compressible":true,"extensions":["ipynb"]},"application/x-iso9660-image":{"source":"apache","extensions":["iso"]},"application/x-iwork-keynote-sffkey":{"extensions":["key"]},"application/x-iwork-numbers-sffnumbers":{"extensions":["numbers"]},"application/x-iwork-pages-sffpages":{"extensions":["pages"]},"application/x-java-archive-diff":{"source":"nginx","extensions":["jardiff"]},"application/x-java-jnlp-file":{"source":"apache","compressible":false,"extensions":["jnlp"]},"application/x-javascript":{"compressible":true},"application/x-keepass2":{"extensions":["kdbx"]},"application/x-latex":{"source":"apache","compressible":false,"extensions":["latex"]},"application/x-lua-bytecode":{"extensions":["luac"]},"application/x-lzh-compressed":{"source":"apache","extensions":["lzh","lha"]},"application/x-makeself":{"source":"nginx","extensions":["run"]},"application/x-mie":{"source":"apache","extensions":["mie"]},"application/x-mobipocket-ebook":{"source":"apache","extensions":["prc","mobi"]},"application/x-mpegurl":{"compressible":false},"application/x-ms-application":{"source":"apache","extensions":["application"]},"application/x-ms-shortcut":{"source":"apache","extensions":["lnk"]},"application/x-ms-wmd":{"source":"apache","extensions":["wmd"]},"application/x-ms-wmz":{"source":"apache","extensions":["wmz"]},"application/x-ms-xbap":{"source":"apache","extensions":["xbap"]},"application/x-msaccess":{"source":"apache","extensions":["mdb"]},"application/x-msbinder":{"source":"apache","extensions":["obd"]},"application/x-mscardfile":{"source":"apache","extensions":["crd"]},"application/x-msclip":{"source":"apache","extensions":["clp"]},"application/x-msdos-program":{"extensions":["exe"]},"application/x-msdownload":{"source":"apache","extensions":["exe","dll","com","bat","msi"]},"application/x-msmediaview":{"source":"apache","extensions":["mvb","m13","m14"]},"application/x-msmetafile":{"source":"apache","extensions":["wmf","wmz","emf","emz"]},"application/x-msmoney":{"source":"apache","extensions":["mny"]},"application/x-mspublisher":{"source":"apache","extensions":["pub"]},"application/x-msschedule":{"source":"apache","extensions":["scd"]},"application/x-msterminal":{"source":"apache","extensions":["trm"]},"application/x-mswrite":{"source":"apache","extensions":["wri"]},"application/x-netcdf":{"source":"apache","extensions":["nc","cdf"]},"application/x-ns-proxy-autoconfig":{"compressible":true,"extensions":["pac"]},"application/x-nzb":{"source":"apache","extensions":["nzb"]},"application/x-perl":{"source":"nginx","extensions":["pl","pm"]},"application/x-pilot":{"source":"nginx","extensions":["prc","pdb"]},"application/x-pkcs12":{"source":"apache","compressible":false,"extensions":["p12","pfx"]},"application/x-pkcs7-certificates":{"source":"apache","extensions":["p7b","spc"]},"application/x-pkcs7-certreqresp":{"source":"apache","extensions":["p7r"]},"application/x-pki-message":{"source":"iana"},"application/x-rar-compressed":{"source":"apache","compressible":false,"extensions":["rar"]},"application/x-redhat-package-manager":{"source":"nginx","extensions":["rpm"]},"application/x-research-info-systems":{"source":"apache","extensions":["ris"]},"application/x-sea":{"source":"nginx","extensions":["sea"]},"application/x-sh":{"source":"apache","compressible":true,"extensions":["sh"]},"application/x-shar":{"source":"apache","extensions":["shar"]},"application/x-shockwave-flash":{"source":"apache","compressible":false,"extensions":["swf"]},"application/x-silverlight-app":{"source":"apache","extensions":["xap"]},"application/x-sql":{"source":"apache","extensions":["sql"]},"application/x-stuffit":{"source":"apache","compressible":false,"extensions":["sit"]},"application/x-stuffitx":{"source":"apache","extensions":["sitx"]},"application/x-subrip":{"source":"apache","extensions":["srt"]},"application/x-sv4cpio":{"source":"apache","extensions":["sv4cpio"]},"application/x-sv4crc":{"source":"apache","extensions":["sv4crc"]},"application/x-t3vm-image":{"source":"apache","extensions":["t3"]},"application/x-tads":{"source":"apache","extensions":["gam"]},"application/x-tar":{"source":"apache","compressible":true,"extensions":["tar"]},"application/x-tcl":{"source":"apache","extensions":["tcl","tk"]},"application/x-tex":{"source":"apache","extensions":["tex"]},"application/x-tex-tfm":{"source":"apache","extensions":["tfm"]},"application/x-texinfo":{"source":"apache","extensions":["texinfo","texi"]},"application/x-tgif":{"source":"apache","extensions":["obj"]},"application/x-ustar":{"source":"apache","extensions":["ustar"]},"application/x-virtualbox-hdd":{"compressible":true,"extensions":["hdd"]},"application/x-virtualbox-ova":{"compressible":true,"extensions":["ova"]},"application/x-virtualbox-ovf":{"compressible":true,"extensions":["ovf"]},"application/x-virtualbox-vbox":{"compressible":true,"extensions":["vbox"]},"application/x-virtualbox-vbox-extpack":{"compressible":false,"extensions":["vbox-extpack"]},"application/x-virtualbox-vdi":{"compressible":true,"extensions":["vdi"]},"application/x-virtualbox-vhd":{"compressible":true,"extensions":["vhd"]},"application/x-virtualbox-vmdk":{"compressible":true,"extensions":["vmdk"]},"application/x-wais-source":{"source":"apache","extensions":["src"]},"application/x-web-app-manifest+json":{"compressible":true,"extensions":["webapp"]},"application/x-www-form-urlencoded":{"source":"iana","compressible":true},"application/x-x509-ca-cert":{"source":"iana","extensions":["der","crt","pem"]},"application/x-x509-ca-ra-cert":{"source":"iana"},"application/x-x509-next-ca-cert":{"source":"iana"},"application/x-xfig":{"source":"apache","extensions":["fig"]},"application/x-xliff+xml":{"source":"apache","compressible":true,"extensions":["xlf"]},"application/x-xpinstall":{"source":"apache","compressible":false,"extensions":["xpi"]},"application/x-xz":{"source":"apache","extensions":["xz"]},"application/x-zip-compressed":{"extensions":["zip"]},"application/x-zmachine":{"source":"apache","extensions":["z1","z2","z3","z4","z5","z6","z7","z8"]},"application/x400-bp":{"source":"iana"},"application/xacml+xml":{"source":"iana","compressible":true},"application/xaml+xml":{"source":"apache","compressible":true,"extensions":["xaml"]},"application/xcap-att+xml":{"source":"iana","compressible":true,"extensions":["xav"]},"application/xcap-caps+xml":{"source":"iana","compressible":true,"extensions":["xca"]},"application/xcap-diff+xml":{"source":"iana","compressible":true,"extensions":["xdf"]},"application/xcap-el+xml":{"source":"iana","compressible":true,"extensions":["xel"]},"application/xcap-error+xml":{"source":"iana","compressible":true},"application/xcap-ns+xml":{"source":"iana","compressible":true,"extensions":["xns"]},"application/xcon-conference-info+xml":{"source":"iana","compressible":true},"application/xcon-conference-info-diff+xml":{"source":"iana","compressible":true},"application/xenc+xml":{"source":"iana","compressible":true,"extensions":["xenc"]},"application/xfdf":{"source":"iana","extensions":["xfdf"]},"application/xhtml+xml":{"source":"iana","compressible":true,"extensions":["xhtml","xht"]},"application/xhtml-voice+xml":{"source":"apache","compressible":true},"application/xliff+xml":{"source":"iana","compressible":true,"extensions":["xlf"]},"application/xml":{"source":"iana","compressible":true,"extensions":["xml","xsl","xsd","rng"]},"application/xml-dtd":{"source":"iana","compressible":true,"extensions":["dtd"]},"application/xml-external-parsed-entity":{"source":"iana"},"application/xml-patch+xml":{"source":"iana","compressible":true},"application/xmpp+xml":{"source":"iana","compressible":true},"application/xop+xml":{"source":"iana","compressible":true,"extensions":["xop"]},"application/xproc+xml":{"source":"apache","compressible":true,"extensions":["xpl"]},"application/xslt+xml":{"source":"iana","compressible":true,"extensions":["xsl","xslt"]},"application/xspf+xml":{"source":"apache","compressible":true,"extensions":["xspf"]},"application/xv+xml":{"source":"iana","compressible":true,"extensions":["mxml","xhvml","xvml","xvm"]},"application/yaml":{"source":"iana"},"application/yang":{"source":"iana","extensions":["yang"]},"application/yang-data+cbor":{"source":"iana"},"application/yang-data+json":{"source":"iana","compressible":true},"application/yang-data+xml":{"source":"iana","compressible":true},"application/yang-patch+json":{"source":"iana","compressible":true},"application/yang-patch+xml":{"source":"iana","compressible":true},"application/yang-sid+json":{"source":"iana","compressible":true},"application/yin+xml":{"source":"iana","compressible":true,"extensions":["yin"]},"application/zip":{"source":"iana","compressible":false,"extensions":["zip"]},"application/zip+dotlottie":{"extensions":["lottie"]},"application/zlib":{"source":"iana"},"application/zstd":{"source":"iana"},"audio/1d-interleaved-parityfec":{"source":"iana"},"audio/32kadpcm":{"source":"iana"},"audio/3gpp":{"source":"iana","compressible":false,"extensions":["3gpp"]},"audio/3gpp2":{"source":"iana"},"audio/aac":{"source":"iana","extensions":["adts","aac"]},"audio/ac3":{"source":"iana"},"audio/adpcm":{"source":"apache","extensions":["adp"]},"audio/amr":{"source":"iana","extensions":["amr"]},"audio/amr-wb":{"source":"iana"},"audio/amr-wb+":{"source":"iana"},"audio/aptx":{"source":"iana"},"audio/asc":{"source":"iana"},"audio/atrac-advanced-lossless":{"source":"iana"},"audio/atrac-x":{"source":"iana"},"audio/atrac3":{"source":"iana"},"audio/basic":{"source":"iana","compressible":false,"extensions":["au","snd"]},"audio/bv16":{"source":"iana"},"audio/bv32":{"source":"iana"},"audio/clearmode":{"source":"iana"},"audio/cn":{"source":"iana"},"audio/dat12":{"source":"iana"},"audio/dls":{"source":"iana"},"audio/dsr-es201108":{"source":"iana"},"audio/dsr-es202050":{"source":"iana"},"audio/dsr-es202211":{"source":"iana"},"audio/dsr-es202212":{"source":"iana"},"audio/dv":{"source":"iana"},"audio/dvi4":{"source":"iana"},"audio/eac3":{"source":"iana"},"audio/encaprtp":{"source":"iana"},"audio/evrc":{"source":"iana"},"audio/evrc-qcp":{"source":"iana"},"audio/evrc0":{"source":"iana"},"audio/evrc1":{"source":"iana"},"audio/evrcb":{"source":"iana"},"audio/evrcb0":{"source":"iana"},"audio/evrcb1":{"source":"iana"},"audio/evrcnw":{"source":"iana"},"audio/evrcnw0":{"source":"iana"},"audio/evrcnw1":{"source":"iana"},"audio/evrcwb":{"source":"iana"},"audio/evrcwb0":{"source":"iana"},"audio/evrcwb1":{"source":"iana"},"audio/evs":{"source":"iana"},"audio/flac":{"source":"iana"},"audio/flexfec":{"source":"iana"},"audio/fwdred":{"source":"iana"},"audio/g711-0":{"source":"iana"},"audio/g719":{"source":"iana"},"audio/g722":{"source":"iana"},"audio/g7221":{"source":"iana"},"audio/g723":{"source":"iana"},"audio/g726-16":{"source":"iana"},"audio/g726-24":{"source":"iana"},"audio/g726-32":{"source":"iana"},"audio/g726-40":{"source":"iana"},"audio/g728":{"source":"iana"},"audio/g729":{"source":"iana"},"audio/g7291":{"source":"iana"},"audio/g729d":{"source":"iana"},"audio/g729e":{"source":"iana"},"audio/gsm":{"source":"iana"},"audio/gsm-efr":{"source":"iana"},"audio/gsm-hr-08":{"source":"iana"},"audio/ilbc":{"source":"iana"},"audio/ip-mr_v2.5":{"source":"iana"},"audio/isac":{"source":"apache"},"audio/l16":{"source":"iana"},"audio/l20":{"source":"iana"},"audio/l24":{"source":"iana","compressible":false},"audio/l8":{"source":"iana"},"audio/lpc":{"source":"iana"},"audio/matroska":{"source":"iana"},"audio/melp":{"source":"iana"},"audio/melp1200":{"source":"iana"},"audio/melp2400":{"source":"iana"},"audio/melp600":{"source":"iana"},"audio/mhas":{"source":"iana"},"audio/midi":{"source":"apache","extensions":["mid","midi","kar","rmi"]},"audio/midi-clip":{"source":"iana"},"audio/mobile-xmf":{"source":"iana","extensions":["mxmf"]},"audio/mp3":{"compressible":false,"extensions":["mp3"]},"audio/mp4":{"source":"iana","compressible":false,"extensions":["m4a","mp4a","m4b"]},"audio/mp4a-latm":{"source":"iana"},"audio/mpa":{"source":"iana"},"audio/mpa-robust":{"source":"iana"},"audio/mpeg":{"source":"iana","compressible":false,"extensions":["mpga","mp2","mp2a","mp3","m2a","m3a"]},"audio/mpeg4-generic":{"source":"iana"},"audio/musepack":{"source":"apache"},"audio/ogg":{"source":"iana","compressible":false,"extensions":["oga","ogg","spx","opus"]},"audio/opus":{"source":"iana"},"audio/parityfec":{"source":"iana"},"audio/pcma":{"source":"iana"},"audio/pcma-wb":{"source":"iana"},"audio/pcmu":{"source":"iana"},"audio/pcmu-wb":{"source":"iana"},"audio/prs.sid":{"source":"iana"},"audio/qcelp":{"source":"iana"},"audio/raptorfec":{"source":"iana"},"audio/red":{"source":"iana"},"audio/rtp-enc-aescm128":{"source":"iana"},"audio/rtp-midi":{"source":"iana"},"audio/rtploopback":{"source":"iana"},"audio/rtx":{"source":"iana"},"audio/s3m":{"source":"apache","extensions":["s3m"]},"audio/scip":{"source":"iana"},"audio/silk":{"source":"apache","extensions":["sil"]},"audio/smv":{"source":"iana"},"audio/smv-qcp":{"source":"iana"},"audio/smv0":{"source":"iana"},"audio/sofa":{"source":"iana"},"audio/sp-midi":{"source":"iana"},"audio/speex":{"source":"iana"},"audio/t140c":{"source":"iana"},"audio/t38":{"source":"iana"},"audio/telephone-event":{"source":"iana"},"audio/tetra_acelp":{"source":"iana"},"audio/tetra_acelp_bb":{"source":"iana"},"audio/tone":{"source":"iana"},"audio/tsvcis":{"source":"iana"},"audio/uemclip":{"source":"iana"},"audio/ulpfec":{"source":"iana"},"audio/usac":{"source":"iana"},"audio/vdvi":{"source":"iana"},"audio/vmr-wb":{"source":"iana"},"audio/vnd.3gpp.iufp":{"source":"iana"},"audio/vnd.4sb":{"source":"iana"},"audio/vnd.audiokoz":{"source":"iana"},"audio/vnd.celp":{"source":"iana"},"audio/vnd.cisco.nse":{"source":"iana"},"audio/vnd.cmles.radio-events":{"source":"iana"},"audio/vnd.cns.anp1":{"source":"iana"},"audio/vnd.cns.inf1":{"source":"iana"},"audio/vnd.dece.audio":{"source":"iana","extensions":["uva","uvva"]},"audio/vnd.digital-winds":{"source":"iana","extensions":["eol"]},"audio/vnd.dlna.adts":{"source":"iana"},"audio/vnd.dolby.heaac.1":{"source":"iana"},"audio/vnd.dolby.heaac.2":{"source":"iana"},"audio/vnd.dolby.mlp":{"source":"iana"},"audio/vnd.dolby.mps":{"source":"iana"},"audio/vnd.dolby.pl2":{"source":"iana"},"audio/vnd.dolby.pl2x":{"source":"iana"},"audio/vnd.dolby.pl2z":{"source":"iana"},"audio/vnd.dolby.pulse.1":{"source":"iana"},"audio/vnd.dra":{"source":"iana","extensions":["dra"]},"audio/vnd.dts":{"source":"iana","extensions":["dts"]},"audio/vnd.dts.hd":{"source":"iana","extensions":["dtshd"]},"audio/vnd.dts.uhd":{"source":"iana"},"audio/vnd.dvb.file":{"source":"iana"},"audio/vnd.everad.plj":{"source":"iana"},"audio/vnd.hns.audio":{"source":"iana"},"audio/vnd.lucent.voice":{"source":"iana","extensions":["lvp"]},"audio/vnd.ms-playready.media.pya":{"source":"iana","extensions":["pya"]},"audio/vnd.nokia.mobile-xmf":{"source":"iana"},"audio/vnd.nortel.vbk":{"source":"iana"},"audio/vnd.nuera.ecelp4800":{"source":"iana","extensions":["ecelp4800"]},"audio/vnd.nuera.ecelp7470":{"source":"iana","extensions":["ecelp7470"]},"audio/vnd.nuera.ecelp9600":{"source":"iana","extensions":["ecelp9600"]},"audio/vnd.octel.sbc":{"source":"iana"},"audio/vnd.presonus.multitrack":{"source":"iana"},"audio/vnd.qcelp":{"source":"apache"},"audio/vnd.rhetorex.32kadpcm":{"source":"iana"},"audio/vnd.rip":{"source":"iana","extensions":["rip"]},"audio/vnd.rn-realaudio":{"compressible":false},"audio/vnd.sealedmedia.softseal.mpeg":{"source":"iana"},"audio/vnd.vmx.cvsd":{"source":"iana"},"audio/vnd.wave":{"compressible":false},"audio/vorbis":{"source":"iana","compressible":false},"audio/vorbis-config":{"source":"iana"},"audio/wav":{"compressible":false,"extensions":["wav"]},"audio/wave":{"compressible":false,"extensions":["wav"]},"audio/webm":{"source":"apache","compressible":false,"extensions":["weba"]},"audio/x-aac":{"source":"apache","compressible":false,"extensions":["aac"]},"audio/x-aiff":{"source":"apache","extensions":["aif","aiff","aifc"]},"audio/x-caf":{"source":"apache","compressible":false,"extensions":["caf"]},"audio/x-flac":{"source":"apache","extensions":["flac"]},"audio/x-m4a":{"source":"nginx","extensions":["m4a"]},"audio/x-matroska":{"source":"apache","extensions":["mka"]},"audio/x-mpegurl":{"source":"apache","extensions":["m3u"]},"audio/x-ms-wax":{"source":"apache","extensions":["wax"]},"audio/x-ms-wma":{"source":"apache","extensions":["wma"]},"audio/x-pn-realaudio":{"source":"apache","extensions":["ram","ra"]},"audio/x-pn-realaudio-plugin":{"source":"apache","extensions":["rmp"]},"audio/x-realaudio":{"source":"nginx","extensions":["ra"]},"audio/x-tta":{"source":"apache"},"audio/x-wav":{"source":"apache","extensions":["wav"]},"audio/xm":{"source":"apache","extensions":["xm"]},"chemical/x-cdx":{"source":"apache","extensions":["cdx"]},"chemical/x-cif":{"source":"apache","extensions":["cif"]},"chemical/x-cmdf":{"source":"apache","extensions":["cmdf"]},"chemical/x-cml":{"source":"apache","extensions":["cml"]},"chemical/x-csml":{"source":"apache","extensions":["csml"]},"chemical/x-pdb":{"source":"apache"},"chemical/x-xyz":{"source":"apache","extensions":["xyz"]},"font/collection":{"source":"iana","extensions":["ttc"]},"font/otf":{"source":"iana","compressible":true,"extensions":["otf"]},"font/sfnt":{"source":"iana"},"font/ttf":{"source":"iana","compressible":true,"extensions":["ttf"]},"font/woff":{"source":"iana","extensions":["woff"]},"font/woff2":{"source":"iana","extensions":["woff2"]},"image/aces":{"source":"iana","extensions":["exr"]},"image/apng":{"source":"iana","compressible":false,"extensions":["apng"]},"image/avci":{"source":"iana","extensions":["avci"]},"image/avcs":{"source":"iana","extensions":["avcs"]},"image/avif":{"source":"iana","compressible":false,"extensions":["avif"]},"image/bmp":{"source":"iana","compressible":true,"extensions":["bmp","dib"]},"image/cgm":{"source":"iana","extensions":["cgm"]},"image/dicom-rle":{"source":"iana","extensions":["drle"]},"image/dpx":{"source":"iana","extensions":["dpx"]},"image/emf":{"source":"iana","extensions":["emf"]},"image/fits":{"source":"iana","extensions":["fits"]},"image/g3fax":{"source":"iana","extensions":["g3"]},"image/gif":{"source":"iana","compressible":false,"extensions":["gif"]},"image/heic":{"source":"iana","extensions":["heic"]},"image/heic-sequence":{"source":"iana","extensions":["heics"]},"image/heif":{"source":"iana","extensions":["heif"]},"image/heif-sequence":{"source":"iana","extensions":["heifs"]},"image/hej2k":{"source":"iana","extensions":["hej2"]},"image/ief":{"source":"iana","extensions":["ief"]},"image/j2c":{"source":"iana"},"image/jaii":{"source":"iana","extensions":["jaii"]},"image/jais":{"source":"iana","extensions":["jais"]},"image/jls":{"source":"iana","extensions":["jls"]},"image/jp2":{"source":"iana","compressible":false,"extensions":["jp2","jpg2"]},"image/jpeg":{"source":"iana","compressible":false,"extensions":["jpg","jpeg","jpe"]},"image/jph":{"source":"iana","extensions":["jph"]},"image/jphc":{"source":"iana","extensions":["jhc"]},"image/jpm":{"source":"iana","compressible":false,"extensions":["jpm","jpgm"]},"image/jpx":{"source":"iana","compressible":false,"extensions":["jpx","jpf"]},"image/jxl":{"source":"iana","extensions":["jxl"]},"image/jxr":{"source":"iana","extensions":["jxr"]},"image/jxra":{"source":"iana","extensions":["jxra"]},"image/jxrs":{"source":"iana","extensions":["jxrs"]},"image/jxs":{"source":"iana","extensions":["jxs"]},"image/jxsc":{"source":"iana","extensions":["jxsc"]},"image/jxsi":{"source":"iana","extensions":["jxsi"]},"image/jxss":{"source":"iana","extensions":["jxss"]},"image/ktx":{"source":"iana","extensions":["ktx"]},"image/ktx2":{"source":"iana","extensions":["ktx2"]},"image/naplps":{"source":"iana"},"image/pjpeg":{"compressible":false,"extensions":["jfif"]},"image/png":{"source":"iana","compressible":false,"extensions":["png"]},"image/prs.btif":{"source":"iana","extensions":["btif","btf"]},"image/prs.pti":{"source":"iana","extensions":["pti"]},"image/pwg-raster":{"source":"iana"},"image/sgi":{"source":"apache","extensions":["sgi"]},"image/svg+xml":{"source":"iana","compressible":true,"extensions":["svg","svgz"]},"image/t38":{"source":"iana","extensions":["t38"]},"image/tiff":{"source":"iana","compressible":false,"extensions":["tif","tiff"]},"image/tiff-fx":{"source":"iana","extensions":["tfx"]},"image/vnd.adobe.photoshop":{"source":"iana","compressible":true,"extensions":["psd"]},"image/vnd.airzip.accelerator.azv":{"source":"iana","extensions":["azv"]},"image/vnd.clip":{"source":"iana"},"image/vnd.cns.inf2":{"source":"iana"},"image/vnd.dece.graphic":{"source":"iana","extensions":["uvi","uvvi","uvg","uvvg"]},"image/vnd.djvu":{"source":"iana","extensions":["djvu","djv"]},"image/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"image/vnd.dwg":{"source":"iana","extensions":["dwg"]},"image/vnd.dxf":{"source":"iana","extensions":["dxf"]},"image/vnd.fastbidsheet":{"source":"iana","extensions":["fbs"]},"image/vnd.fpx":{"source":"iana","extensions":["fpx"]},"image/vnd.fst":{"source":"iana","extensions":["fst"]},"image/vnd.fujixerox.edmics-mmr":{"source":"iana","extensions":["mmr"]},"image/vnd.fujixerox.edmics-rlc":{"source":"iana","extensions":["rlc"]},"image/vnd.globalgraphics.pgb":{"source":"iana"},"image/vnd.microsoft.icon":{"source":"iana","compressible":true,"extensions":["ico"]},"image/vnd.mix":{"source":"iana"},"image/vnd.mozilla.apng":{"source":"iana"},"image/vnd.ms-dds":{"compressible":true,"extensions":["dds"]},"image/vnd.ms-modi":{"source":"iana","extensions":["mdi"]},"image/vnd.ms-photo":{"source":"apache","extensions":["wdp"]},"image/vnd.net-fpx":{"source":"iana","extensions":["npx"]},"image/vnd.pco.b16":{"source":"iana","extensions":["b16"]},"image/vnd.radiance":{"source":"iana"},"image/vnd.sealed.png":{"source":"iana"},"image/vnd.sealedmedia.softseal.gif":{"source":"iana"},"image/vnd.sealedmedia.softseal.jpg":{"source":"iana"},"image/vnd.svf":{"source":"iana"},"image/vnd.tencent.tap":{"source":"iana","extensions":["tap"]},"image/vnd.valve.source.texture":{"source":"iana","extensions":["vtf"]},"image/vnd.wap.wbmp":{"source":"iana","extensions":["wbmp"]},"image/vnd.xiff":{"source":"iana","extensions":["xif"]},"image/vnd.zbrush.pcx":{"source":"iana","extensions":["pcx"]},"image/webp":{"source":"iana","extensions":["webp"]},"image/wmf":{"source":"iana","extensions":["wmf"]},"image/x-3ds":{"source":"apache","extensions":["3ds"]},"image/x-adobe-dng":{"extensions":["dng"]},"image/x-cmu-raster":{"source":"apache","extensions":["ras"]},"image/x-cmx":{"source":"apache","extensions":["cmx"]},"image/x-emf":{"source":"iana"},"image/x-freehand":{"source":"apache","extensions":["fh","fhc","fh4","fh5","fh7"]},"image/x-icon":{"source":"apache","compressible":true,"extensions":["ico"]},"image/x-jng":{"source":"nginx","extensions":["jng"]},"image/x-mrsid-image":{"source":"apache","extensions":["sid"]},"image/x-ms-bmp":{"source":"nginx","compressible":true,"extensions":["bmp"]},"image/x-pcx":{"source":"apache","extensions":["pcx"]},"image/x-pict":{"source":"apache","extensions":["pic","pct"]},"image/x-portable-anymap":{"source":"apache","extensions":["pnm"]},"image/x-portable-bitmap":{"source":"apache","extensions":["pbm"]},"image/x-portable-graymap":{"source":"apache","extensions":["pgm"]},"image/x-portable-pixmap":{"source":"apache","extensions":["ppm"]},"image/x-rgb":{"source":"apache","extensions":["rgb"]},"image/x-tga":{"source":"apache","extensions":["tga"]},"image/x-wmf":{"source":"iana"},"image/x-xbitmap":{"source":"apache","extensions":["xbm"]},"image/x-xcf":{"compressible":false},"image/x-xpixmap":{"source":"apache","extensions":["xpm"]},"image/x-xwindowdump":{"source":"apache","extensions":["xwd"]},"message/bhttp":{"source":"iana"},"message/cpim":{"source":"iana"},"message/delivery-status":{"source":"iana"},"message/disposition-notification":{"source":"iana","extensions":["disposition-notification"]},"message/external-body":{"source":"iana"},"message/feedback-report":{"source":"iana"},"message/global":{"source":"iana","extensions":["u8msg"]},"message/global-delivery-status":{"source":"iana","extensions":["u8dsn"]},"message/global-disposition-notification":{"source":"iana","extensions":["u8mdn"]},"message/global-headers":{"source":"iana","extensions":["u8hdr"]},"message/http":{"source":"iana","compressible":false},"message/imdn+xml":{"source":"iana","compressible":true},"message/mls":{"source":"iana"},"message/news":{"source":"apache"},"message/ohttp-req":{"source":"iana"},"message/ohttp-res":{"source":"iana"},"message/partial":{"source":"iana","compressible":false},"message/rfc822":{"source":"iana","compressible":true,"extensions":["eml","mime","mht","mhtml"]},"message/s-http":{"source":"apache"},"message/sip":{"source":"iana"},"message/sipfrag":{"source":"iana"},"message/tracking-status":{"source":"iana"},"message/vnd.si.simp":{"source":"apache"},"message/vnd.wfa.wsc":{"source":"iana","extensions":["wsc"]},"model/3mf":{"source":"iana","extensions":["3mf"]},"model/e57":{"source":"iana"},"model/gltf+json":{"source":"iana","compressible":true,"extensions":["gltf"]},"model/gltf-binary":{"source":"iana","compressible":true,"extensions":["glb"]},"model/iges":{"source":"iana","compressible":false,"extensions":["igs","iges"]},"model/jt":{"source":"iana","extensions":["jt"]},"model/mesh":{"source":"iana","compressible":false,"extensions":["msh","mesh","silo"]},"model/mtl":{"source":"iana","extensions":["mtl"]},"model/obj":{"source":"iana","extensions":["obj"]},"model/prc":{"source":"iana","extensions":["prc"]},"model/step":{"source":"iana","extensions":["step","stp","stpnc","p21","210"]},"model/step+xml":{"source":"iana","compressible":true,"extensions":["stpx"]},"model/step+zip":{"source":"iana","compressible":false,"extensions":["stpz"]},"model/step-xml+zip":{"source":"iana","compressible":false,"extensions":["stpxz"]},"model/stl":{"source":"iana","extensions":["stl"]},"model/u3d":{"source":"iana","extensions":["u3d"]},"model/vnd.bary":{"source":"iana","extensions":["bary"]},"model/vnd.cld":{"source":"iana","extensions":["cld"]},"model/vnd.collada+xml":{"source":"iana","compressible":true,"extensions":["dae"]},"model/vnd.dwf":{"source":"iana","extensions":["dwf"]},"model/vnd.flatland.3dml":{"source":"iana"},"model/vnd.gdl":{"source":"iana","extensions":["gdl"]},"model/vnd.gs-gdl":{"source":"apache"},"model/vnd.gs.gdl":{"source":"iana"},"model/vnd.gtw":{"source":"iana","extensions":["gtw"]},"model/vnd.moml+xml":{"source":"iana","compressible":true},"model/vnd.mts":{"source":"iana","extensions":["mts"]},"model/vnd.opengex":{"source":"iana","extensions":["ogex"]},"model/vnd.parasolid.transmit.binary":{"source":"iana","extensions":["x_b"]},"model/vnd.parasolid.transmit.text":{"source":"iana","extensions":["x_t"]},"model/vnd.pytha.pyox":{"source":"iana","extensions":["pyo","pyox"]},"model/vnd.rosette.annotated-data-model":{"source":"iana"},"model/vnd.sap.vds":{"source":"iana","extensions":["vds"]},"model/vnd.usda":{"source":"iana","extensions":["usda"]},"model/vnd.usdz+zip":{"source":"iana","compressible":false,"extensions":["usdz"]},"model/vnd.valve.source.compiled-map":{"source":"iana","extensions":["bsp"]},"model/vnd.vtu":{"source":"iana","extensions":["vtu"]},"model/vrml":{"source":"iana","compressible":false,"extensions":["wrl","vrml"]},"model/x3d+binary":{"source":"apache","compressible":false,"extensions":["x3db","x3dbz"]},"model/x3d+fastinfoset":{"source":"iana","extensions":["x3db"]},"model/x3d+vrml":{"source":"apache","compressible":false,"extensions":["x3dv","x3dvz"]},"model/x3d+xml":{"source":"iana","compressible":true,"extensions":["x3d","x3dz"]},"model/x3d-vrml":{"source":"iana","extensions":["x3dv"]},"multipart/alternative":{"source":"iana","compressible":false},"multipart/appledouble":{"source":"iana"},"multipart/byteranges":{"source":"iana"},"multipart/digest":{"source":"iana"},"multipart/encrypted":{"source":"iana","compressible":false},"multipart/form-data":{"source":"iana","compressible":false},"multipart/header-set":{"source":"iana"},"multipart/mixed":{"source":"iana"},"multipart/multilingual":{"source":"iana"},"multipart/parallel":{"source":"iana"},"multipart/related":{"source":"iana","compressible":false},"multipart/report":{"source":"iana"},"multipart/signed":{"source":"iana","compressible":false},"multipart/vnd.bint.med-plus":{"source":"iana"},"multipart/voice-message":{"source":"iana"},"multipart/x-mixed-replace":{"source":"iana"},"text/1d-interleaved-parityfec":{"source":"iana"},"text/cache-manifest":{"source":"iana","compressible":true,"extensions":["appcache","manifest"]},"text/calendar":{"source":"iana","extensions":["ics","ifb"]},"text/calender":{"compressible":true},"text/cmd":{"compressible":true},"text/coffeescript":{"extensions":["coffee","litcoffee"]},"text/cql":{"source":"iana"},"text/cql-expression":{"source":"iana"},"text/cql-identifier":{"source":"iana"},"text/css":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["css"]},"text/csv":{"source":"iana","compressible":true,"extensions":["csv"]},"text/csv-schema":{"source":"iana"},"text/directory":{"source":"iana"},"text/dns":{"source":"iana"},"text/ecmascript":{"source":"apache"},"text/encaprtp":{"source":"iana"},"text/enriched":{"source":"iana"},"text/fhirpath":{"source":"iana"},"text/flexfec":{"source":"iana"},"text/fwdred":{"source":"iana"},"text/gff3":{"source":"iana"},"text/grammar-ref-list":{"source":"iana"},"text/hl7v2":{"source":"iana"},"text/html":{"source":"iana","compressible":true,"extensions":["html","htm","shtml"]},"text/jade":{"extensions":["jade"]},"text/javascript":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["js","mjs"]},"text/jcr-cnd":{"source":"iana"},"text/jsx":{"compressible":true,"extensions":["jsx"]},"text/less":{"compressible":true,"extensions":["less"]},"text/markdown":{"source":"iana","compressible":true,"extensions":["md","markdown"]},"text/mathml":{"source":"nginx","extensions":["mml"]},"text/mdx":{"compressible":true,"extensions":["mdx"]},"text/mizar":{"source":"iana"},"text/n3":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["n3"]},"text/parameters":{"source":"iana","charset":"UTF-8"},"text/parityfec":{"source":"iana"},"text/plain":{"source":"iana","compressible":true,"extensions":["txt","text","conf","def","list","log","in","ini"]},"text/provenance-notation":{"source":"iana","charset":"UTF-8"},"text/prs.fallenstein.rst":{"source":"iana"},"text/prs.lines.tag":{"source":"iana","extensions":["dsc"]},"text/prs.prop.logic":{"source":"iana"},"text/prs.texi":{"source":"iana"},"text/raptorfec":{"source":"iana"},"text/red":{"source":"iana"},"text/rfc822-headers":{"source":"iana"},"text/richtext":{"source":"iana","compressible":true,"extensions":["rtx"]},"text/rtf":{"source":"iana","compressible":true,"extensions":["rtf"]},"text/rtp-enc-aescm128":{"source":"iana"},"text/rtploopback":{"source":"iana"},"text/rtx":{"source":"iana"},"text/sgml":{"source":"iana","extensions":["sgml","sgm"]},"text/shaclc":{"source":"iana"},"text/shex":{"source":"iana","extensions":["shex"]},"text/slim":{"extensions":["slim","slm"]},"text/spdx":{"source":"iana","extensions":["spdx"]},"text/strings":{"source":"iana"},"text/stylus":{"extensions":["stylus","styl"]},"text/t140":{"source":"iana"},"text/tab-separated-values":{"source":"iana","compressible":true,"extensions":["tsv"]},"text/troff":{"source":"iana","extensions":["t","tr","roff","man","me","ms"]},"text/turtle":{"source":"iana","charset":"UTF-8","extensions":["ttl"]},"text/ulpfec":{"source":"iana"},"text/uri-list":{"source":"iana","compressible":true,"extensions":["uri","uris","urls"]},"text/vcard":{"source":"iana","compressible":true,"extensions":["vcard"]},"text/vnd.a":{"source":"iana"},"text/vnd.abc":{"source":"iana"},"text/vnd.ascii-art":{"source":"iana"},"text/vnd.curl":{"source":"iana","extensions":["curl"]},"text/vnd.curl.dcurl":{"source":"apache","extensions":["dcurl"]},"text/vnd.curl.mcurl":{"source":"apache","extensions":["mcurl"]},"text/vnd.curl.scurl":{"source":"apache","extensions":["scurl"]},"text/vnd.debian.copyright":{"source":"iana","charset":"UTF-8"},"text/vnd.dmclientscript":{"source":"iana"},"text/vnd.dvb.subtitle":{"source":"iana","extensions":["sub"]},"text/vnd.esmertec.theme-descriptor":{"source":"iana","charset":"UTF-8"},"text/vnd.exchangeable":{"source":"iana"},"text/vnd.familysearch.gedcom":{"source":"iana","extensions":["ged"]},"text/vnd.ficlab.flt":{"source":"iana"},"text/vnd.fly":{"source":"iana","extensions":["fly"]},"text/vnd.fmi.flexstor":{"source":"iana","extensions":["flx"]},"text/vnd.gml":{"source":"iana"},"text/vnd.graphviz":{"source":"iana","extensions":["gv"]},"text/vnd.hans":{"source":"iana"},"text/vnd.hgl":{"source":"iana"},"text/vnd.in3d.3dml":{"source":"iana","extensions":["3dml"]},"text/vnd.in3d.spot":{"source":"iana","extensions":["spot"]},"text/vnd.iptc.newsml":{"source":"iana"},"text/vnd.iptc.nitf":{"source":"iana"},"text/vnd.latex-z":{"source":"iana"},"text/vnd.motorola.reflex":{"source":"iana"},"text/vnd.ms-mediapackage":{"source":"iana"},"text/vnd.net2phone.commcenter.command":{"source":"iana"},"text/vnd.radisys.msml-basic-layout":{"source":"iana"},"text/vnd.senx.warpscript":{"source":"iana"},"text/vnd.si.uricatalogue":{"source":"apache"},"text/vnd.sosi":{"source":"iana"},"text/vnd.sun.j2me.app-descriptor":{"source":"iana","charset":"UTF-8","extensions":["jad"]},"text/vnd.trolltech.linguist":{"source":"iana","charset":"UTF-8"},"text/vnd.vcf":{"source":"iana"},"text/vnd.wap.si":{"source":"iana"},"text/vnd.wap.sl":{"source":"iana"},"text/vnd.wap.wml":{"source":"iana","extensions":["wml"]},"text/vnd.wap.wmlscript":{"source":"iana","extensions":["wmls"]},"text/vnd.zoo.kcl":{"source":"iana"},"text/vtt":{"source":"iana","charset":"UTF-8","compressible":true,"extensions":["vtt"]},"text/wgsl":{"source":"iana","extensions":["wgsl"]},"text/x-asm":{"source":"apache","extensions":["s","asm"]},"text/x-c":{"source":"apache","extensions":["c","cc","cxx","cpp","h","hh","dic"]},"text/x-component":{"source":"nginx","extensions":["htc"]},"text/x-fortran":{"source":"apache","extensions":["f","for","f77","f90"]},"text/x-gwt-rpc":{"compressible":true},"text/x-handlebars-template":{"extensions":["hbs"]},"text/x-java-source":{"source":"apache","extensions":["java"]},"text/x-jquery-tmpl":{"compressible":true},"text/x-lua":{"extensions":["lua"]},"text/x-markdown":{"compressible":true,"extensions":["mkd"]},"text/x-nfo":{"source":"apache","extensions":["nfo"]},"text/x-opml":{"source":"apache","extensions":["opml"]},"text/x-org":{"compressible":true,"extensions":["org"]},"text/x-pascal":{"source":"apache","extensions":["p","pas"]},"text/x-processing":{"compressible":true,"extensions":["pde"]},"text/x-sass":{"extensions":["sass"]},"text/x-scss":{"extensions":["scss"]},"text/x-setext":{"source":"apache","extensions":["etx"]},"text/x-sfv":{"source":"apache","extensions":["sfv"]},"text/x-suse-ymp":{"compressible":true,"extensions":["ymp"]},"text/x-uuencode":{"source":"apache","extensions":["uu"]},"text/x-vcalendar":{"source":"apache","extensions":["vcs"]},"text/x-vcard":{"source":"apache","extensions":["vcf"]},"text/xml":{"source":"iana","compressible":true,"extensions":["xml"]},"text/xml-external-parsed-entity":{"source":"iana"},"text/yaml":{"compressible":true,"extensions":["yaml","yml"]},"video/1d-interleaved-parityfec":{"source":"iana"},"video/3gpp":{"source":"iana","extensions":["3gp","3gpp"]},"video/3gpp-tt":{"source":"iana"},"video/3gpp2":{"source":"iana","extensions":["3g2"]},"video/av1":{"source":"iana"},"video/bmpeg":{"source":"iana"},"video/bt656":{"source":"iana"},"video/celb":{"source":"iana"},"video/dv":{"source":"iana"},"video/encaprtp":{"source":"iana"},"video/evc":{"source":"iana"},"video/ffv1":{"source":"iana"},"video/flexfec":{"source":"iana"},"video/h261":{"source":"iana","extensions":["h261"]},"video/h263":{"source":"iana","extensions":["h263"]},"video/h263-1998":{"source":"iana"},"video/h263-2000":{"source":"iana"},"video/h264":{"source":"iana","extensions":["h264"]},"video/h264-rcdo":{"source":"iana"},"video/h264-svc":{"source":"iana"},"video/h265":{"source":"iana"},"video/h266":{"source":"iana"},"video/iso.segment":{"source":"iana","extensions":["m4s"]},"video/jpeg":{"source":"iana","extensions":["jpgv"]},"video/jpeg2000":{"source":"iana"},"video/jpm":{"source":"apache","extensions":["jpm","jpgm"]},"video/jxsv":{"source":"iana"},"video/lottie+json":{"source":"iana","compressible":true},"video/matroska":{"source":"iana"},"video/matroska-3d":{"source":"iana"},"video/mj2":{"source":"iana","extensions":["mj2","mjp2"]},"video/mp1s":{"source":"iana"},"video/mp2p":{"source":"iana"},"video/mp2t":{"source":"iana","extensions":["ts","m2t","m2ts","mts"]},"video/mp4":{"source":"iana","compressible":false,"extensions":["mp4","mp4v","mpg4"]},"video/mp4v-es":{"source":"iana"},"video/mpeg":{"source":"iana","compressible":false,"extensions":["mpeg","mpg","mpe","m1v","m2v"]},"video/mpeg4-generic":{"source":"iana"},"video/mpv":{"source":"iana"},"video/nv":{"source":"iana"},"video/ogg":{"source":"iana","compressible":false,"extensions":["ogv"]},"video/parityfec":{"source":"iana"},"video/pointer":{"source":"iana"},"video/quicktime":{"source":"iana","compressible":false,"extensions":["qt","mov"]},"video/raptorfec":{"source":"iana"},"video/raw":{"source":"iana"},"video/rtp-enc-aescm128":{"source":"iana"},"video/rtploopback":{"source":"iana"},"video/rtx":{"source":"iana"},"video/scip":{"source":"iana"},"video/smpte291":{"source":"iana"},"video/smpte292m":{"source":"iana"},"video/ulpfec":{"source":"iana"},"video/vc1":{"source":"iana"},"video/vc2":{"source":"iana"},"video/vnd.cctv":{"source":"iana"},"video/vnd.dece.hd":{"source":"iana","extensions":["uvh","uvvh"]},"video/vnd.dece.mobile":{"source":"iana","extensions":["uvm","uvvm"]},"video/vnd.dece.mp4":{"source":"iana"},"video/vnd.dece.pd":{"source":"iana","extensions":["uvp","uvvp"]},"video/vnd.dece.sd":{"source":"iana","extensions":["uvs","uvvs"]},"video/vnd.dece.video":{"source":"iana","extensions":["uvv","uvvv"]},"video/vnd.directv.mpeg":{"source":"iana"},"video/vnd.directv.mpeg-tts":{"source":"iana"},"video/vnd.dlna.mpeg-tts":{"source":"iana"},"video/vnd.dvb.file":{"source":"iana","extensions":["dvb"]},"video/vnd.fvt":{"source":"iana","extensions":["fvt"]},"video/vnd.hns.video":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.1dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-1010":{"source":"iana"},"video/vnd.iptvforum.2dparityfec-2005":{"source":"iana"},"video/vnd.iptvforum.ttsavc":{"source":"iana"},"video/vnd.iptvforum.ttsmpeg2":{"source":"iana"},"video/vnd.motorola.video":{"source":"iana"},"video/vnd.motorola.videop":{"source":"iana"},"video/vnd.mpegurl":{"source":"iana","extensions":["mxu","m4u"]},"video/vnd.ms-playready.media.pyv":{"source":"iana","extensions":["pyv"]},"video/vnd.nokia.interleaved-multimedia":{"source":"iana"},"video/vnd.nokia.mp4vr":{"source":"iana"},"video/vnd.nokia.videovoip":{"source":"iana"},"video/vnd.objectvideo":{"source":"iana"},"video/vnd.planar":{"source":"iana"},"video/vnd.radgamettools.bink":{"source":"iana"},"video/vnd.radgamettools.smacker":{"source":"apache"},"video/vnd.sealed.mpeg1":{"source":"iana"},"video/vnd.sealed.mpeg4":{"source":"iana"},"video/vnd.sealed.swf":{"source":"iana"},"video/vnd.sealedmedia.softseal.mov":{"source":"iana"},"video/vnd.uvvu.mp4":{"source":"iana","extensions":["uvu","uvvu"]},"video/vnd.vivo":{"source":"iana","extensions":["viv"]},"video/vnd.youtube.yt":{"source":"iana"},"video/vp8":{"source":"iana"},"video/vp9":{"source":"iana"},"video/webm":{"source":"apache","compressible":false,"extensions":["webm"]},"video/x-f4v":{"source":"apache","extensions":["f4v"]},"video/x-fli":{"source":"apache","extensions":["fli"]},"video/x-flv":{"source":"apache","compressible":false,"extensions":["flv"]},"video/x-m4v":{"source":"apache","extensions":["m4v"]},"video/x-matroska":{"source":"apache","compressible":false,"extensions":["mkv","mk3d","mks"]},"video/x-mng":{"source":"apache","extensions":["mng"]},"video/x-ms-asf":{"source":"apache","extensions":["asf","asx"]},"video/x-ms-vob":{"source":"apache","extensions":["vob"]},"video/x-ms-wm":{"source":"apache","extensions":["wm"]},"video/x-ms-wmv":{"source":"apache","compressible":false,"extensions":["wmv"]},"video/x-ms-wmx":{"source":"apache","extensions":["wmx"]},"video/x-ms-wvx":{"source":"apache","extensions":["wvx"]},"video/x-msvideo":{"source":"apache","extensions":["avi"]},"video/x-sgi-movie":{"source":"apache","extensions":["movie"]},"video/x-smv":{"source":"apache","extensions":["smv"]},"x-conference/x-cooltalk":{"source":"apache","extensions":["ice"]},"x-shader/x-fragment":{"compressible":true},"x-shader/x-vertex":{"compressible":true}}');
 
 /***/ }
 
@@ -1069,7 +1069,7 @@ __webpack_require__.d(__webpack_exports__, {
   matrix: () => (/* reexport */ matrix),
   media: () => (/* reexport */ media),
   messageArea: () => (/* reexport */ messageArea),
-  ns: () => (/* reexport */ src_ns),
+  ns: () => (/* reexport */ ns),
   pad: () => (/* reexport */ pad_namespaceObject),
   participation: () => (/* reexport */ participation_namespaceObject),
   preferences: () => (/* reexport */ preferences_namespaceObject),
@@ -1343,7 +1343,7 @@ var external_$rdf_ = __webpack_require__(264);
 
  // Delegate to this which takes RDFlib as param.
 
-/* harmony default export */ const src_ns = (solid_namespace_default()(external_$rdf_));
+/* harmony default export */ const ns = (solid_namespace_default()(external_$rdf_));
 ;// ./node_modules/@babel/runtime/helpers/esm/asyncToGenerator.js
 function asyncGeneratorStep(n, t, e, r, o, a, c) {
   try {
@@ -1354,7 +1354,7 @@ function asyncGeneratorStep(n, t, e, r, o, a, c) {
   }
   i.done ? t(u) : Promise.resolve(u).then(r, o);
 }
-function asyncToGenerator_asyncToGenerator(n) {
+function _asyncToGenerator(n) {
   return function () {
     var t = this,
       e = arguments;
@@ -1577,7 +1577,7 @@ function setInternals(window, document) {
 
 var UI = {
   log: log_namespaceObject,
-  ns: src_ns,
+  ns: ns,
   rdf: external_$rdf_
 };
 
@@ -1689,12 +1689,12 @@ var kb = external_SolidLogic_.solidLogicSingleton.store;
  * synonym for "default".
  */
 function adoptACLDefault(doc, aclDoc, defaultResource, defaultACLDoc) {
-  var ACL = src_ns.acl;
+  var ACL = ns.acl;
   var isContainer = doc.uri.slice(-1) === '/'; // Give default for all directories
 
   var defaults = kb.each(undefined, ACL('default'), defaultResource, defaultACLDoc).concat(kb.each(undefined, ACL('defaultForNew'), defaultResource, defaultACLDoc));
   var proposed = defaults.reduce(function (accumulatedStatements, da) {
-    return accumulatedStatements.concat(kb.statementsMatching(da, src_ns.rdf('type'), ACL('Authorization'), defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLDoc)).concat((0,external_$rdf_.st)(da, ACL('accessTo'), doc, defaultACLDoc)).concat(isContainer ? (0,external_$rdf_.st)(da, ACL('default'), doc, defaultACLDoc) : []);
+    return accumulatedStatements.concat(kb.statementsMatching(da, ns.rdf('type'), ACL('Authorization'), defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agent'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('agentGroup'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('origin'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('originClass'), undefined, defaultACLDoc)).concat(kb.statementsMatching(da, ACL('mode'), undefined, defaultACLDoc)).concat((0,external_$rdf_.st)(da, ACL('accessTo'), doc, defaultACLDoc)).concat(isContainer ? (0,external_$rdf_.st)(da, ACL('default'), doc, defaultACLDoc) : []);
   }, []);
   var kb2 = (0,external_$rdf_.graph)(); // Potential - derived is kept apart
   proposed.forEach(function (st) {
@@ -1715,8 +1715,8 @@ function adoptACLDefault(doc, aclDoc, defaultResource, defaultACLDoc) {
 function readACL(doc, aclDoc) {
   var kb2 = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : kb;
   var getDefaults = arguments.length > 3 && arguments[3] !== undefined ? arguments[3] : false;
-  var auths = getDefaults ? getDefaultsFallback(kb2, src_ns) : kb2.each(undefined, src_ns.acl('accessTo'), doc);
-  var ACL = src_ns.acl;
+  var auths = getDefaults ? getDefaultsFallback(kb2, ns) : kb2.each(undefined, ns.acl('accessTo'), doc);
+  var ACL = ns.acl;
   var ac = {
     agent: {},
     agentClass: {},
@@ -1850,7 +1850,7 @@ function makeACLGraph(kb, x, ac, aclDoc) {
  * Write ACL graph to store from combo
  */
 function makeACLGraphbyCombo(kb, x, byCombo, aclDoc, main, defa) {
-  var ACL = src_ns.acl;
+  var ACL = ns.acl;
   for (var combo in byCombo) {
     var pairs = byCombo[combo];
     if (!pairs.length) continue; // do not add to store when no agent
@@ -1860,7 +1860,7 @@ function makeACLGraphbyCombo(kb, x, byCombo, aclDoc, main, defa) {
     }).join('');
     if (defa && !main) _short += 'Default'; // don't muddle authorizations
     var a = kb.sym(aclDoc.uri + '#' + _short);
-    kb.add(a, src_ns.rdf('type'), ACL('Authorization'), aclDoc);
+    kb.add(a, ns.rdf('type'), ACL('Authorization'), aclDoc);
     if (main) {
       kb.add(a, ACL('accessTo'), x, aclDoc);
     }
@@ -1902,7 +1902,7 @@ function comboToString(byCombo) {
       var pred = pairs[i][0];
       var ag = (0,external_$rdf_.sym)(pairs[i][1]);
       str += pred === 'agent' ? '@' : '';
-      str += ag.sameTerm(src_ns.foaf('Agent')) ? '*' : label_label(ag);
+      str += ag.sameTerm(ns.foaf('Agent')) ? '*' : label_label(ag);
       if (i < pairs.length - 1) str += ',';
     }
     str += ';';
@@ -1954,7 +1954,7 @@ function putACLbyCombo(kb, x, byCombo, aclDoc, callbackFunction) {
  * All group files must be loaded first
  */
 function fixIndividualCardACL(person, log, callbackFunction) {
-  var groups = kb.each(undefined, src_ns.vcard('hasMember'), person);
+  var groups = kb.each(undefined, ns.vcard('hasMember'), person);
   // const doc = person.doc()
   if (groups) {
     fixIndividualACL(person, groups, log, callbackFunction);
@@ -2040,7 +2040,7 @@ function setACL(docURI, aclText, callbackFunction) {
  */
 function getACLorDefault(doc, callbackFunction) {
   getACL(doc, function (ok, status, aclDoc, message) {
-    var ACL = src_ns.acl;
+    var ACL = ns.acl;
     if (!ok) return callbackFunction(false, false, status, message);
 
     // Recursively search for the ACL file which gives default access
@@ -2135,7 +2135,7 @@ function getProspectiveHolder(_x) {
   return _getProspectiveHolder.apply(this, arguments);
 }
 function _getProspectiveHolder() {
-  _getProspectiveHolder = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(targetDirectory) {
+  _getProspectiveHolder = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(targetDirectory) {
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -2156,7 +2156,7 @@ function _getProspectiveHolder() {
   return _getProspectiveHolder.apply(this, arguments);
 }
 ;// ./node_modules/@babel/runtime/helpers/esm/classCallCheck.js
-function classCallCheck_classCallCheck(a, n) {
+function _classCallCheck(a, n) {
   if (!(a instanceof n)) throw new TypeError("Cannot call a class as a function");
 }
 
@@ -2200,7 +2200,7 @@ function _defineProperties(e, r) {
     o.enumerable = o.enumerable || !1, o.configurable = !0, "value" in o && (o.writable = !0), Object.defineProperty(e, toPropertyKey(o.key), o);
   }
 }
-function createClass_createClass(e, r, t) {
+function _createClass(e, r, t) {
   return r && _defineProperties(e.prototype, r), t && _defineProperties(e, t), Object.defineProperty(e, "prototype", {
     writable: !1
   }), e;
@@ -2651,7 +2651,7 @@ var iconBase = __webpack_require__(378);
 
 var utils_UI = {
   log: log_namespaceObject,
-  ns: src_ns,
+  ns: ns,
   rdf: external_$rdf_
 };
 
@@ -3413,10 +3413,10 @@ function shortTime() {
 function setName(element, x) {
   var kb = external_SolidLogic_.store;
   var findName = function findName(x) {
-    var name = kb.any(x, src_ns.vcard('fn')) || kb.any(x, src_ns.foaf('name')) || kb.any(x, src_ns.vcard('organization-name'));
+    var name = kb.any(x, ns.vcard('fn')) || kb.any(x, ns.foaf('name')) || kb.any(x, ns.vcard('organization-name'));
     return name ? name.value : null;
   };
-  var name = x.sameTerm(src_ns.foaf('Agent')) ? 'Everyone' : findName(x);
+  var name = x.sameTerm(ns.foaf('Agent')) ? 'Everyone' : findName(x);
   element.textContent = name || label_label(x);
   if (!name && x.uri) {
     if (!kb.fetcher) {
@@ -3447,7 +3447,7 @@ function setName(element, x) {
 
  */
 function imagesOf(x, kb) {
-  return kb.each(x, src_ns.sioc('avatar')).concat(kb.each(x, src_ns.foaf('img'))).concat(kb.each(x, src_ns.vcard('logo'))).concat(kb.each(x, src_ns.vcard('hasPhoto'))).concat(kb.each(x, src_ns.vcard('photo'))).concat(kb.each(x, src_ns.foaf('depiction')));
+  return kb.each(x, ns.sioc('avatar')).concat(kb.each(x, ns.foaf('img'))).concat(kb.each(x, ns.vcard('logo'))).concat(kb.each(x, ns.vcard('hasPhoto'))).concat(kb.each(x, ns.vcard('photo'))).concat(kb.each(x, ns.foaf('depiction')));
 }
 
 /**
@@ -3554,10 +3554,10 @@ function findImageFromURI(x) {
 function findImage(thing) {
   var kb = external_SolidLogic_.store;
   var iconDir = buttons_iconBase;
-  if (thing.sameTerm(src_ns.foaf('Agent')) || thing.sameTerm(src_ns.rdf('Resource'))) {
+  if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
     return iconDir + 'noun_98053.svg'; // Globe
   }
-  var image = kb.any(thing, src_ns.sioc('avatar')) || kb.any(thing, src_ns.foaf('img')) || kb.any(thing, src_ns.vcard('logo')) || kb.any(thing, src_ns.vcard('hasPhoto')) || kb.any(thing, src_ns.vcard('photo')) || kb.any(thing, src_ns.foaf('depiction'));
+  var image = kb.any(thing, ns.sioc('avatar')) || kb.any(thing, ns.foaf('img')) || kb.any(thing, ns.vcard('logo')) || kb.any(thing, ns.vcard('hasPhoto')) || kb.any(thing, ns.vcard('photo')) || kb.any(thing, ns.foaf('depiction'));
   return image ? image.uri : null;
 }
 
@@ -3611,7 +3611,7 @@ function setImage(element, thing) {
   for (var k in iconForClass) {
     var pref = k.split(':')[0];
     var id = k.split(':')[1];
-    var theClass = src_ns[pref](id);
+    var theClass = ns[pref](id);
     iconForClassMap[theClass.uri] = external_$rdf_.uri.join(iconForClass[k], buttons_iconBase);
   }
   var happy = trySetImage(element, thing, iconForClassMap);
@@ -3842,7 +3842,7 @@ function askName(dom, kb, container, predicate, theClass, noun) {
   return new Promise(function (resolve, _reject) {
     var form = dom.createElement('div'); // form is broken as HTML behaviour can resurface on js error
     // classLabel = utils.label(ns.vcard('Individual'))
-    predicate = predicate || src_ns.foaf('name'); // eg 'name' in user's language
+    predicate = predicate || ns.foaf('name'); // eg 'name' in user's language
     noun = noun || (theClass ? label_label(theClass) : '  '); // eg 'folder' in users's language
     var prompt = noun + ' ' + label_label(predicate) + ': ';
     form.appendChild(dom.createElement('p')).textContent = prompt;
@@ -4081,7 +4081,7 @@ function attachmentList(dom, subject, div) {
   var modify = options.modify;
   var promptIcon = options.promptIcon || buttons_iconBase + 'noun_748003.svg'; //    target
   // const promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
-  var predicate = options.predicate || src_ns.wf('attachment');
+  var predicate = options.predicate || ns.wf('attachment');
   var noun = options.noun || 'attachment';
   var kb = external_SolidLogic_.store;
   var attachmentOuter = div.appendChild(dom.createElement('table'));
@@ -4173,14 +4173,14 @@ function defaultAnnotationStore(subject) {
  */
 function allClassURIs() {
   var set = {};
-  external_SolidLogic_.store.statementsMatching(undefined, src_ns.rdf('type'), undefined).forEach(function (st) {
+  external_SolidLogic_.store.statementsMatching(undefined, ns.rdf('type'), undefined).forEach(function (st) {
     if (st.object.value) set[st.object.value] = true;
   });
-  external_SolidLogic_.store.statementsMatching(undefined, src_ns.rdfs('subClassOf'), undefined).forEach(function (st) {
+  external_SolidLogic_.store.statementsMatching(undefined, ns.rdfs('subClassOf'), undefined).forEach(function (st) {
     if (st.object.value) set[st.object.value] = true;
     if (st.subject.value) set[st.subject.value] = true;
   });
-  external_SolidLogic_.store.each(undefined, src_ns.rdf('type'), src_ns.rdfs('Class')).forEach(function (c) {
+  external_SolidLogic_.store.each(undefined, ns.rdf('type'), ns.rdfs('Class')).forEach(function (c) {
     if (c.value) set[c.value] = true;
   });
   return set;
@@ -4218,7 +4218,7 @@ function propertyTriage(kb) {
       no++;
     }
   } // If nothing discovered, then could be either:
-  var ps = kb.each(undefined, src_ns.rdf('type'), src_ns.rdf('Property'));
+  var ps = kb.each(undefined, ns.rdf('type'), ns.rdf('Property'));
   for (var i = 0; i < ps.length; i++) {
     var _p = ps[i].toNT();
     if (!op[_p] && !dp[_p]) {
@@ -4410,7 +4410,7 @@ function twoLineWidgetForClass(c) {
 function twoLineTransaction(dom, x) {
   var failed = '';
   var enc = function enc(p) {
-    var y = external_SolidLogic_.store.any(x, src_ns.qu(p));
+    var y = external_SolidLogic_.store.any(x, ns.qu(p));
     if (!y) failed += '@@ No value for ' + p + '! ';
     return y ? utils_escapeForXML(y.value) : '?'; // @@@@
   };
@@ -4435,7 +4435,7 @@ function twoLineTrip(dom, x) {
     return y ? utils_escapeForXML(y.value) : '?';
   };
   var box = dom.createElement('table');
-  box.innerHTML = "\n    <tr>\n      <td colspan=\"2\">".concat(enc(src_ns.dc('title')), "</td>\n    </tr>\n    <tr style=\"color: #777\">\n      <td>").concat(enc(src_ns.cal('dtstart')), "</td>\n      <td>").concat(enc(src_ns.cal('dtend')), "</td>\n    </tr>");
+  box.innerHTML = "\n    <tr>\n      <td colspan=\"2\">".concat(enc(ns.dc('title')), "</td>\n    </tr>\n    <tr style=\"color: #777\">\n      <td>").concat(enc(ns.cal('dtstart')), "</td>\n      <td>").concat(enc(ns.cal('dtend')), "</td>\n    </tr>");
   return box;
 }
 
@@ -4655,60 +4655,60 @@ var _fieldParams;
  * field in questions, different values may be read
  * from here.
  */
-var fieldParams = (_fieldParams = {}, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_fieldParams, src_ns.ui('ColorField').uri, {
+var fieldParams = (_fieldParams = {}, _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_fieldParams, ns.ui('ColorField').uri, {
   size: 9,
   type: 'color',
   style: 'height: 3em;',
   // around 1.5em is padding
   dt: 'color',
   pattern: /^\s*#[0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f][0-9a-f]([0-9a-f][0-9a-f])?\s*$/
-}), src_ns.ui('DateField').uri, {
+}), ns.ui('DateField').uri, {
   size: 20,
   type: 'date',
   dt: 'date',
   pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?Z?\s*$/
-}), src_ns.ui('DateTimeField').uri, {
+}), ns.ui('DateTimeField').uri, {
   size: 20,
   type: 'datetime-local',
   // See https://developer.mozilla.org/en-US/docs/Web/HTML/Element/input/datetime
   dt: 'dateTime',
   pattern: /^\s*[0-9][0-9][0-9][0-9](-[0-1]?[0-9]-[0-3]?[0-9])?(T[0-2][0-9]:[0-5][0-9](:[0-5][0-9])?)?Z?\s*$/
-}), src_ns.ui('TimeField').uri, {
+}), ns.ui('TimeField').uri, {
   size: 10,
   type: 'time',
   dt: 'time',
   pattern: /^\s*([0-2]?[0-9]:[0-5][0-9](:[0-5][0-9])?)\s*$/
-}), src_ns.ui('IntegerField').uri, {
+}), ns.ui('IntegerField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'integer',
   pattern: /^\s*-?[0-9]+\s*$/
-}), src_ns.ui('DecimalField').uri, {
+}), ns.ui('DecimalField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'decimal',
   pattern: /^\s*-?[0-9]*(\.[0-9]*)?\s*$/
-}), src_ns.ui('FloatField').uri, {
+}), ns.ui('FloatField').uri, {
   size: 12,
   style: 'text-align: right;',
   dt: 'float',
   pattern: /^\s*-?[0-9]*(\.[0-9]*)?((e|E)-?[0-9]*)?\s*$/
-}), src_ns.ui('SingleLineTextField').uri, {}), src_ns.ui('NamedNodeURIField').uri, {
+}), ns.ui('SingleLineTextField').uri, {}), ns.ui('NamedNodeURIField').uri, {
   namedNode: true
-}), src_ns.ui('TextField').uri, {}), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_fieldParams, src_ns.ui('PhoneField').uri, {
+}), ns.ui('TextField').uri, {}), _defineProperty(_defineProperty(_defineProperty(_defineProperty(_defineProperty(_fieldParams, ns.ui('PhoneField').uri, {
   size: 20,
   uriPrefix: 'tel:',
   pattern: /^\+?[\d-]+[\d]*$/
-}), src_ns.ui('EmailField').uri, {
+}), ns.ui('EmailField').uri, {
   size: 30,
   uriPrefix: 'mailto:',
   pattern: /^\s*.*@.*\..*\s*$/ // @@ Get the right regexp here
-}), src_ns.ui('Group').uri, {
+}), ns.ui('Group').uri, {
   style: style.formGroupStyle
-}), src_ns.ui('Comment').uri, {
+}), ns.ui('Comment').uri, {
   element: 'p',
   style: style.commentStyle
-}), src_ns.ui('Heading').uri, {
+}), ns.ui('Heading').uri, {
   element: 'h3',
   style: style.formHeadingStyle
 }));
@@ -4716,7 +4716,7 @@ var fieldParams = (_fieldParams = {}, _defineProperty(_defineProperty(_definePro
 
 
 
-var fieldFunction_store = external_SolidLogic_.solidLogicSingleton.store;
+var store = external_SolidLogic_.solidLogicSingleton.store;
 var field = {}; // Form field functions by URI of field type.
 
 /**
@@ -4728,7 +4728,7 @@ var field = {}; // Form field functions by URI of field type.
  * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
 function mostSpecificClassURI(x) {
-  var kb = fieldFunction_store;
+  var kb = store;
   var ft = kb.findTypeURIs(x);
   var bot = kb.bottomTypeURIs(ft); // most specific
   var bots = [];
@@ -4765,7 +4765,7 @@ var STYLE_URI_PREFIX = 'https://www.w3.org/ns/css#';
 function setFieldStyle(ele, field) {
   var classUri = mostSpecificClassURI(field);
   var params = fieldParams[classUri] || {};
-  var style = external_SolidLogic_.store.any(field, src_ns.ui('style'));
+  var style = external_SolidLogic_.store.any(field, ns.ui('style'));
   if (!style) {
     if (params.style) {
       ele.setAttribute('style', params.style);
@@ -4815,9 +4815,9 @@ function renderNameValuePair(dom, kb, box, form, label) {
   rhs.setAttribute('class', 'formFieldValue');
   if (label) {
     lhs.appendChild(dom.createTextNode(label));
-  } else if (kb.any(form, src_ns.ui('property'))) {
+  } else if (kb.any(form, ns.ui('property'))) {
     // Assume more space for error on right
-    lhs.appendChild(fieldLabel(dom, kb.any(form, src_ns.ui('property')), form));
+    lhs.appendChild(fieldLabel(dom, kb.any(form, ns.ui('property')), form));
   } else {
     rhs.appendChild(errorMessageBlock(dom, 'No property or label given for form field: ' + form));
     lhs.appendChild(dom.createTextNode('???'));
@@ -4835,7 +4835,7 @@ function renderNameValuePair(dom, kb, box, form, label) {
  * @internal exporting this only for unit tests
  */
 function fieldLabel(dom, property, fieldInQuestion) {
-  var lab = basic_store.any(fieldInQuestion, src_ns.ui('label'));
+  var lab = basic_store.any(fieldInQuestion, ns.ui('label'));
   if (!lab) lab = label_label(property, true); // Init capital
   if (property === undefined) {
     return dom.createTextNode('@@Internal error: undefined property');
@@ -4893,7 +4893,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
   var box = dom.createElement('div');
-  var property = kb.any(form, src_ns.ui('property'));
+  var property = kb.any(form, ns.ui('property'));
   if (container) container.appendChild(box);
   if (!property) {
     return box.appendChild(errorMessageBlock(dom, 'Error: No property given for text field: ' + form));
@@ -4901,7 +4901,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   var rhs = renderNameValuePair(dom, kb, box, form);
 
   // It can be cleaner to just remove empty fields if you can't edit them anyway
-  var suppressEmptyUneditable = kb.anyJS(form, src_ns.ui('suppressEmptyUneditable'), null, formDoc);
+  var suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
   var uri = mostSpecificClassURI(form);
   var params = fieldParams[uri];
   if (params === undefined) params = {
@@ -4915,14 +4915,14 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
   field.setAttribute('type', params.type ? params.type : 'text');
   var fieldType = (field.getAttribute('type') || '').toLowerCase();
   var deferWhileFocused = fieldType === 'date' || fieldType === 'datetime-local';
-  var size = kb.anyJS(form, src_ns.ui('size')) || styleConstants.textInputSize || 20;
+  var size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20;
   field.setAttribute('size', size);
-  var maxLength = kb.any(form, src_ns.ui('maxLength'));
+  var maxLength = kb.any(form, ns.ui('maxLength'));
   field.setAttribute('maxLength', maxLength ? '' + maxLength : styleConstants.basicMaxLength);
   doc = doc || fieldStore(subject, property, doc);
   var obj = kb.any(subject, property, undefined, doc);
   if (!obj) {
-    obj = kb.any(form, src_ns.ui('default'));
+    obj = kb.any(form, ns.ui('default'));
   }
   if (obj && obj.value && params.uriPrefix) {
     // eg tel: or mailto:
@@ -4975,7 +4975,7 @@ function basicField(dom, container, already, subject, form, doc, callbackFunctio
       result = kb.sym(params.uriPrefix + field.value);
     } else {
       if (params.dt) {
-        result = new external_$rdf_.Literal(field.value.trim(), undefined, src_ns.xsd(params.dt));
+        result = new external_$rdf_.Literal(field.value.trim(), undefined, ns.xsd(params.dt));
       } else {
         result = new external_$rdf_.Literal(field.value);
       }
@@ -5090,7 +5090,7 @@ function getPreferredLanguagesFor(_x) {
  *  Either from solid preferences or browser preferences or default
  */
 function _getPreferredLanguagesFor() {
-  _getPreferredLanguagesFor = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(person) {
+  _getPreferredLanguagesFor = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(person) {
     var _store$fetcher;
     var doc, list, languageCodeArray;
     return regenerator_default().wrap(function (_context) {
@@ -5100,7 +5100,7 @@ function _getPreferredLanguagesFor() {
           _context.next = 1;
           return (_store$fetcher = external_SolidLogic_.store.fetcher) === null || _store$fetcher === void 0 ? void 0 : _store$fetcher.load(doc);
         case 1:
-          list = external_SolidLogic_.store.any(person, src_ns.schema('knowsLanguage'), null, doc);
+          list = external_SolidLogic_.store.any(person, ns.schema('knowsLanguage'), null, doc);
           if (list) {
             _context.next = 2;
             break;
@@ -5110,7 +5110,7 @@ function _getPreferredLanguagesFor() {
           languageCodeArray = [];
           list.elements.forEach(function (item) {
             // console.log('@@ item ' + item)
-            var lang = external_SolidLogic_.store.any(item, src_ns.solid('publicId'), null, doc);
+            var lang = external_SolidLogic_.store.any(item, ns.solid('publicId'), null, doc);
             if (!lang) {
               console.warn('getPreferredLanguages: No publiID of language.');
               return;
@@ -5147,7 +5147,7 @@ function getPreferredLanguages() {
  * preferred language version
 */
 function _getPreferredLanguages() {
-  _getPreferredLanguages = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
+  _getPreferredLanguages = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
     var me, solidLanguagePrefs;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -5312,38 +5312,38 @@ var wikidataParameters = {
   insitituteDetailsQuery: "CONSTRUCT\n{  wd:Q49108 schema:name ?itemLabel;\n             schema:logo ?logo;\n              schema:logo  ?sealImage;\n             schema:subOrganization  ?subsidiary .\n                 ?subsidiary schema:name ?subsidiaryLabel .\n}\nWHERE\n{\n   wd:Q49108 # rdfs:label ?itemLabel ;\n             wdt:P154 ?logo;\n              wdt:P158  ?sealImage ;\n             wdt:P355  ?subsidiary .\n          #  ?subsidiary rdfs:label ?subsidiaryLabel .\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE], fr\". }\n}"
 };
 var wikidataIncomingClassMap = {
-  'http://www.wikidata.org/entity/Q15936437': src_ns.schema('CollegeOrUniversity'),
+  'http://www.wikidata.org/entity/Q15936437': ns.schema('CollegeOrUniversity'),
   // research university
-  'http://www.wikidata.org/entity/Q1664720': src_ns.schema('EducationalOrganization'),
+  'http://www.wikidata.org/entity/Q1664720': ns.schema('EducationalOrganization'),
   // insitute @@
-  'http://www.wikidata.org/entity/Q43229': src_ns.schema('Organization'),
+  'http://www.wikidata.org/entity/Q43229': ns.schema('Organization'),
   // research university
-  'http://www.wikidata.org/entity/Q3918': src_ns.schema('CollegeOrUniversity'),
+  'http://www.wikidata.org/entity/Q3918': ns.schema('CollegeOrUniversity'),
   // university
-  'http://www.wikidata.org/entity/Q170584': src_ns.schema('Project'),
+  'http://www.wikidata.org/entity/Q170584': ns.schema('Project'),
   // university
-  'http://www.wikidata.org/entity/Q327333': src_ns.schema('GovernmentOrganization'),
+  'http://www.wikidata.org/entity/Q327333': ns.schema('GovernmentOrganization'),
   // govt agency
-  'http://www.wikidata.org/entity/Q2221906': src_ns.schema('Place'),
+  'http://www.wikidata.org/entity/Q2221906': ns.schema('Place'),
   // geographic location
-  'http://www.wikidata.org/entity/Q167037': src_ns.schema('Corporation') // Corporation
+  'http://www.wikidata.org/entity/Q167037': ns.schema('Corporation') // Corporation
 };
 var variableNameToPredicateMap = {
   // allow other mappings to be added in theory hence var
   // wikidata:
-  targetClass: src_ns.rdf('type'),
+  targetClass: ns.rdf('type'),
   // logo: ns.schema('logo'),
-  sealImage: src_ns.schema('logo'),
+  sealImage: ns.schema('logo'),
   // image: ns.schema('image'),   defaults to shema
-  shortName: src_ns.foaf('nick'),
-  subsidiary: src_ns.schema('subOrganization'),
+  shortName: ns.foaf('nick'),
+  subsidiary: ns.schema('subOrganization'),
   // dbpedia - :
-  city: src_ns.vcard('locality'),
-  state: src_ns.vcard('region'),
-  country: src_ns.vcard('country-name'),
-  homepage: src_ns.foaf('homepage'),
-  lat: src_ns.schema('latitude'),
-  "long": src_ns.schema('longitude')
+  city: ns.vcard('locality'),
+  state: ns.vcard('region'),
+  country: ns.vcard('country-name'),
+  homepage: ns.foaf('homepage'),
+  lat: ns.schema('latitude'),
+  "long": ns.schema('longitude')
 };
 function bindingToTerm(item) {
   var typ = item.type.toLowerCase();
@@ -5400,16 +5400,16 @@ function loadFromBindings(kb, solidSubject, bindings, doc) {
         var regexp = /.*\(([-0-9.-]*) ([-0-9.-]*)\)/;
         var match = regexp.exec(value);
         if (match) {
-          var _float = src_ns.xsd('float');
+          var _float = ns.xsd('float');
           var latitude = new external_$rdf_.Literal(match[1], null, _float);
           var longitude = new external_$rdf_.Literal(match[2], null, _float);
-          kb.add(solidSubject, src_ns.schema('longitude'), longitude, doc);
-          kb.add(solidSubject, src_ns.schema('latitude'), latitude, doc);
+          kb.add(solidSubject, ns.schema('longitude'), longitude, doc);
+          kb.add(solidSubject, ns.schema('latitude'), latitude, doc);
         } else {
           src_debug/* log */.Rm('Bad coordinates syntax: ' + value);
         }
       } else {
-        var pred = predMap[key] || src_ns.schema(key); // fallback to just using schema.org
+        var pred = predMap[key] || ns.schema(key); // fallback to just using schema.org
         kb.add(solidSubject, pred, obj, doc); // @@ deal with non-string and objects
         src_debug/* log */.Rm("  public data ".concat(pred, " ").concat(obj, "."));
       }
@@ -5454,7 +5454,7 @@ function queryESCODataByName(_x, _x2, _x3) {
 * This is aptured in https://github.com/solidos/solid-ui/issues/403
 */
 function _queryESCODataByName() {
-  _queryESCODataByName = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(filter, theClass, queryTarget) {
+  _queryESCODataByName = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(filter, theClass, queryTarget) {
     var _store$fetcher;
     var limit, queryURI, response, text, json;
     return regenerator_default().wrap(function (_context) {
@@ -5509,7 +5509,7 @@ function queryPublicDataByName(_x4, _x5, _x6, _x7) {
 /* Query a database using SPARQL SELECT
 */
 function _queryPublicDataByName() {
-  _queryPublicDataByName = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(filter, theClass, languages, queryTarget) {
+  _queryPublicDataByName = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(filter, theClass, languages, queryTarget) {
     var substituteStrings, languagePrefs, language, sparql, queryURI, response, _store$fetcher2, text, text2, json, bindings, _t, _t2;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -5610,7 +5610,7 @@ function queryPublicDataSelect(_x8, _x9) {
 /* Load from a database using SPARQL CONSTRUCT
 */
 function _queryPublicDataSelect() {
-  _queryPublicDataSelect = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(sparql, queryTarget) {
+  _queryPublicDataSelect = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(sparql, queryTarget) {
     var _store$fetcher3;
     var myUrlWithParams, queryURI, headers, options, response, text, text2, json, bindings;
     return regenerator_default().wrap(function (_context3) {
@@ -5661,7 +5661,7 @@ function queryPublicDataConstruct(_x0, _x1, _x10) {
   return _queryPublicDataConstruct.apply(this, arguments);
 }
 function _queryPublicDataConstruct() {
-  _queryPublicDataConstruct = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(sparql, pubicId, queryTarget) {
+  _queryPublicDataConstruct = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(sparql, pubicId, queryTarget) {
     var _store$fetcher4;
     var myUrlWithParams, queryURI, headers, options, response, text, report;
     return regenerator_default().wrap(function (_context4) {
@@ -5711,7 +5711,7 @@ function loadPublicDataThing(_x11, _x12, _x13) {
   return _loadPublicDataThing.apply(this, arguments);
 }
 function _loadPublicDataThing() {
-  _loadPublicDataThing = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(kb, subject, publicDataID) {
+  _loadPublicDataThing = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(kb, subject, publicDataID) {
     var iDToFetch, headers;
     return regenerator_default().wrap(function (_context5) {
       while (1) switch (_context5.prev = _context5.next) {
@@ -5751,7 +5751,7 @@ function getWikidataDetails(_x14, _x15, _x16) {
   return _getWikidataDetails.apply(this, arguments);
 }
 function _getWikidataDetails() {
-  _getWikidataDetails = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(kb, solidSubject, publicDataID) {
+  _getWikidataDetails = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(kb, solidSubject, publicDataID) {
     var subjRegexp, sparql;
     return regenerator_default().wrap(function (_context6) {
       while (1) switch (_context6.prev = _context6.next) {
@@ -5774,7 +5774,7 @@ function getWikidataDetailsOld(_x17, _x18, _x19) {
   return _getWikidataDetailsOld.apply(this, arguments);
 }
 function _getWikidataDetailsOld() {
-  _getWikidataDetailsOld = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(kb, solidSubject, publicDataID) {
+  _getWikidataDetailsOld = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return regenerator_default().wrap(function (_context7) {
       while (1) switch (_context7.prev = _context7.next) {
@@ -5797,7 +5797,7 @@ function getWikidataLocation(_x20, _x21, _x22) {
   return _getWikidataLocation.apply(this, arguments);
 }
 function _getWikidataLocation() {
-  _getWikidataLocation = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(kb, solidSubject, publicDataID) {
+  _getWikidataLocation = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return regenerator_default().wrap(function (_context8) {
       while (1) switch (_context8.prev = _context8.next) {
@@ -5822,7 +5822,7 @@ function getDbpediaDetails(_x23, _x24, _x25) {
   return _getDbpediaDetails.apply(this, arguments);
 }
 function _getDbpediaDetails() {
-  _getDbpediaDetails = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(kb, solidSubject, publicDataID) {
+  _getDbpediaDetails = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(kb, solidSubject, publicDataID) {
     var sparql, bindings;
     return regenerator_default().wrap(function (_context9) {
       while (1) switch (_context9.prev = _context9.next) {
@@ -5889,7 +5889,7 @@ function renderAutoComplete(_x, _x2, _x3, _x4) {
 
 // ENDS
 function _renderAutoComplete() {
-  _renderAutoComplete = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(dom, acOptions, decoration, callback) {
+  _renderAutoComplete = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(dom, acOptions, decoration, callback) {
     var complain, finish, gotIt, _gotIt, acceptButtonHandler, _acceptButtonHandler, cancelButtonHandler, _cancelButtonHandler, nameMatch, clearList, inputEventHHandler, _inputEventHHandler, loadBindingsAndFilterByLanguage, _loadBindingsAndFilterByLanguage, filterByName, refreshList, _refreshList, initialize, targetClass, lastBindings, loadedEnough, inputEventHandlerLock, allDisplayed, lastFilter, numberOfRows, div, foundName, foundObject, table, head, cell, searchInput, size, searchInputStyle;
     return regenerator_default().wrap(function (_context8) {
       while (1) switch (_context8.prev = _context8.next) {
@@ -5922,7 +5922,7 @@ function _renderAutoComplete() {
             clearList();
           };
           _refreshList = function _refreshList3() {
-            _refreshList = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
+            _refreshList = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
               var rowForBinding, compareBindingsByName, languagePrefs, filter, slimmed, displayable, _iterator, _step, binding;
               return regenerator_default().wrap(function (_context7) {
                 while (1) switch (_context7.prev = _context7.next) {
@@ -5939,7 +5939,7 @@ function _renderAutoComplete() {
                       var object = bindingToTerm(binding.subject);
                       var nameTerm = bindingToTerm(binding.name);
                       row.addEventListener('click', /*#__PURE__*/function () {
-                        var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(_event) {
+                        var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(_event) {
                           return regenerator_default().wrap(function (_context6) {
                             while (1) switch (_context6.prev = _context6.next) {
                               case 0:
@@ -6040,7 +6040,7 @@ function _renderAutoComplete() {
             });
           };
           _loadBindingsAndFilterByLanguage = function _loadBindingsAndFilte2() {
-            _loadBindingsAndFilterByLanguage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(filter, languagePrefs) {
+            _loadBindingsAndFilterByLanguage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(filter, languagePrefs) {
               var bindings, slimmed, _t;
               return regenerator_default().wrap(function (_context5) {
                 while (1) switch (_context5.prev = _context5.next) {
@@ -6080,7 +6080,7 @@ function _renderAutoComplete() {
             return _loadBindingsAndFilterByLanguage.apply(this, arguments);
           };
           _inputEventHHandler = function _inputEventHHandler3() {
-            _inputEventHHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
+            _inputEventHHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
               return regenerator_default().wrap(function (_context4) {
                 while (1) switch (_context4.prev = _context4.next) {
                   case 0:
@@ -6118,7 +6118,7 @@ function _renderAutoComplete() {
             return true;
           };
           _cancelButtonHandler = function _cancelButtonHandler3() {
-            _cancelButtonHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(_event) {
+            _cancelButtonHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(_event) {
               return regenerator_default().wrap(function (_context3) {
                 while (1) switch (_context3.prev = _context3.next) {
                   case 0:
@@ -6142,7 +6142,7 @@ function _renderAutoComplete() {
             return _cancelButtonHandler.apply(this, arguments);
           };
           _acceptButtonHandler = function _acceptButtonHandler3() {
-            _acceptButtonHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_event) {
+            _acceptButtonHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_event) {
               return regenerator_default().wrap(function (_context2) {
                 while (1) switch (_context2.prev = _context2.next) {
                   case 0:
@@ -6162,7 +6162,7 @@ function _renderAutoComplete() {
             return _acceptButtonHandler.apply(this, arguments);
           };
           _gotIt = function _gotIt3() {
-            _gotIt = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(object, name) {
+            _gotIt = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(object, name) {
               return regenerator_default().wrap(function (_context) {
                 while (1) switch (_context.prev = _context.next) {
                   case 0:
@@ -6302,7 +6302,7 @@ function renderAutocompleteControl(_x, _x2, _x3, _x4, _x5, _x6) {
 
 // ends
 function _renderAutocompleteControl() {
-  _renderAutocompleteControl = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(dom, person, barOptions, acOptions, addOneIdAndRefresh, deleteOne) {
+  _renderAutocompleteControl = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(dom, person, barOptions, acOptions, addOneIdAndRefresh, deleteOne) {
     var autoCompleteDone, _autoCompleteDone, greenButtonHandler, _greenButtonHandler, removeDecorated, displayAutocomplete, _displayAutocomplete, searchButtonHandler, _searchButtonHandler, droppedURIHandler, _droppedURIHandler, acceptButton, cancelButton, deleteButtonContainer, noun, deleteButton, editButton, editing, syncEditingStatus, decoration, decoratedAutocomplete, creationArea, plus;
     return regenerator_default().wrap(function (_context6) {
       while (1) switch (_context6.prev = _context6.next) {
@@ -6319,7 +6319,7 @@ function _renderAutocompleteControl() {
             }
           };
           _droppedURIHandler = function _droppedURIHandler3() {
-            _droppedURIHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(uris) {
+            _droppedURIHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(uris) {
               var _iterator, _step, webid, _t2;
               return regenerator_default().wrap(function (_context5) {
                 while (1) switch (_context5.prev = _context5.next) {
@@ -6361,7 +6361,7 @@ function _renderAutocompleteControl() {
             return _droppedURIHandler.apply(this, arguments);
           };
           _searchButtonHandler = function _searchButtonHandler3() {
-            _searchButtonHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
+            _searchButtonHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
               return regenerator_default().wrap(function (_context4) {
                 while (1) switch (_context4.prev = _context4.next) {
                   case 0:
@@ -6388,7 +6388,7 @@ function _renderAutocompleteControl() {
             return _searchButtonHandler.apply(this, arguments);
           };
           _displayAutocomplete = function _displayAutocomplete3() {
-            _displayAutocomplete = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
+            _displayAutocomplete = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
               var _t;
               return regenerator_default().wrap(function (_context3) {
                 while (1) switch (_context3.prev = _context3.next) {
@@ -6430,13 +6430,13 @@ function _renderAutocompleteControl() {
             }
           };
           _greenButtonHandler = function _greenButtonHandler3() {
-            _greenButtonHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_event) {
+            _greenButtonHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_event) {
               var webid;
               return regenerator_default().wrap(function (_context2) {
                 while (1) switch (_context2.prev = _context2.next) {
                   case 0:
                     _context2.next = 1;
-                    return askName(dom, external_SolidLogic_.store, creationArea, src_ns.vcard('url'), undefined, WEBID_NOUN);
+                    return askName(dom, external_SolidLogic_.store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN);
                   case 1:
                     webid = _context2.sent;
                     if (webid) {
@@ -6458,7 +6458,7 @@ function _renderAutocompleteControl() {
             return _greenButtonHandler.apply(this, arguments);
           };
           _autoCompleteDone = function _autoCompleteDone3() {
-            _autoCompleteDone = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(object, name) {
+            _autoCompleteDone = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(object, name) {
               return regenerator_default().wrap(function (_context) {
                 while (1) switch (_context.prev = _context.next) {
                   case 0:
@@ -6577,7 +6577,7 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     return _addOneIdAndRefresh.apply(this, arguments);
   }
   function _addOneIdAndRefresh() {
-    _addOneIdAndRefresh = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(result, name) {
+    _addOneIdAndRefresh = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(result, name) {
       var oldValue, oldName, deletables, insertables, _kb$updater2, _t;
       return regenerator_default().wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -6629,7 +6629,7 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     return _deleteOne.apply(this, arguments);
   }
   function _deleteOne() {
-    _deleteOne = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_result, _name) {
+    _deleteOne = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(_result, _name) {
       var oldValue, deletables, insertables, _kb$updater3, e2, _t2;
       return regenerator_default().wrap(function (_context2) {
         while (1) switch (_context2.prev = _context2.next) {
@@ -6684,33 +6684,33 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
   var rhs = dom.createElement('div');
   rhs.setAttribute('class', 'formFieldValue');
   box.appendChild(rhs);
-  var property = kb.any(form, src_ns.ui('property'));
+  var property = kb.any(form, ns.ui('property'));
   if (!property) {
     return box.appendChild(errorMessageBlock(dom, 'Error: No property given for autocomplete field: ' + form));
   }
-  var labelProperty = kb.any(form, src_ns.ui('labelProperty')) || src_ns.schema('name');
+  var labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name');
 
   // Parse the data source into query options
 
-  var dataSource = kb.any(form, src_ns.ui('dataSource'));
+  var dataSource = kb.any(form, ns.ui('dataSource'));
   if (!dataSource) {
     // console.log('@@ connectedStatements ACF ', kb.connectedStatements(form).map(x => x.toNT()).join('\n'))
     return box.appendChild(errorMessageBlock(dom, 'Error: No data source given for autocomplete field: ' + form));
   }
   var queryParams = {
     // targetClass: kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc()) as NamedNode | undefined,
-    label: kb.anyJS(dataSource, src_ns.schema('name'), null, dataSource.doc()),
-    logo: kb.any(dataSource, src_ns.schema('logo'), null, dataSource.doc())
+    label: kb.anyJS(dataSource, ns.schema('name'), null, dataSource.doc()),
+    logo: kb.any(dataSource, ns.schema('logo'), null, dataSource.doc())
   };
 
   // @@ Should we pass the target class in from the data source definition or use a current type of the subject
-  var targetClass = kb.any(form, src_ns.ui('targetClass'), null, form.doc()) ||
+  var targetClass = kb.any(form, ns.ui('targetClass'), null, form.doc()) ||
   // class in form takes pecedence
-  kb.any(dataSource, src_ns.ui('targetClass'), null, dataSource.doc());
+  kb.any(dataSource, ns.ui('targetClass'), null, dataSource.doc());
   if (targetClass) {
     queryParams.targetClass = targetClass;
   }
-  queryParams.objectURIBase = kb.any(dataSource, src_ns.ui('objectURIBase'), null, dataSource.doc()) || undefined;
+  queryParams.objectURIBase = kb.any(dataSource, ns.ui('objectURIBase'), null, dataSource.doc()) || undefined;
 
   /*
   if (!queryParams.targetClass) {
@@ -6722,26 +6722,26 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     queryParams.targetClass = klass
   }
   */
-  var endpoint = kb.anyJS(dataSource, src_ns.ui('endpoint'), null, dataSource.doc());
+  var endpoint = kb.anyJS(dataSource, ns.ui('endpoint'), null, dataSource.doc());
   if (endpoint) {
     // SPARQL
     queryParams.endpoint = endpoint;
-    queryParams.searchByNameQuery = kb.anyJS(dataSource, src_ns.ui('searchByNameQuery'), null, dataSource.doc());
+    queryParams.searchByNameQuery = kb.anyJS(dataSource, ns.ui('searchByNameQuery'), null, dataSource.doc());
     if (!queryParams.searchByNameQuery) {
       return box.appendChild(errorMessageBlock(dom, 'Error: No searchByNameQuery given for endpoint data Source: ' + form));
     }
-    queryParams.insitituteDetailsQuery = kb.anyJS(dataSource, src_ns.ui('insitituteDetailsQuery'), null, dataSource.doc());
+    queryParams.insitituteDetailsQuery = kb.anyJS(dataSource, ns.ui('insitituteDetailsQuery'), null, dataSource.doc());
   } else {
     // return box.appendChild(
     //  widgets.errorMessageBlock(dom, 'Error: No SPARQL endpoint given for autocomplete field: ' + form))
-    var searchByNameURI = kb.anyJS(dataSource, src_ns.ui('searchByNameURI'));
+    var searchByNameURI = kb.anyJS(dataSource, ns.ui('searchByNameURI'));
     if (!searchByNameURI) {
       return box.appendChild(errorMessageBlock(dom, 'Error: No searchByNameURI OR sparql endpoint given for dataSource: ' + dataSource));
     }
     queryParams.searchByNameURI = searchByNameURI;
   }
   // It can be cleaner to just remove empty fields if you can't edit them anyway
-  var suppressEmptyUneditable = kb.anyJS(form, src_ns.ui('suppressEmptyUneditable'), null, formDoc);
+  var suppressEmptyUneditable = kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
   var editable = (_kb$updater = kb.updater) === null || _kb$updater === void 0 ? void 0 : _kb$updater.editable(doc.uri);
   var autocompleteOptions = {
     // cancelButton?: HTMLElement,
@@ -6750,10 +6750,10 @@ function autocompleteField(dom, container, already, subject, form, doc, callback
     // @@ simplify?
     queryParams: queryParams
   };
-  autocompleteOptions.size = kb.anyJS(form, src_ns.ui('size'), null, formDoc) || undefined;
+  autocompleteOptions.size = kb.anyJS(form, ns.ui('size'), null, formDoc) || undefined;
   var obj = kb.any(subject, property, undefined, doc);
   if (!obj) {
-    obj = kb.any(form, src_ns.ui('default'));
+    obj = kb.any(form, ns.ui('default'));
     if (obj) {
       autocompleteOptions.currentObject = obj;
       autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc);
@@ -6902,7 +6902,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
       tagTemplate = _ref.tagTemplate,
       textField = _ref.textField,
       valueField = _ref.valueField;
-    classCallCheck_classCallCheck(this, IconicMultiSelect);
+    _classCallCheck(this, IconicMultiSelect);
     _defineProperty(this, "_data", void 0);
     _defineProperty(this, "_domElements", void 0);
     _defineProperty(this, "_event", function () {});
@@ -6936,7 +6936,7 @@ var IconicMultiSelect = /*#__PURE__*/function () {
    * Initialize the Iconic Multiselect component.
    * @public
    */
-  return createClass_createClass(IconicMultiSelect, [{
+  return _createClass(IconicMultiSelect, [{
     key: "init",
     value: function init() {
       // Timea change to use this._select instead of this._selectContainer
@@ -7552,7 +7552,7 @@ var checkMarkCharacter = "\u2713";
 var cancelCharacter = "\u2715";
 var dashCharacter = '-';
 var forms_kb = external_SolidLogic_.store;
-field[src_ns.ui('AutocompleteField').uri] = autocompleteField;
+field[ns.ui('AutocompleteField').uri] = autocompleteField;
 
 // ///////////////////////////////////////////////////////////////////////
 
@@ -7580,7 +7580,7 @@ function refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFu
     // This is really messy.
     var _field = subfields[j];
     var t = mostSpecificClassURI(_field); // Field type
-    if (t === src_ns.ui('Options').uri) {
+    if (t === ns.ui('Options').uri) {
       var optionsRender = fieldFunction(dom, _field);
       var newOne = optionsRender(dom, null, already, subject, _field, dataDoc, callbackFunction);
       src_debug/* log */.Rm('Refreshing Options field by replacing it.'); // better to support actual refresh
@@ -7589,9 +7589,9 @@ function refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFu
     }
   }
 }
-field[src_ns.ui('Form').uri] = field[src_ns.ui('Group').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('Form').uri] = field[ns.ui('Group').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var box = dom.createElement('div');
-  var ui = src_ns.ui;
+  var ui = ns.ui;
   if (container) container.appendChild(box);
 
   // Prevent loops
@@ -7659,23 +7659,23 @@ field[src_ns.ui('Form').uri] = field[src_ns.ui('Group').uri] = function (dom, co
  ** @returns {Element} The HTML widget created
  */
 
-field[src_ns.ui('Options').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('Options').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var kb = external_SolidLogic_.store;
   var box = dom.createElement('div');
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
-  var ui = src_ns.ui;
+  var ui = ns.ui;
   if (container) container.appendChild(box);
   var dependingOn = kb.any(form, ui('dependingOn'));
   if (!dependingOn) {
-    dependingOn = src_ns.rdf('type');
+    dependingOn = ns.rdf('type');
   } // @@ default to type (do we want defaults?)
   var cases = kb.each(form, ui('case'), null, formDoc);
   if (!cases) {
     box.appendChild(errorMessageBlock(dom, 'No cases to Options form. '));
   }
   var values;
-  if (dependingOn.sameTerm(src_ns.rdf('type'))) {
+  if (dependingOn.sameTerm(ns.rdf('type'))) {
     values = Object.keys(kb.findTypeURIs(subject)).map(function (uri) {
       return external_$rdf_.sym(uri);
     }); // Use RDF-S inference
@@ -7735,7 +7735,7 @@ field[src_ns.ui('Options').uri] = function (dom, container, already, subject, fo
  **      @param {NamedNode} property The property to be written in the data
  **      @param {Boolean} ordered Is the list an ordered one where the user defined the order
  */
-field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('Multiple').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   /** Diagnostic function
   */
   function debugString(values) {
@@ -7756,7 +7756,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
    * @param {Node} object The RDF object to be represented by this item.
    */
   function _addItem() {
-    _addItem = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
+    _addItem = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
       var object, toBeInserted, msg, _t;
       return regenerator_default().wrap(function (_context6) {
         while (1) switch (_context6.prev = _context6.next) {
@@ -7806,7 +7806,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
      * @param {Boolean} upwards Move this up (true) or down (false).
      */
     function _deleteThisItem() {
-      _deleteThisItem = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
+      _deleteThisItem = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
         var i, del;
         return regenerator_default().wrap(function (_context3) {
           while (1) switch (_context3.prev = _context3.next) {
@@ -7867,7 +7867,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
     * this callback happens to avoid widow links
      */
     function _moveThisItem() {
-      _moveThisItem = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(event, upwards) {
+      _moveThisItem = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(event, upwards) {
         var i;
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
@@ -7950,7 +7950,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
         frame.style.gridTemplateColumns = 'auto 3em';
         frame.style.gridTemplateRows = '50% 50%';
         var moveUpButton = buttons_button(dom, iconBase/* icons */.Pt.iconBase + 'noun_1369237.svg', 'Move Up', /*#__PURE__*/function () {
-          var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(event) {
+          var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(event) {
             return regenerator_default().wrap(function (_context) {
               while (1) switch (_context.prev = _context.next) {
                 case 0:
@@ -7966,7 +7966,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
           };
         }());
         var moveDownButton = buttons_button(dom, iconBase/* icons */.Pt.iconBase + 'noun_1369241.svg', 'Move Down', /*#__PURE__*/function () {
-          var _ref2 = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(event) {
+          var _ref2 = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(event) {
             return regenerator_default().wrap(function (_context2) {
               while (1) switch (_context2.prev = _context2.next) {
                 case 0:
@@ -8012,7 +8012,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
   var shim = box; // no  shim
   // We don't indent multiple as it is a sort of a prefix of the next field and has contents of one.
   // box.setAttribute('style', 'padding-left: 2em; border: 0.05em solid green;')  // Indent a multiple
-  var ui = src_ns.ui;
+  var ui = ns.ui;
   if (container) container.appendChild(box);
   var orderedNode = kb.any(form, ui('ordered'));
   var ordered = orderedNode ? external_$rdf_.Node.toJS(orderedNode) : false;
@@ -8059,7 +8059,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
     var prompt = dom.createElement('span');
     prompt.textContent = (values.length === 0 ? 'Add another ' : 'Add ') + multipleUIlabel;
     tail.addEventListener('click', /*#__PURE__*/function () {
-      var _ref3 = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(_eventNotUsed) {
+      var _ref3 = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(_eventNotUsed) {
         return regenerator_default().wrap(function (_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
@@ -8091,7 +8091,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
     return _saveListThenRefresh.apply(this, arguments);
   }
   function _saveListThenRefresh() {
-    _saveListThenRefresh = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
+    _saveListThenRefresh = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
       var _t2;
       return regenerator_default().wrap(function (_context7) {
         while (1) switch (_context7.prev = _context7.next) {
@@ -8137,7 +8137,7 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
     return _asyncStuff.apply(this, arguments);
   }
   function _asyncStuff() {
-    _asyncStuff = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
+    _asyncStuff = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
       var extra, j;
       return regenerator_default().wrap(function (_context8) {
         while (1) switch (_context8.prev = _context8.next) {
@@ -8187,26 +8187,26 @@ field[src_ns.ui('Multiple').uri] = function (dom, container, already, subject, f
 // or use HTML5: http://www.w3.org/TR/2011/WD-html-markup-20110113/input.date.html
 //
 
-field[src_ns.ui('PhoneField').uri] = basicField;
-field[src_ns.ui('EmailField').uri] = basicField;
-field[src_ns.ui('ColorField').uri] = basicField;
-field[src_ns.ui('DateField').uri] = basicField;
-field[src_ns.ui('DateTimeField').uri] = basicField;
-field[src_ns.ui('TimeField').uri] = basicField;
-field[src_ns.ui('NumericField').uri] = basicField;
-field[src_ns.ui('IntegerField').uri] = basicField;
-field[src_ns.ui('DecimalField').uri] = basicField;
-field[src_ns.ui('FloatField').uri] = basicField;
-field[src_ns.ui('TextField').uri] = basicField;
-field[src_ns.ui('SingleLineTextField').uri] = basicField;
-field[src_ns.ui('NamedNodeURIField').uri] = basicField;
+field[ns.ui('PhoneField').uri] = basicField;
+field[ns.ui('EmailField').uri] = basicField;
+field[ns.ui('ColorField').uri] = basicField;
+field[ns.ui('DateField').uri] = basicField;
+field[ns.ui('DateTimeField').uri] = basicField;
+field[ns.ui('TimeField').uri] = basicField;
+field[ns.ui('NumericField').uri] = basicField;
+field[ns.ui('IntegerField').uri] = basicField;
+field[ns.ui('DecimalField').uri] = basicField;
+field[ns.ui('FloatField').uri] = basicField;
+field[ns.ui('TextField').uri] = basicField;
+field[ns.ui('SingleLineTextField').uri] = basicField;
+field[ns.ui('NamedNodeURIField').uri] = basicField;
 
 /*          Multiline Text field
  **
  */
 
-field[src_ns.ui('MultiLineTextField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
-  var ui = src_ns.ui;
+field[ns.ui('MultiLineTextField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+  var ui = ns.ui;
   var kb = external_SolidLogic_.store;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
@@ -8224,7 +8224,7 @@ field[src_ns.ui('MultiLineTextField').uri] = function (dom, container, already, 
   dataDoc = fieldStore(subject, property, dataDoc);
   var text = kb.anyJS(subject, property, null, dataDoc) || '';
   var editable = kb.updater.editable(dataDoc.uri);
-  var suppressEmptyUneditable = form && kb.anyJS(form, src_ns.ui('suppressEmptyUneditable'), null, formDoc);
+  var suppressEmptyUneditable = form && kb.anyJS(form, ns.ui('suppressEmptyUneditable'), null, formDoc);
   if (!editable && suppressEmptyUneditable && text === '') {
     box.style.display = 'none';
   }
@@ -8239,7 +8239,7 @@ field[src_ns.ui('MultiLineTextField').uri] = function (dom, container, already, 
  ** @@ todo: remove tristate param
  */
 function booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, tristate) {
-  var ui = src_ns.ui;
+  var ui = ns.ui;
   var kb = external_SolidLogic_.store;
   var property = kb.any(form, ui('property'));
   if (!property) {
@@ -8260,10 +8260,10 @@ function booleanField(dom, container, already, subject, form, dataDoc, callbackF
   if (container) container.appendChild(box);
   return box;
 }
-field[src_ns.ui('BooleanField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('BooleanField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   return booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, false);
 };
-field[src_ns.ui('TristateField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('TristateField').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   return booleanField(dom, container, already, subject, form, dataDoc, callbackFunction, true);
 };
 
@@ -8274,9 +8274,9 @@ field[src_ns.ui('TristateField').uri] = function (dom, container, already, subje
  ** @@ To do: If a classification changes, then change any dependent Options fields.
  */
 
-field[src_ns.ui('Classifier').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+field[ns.ui('Classifier').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
   var kb = external_SolidLogic_.store;
-  var ui = src_ns.ui;
+  var ui = ns.ui;
   var category = kb.any(form, ui('category'));
   if (!category) {
     return errorMessageBlock(dom, 'No category for classifier: ' + form);
@@ -8335,8 +8335,8 @@ field[src_ns.ui('Classifier').uri] = function (dom, container, already, subject,
  ** TODO: according to ontology ui:choice can also have ns.ui('default') - this is not implemented yet
  */
 
-field[src_ns.ui('Choice').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
-  var ui = src_ns.ui;
+field[ns.ui('Choice').uri] = function (dom, container, already, subject, form, dataDoc, callbackFunction) {
+  var ui = ns.ui;
   var kb = external_SolidLogic_.store;
   var formDoc = form.doc ? form.doc() : null; // @@ if blank no way to know
 
@@ -8371,24 +8371,24 @@ field[src_ns.ui('Choice').uri] = function (dom, container, already, subject, for
   function getSelectorOptions(dataSource) {
     var possible = [];
     var possibleProperties;
-    possible = kb.each(undefined, src_ns.rdf('type'), uiFrom, formDoc);
+    possible = kb.each(undefined, ns.rdf('type'), uiFrom, formDoc);
     for (var x in findMembersNT(kb, uiFrom, dataSource)) {
       possible.push(kb.fromNT(x));
     } // Use rdfs
 
-    if (uiFrom.sameTerm(src_ns.rdfs('Class'))) {
+    if (uiFrom.sameTerm(ns.rdfs('Class'))) {
       for (p in allClassURIs()) possible.push(kb.sym(p));
       // log.debug("%%% Choice field: possible.length 2 = "+possible.length)
-    } else if (uiFrom.sameTerm(src_ns.rdf('Property'))) {
+    } else if (uiFrom.sameTerm(ns.rdf('Property'))) {
       possibleProperties = propertyTriage(kb);
       for (p in possibleProperties.op) possible.push(kb.fromNT(p));
       for (p in possibleProperties.dp) possible.push(kb.fromNT(p));
       opts.disambiguate = true; // This is a big class, and the labels won't be enough.
-    } else if (uiFrom.sameTerm(src_ns.owl('ObjectProperty'))) {
+    } else if (uiFrom.sameTerm(ns.owl('ObjectProperty'))) {
       possibleProperties = propertyTriage(kb);
       for (p in possibleProperties.op) possible.push(kb.fromNT(p));
       opts.disambiguate = true;
-    } else if (uiFrom.sameTerm(src_ns.owl('DatatypeProperty'))) {
+    } else if (uiFrom.sameTerm(ns.owl('DatatypeProperty'))) {
       possibleProperties = propertyTriage(kb);
       for (p in possibleProperties.dp) possible.push(kb.fromNT(p));
       opts.disambiguate = true;
@@ -8444,7 +8444,7 @@ field[src_ns.ui('Choice').uri] = function (dom, container, already, subject, for
             var newObject = newThing(dataDoc);
             var is = [];
             is.push(external_$rdf_.st(subject, property, kb.sym(newObject), dataDoc));
-            if (uiFrom) is.push(external_$rdf_.st(newObject, src_ns.rdf('type'), kb.sym(uiFrom), dataDoc));
+            if (uiFrom) is.push(external_$rdf_.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
             if (subForm) {
               addSubFormChoice(dom, rhs, {}, external_$rdf_.sym(newObject), subForm, dataDoc, function (ok, body) {
                 if (ok) {
@@ -8478,8 +8478,8 @@ function addSubFormChoice(dom, selectDiv, already, subject, subForm, dataDoc, ca
 //          Documentation - non-interactive fields
 //
 
-field[src_ns.ui('Comment').uri] = field[src_ns.ui('Heading').uri] = function (dom, container, already, subject, form, dataDoc, _callbackFunction) {
-  var ui = src_ns.ui;
+field[ns.ui('Comment').uri] = field[ns.ui('Heading').uri] = function (dom, container, already, subject, form, dataDoc, _callbackFunction) {
+  var ui = ns.ui;
   var kb = external_SolidLogic_.store;
   var contents = kb.any(form, ui('contents'));
   if (!contents) contents = 'Error: No contents in comment field.';
@@ -8494,7 +8494,7 @@ field[src_ns.ui('Comment').uri] = field[src_ns.ui('Heading').uri] = function (do
   setFieldStyle(p, form);
 
   // Some headings and prompts are only useful to guide user input
-  var suppressIfUneditable = kb.anyJS(form, src_ns.ui('suppressIfUneditable'), null, formDoc);
+  var suppressIfUneditable = kb.anyJS(form, ns.ui('suppressIfUneditable'), null, formDoc);
   var editable = kb.updater.editable(dataDoc.uri);
   if (suppressIfUneditable && !editable) {
     box.style.display = 'none';
@@ -8510,10 +8510,10 @@ field[src_ns.ui('Comment').uri] = field[src_ns.ui('Heading').uri] = function (do
 function editFormButton(dom, container, form, dataDoc, callbackFunction) {
   var b = dom.createElement('button');
   b.setAttribute('type', 'button');
-  b.innerHTML = 'Edit ' + label_label(src_ns.ui('Form'));
+  b.innerHTML = 'Edit ' + label_label(ns.ui('Form'));
   b.addEventListener('click', function (_e) {
-    var ff = appendForm(dom, container, {}, form, src_ns.ui('FormForm'), dataDoc, callbackFunction);
-    ff.setAttribute('style', src_ns.ui('FormForm').sameTerm(form) ? 'background-color: #fee;' : 'background-color: #ffffe7;');
+    var ff = appendForm(dom, container, {}, form, ns.ui('FormForm'), dataDoc, callbackFunction);
+    ff.setAttribute('style', ns.ui('FormForm').sameTerm(form) ? 'background-color: #fee;' : 'background-color: #ffffe7;');
     b.parentNode.removeChild(b);
   }, true);
   return b;
@@ -8531,13 +8531,13 @@ function appendForm(dom, container, already, subject, form, dataDoc, itemDone) {
 */
 
 function propertiesForClass(kb, c) {
-  var explicit = kb.each(undefined, src_ns.rdf('range'), c);
-  [src_ns.rdfs('comment'), src_ns.dc('title'),
+  var explicit = kb.each(undefined, ns.rdf('range'), c);
+  [ns.rdfs('comment'), ns.dc('title'),
   // Generic things
-  src_ns.foaf('name'), src_ns.foaf('homepage')].forEach(function (x) {
+  ns.foaf('name'), ns.foaf('homepage')].forEach(function (x) {
     explicit.push(x);
   });
-  var members = kb.each(undefined, src_ns.rdf('type'), c);
+  var members = kb.each(undefined, ns.rdf('type'), c);
   if (members.length > 60) members = members.slice(0, 60); // Array supports slice?
   var used = {};
   for (var i = 0; i < (members.length > 60 ? 60 : members.length); i++) {
@@ -8567,7 +8567,7 @@ function findClosest(kb, cla, prop) {
     var lists = kb.each(c, prop);
     debug('Lists for ' + c + ', ' + prop + ': ' + lists.length);
     if (lists.length !== 0) return lists;
-    var supers = kb.each(c, src_ns.rdfs('subClassOf'));
+    var supers = kb.each(c, ns.rdfs('subClassOf'));
     for (var i = 0; i < supers.length; i++) {
       agenda.push(supers[i]);
       debug('findClosest: add super: ' + supers[i]);
@@ -8591,14 +8591,14 @@ function formsFor(subject) {
   for (var b in bottom) {
     // Find the most specific
     debug('candidatesFor: trying bottom type =' + b);
-    candidates = candidates.concat(findClosest(kb, b, src_ns.ui('creationForm')));
-    candidates = candidates.concat(findClosest(kb, b, src_ns.ui('annotationForm')));
+    candidates = candidates.concat(findClosest(kb, b, ns.ui('creationForm')));
+    candidates = candidates.concat(findClosest(kb, b, ns.ui('annotationForm')));
   }
   return candidates;
 }
 function sortBySequence(list) {
   var subfields = list.map(function (p) {
-    var k = forms_kb.any(p, src_ns.ui('sequence'));
+    var k = forms_kb.any(p, ns.ui('sequence'));
     return [k || 9999, p];
   });
   subfields.sort(function (a, b) {
@@ -8648,7 +8648,7 @@ function newButton(dom, kb, subject, predicate, theClass, form, dataDoc, callbac
 function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, callbackFunction) {
   var box = dom.createElement('form');
   if (!form) {
-    var lists = findClosest(kb, theClass.uri, src_ns.ui('creationForm'));
+    var lists = findClosest(kb, theClass.uri, ns.ui('creationForm'));
     if (lists.length === 0) {
       var p = box.appendChild(dom.createElement('p'));
       p.textContent = 'I am sorry, you need to provide information about a ' + label_label(theClass) + ' but I don\'t know enough information about those to ask you.';
@@ -8678,8 +8678,8 @@ function promptForNew(dom, kb, subject, predicate, theClass, form, dataDoc, call
     if (subject && !kb.holds(subject, predicate, object, dataDoc)) {
       insertMe.push(external_$rdf_.st(subject, predicate, object, dataDoc));
     }
-    if (subject && !kb.holds(object, src_ns.rdf('type'), theClass, dataDoc)) {
-      insertMe.push(external_$rdf_.st(object, src_ns.rdf('type'), theClass, dataDoc));
+    if (subject && !kb.holds(object, ns.rdf('type'), theClass, dataDoc)) {
+      insertMe.push(external_$rdf_.st(object, ns.rdf('type'), theClass, dataDoc));
     }
     if (insertMe.length) {
       kb.updater.update([], insertMe, linkDone);
@@ -8797,7 +8797,7 @@ function makeSelectForClassifierOptions(dom, kb, subject, predicate, possible, o
   var actual;
   var getActual = function getActual() {
     actual = {};
-    if (predicate.sameTerm(src_ns.rdf('type'))) {
+    if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject);
     } else {
       kb.each(subject, predicate, null, dataDoc).forEach(function (x) {
@@ -8965,7 +8965,7 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
   var actual;
   var getActual = function getActual() {
     actual = {};
-    if (predicate.sameTerm(src_ns.rdf('type'))) {
+    if (predicate.sameTerm(ns.rdf('type'))) {
       actual = kb.findTypeURIs(subject);
     } else {
       kb.each(subject, predicate, null, dataDoc).forEach(function (x) {
@@ -9075,11 +9075,11 @@ function makeSelectForOptions(dom, kb, subject, predicate, possible, options, da
 // Callback takes (boolean ok, string errorBody)
 
 function makeSelectForCategory(dom, kb, subject, category, dataDoc, callbackFunction) {
-  var du = kb.any(category, src_ns.owl('disjointUnionOf'));
+  var du = kb.any(category, ns.owl('disjointUnionOf'));
   var subs;
   var multiple = false;
   if (!du) {
-    subs = kb.each(undefined, src_ns.rdfs('subClassOf'), category);
+    subs = kb.each(undefined, ns.rdfs('subClassOf'), category);
     multiple = true;
   } else {
     subs = du.elements;
@@ -9091,7 +9091,7 @@ function makeSelectForCategory(dom, kb, subject, category, dataDoc, callbackFunc
   if (subs.length === 1) {
     return errorMessageBlock(dom, 'Can\'t do ' + (multiple ? 'multiple ' : '') + 'selector with only 1 subclass of category: ' + category + ':' + subs[1]);
   }
-  return makeSelectForClassifierOptions(dom, kb, subject, src_ns.rdf('type'), subs, {
+  return makeSelectForClassifierOptions(dom, kb, subject, ns.rdf('type'), subs, {
     multiple: multiple,
     nullLabel: '* Select type *'
   }, dataDoc, callbackFunction);
@@ -9110,7 +9110,7 @@ function makeSelectForNestedCategory(dom, kb, subject, category, dataDoc, callba
       container.removeChild(child);
       child = null;
     }
-    if (select.currentURI && kb.any(kb.sym(select.currentURI), src_ns.owl('disjointUnionOf'))) {
+    if (select.currentURI && kb.any(kb.sym(select.currentURI), ns.owl('disjointUnionOf'))) {
       child = makeSelectForNestedCategory(dom, kb, subject, kb.sym(select.currentURI), dataDoc, callbackFunction);
       select.subSelect = child.firstChild;
       select.subSelect.superSelect = select;
@@ -9175,7 +9175,7 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
       }
       if (!state && !negation) {
         state = null;
-        var defa = kb.any(form, src_ns.ui('default'));
+        var defa = kb.any(form, ns.ui('default'));
         displayState = defa ? defa.value === '1' : tristate ? null : false;
       }
     }
@@ -9331,8 +9331,8 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
         is.push(external_$rdf_.st(subject, predicate, t, dataDoc));
         // console.log("----value added " + t)
       }
-      if (uiFrom && !kb.holds(t, src_ns.rdf('type'), kb.sym(uiFrom), dataDoc)) {
-        is.push(external_$rdf_.st(t, src_ns.rdf('type'), kb.sym(uiFrom), dataDoc));
+      if (uiFrom && !kb.holds(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc)) {
+        is.push(external_$rdf_.st(t, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
         // console.log("----added type to value " + uiFrom)
       }
     };
@@ -9394,7 +9394,7 @@ function makeSelectForChoice(dom, container, kb, subject, predicate, inputPossib
           newObject = newThing(dataDoc);
         }
         is.push(external_$rdf_.st(subject, predicate, kb.sym(newObject), dataDoc));
-        if (uiFrom) is.push(external_$rdf_.st(newObject, src_ns.rdf('type'), kb.sym(uiFrom), dataDoc));
+        if (uiFrom) is.push(external_$rdf_.st(newObject, ns.rdf('type'), kb.sym(uiFrom), dataDoc));
 
         // not sure if this 'if' is used because I cannot find mintStatementsFun
         if (options.mintStatementsFun) {
@@ -9622,7 +9622,7 @@ function ensureLoadedPreferences(_x) {
  */
 // used to be logInLoadProfile
 function _ensureLoadedPreferences() {
-  _ensureLoadedPreferences = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(context) {
+  _ensureLoadedPreferences = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(context) {
     var progressDisplay, preferencesFile, m2, _t4;
     return regenerator_default().wrap(function (_context4) {
       while (1) switch (_context4.prev = _context4.next) {
@@ -9723,7 +9723,7 @@ function ensureLoadedProfile(_x2) {
   * leaving the `isPublic` param undefined will bring in community index things, too
   */
 function _ensureLoadedProfile() {
-  _ensureLoadedProfile = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(context) {
+  _ensureLoadedProfile = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(context) {
     var logInContext, _t5;
     return regenerator_default().wrap(function (_context5) {
       while (1) switch (_context5.prev = _context5.next) {
@@ -9772,7 +9772,7 @@ function findAppInstances(_x3, _x4, _x5) {
   return _findAppInstances.apply(this, arguments);
 }
 function _findAppInstances() {
-  _findAppInstances = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(context, theClass, isPublic) {
+  _findAppInstances = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(context, theClass, isPublic) {
     var items, _t6;
     return regenerator_default().wrap(function (_context6) {
       while (1) switch (_context6.prev = _context6.next) {
@@ -9825,7 +9825,7 @@ function registrationControl(_x6, _x7, _x8) {
   return _registrationControl.apply(this, arguments);
 }
 function _registrationControl() {
-  _registrationControl = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(context, instance, theClass) {
+  _registrationControl = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(context, instance, theClass) {
     var registrationStatements, renderScopeCheckbox, dom, box, me, scopes, msg, tbody, form, _iterator, _step, scope, row, _t7;
     return regenerator_default().wrap(function (_context7) {
       while (1) switch (_context7.prev = _context7.next) {
@@ -9839,7 +9839,7 @@ function _registrationControl() {
           registrationStatements = function _registrationStatemen(index) {
             var registrations = getRegistrations(instance, theClass);
             var reg = registrations.length ? registrations[0] : newThing(index);
-            return [(0,external_$rdf_.st)(reg, src_ns.solid('instance'), instance, index), (0,external_$rdf_.st)(reg, src_ns.solid('forClass'), theClass, index)];
+            return [(0,external_$rdf_.st)(reg, ns.solid('instance'), instance, index), (0,external_$rdf_.st)(reg, ns.solid('forClass'), theClass, index)];
           };
           /// / body of registrationControl
           dom = context.dom;
@@ -9938,7 +9938,7 @@ function registrationList(_x9, _x0) {
  * @returns
  */
 function _registrationList() {
-  _registrationList = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(context, options) {
+  _registrationList = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(context, options) {
     var dom, div, box, scopes, table, tbody, _iterator2, _step2, scope, headingRow, items, _iterator3, _step3, _loop, _t8, _t9;
     return regenerator_default().wrap(function (_context0) {
       while (1) switch (_context0.prev = _context0.next) {
@@ -9993,9 +9993,9 @@ function _registrationList() {
               while (1) switch (_context9.prev = _context9.next) {
                 case 0:
                   item = _step3.value;
-                  row = personTR(dom, src_ns.solid('instance'), item.instance, {
+                  row = personTR(dom, ns.solid('instance'), item.instance, {
                     deleteFunction: function () {
-                      var _deleteFunction = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
+                      var _deleteFunction = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
                         return regenerator_default().wrap(function (_context8) {
                           while (1) switch (_context8.prev = _context8.next) {
                             case 0:
@@ -10160,7 +10160,7 @@ function renderSignInPopup(dom) {
   issuerPopupBoxTopMenu.appendChild(issuerPopupBoxLabel);
   issuerPopupBoxTopMenu.appendChild(issuerPopupBoxCloseButton);
   var loginToIssuer = /*#__PURE__*/function () {
-    var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(issuerUri) {
+    var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(issuerUri) {
       var preLoginRedirectHash, locationUrl, _t;
       return regenerator_default().wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
@@ -10296,7 +10296,7 @@ function loginStatusBox(dom) {
     var signInButtonStyle = options.buttonStyle || style.signInAndUpButtonStyle;
     var logoutLabel = 'WebID logout';
     if (me) {
-      var nick = external_SolidLogic_.solidLogicSingleton.store.any(me, src_ns.foaf('nick')) || external_SolidLogic_.solidLogicSingleton.store.any(me, src_ns.foaf('name'));
+      var nick = external_SolidLogic_.solidLogicSingleton.store.any(me, ns.foaf('nick')) || external_SolidLogic_.solidLogicSingleton.store.any(me, ns.foaf('name'));
       if (nick) {
         logoutLabel = 'Logout ' + nick.value;
       }
@@ -10338,7 +10338,7 @@ function loginStatusBox(dom) {
   box.refresh();
   return box;
 }
-external_SolidLogic_.authSession.events.on('logout', /*#__PURE__*/asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
+external_SolidLogic_.authSession.events.on('logout', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
   var issuer, wellKnownUri, wellKnownResult, openidConfiguration, _t2;
   return regenerator_default().wrap(function (_context2) {
     while (1) switch (_context2.prev = _context2.next) {
@@ -10425,7 +10425,7 @@ function selectWorkspace(dom, appDetails, callbackWS) {
     box.appendChild(errorMessageBlock(dom, s, background));
   }
   function figureOutBase(ws) {
-    var newBaseNode = external_SolidLogic_.solidLogicSingleton.store.any(ws, src_ns.space('uriPrefix'));
+    var newBaseNode = external_SolidLogic_.solidLogicSingleton.store.any(ws, ns.space('uriPrefix'));
     var newBaseString;
     if (!newBaseNode) {
       newBaseString = ws.uri.split('#')[0];
@@ -10446,7 +10446,7 @@ function selectWorkspace(dom, appDetails, callbackWS) {
       return _makeNewWorkspace.apply(this, arguments);
     } // const status = ''
     function _makeNewWorkspace() {
-      _makeNewWorkspace = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(_event) {
+      _makeNewWorkspace = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(_event) {
         var row, cell, newBase, newWs, newData, _t3;
         return regenerator_default().wrap(function (_context3) {
           while (1) switch (_context3.prev = _context3.next) {
@@ -10457,11 +10457,11 @@ function selectWorkspace(dom, appDetails, callbackWS) {
               cell.style.padding = '0.5em';
               _t3 = encodeURI;
               _context3.next = 1;
-              return askName(dom, external_SolidLogic_.solidLogicSingleton.store, cell, src_ns.solid('URL'), src_ns.space('Workspace'), 'Workspace');
+              return askName(dom, external_SolidLogic_.solidLogicSingleton.store, cell, ns.solid('URL'), ns.space('Workspace'), 'Workspace');
             case 1:
               newBase = _t3(_context3.sent);
               newWs = newThing(context.preferencesFile);
-              newData = [(0,external_$rdf_.st)(context.me, src_ns.space('workspace'), newWs, context.preferencesFile), (0,external_$rdf_.st)(newWs, src_ns.space('uriPrefix'), newBase, context.preferencesFile)];
+              newData = [(0,external_$rdf_.st)(context.me, ns.space('workspace'), newWs, context.preferencesFile), (0,external_$rdf_.st)(newWs, ns.space('uriPrefix'), newBase, context.preferencesFile)];
               if (external_SolidLogic_.solidLogicSingleton.store.updater) {
                 _context3.next = 2;
                 break;
@@ -10483,14 +10483,14 @@ function selectWorkspace(dom, appDetails, callbackWS) {
     var newBase = null;
 
     // A workspace specifically defined in the private preference file:
-    var w = external_SolidLogic_.solidLogicSingleton.store.each(id, src_ns.space('workspace'), undefined, preferencesFile); // Only trust preference file here
+    var w = external_SolidLogic_.solidLogicSingleton.store.each(id, ns.space('workspace'), undefined, preferencesFile); // Only trust preference file here
 
     // A workspace in a storage in the public profile:
-    var storages = external_SolidLogic_.solidLogicSingleton.store.each(id, src_ns.space('storage')); // @@ No provenance requirement at the moment
+    var storages = external_SolidLogic_.solidLogicSingleton.store.each(id, ns.space('storage')); // @@ No provenance requirement at the moment
     if (w.length === 0 && storages) {
       say("You don't seem to have any workspaces. You have ".concat(storages.length, " storage spaces."), 'white');
       storages.map(function (s) {
-        w = w.concat(external_SolidLogic_.solidLogicSingleton.store.each(s, src_ns.ldp('contains')));
+        w = w.concat(external_SolidLogic_.solidLogicSingleton.store.each(s, ns.ldp('contains')));
         return w;
       }).filter(function (file) {
         return file.id ? ['public', 'private'].includes(file.id().toLowerCase()) : '';
@@ -10548,9 +10548,9 @@ function selectWorkspace(dom, appDetails, callbackWS) {
 
     // const row = 0
     w = w.filter(function (x) {
-      return !external_SolidLogic_.solidLogicSingleton.store.holds(x, src_ns.rdf('type'),
+      return !external_SolidLogic_.solidLogicSingleton.store.holds(x, ns.rdf('type'),
       // Ignore master workspaces
-      src_ns.space('MasterWorkspace'));
+      ns.space('MasterWorkspace'));
     });
     var col1, col2, col3, tr, ws, localStyle, comment;
     var cellStyle = 'height: 3em; margin: 1em; padding: 1em white; border-radius: 0.3em;';
@@ -10567,7 +10567,7 @@ function selectWorkspace(dom, appDetails, callbackWS) {
         tr.appendChild(col1);
       }
       col2 = dom.createElement('td');
-      localStyle = external_SolidLogic_.solidLogicSingleton.store.anyValue(ws, src_ns.ui('style'));
+      localStyle = external_SolidLogic_.solidLogicSingleton.store.anyValue(ws, ns.ui('style'));
       if (!localStyle) {
         // Otherwise make up arbitrary colour
         var hash = function hash(x) {
@@ -10581,7 +10581,7 @@ function selectWorkspace(dom, appDetails, callbackWS) {
       }
       col2.setAttribute('style', deselectedStyle + localStyle);
       tr.target = ws.uri;
-      var label = external_SolidLogic_.solidLogicSingleton.store.any(ws, src_ns.rdfs('label'));
+      var label = external_SolidLogic_.solidLogicSingleton.store.any(ws, ns.rdfs('label'));
       if (!label) {
         label = ws.uri.split('/').slice(-1)[0] || ws.uri.split('/').slice(-2)[0];
       }
@@ -10595,7 +10595,7 @@ function selectWorkspace(dom, appDetails, callbackWS) {
         tr.appendChild(col3);
       }
       table.appendChild(tr);
-      comment = external_SolidLogic_.solidLogicSingleton.store.any(ws, src_ns.rdfs('comment'));
+      comment = external_SolidLogic_.solidLogicSingleton.store.any(ws, ns.rdfs('comment'));
       comment = comment ? comment.value : 'Use this workspace';
       col2.addEventListener('click', function (_event) {
         col3.textContent = comment ? comment.value : '';
@@ -10678,7 +10678,7 @@ function getUserRoles() {
  * Filters which panes should be available, based on the result of [[getUserRoles]]
  */
 function _getUserRoles() {
-  _getUserRoles = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0() {
+  _getUserRoles = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0() {
     var _yield$ensureLoadedPr, me, preferencesFile, preferencesFileError, _t0;
     return regenerator_default().wrap(function (_context1) {
       while (1) switch (_context1.prev = _context1.next) {
@@ -10697,7 +10697,7 @@ function _getUserRoles() {
           }
           throw new Error(preferencesFileError);
         case 2:
-          return _context1.abrupt("return", external_SolidLogic_.solidLogicSingleton.store.each(me, src_ns.rdf('type'), null, preferencesFile.doc()));
+          return _context1.abrupt("return", external_SolidLogic_.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc()));
         case 3:
           _context1.prev = 3;
           _t0 = _context1["catch"](0);
@@ -10715,7 +10715,7 @@ function filterAvailablePanes(_x11) {
   return _filterAvailablePanes.apply(this, arguments);
 }
 function _filterAvailablePanes() {
-  _filterAvailablePanes = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee1(panes) {
+  _filterAvailablePanes = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee1(panes) {
     var userRoles;
     return regenerator_default().wrap(function (_context10) {
       while (1) switch (_context10.prev = _context10.next) {
@@ -10767,13 +10767,13 @@ function isMatchingAudience(pane, userRoles) {
  */
 var AddAgentButtons = /*#__PURE__*/function () {
   function AddAgentButtons(groupList) {
-    classCallCheck_classCallCheck(this, AddAgentButtons);
+    _classCallCheck(this, AddAgentButtons);
     _defineProperty(this, "isExpanded", false);
     this.groupList = groupList;
     this.rootElement = groupList.controller.dom.createElement('div');
     this.barElement = groupList.controller.dom.createElement('div');
   }
-  return createClass_createClass(AddAgentButtons, [{
+  return _createClass(AddAgentButtons, [{
     key: "render",
     value: function render() {
       this.rootElement.innerHTML = '';
@@ -10820,7 +10820,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _this3 = this;
       return buttons_button(this.groupList.controller.dom, iconBase/* icons */.Pt.iconBase + iconForClass['vcard:Individual'], 'Add Person', function (event) {
         _this3.renderSimplifiedBar(event.target);
-        _this3.renderNameForm(src_ns.vcard('Individual'), 'person').then(function (name) {
+        _this3.renderNameForm(ns.vcard('Individual'), 'person').then(function (name) {
           return _this3.addPerson(name);
         }).then(function () {
           return _this3.renderCleanup();
@@ -10835,7 +10835,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _this4 = this;
       return buttons_button(this.groupList.controller.dom, iconBase/* icons */.Pt.iconBase + iconForClass['vcard:Group'], 'Add Group', function (event) {
         _this4.renderSimplifiedBar(event.target);
-        _this4.renderNameForm(src_ns.vcard('Group'), 'group').then(function (name) {
+        _this4.renderNameForm(ns.vcard('Group'), 'group').then(function (name) {
           return _this4.addGroup(name);
         }).then(function () {
           return _this4.renderCleanup();
@@ -10847,14 +10847,14 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "renderNameForm",
     value: function renderNameForm(type, noun) {
-      return askName(this.groupList.controller.dom, this.groupList.store, this.barElement, src_ns.vcard('URI'), type, noun);
+      return askName(this.groupList.controller.dom, this.groupList.store, this.barElement, ns.vcard('URI'), type, noun);
     }
   }, {
     key: "renderPublicButton",
     value: function renderPublicButton() {
       var _this5 = this;
       return buttons_button(this.groupList.controller.dom, iconBase/* icons */.Pt.iconBase + iconForClass['foaf:Agent'], 'Add Everyone', function () {
-        return _this5.addAgent(src_ns.foaf('Agent').uri).then(function () {
+        return _this5.addAgent(ns.foaf('Agent').uri).then(function () {
           return _this5.groupList.controller.renderTemporaryStatus('Adding the general public to those who can read. Drag the globe to a different level to give them more access.');
         }).then(function () {
           return _this5.renderCleanup();
@@ -10866,7 +10866,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
     value: function renderAuthenticatedAgentButton() {
       var _this6 = this;
       return buttons_button(this.groupList.controller.dom, "".concat(iconBase/* icons */.Pt.iconBase, "noun_99101.svg"), 'Anyone logged In', function () {
-        return _this6.addAgent(src_ns.acl('AuthenticatedAgent').uri).then(function () {
+        return _this6.addAgent(ns.acl('AuthenticatedAgent').uri).then(function () {
           return _this6.groupList.controller.renderTemporaryStatus('Adding anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.');
         }).then(function () {
           return _this6.renderCleanup();
@@ -10879,7 +10879,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
       var _this7 = this;
       return buttons_button(this.groupList.controller.dom, iconBase/* icons */.Pt.iconBase + 'noun_Robot_849764.svg', 'A Software Agent (bot)', function (event) {
         _this7.renderSimplifiedBar(event.target);
-        _this7.renderNameForm(src_ns.schema('Application'), 'bot').then(function (name) {
+        _this7.renderNameForm(ns.schema('Application'), 'bot').then(function (name) {
           return _this7.addBot(name);
         }).then(function () {
           return _this7.renderCleanup();
@@ -10900,7 +10900,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
           return _this8.groupList.controller.renderStatus(error);
         });
         _this8.renderAppsView();
-        var newApp = _this8.renderNameForm(src_ns.schema('WebApplication'), 'webapp domain').then(function (name) {
+        var newApp = _this8.renderNameForm(ns.schema('WebApplication'), 'webapp domain').then(function (name) {
           return _this8.getOriginFromName(name);
         });
         Promise.race([existingApps, newApp]).then(function (origin) {
@@ -10931,7 +10931,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "renderAppsTable",
     value: function () {
-      var _renderAppsTable = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(eventContext) {
+      var _renderAppsTable = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(eventContext) {
         var _this0 = this;
         var trustedApps, trustedOrigins;
         return regenerator_default().wrap(function (_context) {
@@ -10940,20 +10940,20 @@ var AddAgentButtons = /*#__PURE__*/function () {
               _context.next = 1;
               return ensureLoadedProfile(eventContext);
             case 1:
-              trustedApps = this.groupList.store.each(eventContext.me, src_ns.acl('trustedApp')); // @@ TODO fix as
+              trustedApps = this.groupList.store.each(eventContext.me, ns.acl('trustedApp')); // @@ TODO fix as
               trustedOrigins = trustedApps.flatMap(function (app) {
-                return _this0.groupList.store.each(app, src_ns.acl('origin'));
+                return _this0.groupList.store.each(app, ns.acl('origin'));
               }); // @@ TODO fix as
               this.barElement.appendChild(this.groupList.controller.dom.createElement('p')).textContent = "You have ".concat(trustedOrigins.length, " selected web apps.");
               return _context.abrupt("return", new Promise(function (resolve, reject) {
                 var appsTable = _this0.barElement.appendChild(_this0.groupList.controller.dom.createElement('table'));
                 appsTable.setAttribute('style', style.trustedAppAddApplicationsTable);
                 trustedApps.forEach(function (app) {
-                  var origin = _this0.groupList.store.any(app, src_ns.acl('origin')); // @@ TODO fix as
+                  var origin = _this0.groupList.store.any(app, ns.acl('origin')); // @@ TODO fix as
                   if (!origin) {
                     reject(new Error("Unable to pick app: ".concat(app.value)));
                   }
-                  var thingTR = personTR(_this0.groupList.controller.dom, src_ns.acl('origin'), origin, {});
+                  var thingTR = personTR(_this0.groupList.controller.dom, ns.acl('origin'), origin, {});
                   var innerTable = _this0.groupList.controller.dom.createElement('table');
                   var innerRow = innerTable.appendChild(_this0.groupList.controller.dom.createElement('tr'));
                   var innerLeftColumn = innerRow.appendChild(_this0.groupList.controller.dom.createElement('td'));
@@ -10987,7 +10987,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "addPerson",
     value: function () {
-      var _addPerson = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(name) {
+      var _addPerson = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(name) {
         var domainNameRegexp;
         return regenerator_default().wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
@@ -11026,7 +11026,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "addGroup",
     value: function () {
-      var _addGroup = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(name) {
+      var _addGroup = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(name) {
         var domainNameRegexp;
         return regenerator_default().wrap(function (_context3) {
           while (1) switch (_context3.prev = _context3.next) {
@@ -11065,7 +11065,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "addAgent",
     value: function () {
-      var _addAgent = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(agentUri) {
+      var _addAgent = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(agentUri) {
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
@@ -11087,7 +11087,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "addBot",
     value: function () {
-      var _addBot = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(name) {
+      var _addBot = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(name) {
         var domainNameRegexp;
         return regenerator_default().wrap(function (_context5) {
           while (1) switch (_context5.prev = _context5.next) {
@@ -11126,7 +11126,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
   }, {
     key: "getOriginFromName",
     value: function () {
-      var _getOriginFromName = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(name) {
+      var _getOriginFromName = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(name) {
         var domainNameRegexp, origin;
         return regenerator_default().wrap(function (_context6) {
           while (1) switch (_context6.prev = _context6.next) {
@@ -11186,7 +11186,7 @@ var AddAgentButtons = /*#__PURE__*/function () {
 
 
 
-var ACL = src_ns.acl;
+var ACL = ns.acl;
 var COLLOQUIAL = {
   13: 'Owners',
   9: 'Owners (write locked)',
@@ -11224,7 +11224,7 @@ var AccessGroups = /*#__PURE__*/function () {
 
   function AccessGroups(doc, aclDoc, controller, store) {
     var _options = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : {};
-    classCallCheck_classCallCheck(this, AccessGroups);
+    _classCallCheck(this, AccessGroups);
     this.doc = doc;
     this.aclDoc = aclDoc;
     this.controller = controller;
@@ -11237,7 +11237,7 @@ var AccessGroups = /*#__PURE__*/function () {
     this.rootElement = this.controller.dom.createElement('div');
     this.rootElement.setAttribute('style', style.accessGroupList);
   }
-  return createClass_createClass(AccessGroups, [{
+  return _createClass(AccessGroups, [{
     key: "store",
     get: function get() {
       return this._store;
@@ -11405,7 +11405,7 @@ var AccessGroups = /*#__PURE__*/function () {
   }, {
     key: "deleteAgent",
     value: function () {
-      var _deleteAgent = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(combo, pred, obj) {
+      var _deleteAgent = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(combo, pred, obj) {
         var combos, comboToRemove;
         return regenerator_default().wrap(function (_context) {
           while (1) switch (_context.prev = _context.next) {
@@ -11436,7 +11436,7 @@ var AccessGroups = /*#__PURE__*/function () {
   }, {
     key: "addNewURI",
     value: function () {
-      var _addNewURI = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(uri) {
+      var _addNewURI = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(uri) {
         return regenerator_default().wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
@@ -11459,7 +11459,7 @@ var AccessGroups = /*#__PURE__*/function () {
   }, {
     key: "handleDroppedUris",
     value: function () {
-      var _handleDroppedUris = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(uris, combo) {
+      var _handleDroppedUris = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(uris, combo) {
         var _this5 = this;
         var _t;
         return regenerator_default().wrap(function (_context3) {
@@ -11494,7 +11494,7 @@ var AccessGroups = /*#__PURE__*/function () {
   }, {
     key: "handleDroppedUri",
     value: function () {
-      var _handleDroppedUri = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(uri, combo) {
+      var _handleDroppedUri = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(uri, combo) {
         var secondAttempt,
           agent,
           thing,
@@ -11623,26 +11623,26 @@ function findAgent(uri, kb) {
       obj: (0,external_$rdf_.sym)(uri.slice(0, -1))
     }; // Fix a URI where the drag and drop system has added a spurious slash
   }
-  if (src_ns.vcard('WebID').uri in types) return {
+  if (ns.vcard('WebID').uri in types) return {
     pred: 'agent',
     obj: obj
   };
-  if (src_ns.vcard('Group').uri in types) {
+  if (ns.vcard('Group').uri in types) {
     return {
       pred: 'agentGroup',
       obj: obj
     }; // @@ note vcard membership not RDFs
   }
-  if (obj.sameTerm(src_ns.foaf('Agent')) || obj.sameTerm(src_ns.acl('AuthenticatedAgent')) ||
+  if (obj.sameTerm(ns.foaf('Agent')) || obj.sameTerm(ns.acl('AuthenticatedAgent')) ||
   // AuthenticatedAgent
-  obj.sameTerm(src_ns.rdf('Resource')) || obj.sameTerm(src_ns.owl('Thing'))) {
+  obj.sameTerm(ns.rdf('Resource')) || obj.sameTerm(ns.owl('Thing'))) {
     return {
       pred: 'agentClass',
       obj: obj
     };
   }
-  if (src_ns.vcard('Individual').uri in types || src_ns.foaf('Person').uri in types || src_ns.foaf('Agent').uri in types) {
-    var pref = kb.any(obj, src_ns.foaf('preferredURI'));
+  if (ns.vcard('Individual').uri in types || ns.foaf('Person').uri in types || ns.foaf('Agent').uri in types) {
+    var pref = kb.any(obj, ns.foaf('preferredURI'));
     if (pref) return {
       pred: 'agent',
       obj: (0,external_$rdf_.sym)(pref)
@@ -11652,13 +11652,13 @@ function findAgent(uri, kb) {
       obj: obj
     };
   }
-  if (src_ns.solid('AppProvider').uri in types) {
+  if (ns.solid('AppProvider').uri in types) {
     return {
       pred: 'origin',
       obj: obj
     };
   }
-  if (src_ns.solid('AppProviderClass').uri in types) {
+  if (ns.solid('AppProviderClass').uri in types) {
     return {
       pred: 'originClass',
       obj: obj
@@ -11690,7 +11690,7 @@ function findAgent(uri, kb) {
  */
 var AccessController = /*#__PURE__*/function () {
   function AccessController(subject, noun, context, statusElement, targetIsProtected, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc, prospectiveDefaultHolder, store, dom) {
-    classCallCheck_classCallCheck(this, AccessController);
+    _classCallCheck(this, AccessController);
     this.subject = subject;
     this.noun = noun;
     this.context = context;
@@ -11723,7 +11723,7 @@ var AccessController = /*#__PURE__*/function () {
       this.defaultsDiffer = !sameACL(this.mainCombo.aclMap, this.defaultsCombo.aclMap);
     }
   }
-  return createClass_createClass(AccessController, [{
+  return _createClass(AccessController, [{
     key: "isEditable",
     get: function get() {
       return !this.isUsingDefaults;
@@ -11857,7 +11857,7 @@ var AccessController = /*#__PURE__*/function () {
   }, {
     key: "addAcls",
     value: function () {
-      var _addAcls = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
+      var _addAcls = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
         var _this6 = this;
         var message, aclGraph, _message, _t;
         return regenerator_default().wrap(function (_context) {
@@ -11901,7 +11901,7 @@ var AccessController = /*#__PURE__*/function () {
   }, {
     key: "addDefaults",
     value: function () {
-      var _addDefaults = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
+      var _addDefaults = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
         return regenerator_default().wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
@@ -11923,7 +11923,7 @@ var AccessController = /*#__PURE__*/function () {
   }, {
     key: "removeAcls",
     value: function () {
-      var _removeAcls = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
+      var _removeAcls = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3() {
         var message, _t2, _t3;
         return regenerator_default().wrap(function (_context3) {
           while (1) switch (_context3.prev = _context3.next) {
@@ -11968,7 +11968,7 @@ var AccessController = /*#__PURE__*/function () {
   }, {
     key: "removeDefaults",
     value: function () {
-      var _removeDefaults = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4() {
+      var _removeDefaults = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4() {
         var fallbackCombo, _t4;
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
@@ -12187,13 +12187,13 @@ function loadController(_x, _x2, _x3, _x4, _x5, _x6, _x7) {
   return _loadController.apply(this, arguments);
 }
 function _loadController() {
-  _loadController = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(doc, kb, subject, noun, context, dom, status) {
+  _loadController = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(doc, kb, subject, noun, context, dom, status) {
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
           return _context2.abrupt("return", new Promise(function (resolve, reject) {
             return getACLorDefault(doc, /*#__PURE__*/function () {
-              var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
+              var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(ok, isDirectACL, targetDoc, targetACLDoc, defaultHolder, defaultACLDoc) {
                 var targetDirectory, targetIsProtected, prospectiveDefaultHolder, getController, _t;
                 return regenerator_default().wrap(function (_context) {
                   while (1) switch (_context.prev = _context.next) {
@@ -12255,7 +12255,7 @@ function isStorage(doc, aclDoc, store) {
   // @@ TODO: The methods used for targetIsStorage are HACKs - it should not be relied upon, and work is
   // @@ underway to standardize a behavior that does not rely upon this hack
   // @@ hopefully fixed as part of https://github.com/solidos/data-interoperability-panel/issues/10
-  return store.holds(doc, src_ns.rdf('type'), src_ns.space('Storage'), aclDoc);
+  return store.holds(doc, ns.rdf('type'), ns.space('Storage'), aclDoc);
 }
 function hasProtectedAcl(targetDoc) {
   // @@ TODO: This is hacky way of knowing whether or not a certain ACL file can be removed
@@ -12384,10 +12384,10 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
               var isPackage = tail.includes('/');
               src_debug/* log */.Rm('  new thing is packge? ' + isPackage);
               if (isPackage) {
-                create_kb.add(newPaneOptions.folder, src_ns.ldp('contains'), create_kb.sym(newPaneOptions.newBase), newPaneOptions.folder.doc());
+                create_kb.add(newPaneOptions.folder, ns.ldp('contains'), create_kb.sym(newPaneOptions.newBase), newPaneOptions.folder.doc());
               } else {
                 // single file
-                create_kb.add(newPaneOptions.folder, src_ns.ldp('contains'), newPaneOptions.newInstance, newPaneOptions.folder.doc()); // Ping the patch system?
+                create_kb.add(newPaneOptions.folder, ns.ldp('contains'), newPaneOptions.newInstance, newPaneOptions.folder.doc()); // Ping the patch system?
               }
               // @ts-ignore @@ TODO check whether refresh can exist here. Either fix type or remove unreachable code
               if (newPaneOptions.refreshTarget && newPaneOptions.refreshTarget.refresh) {
@@ -12441,7 +12441,7 @@ function newThingUI(createContext, dataBrowserContext, thePanes) {
             callbackWS(null, uri);
           }
         };
-        askName(dom, create_kb, options.div, src_ns.foaf('name'), null, options.noun).then(gotName);
+        askName(dom, create_kb, options.div, ns.foaf('name'), null, options.noun).then(gotName);
         // selectUI = getNameForm(dom, kb, options.noun, gotName)
         // options.div.appendChild(selectUI)
         // selectUIParent = options.div
@@ -12913,7 +12913,7 @@ function cameraButton(dom, store, getImageDoc, doneCallback) {
     return _restoreButton.apply(this, arguments);
   }
   function _restoreButton() {
-    _restoreButton = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(imageDoc) {
+    _restoreButton = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(imageDoc) {
       return regenerator_default().wrap(function (_context) {
         while (1) switch (_context.prev = _context.next) {
           case 0:
@@ -12972,6 +12972,7 @@ function rng() {
 }
 
 ;// ./node_modules/uuid/dist/stringify.js
+/* unused harmony import specifier */ var validate;
 
 const byteToHex = [];
 for (let i = 0; i < 256; ++i) {
@@ -13068,7 +13069,7 @@ var _templateObject;
 var peoplePicker_kb = external_SolidLogic_.solidLogicSingleton.store;
 var PeoplePicker = /*#__PURE__*/function () {
   function PeoplePicker(element, typeIndex, groupPickedCb, options) {
-    classCallCheck_classCallCheck(this, PeoplePicker);
+    _classCallCheck(this, PeoplePicker);
     // @@ can't expect typeindex to be passed
     this.options = options || {};
     this.element = element;
@@ -13077,7 +13078,7 @@ var PeoplePicker = /*#__PURE__*/function () {
     this.selectedgroup = this.options.selectedgroup; // current selected group if any
     this.onSelectGroup = this.onSelectGroup.bind(this);
   }
-  return createClass_createClass(PeoplePicker, [{
+  return _createClass(PeoplePicker, [{
     key: "render",
     value: function render() {
       var _this = this;
@@ -13138,11 +13139,11 @@ var PeoplePicker = /*#__PURE__*/function () {
           if (!ok) {
             return reject(err);
           }
-          var bookRegistration = peoplePicker_kb.any(null, src_ns.solid('forClass'), src_ns.vcard('AddressBook'));
+          var bookRegistration = peoplePicker_kb.any(null, ns.solid('forClass'), ns.vcard('AddressBook'));
           if (!bookRegistration) {
             return reject(new Error('no address book registered in the solid type index ' + typeIndex));
           }
-          var book = peoplePicker_kb.any(bookRegistration, src_ns.solid('instance'));
+          var book = peoplePicker_kb.any(bookRegistration, ns.solid('instance'));
           if (!book) {
             return reject(new Error('incomplete address book registration'));
           }
@@ -13169,9 +13170,9 @@ var PeoplePicker = /*#__PURE__*/function () {
       // non-atomic in that solid requires us to send two PATCHes, either of which
       // might fail.
       var patchPromises = [group.doc(), groupIndex].map(function (doc) {
-        var typeStatement = external_$rdf_.st(group, src_ns.rdf('type'), src_ns.vcard('Group'), doc);
-        var nameStatement = external_$rdf_.st(group, src_ns.vcard('fn'), name, group.doc(), doc);
-        var includesGroupStatement = external_$rdf_.st(book, src_ns.vcard('includesGroup'), group, doc);
+        var typeStatement = external_$rdf_.st(group, ns.rdf('type'), ns.vcard('Group'), doc);
+        var nameStatement = external_$rdf_.st(group, ns.vcard('fn'), name, group.doc(), doc);
+        var includesGroupStatement = external_$rdf_.st(book, ns.vcard('includesGroup'), group, doc);
         var toIns = doc.equals(groupIndex) ? [typeStatement, nameStatement, includesGroupStatement] : [typeStatement, nameStatement];
         return patch(doc.uri, {
           toIns: toIns
@@ -13201,12 +13202,12 @@ var PeoplePicker = /*#__PURE__*/function () {
 }();
 var GroupPicker = /*#__PURE__*/function () {
   function GroupPicker(element, book, onSelectGroup) {
-    classCallCheck_classCallCheck(this, GroupPicker);
+    _classCallCheck(this, GroupPicker);
     this.element = element;
     this.book = book;
     this.onSelectGroup = onSelectGroup;
   }
-  return createClass_createClass(GroupPicker, [{
+  return _createClass(GroupPicker, [{
     key: "render",
     value: function render() {
       var _this2 = this;
@@ -13239,7 +13240,7 @@ var GroupPicker = /*#__PURE__*/function () {
           if (!ok) {
             return reject(err);
           }
-          var groups = peoplePicker_kb.each(_this3.book, src_ns.vcard('includesGroup'));
+          var groups = peoplePicker_kb.each(_this3.book, ns.vcard('includesGroup'));
           return resolve(groups);
         });
       });
@@ -13256,17 +13257,17 @@ var GroupPicker = /*#__PURE__*/function () {
 }();
 var Group = /*#__PURE__*/function () {
   function Group(element, group) {
-    classCallCheck_classCallCheck(this, Group);
+    _classCallCheck(this, Group);
     this.element = element;
     this.group = group;
   }
-  return createClass_createClass(Group, [{
+  return _createClass(Group, [{
     key: "render",
     value: function render() {
       var container = document.createElement('div');
       container.textContent = escape_html_default()(
       // @@@@@ need to escape??
-      getWithDefault(this.group, src_ns.vcard('fn'), "[".concat(this.group.value, "]")));
+      getWithDefault(this.group, ns.vcard('fn'), "[".concat(this.group.value, "]")));
       this.element.innerHTML = '';
       this.element.appendChild(container);
       return this;
@@ -13275,7 +13276,7 @@ var Group = /*#__PURE__*/function () {
 }();
 var GroupBuilder = /*#__PURE__*/function () {
   function GroupBuilder(element, book, group, doneBuildingCb, groupChangedCb) {
-    classCallCheck_classCallCheck(this, GroupBuilder);
+    _classCallCheck(this, GroupBuilder);
     this.element = element;
     this.book = book;
     this.group = group;
@@ -13287,7 +13288,7 @@ var GroupBuilder = /*#__PURE__*/function () {
     this.groupChangedCb = groupChangedCb;
     this.doneBuildingCb = doneBuildingCb;
   }
-  return createClass_createClass(GroupBuilder, [{
+  return _createClass(GroupBuilder, [{
     key: "refresh",
     value: function refresh() {
       // TODO: implement
@@ -13311,7 +13312,7 @@ var GroupBuilder = /*#__PURE__*/function () {
       });
       var groupNameInput = document.createElement('input');
       groupNameInput.type = 'text';
-      groupNameInput.value = getWithDefault(this.group, src_ns.vcard('fn'), 'Untitled Group');
+      groupNameInput.value = getWithDefault(this.group, ns.vcard('fn'), 'Untitled Group');
       groupNameInput.addEventListener('change', function (event) {
         _this5.setGroupName(event.target.value)["catch"](function (err) {
           _this5.element.appendChild(errorMessageBlock(document, "Error changing group name. (".concat(err, ")")));
@@ -13321,8 +13322,8 @@ var GroupBuilder = /*#__PURE__*/function () {
       groupNameLabel.textContent = escape_html_default()('Group Name:');
       groupNameLabel.appendChild(groupNameInput);
       dropContainer.appendChild(groupNameLabel);
-      if (peoplePicker_kb.any(this.group, src_ns.vcard('hasMember'))) {
-        peoplePicker_kb.match(this.group, src_ns.vcard('hasMember')).forEach(function (statement) {
+      if (peoplePicker_kb.any(this.group, ns.vcard('hasMember'))) {
+        peoplePicker_kb.match(this.group, ns.vcard('hasMember')).forEach(function (statement) {
           var webIdNode = statement.object;
           var personDiv = document.createElement('div');
           new Person(personDiv, webIdNode, _this5.handleRemove(webIdNode)).render();
@@ -13356,14 +13357,14 @@ var GroupBuilder = /*#__PURE__*/function () {
           // make sure it's a valid person, group, or entity (for now just handle
           // webId)
           var webIdNode = external_$rdf_.namedNode(webId);
-          var rdfClass = peoplePicker_kb.any(webIdNode, src_ns.rdf('type'));
-          if (!rdfClass || !rdfClass.equals(src_ns.foaf('Person'))) {
+          var rdfClass = peoplePicker_kb.any(webIdNode, ns.rdf('type'));
+          if (!rdfClass || !rdfClass.equals(ns.foaf('Person'))) {
             return reject(new Error("Only people supported right now. (tried to add something of type ".concat(rdfClass.value, ")")));
           }
           return resolve(webIdNode);
         });
       }).then(function (webIdNode) {
-        var statement = external_$rdf_.st(_this6.group, src_ns.vcard('hasMember'), webIdNode);
+        var statement = external_$rdf_.st(_this6.group, ns.vcard('hasMember'), webIdNode);
         if (peoplePicker_kb.holdsStatement(statement)) {
           return webIdNode;
         }
@@ -13382,7 +13383,7 @@ var GroupBuilder = /*#__PURE__*/function () {
     value: function handleRemove(webIdNode) {
       var _this7 = this;
       return function (_event) {
-        var statement = external_$rdf_.st(_this7.group, src_ns.vcard('hasMember'), webIdNode);
+        var statement = external_$rdf_.st(_this7.group, ns.vcard('hasMember'), webIdNode);
         return patch(_this7.group.doc().uri, {
           toDel: [statement]
         }).then(function () {
@@ -13391,7 +13392,7 @@ var GroupBuilder = /*#__PURE__*/function () {
           _this7.render();
           return true;
         })["catch"](function (err) {
-          var name = peoplePicker_kb.any(webIdNode, src_ns.foaf('name'));
+          var name = peoplePicker_kb.any(webIdNode, ns.foaf('name'));
           var errorMessage = name && name.value ? "Could not remove ".concat(name.value, ". (").concat(err, ")") : "Could not remove ".concat(webIdNode.value, ". (").concat(err, ")");
           throw new Error(errorMessage);
         });
@@ -13404,8 +13405,8 @@ var GroupBuilder = /*#__PURE__*/function () {
       var _indexes3 = indexes(this.book),
         groupIndex = _indexes3.groupIndex;
       var updatePromises = [this.group.doc(), groupIndex].map(function (namedGraph) {
-        var oldNameStatements = peoplePicker_kb.match(_this8.group, src_ns.vcard('fn'), null, namedGraph);
-        var newNameStatement = external_$rdf_.st(_this8.group, src_ns.vcard('fn'), external_$rdf_.literal(name));
+        var oldNameStatements = peoplePicker_kb.match(_this8.group, ns.vcard('fn'), null, namedGraph);
+        var newNameStatement = external_$rdf_.st(_this8.group, ns.vcard('fn'), external_$rdf_.literal(name));
         return patch(namedGraph.value, {
           toDel: oldNameStatements,
           toIns: [newNameStatement]
@@ -13424,12 +13425,12 @@ var GroupBuilder = /*#__PURE__*/function () {
 // now I will leave it where it was
 var Person = /*#__PURE__*/function () {
   function Person(element, webIdNode, handleRemove) {
-    classCallCheck_classCallCheck(this, Person);
+    _classCallCheck(this, Person);
     this.webIdNode = webIdNode;
     this.element = element;
     this.handleRemove = handleRemove;
   }
-  return createClass_createClass(Person, [{
+  return _createClass(Person, [{
     key: "render",
     value: function render() {
       var _this9 = this;
@@ -13437,7 +13438,7 @@ var Person = /*#__PURE__*/function () {
       container.style.display = 'flex';
 
       // TODO: take a look at UI.widgets.setName
-      var imgSrc = getWithDefault(this.webIdNode, src_ns.foaf('img'), iconBase/* iconBase */.LN + 'noun_15059.svg');
+      var imgSrc = getWithDefault(this.webIdNode, ns.foaf('img'), iconBase/* iconBase */.LN + 'noun_15059.svg');
       var profileImg = document.createElement('img');
       profileImg.src = escape_html_default()(imgSrc);
       profileImg.width = '50';
@@ -13445,7 +13446,7 @@ var Person = /*#__PURE__*/function () {
       profileImg.style.margin = '5px';
 
       // TODO: take a look at UI.widgets.setImage
-      var name = getWithDefault(this.webIdNode, src_ns.foaf('name'), "[".concat(this.webIdNode, "]"));
+      var name = getWithDefault(this.webIdNode, ns.foaf('name'), "[".concat(this.webIdNode, "]"));
       var nameSpan = document.createElement('span');
       nameSpan.innerHTML = escape_html_default()(name);
       nameSpan.style.flexGrow = '1';
@@ -13495,7 +13496,7 @@ function patch(url, _ref3) {
 function indexes(book) {
   return {
     // bookIndex: book,
-    groupIndex: peoplePicker_kb.any(book, src_ns.vcard('groupIndex')),
+    groupIndex: peoplePicker_kb.any(book, ns.vcard('groupIndex')),
     groupContainer: peoplePicker_kb.sym(book.dir().uri + 'Group/')
   };
 }
@@ -13564,7 +13565,7 @@ console.log('widgets exported:', widgets)
 
 var messageArea_UI = {
   icons: iconBase/* icons */.Pt,
-  ns: src_ns,
+  ns: ns,
   rdf: external_$rdf_,
   style: style,
   widgets: widgets_namespaceObject
@@ -13882,14 +13883,14 @@ function emptyLeaf(_x) {
  * Track back through the YYYY/MM/DD tree to find the previous/next day
  */
 function _emptyLeaf() {
-  _emptyLeaf = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(leafDocument) {
+  _emptyLeaf = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(leafDocument) {
     return regenerator_default().wrap(function (_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           _context5.next = 1;
           return external_SolidLogic_.store.fetcher.load(leafDocument);
         case 1:
-          return _context5.abrupt("return", !(external_SolidLogic_.store.statementsMatching(null, src_ns.dct('created'), null, leafDocument).length > 0));
+          return _context5.abrupt("return", !(external_SolidLogic_.store.statementsMatching(null, ns.dct('created'), null, leafDocument).length > 0));
         case 2:
         case "end":
           return _context5.stop();
@@ -13900,17 +13901,17 @@ function _emptyLeaf() {
 }
 var DateFolder = /*#__PURE__*/function () {
   function DateFolder(rootThing, leafFileName, membershipProperty) {
-    classCallCheck_classCallCheck(this, DateFolder);
+    _classCallCheck(this, DateFolder);
     this.root = rootThing;
     this.rootFolder = rootThing.dir();
     this.leafFileName = leafFileName || 'index.ttl'; // typically chat.ttl
-    this.membershipProperty = membershipProperty || src_ns.wf('leafObject');
+    this.membershipProperty = membershipProperty || ns.wf('leafObject');
   }
 
   /* Generate the leaf document (rdf object) from date
    * @returns: <NamedNode> - document
    */
-  return createClass_createClass(DateFolder, [{
+  return _createClass(DateFolder, [{
     key: "leafDocumentFromDate",
     value: function leafDocumentFromDate(date) {
       // debug.log('incoming date: ' + date)
@@ -13936,13 +13937,13 @@ var DateFolder = /*#__PURE__*/function () {
   }, {
     key: "loadPrevious",
     value: function () {
-      var _loadPrevious = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(date, backwards) {
+      var _loadPrevious = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(date, backwards) {
         var previousPeriod, _previousPeriod, folder, found, leafDocument, nextDate;
         return regenerator_default().wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
               _previousPeriod = function _previousPeriod3() {
-                _previousPeriod = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(file, level) {
+                _previousPeriod = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(file, level) {
                   var younger, suitable, lastOrFirst, parent, siblings, _folder, uncle, cousins, result, _t;
                   return regenerator_default().wrap(function (_context) {
                     while (1) switch (_context.prev = _context.next) {
@@ -13968,7 +13969,7 @@ var DateFolder = /*#__PURE__*/function () {
                         _context.next = 2;
                         return external_SolidLogic_.store.fetcher.load(parent);
                       case 2:
-                        siblings = external_SolidLogic_.store.each(parent, src_ns.ldp('contains'));
+                        siblings = external_SolidLogic_.store.each(parent, ns.ldp('contains'));
                         siblings = siblings.filter(younger);
                         _folder = lastOrFirst(siblings);
                         if (!_folder) {
@@ -14013,7 +14014,7 @@ var DateFolder = /*#__PURE__*/function () {
                         _context.next = 10;
                         return external_SolidLogic_.store.fetcher.load(uncle);
                       case 10:
-                        cousins = external_SolidLogic_.store.each(uncle, src_ns.ldp('contains'));
+                        cousins = external_SolidLogic_.store.each(uncle, ns.ldp('contains'));
                         result = lastOrFirst(cousins); // debug.log('   previousPeriod: returning cousins at level ' + level, cousins)
                         // debug.log('   previousPeriod: returning result at level ' + level, result)
                         return _context.abrupt("return", result);
@@ -14077,13 +14078,13 @@ var DateFolder = /*#__PURE__*/function () {
   }, {
     key: "firstLeaf",
     value: function () {
-      var _firstLeaf = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(backwards) {
+      var _firstLeaf = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(backwards) {
         var folderStore, folderFetcher, earliestSubfolder, _earliestSubfolder, y, month, d, leafDocument, leafObjects, msg, sortMe;
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
               _earliestSubfolder = function _earliestSubfolder3() {
-                _earliestSubfolder = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(parent) {
+                _earliestSubfolder = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(parent) {
                   var suitable, kids;
                   return regenerator_default().wrap(function (_context3) {
                     while (1) switch (_context3.prev = _context3.next) {
@@ -14104,7 +14105,7 @@ var DateFolder = /*#__PURE__*/function () {
                         // Force fetch as will have changed
                         // }catch (err) {
                         // }
-                        kids = folderStore.each(parent, src_ns.ldp('contains'));
+                        kids = folderStore.each(parent, ns.ldp('contains'));
                         kids = kids.filter(suitable);
                         if (!(kids.length === 0)) {
                           _context3.next = 2;
@@ -14155,7 +14156,7 @@ var DateFolder = /*#__PURE__*/function () {
               throw new Error(msg);
             case 5:
               sortMe = leafObjects.map(function (leafObject) {
-                return [folderStore.any(leafObject, src_ns.dct('created')), leafObject];
+                return [folderStore.any(leafObject, ns.dct('created')), leafObject];
               });
               sortMe.sort();
               if (backwards) sortMe.reverse();
@@ -14183,19 +14184,19 @@ var DateFolder = /*#__PURE__*/function () {
  */
 /*! noble-hashes - MIT License (c) 2022 Paul Miller (paulmillr.com) */
 /** Checks if something is Uint8Array. Be careful: nodejs Buffer will return true. */
-function utils_isBytes(a) {
+function isBytes(a) {
     return a instanceof Uint8Array || (ArrayBuffer.isView(a) && a.constructor.name === 'Uint8Array');
 }
 /** Asserts something is positive integer. */
-function utils_anumber(n, title = '') {
+function anumber(n, title = '') {
     if (!Number.isSafeInteger(n) || n < 0) {
         const prefix = title && `"${title}" `;
         throw new Error(`${prefix}expected integer >= 0, got ${n}`);
     }
 }
 /** Asserts something is Uint8Array. */
-function utils_abytes(value, length, title = '') {
-    const bytes = utils_isBytes(value);
+function abytes(value, length, title = '') {
+    const bytes = isBytes(value);
     const len = value?.length;
     const needsLen = length !== undefined;
     if (!bytes || (needsLen && len !== length)) {
@@ -14207,11 +14208,11 @@ function utils_abytes(value, length, title = '') {
     return value;
 }
 /** Asserts something is hash */
-function utils_ahash(h) {
+function ahash(h) {
     if (typeof h !== 'function' || typeof h.create !== 'function')
         throw new Error('Hash must wrapped by utils.createHasher');
-    utils_anumber(h.outputLen);
-    utils_anumber(h.blockLen);
+    anumber(h.outputLen);
+    anumber(h.blockLen);
 }
 /** Asserts a hash instance has not been destroyed / finished */
 function aexists(instance, checkFinished = true) {
@@ -14222,7 +14223,7 @@ function aexists(instance, checkFinished = true) {
 }
 /** Asserts output is properly-sized byte array */
 function aoutput(out, instance) {
-    utils_abytes(out, undefined, 'digestInto() output');
+    abytes(out, undefined, 'digestInto() output');
     const min = instance.outputLen;
     if (out.length < min) {
         throw new Error('"digestInto() output" expected to be of length >=' + min);
@@ -14287,8 +14288,8 @@ const hexes = /* @__PURE__ */ Array.from({ length: 256 }, (_, i) => i.toString(1
  * Convert byte array to hex string. Uses built-in function, when available.
  * @example bytesToHex(Uint8Array.from([0xca, 0xfe, 0x01, 0x23])) // 'cafe0123'
  */
-function utils_bytesToHex(bytes) {
-    utils_abytes(bytes);
+function bytesToHex(bytes) {
+    abytes(bytes);
     // @ts-ignore
     if (hasHexBuiltin)
         return bytes.toHex();
@@ -14314,7 +14315,7 @@ function asciiToBase16(ch) {
  * Convert hex string to byte array. Uses built-in function, when available.
  * @example hexToBytes('cafe0123') // Uint8Array.from([0xca, 0xfe, 0x01, 0x23])
  */
-function utils_hexToBytes(hex) {
+function hexToBytes(hex) {
     if (typeof hex !== 'string')
         throw new Error('hex string expected, got ' + typeof hex);
     // @ts-ignore
@@ -14372,14 +14373,14 @@ function utf8ToBytes(str) {
 function kdfInputToBytes(data, errorTitle = '') {
     if (typeof data === 'string')
         return utf8ToBytes(data);
-    return utils_abytes(data, undefined, errorTitle);
+    return abytes(data, undefined, errorTitle);
 }
 /** Copies several Uint8Arrays into one. */
-function utils_concatBytes(...arrays) {
+function concatBytes(...arrays) {
     let sum = 0;
     for (let i = 0; i < arrays.length; i++) {
         const a = arrays[i];
-        utils_abytes(a);
+        abytes(a);
         sum += a.length;
     }
     const res = new Uint8Array(sum);
@@ -14398,7 +14399,7 @@ function checkOpts(defaults, opts) {
     return merged;
 }
 /** Creates function with outputLen, blockLen, create properties from a class constructor. */
-function utils_createHasher(hashCons, info = {}) {
+function createHasher(hashCons, info = {}) {
     const hashC = (msg, opts) => hashCons(opts).update(msg).digest();
     const tmp = hashCons(undefined);
     hashC.outputLen = tmp.outputLen;
@@ -14415,7 +14416,7 @@ function randomBytes(bytesLength = 32) {
     return cr.getRandomValues(new Uint8Array(bytesLength));
 }
 /** Creates OID opts for NIST hashes, with prefix 06 09 60 86 48 01 65 03 04 02. */
-const utils_oidNist = (suffix) => ({
+const oidNist = (suffix) => ({
     oid: Uint8Array.from([0x06, 0x09, 0x60, 0x86, 0x48, 0x01, 0x65, 0x03, 0x04, 0x02, suffix]),
 });
 //# sourceMappingURL=utils.js.map
@@ -14459,7 +14460,7 @@ class HashMD {
     }
     update(data) {
         aexists(this);
-        utils_abytes(data);
+        abytes(data);
         const { view, buffer, blockLen } = this;
         const len = data.length;
         for (let pos = 0; pos < len;) {
@@ -14636,6 +14637,8 @@ const u64 = {
 /* harmony default export */ const _u64 = ((/* unused pure expression or super */ null && (u64)));
 //# sourceMappingURL=_u64.js.map
 ;// ./node_modules/@noble/hashes/sha2.js
+/* unused harmony import specifier */ var sha2_createHasher;
+/* unused harmony import specifier */ var sha2_oidNist;
 /**
  * SHA2 hash function. A.k.a. sha256, sha384, sha512, sha512_224, sha512_256.
  * SHA256 is the fastest hash implementable in JS, even faster than Blake3.
@@ -15009,31 +15012,34 @@ class _SHA512_256 extends SHA2_64B {
  * - Each sha256 hash is executing 2^18 bit operations.
  * - Good 2024 ASICs can do 200Th/sec with 3500 watts of power, corresponding to 2^36 hashes/joule.
  */
-const sha2_sha256 = /* @__PURE__ */ utils_createHasher(() => new _SHA256(), 
-/* @__PURE__ */ utils_oidNist(0x01));
+const sha256 = /* @__PURE__ */ createHasher(() => new _SHA256(), 
+/* @__PURE__ */ oidNist(0x01));
 /** SHA2-224 hash function from RFC 4634 */
-const sha224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new _SHA224(), 
-/* @__PURE__ */ oidNist(0x04))));
+const sha224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (sha2_createHasher(() => new _SHA224(), 
+/* @__PURE__ */ sha2_oidNist(0x04))));
 /** SHA2-512 hash function from RFC 4634. */
-const sha512 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new _SHA512(), 
-/* @__PURE__ */ oidNist(0x03))));
+const sha512 = /* @__PURE__ */ (/* unused pure expression or super */ null && (sha2_createHasher(() => new _SHA512(), 
+/* @__PURE__ */ sha2_oidNist(0x03))));
 /** SHA2-384 hash function from RFC 4634. */
-const sha384 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new _SHA384(), 
-/* @__PURE__ */ oidNist(0x02))));
+const sha384 = /* @__PURE__ */ (/* unused pure expression or super */ null && (sha2_createHasher(() => new _SHA384(), 
+/* @__PURE__ */ sha2_oidNist(0x02))));
 /**
  * SHA2-512/256 "truncated" hash function, with improved resistance to length extension attacks.
  * See the paper on [truncated SHA512](https://eprint.iacr.org/2010/548.pdf).
  */
-const sha512_256 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new _SHA512_256(), 
-/* @__PURE__ */ oidNist(0x06))));
+const sha512_256 = /* @__PURE__ */ (/* unused pure expression or super */ null && (sha2_createHasher(() => new _SHA512_256(), 
+/* @__PURE__ */ sha2_oidNist(0x06))));
 /**
  * SHA2-512/224 "truncated" hash function, with improved resistance to length extension attacks.
  * See the paper on [truncated SHA512](https://eprint.iacr.org/2010/548.pdf).
  */
-const sha512_224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (createHasher(() => new _SHA512_224(), 
-/* @__PURE__ */ oidNist(0x05))));
+const sha512_224 = /* @__PURE__ */ (/* unused pure expression or super */ null && (sha2_createHasher(() => new _SHA512_224(), 
+/* @__PURE__ */ sha2_oidNist(0x05))));
 //# sourceMappingURL=sha2.js.map
 ;// ./node_modules/@noble/curves/utils.js
+/* unused harmony import specifier */ var hexToBytes_;
+/* unused harmony import specifier */ var utils_anumber;
+/* unused harmony import specifier */ var concatBytes_;
 /**
  * Hex, bytes and number utilities.
  * @module
@@ -15043,7 +15049,7 @@ const sha512_224 = /* @__PURE__ */ (/* unused pure expression or super */ null &
 
 const _0n = /* @__PURE__ */ BigInt(0);
 const _1n = /* @__PURE__ */ BigInt(1);
-function utils_abool(value, title = '') {
+function abool(value, title = '') {
     if (typeof value !== 'boolean') {
         const prefix = title && `"${title}" `;
         throw new Error(prefix + 'expected boolean, got type=' + typeof value);
@@ -15057,7 +15063,7 @@ function abignumber(n) {
             throw new Error('positive bigint expected, got ' + n);
     }
     else
-        utils_anumber(n);
+        anumber(n);
     return n;
 }
 function asafenumber(value, title = '') {
@@ -15076,16 +15082,16 @@ function hexToNumber(hex) {
     return hex === '' ? _0n : BigInt('0x' + hex); // Big Endian
 }
 // BE: Big Endian, LE: Little Endian
-function utils_bytesToNumberBE(bytes) {
-    return hexToNumber(utils_bytesToHex(bytes));
+function bytesToNumberBE(bytes) {
+    return hexToNumber(bytesToHex(bytes));
 }
 function bytesToNumberLE(bytes) {
-    return hexToNumber(utils_bytesToHex(copyBytes(utils_abytes(bytes)).reverse()));
+    return hexToNumber(bytesToHex(copyBytes(abytes(bytes)).reverse()));
 }
 function numberToBytesBE(n, len) {
-    utils_anumber(len);
+    anumber(len);
     n = abignumber(n);
-    const res = utils_hexToBytes(n.toString(16).padStart(len * 2, '0'));
+    const res = hexToBytes(n.toString(16).padStart(len * 2, '0'));
     if (res.length !== len)
         throw new Error('number too large');
     return res;
@@ -15137,7 +15143,7 @@ function inRange(n, min, max) {
  * @example
  * aInRange('x', x, 1n, 256n); // would assume x is in (1n..255n)
  */
-function utils_aInRange(title, n, min, max) {
+function aInRange(title, n, min, max) {
     // Why min <= n < max and not a (min < n < max) OR b (min <= n <= max)?
     // consider P=256n, min=0n, max=P
     // - a for min=0 would require -1:          `inRange('x', x, -1n, P)`
@@ -15152,7 +15158,7 @@ function utils_aInRange(title, n, min, max) {
  * Same as `n.toString(2).length`
  * TODO: merge with nLength in modular
  */
-function utils_bitLen(n) {
+function bitLen(n) {
     let len;
     for (len = 0; n > _0n; n >>= _1n, len += 1)
         ;
@@ -15176,7 +15182,7 @@ function bitSet(n, pos, value) {
  * Calculate mask for N bits. Not using ** operator with bigints because of old engines.
  * Same as BigInt(`0b${Array(i).fill('1').join('')}`)
  */
-const utils_bitMask = (n) => (_1n << BigInt(n)) - _1n;
+const bitMask = (n) => (_1n << BigInt(n)) - _1n;
 /**
  * Minimal HMAC-DRBG from NIST 800-90 for RFC6979 sigs.
  * @returns function that will call DRBG until 2nd arg returns something meaningful
@@ -15184,9 +15190,9 @@ const utils_bitMask = (n) => (_1n << BigInt(n)) - _1n;
  *   const drbg = createHmacDRBG<Key>(32, 32, hmac);
  *   drbg(seed, bytesToKey); // bytesToKey must return Key or undefined
  */
-function utils_createHmacDrbg(hashLen, qByteLen, hmacFn) {
-    anumber(hashLen, 'hashLen');
-    anumber(qByteLen, 'qByteLen');
+function createHmacDrbg(hashLen, qByteLen, hmacFn) {
+    utils_anumber(hashLen, 'hashLen');
+    utils_anumber(qByteLen, 'qByteLen');
     if (typeof hmacFn !== 'function')
         throw new Error('hmacFn must be a function');
     const u8n = (len) => new Uint8Array(len); // creates Uint8Array
@@ -15238,7 +15244,7 @@ function utils_createHmacDrbg(hashLen, qByteLen, hmacFn) {
     };
     return genUntil;
 }
-function utils_validateObject(object, fields = {}, optFields = {}) {
+function validateObject(object, fields = {}, optFields = {}) {
     if (!object || typeof object !== 'object')
         throw new Error('expected valid options object');
     function checkField(fieldName, expectedType, isOpt) {
@@ -15495,7 +15501,7 @@ const FIELD_FIELDS = [
     'eql', 'add', 'sub', 'mul', 'pow', 'div',
     'addN', 'subN', 'mulN', 'sqrN'
 ];
-function modular_validateField(field) {
+function validateField(field) {
     const initial = {
         ORDER: 'bigint',
         BYTES: 'number',
@@ -15505,7 +15511,7 @@ function modular_validateField(field) {
         map[val] = 'function';
         return map;
     }, initial);
-    utils_validateObject(field, opts);
+    validateObject(field, opts);
     // const max = 16384;
     // if (field.BYTES < 1 || field.BYTES > max) throw new Error('invalid field');
     // if (field.BITS < 1 || field.BITS > 8 * max) throw new Error('invalid field');
@@ -15538,7 +15544,7 @@ function FpPow(Fp, num, power) {
  * Exception-free. Will return `undefined` for 0 elements.
  * @param passZero map 0 to 0 (instead of undefined)
  */
-function modular_FpInvertBatch(Fp, nums, passZero = false) {
+function FpInvertBatch(Fp, nums, passZero = false) {
     const inverted = new Array(nums.length).fill(passZero ? Fp.ZERO : undefined);
     // Walk from first to last, multiply them by each other MOD p
     const multipliedAcc = nums.reduce((acc, num, i) => {
@@ -15592,7 +15598,7 @@ function FpIsSquare(Fp, n) {
 function nLength(n, nBitLength) {
     // Bit size, byte size of CURVE.n
     if (nBitLength !== undefined)
-        utils_anumber(nBitLength);
+        anumber(nBitLength);
     const _nBitLength = nBitLength !== undefined ? nBitLength : n.toString(2).length;
     const nByteLength = Math.ceil(_nBitLength / 8);
     return { nBitLength: _nBitLength, nByteLength };
@@ -15701,7 +15707,7 @@ class _Field {
         return this.isLE ? numberToBytesLE(num, this.BYTES) : numberToBytesBE(num, this.BYTES);
     }
     fromBytes(bytes, skipValidation = false) {
-        utils_abytes(bytes);
+        abytes(bytes);
         const { _lengths: allowedLengths, BYTES, isLE, ORDER, _mod: modFromBytes } = this;
         if (allowedLengths) {
             if (!allowedLengths.includes(bytes.length) || bytes.length > BYTES) {
@@ -15714,7 +15720,7 @@ class _Field {
         }
         if (bytes.length !== BYTES)
             throw new Error('Field.fromBytes: expected ' + BYTES + ' bytes, got ' + bytes.length);
-        let scalar = isLE ? bytesToNumberLE(bytes) : utils_bytesToNumberBE(bytes);
+        let scalar = isLE ? bytesToNumberLE(bytes) : bytesToNumberBE(bytes);
         if (modFromBytes)
             scalar = mod(scalar, ORDER);
         if (!skipValidation)
@@ -15726,7 +15732,7 @@ class _Field {
     }
     // TODO: we don't need it here, move out to separate fn
     invertBatch(lst) {
-        return modular_FpInvertBatch(this, lst);
+        return FpInvertBatch(this, lst);
     }
     // We can't move this out because Fp6, Fp12 implement it
     // and it's unclear what to return in there.
@@ -15800,7 +15806,7 @@ function getFieldBytesLength(fieldOrder) {
  * @param fieldOrder number of field elements, usually CURVE.n
  * @returns byte length of target hash
  */
-function modular_getMinHashLength(fieldOrder) {
+function getMinHashLength(fieldOrder) {
     const length = getFieldBytesLength(fieldOrder);
     return length + Math.ceil(length / 2);
 }
@@ -15817,21 +15823,23 @@ function modular_getMinHashLength(fieldOrder) {
  * @param isLE interpret hash bytes as LE num
  * @returns valid private scalar
  */
-function modular_mapHashToField(key, fieldOrder, isLE = false) {
-    utils_abytes(key);
+function mapHashToField(key, fieldOrder, isLE = false) {
+    abytes(key);
     const len = key.length;
     const fieldLen = getFieldBytesLength(fieldOrder);
-    const minLen = modular_getMinHashLength(fieldOrder);
+    const minLen = getMinHashLength(fieldOrder);
     // No small numbers: need to understand bias story. No huge numbers: easier to detect JS timings.
     if (len < 16 || len < minLen || len > 1024)
         throw new Error('expected ' + minLen + '-1024 bytes of input, got ' + len);
-    const num = isLE ? bytesToNumberLE(key) : utils_bytesToNumberBE(key);
+    const num = isLE ? bytesToNumberLE(key) : bytesToNumberBE(key);
     // `mod(x, 11)` can sometimes produce 0. `mod(x, 10) + 1` is the same, but no 0
     const reduced = mod(num, fieldOrder - modular_1n) + modular_1n;
     return isLE ? numberToBytesLE(reduced, fieldLen) : numberToBytesBE(reduced, fieldLen);
 }
 //# sourceMappingURL=modular.js.map
 ;// ./node_modules/@noble/curves/abstract/curve.js
+/* unused harmony import specifier */ var curve_bitLen;
+/* unused harmony import specifier */ var curve_bitMask;
 /**
  * Methods for elliptic curve multiplication by scalars.
  * Contains wNAF, pippenger.
@@ -15853,7 +15861,7 @@ function negateCt(condition, item) {
  * Optimization: converts a list of projective points to a list of identical points with Z=1.
  */
 function normalizeZ(c, points) {
-    const invertedZs = modular_FpInvertBatch(c.Fp, points.map((p) => p.Z));
+    const invertedZs = FpInvertBatch(c.Fp, points.map((p) => p.Z));
     return points.map((p, i) => c.fromAffine(p.toAffine(invertedZs[i])));
 }
 function validateW(W, bits) {
@@ -15865,7 +15873,7 @@ function calcWOpts(W, scalarBits) {
     const windows = Math.ceil(scalarBits / W) + 1; // W=8 33. Not 32, because we skip zero
     const windowSize = 2 ** (W - 1); // W=8 128. Not 256, because we skip zero
     const maxNumber = 2 ** W; // W=8 256
-    const mask = utils_bitMask(W); // W=8 255 == mask 0b11111111
+    const mask = bitMask(W); // W=8 255 == mask 0b11111111
     const shiftBy = BigInt(W); // W=8 8
     return { windows, windowSize, mask, maxNumber, shiftBy };
 }
@@ -16136,7 +16144,7 @@ function pippenger(c, points, scalars) {
         throw new Error('arrays of points and scalars must have equal length');
     // if (plength === 0) throw new Error('array must be of length >= 2');
     const zero = c.ZERO;
-    const wbits = bitLen(BigInt(plength));
+    const wbits = curve_bitLen(BigInt(plength));
     let windowSize = 1; // bits
     if (wbits > 12)
         windowSize = wbits - 3;
@@ -16144,7 +16152,7 @@ function pippenger(c, points, scalars) {
         windowSize = wbits - 2;
     else if (wbits > 0)
         windowSize = 2;
-    const MASK = bitMask(windowSize);
+    const MASK = curve_bitMask(windowSize);
     const buckets = new Array(Number(MASK) + 1).fill(zero); // +1 for zero array
     const lastBits = Math.floor((fieldN.BITS - 1) / windowSize) * windowSize;
     let sum = zero;
@@ -16217,7 +16225,7 @@ function precomputeMSMUnsafe(c, points, windowSize) {
     const zero = c.ZERO;
     const tableSize = 2 ** windowSize - 1; // table size (without zero)
     const chunks = Math.ceil(fieldN.BITS / windowSize); // chunks of item
-    const MASK = bitMask(windowSize);
+    const MASK = curve_bitMask(windowSize);
     const tables = points.map((p) => {
         const res = [];
         for (let i = 0, acc = p; i < tableSize; i++) {
@@ -16252,7 +16260,7 @@ function createField(order, field, isLE) {
     if (field) {
         if (field.ORDER !== order)
             throw new Error('Field.ORDER must match order: Fp == p, Fn == n');
-        modular_validateField(field);
+        validateField(field);
         return field;
     }
     else {
@@ -16282,7 +16290,7 @@ function createCurveFields(type, CURVE, curveOpts = {}, FpFnLE) {
     CURVE = Object.freeze(Object.assign({}, CURVE));
     return { CURVE, Fp, Fn };
 }
-function curve_createKeygen(randomSecretKey, getPublicKey) {
+function createKeygen(randomSecretKey, getPublicKey) {
     return function keygen(seed) {
         const secretKey = randomSecretKey(seed);
         return { secretKey, publicKey: getPublicKey(secretKey) };
@@ -16290,6 +16298,25 @@ function curve_createKeygen(randomSecretKey, getPublicKey) {
 }
 //# sourceMappingURL=curve.js.map
 ;// ./node_modules/@noble/curves/abstract/weierstrass.js
+/* unused harmony import specifier */ var nobleHmac;
+/* unused harmony import specifier */ var weierstrass_ahash;
+/* unused harmony import specifier */ var weierstrass_abool;
+/* unused harmony import specifier */ var weierstrass_validateObject;
+/* unused harmony import specifier */ var weierstrass_bytesToNumberBE;
+/* unused harmony import specifier */ var weierstrass_bitMask;
+/* unused harmony import specifier */ var weierstrass_aInRange;
+/* unused harmony import specifier */ var weierstrass_createHmacDrbg;
+/* unused harmony import specifier */ var wcRandomBytes;
+/* unused harmony import specifier */ var weierstrass_abytes;
+/* unused harmony import specifier */ var weierstrass_isBytes;
+/* unused harmony import specifier */ var weierstrass_hexToBytes;
+/* unused harmony import specifier */ var weierstrass_concatBytes;
+/* unused harmony import specifier */ var weierstrass_bytesToHex;
+/* unused harmony import specifier */ var weierstrass_createKeygen;
+/* unused harmony import specifier */ var weierstrass_validateField;
+/* unused harmony import specifier */ var weierstrass_FpInvertBatch;
+/* unused harmony import specifier */ var weierstrass_getMinHashLength;
+/* unused harmony import specifier */ var weierstrass_mapHashToField;
 /**
  * Short Weierstrass curve methods. The formula is: y² = x³ + ax + b.
  *
@@ -16346,7 +16373,7 @@ function _splitEndoScalar(k, basis, n) {
         k2 = -k2;
     // Double check that resulting scalar less than half bits of N: otherwise wNAF will fail.
     // This should only happen on wrong basises. Also, math inside is too complex and I don't trust it.
-    const MAX_NUM = utils_bitMask(Math.ceil(utils_bitLen(n) / 2)) + weierstrass_1n; // Half bits of N
+    const MAX_NUM = bitMask(Math.ceil(bitLen(n) / 2)) + weierstrass_1n; // Half bits of N
     if (k1 < weierstrass_0n || k1 >= MAX_NUM || k2 < weierstrass_0n || k2 >= MAX_NUM) {
         throw new Error('splitScalar (endomorphism): failed, k=' + k);
     }
@@ -16363,8 +16390,8 @@ function validateSigOpts(opts, def) {
         // @ts-ignore
         optsn[optName] = opts[optName] === undefined ? def[optName] : opts[optName];
     }
-    abool(optsn.lowS, 'lowS');
-    abool(optsn.prehash, 'prehash');
+    weierstrass_abool(optsn.lowS, 'lowS');
+    weierstrass_abool(optsn.prehash, 'prehash');
     if (optsn.format !== undefined)
         validateSigFormat(optsn.format);
     return optsn;
@@ -16461,13 +16488,13 @@ const DER = {
                 throw new E('invalid signature integer: negative');
             if (data[0] === 0x00 && !(data[1] & 0b1000_0000))
                 throw new E('invalid signature integer: unnecessary leading zero');
-            return utils_bytesToNumberBE(data);
+            return bytesToNumberBE(data);
         },
     },
     toSig(bytes) {
         // parse DER signature
         const { Err: E, _int: int, _tlv: tlv } = DER;
-        const data = utils_abytes(bytes, undefined, 'signature');
+        const data = abytes(bytes, undefined, 'signature');
         const { v: seqBytes, l: seqLeftBytes } = tlv.decode(0x30, data);
         if (seqLeftBytes.length)
             throw new E('invalid signature: left bytes after parsing');
@@ -16512,7 +16539,7 @@ function weierstrass(params, extraOpts = {}) {
     const { Fp, Fn } = validated;
     let CURVE = validated.CURVE;
     const { h: cofactor, n: CURVE_ORDER } = CURVE;
-    utils_validateObject(extraOpts, {}, {
+    validateObject(extraOpts, {}, {
         allowInfinityPoint: 'boolean',
         clearCofactor: 'function',
         isTorsionFree: 'function',
@@ -16536,18 +16563,18 @@ function weierstrass(params, extraOpts = {}) {
     function pointToBytes(_c, point, isCompressed) {
         const { x, y } = point.toAffine();
         const bx = Fp.toBytes(x);
-        utils_abool(isCompressed, 'isCompressed');
+        abool(isCompressed, 'isCompressed');
         if (isCompressed) {
             assertCompressionIsSupported();
             const hasEvenY = !Fp.isOdd(y);
-            return utils_concatBytes(pprefix(hasEvenY), bx);
+            return concatBytes(pprefix(hasEvenY), bx);
         }
         else {
-            return utils_concatBytes(Uint8Array.of(0x04), bx, Fp.toBytes(y));
+            return concatBytes(Uint8Array.of(0x04), bx, Fp.toBytes(y));
         }
     }
     function pointFromBytes(bytes) {
-        utils_abytes(bytes, undefined, 'Point');
+        abytes(bytes, undefined, 'Point');
         const { publicKey: comp, publicKeyUncompressed: uncomp } = lengths; // e.g. for 32-byte: 33, 65
         const length = bytes.length;
         const head = bytes[0];
@@ -16715,12 +16742,12 @@ function weierstrass(params, extraOpts = {}) {
             return new Point(x, y, Fp.ONE);
         }
         static fromBytes(bytes) {
-            const P = Point.fromAffine(decodePoint(utils_abytes(bytes, undefined, 'point')));
+            const P = Point.fromAffine(decodePoint(abytes(bytes, undefined, 'point')));
             P.assertValidity();
             return P;
         }
         static fromHex(hex) {
-            return Point.fromBytes(utils_hexToBytes(hex));
+            return Point.fromBytes(hexToBytes(hex));
         }
         get x() {
             return this.toAffine().x;
@@ -16955,12 +16982,12 @@ function weierstrass(params, extraOpts = {}) {
             return this.multiplyUnsafe(cofactor).is0();
         }
         toBytes(isCompressed = true) {
-            utils_abool(isCompressed, 'isCompressed');
+            abool(isCompressed, 'isCompressed');
             this.assertValidity();
             return encodePoint(Point, this, isCompressed);
         }
         toHex(isCompressed = true) {
-            return utils_bytesToHex(this.toBytes(isCompressed));
+            return bytesToHex(this.toBytes(isCompressed));
         }
         toString() {
             return `<Point ${this.is0() ? 'ZERO' : this.toHex()}>`;
@@ -17057,8 +17084,8 @@ function SWUFpSqrtRatio(Fp, Z) {
  * Simplified Shallue-van de Woestijne-Ulas Method
  * https://www.rfc-editor.org/rfc/rfc9380#section-6.6.2
  */
-function weierstrass_mapToCurveSimpleSWU(Fp, opts) {
-    validateField(Fp);
+function mapToCurveSimpleSWU(Fp, opts) {
+    weierstrass_validateField(Fp);
     const { A, B, Z } = opts;
     if (!Fp.isValid(A) || !Fp.isValid(B) || !Fp.isValid(Z))
         throw new Error('mapToCurveSimpleSWU: invalid opts');
@@ -17094,7 +17121,7 @@ function weierstrass_mapToCurveSimpleSWU(Fp, opts) {
         y = Fp.cmov(y, value, isValid); // 22.   y = CMOV(y, y1, is_gx1_square)
         const e1 = Fp.isOdd(u) === Fp.isOdd(y); // 23.  e1 = sgn0(u) == sgn0(y)
         y = Fp.cmov(Fp.neg(y), y, e1); // 24.   y = CMOV(-y, y, e1)
-        const tv4_inv = FpInvertBatch(Fp, [tv4], true)[0];
+        const tv4_inv = weierstrass_FpInvertBatch(Fp, [tv4], true)[0];
         x = Fp.mul(x, tv4_inv); // 25.   x = x / tv4
         return { x, y };
     };
@@ -17115,7 +17142,7 @@ function getWLengths(Fp, Fn) {
 function ecdh(Point, ecdhOpts = {}) {
     const { Fn } = Point;
     const randomBytes_ = ecdhOpts.randomBytes || wcRandomBytes;
-    const lengths = Object.assign(getWLengths(Point.Fp, Fn), { seed: getMinHashLength(Fn.ORDER) });
+    const lengths = Object.assign(getWLengths(Point.Fp, Fn), { seed: weierstrass_getMinHashLength(Fn.ORDER) });
     function isValidSecretKey(secretKey) {
         try {
             const num = Fn.fromBytes(secretKey);
@@ -17144,7 +17171,7 @@ function ecdh(Point, ecdhOpts = {}) {
      * (groupLen + ceil(groupLen / 2)) with modulo bias being negligible.
      */
     function randomSecretKey(seed = randomBytes_(lengths.seed)) {
-        return mapHashToField(abytes(seed, lengths.seed, 'seed'), Fn.ORDER);
+        return weierstrass_mapHashToField(weierstrass_abytes(seed, lengths.seed, 'seed'), Fn.ORDER);
     }
     /**
      * Computes public key for a secret key. Checks for validity of the secret key.
@@ -17159,11 +17186,11 @@ function ecdh(Point, ecdhOpts = {}) {
      */
     function isProbPub(item) {
         const { secretKey, publicKey, publicKeyUncompressed } = lengths;
-        if (!isBytes(item))
+        if (!weierstrass_isBytes(item))
             return undefined;
         if (('_lengths' in Fn && Fn._lengths) || secretKey === publicKey)
             return undefined;
-        const l = abytes(item, undefined, 'key').length;
+        const l = weierstrass_abytes(item, undefined, 'key').length;
         return l === publicKey || l === publicKeyUncompressed;
     }
     /**
@@ -17188,7 +17215,7 @@ function ecdh(Point, ecdhOpts = {}) {
         isValidPublicKey,
         randomSecretKey,
     };
-    const keygen = createKeygen(randomSecretKey, getPublicKey);
+    const keygen = weierstrass_createKeygen(randomSecretKey, getPublicKey);
     return Object.freeze({ getPublicKey, getSharedSecret, keygen, Point, utils, lengths });
 }
 /**
@@ -17206,9 +17233,9 @@ function ecdh(Point, ecdhOpts = {}) {
  * const p256_sha224_r = ecdsa(p256_Point, sha224, { randomBytes: (length) => { ... } });
  * ```
  */
-function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
-    ahash(hash);
-    validateObject(ecdsaOpts, {}, {
+function ecdsa(Point, hash, ecdsaOpts = {}) {
+    weierstrass_ahash(hash);
+    weierstrass_validateObject(ecdsaOpts, {}, {
         hmac: 'function',
         lowS: 'boolean',
         randomBytes: 'function',
@@ -17253,7 +17280,7 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
         validateSigFormat(format);
         const size = lengths.signature;
         const sizer = format === 'compact' ? size : format === 'recovered' ? size + 1 : undefined;
-        return abytes(bytes, sizer);
+        return weierstrass_abytes(bytes, sizer);
     }
     /**
      * ECDSA signature with its (r, s) properties. Supports compact, recovered & DER representations.
@@ -17277,7 +17304,7 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
             validateSigLength(bytes, format);
             let recid;
             if (format === 'der') {
-                const { r, s } = DER.toSig(abytes(bytes));
+                const { r, s } = DER.toSig(weierstrass_abytes(bytes));
                 return new Signature(r, s);
             }
             if (format === 'recovered') {
@@ -17291,7 +17318,7 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
             return new Signature(Fn.fromBytes(r), Fn.fromBytes(s), recid);
         }
         static fromHex(hex, format) {
-            return this.fromBytes(hexToBytes(hex), format);
+            return this.fromBytes(weierstrass_hexToBytes(hex), format);
         }
         assertRecovery() {
             const { recovery } = this;
@@ -17309,9 +17336,9 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
             if (!Fp.isValid(radj))
                 throw new Error('invalid recovery id: sig.r+curve.n != R.x');
             const x = Fp.toBytes(radj);
-            const R = Point.fromBytes(concatBytes(pprefix((recovery & 1) === 0), x));
+            const R = Point.fromBytes(weierstrass_concatBytes(pprefix((recovery & 1) === 0), x));
             const ir = Fn.inv(radj); // r^-1
-            const h = bits2int_modN(abytes(messageHash, undefined, 'msgHash')); // Truncate hash
+            const h = bits2int_modN(weierstrass_abytes(messageHash, undefined, 'msgHash')); // Truncate hash
             const u1 = Fn.create(-h * ir); // -hr^-1
             const u2 = Fn.create(s * ir); // sr^-1
             // (sr^-1)R-(hr^-1)G = -(hr^-1)G + (sr^-1). unsafe is fine: there is no private data.
@@ -17328,18 +17355,18 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
         toBytes(format = defaultSigOpts.format) {
             validateSigFormat(format);
             if (format === 'der')
-                return hexToBytes(DER.hexFromSig(this));
+                return weierstrass_hexToBytes(DER.hexFromSig(this));
             const { r, s } = this;
             const rb = Fn.toBytes(r);
             const sb = Fn.toBytes(s);
             if (format === 'recovered') {
                 assertSmallCofactor();
-                return concatBytes(Uint8Array.of(this.assertRecovery()), rb, sb);
+                return weierstrass_concatBytes(Uint8Array.of(this.assertRecovery()), rb, sb);
             }
-            return concatBytes(rb, sb);
+            return weierstrass_concatBytes(rb, sb);
         }
         toHex(format) {
-            return bytesToHex(this.toBytes(format));
+            return weierstrass_bytesToHex(this.toBytes(format));
         }
     }
     // RFC6979: ensure ECDSA msg is X bytes and < N. RFC suggests optional truncating via bits2octets.
@@ -17353,7 +17380,7 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
                 throw new Error('input is too large');
             // For curves with nBitLength % 8 !== 0: bits2octets(bits2octets(m)) !== bits2octets(m)
             // for some cases, since bytes.length * 8 is not actual bitLength.
-            const num = bytesToNumberBE(bytes); // check for == u8 done here
+            const num = weierstrass_bytesToNumberBE(bytes); // check for == u8 done here
             const delta = bytes.length * 8 - fnBits; // truncate to nBitLength leftmost bits
             return delta > 0 ? num >> BigInt(delta) : num;
         };
@@ -17362,16 +17389,16 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
             return Fn.create(bits2int(bytes)); // can't use bytesToNumberBE here
         };
     // Pads output with zero as per spec
-    const ORDER_MASK = bitMask(fnBits);
+    const ORDER_MASK = weierstrass_bitMask(fnBits);
     /** Converts to bytes. Checks if num in `[0..ORDER_MASK-1]` e.g.: `[0..2^256-1]`. */
     function int2octets(num) {
         // IMPORTANT: the check ensures working for case `Fn.BYTES != Fn.BITS * 8`
-        aInRange('num < 2^' + fnBits, num, weierstrass_0n, ORDER_MASK);
+        weierstrass_aInRange('num < 2^' + fnBits, num, weierstrass_0n, ORDER_MASK);
         return Fn.toBytes(num);
     }
     function validateMsgAndHash(message, prehash) {
-        abytes(message, undefined, 'message');
-        return prehash ? abytes(hash(message), undefined, 'prehashed message') : message;
+        weierstrass_abytes(message, undefined, 'message');
+        return prehash ? weierstrass_abytes(hash(message), undefined, 'prehashed message') : message;
     }
     /**
      * Steps A, D of RFC6979 3.2.
@@ -17397,9 +17424,9 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
             // K = HMAC_K(V || 0x00 || int2octets(x) || bits2octets(h1) || k')
             // gen random bytes OR pass as-is
             const e = extraEntropy === true ? randomBytes(lengths.secretKey) : extraEntropy;
-            seedArgs.push(abytes(e, undefined, 'extraEntropy')); // check for being bytes
+            seedArgs.push(weierstrass_abytes(e, undefined, 'extraEntropy')); // check for being bytes
         }
-        const seed = concatBytes(...seedArgs); // Step D of RFC6979 3.2
+        const seed = weierstrass_concatBytes(...seedArgs); // Step D of RFC6979 3.2
         const m = h1int; // no need to call bits2int second time here, it is inside truncateHash!
         // Converts signature params into point w r/s, checks result for validity.
         // To transform k => Signature:
@@ -17446,7 +17473,7 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
      */
     function sign(message, secretKey, opts = {}) {
         const { seed, k2sig } = prepSig(message, secretKey, opts); // Steps A, D of RFC6979 3.2.
-        const drbg = createHmacDrbg(hash.outputLen, Fn.BYTES, hmac);
+        const drbg = weierstrass_createHmacDrbg(hash.outputLen, Fn.BYTES, hmac);
         const sig = drbg(seed, k2sig); // Steps B, C, D, E, F, G
         return sig.toBytes(opts.format);
     }
@@ -17465,9 +17492,9 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
      */
     function verify(signature, message, publicKey, opts = {}) {
         const { lowS, prehash, format } = validateSigOpts(opts, defaultSigOpts);
-        publicKey = abytes(publicKey, undefined, 'publicKey');
+        publicKey = weierstrass_abytes(publicKey, undefined, 'publicKey');
         message = validateMsgAndHash(message, prehash);
-        if (!isBytes(signature)) {
+        if (!weierstrass_isBytes(signature)) {
             const end = signature instanceof Signature ? ', use sig.toBytes()' : '';
             throw new Error('verify expects Uint8Array signature' + end);
         }
@@ -17513,6 +17540,11 @@ function weierstrass_ecdsa(Point, hash, ecdsaOpts = {}) {
 }
 //# sourceMappingURL=weierstrass.js.map
 ;// ./node_modules/@noble/curves/secp256k1.js
+/* unused harmony import specifier */ var secp256k1_sha256;
+/* unused harmony import specifier */ var isogenyMap;
+/* unused harmony import specifier */ var secp256k1_createHasher;
+/* unused harmony import specifier */ var secp256k1_ecdsa;
+/* unused harmony import specifier */ var secp256k1_mapToCurveSimpleSWU;
 /**
  * SECG secp256k1. See [pdf](https://www.secg.org/sec2-v2.pdf).
  *
@@ -17599,7 +17631,7 @@ const Pointk1 = /* @__PURE__ */ weierstrass(secp256k1_CURVE, {
  * // const sigKeccak = secp256k1.sign(keccak256(msg), secretKey, { prehash: false });
  * ```
  */
-const secp256k1 = /* @__PURE__ */ (/* unused pure expression or super */ null && (ecdsa(Pointk1, sha256)));
+const secp256k1 = /* @__PURE__ */ (/* unused pure expression or super */ null && (secp256k1_ecdsa(Pointk1, secp256k1_sha256)));
 // Schnorr signatures are superior to ECDSA from above. Below is Schnorr-specific BIP0340 code.
 // https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki
 /** An object mapping tags to their tagged hash prefix of [SHA256(tag) | SHA256(tag)] */
@@ -17607,11 +17639,11 @@ const TAGGED_HASH_PREFIXES = {};
 function taggedHash(tag, ...messages) {
     let tagP = TAGGED_HASH_PREFIXES[tag];
     if (tagP === undefined) {
-        const tagH = sha2_sha256(asciiToBytes(tag));
-        tagP = utils_concatBytes(tagH, tagH);
+        const tagH = sha256(asciiToBytes(tag));
+        tagP = concatBytes(tagH, tagH);
         TAGGED_HASH_PREFIXES[tag] = tagP;
     }
-    return sha2_sha256(utils_concatBytes(tagP, ...messages));
+    return sha256(concatBytes(tagP, ...messages));
 }
 // ECDSA compact points are 33-byte. Schnorr is 32: we strip first byte 0x02 or 0x03
 const pointToBytes = (point) => point.toBytes(true).slice(1);
@@ -17643,7 +17675,7 @@ function lift_x(x) {
     p.assertValidity();
     return p;
 }
-const num = utils_bytesToNumberBE;
+const num = bytesToNumberBE;
 /**
  * Create tagged hash, convert it to bigint, reduce modulo-n.
  */
@@ -17662,9 +17694,9 @@ function schnorrGetPublicKey(secretKey) {
  */
 function schnorrSign(message, secretKey, auxRand = randomBytes(32)) {
     const { Fn } = Pointk1;
-    const m = utils_abytes(message, undefined, 'message');
+    const m = abytes(message, undefined, 'message');
     const { bytes: px, scalar: d } = schnorrGetExtPubKey(secretKey); // checks for isWithinCurveOrder
-    const a = utils_abytes(auxRand, 32, 'auxRand'); // Auxiliary random data a: a 32-byte array
+    const a = abytes(auxRand, 32, 'auxRand'); // Auxiliary random data a: a 32-byte array
     const t = Fn.toBytes(d ^ num(taggedHash('BIP0340/aux', a))); // Let t be the byte-wise xor of bytes(d) and hash/aux(a)
     const rand = taggedHash('BIP0340/nonce', t, px, m); // Let rand = hash/nonce(t || bytes(P) || m)
     // Let k' = int(rand) mod n. Fail if k' = 0. Let R = k'⋅G
@@ -17684,9 +17716,9 @@ function schnorrSign(message, secretKey, auxRand = randomBytes(32)) {
  */
 function schnorrVerify(signature, message, publicKey) {
     const { Fp, Fn, BASE } = Pointk1;
-    const sig = utils_abytes(signature, 64, 'signature');
-    const m = utils_abytes(message, undefined, 'message');
-    const pub = utils_abytes(publicKey, 32, 'publicKey');
+    const sig = abytes(signature, 64, 'signature');
+    const m = abytes(message, undefined, 'message');
+    const pub = abytes(publicKey, 32, 'publicKey');
     try {
         const P = lift_x(num(pub)); // P = lift_x(int(pk)); fail if that fails
         const r = num(sig.subarray(0, 32)); // Let r = int(sig[0:32]); fail if r ≥ p.
@@ -17725,10 +17757,10 @@ const schnorr = /* @__PURE__ */ (() => {
     const size = 32;
     const seedLength = 48;
     const randomSecretKey = (seed = randomBytes(seedLength)) => {
-        return modular_mapHashToField(seed, secp256k1_CURVE.n);
+        return mapHashToField(seed, secp256k1_CURVE.n);
     };
     return {
-        keygen: curve_createKeygen(randomSecretKey, schnorrGetPublicKey),
+        keygen: createKeygen(randomSecretKey, schnorrGetPublicKey),
         getPublicKey: schnorrGetPublicKey,
         sign: schnorrSign,
         verify: schnorrVerify,
@@ -17777,13 +17809,13 @@ const isoMap = /* @__PURE__ */ (/* unused pure expression or super */ null && ((
         '0x0000000000000000000000000000000000000000000000000000000000000001', // LAST 1
     ],
 ].map((i) => i.map((j) => BigInt(j)))))()));
-const mapSWU = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => mapToCurveSimpleSWU(Fpk1, {
+const mapSWU = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => secp256k1_mapToCurveSimpleSWU(Fpk1, {
     A: BigInt('0x3f8731abdd661adca08a5558f0f5d272e953d363cb6f0e5d405447c01a444533'),
     B: BigInt('1771'),
     Z: Fpk1.create(BigInt('-11')),
 }))()));
 /** Hashing / encoding to secp256k1 points / field. RFC 9380 methods. */
-const secp256k1_hasher = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => createHasher(Pointk1, (scalars) => {
+const secp256k1_hasher = /* @__PURE__ */ (/* unused pure expression or super */ null && ((() => secp256k1_createHasher(Pointk1, (scalars) => {
     const { x, y } = mapSWU(Fpk1.create(scalars[0]));
     return isoMap(x, y);
 }, {
@@ -17793,7 +17825,7 @@ const secp256k1_hasher = /* @__PURE__ */ (/* unused pure expression or super */ 
     m: 1,
     k: 128,
     expand: 'xmd',
-    hash: sha256,
+    hash: secp256k1_sha256,
 }))()));
 //# sourceMappingURL=secp256k1.js.map
 ;// ./src/chat/signature.ts
@@ -17862,8 +17894,8 @@ function serializeMsg(msg) {
   return JSON.stringify(msg);
 }
 function getMsgHash(message) {
-  var msgHash = sha2_sha256(utf8Encoder.encode(serializeMsg(message)));
-  return utils_bytesToHex(msgHash);
+  var msgHash = sha256(utf8Encoder.encode(serializeMsg(message)));
+  return bytesToHex(msgHash);
 }
 
 // const isRecord = (obj: unknown): obj is Record<string, unknown> => obj instanceof Object
@@ -17889,10 +17921,10 @@ function getMsgHash(message) {
 } */
 
 function verifySignature(sig, message, pubKey) {
-  return schnorr.verify(utils_hexToBytes(sig), utils_hexToBytes(getMsgHash(message)), utils_hexToBytes(pubKey));
+  return schnorr.verify(hexToBytes(sig), hexToBytes(getMsgHash(message)), hexToBytes(pubKey));
 }
 function signMsg(message, key) {
-  return utils_bytesToHex(schnorr.sign(utils_hexToBytes(getMsgHash(message)), utils_hexToBytes(key)));
+  return bytesToHex(schnorr.sign(hexToBytes(getMsgHash(message)), hexToBytes(key)));
 }
 ;// ./src/utils/keyHelpers/otherHelpers.ts
 
@@ -17902,7 +17934,7 @@ function signMsg(message, key) {
 
 var getRootIfPreferencesExist = function getRootIfPreferencesExist(webId) {
   var _store$any, _root;
-  var root = (_store$any = external_SolidLogic_.store.any(webId, src_ns.space('preferencesFile'), null, webId.doc())) === null || _store$any === void 0 ? void 0 : _store$any.value;
+  var root = (_store$any = external_SolidLogic_.store.any(webId, ns.space('preferencesFile'), null, webId.doc())) === null || _store$any === void 0 ? void 0 : _store$any.value;
   root = (_root = root) === null || _root === void 0 ? void 0 : _root.split('/').slice(0, -2).join('/');
   if (!root) throw new Error("prefererencesFile is expected to exist in ".concat(webId));
   return root;
@@ -17938,7 +17970,7 @@ function getExistingPublicKey(_x, _x2) {
   return _getExistingPublicKey.apply(this, arguments);
 }
 function _getExistingPublicKey() {
-  _getExistingPublicKey = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(webId, publicKeyUrl) {
+  _getExistingPublicKey = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(webId, publicKeyUrl) {
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
@@ -17958,7 +17990,7 @@ function getExistingPrivateKey(_x3, _x4) {
   return _getExistingPrivateKey.apply(this, arguments);
 }
 function _getExistingPrivateKey() {
-  _getExistingPrivateKey = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(webId, privateKeyUrl) {
+  _getExistingPrivateKey = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(webId, privateKeyUrl) {
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
         case 0:
@@ -17978,7 +18010,7 @@ function getKeyIfExists(_x5, _x6, _x7) {
   return _getKeyIfExists.apply(this, arguments);
 }
 function _getKeyIfExists() {
-  _getKeyIfExists = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(webId, keyUrl, keyType) {
+  _getKeyIfExists = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(webId, keyUrl, keyType) {
     var key, _t, _t2;
     return regenerator_default().wrap(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
@@ -17987,7 +18019,7 @@ function _getKeyIfExists() {
           _context3.next = 1;
           return external_SolidLogic_.store.fetcher.load(keyUrl);
         case 1:
-          key = external_SolidLogic_.store.any(webId, src_ns.solid(keyType)); // store.sym(CERT + keyType))
+          key = external_SolidLogic_.store.any(webId, ns.solid(keyType)); // store.sym(CERT + keyType))
           return _context3.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
         case 2:
           _context3.prev = 2;
@@ -18047,7 +18079,7 @@ function setAcl(_x, _x2) {
  * @returns aclBody
  */
 function _setAcl() {
-  _setAcl = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(keyDoc, aclBody) {
+  _setAcl = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(keyDoc, aclBody) {
     var keyAclDoc, _err$response, _t;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -18120,10 +18152,10 @@ var keyAclBody = function keyAclBody(keyDoc, me) {
 
 
 function generatePrivateKey() {
-  return utils_bytesToHex(schnorr.utils.randomSecretKey());
+  return bytesToHex(schnorr.utils.randomSecretKey());
 }
 function generatePublicKey(privateKey) {
-  return utils_bytesToHex(schnorr.getPublicKey(utils_hexToBytes(privateKey)));
+  return bytesToHex(schnorr.getPublicKey(hexToBytes(privateKey)));
 }
 
 /**
@@ -18137,7 +18169,7 @@ function getPublicKey(_x) {
   return _getPublicKey.apply(this, arguments);
 }
 function _getPublicKey() {
-  _getPublicKey = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(webId) {
+  _getPublicKey = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(webId) {
     var publicKeyDoc, key, _t2;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -18154,7 +18186,7 @@ function _getPublicKey() {
           return external_SolidLogic_.store.fetcher.load(publicKeyDoc);
         case 4:
           // url.href)
-          key = external_SolidLogic_.store.any(webId, src_ns.solid('publicKey'));
+          key = external_SolidLogic_.store.any(webId, ns.solid('publicKey'));
           return _context2.abrupt("return", key === null || key === void 0 ? void 0 : key.value);
         case 5:
           _context2.prev = 5;
@@ -18172,7 +18204,7 @@ function getPrivateKey(_x2) {
   return _getPrivateKey.apply(this, arguments);
 }
 function _getPrivateKey() {
-  _getPrivateKey = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(webId) {
+  _getPrivateKey = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(webId) {
     var publicKeyDoc, privateKeyDoc, publicKey, privateKey, validPublicKey, del, add, newPublicKey, keyContainer;
     return regenerator_default().wrap(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
@@ -18215,7 +18247,7 @@ function _getPrivateKey() {
           }
           // add = []
           privateKey = generatePrivateKey();
-          add = [external_$rdf_.st(webId, src_ns.solid('privateKey'), external_$rdf_.literal(privateKey), external_SolidLogic_.store.sym(privateKeyDoc))];
+          add = [external_$rdf_.st(webId, ns.solid('privateKey'), external_$rdf_.literal(privateKey), external_SolidLogic_.store.sym(privateKeyDoc))];
           _context3.next = 6;
           return saveKey(privateKeyDoc, [], add, webId.uri);
         case 6:
@@ -18226,12 +18258,12 @@ function _getPrivateKey() {
           del = [];
           // delete invalid public key
           if (publicKey) {
-            del = [external_$rdf_.st(webId, src_ns.solid('publicKey'), external_$rdf_.lit(publicKey), external_SolidLogic_.store.sym(publicKeyDoc))];
+            del = [external_$rdf_.st(webId, ns.solid('publicKey'), external_$rdf_.lit(publicKey), external_SolidLogic_.store.sym(publicKeyDoc))];
             src_debug/* log */.Rm('delete invalid publicKey ' + del);
           }
           // update new valid key
           newPublicKey = generatePublicKey(privateKey);
-          add = [external_$rdf_.st(webId, src_ns.solid('publicKey'), external_$rdf_.literal(newPublicKey), external_SolidLogic_.store.sym(publicKeyDoc))];
+          add = [external_$rdf_.st(webId, ns.solid('publicKey'), external_$rdf_.literal(newPublicKey), external_SolidLogic_.store.sym(publicKeyDoc))];
           _context3.next = 7;
           return saveKey(publicKeyDoc, del, add);
         case 7:
@@ -18249,7 +18281,7 @@ function _getPrivateKey() {
   return _getPrivateKey.apply(this, arguments);
 }
 var deleteKeyAcl = /*#__PURE__*/function () {
-  var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(keyDoc) {
+  var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(keyDoc) {
     var keyAclDoc, response, _t;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -18301,7 +18333,7 @@ function saveKey(_x4, _x5, _x6) {
   return _saveKey.apply(this, arguments);
 }
 function _saveKey() {
-  _saveKey = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(keyDoc, del, add) {
+  _saveKey = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(keyDoc, del, add) {
     var me,
       aclBody,
       _args4 = arguments;
@@ -18329,6 +18361,9 @@ function _saveKey() {
   return _saveKey.apply(this, arguments);
 }
 ;// ./src/chat/chatLogic.js
+/* unused harmony import specifier */ var chatLogic_store;
+/* unused harmony import specifier */ var chatLogic_ns;
+/* unused harmony import specifier */ var utils;
 
 
 
@@ -18360,7 +18395,7 @@ function _saveKey() {
 
 var ChatChannel = /*#__PURE__*/function () {
   function ChatChannel(channel, options) {
-    classCallCheck_classCallCheck(this, ChatChannel);
+    _classCallCheck(this, ChatChannel);
     this.channel = channel;
     this.channelRoot = channel.doc();
     this.options = options;
@@ -18370,10 +18405,10 @@ var ChatChannel = /*#__PURE__*/function () {
 
   /* Store a new message in the web,
   */
-  return createClass_createClass(ChatChannel, [{
+  return _createClass(ChatChannel, [{
     key: "createMessage",
     value: (function () {
-      var _createMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(text) {
+      var _createMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(text) {
         return regenerator_default().wrap(function (_context) {
           while (1) switch (_context.prev = _context.next) {
             case 0:
@@ -18397,7 +18432,7 @@ var ChatChannel = /*#__PURE__*/function () {
   }, {
     key: "updateMessage",
     value: (function () {
-      var _updateMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(text) {
+      var _updateMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(text) {
         var oldMsg,
           deleteIt,
           thread,
@@ -18438,7 +18473,7 @@ var ChatChannel = /*#__PURE__*/function () {
                 break;
               }
               // edit message replaces old one
-              oldMsgMaker = external_SolidLogic_.store.any(oldMsg, src_ns.foaf('maker')); // may not be needed here, but needed on READ
+              oldMsgMaker = external_SolidLogic_.store.any(oldMsg, ns.foaf('maker')); // may not be needed here, but needed on READ
               if (!(oldMsgMaker.uri === me.uri)) {
                 _context2.next = 2;
                 break;
@@ -18447,15 +18482,15 @@ var ChatChannel = /*#__PURE__*/function () {
               return mostRecentVersion(oldMsg);
             case 1:
               oldMsgMostRecentVersion = _context2.sent;
-              sts.push(external_$rdf_.st(oldMsgMostRecentVersion, src_ns.dct('isReplacedBy'), message, chatDocument));
+              sts.push(external_$rdf_.st(oldMsgMostRecentVersion, ns.dct('isReplacedBy'), message, chatDocument));
               // if oldMsg has_reply => add has_reply to message
-              oldMsgThread = external_SolidLogic_.store.any(oldMsgMostRecentVersion, src_ns.sioc('has_reply'));
+              oldMsgThread = external_SolidLogic_.store.any(oldMsgMostRecentVersion, ns.sioc('has_reply'));
               if (oldMsgThread) {
-                sts.push(external_$rdf_.st(message, src_ns.sioc('has_reply'), oldMsgThread, chatDocument));
+                sts.push(external_$rdf_.st(message, ns.sioc('has_reply'), oldMsgThread, chatDocument));
               }
               if (deleteIt) {
                 // we need to add a specific signature, else anyone can delete a msg ?
-                sts.push(external_$rdf_.st(message, src_ns.schema('dateDeleted'), dateStamp, chatDocument));
+                sts.push(external_$rdf_.st(message, ns.schema('dateDeleted'), dateStamp, chatDocument));
               }
               _context2.next = 3;
               break;
@@ -18469,17 +18504,17 @@ var ChatChannel = /*#__PURE__*/function () {
               break;
             case 4:
               // link new message to channel
-              sts.push(external_$rdf_.st(this.channel, src_ns.wf('message'), message, chatDocument));
+              sts.push(external_$rdf_.st(this.channel, ns.wf('message'), message, chatDocument));
             case 5:
-              sts.push(external_$rdf_.st(message, src_ns.sioc('content'), external_SolidLogic_.store.literal(text), chatDocument));
+              sts.push(external_$rdf_.st(message, ns.sioc('content'), external_SolidLogic_.store.literal(text), chatDocument));
               msg.content = text;
-              sts.push(external_$rdf_.st(message, src_ns.dct('created'), dateStamp, chatDocument));
+              sts.push(external_$rdf_.st(message, ns.dct('created'), dateStamp, chatDocument));
               msg.created = dateStamp.value;
               if (!me) {
                 _context2.next = 7;
                 break;
               }
-              sts.push(external_$rdf_.st(message, src_ns.foaf('maker'), me, chatDocument));
+              sts.push(external_$rdf_.st(message, ns.foaf('maker'), me, chatDocument));
               msg.maker = me.uri;
               // privateKey the cached private key of me, cached in store
               _context2.next = 6;
@@ -18491,9 +18526,9 @@ var ChatChannel = /*#__PURE__*/function () {
               sts.push(external_$rdf_.st(message, external_$rdf_.sym("".concat(SEC, "proofValue")), external_$rdf_.lit(sig), chatDocument));
             case 7:
               if (thread) {
-                sts.push(external_$rdf_.st(thread, src_ns.sioc('has_member'), message, chatDocument));
+                sts.push(external_$rdf_.st(thread, ns.sioc('has_member'), message, chatDocument));
                 if (!thread.doc().sameTerm(message.doc())) {
-                  sts.push(external_$rdf_.st(thread, src_ns.sioc('has_member'), message, thread.doc()));
+                  sts.push(external_$rdf_.st(thread, ns.sioc('has_member'), message, thread.doc()));
                 }
               }
               _context2.prev = 8;
@@ -18530,7 +18565,7 @@ var ChatChannel = /*#__PURE__*/function () {
   }, {
     key: "deleteMessage",
     value: (function () {
-      var _deleteMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(message) {
+      var _deleteMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(message) {
         return regenerator_default().wrap(function (_context3) {
           while (1) switch (_context3.prev = _context3.next) {
             case 0:
@@ -18551,13 +18586,13 @@ var ChatChannel = /*#__PURE__*/function () {
   }, {
     key: "createThread",
     value: function () {
-      var _createThread = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(threadRoot) {
+      var _createThread = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(threadRoot) {
         var already, thread, insert;
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
-              already = external_SolidLogic_.store.each(threadRoot, src_ns.sioc('has_reply'), null, threadRoot.doc()).filter(function (thread) {
-                return external_SolidLogic_.store.holds(thread, src_ns.rdf('type'), src_ns.sioc('Thread'), thread.doc());
+              already = external_SolidLogic_.store.each(threadRoot, ns.sioc('has_reply'), null, threadRoot.doc()).filter(function (thread) {
+                return external_SolidLogic_.store.holds(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc());
               });
               if (!(already.length > 0)) {
                 _context4.next = 1;
@@ -18566,7 +18601,7 @@ var ChatChannel = /*#__PURE__*/function () {
               return _context4.abrupt("return", already[0]);
             case 1:
               thread = external_$rdf_.sym(threadRoot.uri + '-thread');
-              insert = [external_$rdf_.st(thread, src_ns.rdf('type'), src_ns.sioc('Thread'), thread.doc()), external_$rdf_.st(threadRoot, src_ns.sioc('has_reply'), thread, thread.doc())];
+              insert = [external_$rdf_.st(thread, ns.rdf('type'), ns.sioc('Thread'), thread.doc()), external_$rdf_.st(threadRoot, ns.sioc('has_reply'), thread, thread.doc())];
               _context4.next = 2;
               return external_SolidLogic_.store.updater.update([], insert);
             case 2:
@@ -18588,11 +18623,11 @@ var ChatChannel = /*#__PURE__*/function () {
 // ////////// Utility functions
 
 // Have to not loop forever if fed loops
-function chatLogic_allVersions(_x5) {
+function allVersions(_x5) {
   return _allVersions.apply(this, arguments);
 }
 function _allVersions() {
-  _allVersions = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(message) {
+  _allVersions = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(message) {
     var versions, done, m, prev, next;
     return regenerator_default().wrap(function (_context5) {
       while (1) switch (_context5.prev = _context5.next) {
@@ -18605,7 +18640,7 @@ function _allVersions() {
           if (false) // removed by dead control flow
 {}
           // earlier?
-          prev = external_SolidLogic_.store.any(null, src_ns.dct('isReplacedBy'), m, m.doc());
+          prev = external_SolidLogic_.store.any(null, ns.dct('isReplacedBy'), m, m.doc());
           if (!(!prev || done[prev.uri])) {
             _context5.next = 2;
             break;
@@ -18626,7 +18661,7 @@ function _allVersions() {
           if (false) // removed by dead control flow
 {}
           // later?
-          next = external_SolidLogic_.store.any(m, src_ns.dct('isReplacedBy'), null, m.doc());
+          next = external_SolidLogic_.store.any(m, ns.dct('isReplacedBy'), null, m.doc());
           if (!(!next || done[next.uri])) {
             _context5.next = 6;
             break;
@@ -18652,7 +18687,7 @@ function originalVersion(_x6) {
   return _originalVersion.apply(this, arguments);
 }
 function _originalVersion() {
-  _originalVersion = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(message) {
+  _originalVersion = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(message) {
     var msg, done;
     return regenerator_default().wrap(function (_context6) {
       while (1) switch (_context6.prev = _context6.next) {
@@ -18676,7 +18711,7 @@ function _originalVersion() {
           _context6.next = 3;
           return external_SolidLogic_.store.fetcher.load(message);
         case 3:
-          msg = external_SolidLogic_.store.any(null, src_ns.dct('isReplacedBy'), message, message.doc());
+          msg = external_SolidLogic_.store.any(null, ns.dct('isReplacedBy'), message, message.doc());
           _context6.next = 1;
           break;
         case 4:
@@ -18693,7 +18728,7 @@ function mostRecentVersion(_x7) {
   return _mostRecentVersion.apply(this, arguments);
 }
 function _mostRecentVersion() {
-  _mostRecentVersion = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(message) {
+  _mostRecentVersion = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(message) {
     var msg, done;
     return regenerator_default().wrap(function (_context7) {
       while (1) switch (_context7.prev = _context7.next) {
@@ -18717,7 +18752,7 @@ function _mostRecentVersion() {
           _context7.next = 3;
           return external_SolidLogic_.store.fetcher.load(message);
         case 3:
-          msg = external_SolidLogic_.store.any(message, src_ns.dct('isReplacedBy'), null, message.doc());
+          msg = external_SolidLogic_.store.any(message, ns.dct('isReplacedBy'), null, message.doc());
           _context7.next = 1;
           break;
         case 4:
@@ -18731,10 +18766,10 @@ function _mostRecentVersion() {
   return _mostRecentVersion.apply(this, arguments);
 }
 function isDeleted(message) {
-  return external_SolidLogic_.store.holds(message, src_ns.schema('dateDeleted'), null, message.doc());
+  return external_SolidLogic_.store.holds(message, ns.schema('dateDeleted'), null, message.doc());
 }
 function isReplaced(message) {
-  return store.holds(message, ns.dct('isReplacedBy'), null, message.doc());
+  return chatLogic_store.holds(message, chatLogic_ns.dct('isReplacedBy'), null, message.doc());
 }
 function isHidden(message) {
   return this.isDeleted(message) || this.isReplaced(message);
@@ -18743,12 +18778,18 @@ function isHidden(message) {
 // A Nickname for a person
 
 function nick(person) {
-  var s = store.any(person, ns.foaf('nick'));
+  var s = chatLogic_store.any(person, chatLogic_ns.foaf('nick'));
   if (s) return '' + s.value;
   return '' + utils.label(person);
 }
 // ends
 ;// ./src/participation.ts
+/* unused harmony import specifier */ var participation_createClass;
+/* unused harmony import specifier */ var participation_classCallCheck;
+/* unused harmony import specifier */ var _possibleConstructorReturn;
+/* unused harmony import specifier */ var _getPrototypeOf;
+/* unused harmony import specifier */ var _inherits;
+/* unused harmony import specifier */ var _wrapNativeSuper;
 
 
 
@@ -18776,11 +18817,11 @@ function _isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.
 
 var ParticipationTableElement = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLTableElement) {
   function ParticipationTableElement() {
-    _classCallCheck(this, ParticipationTableElement);
+    participation_classCallCheck(this, ParticipationTableElement);
     return _callSuper(this, ParticipationTableElement, arguments);
   }
   _inherits(ParticipationTableElement, _HTMLTableElement);
-  return _createClass(ParticipationTableElement);
+  return participation_createClass(ParticipationTableElement);
 }(/*#__PURE__*/_wrapNativeSuper(HTMLTableElement))));
 var participation_store = external_SolidLogic_.solidLogicSingleton.store;
 
@@ -18796,14 +18837,14 @@ var participation_store = external_SolidLogic_.solidLogicSingleton.store;
 function renderParticipants(dom, table, unused1, subject, unused2, options) {
   table.setAttribute('style', style.participantsStyle);
   var newRowForParticipation = function newRowForParticipation(parp) {
-    var person = participation_store.any(parp, src_ns.wf('participant'));
+    var person = participation_store.any(parp, ns.wf('participant'));
     var tr;
     if (!person) {
       tr = dom.createElement('tr');
       tr.textContent = '???'; // Don't crash - invalid part'n entry
       return tr;
     }
-    var bg = participation_store.anyValue(parp, src_ns.ui('backgroundColor')) || styleConstants.participationDefaultBackground;
+    var bg = participation_store.anyValue(parp, ns.ui('backgroundColor')) || styleConstants.participationDefaultBackground;
     var block = dom.createElement('div');
     block.setAttribute('style', style.participantsBlock);
     block.style.backgroundColor = bg;
@@ -18816,9 +18857,9 @@ function renderParticipants(dom, table, unused1, subject, unused2, options) {
     return tr;
   };
   var syncTable = function syncTable() {
-    var parps = participation_store.each(subject, src_ns.wf('participation')).map(function (parp) {
+    var parps = participation_store.each(subject, ns.wf('participation')).map(function (parp) {
       (0,src_debug/* log */.Rm)('in participants');
-      return [participation_store.anyValue(parp, src_ns.cal('dtstart')) || '9999-12-31', parp];
+      return [participation_store.anyValue(parp, ns.cal('dtstart')) || '9999-12-31', parp];
     });
     parps.sort(); // List in order of joining
     var participations = parps.map(function (p) {
@@ -18845,8 +18886,8 @@ function participationObject(subject, padDoc, me) {
     if (!me) {
       throw new Error('No user id');
     }
-    var parps = participation_store.each(subject, src_ns.wf('participation')).filter(function (pn) {
-      return participation_store.holds(pn, src_ns.wf('participant'), me);
+    var parps = participation_store.each(subject, ns.wf('participation')).filter(function (pn) {
+      return participation_store.holds(pn, ns.wf('participant'), me);
     });
     if (parps.length > 1) {
       // This can happen. https://github.com/solidos/chat-pane/issues/71
@@ -18856,7 +18897,7 @@ function participationObject(subject, padDoc, me) {
       try {
         for (_iterator.s(); !(_step = _iterator.n()).done;) {
           var participation = _step.value;
-          var date = participation_store.anyValue(participation, src_ns.cal('dtstart'));
+          var date = participation_store.anyValue(participation, ns.cal('dtstart'));
           if (date) {
             candidates.push([date, participation]);
           }
@@ -18877,7 +18918,7 @@ function participationObject(subject, padDoc, me) {
       resolve(parps[0]); // returns the participation object
     } else {
       var _participation = newThing(padDoc);
-      var ins = [(0,external_$rdf_.st)(subject, src_ns.wf('participation'), _participation, padDoc), (0,external_$rdf_.st)(_participation, src_ns.wf('participant'), me, padDoc), (0,external_$rdf_.st)(_participation, src_ns.cal('dtstart'), new Date(), padDoc), (0,external_$rdf_.st)(_participation, src_ns.ui('backgroundColor'), lightColorHash(me), padDoc)];
+      var ins = [(0,external_$rdf_.st)(subject, ns.wf('participation'), _participation, padDoc), (0,external_$rdf_.st)(_participation, ns.wf('participant'), me, padDoc), (0,external_$rdf_.st)(_participation, ns.cal('dtstart'), new Date(), padDoc), (0,external_$rdf_.st)(_participation, ns.ui('backgroundColor'), lightColorHash(me), padDoc)];
       participation_store.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
           reject(new Error('Error recording your participation: ' + errorMessage));
@@ -18901,8 +18942,8 @@ function recordParticipation(subject, padDoc, refreshable) {
   var me = external_SolidLogic_.authn.currentUser();
   if (!me) return; // Not logged in
 
-  var parps = participation_store.each(subject, src_ns.wf('participation')).filter(function (pn) {
-    return participation_store.holds(pn, src_ns.wf('participant'), me);
+  var parps = participation_store.each(subject, ns.wf('participation')).filter(function (pn) {
+    return participation_store.holds(pn, ns.wf('participant'), me);
   });
   if (parps.length > 1) {
     throw new Error('Multiple records of your participation');
@@ -18916,7 +18957,7 @@ function recordParticipation(subject, padDoc, refreshable) {
       return null;
     }
     var participation = newThing(padDoc);
-    var ins = [(0,external_$rdf_.st)(subject, src_ns.wf('participation'), participation, padDoc), (0,external_$rdf_.st)(participation, src_ns.wf('participant'), me, padDoc), (0,external_$rdf_.st)(participation, src_ns.cal('dtstart'), new Date(), padDoc), (0,external_$rdf_.st)(participation, src_ns.ui('backgroundColor'), lightColorHash(me), padDoc)];
+    var ins = [(0,external_$rdf_.st)(subject, ns.wf('participation'), participation, padDoc), (0,external_$rdf_.st)(participation, ns.wf('participant'), me, padDoc), (0,external_$rdf_.st)(participation, ns.cal('dtstart'), new Date(), padDoc), (0,external_$rdf_.st)(participation, ns.ui('backgroundColor'), lightColorHash(me), padDoc)];
     participation_store.updater.update([], ins, function (uri, ok, errorMessage) {
       if (!ok) {
         throw new Error('Error recording your participation: ' + errorMessage);
@@ -18951,13 +18992,19 @@ function manageParticipation(dom, container, padDoc, subject, me, options) {
   return table;
 }
 ;// ./src/pad.ts
+/* unused harmony import specifier */ var pad_createClass;
+/* unused harmony import specifier */ var pad_classCallCheck;
+/* unused harmony import specifier */ var pad_possibleConstructorReturn;
+/* unused harmony import specifier */ var pad_getPrototypeOf;
+/* unused harmony import specifier */ var pad_inherits;
+/* unused harmony import specifier */ var pad_wrapNativeSuper;
 
 
 
 
 
 
-function pad_callSuper(t, o, e) { return o = _getPrototypeOf(o), _possibleConstructorReturn(t, pad_isNativeReflectConstruct() ? Reflect.construct(o, e || [], _getPrototypeOf(t).constructor) : o.apply(t, e)); }
+function pad_callSuper(t, o, e) { return o = pad_getPrototypeOf(o), pad_possibleConstructorReturn(t, pad_isNativeReflectConstruct() ? Reflect.construct(o, e || [], pad_getPrototypeOf(t).constructor) : o.apply(t, e)); }
 function pad_isNativeReflectConstruct() { try { var t = !Boolean.prototype.valueOf.call(Reflect.construct(Boolean, [], function () {})); } catch (t) {} return (pad_isNativeReflectConstruct = function _isNativeReflectConstruct() { return !!t; })(); }
 /** **************
  *   Notepad Widget
@@ -18980,23 +19027,23 @@ var PAD = (0,external_$rdf_.Namespace)('http://www.w3.org/ns/pim/pad#');
  */
 var NotepadElement = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLElement) {
   function NotepadElement() {
-    _classCallCheck(this, NotepadElement);
+    pad_classCallCheck(this, NotepadElement);
     return pad_callSuper(this, NotepadElement, arguments);
   }
-  _inherits(NotepadElement, _HTMLElement);
-  return _createClass(NotepadElement);
-}(/*#__PURE__*/_wrapNativeSuper(HTMLElement))));
+  pad_inherits(NotepadElement, _HTMLElement);
+  return pad_createClass(NotepadElement);
+}(/*#__PURE__*/pad_wrapNativeSuper(HTMLElement))));
 /**
  * @ignore
  */
 var NotepadPart = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLElement2) {
   function NotepadPart() {
-    _classCallCheck(this, NotepadPart);
+    pad_classCallCheck(this, NotepadPart);
     return pad_callSuper(this, NotepadPart, arguments);
   }
-  _inherits(NotepadPart, _HTMLElement2);
-  return _createClass(NotepadPart);
-}(/*#__PURE__*/_wrapNativeSuper(HTMLElement))));
+  pad_inherits(NotepadPart, _HTMLElement2);
+  return pad_createClass(NotepadPart);
+}(/*#__PURE__*/pad_wrapNativeSuper(HTMLElement))));
 /** Figure out a random color from my webid
  *
  * @param {NamedNode} author - The author of text being displayed
@@ -19067,7 +19114,7 @@ function notepad(dom, padDoc, subject, me, options) {
     var baseStyle = style.baseStyle;
     var headingCore = style.headingCore;
     var headingStyle = style.headingStyle;
-    var author = kb.any(chunk, src_ns.dc('author'));
+    var author = kb.any(chunk, ns.dc('author'));
     if (!colors && author) {
       // Hash the user webid for now -- later allow user selection!
       var bgcolor = lightColorHash(author);
@@ -19250,11 +19297,11 @@ function notepad(dom, padDoc, subject, me, options) {
     var _updateStore = function updateStore(part) {
       var chunk = part.subject;
       setPartStyle(part, undefined, true);
-      var old = kb.any(chunk, src_ns.sioc('content')).value;
-      var del = [(0,external_$rdf_.st)(chunk, src_ns.sioc('content'), old, padDoc)];
+      var old = kb.any(chunk, ns.sioc('content')).value;
+      var del = [(0,external_$rdf_.st)(chunk, ns.sioc('content'), old, padDoc)];
       var ins;
       if (part.value) {
-        ins = [(0,external_$rdf_.st)(chunk, src_ns.sioc('content'), part.value, padDoc)];
+        ins = [(0,external_$rdf_.st)(chunk, ns.sioc('content'), part.value, padDoc)];
       }
       var newOne = part.value;
 
@@ -19366,7 +19413,7 @@ function notepad(dom, padDoc, subject, me, options) {
   // @@ TODO Need to research before as it appears to be used as an Element and a boolean
   var newPartAfter = function newPartAfter(tr1, chunk, before) {
     // @@ take chunk and add listeners
-    var text = kb.any(chunk, src_ns.sioc('content'));
+    var text = kb.any(chunk, ns.sioc('content'));
     text = text ? text.value : '';
     var tr = dom.createElement('tr');
     if (before) {
@@ -19428,7 +19475,7 @@ function notepad(dom, padDoc, subject, me, options) {
     var chunk = newThing(padDoc);
     var label = chunk.uri.slice(-4);
     var del = [(0,external_$rdf_.st)(prev, PAD('next'), next, padDoc)];
-    var ins = [(0,external_$rdf_.st)(prev, PAD('next'), chunk, padDoc), (0,external_$rdf_.st)(chunk, PAD('next'), next, padDoc), (0,external_$rdf_.st)(chunk, src_ns.dc('author'), me, padDoc), (0,external_$rdf_.st)(chunk, src_ns.sioc('content'), '', padDoc)];
+    var ins = [(0,external_$rdf_.st)(prev, PAD('next'), chunk, padDoc), (0,external_$rdf_.st)(chunk, PAD('next'), next, padDoc), (0,external_$rdf_.st)(chunk, ns.dc('author'), me, padDoc), (0,external_$rdf_.st)(chunk, ns.sioc('content'), '', padDoc)];
     if (indent > 0) {
       // Do not inherit
       ins.push((0,external_$rdf_.st)(chunk, PAD('indent'), indent, padDoc));
@@ -19493,15 +19540,15 @@ function notepad(dom, padDoc, subject, me, options) {
       if (k > 1) {
         complain2('Should be 0 or 1 not ' + k + ' indent for ' + label);
       }
-      k = kb.each(chunk, src_ns.sioc('content')).length;
+      k = kb.each(chunk, ns.sioc('content')).length;
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' contents for ' + label);
       }
-      k = kb.each(chunk, src_ns.dc('author')).length;
+      k = kb.each(chunk, ns.dc('author')).length;
       if (k !== 1) {
         complain2('Should be 1 not ' + k + ' author for ' + label);
       }
-      var sts = kb.statementsMatching(undefined, src_ns.sioc('contents'));
+      var sts = kb.statementsMatching(undefined, ns.sioc('contents'));
       sts.forEach(function (st) {
         if (!found[st.subject.value]) {
           complain2('Loose chunk! ' + st.subject.value);
@@ -19551,7 +19598,7 @@ function notepad(dom, padDoc, subject, me, options) {
     // Insert any new lines and update old ones
     row = table.firstChild; // might be null
     for (var _chunk = kb.the(subject, PAD('next')); !_chunk.sameTerm(subject); _chunk = kb.the(_chunk, PAD('next'))) {
-      var text = kb.any(_chunk, src_ns.sioc('content')).value;
+      var text = kb.any(_chunk, ns.sioc('content')).value;
       // superstitious -- don't mess with unchanged input fields
       // which may be selected by the user
       if (row && manif[_chunk.uri]) {
@@ -19637,7 +19684,7 @@ function notepad(dom, padDoc, subject, me, options) {
   } else {
     // Make new pad
     (0,src_debug/* log */.Rm)('No pad exists - making new one.');
-    var insertables = [(0,external_$rdf_.st)(subject, src_ns.rdf('type'), PAD('Notepad'), padDoc), (0,external_$rdf_.st)(subject, src_ns.dc('author'), me, padDoc), (0,external_$rdf_.st)(subject, src_ns.dc('created'), new Date(), padDoc), (0,external_$rdf_.st)(subject, PAD('next'), subject, padDoc)];
+    var insertables = [(0,external_$rdf_.st)(subject, ns.rdf('type'), PAD('Notepad'), padDoc), (0,external_$rdf_.st)(subject, ns.dc('author'), me, padDoc), (0,external_$rdf_.st)(subject, ns.dc('created'), new Date(), padDoc), (0,external_$rdf_.st)(subject, PAD('next'), subject, padDoc)];
     if (!updater) {
       throw new Error('no updater');
     }
@@ -19684,7 +19731,7 @@ function xmlEncode(str) {
 function notepadToHTML(pad, kb) {
   var chunks = getChunks(pad, kb);
   var html = '<html>\n  <head>\n';
-  var title = kb.anyValue(pad, src_ns.dct('title'));
+  var title = kb.anyValue(pad, ns.dct('title'));
   if (title) {
     html += "    <title>".concat(xmlEncode(title), "</title>\n");
   }
@@ -19702,7 +19749,7 @@ function notepadToHTML(pad, kb) {
   }
   chunks.forEach(function (chunk) {
     var indent = kb.anyJS(chunk, PAD('indent'));
-    var rawContent = kb.anyJS(chunk, src_ns.sioc('content'));
+    var rawContent = kb.anyJS(chunk, ns.sioc('content'));
     if (!rawContent) return; // seed chunk is dummy
     var content = xmlEncode(rawContent);
     if (indent < 0) {
@@ -19750,7 +19797,7 @@ function notepadToHTML(pad, kb) {
 
 var bookmarks_UI = {
   icons: iconBase/* icons */.Pt,
-  ns: src_ns,
+  ns: ns,
   media: media,
   pad: pad_namespaceObject,
   style: style,
@@ -19786,7 +19833,7 @@ function findBookmarkDocument(_x) {
 /** Add a bookmark
  */
 function _findBookmarkDocument() {
-  _findBookmarkDocument = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(userContext) {
+  _findBookmarkDocument = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(userContext) {
     var theClass, fileTail, isPublic, newBookmarkFile, _t;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -19850,7 +19897,7 @@ function addBookmark(_x2, _x3) {
   return _addBookmark.apply(this, arguments);
 }
 function _addBookmark() {
-  _addBookmark = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(context, target) {
+  _addBookmark = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(context, target) {
     var title, me, author, bookmarkDoc, bookmark, ins, msg, _t2;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -19875,8 +19922,8 @@ function _addBookmark() {
           }
           throw new Error('Must be logged on to add Bookmark');
         case 1:
-          author = external_SolidLogic_.store.any(target, src_ns.foaf('maker'));
-          title = label(author) + ': ' + external_SolidLogic_.store.anyValue(target, src_ns.sioc('content')).slice(0, 80); // @@ add chat title too?
+          author = external_SolidLogic_.store.any(target, ns.foaf('maker'));
+          title = label(author) + ': ' + external_SolidLogic_.store.anyValue(target, ns.sioc('content')).slice(0, 80); // @@ add chat title too?
           bookmarkDoc = context.bookmarkDocument;
           bookmark = bookmarks_UI.widgets.newThing(bookmarkDoc, title);
           ins = [external_$rdf_.st(bookmarkDoc, bookmarks_UI.ns.dct('references'), bookmark, bookmarkDoc), external_$rdf_.st(bookmark, bookmarks_UI.ns.rdf('type'), BOOK('Bookmark'), bookmarkDoc), external_$rdf_.st(bookmark, bookmarks_UI.ns.dct('created'), new Date(), bookmarkDoc), external_$rdf_.st(bookmark, BOOK('recalls'), target, bookmarkDoc), external_$rdf_.st(bookmark, bookmarks_UI.ns.foaf('maker'), me, bookmarkDoc), external_$rdf_.st(bookmark, bookmarks_UI.ns.dct('title'), title, bookmarkDoc)];
@@ -19906,7 +19953,7 @@ function toggleBookmark(_x4, _x5, _x6) {
   return _toggleBookmark.apply(this, arguments);
 }
 function _toggleBookmark() {
-  _toggleBookmark = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(userContext, target, bookmarkButton) {
+  _toggleBookmark = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(userContext, target, bookmarkButton) {
     var bookmarks, i, bookmark, _t3;
     return regenerator_default().wrap(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
@@ -19970,13 +20017,13 @@ function renderBookmarksButton(_x7, _x8) {
   return _renderBookmarksButton.apply(this, arguments);
 }
 function _renderBookmarksButton() {
-  _renderBookmarksButton = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(userContext, target) {
+  _renderBookmarksButton = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(userContext, target) {
     var setBookmarkButtonColor, _setBookmarkButtonColor, bookmarkButton;
     return regenerator_default().wrap(function (_context5) {
       while (1) switch (_context5.prev = _context5.next) {
         case 0:
           _setBookmarkButtonColor = function _setBookmarkButtonCol2() {
-            _setBookmarkButtonColor = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(bookmarkButton) {
+            _setBookmarkButtonColor = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(bookmarkButton) {
               var bookmarked;
               return regenerator_default().wrap(function (_context4) {
                 while (1) switch (_context4.prev = _context4.next) {
@@ -20019,6 +20066,12 @@ function _renderBookmarksButton() {
   return _renderBookmarksButton.apply(this, arguments);
 }
 ;// ./src/chat/messageTools.js
+/* unused harmony import specifier */ var messageTools_asyncToGenerator;
+/* unused harmony import specifier */ var _regeneratorRuntime;
+/* unused harmony import specifier */ var messageTools_ns;
+/* unused harmony import specifier */ var rdf;
+/* unused harmony import specifier */ var messageTools_store;
+/* unused harmony import specifier */ var messageTools_allVersions;
 
 
 
@@ -20061,10 +20114,10 @@ var REPLY_ICON = 'noun-reply-5506924.svg';
  * Emoji in Unicode
  */
 var emojiMap = {};
-emojiMap[src_ns.schema('AgreeAction')] = '👍';
-emojiMap[src_ns.schema('DisagreeAction')] = '👎';
-emojiMap[src_ns.schema('EndorseAction')] = '⭐️';
-emojiMap[src_ns.schema('LikeAction')] = '❤️';
+emojiMap[ns.schema('AgreeAction')] = '👍';
+emojiMap[ns.schema('DisagreeAction')] = '👎';
+emojiMap[ns.schema('EndorseAction')] = '⭐️';
+emojiMap[ns.schema('LikeAction')] = '❤️';
 function emojiFromActionClass(action) {
   return emojiMap[action] || null;
 }
@@ -20080,9 +20133,9 @@ function ActionClassFromEmoji(emoji) {
 // Allow the action to give its own emoji as content,
 // or get the emoji from the class of action.
 function emojiFromAction(action) {
-  var content = store.any(action, ns.sioc('content'), null, action.doc());
+  var content = messageTools_store.any(action, messageTools_ns.sioc('content'), null, action.doc());
   if (content) return content;
-  var klass = store.any(action, ns.rdf('type'), null, action.doc());
+  var klass = messageTools_store.any(action, messageTools_ns.rdf('type'), null, action.doc());
   if (klass) {
     var em = emojiFromActionClass(klass);
     if (em) return em;
@@ -20103,18 +20156,18 @@ function sentimentStrip(_x, _x2) {
  * @param doc {NamedNode} - The document in which they are expressed
  */
 function _sentimentStrip() {
-  _sentimentStrip = _asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee(target, doc) {
+  _sentimentStrip = messageTools_asyncToGenerator(/*#__PURE__*/_regeneratorRuntime.mark(function _callee(target, doc) {
     var versions, actions, strings;
     return _regeneratorRuntime.wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.next = 1;
-          return allVersions(target);
+          return messageTools_allVersions(target);
         case 1:
           versions = _context.sent;
           // debug.log('sentimentStrip Versions for ' + target, versions)
           actions = versions.map(function (version) {
-            return store.each(null, ns.schema('target'), version, doc);
+            return messageTools_store.each(null, messageTools_ns.schema('target'), version, doc);
           }).flat(); // debug.log('sentimentStrip: Actions for ' + target, actions)
           strings = actions.map(function (action) {
             return emojiFromAction(action) || '';
@@ -20135,13 +20188,13 @@ function sentimentStripLinked(_x3, _x4) {
  * Creates a message toolbar component
  */
 function _sentimentStripLinked() {
-  _sentimentStripLinked = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(target, doc) {
+  _sentimentStripLinked = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(target, doc) {
     var strip, refresh, _refresh;
     return regenerator_default().wrap(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
         case 0:
           _refresh = function _refresh3() {
-            _refresh = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
+            _refresh = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2() {
               var versions, actions, sentiments;
               return regenerator_default().wrap(function (_context2) {
                 while (1) switch (_context2.prev = _context2.next) {
@@ -20154,12 +20207,12 @@ function _sentimentStripLinked() {
                     return _context2.abrupt("return", strip);
                   case 1:
                     _context2.next = 2;
-                    return chatLogic_allVersions(target);
+                    return allVersions(target);
                   case 2:
                     versions = _context2.sent;
                     // debug.log('sentimentStripLinked: Versions for ' + target, versions)
                     actions = versions.map(function (version) {
-                      return external_SolidLogic_.store.each(null, src_ns.schema('target'), version, doc);
+                      return external_SolidLogic_.store.each(null, ns.schema('target'), version, doc);
                     }).flat(); // debug.log('sentimentStripLinked: Actions for ' + target, actions)
                     if (!(actions.length === 0)) {
                       _context2.next = 3;
@@ -20168,7 +20221,7 @@ function _sentimentStripLinked() {
                     return _context2.abrupt("return", strip);
                   case 3:
                     sentiments = actions.map(function (a) {
-                      return [external_SolidLogic_.store.any(a, src_ns.rdf('type'), null, doc), external_SolidLogic_.store.any(a, src_ns.sioc('content'), null, doc), external_SolidLogic_.store.any(a, src_ns.schema('agent'), null, doc)];
+                      return [external_SolidLogic_.store.any(a, ns.rdf('type'), null, doc), external_SolidLogic_.store.any(a, ns.sioc('content'), null, doc), external_SolidLogic_.store.any(a, ns.schema('agent'), null, doc)];
                     }); // debug.log('  Actions sentiments ', sentiments)
                     sentiments.sort();
                     sentiments.forEach(function (ss) {
@@ -20214,7 +20267,7 @@ function messageToolbar(_x5, _x6, _x7, _x8) {
   return _messageToolbar.apply(this, arguments);
 }
 function _messageToolbar() {
-  _messageToolbar = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0(message, messageRow, userContext, channelObject) {
+  _messageToolbar = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0(message, messageRow, userContext, channelObject) {
     var deleteMessage, _deleteMessage, editMessage, _editMessage, replyInThread, _replyInThread, div, closeToolbar, deleteThingThen, _deleteThingThen, me, sentimentButton, context1, cancelButton, _t2, _t3, _t4, _t5, _t6;
     return regenerator_default().wrap(function (_context0) {
       while (1) switch (_context0.prev = _context0.next) {
@@ -20224,7 +20277,7 @@ function _messageToolbar() {
               button.style.backgroundColor = action ? 'yellow' : 'white';
             }
             var button = buttons_button(messageTools_dom, icon, label_label(actionClass), /*#__PURE__*/function () {
-              var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
+              var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(_event) {
                 var insertMe, dirty, i, a;
                 return regenerator_default().wrap(function (_context4) {
                   while (1) switch (_context4.prev = _context4.next) {
@@ -20243,7 +20296,7 @@ function _messageToolbar() {
                     case 2:
                       // no action
                       action = newThing(doc);
-                      insertMe = [external_$rdf_.st(action, src_ns.schema('agent'), context.me, doc), external_$rdf_.st(action, src_ns.rdf('type'), actionClass, doc), external_$rdf_.st(action, src_ns.schema('target'), target, doc)];
+                      insertMe = [external_$rdf_.st(action, ns.schema('agent'), context.me, doc), external_$rdf_.st(action, ns.rdf('type'), actionClass, doc), external_$rdf_.st(action, ns.schema('target'), target, doc)];
                       _context4.next = 3;
                       return external_SolidLogic_.store.updater.update([], insertMe);
                     case 3:
@@ -20290,10 +20343,10 @@ function _messageToolbar() {
               };
             }());
             function existingAction(actionClass) {
-              var actions = external_SolidLogic_.store.each(null, src_ns.schema('agent'), context.me, doc).filter(function (x) {
-                return external_SolidLogic_.store.holds(x, src_ns.rdf('type'), actionClass, doc);
+              var actions = external_SolidLogic_.store.each(null, ns.schema('agent'), context.me, doc).filter(function (x) {
+                return external_SolidLogic_.store.holds(x, ns.rdf('type'), actionClass, doc);
               }).filter(function (x) {
-                return external_SolidLogic_.store.holds(x, src_ns.schema('target'), target, doc);
+                return external_SolidLogic_.store.holds(x, ns.schema('target'), target, doc);
               });
               return actions.length ? actions[0] : null;
             }
@@ -20307,7 +20360,7 @@ function _messageToolbar() {
             return button;
           };
           _deleteThingThen = function _deleteThingThen3() {
-            _deleteThingThen = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(x) {
+            _deleteThingThen = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(x) {
               return regenerator_default().wrap(function (_context9) {
                 while (1) switch (_context9.prev = _context9.next) {
                   case 0:
@@ -20328,7 +20381,7 @@ function _messageToolbar() {
             div.parentElement.parentElement.removeChild(div.parentElement); // remive the TR
           };
           _replyInThread = function _replyInThread3() {
-            _replyInThread = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
+            _replyInThread = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8() {
               var thread, options;
               return regenerator_default().wrap(function (_context8) {
                 while (1) switch (_context8.prev = _context8.next) {
@@ -20358,11 +20411,11 @@ function _messageToolbar() {
             return _replyInThread.apply(this, arguments);
           };
           _editMessage = function _editMessage3() {
-            _editMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(messageRow) {
+            _editMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(messageRow) {
               return regenerator_default().wrap(function (_context7) {
                 while (1) switch (_context7.prev = _context7.next) {
                   case 0:
-                    if (!(me.value === external_SolidLogic_.store.any(message, src_ns.foaf('maker')).value)) {
+                    if (!(me.value === external_SolidLogic_.store.any(message, ns.foaf('maker')).value)) {
                       _context7.next = 1;
                       break;
                     }
@@ -20381,12 +20434,12 @@ function _messageToolbar() {
             return _editMessage.apply(this, arguments);
           };
           _deleteMessage = function _deleteMessage3() {
-            _deleteMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
+            _deleteMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
               var author, msg, area, _t;
               return regenerator_default().wrap(function (_context6) {
                 while (1) switch (_context6.prev = _context6.next) {
                   case 0:
-                    author = external_SolidLogic_.store.any(message, src_ns.foaf('maker'));
+                    author = external_SolidLogic_.store.any(message, ns.foaf('maker'));
                     if (me) {
                       _context6.next = 1;
                       break;
@@ -20437,7 +20490,7 @@ function _messageToolbar() {
           return mostRecentVersion(message).value;
         case 1:
           _t2 = _context0.sent;
-          _t3 = src_ns.schema('dateDeleted').value;
+          _t3 = ns.schema('dateDeleted').value;
           if (!(_t2 === _t3)) {
             _context0.next = 2;
             break;
@@ -20446,7 +20499,7 @@ function _messageToolbar() {
         case 2:
           // Things only the original author can do
           me = external_SolidLogic_.authn.currentUser(); // If already logged on
-          if (me && external_SolidLogic_.store.holds(message, src_ns.foaf('maker'), me)) {
+          if (me && external_SolidLogic_.store.holds(message, ns.foaf('maker'), me)) {
             // button to delete the message
             div.appendChild(deleteButtonWithCheck(messageTools_dom, div, 'message', deleteMessage));
             // button to edit the message
@@ -20489,7 +20542,7 @@ function _messageToolbar() {
           return mostRecentVersion(message).value;
         case 3:
           _t5 = _context0.sent;
-          _t6 = src_ns.schema('dateDeleted').value;
+          _t6 = ns.schema('dateDeleted').value;
           _t4 = _t5 !== _t6;
         case 4:
           if (!_t4) {
@@ -20503,15 +20556,15 @@ function _messageToolbar() {
           };
           div.appendChild(sentimentButton(context1, message,
           // @@ TODO use widgets.sentimentButton
-          iconBase/* icons */.Pt.iconBase + THUMBS_UP_ICON, src_ns.schema('AgreeAction'), message.doc(), [src_ns.schema('DisagreeAction')]));
+          iconBase/* icons */.Pt.iconBase + THUMBS_UP_ICON, ns.schema('AgreeAction'), message.doc(), [ns.schema('DisagreeAction')]));
           // Thumbs down
-          div.appendChild(sentimentButton(context1, message, iconBase/* icons */.Pt.iconBase + THUMBS_DOWN_ICON, src_ns.schema('DisagreeAction'), message.doc(), [src_ns.schema('AgreeAction')]));
+          div.appendChild(sentimentButton(context1, message, iconBase/* icons */.Pt.iconBase + THUMBS_DOWN_ICON, ns.schema('DisagreeAction'), message.doc(), [ns.schema('AgreeAction')]));
         case 5:
           // Reply buttton
 
-          if (external_SolidLogic_.store.any(message, src_ns.dct('created'))) {
+          if (external_SolidLogic_.store.any(message, ns.dct('created'))) {
             // Looks like a messsage? Bar can be used for other things
-            div.appendChild(buttons_button(messageTools_dom, iconBase/* icons */.Pt.iconBase + REPLY_ICON, 'Reply in thread', /*#__PURE__*/asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5() {
+            div.appendChild(buttons_button(messageTools_dom, iconBase/* icons */.Pt.iconBase + REPLY_ICON, 'Reply in thread', /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5() {
               return regenerator_default().wrap(function (_context5) {
                 while (1) switch (_context5.prev = _context5.next) {
                   case 0:
@@ -20608,7 +20661,7 @@ var message_anchor = function anchor(text, term) {
   return a;
 };
 function nickname(person) {
-  var s = external_SolidLogic_.store.any(person, src_ns.foaf('nick'));
+  var s = external_SolidLogic_.store.any(person, ns.foaf('nick'));
   if (s) return '' + s.value;
   return '' + message_label(person);
 }
@@ -20671,7 +20724,7 @@ function renderMessageRow(_x, _x2, _x3, _x4, _x5) {
   return _renderMessageRow.apply(this, arguments);
 } // END OF RENDERMESSAGE
 function _renderMessageRow() {
-  _renderMessageRow = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(channelObject, message, fresh, options, userContext) {
+  _renderMessageRow = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(channelObject, message, fresh, options, userContext) {
     var unsignedMessage, colorizeByAuthor, creator, date, latestVersion, latestVersionCreator, msgId, content, versions, replies, thread, straightReplies, _iterator2, _step2, reply, signature, msg, originalMessage, edited, sortDate, messageRow, td1, img, bothDates, td2, text, isURI, para, isImage, _img, anc, bgcolor, getBgColor, strip, td3, toolsButton;
     return regenerator_default().wrap(function (_context0) {
       while (1) switch (_context0.prev = _context0.next) {
@@ -20682,18 +20735,18 @@ function _renderMessageRow() {
           unsignedMessage = false;
           colorizeByAuthor = options.colorizeByAuthor === '1' || options.colorizeByAuthor === true; // const id = store.any(latestVersion, ns.sioc('id'))
           // const replies = store.each(latestVersion, ns.sioc('has_reply'))
-          creator = external_SolidLogic_.store.any(message, src_ns.foaf('maker'));
-          date = external_SolidLogic_.store.any(message, src_ns.dct('created'));
+          creator = external_SolidLogic_.store.any(message, ns.foaf('maker'));
+          date = external_SolidLogic_.store.any(message, ns.dct('created'));
           _context0.next = 1;
           return mostRecentVersion(message);
         case 1:
           latestVersion = _context0.sent;
-          latestVersionCreator = external_SolidLogic_.store.any(latestVersion, src_ns.foaf('maker')); // use latest content if same owner, else use original
+          latestVersionCreator = external_SolidLogic_.store.any(latestVersion, ns.foaf('maker')); // use latest content if same owner, else use original
           // this is may be too strict. Should we find latest valid version if any ?
           msgId = creator.uri === (latestVersionCreator === null || latestVersionCreator === void 0 ? void 0 : latestVersionCreator.uri) ? latestVersion : message;
-          content = external_SolidLogic_.store.any(msgId, src_ns.sioc('content'));
+          content = external_SolidLogic_.store.any(msgId, ns.sioc('content'));
           _context0.next = 2;
-          return chatLogic_allVersions(msgId);
+          return allVersions(msgId);
         case 2:
           versions = _context0.sent;
           if (versions.length > 1) {
@@ -20701,7 +20754,7 @@ function _renderMessageRow() {
           }
           // be tolerant in accepting replies on any version of a message
           replies = versions.map(function (version) {
-            return external_SolidLogic_.store.each(version, src_ns.sioc('has_reply'));
+            return external_SolidLogic_.store.each(version, ns.sioc('has_reply'));
           }).flat();
           thread = null;
           straightReplies = [];
@@ -20709,7 +20762,7 @@ function _renderMessageRow() {
           try {
             for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
               reply = _step2.value;
-              if (external_SolidLogic_.store.holds(reply, src_ns.rdf('type'), src_ns.sioc('Thread'))) {
+              if (external_SolidLogic_.store.holds(reply, ns.rdf('type'), ns.sioc('Thread'))) {
                 thread = reply;
                 src_debug/* log */.Rm('renderMessageRow: found thread: ' + thread);
               } else {
@@ -20726,7 +20779,7 @@ function _renderMessageRow() {
           }
           if (!thread) {
             // thread = store.any(message, ns.sioc('has_reply'))
-            thread = external_SolidLogic_.store.any(null, src_ns.sioc('has_member'), message);
+            thread = external_SolidLogic_.store.any(null, ns.sioc('has_member'), message);
           }
           // debug.log('@@@@ is thread' + thread)
 
@@ -20734,7 +20787,7 @@ function _renderMessageRow() {
           signature = external_SolidLogic_.store.any(msgId, $rdf.sym("".concat(SEC, "proofValue"))); // set proof message object
           msg = getBlankMsg();
           msg.id = msgId.uri;
-          msg.created = external_SolidLogic_.store.any(msgId, src_ns.dct('created')).value;
+          msg.created = external_SolidLogic_.store.any(msgId, ns.dct('created')).value;
           msg.content = content.value;
           msg.maker = creator.uri;
 
@@ -20763,7 +20816,7 @@ function _renderMessageRow() {
           originalMessage = _context0.sent;
           edited = !message.sameTerm(originalMessage); // @@ load it first  @@   Or display the new data at the old date.
           // @@@ kludge!
-          sortDate = external_SolidLogic_.store.the(originalMessage, src_ns.dct('created'), null, originalMessage.doc()) || external_SolidLogic_.store.the(message, src_ns.dct('created'), null, message.doc()); // In message
+          sortDate = external_SolidLogic_.store.the(originalMessage, ns.dct('created'), null, originalMessage.doc()) || external_SolidLogic_.store.the(message, ns.dct('created'), null, message.doc()); // In message
           messageRow = message_dom.createElement('tr');
           if (unsignedMessage) messageRow.setAttribute('style', 'background-color: red');
           messageRow.AJAR_date = sortDate.value;
@@ -20831,7 +20884,7 @@ function _renderMessageRow() {
           toolsButton = buttons_button(message_dom, iconBase/* icons */.Pt.iconBase + 'noun_243787.svg', '...');
           td3.appendChild(toolsButton);
           toolsButton.addEventListener('click', /*#__PURE__*/function () {
-            var _ref4 = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(_event) {
+            var _ref4 = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(_event) {
               var toolsTR, tools, toolsTD;
               return regenerator_default().wrap(function (_context9) {
                 while (1) switch (_context9.prev = _context9.next) {
@@ -20898,7 +20951,7 @@ function switchToEditor(_x6, _x7, _x8, _x9) {
  *
  */
 function _switchToEditor() {
-  _switchToEditor = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0(messageRow, message, channelObject, userContext) {
+  _switchToEditor = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0(messageRow, message, channelObject, userContext) {
     var messageTable, editRow, _t3, _t4, _t5, _t6, _t7;
     return regenerator_default().wrap(function (_context1) {
       while (1) switch (_context1.prev = _context1.next) {
@@ -20933,7 +20986,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     return _handleFieldInput.apply(this, arguments);
   }
   function _handleFieldInput() {
-    _handleFieldInput = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(_event) {
+    _handleFieldInput = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(_event) {
       return regenerator_default().wrap(function (_context6) {
         while (1) switch (_context6.prev = _context6.next) {
           case 0:
@@ -20952,13 +21005,13 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
   } // sendMessage
   //    DRAG AND DROP
   function _sendMessage() {
-    _sendMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(text, fromMainField) {
+    _sendMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7(text, fromMainField) {
       var sendComplete, _sendComplete, message, statusArea, _t2;
       return regenerator_default().wrap(function (_context8) {
         while (1) switch (_context8.prev = _context8.next) {
           case 0:
             _sendComplete = function _sendComplete3() {
-              _sendComplete = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(message, _text2) {
+              _sendComplete = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6(message, _text2) {
                 var oldRow;
                 return regenerator_default().wrap(function (_context7) {
                   while (1) switch (_context7.prev = _context7.next) {
@@ -21032,7 +21085,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
   function droppedFileHandler(files) {
     var base = messageTable.chatDocument.dir().uri;
     uploadFiles(external_SolidLogic_.store.fetcher, files, base + 'Files', base + 'Pictures', /*#__PURE__*/function () {
-      var _ref = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(theFile, destURI) {
+      var _ref = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(theFile, destURI) {
         return regenerator_default().wrap(function (_context2) {
           while (1) switch (_context2.prev = _context2.next) {
             case 0:
@@ -21052,7 +21105,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
 
   // When a set of URIs are dropped on the field
   var droppedURIHandler = /*#__PURE__*/function () {
-    var _ref2 = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(uris) {
+    var _ref2 = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(uris) {
       var _iterator, _step, uri, _t;
       return regenerator_default().wrap(function (_context3) {
         while (1) switch (_context3.prev = _context3.next) {
@@ -21103,7 +21156,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
       return _tookPicture.apply(this, arguments);
     } // Body of turnOnInput
     function _tookPicture() {
-      _tookPicture = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(imageDoc) {
+      _tookPicture = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(imageDoc) {
         return regenerator_default().wrap(function (_context5) {
           while (1) switch (_context5.prev = _context5.next) {
             case 0:
@@ -21148,7 +21201,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     middle.appendChild(field);
     field.rows = 3;
     if (originalMessage) {
-      field.value = external_SolidLogic_.store.anyValue(originalMessage, src_ns.sioc('content'), null, originalMessage.doc());
+      field.value = external_SolidLogic_.store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc());
     }
     // field.cols = 40
     field.setAttribute('style', messageBodyStyle + 'background-color: #eef;');
@@ -21156,7 +21209,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
     // Trap the Enter BEFORE it is used ti make a newline
 
     field.addEventListener('keydown', /*#__PURE__*/function () {
-      var _ref3 = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(e) {
+      var _ref3 = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(e) {
         return regenerator_default().wrap(function (_context4) {
           while (1) switch (_context4.prev = _context4.next) {
             case 0:
@@ -21208,7 +21261,7 @@ function renderMessageEditor(channelObject, messageTable, userContext, options, 
 
   var sortDate, sendIcon;
   if (originalMessage) {
-    sortDate = external_SolidLogic_.store.anyValue(originalMessage, src_ns.dct('created'), null, originalMessage.doc());
+    sortDate = external_SolidLogic_.store.anyValue(originalMessage, ns.dct('created'), null, originalMessage.doc());
     // text = store.anyValue(originalMessage, ns.sioc('content'), null, originalMessage.doc())
     sendIcon = iconBase/* icons */.Pt.iconBase + 'noun_1180158.svg'; // Green check
     // cancelIcon = icons.iconBase + 'noun_1180156.svg' // Black cross
@@ -21320,7 +21373,7 @@ function insertMessageIntoTable(_x, _x2, _x3, _x4, _x5, _x6) {
 
  */
 function _insertMessageIntoTable() {
-  _insertMessageIntoTable = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(channelObject, messageTable, message, fresh, options, userContext) {
+  _insertMessageIntoTable = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(channelObject, messageTable, message, fresh, options, userContext) {
     var messageRow, done, ele, newestFirst, dateString;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -21373,13 +21426,13 @@ function infiniteMessageArea(_x7, _x8, _x9, _x0) {
   return _infiniteMessageArea.apply(this, arguments);
 }
 function _infiniteMessageArea() {
-  _infiniteMessageArea = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee13(dom, wasStore, chatChannel, options) {
+  _infiniteMessageArea = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee13(dom, wasStore, chatChannel, options) {
     var syncMessages, _syncMessages, addMessage, _addMessage, insertPreviousMessages, _insertPreviousMessages, removePreviousMessages, createMessageTable, _createMessageTable, renderMessageTable, _renderMessageTable, addNewChatDocumentIfNewDay, _addNewChatDocumentIfNewDay, appendCurrentMessages, _appendCurrentMessages, loadMoreWhereNeeded, _loadMoreWhereNeeded, loadInitialContent, _loadInitialContent, newestFirst, channelObject, dateFolder, div, statusArea, userContext, liveMessageTable, threadRootMessage, earliest, latest, thread, threadTime, lock;
     return regenerator_default().wrap(function (_context13) {
       while (1) switch (_context13.prev = _context13.next) {
         case 0:
           _loadInitialContent = function _loadInitialContent3() {
-            _loadInitialContent = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee12() {
+            _loadInitialContent = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee12() {
               var yank, fixScroll, live, selectedDocument, threadRootDocument, initialDocment, now, todayDocument, selectedMessageTable, selectedDate;
               return regenerator_default().wrap(function (_context12) {
                 while (1) switch (_context12.prev = _context12.next) {
@@ -21456,7 +21509,7 @@ function _infiniteMessageArea() {
             return _loadInitialContent.apply(this, arguments);
           };
           _loadMoreWhereNeeded = function _loadMoreWhereNeeded3() {
-            _loadMoreWhereNeeded = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee11(event, fixScroll) {
+            _loadMoreWhereNeeded = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee11(event, fixScroll) {
               var freeze, magicZone, done, scrollBottom, scrollTop;
               return regenerator_default().wrap(function (_context11) {
                 while (1) switch (_context11.prev = _context11.next) {
@@ -21550,7 +21603,7 @@ function _infiniteMessageArea() {
             return _loadMoreWhereNeeded.apply(this, arguments);
           };
           _appendCurrentMessages = function _appendCurrentMessage2() {
-            _appendCurrentMessages = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee10() {
+            _appendCurrentMessages = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee10() {
               var now, chatDocument, messageTable;
               return regenerator_default().wrap(function (_context10) {
                 while (1) switch (_context10.prev = _context10.next) {
@@ -21562,7 +21615,7 @@ function _infiniteMessageArea() {
                   case 1:
                     messageTable = _context10.sent;
                     div.appendChild(messageTable);
-                    div.refresh = /*#__PURE__*/asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee1() {
+                    div.refresh = /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee1() {
                       return regenerator_default().wrap(function (_context1) {
                         while (1) switch (_context1.prev = _context1.next) {
                           case 0:
@@ -21596,7 +21649,7 @@ function _infiniteMessageArea() {
             return _appendCurrentMessages.apply(this, arguments);
           };
           _addNewChatDocumentIfNewDay = function _addNewChatDocumentIf2() {
-            _addNewChatDocumentIfNewDay = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0() {
+            _addNewChatDocumentIfNewDay = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee0() {
               var newChatDocument, oldChatDocument, sts;
               return regenerator_default().wrap(function (_context0) {
                 while (1) switch (_context0.prev = _context0.next) {
@@ -21617,8 +21670,8 @@ function _infiniteMessageArea() {
                     return appendCurrentMessages();
                   case 1:
                     // Adding a link in the document will ping listeners to add the new block too
-                    if (!external_SolidLogic_.store.holds(oldChatDocument, src_ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
-                      sts = [external_$rdf_.st(oldChatDocument, src_ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)];
+                    if (!external_SolidLogic_.store.holds(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)) {
+                      sts = [external_$rdf_.st(oldChatDocument, ns.rdfs('seeAlso'), newChatDocument, oldChatDocument)];
                       try {
                         external_SolidLogic_.store.updater.update([], sts);
                       } catch (err) {
@@ -21637,13 +21690,13 @@ function _infiniteMessageArea() {
             return _addNewChatDocumentIfNewDay.apply(this, arguments);
           };
           _renderMessageTable = function _renderMessageTable3() {
-            _renderMessageTable = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(date, live) {
+            _renderMessageTable = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee9(date, live) {
               var scrollBackbutton, scrollForwardButton, extendBackwards, _extendBackwards, setScrollBackbuttonIcon, extendForwards, _extendForwards, setScrollForwardButtonIcon, scrollForwardButtonHandler, _scrollForwardButtonHandler, messageTable, chatDocument, tr, test, titleTR, dateCell, scrollForwardButtonCell, sts, _iterator2, _step2, st, _t3;
               return regenerator_default().wrap(function (_context9) {
                 while (1) switch (_context9.prev = _context9.next) {
                   case 0:
                     _scrollForwardButtonHandler = function _scrollForwardButtonH2() {
-                      _scrollForwardButtonHandler = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(_event) {
+                      _scrollForwardButtonHandler = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee8(_event) {
                         return regenerator_default().wrap(function (_context8) {
                           while (1) switch (_context8.prev = _context8.next) {
                             case 0:
@@ -21683,7 +21736,7 @@ function _infiniteMessageArea() {
                       }
                     };
                     _extendForwards = function _extendForwards3() {
-                      _extendForwards = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
+                      _extendForwards = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee7() {
                         var done;
                         return regenerator_default().wrap(function (_context7) {
                           while (1) switch (_context7.prev = _context7.next) {
@@ -21716,7 +21769,7 @@ function _infiniteMessageArea() {
                       }
                     };
                     _extendBackwards = function _extendBackwards3() {
-                      _extendBackwards = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
+                      _extendBackwards = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee6() {
                         var done;
                         return regenerator_default().wrap(function (_context6) {
                           while (1) switch (_context6.prev = _context6.next) {
@@ -21852,7 +21905,7 @@ function _infiniteMessageArea() {
                         messageTable.appendChild(titleTR); //  newestFirst
                       }
                     }
-                    sts = external_SolidLogic_.store.statementsMatching(null, src_ns.wf('message'), null, chatDocument);
+                    sts = external_SolidLogic_.store.statementsMatching(null, ns.wf('message'), null, chatDocument);
                     if (!live && sts.length === 0) {
                       // not todays
                       // no need buttomns at the moment
@@ -21898,7 +21951,7 @@ function _infiniteMessageArea() {
             return _renderMessageTable.apply(this, arguments);
           };
           _createMessageTable = function _createMessageTable3() {
-            _createMessageTable = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(date, live) {
+            _createMessageTable = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee5(date, live) {
               var chatDocument, messageTable, statusTR, _t2;
               return regenerator_default().wrap(function (_context5) {
                 while (1) switch (_context5.prev = _context5.next) {
@@ -21961,7 +22014,7 @@ function _infiniteMessageArea() {
             extr.messageTable = messageTable;
           };
           _insertPreviousMessages = function _insertPreviousMessag2() {
-            _insertPreviousMessages = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(backwards) {
+            _insertPreviousMessages = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(backwards) {
               var extremity, date, live, todayDoc, doc, newMessageTable;
               return regenerator_default().wrap(function (_context4) {
                 while (1) switch (_context4.prev = _context4.next) {
@@ -22031,7 +22084,7 @@ function _infiniteMessageArea() {
             return _insertPreviousMessages.apply(this, arguments);
           };
           _addMessage = function _addMessage3() {
-            _addMessage = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(message, messageTable) {
+            _addMessage = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(message, messageTable) {
               var thread, id;
               return regenerator_default().wrap(function (_context3) {
                 while (1) switch (_context3.prev = _context3.next) {
@@ -22045,16 +22098,16 @@ function _infiniteMessageArea() {
                     /* if (isReplaced(message)) { //
                       return // this is old version
                     } */
-                    thread = external_SolidLogic_.store.any(null, src_ns.sioc('has_member'), message, message.doc());
-                    id = external_SolidLogic_.store.any(message, src_ns.sioc('id'), null, message.doc());
+                    thread = external_SolidLogic_.store.any(null, ns.sioc('has_member'), message, message.doc());
+                    id = external_SolidLogic_.store.any(message, ns.sioc('id'), null, message.doc());
                     if (id && !thread) {
-                      thread = external_SolidLogic_.store.any(null, src_ns.sioc('has_member'), id, message.doc());
+                      thread = external_SolidLogic_.store.any(null, ns.sioc('has_member'), id, message.doc());
                     }
                     if (!options.thread) {
                       _context3.next = 5;
                       break;
                     }
-                    if (!external_SolidLogic_.store.holds(message, src_ns.sioc('has_reply'), options.thread)) {
+                    if (!external_SolidLogic_.store.holds(message, ns.sioc('has_reply'), options.thread)) {
                       _context3.next = 2;
                       break;
                     }
@@ -22097,7 +22150,7 @@ function _infiniteMessageArea() {
             return _addMessage.apply(this, arguments);
           };
           _syncMessages = function _syncMessages3() {
-            _syncMessages = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(chatChannel, messageTable) {
+            _syncMessages = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(chatChannel, messageTable) {
               var displayed, ele, ele2, messages, stored, _iterator, _step, m, _t;
               return regenerator_default().wrap(function (_context2) {
                 while (1) switch (_context2.prev = _context2.next) {
@@ -22108,7 +22161,7 @@ function _infiniteMessageArea() {
                         displayed[ele.AJAR_subject.uri] = true;
                       }
                     }
-                    messages = external_SolidLogic_.store.each(chatChannel, src_ns.wf('message'), null, messageTable.chatDocument);
+                    messages = external_SolidLogic_.store.each(chatChannel, ns.wf('message'), null, messageTable.chatDocument);
                     stored = {};
                     _iterator = infinite_createForOfIteratorHelper(messages);
                     _context2.prev = 1;
@@ -22210,9 +22263,9 @@ function _infiniteMessageArea() {
           };
           if (options.thread) {
             thread = options.thread;
-            threadRootMessage = external_SolidLogic_.store.any(null, src_ns.sioc('has_reply'), thread, thread.doc());
+            threadRootMessage = external_SolidLogic_.store.any(null, ns.sioc('has_reply'), thread, thread.doc());
             if (threadRootMessage) {
-              threadTime = external_SolidLogic_.store.any(threadRootMessage, src_ns.dct('created'), null, threadRootMessage.doc());
+              threadTime = external_SolidLogic_.store.any(threadRootMessage, ns.dct('created'), null, threadRootMessage.doc());
               if (threadTime) {
                 earliest.limit = new Date(threadTime.value);
                 // debug.log(' infinite: thread start at ' + earliest.limit)
@@ -22272,14 +22325,14 @@ function set(k, v) {
 // (maybe make it in a separate file?)
 function recordSharedPreferences(subject, context) {
   return new Promise(function (resolve, reject) {
-    var sharedPreferences = preferences_kb.any(subject, src_ns.ui('sharedPreferences'));
+    var sharedPreferences = preferences_kb.any(subject, ns.ui('sharedPreferences'));
     if (!sharedPreferences) {
       if (!preferences_kb.updater.editable(subject.doc())) {
         src_debug/* log */.Rm(" Cant make shared preferences, may not change ".concat(subject.doc));
         resolve(context);
       }
       var sp = external_$rdf_.sym(subject.doc().uri + '#SharedPreferences');
-      var ins = [external_$rdf_.st(subject, src_ns.ui('sharedPreferences'), sp, subject.doc())];
+      var ins = [external_$rdf_.st(subject, ns.ui('sharedPreferences'), sp, subject.doc())];
       src_debug/* log */.Rm('Creating shared preferences ' + sp);
       preferences_kb.updater.update([], ins, function (uri, ok, errorMessage) {
         if (!ok) {
@@ -22305,14 +22358,14 @@ function recordPersonalDefaults(theClass, context) {
         src_debug/* log */.Rm('Not doing private class preferences as no access to preferences file. ' + context.preferencesFileError);
         return;
       }
-      var regs = preferences_kb.each(null, src_ns.solid('forClass'), theClass, context.preferencesFile);
+      var regs = preferences_kb.each(null, ns.solid('forClass'), theClass, context.preferencesFile);
       var ins = [];
       var prefs;
       var reg;
       if (regs.length) {
         // Use existing node if we can
         regs.forEach(function (r) {
-          prefs = prefs || preferences_kb.any(r, src_ns.solid('personalDefaults'));
+          prefs = prefs || preferences_kb.any(r, ns.solid('personalDefaults'));
         });
         if (prefs) {
           context.personalDefaults = prefs; // Found one
@@ -22325,10 +22378,10 @@ function recordPersonalDefaults(theClass, context) {
       } else {
         // no regs fo class
         reg = newThing(context.preferencesFile);
-        ins = [external_$rdf_.st(reg, src_ns.rdf('type'), src_ns.solid('TypeRegistration'), context.preferencesFile), external_$rdf_.st(reg, src_ns.solid('forClass'), theClass, context.preferencesFile)];
+        ins = [external_$rdf_.st(reg, ns.rdf('type'), ns.solid('TypeRegistration'), context.preferencesFile), external_$rdf_.st(reg, ns.solid('forClass'), theClass, context.preferencesFile)];
       }
       prefs = newThing(context.preferencesFile);
-      ins.push(external_$rdf_.st(reg, src_ns.solid('personalDefaults'), prefs, context.preferencesFile));
+      ins.push(external_$rdf_.st(reg, ns.solid('personalDefaults'), prefs, context.preferencesFile));
       preferences_kb.updater.update([], ins, function (uri, ok, errm) {
         if (!ok) {
           reject(new Error('Setting preferences for ' + theClass + ': ' + errm));
@@ -22379,13 +22432,13 @@ function renderPreferencesForm(subject, theClass, preferencesForm, context) {
 
 function toJS(term) {
   if (!term.datatype) return term; // Objects remain objects
-  if (term.datatype.equals(src_ns.xsd('boolean'))) {
+  if (term.datatype.equals(ns.xsd('boolean'))) {
     return term.value === '1';
   }
-  if (term.datatype.equals(src_ns.xsd('dateTime')) || term.datatype.equals(src_ns.xsd('date'))) {
+  if (term.datatype.equals(ns.xsd('dateTime')) || term.datatype.equals(ns.xsd('date'))) {
     return new Date(term.value);
   }
-  if (term.datatype.equals(src_ns.xsd('integer')) || term.datatype.equals(src_ns.xsd('float')) || term.datatype.equals(src_ns.xsd('decimal'))) {
+  if (term.datatype.equals(ns.xsd('integer')) || term.datatype.equals(ns.xsd('float')) || term.datatype.equals(ns.xsd('decimal'))) {
     return Number(term.value);
   }
   return term.value;
@@ -22456,7 +22509,7 @@ function getPreferencesForClass(subject, theClass, predicates, context) {
 var table_UI = {
   icons: iconBase/* icons */.Pt,
   log: log_namespaceObject,
-  ns: src_ns,
+  ns: ns,
   utils: utils_namespaceObject,
   widgets: widgets_namespaceObject
 };
@@ -24095,6 +24148,10 @@ function wrapNativeSuper_wrapNativeSuper(t) {
 }
 
 ;// ./src/tabs.ts
+/* unused harmony import specifier */ var tabs_createClass;
+/* unused harmony import specifier */ var tabs_classCallCheck;
+/* unused harmony import specifier */ var tabs_inherits;
+/* unused harmony import specifier */ var tabs_wrapNativeSuper;
 
 
 
@@ -24114,19 +24171,19 @@ function tabs_isNativeReflectConstruct() { try { var t = !Boolean.prototype.valu
  */
 var ContainerElement = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLElement) {
   function ContainerElement() {
-    _classCallCheck(this, ContainerElement);
+    tabs_classCallCheck(this, ContainerElement);
     return tabs_callSuper(this, ContainerElement, arguments);
   }
-  _inherits(ContainerElement, _HTMLElement);
-  return _createClass(ContainerElement);
-}(/*#__PURE__*/_wrapNativeSuper(HTMLElement))));
+  tabs_inherits(ContainerElement, _HTMLElement);
+  return tabs_createClass(ContainerElement);
+}(/*#__PURE__*/tabs_wrapNativeSuper(HTMLElement))));
 var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
   function TabWidgetElement() {
-    classCallCheck_classCallCheck(this, TabWidgetElement);
+    _classCallCheck(this, TabWidgetElement);
     return tabs_callSuper(this, TabWidgetElement, arguments);
   }
   inherits_inherits(TabWidgetElement, _HTMLElement2);
-  return createClass_createClass(TabWidgetElement);
+  return _createClass(TabWidgetElement);
 }(/*#__PURE__*/wrapNativeSuper_wrapNativeSuper(HTMLElement));
 
 /**
@@ -24134,12 +24191,12 @@ var TabWidgetElement = /*#__PURE__*/function (_HTMLElement2) {
  */
 var TabElement = /*#__PURE__*/(/* unused pure expression or super */ null && (function (_HTMLElement3) {
   function TabElement() {
-    _classCallCheck(this, TabElement);
+    tabs_classCallCheck(this, TabElement);
     return tabs_callSuper(this, TabElement, arguments);
   }
-  _inherits(TabElement, _HTMLElement3);
-  return _createClass(TabElement);
-}(/*#__PURE__*/_wrapNativeSuper(HTMLElement))));
+  tabs_inherits(TabElement, _HTMLElement3);
+  return tabs_createClass(TabElement);
+}(/*#__PURE__*/tabs_wrapNativeSuper(HTMLElement))));
 /**
  * Use this widget to generate tabs from triples set in the global store.
  *
@@ -24550,13 +24607,13 @@ function getPodOwner(_x, _x2) {
  * @ignore exporting this only for the unit test
  */
 function _getPodOwner() {
-  _getPodOwner = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(pod, store) {
+  _getPodOwner = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee(pod, store) {
     var response, containerTurtle, podOwner, guess, _t, _t2, _t3;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
         case 0:
           _context.prev = 0;
-          if (store.any(pod, null, src_ns.ldp('Container'), pod)) {
+          if (store.any(pod, null, ns.ldp('Container'), pod)) {
             _context.next = 2;
             break;
           }
@@ -24579,14 +24636,14 @@ function _getPodOwner() {
           console.error('Error loading pod ' + pod + ': ' + _t);
           return _context.abrupt("return", null);
         case 4:
-          if (store.holds(pod, src_ns.rdf('type'), src_ns.space('Storage'), pod)) {
+          if (store.holds(pod, ns.rdf('type'), ns.space('Storage'), pod)) {
             _context.next = 5;
             break;
           }
           console.warn('Pod  ' + pod + ' does not declare itself as a space:Storage');
           return _context.abrupt("return", null);
         case 5:
-          podOwner = store.any(pod, src_ns.solid('owner'), null, pod) || store.any(null, src_ns.space('storage'), pod, pod);
+          podOwner = store.any(pod, ns.solid('owner'), null, pod) || store.any(null, ns.space('storage'), pod, pod);
           if (!podOwner) {
             _context.next = 10;
             break;
@@ -24603,7 +24660,7 @@ function _getPodOwner() {
           console.warn('Unable to load profile of pod owner ' + podOwner);
           return _context.abrupt("return", null);
         case 9:
-          if (!store.holds(podOwner, src_ns.space('storage'), pod, podOwner.doc())) {
+          if (!store.holds(podOwner, ns.space('storage'), pod, podOwner.doc())) {
             console.warn("Pod owner ".concat(podOwner, " does NOT list pod ").concat(pod, " as their storage"));
           }
           return _context.abrupt("return", podOwner);
@@ -24624,7 +24681,7 @@ function _getPodOwner() {
           console.error('Ooops. Guessed wrong pod owner webid {$guess} : can\'t load it.');
           return _context.abrupt("return", null);
         case 14:
-          if (!store.holds(guess, src_ns.space('storage'), pod, guess.doc())) {
+          if (!store.holds(guess, ns.space('storage'), pod, guess.doc())) {
             _context.next = 15;
             break;
           }
@@ -24641,7 +24698,7 @@ function _getPodOwner() {
   return _getPodOwner.apply(this, arguments);
 }
 function getName(store, user) {
-  return store.anyValue(user, src_ns.vcard('fn'), null, user.doc()) || store.anyValue(user, src_ns.foaf('name'), null, user.doc()) || user.uri;
+  return store.anyValue(user, ns.vcard('fn'), null, user.doc()) || store.anyValue(user, ns.foaf('name'), null, user.doc()) || user.uri;
 }
 /**
  * @ignore exporting this only for the unit test
@@ -24721,7 +24778,7 @@ function initHeader(_x, _x2, _x3) {
  * @ignore exporting this only for the unit test
  */
 function _initHeader() {
-  _initHeader = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(store, userMenuList, options) {
+  _initHeader = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(store, userMenuList, options) {
     var header, pod;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -24746,7 +24803,7 @@ function _initHeader() {
   return _initHeader.apply(this, arguments);
 }
 function rebuildHeader(header, store, pod, userMenuList, options) {
-  return /*#__PURE__*/asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
+  return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
     var user, _t;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -24775,7 +24832,7 @@ function createBanner(_x4, _x5, _x6, _x7, _x8) {
  * @ignore exporting this only for the unit test
  */
 function _createBanner() {
-  _createBanner = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(store, pod, user, userMenuList, options) {
+  _createBanner = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee3(store, pod, user, userMenuList, options) {
     var podLink, image, userMenu, banner, leftSideOfHeader, helpMenu, _t2;
     return regenerator_default().wrap(function (_context3) {
       while (1) switch (_context3.prev = _context3.next) {
@@ -24927,7 +24984,7 @@ function createUserMenu(_x9, _x0, _x1) {
  * @ignore exporting this only for the unit test
  */
 function _createUserMenu() {
-  _createUserMenu = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(store, user, userMenuList) {
+  _createUserMenu = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee4(store, user, userMenuList) {
     var fetcher, loggedInMenuList, loggedInMenu, loggedInMenuTrigger, profileImg, loggedInMenuContainer, throttledMenuToggle, timer;
     return regenerator_default().wrap(function (_context4) {
       while (1) switch (_context4.prev = _context4.next) {
@@ -25067,7 +25124,7 @@ function initFooter(_x, _x2) {
  * @ignore exporting this only for the unit test
  */
 function _initFooter() {
-  _initFooter = asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(store, options) {
+  _initFooter = _asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee2(store, options) {
     var footer, pod, podOwner;
     return regenerator_default().wrap(function (_context2) {
       while (1) switch (_context2.prev = _context2.next) {
@@ -25096,7 +25153,7 @@ function _initFooter() {
   return _initFooter.apply(this, arguments);
 }
 function rebuildFooter(footer, store, pod, podOwner, options) {
-  return /*#__PURE__*/asyncToGenerator_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
+  return /*#__PURE__*/_asyncToGenerator(/*#__PURE__*/regenerator_default().mark(function _callee() {
     var user, _t;
     return regenerator_default().wrap(function (_context) {
       while (1) switch (_context.prev = _context.next) {
@@ -25230,7 +25287,7 @@ var src_dom = window ? window.document : null; // Idea that UI.dom can be adapte
 if (typeof window !== 'undefined') {
   ;
   window.UI = {
-    ns: src_ns,
+    ns: ns,
     acl: acl,
     aclControl: aclControl,
     create: create,
