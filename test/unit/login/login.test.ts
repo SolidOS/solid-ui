@@ -11,6 +11,7 @@ function buildSolidLogicMock () {
     add: jest.fn(),
     sym,
     fetcher: {
+      requested: {},
       load: jest.fn(async () => undefined)
     }
   }
@@ -169,5 +170,44 @@ describe('getUserRoles', () => {
     expect(second).toEqual([role])
     expect(loadPreferences).toHaveBeenCalledTimes(2)
     expect(store.each).toHaveBeenCalledTimes(1)
+  })
+
+  it('does not clear cached storage request failures during login UI handling', async () => {
+    const { loginModule, solidLogic, store } = loadLoginWithMock()
+
+    const me = sym('https://alice.example.com/profile/card#me')
+    const initialRequested = {
+      'https://alice.example.com/settings/': 404,
+      'https://alice.example.com/private/notes.ttl': 404,
+      'https://other.example.com/resource.ttl': 404
+    }
+    store.fetcher.requested = { ...initialRequested }
+
+    const dom = document.implementation.createHTMLDocument('login-test')
+    const userUriInput = dom.createElement('input')
+    userUriInput.id = 'UserURI'
+    userUriInput.value = 'https://alice.example.com/private/notes.ttl'
+    dom.body.appendChild(userUriInput)
+
+    solidLogic.authn.currentUser
+      .mockReturnValueOnce(null)
+      .mockReturnValue(me)
+      .mockReturnValue(me)
+
+    const box = loginModule.loginStatusBox(dom, jest.fn())
+    dom.body.appendChild(box)
+
+    const loginHandlers = solidLogic.authSession.events.on.mock.calls
+      .filter(([eventName]) => eventName === 'login')
+      .map(([, handler]) => handler)
+
+    expect(loginHandlers.length).toBeGreaterThan(0)
+    for (const handler of loginHandlers) {
+      await handler()
+    }
+
+    expect(store.fetcher.requested['https://alice.example.com/settings/']).toBe(404)
+    expect(store.fetcher.requested['https://alice.example.com/private/notes.ttl']).toBe(404)
+    expect(store.fetcher.requested['https://other.example.com/resource.ttl']).toBe(404)
   })
 })
