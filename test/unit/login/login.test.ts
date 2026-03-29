@@ -11,3 +11,29 @@ describe('ensureLoggedIn', () => {
     expect(testLogin.ensureLoggedIn({})).toBeInstanceOf(Object)
   })
 })
+
+describe('getUserRoles', () => {
+  afterEach(() => {
+    jest.restoreAllMocks()
+    jest.resetModules()
+  })
+
+  it('returns [] and does not load preferences when current user is missing', async () => {
+    const solidLogic = require('solid-logic')
+
+    const currentUserSpy = jest
+      .spyOn(solidLogic.authn, 'currentUser')
+      .mockReturnValue(null)
+    const loadPreferencesSpy = jest.spyOn(
+      solidLogic.solidLogicSingleton.profile,
+      'loadPreferences'
+    )
+
+    const loginModule = require('../../../src/login/login')
+    const roles = await loginModule.getUserRoles()
+
+    expect(currentUserSpy).toHaveBeenCalled()
+    expect(roles).toEqual([])
+    expect(loadPreferencesSpy).not.toHaveBeenCalled()
+  })
+})
