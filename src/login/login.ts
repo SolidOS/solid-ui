@@ -1132,11 +1132,11 @@ export function newAppInstance (
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
   const currentUser = authn.currentUser()
-   const sessionInfo = authSession.info
+  const sessionInfo = authSession.info
   if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
     return []
   }
-  
+
   if (!currentUser || currentUser.uri !== sessionInfo.webId) {
     return []
   }
@@ -1153,22 +1153,16 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
   }
 
   const run = (async (): Promise<Array<NamedNode>> => {
-
-    try {
-      const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
-      if (!preferencesFile || preferencesFileError) {
-        throw new Error(preferencesFileError || 'Unable to load user preferences file.')
-      }
-      return solidLogicSingleton.store.each(
-        me,
-        ns.rdf('type'),
-        null,
-        preferencesFile.doc()
-      ) as NamedNode[]
-    } catch (error) {
-      debug.warn('Unable to fetch your preferences - this was the error: ', error)
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
+    if (!preferencesFile || preferencesFileError) {
+      throw new Error(preferencesFileError || 'Unable to load user preferences file.')
     }
-    return []
+    return solidLogicSingleton.store.each(
+      me,
+      ns.rdf('type'),
+      null,
+      preferencesFile.doc()
+    ) as NamedNode[]
   })()
 
   getUserRolesInFlight.set(webId, run)
@@ -1176,6 +1170,9 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
     const roles = await run
     cachedUserRolesByWebId.set(webId, roles)
     return roles
+  } catch (error) {
+    debug.warn('Unable to fetch your preferences - this was the error: ', error)
+    return []
   } finally {
     if (getUserRolesInFlight.get(webId) === run) {
       getUserRolesInFlight.delete(webId)
