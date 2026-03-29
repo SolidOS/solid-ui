@@ -430,73 +430,11 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}${style.headerBannerLoginInput}` + style.signUpBackground)
 
-  authSession.events.on('login', async () => {
+  authSession.events.on('login', () => {
     const me = authn.currentUser()
     // const sessionInfo = authSession.info
     // if (sessionInfo && sessionInfo.isLoggedIn) {
     if (me) {
-      // Ensure preferences and related settings files are initialized before
-      // resolving login boxes, to avoid transient 404s for settings resources.
-      let preferencesFile: NamedNode | undefined
-      try {
-        const ensured = await ensureLoadedPreferences({ me })
-        preferencesFile = ensured.preferencesFile as NamedNode | undefined
-      } catch (err) {
-        debug.warn('Failed to initialize preferences after login', err)
-      }
-
-      // Refresh key resources after login with authenticated fetch, but avoid
-      // destructive clears or forced navigation that can hide existing entries.
-      try {
-        const storageRoot = store.any(me, ns.space('storage')) as NamedNode | null
-        const resourcesToReload: NamedNode[] = []
-        const seenResources = new Set<string>()
-        const queueResource = (resource: NamedNode | null | undefined): void => {
-          if (!resource || seenResources.has(resource.uri)) return
-          seenResources.add(resource.uri)
-          resourcesToReload.push(resource)
-        }
-
-        queueResource(me.doc())
-        queueResource(storageRoot)
-        if (preferencesFile) {
-          const preferencesDoc = preferencesFile.doc()
-          const settingsContainer = preferencesDoc.dir()
-          queueResource(preferencesDoc)
-          queueResource(settingsContainer)
-
-          // If settings are under the advertised storage root, proactively load
-          // each ancestor container so folder UIs can discover the path via
-          // fetched containment data rather than synthesized triples.
-          if (storageRoot && settingsContainer) {
-            const normalizedRoot = storageRoot.uri.endsWith('/') ? storageRoot.uri : `${storageRoot.uri}/`
-            if (settingsContainer.uri.startsWith(normalizedRoot)) {
-              const relativeParts = settingsContainer.uri
-                .slice(normalizedRoot.length)
-                .split('/')
-                .filter(Boolean)
-              let cursor = normalizedRoot
-              for (const part of relativeParts) {
-                cursor += `${part}/`
-                queueResource(store.sym(cursor))
-              }
-            }
-          }
-
-        }
-
-        const currentUri = (dom.getElementById('UserURI') as HTMLInputElement | null)?.value
-        if (currentUri) {
-          queueResource(store.sym(currentUri))
-        }
-
-        await Promise.allSettled(
-          resourcesToReload.map(resource => store.fetcher.load(resource, { force: true }))
-        )
-      } catch (err) {
-        debug.warn('Failed to refresh authenticated resources after login', err)
-      }
-
       // const webIdURI = sessionInfo.webId
       const webIdURI = me.uri
       // setUserCallback(webIdURI)
