@@ -65,6 +65,12 @@ const {
   deleteTypeIndexRegistration
 } = solidLogicSingleton.typeIndex
 
+// Dedupe/caching for preference loading across repeated UI callers.
+const ensureLoadedPreferencesInFlight = new Map<string, Promise<AuthenticationContext>>()
+const cachedPreferencesFileByWebId = new Map<string, NamedNode>()
+const getUserRolesInFlight = new Map<string, Promise<Array<NamedNode>>>()
+const cachedUserRolesByWebId = new Map<string, Array<NamedNode>>()
+
 /**
  * Resolves with the logged in user's WebID
  *
@@ -83,6 +89,7 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
       // Already logged in?
       if (webId) {
         debug.log(`logIn: Already logged in as ${webId}`)
+        authn.saveUser(webId as NamedNode | string, context)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
@@ -110,6 +117,25 @@ export async function ensureLoadedPreferences (
   context: AuthenticationContext
 ): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
+
+  const webId = context?.me?.uri
+  if (webId) {
+    const cachedPreferencesFile = cachedPreferencesFileByWebId.get(webId)
+    if (cachedPreferencesFile) {
+      context.preferencesFile = cachedPreferencesFile
+      return context
+    }
+
+    const inFlight = ensureLoadedPreferencesInFlight.get(webId)
+    if (inFlight) {
+      const resolved = await inFlight
+      context.preferencesFile = resolved.preferencesFile
+      context.preferencesFileError = resolved.preferencesFileError
+      return context
+    }
+  }
+
+  const run = (async (): Promise<AuthenticationContext> => {
 
   // const statusArea = context.statusArea || context.div || null
   let progressDisplay
@@ -163,7 +189,24 @@ export async function ensureLoadedPreferences (
       throw new Error(`(via loadPrefs) ${err}`)
     }
   }
-  return context
+    return context
+  })()
+
+  if (webId) {
+    ensureLoadedPreferencesInFlight.set(webId, run)
+  }
+
+  try {
+    const resolved = await run
+    if (webId && resolved.preferencesFile) {
+      cachedPreferencesFileByWebId.set(webId, resolved.preferencesFile)
+    }
+    return resolved
+  } finally {
+    if (webId && ensureLoadedPreferencesInFlight.get(webId) === run) {
+      ensureLoadedPreferencesInFlight.delete(webId)
+    }
+  }
 }
 
 /**
@@ -1047,17 +1090,28 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
-   const sessionInfo = authSession.info
+  const currentUser = authn.currentUser()
+  const sessionInfo = authSession.info
   if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
     return []
   }
-  
-  const currentUser = authn.currentUser()
-  if (!currentUser) {
+
+  if (!currentUser || currentUser.uri !== sessionInfo.webId) {
     return []
   }
 
-  try {
+  const webId = currentUser.uri
+  const cachedUserRoles = cachedUserRolesByWebId.get(webId)
+  if (cachedUserRoles) {
+    return cachedUserRoles
+  }
+
+  const inFlight = getUserRolesInFlight.get(webId)
+  if (inFlight) {
+    return inFlight
+  }
+
+  const run = (async (): Promise<Array<NamedNode>> => {
     const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError || 'Unable to load user preferences file.')
@@ -1068,10 +1122,21 @@ export async function getUserRoles (): Promise<Array<NamedNode>> {
       null,
       preferencesFile.doc()
     ) as NamedNode[]
+  })()
+
+  getUserRolesInFlight.set(webId, run)
+  try {
+    const roles = await run
+    cachedUserRolesByWebId.set(webId, roles)
+    return roles
   } catch (error) {
     debug.warn('Unable to fetch your preferences - this was the error: ', error)
+    return []
+  } finally {
+    if (getUserRolesInFlight.get(webId) === run) {
+      getUserRolesInFlight.delete(webId)
+    }
   }
-  return []
 }
 
 /**
