@@ -21,6 +21,11 @@ describe('getUserRoles', () => {
   it('returns [] and does not load preferences when current user is missing', async () => {
     const solidLogic = require('solid-logic')
 
+    solidLogic.authSession.info = {
+      isLoggedIn: true,
+      webId: 'https://alice.example.com/profile/card#me'
+    }
+
     const currentUserSpy = jest
       .spyOn(solidLogic.authn, 'currentUser')
       .mockReturnValue(null)
