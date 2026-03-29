@@ -65,6 +65,12 @@ const {
   deleteTypeIndexRegistration
 } = solidLogicSingleton.typeIndex
 
+// Dedupe/caching for preference loading across repeated UI callers.
+const ensureLoadedPreferencesInFlight = new Map<string, Promise<AuthenticationContext>>()
+const cachedPreferencesFileByWebId = new Map<string, NamedNode>()
+const getUserRolesInFlight = new Map<string, Promise<Array<NamedNode>>>()
+const cachedUserRolesByWebId = new Map<string, Array<NamedNode>>()
+
 /**
  * Resolves with the logged in user's WebID
  *
@@ -83,6 +89,7 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
       // Already logged in?
       if (webId) {
         debug.log(`logIn: Already logged in as ${webId}`)
+        authn.saveUser(webId as NamedNode | string, context)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
@@ -110,6 +117,25 @@ export async function ensureLoadedPreferences (
   context: AuthenticationContext
 ): Promise<AuthenticationContext> {
   if (context.preferencesFile) return Promise.resolve(context) // already done
+
+  const webId = context?.me?.uri
+  if (webId) {
+    const cachedPreferencesFile = cachedPreferencesFileByWebId.get(webId)
+    if (cachedPreferencesFile) {
+      context.preferencesFile = cachedPreferencesFile
+      return context
+    }
+
+    const inFlight = ensureLoadedPreferencesInFlight.get(webId)
+    if (inFlight) {
+      const resolved = await inFlight
+      context.preferencesFile = resolved.preferencesFile
+      context.preferencesFileError = resolved.preferencesFileError
+      return context
+    }
+  }
+
+  const run = (async (): Promise<AuthenticationContext> => {
 
   // const statusArea = context.statusArea || context.div || null
   let progressDisplay
@@ -163,7 +189,24 @@ export async function ensureLoadedPreferences (
       throw new Error(`(via loadPrefs) ${err}`)
     }
   }
-  return context
+    return context
+  })()
+
+  if (webId) {
+    ensureLoadedPreferencesInFlight.set(webId, run)
+  }
+
+  try {
+    const resolved = await run
+    if (webId && resolved.preferencesFile) {
+      cachedPreferencesFileByWebId.set(webId, resolved.preferencesFile)
+    }
+    return resolved
+  } finally {
+    if (webId && ensureLoadedPreferencesInFlight.get(webId) === run) {
+      ensureLoadedPreferencesInFlight.delete(webId)
+    }
+  }
 }
 
 /**
@@ -387,11 +430,52 @@ function signInOrSignUpBox (
   signInPopUpButton.setAttribute('value', 'Log in')
   signInPopUpButton.setAttribute('style', `${signInButtonStyle}${style.headerBannerLoginInput}` + style.signUpBackground)
 
-  authSession.events.on('login', () => {
+  authSession.events.on('login', async () => {
     const me = authn.currentUser()
     // const sessionInfo = authSession.info
     // if (sessionInfo && sessionInfo.isLoggedIn) {
     if (me) {
+      // Ensure preferences and related settings files are initialized before
+      // resolving login boxes, to avoid transient 404s for settings resources.
+      let preferencesFile: NamedNode | undefined
+      try {
+        const ensured = await ensureLoadedPreferences({ me })
+        preferencesFile = ensured.preferencesFile as NamedNode | undefined
+      } catch (err) {
+        debug.warn('Failed to initialize preferences after login', err)
+      }
+
+      // Refresh key resources after login with authenticated fetch, but avoid
+      // destructive clears or forced navigation that can hide existing entries.
+      try {
+        const storageRoot = store.any(me, ns.space('storage')) as NamedNode | null
+        if (storageRoot) {
+          await store.fetcher.load(storageRoot, { force: true })
+        }
+
+        if (preferencesFile) {
+          const settingsContainer = preferencesFile.doc().dir()
+          if (settingsContainer) {
+            await store.fetcher.load(settingsContainer, { force: true })
+
+            // Some servers or cached container states may omit settings from
+            // the visible root listing even when the container exists.
+            // Ensure folder UIs can discover it from local store state.
+            if (storageRoot &&
+              !store.holds(storageRoot, ns.ldp('contains'), settingsContainer, storageRoot.doc())) {
+              store.add(storageRoot, ns.ldp('contains'), settingsContainer, storageRoot.doc())
+            }
+          }
+        }
+
+        const currentUri = (dom.getElementById('UserURI') as HTMLInputElement | null)?.value
+        if (currentUri) {
+          await store.fetcher.load(store.sym(currentUri), { force: true })
+        }
+      } catch (err) {
+        debug.warn('Failed to refresh authenticated resources after login', err)
+      }
+
       // const webIdURI = sessionInfo.webId
       const webIdURI = me.uri
       // setUserCallback(webIdURI)
@@ -1047,26 +1131,56 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
-  const currentUser = authn.currentUser()
-  if (!currentUser) {
+  const sessionInfo = authSession.info
+  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
     return []
   }
 
-  try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
-    if (!preferencesFile || preferencesFileError) {
-      return []
-    }
-    return solidLogicSingleton.store.each(
-      me,
-      ns.rdf('type'),
-      null,
-      preferencesFile.doc()
-    ) as NamedNode[]
-  } catch (error) {
-    debug.warn('Unable to fetch your preferences - this was the error: ', error)
+  const currentUser = authn.currentUser()
+  if (!currentUser || currentUser.uri !== sessionInfo.webId) {
+    return []
   }
-  return []
+
+  const webId = currentUser.uri
+  const cachedUserRoles = cachedUserRolesByWebId.get(webId)
+  if (cachedUserRoles) {
+    return cachedUserRoles
+  }
+
+  const inFlight = getUserRolesInFlight.get(webId)
+  if (inFlight) {
+    return inFlight
+  }
+
+  const run = (async (): Promise<Array<NamedNode>> => {
+
+    try {
+      const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
+      if (!preferencesFile || preferencesFileError) {
+        throw new Error(preferencesFileError)
+      }
+      return solidLogicSingleton.store.each(
+        me,
+        ns.rdf('type'),
+        null,
+        preferencesFile.doc()
+      ) as NamedNode[]
+    } catch (error) {
+      debug.warn('Unable to fetch your preferences - this was the error: ', error)
+    }
+    return []
+  })()
+
+  getUserRolesInFlight.set(webId, run)
+  try {
+    const roles = await run
+    cachedUserRolesByWebId.set(webId, roles)
+    return roles
+  } finally {
+    if (getUserRolesInFlight.get(webId) === run) {
+      getUserRolesInFlight.delete(webId)
+    }
+  }
 }
 
 /**
