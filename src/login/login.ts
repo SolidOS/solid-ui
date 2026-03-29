@@ -449,29 +449,50 @@ function signInOrSignUpBox (
       // destructive clears or forced navigation that can hide existing entries.
       try {
         const storageRoot = store.any(me, ns.space('storage')) as NamedNode | null
-        if (storageRoot) {
-          await store.fetcher.load(storageRoot, { force: true })
+        const resourcesToReload: NamedNode[] = []
+        const seenResources = new Set<string>()
+        const queueResource = (resource: NamedNode | null | undefined): void => {
+          if (!resource || seenResources.has(resource.uri)) return
+          seenResources.add(resource.uri)
+          resourcesToReload.push(resource)
         }
 
+        queueResource(me.doc())
+        queueResource(storageRoot)
         if (preferencesFile) {
-          const settingsContainer = preferencesFile.doc().dir()
-          if (settingsContainer) {
-            await store.fetcher.load(settingsContainer, { force: true })
+          const preferencesDoc = preferencesFile.doc()
+          const settingsContainer = preferencesDoc.dir()
+          queueResource(preferencesDoc)
+          queueResource(settingsContainer)
 
-            // Some servers or cached container states may omit settings from
-            // the visible root listing even when the container exists.
-            // Ensure folder UIs can discover it from local store state.
-            if (storageRoot &&
-              !store.holds(storageRoot, ns.ldp('contains'), settingsContainer, storageRoot.doc())) {
-              store.add(storageRoot, ns.ldp('contains'), settingsContainer, storageRoot.doc())
+          // If settings are under the advertised storage root, proactively load
+          // each ancestor container so folder UIs can discover the path via
+          // fetched containment data rather than synthesized triples.
+          if (storageRoot && settingsContainer) {
+            const normalizedRoot = storageRoot.uri.endsWith('/') ? storageRoot.uri : `${storageRoot.uri}/`
+            if (settingsContainer.uri.startsWith(normalizedRoot)) {
+              const relativeParts = settingsContainer.uri
+                .slice(normalizedRoot.length)
+                .split('/')
+                .filter(Boolean)
+              let cursor = normalizedRoot
+              for (const part of relativeParts) {
+                cursor += `${part}/`
+                queueResource(store.sym(cursor))
+              }
             }
           }
+
         }
 
         const currentUri = (dom.getElementById('UserURI') as HTMLInputElement | null)?.value
         if (currentUri) {
-          await store.fetcher.load(store.sym(currentUri), { force: true })
+          queueResource(store.sym(currentUri))
         }
+
+        await Promise.allSettled(
+          resourcesToReload.map(resource => store.fetcher.load(resource, { force: true }))
+        )
       } catch (err) {
         debug.warn('Failed to refresh authenticated resources after login', err)
       }
