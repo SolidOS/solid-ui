@@ -91,3 +91,32 @@ jobs:
       - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         run: npm publish --tag latest
+
+  github-release:
+    needs: [npm-publish-latest]
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0
+      - name: Create GitHub release with generated notes
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TAG="v$(node -p "require('./package.json').version")"
+      
+          if gh release view "$TAG" >/dev/null 2>&1; then
+            echo "Release $TAG already exists. Skipping."
+            exit 0
+          fi
+      
+          if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
+            echo "Tag $TAG already exists on origin. Creating release from existing tag."
+            gh release create "$TAG" --verify-tag --generate-notes
+          else
+            echo "Creating tag and release $TAG from commit $GITHUB_SHA."
+            gh release create "$TAG" --target "$GITHUB_SHA" --generate-notes
+          fi
