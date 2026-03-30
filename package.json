@@ -90,7 +90,7 @@
     "@storybook/addon-docs": "8.6.15",
     "@storybook/addon-essentials": "8.6.15",
     "@storybook/addon-links": "8.6.15",
-    "@storybook/addon-mdx-gfm": "8.6.15",
+    "@storybook/addon-mdx-gfm": "8.6.18",
     "@storybook/addon-webpack5-compiler-swc": "^3.0.0",
     "@storybook/html": "8.6.15",
     "@storybook/html-webpack5": "8.6.15",
