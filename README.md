@@ -20,6 +20,7 @@ See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation
 - [Development](#development-new-components)
 - [Testing](#adding-tests)
 - [Further Documentation](#further-documentation)
+- [Generative AI usage](#generative-ai-usage)
 
 
 ## Getting started
@@ -286,3 +287,12 @@ The following document gives guidance on how to add and perform testing in solid
 ## Further documentation
 
 - [Some code know-how](https://github.com/SolidOS/solidos/wiki/2.-Solid-UI-know-how)
+
+## Generative AI usage
+The SolidOS team is using GitHub Copilot integrated in Visual Studio Code. 
+We have added comments in the code to make it explicit which parts are 100% written by AI. 
+
+### Prompt usage history:
+* Raptor mini model: Change this js file (headerStyle.js) in a css file and replace in index.ts all .style variables with a css class. You can keep the names of the css classes.
+
+* Raptor mini model: I want to add bundler config to support CSS imports.

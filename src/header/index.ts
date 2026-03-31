@@ -7,9 +7,7 @@ import { IndexedFormula, NamedNode } from 'rdflib'
 import { icons } from '../index'
 import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
-// import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
-import { style } from '../style'
 import { emptyProfile } from './empty-profile'
 import { getPod, throttle } from '../utils/headerFooterHelpers'
 
@@ -75,13 +73,17 @@ export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: 
  */
 export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
+  podLink.setAttribute('aria-label', 'Solid logo')
+  podLink.setAttribute('id', 'headerBannerLink')
   podLink.href = pod.uri
-  podLink.setAttribute('style', style.headerBannerLink)
+  podLink.classList.add('headerBannerLink')
   const image = document.createElement('img')
   if (options) {
     image.src = options.logo ? options.logo : DEFAUL_SOLID_ICON_URL
   }
-  image.setAttribute('style', style.headerBannerIcon)
+  image.setAttribute('alt', 'Solid logo')
+  image.setAttribute('id', 'headerBannerIcon')
+  image.classList.add('headerBannerIcon')
   podLink.appendChild(image)
 
   const userMenu = user
@@ -89,11 +91,12 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
     : createLoginSignUpButtons()
 
   const banner = document.createElement('div')
-  banner.setAttribute('style', style.headerBanner)
+  banner.setAttribute('id', 'headerBanner')
+  banner.classList.add('headerBanner')
   banner.appendChild(podLink)
 
   const leftSideOfHeader = document.createElement('div')
-  leftSideOfHeader.setAttribute('style', style.headerBannerRightMenu)
+  leftSideOfHeader.classList.add('headerBannerRightMenu')
   leftSideOfHeader.appendChild(userMenu)
 
   if (options && options.helpMenuList) {
@@ -111,7 +114,7 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems[]) {
   if (!helpMenuItems) return
   const helpMenuList = document.createElement('ul')
-  helpMenuList.setAttribute('style', style.headerUserMenuList)
+  helpMenuList.classList.add('headerUserMenuList')
   helpMenuItems.forEach(function (menuItem) {
     const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
     if (menuItemType === 'url') {
@@ -123,22 +126,22 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
 
   const helpMenu = document.createElement('nav')
 
-  helpMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
+  helpMenu.classList.add('headerUserMenuNavigationMenuNotDisplayed')
   helpMenu.setAttribute('aria-hidden', 'true')
   helpMenu.setAttribute('id', 'helperNav')
   helpMenu.appendChild(helpMenuList)
 
   const helpMenuContainer = document.createElement('div')
-  helpMenuContainer.setAttribute('style', style.headerBannerUserMenu)
+  helpMenuContainer.classList.add('headerBannerUserMenu')
   helpMenuContainer.appendChild(helpMenu)
 
   const helpMenuTrigger = document.createElement('button')
-  helpMenuTrigger.setAttribute('style', style.headerUserMenuTrigger)
+  helpMenuTrigger.classList.add('headerUserMenuTrigger')
   helpMenuTrigger.type = 'button'
 
   const helpMenuIcon = document.createElement('img')
   helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON
-  helpMenuIcon.setAttribute('style', style.headerUserMenuTriggerImg)
+  helpMenuIcon.classList.add('headerUserMenuTriggerImg')
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
 
@@ -149,12 +152,18 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
     clearTimeout(timer)
     throttledMenuToggle(event)
     const nav = document.getElementById('helperNav')
-    nav?.setAttribute('style', style.headerUserMenuNavigationMenu)
+    if (nav) {
+      nav.classList.remove('headerUserMenuNavigationMenuNotDisplayed')
+      nav.classList.add('headerUserMenuNavigationMenu')
+    }
   })
   helpMenuContainer.addEventListener('mouseout', event => {
     timer = setTimeout(() => throttledMenuToggle(event), 200)
     const nav = document.getElementById('helperNav')
-    nav?.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
+    if (nav) {
+      nav.classList.remove('headerUserMenuNavigationMenu')
+      nav.classList.add('headerUserMenuNavigationMenuNotDisplayed')
+    }
   })
 
   return helpMenuContainer
@@ -164,7 +173,7 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
  */
 export function createLoginSignUpButtons () {
   const profileLoginButtonPre = document.createElement('div')
-  profileLoginButtonPre.setAttribute('style', style.headerBannerLogin)
+  profileLoginButtonPre.classList.add('headerBannerLogin')
   profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
   return profileLoginButtonPre
 }
@@ -173,12 +182,12 @@ export function createLoginSignUpButtons () {
  */
 export function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
-  button.setAttribute('style', style.headerUserMenuButton)
+  button.classList.add('headerUserMenuButton')
   button.onmouseover = function () {
-    button.setAttribute('style', style.headerUserMenuButtonHover)
+    button.classList.add('headerUserMenuButtonHover')
   }
   button.onmouseout = function () {
-    button.setAttribute('style', style.headerUserMenuButton)
+    button.classList.remove('headerUserMenuButtonHover')
   }
   button.addEventListener('click', onClick)
   button.innerText = label
@@ -189,12 +198,12 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
  */
 export function createUserMenuLink (label: string, href: string, target?: string): HTMLElement {
   const link = document.createElement('a')
-  link.setAttribute('style', style.headerUserMenuLink)
+  link.classList.add('headerUserMenuLink')
   link.onmouseover = function () {
-    link.setAttribute('style', style.headerUserMenuLinkHover)
+    link.classList.add('headerUserMenuLinkHover')
   }
   link.onmouseout = function () {
-    link.setAttribute('style', style.headerUserMenuLink)
+    link.classList.remove('headerUserMenuLinkHover')
   }
   link.href = href
   link.innerText = label
@@ -213,7 +222,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
 
   const loggedInMenuList = document.createElement('ul')
-  loggedInMenuList.setAttribute('style', style.headerUserMenuList)
+  loggedInMenuList.classList.add('headerUserMenuList')
   if (userMenuList) {
     userMenuList.forEach(function (menuItem) {
       const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
@@ -226,13 +235,13 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
   const loggedInMenu = document.createElement('nav')
 
-  loggedInMenu.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
+  loggedInMenu.classList.add('headerUserMenuNavigationMenuNotDisplayed')
   loggedInMenu.setAttribute('aria-hidden', 'true')
   loggedInMenu.setAttribute('id', 'loggedInNav')
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
-  loggedInMenuTrigger.setAttribute('style', style.headerUserMenuTrigger)
+  loggedInMenuTrigger.classList.add('headerUserMenuTrigger')
   loggedInMenuTrigger.type = 'button'
   const profileImg = getProfileImg(store, user)
   if (typeof profileImg === 'string') {
@@ -242,7 +251,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
 
   const loggedInMenuContainer = document.createElement('div')
-  loggedInMenuContainer.setAttribute('style', style.headerBannerUserMenuNotDisplayed)
+  loggedInMenuContainer.classList.add('headerBannerUserMenuNotDisplayed')
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -253,12 +262,18 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
     clearTimeout(timer)
     throttledMenuToggle(event)
     const nav = document.getElementById('loggedInNav')
-    nav?.setAttribute('style', style.headerUserMenuNavigationMenu)
+    if (nav) {
+      nav.classList.remove('headerUserMenuNavigationMenuNotDisplayed')
+      nav.classList.add('headerUserMenuNavigationMenu')
+    }
   })
   loggedInMenuContainer.addEventListener('mouseout', event => {
     timer = setTimeout(() => throttledMenuToggle(event), 200)
     const nav = document.getElementById('loggedInNav')
-    nav?.setAttribute('style', style.headerUserMenuNavigationMenuNotDisplayed)
+    if (nav) {
+      nav.classList.remove('headerUserMenuNavigationMenu')
+      nav.classList.add('headerUserMenuNavigationMenuNotDisplayed')
+    }
   })
 
   return loggedInMenuContainer
@@ -269,7 +284,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
  */
 export function createUserMenuItem (child: HTMLElement): HTMLElement {
   const menuProfileItem = document.createElement('li')
-  menuProfileItem.setAttribute('style', style.headerUserMenuListItem)
+  menuProfileItem.classList.add('headerUserMenuListItem')
   menuProfileItem.appendChild(child)
   return menuProfileItem
 }
@@ -288,7 +303,7 @@ export function getProfileImg (store: IndexedFormula, user: NamedNode): string |
   }
 
   const profileImage = document.createElement('div')
-  profileImage.setAttribute('style', style.headerUserMenuPhoto)
+  profileImage.classList.add('headerUserMenuPhoto')
   profileImage.style.backgroundImage = `url(${profileUrl})`
   return profileImage
 }
