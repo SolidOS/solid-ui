@@ -295,6 +295,126 @@ describe('basicField', () => {
     expect(store.updater.updated).toEqual(true)
   })
 
+  it('defers date change while focused', () => {
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const formType = ns.ui('DateField')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(form, ns.rdf('type'), formType, doc)
+    store.add(subject, property, '2026-03-15', doc)
+
+    const originalUpdate = store.updater.update
+    const updateSpy = jest.fn((_deletes, _inserts, onDone) => {
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    })
+    store.updater.update = updateSpy as any
+
+    try {
+      const result = basicField(
+        document,
+        container,
+        already,
+        subject,
+        form,
+        doc,
+        callbackFunction
+      )
+      const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+      inputElement.focus()
+      inputElement.value = '2026-03-16'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(updateSpy).not.toHaveBeenCalled()
+    } finally {
+      store.updater.update = originalUpdate
+      container.remove()
+    }
+  })
+
+  it('does not disable DateField during save', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const formType = ns.ui('DateField')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(form, ns.rdf('type'), formType, doc)
+    store.add(subject, property, '2026-03-15', doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+
+    const originalUpdate = store.updater.update
+    store.updater.update = ((_deletes, _inserts, onDone) => {
+      expect(inputElement.disabled).toEqual(false)
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    }) as any
+
+    try {
+      inputElement.value = '2026-03-16'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(inputElement.disabled).toEqual(false)
+    } finally {
+      store.updater.update = originalUpdate
+    }
+  })
+
+  it('disables non-date input during save and reenables on success', () => {
+    const container = document.createElement('div')
+    const already = {}
+    const subject = namedNode('http://example.com/#this')
+    const form = namedNode('http://example.com/#form')
+    const property = namedNode('http://example.com/#some-property')
+    const doc = namedNode('http://example.com/')
+    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    store.add(form, ns.ui('property'), property, doc)
+    store.add(subject, property, namedNode('http://example.com/#initial-value'), doc)
+
+    const result = basicField(
+      document,
+      container,
+      already,
+      subject,
+      form,
+      doc,
+      callbackFunction
+    )
+    const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
+
+    const originalUpdate = store.updater.update
+    store.updater.update = ((_deletes, _inserts, onDone) => {
+      expect(inputElement.disabled).toEqual(true)
+      onDone('uri', true, 'body')
+      return Promise.resolve()
+    }) as any
+
+    try {
+      inputElement.value = 'changed value'
+      inputElement.dispatchEvent(new Event('change'))
+      expect(inputElement.disabled).toEqual(false)
+    } finally {
+      store.updater.update = originalUpdate
+    }
+  })
+
   it('calls updater on change for a NamedNodeUriField', () => {
     const container = document.createElement('div')
     const already = {}
