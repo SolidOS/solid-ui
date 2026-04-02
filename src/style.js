@@ -63,6 +63,15 @@ export const style = { // styleModule
   imageDivStyle: 'width:2.5em; padding:0.5em; height: 2.5em;',
   linkDivStyle: 'width:2em; padding:0.5em; height: 4em;',
 
+  // modals
+  modalUnorderedListStyle: 'padding: 0 .2em;',
+  modalListItemStyle: 'list-style: none; box-shadow: 1px 1px 1px 1px #888888; padding: .5em;',
+  modalAnchorStyle: 'text-decoration: none;',
+  modalContentStyle: 'display: flex; flex-direction: column; background-color: #fefefe;',
+  modalCloseStyle: 'background: none; border: 0; padding: 0; color: #aaaaaa; align-self: flex-end; font-size: 20px; font-weight: bold; margin-right: .2em; margin-top: .2em; cursor: pointer;',
+  modalCloseStyleHover: 'background: none; border: 0; padding: 0; color: #666666; align-self: flex-end; font-size: 20px; font-weight: bold; margin-right: .2em; margin-top: .2em; text-decoration: none; cursor: pointer;',
+  modalCloseStyleFocus: 'background: none; border: 0; padding: 0; color: #666666; align-self: flex-end; font-size: 20px; font-weight: bold; margin-right: .2em; margin-top: .2em; text-decoration: none; cursor: pointer; outline: 1px solid #888;',
+
   // ACL
   aclControlBoxContainer: 'margin: 1em;',
   aclControlBoxHeader: 'font-size: 120%; margin: 0 0 1rem;',

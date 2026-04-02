@@ -23,6 +23,7 @@ export * from './buttons'
 export * from './buttons/iconLinks'
 export * from './error'
 export * from './forms'
+export * from './modals'
 
 export * from './forms/autocomplete/autocompleteBar'
 export * from './forms/autocomplete/autocompletePicker'

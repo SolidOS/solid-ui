@@ -46,7 +46,7 @@ class NotepadPart extends HTMLElement {
  * @param {NamedNode} author - The author of text being displayed
  * @returns {String} The CSS color generated, constrained to be light for a background color
  */
-export function lightColorHash(author?: NamedNode): string {
+export function lightColorHash (author?: NamedNode): string {
   const hash = function (x) {
     return x.split('').reduce(function (a, b) {
       a = (a << 5) - a + b.charCodeAt(0)
@@ -66,7 +66,7 @@ export function lightColorHash(author?: NamedNode): string {
  * @param {NamedNode} me - person who is logged into the pod
  * @param {notepadOptions} options - the options that can be passed in consist of statusArea, exists
  */
-export function notepad(
+export function notepad (
   dom: HTMLDocument,
   padDoc: NamedNode,
   subject: NamedNode,
@@ -164,7 +164,7 @@ export function notepad(
     const next: any = kb.any(chunk as any, PAD('next'))
     if (prev.sameTerm(subject) && next.sameTerm(subject)) {
       // Last one
-      log("You can't delete the only line.")
+      log('You can\'t delete the only line.')
       return
     }
 
@@ -210,7 +210,7 @@ export function notepad(
         }, 1000)
       } else {
         log('    removePart FAILED ' + chunk + ': ' + errorMessage)
-        log("    removePart was deleting :'" + del)
+        log('    removePart was deleting :\'' + del)
         setPartStyle(part, 'color: black;  background-color: #fdd;') // failed
         const res = response
           ? (response as any).status
@@ -235,9 +235,9 @@ export function notepad(
     updater.update(del, ins as any, function (uri, ok, errorBody) {
       if (!ok) {
         log(
-          "Indent change FAILED '" +
+          'Indent change FAILED \'' +
             newIndent +
-            "' for " +
+            '\' for ' +
             padDoc +
             ': ' +
             errorBody
@@ -351,11 +351,11 @@ export function notepad(
         if (old !== part.lastSent) {
           // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
           console.warn(
-            "Out of order, last sent expected '" +
+            'Out of order, last sent expected \'' +
               old +
-              "' but found '" +
+              '\' but found \'' +
               part.lastSent +
-              "'"
+              '\''
           )
         }
       }
@@ -380,11 +380,11 @@ export function notepad(
           log(
             '    patch FAILED ' +
               (xhr as any).status +
-              " for '" +
+              ' for \'' +
               old +
-              "' -> '" +
+              '\' -> \'' +
               newOne +
-              "': " +
+              '\': ' +
               errorBody
           )
           if ((xhr as any).status === 409) {
@@ -421,7 +421,7 @@ export function notepad(
         } else {
           clearStatus(true) // upstream
           setPartStyle(part) // synced
-          log("    Patch ok '" + old + "' -> '" + newOne + "' ")
+          log('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ')
 
           if (part.state === 4) {
             //  delete me
@@ -440,10 +440,10 @@ export function notepad(
       })
     }
 
-    part.addEventListener('input', function inputChangeListener(_event) {
+    part.addEventListener('input', function inputChangeListener (_event) {
       // debug.log("input changed "+part.value);
       setPartStyle(part, undefined, true) // grey out - not synced
-      log('Input event state ' + part.state + " value '" + part.value + "'")
+      log('Input event state ' + part.state + ' value \'' + part.value + '\'')
       switch (part.state) {
         case 3: // being deleted
           return
@@ -498,7 +498,7 @@ export function notepad(
       addListeners(part, chunk)
     } else {
       setPartStyle(part, 'color: #222; background-color: #fff')
-      log("Note can't add listeners - not logged in")
+      log('Note can\'t add listeners - not logged in')
     }
     return part
   }
@@ -584,7 +584,7 @@ export function notepad(
   const consistencyCheck = function () {
     const found: { [uri: string]: boolean } = {}
     let failed = 0
-    function complain2(msg) {
+    function complain2 (msg) {
       complain(msg)
       failed++
     }
@@ -831,7 +831,7 @@ export function notepad(
  */
 
 // @ignore exporting this only for the unit test
-export function getChunks(subject: NamedNode, kb: IndexedFormula) {
+export function getChunks (subject: NamedNode, kb: IndexedFormula) {
   const chunks: any[] = []
   for (
     let chunk: any = kb.the(subject, PAD('next'));
@@ -847,7 +847,7 @@ export function getChunks(subject: NamedNode, kb: IndexedFormula) {
  *  Encode content to be put in XML or HTML elements
  */
 // @ignore exporting this only for the unit test
-export function xmlEncode(str) {
+export function xmlEncode (str) {
   return str.replace('&', '&amp;').replace('<', '&lt;').replace('>', '&gt;')
 }
 
@@ -856,7 +856,7 @@ export function xmlEncode(str) {
  *   @param { } pad - the notepad
  *   @param {store} pad - the data store
  */
-export function notepadToHTML(pad: any, kb: IndexedFormula) {
+export function notepadToHTML (pad: any, kb: IndexedFormula) {
   const chunks = getChunks(pad, kb)
   let html = '<html>\n  <head>\n'
   const title = kb.anyValue(pad, ns.dct('title'))
@@ -866,13 +866,13 @@ export function notepadToHTML(pad: any, kb: IndexedFormula) {
   html += '  </head>\n  <body>\n'
   let level = 0
 
-  function increaseLevel(indent) {
+  function increaseLevel (indent) {
     for (; level < indent; level++) {
       html += '<ul>\n'
     }
   }
 
-  function decreaseLevel(indent) {
+  function decreaseLevel (indent) {
     for (; level > indent; level--) {
       html += '</ul>\n'
     }

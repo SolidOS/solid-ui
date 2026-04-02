@@ -21,7 +21,7 @@ global.WritableStream = WritableStream
 
 // Node provides MessagePort via worker_threads; jsdom/undici expects it in global scope
 try {
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  // Intentionally require worker_threads in Jest setup to expose MessagePort globals.
   const { MessageChannel, MessagePort } = require('worker_threads')
   global.MessageChannel = MessageChannel
   global.MessagePort = MessagePort
