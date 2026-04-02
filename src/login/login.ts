@@ -134,10 +134,13 @@ export async function ensureLoadedPreferences (
     context.preferencesFile = preferencesFile
   } catch (err) {
     let m2: string
-    if (err instanceof UnauthorizedError) {
+    const errorMessage = err instanceof Error ? err.message : `${err}`
+    if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(errorMessage)) {
       m2 =
-        'Oops — you are not authenticated (properly logged in), so SolidOS cannot read your preferences file. Try logging out and then logging back in.'
-      alert(m2)
+        'Not logged in, so preferences were not loaded.'
+      context.preferencesFileError = m2
+      debug.warn(m2)
+      return context
     } else if (err instanceof CrossOriginForbiddenError) {
       m2 = `Unauthorized: Assuming preference file blocked for origin ${window.location.origin}`
       context.preferencesFileError = m2
@@ -180,15 +183,44 @@ export async function ensureLoadedProfile (
   if (context.publicProfile) {
     return context
   } // already done
+  let logInContext: AuthenticationContext | undefined
   try {
-    const logInContext = await ensureLoggedIn(context)
+    logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
-      throw new Error('Could not log in')
+      const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
+      debug.log(notLoggedInMessage)
+      if (context.div && context.dom) {
+        context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
+      }
+      return context
     }
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
+    const message = err instanceof Error ? err.message : `${err}`
+    if (/status:\s*401|unauthorized/i.test(message)) {
+      const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
+      debug.warn(notLoggedInMessage)
+      if (context.div && context.dom) {
+        context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
+      }
+      return context
+    }
+    const loggedInUser = logInContext && logInContext.me
+    const isNonFatalProfileSideLoadFailure =
+      !!loggedInUser &&
+      (
+        err instanceof CrossOriginForbiddenError ||
+        err instanceof SameOriginForbiddenError ||
+        /status:\s*403\b|forbidden/i.test(message) ||
+        /cancel/i.test(message)
+      )
+    if (isNonFatalProfileSideLoadFailure) {
+      debug.warn(`Unable to load all profile-linked resources; continuing as logged in user: ${message}`)
+      context.publicProfile = loggedInUser!.doc()
+      return context
+    }
     if (context.div && context.dom) {
-      context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, message))
     }
     throw new Error(`Can't log in: ${err}`)
   }
