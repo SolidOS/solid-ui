@@ -84,7 +84,7 @@
     "@babel/preset-env": "^7.28.6",
     "@babel/preset-typescript": "^7.28.5",
     "@babel/runtime": "^7.28.6",
-    "@eslint/js": "^9.39.2",
+    "@eslint/js": "^10.0.1",
     "@mdx-js/react": "^3.1.1",
     "@storybook/addon-actions": "8.6.15",
     "@storybook/addon-docs": "8.6.15",
