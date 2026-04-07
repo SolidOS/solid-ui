@@ -296,3 +296,14 @@ We have added comments in the code to make it explicit which parts are 100% writ
 * Raptor mini model: Change this js file (headerStyle.js) in a css file and replace in index.ts all .style variables with a css class. You can keep the names of the css classes.
 
 * Raptor mini model: I want to add bundler config to support CSS imports.
+
+* Raptor mini: If I want to make the header a web component with a self contained CSS which only consumes CSS variables from a theme, how would I do this? 
+
+* Raptor mini: Go ahead and reate a header web component, for backward compatibility keep the current code too.
+In the new header component I need to be flexible and receive from consumer - the layout (mobile or desktop) and the theme (light or dark) and its according CSS variables for light ot dark.
+
+* Raptor mini: Propose code. how about webpack config for distribution?
+
+* Raptor mini: pls add a readme in the component documenting it usage and test and all
+
+* Raptor mini: the #sym:helpMenuList should be menu items inside the help icon drop down menu

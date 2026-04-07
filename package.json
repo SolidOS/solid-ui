@@ -4,12 +4,15 @@
   "description": "UI library for Solid applications",
   "main": "dist/solid-ui.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/solid-ui.esm.js",
       "require": "./dist/solid-ui.js"
+    },
+    "./components/solid-ui-header": {
+      "import": "./dist/components/solid-ui-header.esm.js",
+      "require": "./dist/components/solid-ui-header.js"
     }
   },
   "files": [
@@ -67,7 +70,9 @@
   "dependencies": {
     "@noble/curves": "^2.0.1",
     "@noble/hashes": "^2.0.1",
+    "copy-webpack-plugin": "^14.0.0",
     "escape-html": "^1.0.3",
+    "lit": "^3.3.2",
     "mime-types": "^3.0.2",
     "pane-registry": "^3.0.2",
     "solid-namespace": "^0.5.4",
@@ -102,6 +107,7 @@
     "@typescript-eslint/parser": "^8.54.0",
     "babel-jest": "^30.2.0",
     "babel-loader": "^10.0.0",
+    "css-loader": "^6.11.0",
     "eslint": "^9.39.2",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -120,6 +126,7 @@
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "storybook": "8.6.15",
+    "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.16",
     "typedoc": "^0.28.16",
     "typescript": "^5.9.3",

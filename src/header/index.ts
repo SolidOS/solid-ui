@@ -3,11 +3,12 @@
     This file was copied from mashlib/src/global/header.ts file. It is modified to
     work in solid-ui by adjusting where imported functions are found.
  */
-import { IndexedFormula, NamedNode } from 'rdflib'
-import { icons } from '../index'
+import { LiveStore, NamedNode } from 'rdflib'
+import { icons } from '../iconBase'
 import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 import * as widgets from '../widgets'
+import './headerStyle.css'
 import { emptyProfile } from './empty-profile'
 import { getPod, throttle } from '../utils/headerFooterHelpers'
 
@@ -40,6 +41,8 @@ export type HeaderOptions = {
   helpMenuList?: MenuItems[]
 }
 
+export { Header as SolidUIHeaderElement } from '../v2/components/header/Header'
+
 /**
  * Initialize header component, the header object returned depends on whether the user is authenticated.
  * @param store the data store
@@ -47,7 +50,7 @@ export type HeaderOptions = {
  * @param options allow the header to be customized with a personalized logo, help icon and a help menu list of links or buttons.
  * @returns a header for an authenticated user with menu items given or a login screen
  */
-export async function initHeader (store: IndexedFormula, userMenuList: MenuItems[], options?: HeaderOptions) {
+export async function initHeader (store: LiveStore, userMenuList: MenuItems[], options?: HeaderOptions) {
   const header = document.getElementById('PageHeader')
   if (!header) {
     return
@@ -61,7 +64,7 @@ export async function initHeader (store: IndexedFormula, userMenuList: MenuItems
 /**
  * @ignore exporting this only for the unit test
  */
-export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions) {
+export function rebuildHeader (header: HTMLElement, store: LiveStore, pod: NamedNode, userMenuList: MenuItems[], options?: HeaderOptions) {
   return async () => {
     const user = authn.currentUser()
     header.innerHTML = ''
@@ -71,7 +74,7 @@ export function rebuildHeader (header: HTMLElement, store: IndexedFormula, pod: 
 /**
  * @ignore exporting this only for the unit test
  */
-export async function createBanner (store: IndexedFormula, pod: NamedNode, user: NamedNode | null, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement> {
+export async function createBanner (store: LiveStore, pod: NamedNode, user: NamedNode | null, userMenuList: MenuItems[], options?: HeaderOptions): Promise<HTMLElement> {
   const podLink = document.createElement('a')
   podLink.setAttribute('aria-label', 'Solid logo')
   podLink.setAttribute('id', 'headerBannerLink')
@@ -95,16 +98,21 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
   banner.classList.add('headerBanner')
   banner.appendChild(podLink)
 
-  const leftSideOfHeader = document.createElement('div')
-  leftSideOfHeader.classList.add('headerBannerRightMenu')
-  leftSideOfHeader.appendChild(userMenu)
+  const rightSideOfHeader = document.createElement('div')
+  rightSideOfHeader.setAttribute('id', 'headerBannerRightMenu')
+  rightSideOfHeader.classList.add('headerBannerRightMenu')
+  rightSideOfHeader.appendChild(userMenu)
 
   if (options && options.helpMenuList) {
+    const verticalHr = document.createElement('hr')
+    verticalHr.setAttribute('id', 'headerVerticalHr')
+    verticalHr.classList.add('headerVerticalHr')
+    rightSideOfHeader.appendChild(verticalHr)
     const helpMenu = createHelpMenu(options, options.helpMenuList)
-    leftSideOfHeader.appendChild(helpMenu as HTMLDivElement)
+    rightSideOfHeader.appendChild(helpMenu as HTMLDivElement)
   }
 
-  banner.appendChild(leftSideOfHeader)
+  banner.appendChild(rightSideOfHeader)
 
   return banner
 }
@@ -114,6 +122,7 @@ export async function createBanner (store: IndexedFormula, pod: NamedNode, user:
 export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems[]) {
   if (!helpMenuItems) return
   const helpMenuList = document.createElement('ul')
+  helpMenuList.setAttribute('id', 'helpMenuList')
   helpMenuList.classList.add('headerUserMenuList')
   helpMenuItems.forEach(function (menuItem) {
     const menuItemType: string = (menuItem as MenuItemLink).url ? 'url' : 'onclick'
@@ -133,15 +142,21 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
 
   const helpMenuContainer = document.createElement('div')
   helpMenuContainer.classList.add('headerBannerUserMenu')
+  helpMenuContainer.setAttribute('id', 'helpMenuContainer')
   helpMenuContainer.appendChild(helpMenu)
 
   const helpMenuTrigger = document.createElement('button')
+  helpMenuTrigger.setAttribute('id', 'helpMenuTrigger')
   helpMenuTrigger.classList.add('headerUserMenuTrigger')
   helpMenuTrigger.type = 'button'
 
   const helpMenuIcon = document.createElement('img')
+  helpMenuIcon.setAttribute('alt', 'Help menu icon')
+  helpMenuIcon.setAttribute('id', 'headerHelpMenuIcon')
   helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON
   helpMenuIcon.classList.add('headerUserMenuTriggerImg')
+  //TODO make it dependent on theme
+  helpMenuIcon.style.filter = 'invert(1) brightness(1.5)'
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
 
@@ -172,16 +187,18 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
  * @ignore exporting this only for the unit test
  */
 export function createLoginSignUpButtons () {
-  const profileLoginButtonPre = document.createElement('div')
-  profileLoginButtonPre.classList.add('headerBannerLogin')
-  profileLoginButtonPre.appendChild(loginStatusBox(document, null, {}))
-  return profileLoginButtonPre
+  const headerButtonsDiv = document.createElement('div')
+  headerButtonsDiv.setAttribute('id', 'headerButtonsDiv')
+  headerButtonsDiv.classList.add('headerButtonsDiv')
+  headerButtonsDiv.appendChild(loginStatusBox(document, null, {}))
+  return headerButtonsDiv
 }
 /**
  * @ignore exporting this only for the unit test
  */
 export function createUserMenuButton (label: string, onClick: EventListenerOrEventListenerObject): HTMLElement {
   const button = document.createElement('button')
+  button.setAttribute('id', 'headerUserMenuButton')
   button.classList.add('headerUserMenuButton')
   button.onmouseover = function () {
     button.classList.add('headerUserMenuButtonHover')
@@ -198,6 +215,7 @@ export function createUserMenuButton (label: string, onClick: EventListenerOrEve
  */
 export function createUserMenuLink (label: string, href: string, target?: string): HTMLElement {
   const link = document.createElement('a')
+  link.setAttribute('id', 'headerUserMenuLink')
   link.classList.add('headerUserMenuLink')
   link.onmouseover = function () {
     link.classList.add('headerUserMenuLinkHover')
@@ -214,7 +232,7 @@ export function createUserMenuLink (label: string, href: string, target?: string
 /**
  * @ignore exporting this only for the unit test
  */
-export async function createUserMenu (store: IndexedFormula, user: NamedNode, userMenuList: MenuItems[]): Promise<HTMLElement> {
+export async function createUserMenu (store: LiveStore, user: NamedNode, userMenuList: MenuItems[]): Promise<HTMLElement> {
   const fetcher = (<any>store).fetcher
   if (fetcher) {
     // Making sure that Profile is loaded before building menu
@@ -222,6 +240,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   }
 
   const loggedInMenuList = document.createElement('ul')
+  loggedInMenuList.setAttribute('id', 'loggedInMenuList')
   loggedInMenuList.classList.add('headerUserMenuList')
   if (userMenuList) {
     userMenuList.forEach(function (menuItem) {
@@ -241,6 +260,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
   loggedInMenu.appendChild(loggedInMenuList)
 
   const loggedInMenuTrigger = document.createElement('button')
+  loggedInMenuTrigger.setAttribute('id', 'loggedInMenuTrigger')
   loggedInMenuTrigger.classList.add('headerUserMenuTrigger')
   loggedInMenuTrigger.type = 'button'
   const profileImg = getProfileImg(store, user)
@@ -252,6 +272,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
 
   const loggedInMenuContainer = document.createElement('div')
   loggedInMenuContainer.classList.add('headerBannerUserMenuNotDisplayed')
+  loggedInMenuContainer.setAttribute('id', 'loggedInMenuContainer')
   loggedInMenuContainer.appendChild(loggedInMenuTrigger)
   loggedInMenuContainer.appendChild(loggedInMenu)
 
@@ -271,6 +292,7 @@ export async function createUserMenu (store: IndexedFormula, user: NamedNode, us
     timer = setTimeout(() => throttledMenuToggle(event), 200)
     const nav = document.getElementById('loggedInNav')
     if (nav) {
+      nav.setAttribute('id', 'loggedInNav')
       nav.classList.remove('headerUserMenuNavigationMenu')
       nav.classList.add('headerUserMenuNavigationMenuNotDisplayed')
     }
@@ -291,7 +313,7 @@ export function createUserMenuItem (child: HTMLElement): HTMLElement {
 /**
  * @ignore exporting this only for the unit test
  */
-export function getProfileImg (store: IndexedFormula, user: NamedNode): string | HTMLElement {
+export function getProfileImg (store: LiveStore, user: NamedNode): string | HTMLElement {
   let profileUrl = null
   try {
     profileUrl = widgets.findImage(user)
@@ -303,6 +325,7 @@ export function getProfileImg (store: IndexedFormula, user: NamedNode): string |
   }
 
   const profileImage = document.createElement('div')
+  profileImage.setAttribute('id', 'headerMenuProfileImage')
   profileImage.classList.add('headerUserMenuPhoto')
   profileImage.style.backgroundImage = `url(${profileUrl})`
   return profileImage

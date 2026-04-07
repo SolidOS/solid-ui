@@ -5,7 +5,7 @@ export default {
         browsers: ['> 1%', 'last 3 versions', 'not dead']
       }
     }],
-    '@babel/preset-typescript',
+    ['@babel/preset-typescript', { allowDeclareFields: true }],
   ],
   plugins: [
     '@babel/plugin-transform-runtime'

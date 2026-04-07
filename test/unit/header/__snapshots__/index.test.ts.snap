@@ -20,12 +20,15 @@ exports[`createBanner check customized logo... 1`] = `
   </a>
   <div
     class="headerBannerRightMenu"
+    id="headerBannerRightMenu"
   >
     <div
       class="headerBannerUserMenuNotDisplayed"
+      id="loggedInMenuContainer"
     >
       <button
         class="headerUserMenuTrigger"
+        id="loggedInMenuTrigger"
         type="button"
       >
         
@@ -96,6 +99,7 @@ exports[`createBanner check customized logo... 1`] = `
       >
         <ul
           class="headerUserMenuList"
+          id="loggedInMenuList"
         >
           <li
             class="headerUserMenuListItem"
@@ -103,13 +107,19 @@ exports[`createBanner check customized logo... 1`] = `
             <a
               class="headerUserMenuLink"
               href="https://reflectechblog.wordpress.com/"
+              id="headerUserMenuLink"
             />
           </li>
         </ul>
       </nav>
     </div>
+    <hr
+      class="headerVerticalHr"
+      id="headerVerticalHr"
+    />
     <div
       class="headerBannerUserMenu"
+      id="helpMenuContainer"
     >
       <nav
         aria-hidden="true"
@@ -118,6 +128,7 @@ exports[`createBanner check customized logo... 1`] = `
       >
         <ul
           class="headerUserMenuList"
+          id="helpMenuList"
         >
           <li
             class="headerUserMenuListItem"
@@ -125,17 +136,22 @@ exports[`createBanner check customized logo... 1`] = `
             <a
               class="headerUserMenuLink"
               href="https://reflectechblog.wordpress.com/"
+              id="headerUserMenuLink"
             />
           </li>
         </ul>
       </nav>
       <button
         class="headerUserMenuTrigger"
+        id="helpMenuTrigger"
         type="button"
       >
         <img
+          alt="Help menu icon"
           class="headerUserMenuTriggerImg"
+          id="headerHelpMenuIcon"
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+          style="filter: invert(1) brightness(1.5);"
         />
       </button>
     </div>
@@ -163,12 +179,15 @@ exports[`createBanner creates a link 1`] = `
   </a>
   <div
     class="headerBannerRightMenu"
+    id="headerBannerRightMenu"
   >
     <div
       class="headerBannerUserMenuNotDisplayed"
+      id="loggedInMenuContainer"
     >
       <button
         class="headerUserMenuTrigger"
+        id="loggedInMenuTrigger"
         type="button"
       >
         
@@ -239,6 +258,7 @@ exports[`createBanner creates a link 1`] = `
       >
         <ul
           class="headerUserMenuList"
+          id="loggedInMenuList"
         >
           <li
             class="headerUserMenuListItem"
@@ -246,13 +266,19 @@ exports[`createBanner creates a link 1`] = `
             <a
               class="headerUserMenuLink"
               href="https://reflectechblog.wordpress.com/"
+              id="headerUserMenuLink"
             />
           </li>
         </ul>
       </nav>
     </div>
+    <hr
+      class="headerVerticalHr"
+      id="headerVerticalHr"
+    />
     <div
       class="headerBannerUserMenu"
+      id="helpMenuContainer"
     >
       <nav
         aria-hidden="true"
@@ -261,6 +287,7 @@ exports[`createBanner creates a link 1`] = `
       >
         <ul
           class="headerUserMenuList"
+          id="helpMenuList"
         >
           <li
             class="headerUserMenuListItem"
@@ -268,17 +295,22 @@ exports[`createBanner creates a link 1`] = `
             <a
               class="headerUserMenuLink"
               href="https://reflectechblog.wordpress.com/"
+              id="headerUserMenuLink"
             />
           </li>
         </ul>
       </nav>
       <button
         class="headerUserMenuTrigger"
+        id="helpMenuTrigger"
         type="button"
       >
         <img
+          alt="Help menu icon"
           class="headerUserMenuTriggerImg"
+          id="headerHelpMenuIcon"
           src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+          style="filter: invert(1) brightness(1.5);"
         />
       </button>
     </div>
@@ -289,6 +321,7 @@ exports[`createBanner creates a link 1`] = `
 exports[`createHelpMenu creates a menu.... 1`] = `
 <div
   class="headerBannerUserMenu"
+  id="helpMenuContainer"
 >
   <nav
     aria-hidden="true"
@@ -297,15 +330,20 @@ exports[`createHelpMenu creates a menu.... 1`] = `
   >
     <ul
       class="headerUserMenuList"
+      id="helpMenuList"
     />
   </nav>
   <button
     class="headerUserMenuTrigger"
+    id="helpMenuTrigger"
     type="button"
   >
     <img
+      alt="Help menu icon"
       class="headerUserMenuTriggerImg"
+      id="headerHelpMenuIcon"
       src="https://solidos.github.io/solid-ui/src/icons/https://solidos.github.io/solid-ui/src/icons/noun_help.svg"
+      style="filter: invert(1) brightness(1.5);"
     />
   </button>
 </div>
@@ -313,7 +351,8 @@ exports[`createHelpMenu creates a menu.... 1`] = `
 
 exports[`createLoginSignUpButtons creates div 1`] = `
 <div
-  class="headerBannerLogin"
+  class="headerButtonsDiv"
+  id="headerButtonsDiv"
 >
   <div>
     <div
@@ -338,9 +377,11 @@ exports[`createLoginSignUpButtons creates div 1`] = `
 exports[`createUserMenu creates a menu.... 1`] = `
 <div
   class="headerBannerUserMenuNotDisplayed"
+  id="loggedInMenuContainer"
 >
   <button
     class="headerUserMenuTrigger"
+    id="loggedInMenuTrigger"
     type="button"
   >
     
@@ -411,6 +452,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
   >
     <ul
       class="headerUserMenuList"
+      id="loggedInMenuList"
     >
       <li
         class="headerUserMenuListItem"
@@ -418,6 +460,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
         <a
           class="headerUserMenuLink"
           href="https://reflectechblog.wordpress.com/"
+          id="headerUserMenuLink"
         />
       </li>
     </ul>
@@ -428,6 +471,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
 exports[`createUserMenuButton creates a button 1`] = `
 <button
   class="headerUserMenuButton"
+  id="headerUserMenuButton"
 />
 `;
 
@@ -443,6 +487,7 @@ exports[`createUserMenuLink creates a link 1`] = `
 <a
   class="headerUserMenuLink"
   href="http://www.test.com"
+  id="headerUserMenuLink"
 />
 `;
 

@@ -1,5 +1,6 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import CopyPlugin from 'copy-webpack-plugin'
 
 const externalsBase = {
   fs: 'null',
@@ -19,7 +20,10 @@ const esmExternals = {
 }
 
 const common = {
-  entry: './src/index.ts',
+  entry: {
+    main: './src/index.ts',
+    'solid-ui-header': './src/v2/components/header/Header.ts'
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
     library: {
@@ -40,22 +44,28 @@ const common = {
     fallback: { path: false }
   },
   devtool: 'source-map',
+  plugins: [
+    new CopyPlugin({
+      patterns: [
+        {
+          from: 'src/**/*.css',
+          to: ({ context, absoluteFilename }) => {
+            const relPath = path.relative(path.resolve('src'), absoluteFilename)
+            return path.resolve('dist', relPath)
+          }
+        }
+      ]
+    })
+  ],
   module: {
     rules: [
       {
         test: /\.(mjs|js|ts)$/,
         exclude: /(node_modules|bower_components|dist)/,
-        use: {
-          loader: 'babel-loader',
-          options: {
-            presets: [
-              ['@babel/preset-env', {
-                modules: false // Preserve ES modules for webpack
-              }],
-              '@babel/preset-typescript'
-            ]
-          }
-        }
+        use: 'babel-loader'
+      }, {
+        test: /\.css$/i,
+        use: ['style-loader', 'css-loader']
       }, {
         test: /\.sparql$/i,
         type: 'asset/source'
@@ -72,7 +82,9 @@ const minified = {
   mode: 'production',
   output: {
     ...common.output,
-    filename: 'solid-ui.min.js'
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.min.js'
+      : 'components/[name].min.js'
   },
   externals: externalsBase,
   optimization: {
@@ -87,7 +99,9 @@ const unminified = {
   mode: 'production',
   output: {
     ...common.output,
-    filename: 'solid-ui.js'
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.js'
+      : 'components/[name].js'
   },
   externals: externalsBase,
   optimization: {
@@ -100,7 +114,9 @@ const esmMinified = {
   ...common,
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.min.js',
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.esm.min.js'
+      : 'components/[name].esm.min.js',
     library: {
       type: 'module'
     },
@@ -124,7 +140,9 @@ const esmUnminified = {
   ...common,
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.js',
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.esm.js'
+      : 'components/[name].esm.js',
     library: {
       type: 'module'
     },
