@@ -22,7 +22,9 @@ const esmExternals = {
 const common = {
   entry: {
     main: './src/index.ts',
-    header: './src/v2/components/header/index.ts'
+    header: './src/v2/components/header/index.ts',
+    loginButton: './src/v2/components/loginButton/index.ts',
+    signupButton: './src/v2/components/signupButton/index.ts'
   },
   output: {
     path: path.resolve(process.cwd(), 'dist'),

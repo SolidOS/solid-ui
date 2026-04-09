@@ -2,6 +2,8 @@
 
 A Lit-based custom element that renders the Solid application header, including branding, auth actions, account management, and a help menu.
 
+When `auth-state="logged-out"`, the header renders a `<solid-ui-login-button>` as the login action. The login button opens a Solid IDP selection popup and handles the full OIDC login flow via `solid-logic`. On success it emits a `login-success` event and the header transitions to `logged-in` state automatically.
+
 ## Installation
 
 ```bash
@@ -15,6 +17,8 @@ Import once to register the custom element and get access to the types:
 ```javascript
 import { Header } from 'solid-ui/components/header'
 ```
+
+The header automatically imports and registers `<solid-ui-login-button>` — no separate import is needed.
 
 Then use the element in HTML or in your framework templates:
 
@@ -54,6 +58,14 @@ const header = document.querySelector('solid-ui-header') as Header
 header.authState = 'logged-in' satisfies HeaderAuthState
 ```
 
+## solid-ui-login-button
+
+The login button is a self-contained component with its own README: [`src/v2/components/loginButton/README.md`](../loginButton/README.md).
+
+The header automatically imports and registers it — no separate import is needed.
+
+---
+
 ## API
 
 Properties/attributes:
@@ -64,7 +76,7 @@ Properties/attributes:
 - `layout`: `desktop` or `mobile`.
 - `theme`: `light` or `dark`.
 - `authState`: `logged-out` or `logged-in`.
-- `loginAction`: object for the logged-out Log in action.
+- `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link.
 - `signUpAction`: object for the logged-out Sign Up action.
 - `accountLabel`: label for the logged-in dropdown trigger (default: `Accounts`).
 - `accountAvatar`: avatar URL used as the logged-in dropdown icon.
@@ -84,19 +96,40 @@ The `helpMenuList` property also renders inside the same help icon dropdown menu
 
 ## Auth Modes
 
-Use `auth-state="logged-out"` to render Log in and Sign Up actions:
+### Logged-out (with built-in login flow)
+
+Use `auth-state="logged-out"` to render the `<solid-ui-login-button>` and a Sign Up action. The login button opens an IDP selection popup and drives the full OIDC login flow without any extra wiring. On a successful login the header automatically sets `auth-state="logged-in"` and emits `auth-action-select`:
 
 ```html
 <solid-ui-header></solid-ui-header>
 <script type="module">
+  import { Header } from 'solid-ui/components/header'
+
   const header = document.querySelector('solid-ui-header')
   header.authState = 'logged-out'
-  header.loginAction = { label: 'Log in', url: '/login' }
+  // Optionally override the login button label:
+  header.loginAction = { label: 'Log in' }
+  // Optionally override sign-up (URL-based, no built-in flow):
   header.signUpAction = { label: 'Sign Up', url: '/sign-up' }
+
+  header.addEventListener('auth-action-select', ({ detail }) => {
+    if (detail.role === 'login') {
+      // login completed — detail.webId is available via login-success on the button
+      header.authState = 'logged-in'
+    }
+  })
 </script>
 ```
 
-Use `auth-state="logged-in"` to render a single Accounts dropdown with the profile avatar in the trigger:
+If you want a fully custom login UI you can override the slot:
+
+```html
+<solid-ui-header>
+  <a slot="login-action" href="/login">Log in</a>
+</solid-ui-header>
+```
+
+### Logged-in
 
 ```html
 <solid-ui-header></solid-ui-header>

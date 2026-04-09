@@ -1,5 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import { icons } from '../../../iconBase'
+import '../loginButton/index'
+import '../signupButton/index'
 
 const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
@@ -51,6 +53,7 @@ export class Header extends LitElement {
     --header-link-hover: var(--solid-header-link-hover, #e6dcff);
     --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
     --header-menu-bg: var(--solid-header-menu-bg, #f6f5f9);
+    --header-menu-text: var(--solid-header-menu-text, #d5cee1);
     --header-border-radius: var(--solid-header-border-radius, 0.3em);
     --header-button-bg: var(--solid-header-button-bg, #ffffff);
     --header-button-text: var(--solid-header-button-text, #0f172a);
@@ -68,6 +71,7 @@ export class Header extends LitElement {
     --header-link-hover: var(--solid-header-link-hover-dark, #e6dcff);
     --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
     --header-menu-bg: var(--solid-header-menu-bg-dark, #f6f5f9);
+    --header-menu-text: var(--solid-header-menu-text-dark, #d5cee1);
     --header-border-radius: var(--solid-header-border-radius-dark, 0.3em);
     --header-button-bg: var(--solid-header-button-bg-dark, #ffffff);
     --header-button-text: var(--solid-header-button-text-dark, #0f172a);
@@ -282,12 +286,12 @@ export class Header extends LitElement {
     height: 2rem;
   }
 
-  .account-label {
-    background: var(--header-border);
-  }
-
   .account-switch {
-    color: var(--header-border);
+    display: block;
+    width: 100%;
+    color: var(--header-menu-text);
+    text-align: left;
+    text-transform: uppercase;
   }
 
   .account-menu-separator {
@@ -465,14 +469,6 @@ export class Header extends LitElement {
     super.disconnectedCallback()
   }
 
-  private handleAuthActionClick (role: 'login' | 'sign-up', item: HeaderMenuItem) {
-    this.dispatchEvent(new CustomEvent('auth-action-select', {
-      detail: { role, item },
-      bubbles: true,
-      composed: true
-    }))
-  }
-
   private handleHelpMenuClick (item: HeaderMenuItem, event: MouseEvent) {
     event.preventDefault()
     this.helpMenuOpen = false
@@ -559,46 +555,43 @@ export class Header extends LitElement {
     `
   }
 
-  private renderAuthAction (item: HeaderMenuItem, role: 'login' | 'sign-up', extraClass = '') {
-    const classes = ['auth-button', extraClass].filter(Boolean).join(' ')
-
-    if (item.url) {
-      return html`
-        <a
-          class="${classes}"
-          href="${item.url}"
-          target="${item.target || '_self'}"
-          @click="${() => this.handleAuthActionClick(role, item)}"
-          part="${role}-action"
-        >
-          ${item.label}
-        </a>
-      `
-    }
-
-    return html`
-      <button
-        class="${classes}"
-        type="button"
-        @click="${() => this.handleAuthActionClick(role, item)}"
-        part="${role}-action"
-      >
-        ${item.label}
-      </button>
-    `
-  }
-
   private renderLoggedOutActions () {
     return html`
       <div class="auth-actions" part="auth-actions">
         <slot name="login-action">
-          ${this.renderAuthAction(this.loginAction, 'login')}
+          <solid-ui-login-button
+            label="${this.loginAction.label}"
+            part="login-action"
+            @login-success="${() => this.handleLoginSuccess()}"
+          ></solid-ui-login-button>
         </slot>
         <slot name="sign-up-action">
-          ${this.renderAuthAction(this.signUpAction, 'sign-up', 'auth-button-sign-up')}
+          <solid-ui-signup-button
+            label="${this.signUpAction.label}"
+            signup-url="${this.signUpAction.url || ''}"
+            part="sign-up-action"
+            @signup-success="${(e: CustomEvent) => this.handleSignupSuccess(e)}"
+          ></solid-ui-signup-button>
         </slot>
       </div>
     `
+  }
+
+  private handleLoginSuccess () {
+    this.authState = 'logged-in'
+    this.dispatchEvent(new CustomEvent('auth-action-select', {
+      detail: { role: 'login' },
+      bubbles: true,
+      composed: true
+    }))
+  }
+
+  private handleSignupSuccess (e: CustomEvent) {
+    this.dispatchEvent(new CustomEvent('auth-action-select', {
+      detail: { role: 'sign-up', webId: e.detail.webId },
+      bubbles: true,
+      composed: true
+    }))
   }
 
   private renderAccountMenuItem (item: HeaderAccountMenuItem) {
@@ -665,8 +658,7 @@ export class Header extends LitElement {
           ?hidden="${!this.accountMenuOpen || !this.hasAccountMenuItems()}"
           part="account-dropdown"
         >
-          <slot name="account-label" class="account-label">Accounts</slot>
-          <slot name="account-switch" class="account-switch">Switch accounts</slot>
+          <slot name="account-switch" class="account-switch">Switch account</slot>
           <hr class="account-menu-separator" />
           <slot name="account-menu" @slotchange="${(e: Event) => this.handleAccountSlotChange(e)}"></slot>
           ${this.accountMenu && this.accountMenu.length ? html`
@@ -732,7 +724,10 @@ export class Header extends LitElement {
         <div class="menu" part="menu">
           ${this.renderUserArea()}
 
-          ${this.hasAuthContent() && this.hasHelpMenuItems() ? html`<hr class="menu-separator" />` : ''}
+          ${this.authState === 'logged-in' && this.hasHelpMenuItems() ? 
+            html`<hr class="account-menu-separator" />` : 
+            this.hasAuthContent() && this.hasHelpMenuItems() ? 
+              html`<hr class="menu-separator" />` : ''}
 
           <div class="help-menu-container" part="help-menu-container">
             <button

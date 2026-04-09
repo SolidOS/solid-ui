@@ -14,6 +14,16 @@
       "types": "./dist/components/header/index.d.ts",
       "import": "./dist/components/header/index.esm.js",
       "require": "./dist/components/header/index.js"
+    },
+    "./components/login-button": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
+    "./components/signup-button": {
+      "types": "./dist/components/signupButton/index.d.ts",
+      "import": "./dist/components/signupButton/index.esm.js",
+      "require": "./dist/components/signupButton/index.js"
     }
   },
   "files": [
