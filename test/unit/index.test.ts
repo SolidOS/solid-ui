@@ -11,6 +11,7 @@ describe('Index', () => {
       'create',
       'createTypes',
       'dom',
+      'fonts',
       'icons',
       'infiniteMessageArea',
       'initFooter',

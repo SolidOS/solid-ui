@@ -1,6 +1,10 @@
 export default {
   highlightColor: '#7C4DFF', // Solid lavender https://design.inrupt.com/atomic-core/?cat=Core
 
+  // Font families referenced throughout the UI
+  fontFamilyButton: 'Raleway, Roboto, sans-serif', // Used for primary and secondary buttons
+  fontFamilyHeader: 'Arial, sans-serif', // Used for header menus and navigation
+
   formBorderColor: '#888888', // Mid-grey
   formHeadingColor: '#888888', // originally was brown; now grey
   lowProfileLinkColor: '#3B5998', // Grey-blue, e.g., for field labels linking to ontology

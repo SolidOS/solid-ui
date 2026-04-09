@@ -57,6 +57,7 @@ import * as pad from './pad'
 import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
+import * as fonts from './fonts'
 // @ts-ignore
 import { style } from './style'
 // @ts-ignore
@@ -80,6 +81,7 @@ if (typeof window !== 'undefined') {
     create,
     createTypes,
     dom,
+    fonts,
     icons,
     language,
     log,
@@ -109,6 +111,7 @@ export {
   create,
   createTypes,
   dom,
+  fonts,
   icons,
   language,
   log,

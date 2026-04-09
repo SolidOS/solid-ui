@@ -97,7 +97,7 @@ exports[`createBanner check customized logo... 1`] = `
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
@@ -119,7 +119,7 @@ exports[`createBanner check customized logo... 1`] = `
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
@@ -235,7 +235,7 @@ exports[`createBanner creates a link 1`] = `
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
@@ -257,7 +257,7 @@ exports[`createBanner creates a link 1`] = `
           >
             <a
               href="https://reflectechblog.wordpress.com/"
-              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+              style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
             />
           </li>
         </ul>
@@ -407,7 +407,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
       >
         <a
           href="https://reflectechblog.wordpress.com/"
-          style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+          style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
         />
       </li>
     </ul>
@@ -417,7 +417,7 @@ exports[`createUserMenu creates a menu.... 1`] = `
 
 exports[`createUserMenuButton creates a button 1`] = `
 <button
-  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%;"
+  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em; width: 100%;"
 />
 `;
 
@@ -432,7 +432,7 @@ exports[`createUserMenuItem creates a link 1`] = `
 exports[`createUserMenuLink creates a link 1`] = `
 <a
   href="http://www.test.com"
-  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
+  style="background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial, sans-serif; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;"
 />
 `;
 
