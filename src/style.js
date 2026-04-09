@@ -88,6 +88,28 @@ export const style = { // styleModule
   temporaryStatusInit: 'background: green;',
   temporaryStatusEnd: 'background: transparent; transition: background 5s linear;',
 
+  // header
+  headerUserMenuLink: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none;',
+  headerUserMenuLinkHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em;  width: 100%; text-decoration: none; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);',
+  headerUserMenuTrigger: 'background: none; border: 0; cursor: pointer; width: 60px; height: 60px;',
+  headerUserMenuTriggerImg: 'border-radius: 50%; height: 56px; width: 28px !important;',
+  headerUserMenuButton: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%;',
+  headerUserMenuButtonHover: 'background: none; border: 0; color: black; cursor: pointer; display: block; font-family: Arial; font-size: 1em; text-align: left; padding: 1em; width: 100%; background-image: linear-gradient(to right, #7C4DFF 0%, #18A9E6 50%, #01C9EA 100%);',
+  headerUserMenuList: 'list-style: none; margin: 0; padding: 0;',
+  headerUserMenuListDisplay: 'list-style: none; margin: 0; padding: 0; display:true;',
+  headerUserMenuNavigationMenu: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: true;',
+  headerUserMenuNavigationMenuNotDisplayed: 'background: white; border: solid 1px #000000; border-right: 0; position: absolute; right: 0; top: 60px; width: 200px; z-index: 1; display: none;',
+  headerUserMenuListItem: 'border-bottom: solid 1px #000000;',
+  headerUserMenuPhoto: 'border-radius: 50%; background-position: center; background-repeat: no-repeat; background-size: cover; height: 50px; width: 50px;',
+  headerBanner: 'box-shadow: 0px 1px 4px #000000; display: flex; justify-content: space-between; padding: 0 1.5em; margin-bottom: 4px;',
+  headerBannerLink: 'display: block;',
+  headerBannerRightMenu: 'display: flex;',
+  headerBannerLogin: 'margin-left: auto;',
+  allChildrenVisible: 'display:true;',
+  headerBannerUserMenu: 'border-left: solid 1px #000000; margin-left: auto;',
+  headerBannerHelpMenu: 'border-left: solid 1px #000000; margin-left: auto;',
+  headerBannerIcon: 'background-size: 65px 60px !important; height: 60px !important; width: 65px !important;', // may just be 65px round($icon-size * 352 / 322);
+
   // footer
   footer: 'border-top: solid 1px $divider-color; font-size: 0.9em; padding: 0.5em 1.5em;',
 

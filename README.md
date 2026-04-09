@@ -17,6 +17,8 @@ See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation
 - [Use Directly in Browser](#use-directly-in-a-browser)
   - [UMD Bundle](#umd-bundle-global-variable)
   - [ESM Bundle](#esm-bundle-import-as-module)
+- [Web Components](#web-components)
+  - [solid-ui-header](#solid-ui-header)
 - [Development](#development-new-components)
 - [Testing](#adding-tests)
 - [Further Documentation](#further-documentation)
@@ -256,6 +258,45 @@ Use import maps for cleaner module specifiers:
 
 ### Development new components
 
+## Web Components
+
+solid-ui ships self-contained Lit-based custom elements as subpath exports. Each component is independently importable, registers its custom element on import, and ships its own styles encapsulated in a Shadow DOM.
+
+### solid-ui-header
+
+A header bar with branding, auth state (logged-out / logged-in), an account dropdown, and a help menu.
+
+**Subpath export:** `solid-ui/components/header`
+
+```typescript
+import { Header } from 'solid-ui/components/header'
+import type { HeaderMenuItem, HeaderAccountMenuItem, HeaderAuthState } from 'solid-ui/components/header'
+```
+
+Importing this module automatically registers `<solid-ui-header>` as a custom element. See [src/v2/components/header/README.md](src/v2/components/header/README.md) for the full API reference and usage examples.
+
+### Component build pipeline
+
+Web components use a two-stage build to produce a clean public layout without exposing internal source paths:
+
+1. **webpack** (`npm run build-dist`) bundles each component entrypoint and emits the runtime files to `dist/components/<name>/index.js` and `dist/components/<name>/index.esm.js`.
+2. **tsc** (`npm run build-js`) emits declaration files mirroring the source tree, so they land at `dist/v2/components/<name>/index.d.ts`.
+3. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes a thin re-export wrapper at `dist/components/<name>/index.d.ts`, bridging the tsc output to the public package location.
+
+This keeps the `package.json` subpath export fully aligned:
+
+```json
+"./components/header": {
+  "types":   "./dist/components/header/index.d.ts",
+  "import":  "./dist/components/header/index.esm.js",
+  "require": "./dist/components/header/index.js"
+}
+```
+
+Consumers never see the internal `v2` path; it is an implementation detail of the source tree.
+
+### Development new components
+
 When developing a component in solid-ui you can test it in isolation using storybook
 
 ```
@@ -293,9 +334,6 @@ The SolidOS team is using GitHub Copilot integrated in Visual Studio Code.
 We have added comments in the code to make it explicit which parts are 100% written by AI. 
 
 ### Prompt usage history:
-* Raptor mini model: Change this js file (headerStyle.js) in a css file and replace in index.ts all .style variables with a css class. You can keep the names of the css classes.
-
-* Raptor mini model: I want to add bundler config to support CSS imports.
 
 * Raptor mini: If I want to make the header a web component with a self contained CSS which only consumes CSS variables from a theme, how would I do this? 
 
@@ -306,4 +344,8 @@ In the new header component I need to be flexible and receive from consumer - th
 
 * Raptor mini: pls add a readme in the component documenting it usage and test and all
 
-* Raptor mini: the #sym:helpMenuList should be menu items inside the help icon drop down menu
+* Raptor mini: the helpMenuList should be menu items inside the help icon drop down menu
+
+* Raptor mini: When I am not logged in I want the header to display: Log in button and Sign Up button.
+When the suer is logged in, there is only one button, a drop down button called Accounts. The icon of the button is the avatar of the profile and it displays a list of availabel accounts of the user.
+I want this all to be presented flexible in the component.

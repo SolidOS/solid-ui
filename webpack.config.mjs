@@ -22,7 +22,7 @@ const esmExternals = {
 const common = {
   entry: {
     main: './src/index.ts',
-    'solid-ui-header': './src/v2/components/header/Header.ts'
+    header: './src/v2/components/header/index.ts'
   },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
@@ -44,28 +44,12 @@ const common = {
     fallback: { path: false }
   },
   devtool: 'source-map',
-  plugins: [
-    new CopyPlugin({
-      patterns: [
-        {
-          from: 'src/**/*.css',
-          to: ({ context, absoluteFilename }) => {
-            const relPath = path.relative(path.resolve('src'), absoluteFilename)
-            return path.resolve('dist', relPath)
-          }
-        }
-      ]
-    })
-  ],
   module: {
     rules: [
       {
         test: /\.(mjs|js|ts)$/,
         exclude: /(node_modules|bower_components|dist)/,
         use: 'babel-loader'
-      }, {
-        test: /\.css$/i,
-        use: ['style-loader', 'css-loader']
       }, {
         test: /\.sparql$/i,
         type: 'asset/source'
@@ -84,7 +68,7 @@ const minified = {
     ...common.output,
     filename: pathData => pathData.chunk.name === 'main'
       ? 'solid-ui.min.js'
-      : 'components/[name].min.js'
+      : 'components/[name]/index.min.js'
   },
   externals: externalsBase,
   optimization: {
@@ -101,7 +85,7 @@ const unminified = {
     ...common.output,
     filename: pathData => pathData.chunk.name === 'main'
       ? 'solid-ui.js'
-      : 'components/[name].js'
+      : 'components/[name]/index.js'
   },
   externals: externalsBase,
   optimization: {
@@ -116,7 +100,7 @@ const esmMinified = {
     path: path.resolve(process.cwd(), 'dist'),
     filename: pathData => pathData.chunk.name === 'main'
       ? 'solid-ui.esm.min.js'
-      : 'components/[name].esm.min.js',
+      : 'components/[name]/index.esm.min.js',
     library: {
       type: 'module'
     },
@@ -142,7 +126,7 @@ const esmUnminified = {
     path: path.resolve(process.cwd(), 'dist'),
     filename: pathData => pathData.chunk.name === 'main'
       ? 'solid-ui.esm.js'
-      : 'components/[name].esm.js',
+      : 'components/[name]/index.esm.js',
     library: {
       type: 'module'
     },

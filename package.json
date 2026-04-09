@@ -10,9 +10,10 @@
       "import": "./dist/solid-ui.esm.js",
       "require": "./dist/solid-ui.js"
     },
-    "./components/solid-ui-header": {
-      "import": "./dist/components/solid-ui-header.esm.js",
-      "require": "./dist/components/solid-ui-header.js"
+    "./components/header": {
+      "types": "./dist/components/header/index.d.ts",
+      "import": "./dist/components/header/index.esm.js",
+      "require": "./dist/components/header/index.js"
     }
   },
   "files": [
@@ -25,7 +26,7 @@
     "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
-    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
+    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map && node scripts/build-component-dts.mjs",
     "build-dist": "webpack --progress",
     "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",

@@ -1,6 +1,5 @@
 import { Header } from './Header'
-// Import the module for side effects (custom element registration)
-import './Header'
+import './index'
 
 describe('SolidUIHeaderElement', () => {
   beforeEach(() => {
@@ -10,6 +9,7 @@ describe('SolidUIHeaderElement', () => {
       writable: true,
       value: jest.fn()
     })
+
   })
 
 
@@ -23,7 +23,8 @@ describe('SolidUIHeaderElement', () => {
     header.setAttribute('logo', 'https://example.com/logo.png')
     header.setAttribute('help-icon', 'https://example.com/help.png')
     header.setAttribute('brand-link', '/home')
-    header.innerHTML = '<a slot="user-menu" href="/profile">Profile</a><button slot="help-menu" id="helpBtn">Help</button>'
+    header.authState = 'logged-out'
+    header.innerHTML = '<button slot="help-menu" id="helpBtn">Help</button>'
 
     document.body.appendChild(header)
     await header.updateComplete
@@ -39,13 +40,97 @@ describe('SolidUIHeaderElement', () => {
     expect(helpIcon?.src).toContain('https://example.com/help.png')
     expect(brandLink?.href).toContain('/home')
 
-    const userMenuSlot = shadow?.querySelector('slot[name="user-menu"]')
-    expect(userMenuSlot).not.toBeNull()
-    expect(header.querySelector('[slot="user-menu"]')).not.toBeNull()
+    const authButtons = shadow?.querySelectorAll('.auth-button')
+    expect(authButtons).toHaveLength(2)
 
     const helpMenuSlot = shadow?.querySelector('slot[name="help-menu"]')
     expect(helpMenuSlot).not.toBeNull()
     expect(header.querySelector('#helpBtn')).not.toBeNull()
+  })
+
+  it('renders login and sign up actions when logged out', async () => {
+    const header = new Header()
+    const authActionSelected = jest.fn()
+
+    header.authState = 'logged-out'
+    header.loginAction = { label: 'Log in', action: 'login' }
+    header.signUpAction = { label: 'Sign Up', url: '/signup' }
+
+    header.addEventListener('auth-action-select', (event: Event) => {
+      authActionSelected((event as CustomEvent).detail)
+    })
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const authButtons = shadow?.querySelectorAll('.auth-button')
+    const loginButton = authButtons?.[0] as HTMLButtonElement
+    const signUpLink = authButtons?.[1] as HTMLAnchorElement
+
+    expect(authButtons).toHaveLength(2)
+    expect(loginButton.textContent?.trim()).toBe('Log in')
+    expect(signUpLink.textContent?.trim()).toBe('Sign Up')
+
+    loginButton.click()
+
+    expect(authActionSelected).toHaveBeenCalledWith({
+      role: 'login',
+      item: { label: 'Log in', action: 'login' }
+    })
+  })
+
+  it('renders an accounts dropdown with avatar when logged in', async () => {
+    const header = new Header()
+    const accountMenuSelected = jest.fn()
+
+    header.authState = 'logged-in'
+    header.accountLabel = 'Accounts'
+    header.accountAvatar = 'https://example.com/avatar.png'
+    header.accountMenu = [
+      { label: 'Personal Pod', description: 'https://pod.example/profile/card#me', action: 'switch-personal' },
+      { label: 'Work Pod', description: 'https://work.example/profile/card#me', url: '/work' }
+    ]
+
+    header.addEventListener('account-menu-select', (event: Event) => {
+      accountMenuSelected((event as CustomEvent).detail)
+    })
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const trigger = shadow?.getElementById('accountMenuTrigger') as HTMLButtonElement
+
+    expect(trigger).not.toBeNull()
+    expect(trigger.textContent).toContain('Accounts')
+    expect((shadow?.querySelector('.account-avatar img') as HTMLImageElement)?.src).toContain('https://example.com/avatar.png')
+
+    trigger.click()
+    await header.updateComplete
+
+    const dropdown = shadow?.getElementById('accountMenu') as HTMLElement
+    const accountButtons = shadow?.querySelectorAll('.account-menu-item-button') as NodeListOf<HTMLButtonElement>
+    const firstItem = accountButtons[0]
+    const lastItem = accountButtons[accountButtons.length - 1]
+
+    expect(dropdown.hidden).toBe(false)
+    expect(firstItem.textContent).toContain('Personal Pod')
+    expect(lastItem.textContent).toContain('Log out')
+
+    firstItem.click()
+
+    expect(accountMenuSelected).toHaveBeenCalledWith({
+      label: 'Personal Pod',
+      description: 'https://pod.example/profile/card#me',
+      action: 'switch-personal'
+    })
+
+    trigger.click()
+    await header.updateComplete
+    lastItem.click()
+
+    expect(accountMenuSelected).toHaveBeenCalledWith({ label: 'Log out', action: 'logout' })
   })
 
   it('supports theme and layout attributes', async () => {
@@ -94,15 +179,11 @@ describe('SolidUIHeaderElement', () => {
   it('renders helpMenuList inside the help dropdown and dispatches events', async () => {
     const header = new Header()
 
-    const userMenuClicked = jest.fn()
     const helpMenuClicked = jest.fn()
 
-    header.userMenu = [{ label: 'Logout', action: 'logout' }]
+    header.authState = 'logged-in'
     header.helpMenuList = [{ label: 'Docs', url: 'https://example.com/docs', target: '_blank' }]
 
-    header.addEventListener('user-menu-select', (event: Event) => {
-      userMenuClicked((event as CustomEvent).detail)
-    })
     header.addEventListener('help-menu-select', (event: Event) => {
       helpMenuClicked((event as CustomEvent).detail)
     })
@@ -111,13 +192,10 @@ describe('SolidUIHeaderElement', () => {
     await header.updateComplete
 
     const shadow = header.shadowRoot
-    const userButton = shadow?.querySelector('button[part="user-menu-item"]') as HTMLElement
     const helpTrigger = shadow?.getElementById('helpMenuTrigger') as HTMLButtonElement
 
-    expect(userButton?.textContent?.trim()).toBe('Logout')
     expect(helpTrigger?.disabled).toBe(false)
 
-    userButton?.click()
     helpTrigger?.click()
     await header.updateComplete
 
@@ -129,7 +207,6 @@ describe('SolidUIHeaderElement', () => {
 
     helpLink?.click()
 
-    expect(userMenuClicked).toHaveBeenCalledWith({ label: 'Logout', action: 'logout' })
     expect(helpMenuClicked).toHaveBeenCalledWith({ label: 'Docs', url: 'https://example.com/docs', target: '_blank' })
   })
 })

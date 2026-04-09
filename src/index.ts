@@ -66,7 +66,7 @@ import * as tabs from './tabs'
 import * as utils from './utils'
 import * as login from './login/login'
 import * as widgets from './widgets/index'
-import { initHeader, SolidUIHeaderElement } from './header'
+import { initHeader } from './header'
 import { initFooter } from './footer'
 import * as createTypes from './create/types'
 
@@ -97,8 +97,7 @@ if (typeof window !== 'undefined') {
     utils,
     widgets,
     initHeader,
-    initFooter,
-    SolidUIHeaderElement
+    initFooter
   } // Simpler access by non-node scripts
 }
 
@@ -127,8 +126,7 @@ export {
   utils,
   widgets,
   initHeader,
-  initFooter,
-  SolidUIHeaderElement
+  initFooter
 }
 // uses in solid-panes
 export type { CreateContext, NewAppInstanceOptions } from './create/types'
