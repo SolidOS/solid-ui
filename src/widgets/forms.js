@@ -477,11 +477,18 @@ field[ns.ui('Multiple').uri] = function (
 
   function createListIfNecessary () {
     if (!list) {
-      list = new $rdf.Collection()
-      if (reverse) {
-        kb.add(list, property, subject, dataDoc)
+      // Recover from a stale list reference: check the store for an existing list head
+      // before creating a new one (avoids duplicate heads after document reload).
+      const existing = reverse ? kb.any(null, property, subject, dataDoc) : kb.any(subject, property, null, dataDoc)
+      if (existing && existing.termType === 'Collection') {
+        list = existing
       } else {
-        kb.add(subject, property, list, dataDoc)
+        list = new $rdf.Collection()
+        if (reverse) {
+          kb.add(list, property, subject, dataDoc)
+        } else {
+          kb.add(subject, property, list, dataDoc)
+        }
       }
     }
   }
@@ -490,6 +497,36 @@ field[ns.ui('Multiple').uri] = function (
     debug.log('save list: ' + debugString(list.elements)) // 20191214
 
     createListIfNecessary()
+
+    // Re-create the Collection from the current elements before saving.
+    //
+    // rdflib's IndexedFormula indexes Collections by their *element content*
+    // (not by object identity). After list.elements is mutated (by addItem,
+    // deleteThisItem, or moveThisItem), the existing store statement is indexed
+    // under the OLD element content key. Calling removeMany() — which uses the
+    // CURRENT (mutated) element content to look up the index entry — fails to
+    // find it and throws "Statement to be removed is not on store".
+    //
+    // Calling statementsMatching() with a null object finds the statement via
+    // the subject/predicate index (bypassing the stale object index), and
+    // removeStatement() removes it from the statements array and cleans up
+    // the non-stale index entries, safely skipping the stale object-index entry
+    // (it is undefined after mutation, so the `if (!this.index[p][h])` guard fires).
+    //
+    // Rebuilding a fresh Collection with the current elements ensures the new
+    // store entry is correctly indexed, preventing duplicate heads on re-fetch.
+    const currentElements = list.elements.slice()
+    const oldStatements = reverse
+      ? kb.statementsMatching(null, property, subject, dataDoc)
+      : kb.statementsMatching(subject, property, null, dataDoc)
+    oldStatements.forEach(st => kb.removeStatement(st))
+    list = new $rdf.Collection(currentElements)
+    if (reverse) {
+      kb.add(list, property, subject, dataDoc)
+    } else {
+      kb.add(subject, property, list, dataDoc)
+    }
+
     try {
       await kb.fetcher.putBack(dataDoc)
     } catch (err) {
@@ -505,6 +542,9 @@ field[ns.ui('Multiple').uri] = function (
     let vals
     if (ordered) {
       const li = reverse ? kb.the(null, property, subject, dataDoc) : kb.the(subject, property, null, dataDoc)
+      if (li) {
+        list = li // Keep list in sync with the store after any external document reload
+      }
       vals = li ? li.elements : []
     } else {
       vals = reverse ? kb.each(null, property, subject, dataDoc) : kb.each(subject, property, null, dataDoc)

@@ -69,6 +69,10 @@ export class Fetcher {
   nowOrWhenFetched () {
     return Promise.resolve()
   }
+
+  putBack () {
+    return Promise.resolve()
+  }
 }
 
 export class UpdateManager {
