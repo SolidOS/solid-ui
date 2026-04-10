@@ -50,10 +50,11 @@ btn.addEventListener('login-success', (e: CustomEvent) => {
 
 ### Properties / attributes
 
-| Property    | Attribute     | Type     | Default  | Description |
-|-------------|---------------|----------|----------|-------------|
-| `label`     | `label`       | `string` | `Log in` | Button text. Overridable via the default slot. |
-| `issuerUrl` | `issuer-url`  | `string` | `''`     | Pre-fills the IDP URL input in the popup. If `localStorage.loginIssuer` is set it takes precedence. |
+| Property    | Attribute     | Type               | Default  | Description |
+|-------------|---------------|--------------------|----------|-------------|
+| `label`     | `label`       | `string`           | `Log in` | Button text. Overridable via the default slot. |
+| `issuerUrl` | `issuer-url`  | `string`           | `''`     | Pre-fills the IDP URL input in the popup. If `localStorage.loginIssuer` is set it takes precedence. |
+| `theme`     | `theme`       | `'light' \| 'dark'` | `'light'` | Sets the colour theme. Use `'dark'` when placing the button on a dark background. |
 
 ### Events
 
@@ -71,12 +72,20 @@ btn.addEventListener('login-success', (e: CustomEvent) => {
 
 The component inherits Header CSS variables automatically when used inside `<solid-ui-header>`. When used standalone, these can be set on a parent or on `:root`:
 
-| Variable                      | Fallback                        | Description |
-|-------------------------------|---------------------------------|-------------|
-| `--login-button-bg`           | `--header-menu-bg` / `#f6f5f9` | Button background |
-| `--login-button-text`         | `--header-button-text` / `#0f172a` | Button text colour |
-| `--login-button-border`       | `--header-border` / `#efecf3`  | Button border colour |
-| `--login-button-border-hover` | `--header-link-hover` / `#e6dcff` | Border colour on hover |
+| Variable                      | Fallback                            | Description |
+|-------------------------------|-------------------------------------|-------------|
+| `--primary-royal-lavender`    | `#7C4DFF`                           | Button background colour |
+| `--login-button-text`         | `--header-button-text` / `#0f172a` | Button text colour (light theme) |
+
+### Theming
+
+Set `theme="dark"` for dark backgrounds. The button background (`--primary-royal-lavender`) stays the same; the text colour switches to white.
+
+```html
+<solid-ui-login-button theme="dark"></solid-ui-login-button>
+```
+
+When used inside `<solid-ui-header>`, the `theme` attribute is forwarded automatically.
 
 ## Popup behaviour
 

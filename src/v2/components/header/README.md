@@ -77,11 +77,11 @@ Properties/attributes:
 - `theme`: `light` or `dark`.
 - `authState`: `logged-out` or `logged-in`.
 - `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link.
-- `signUpAction`: object for the logged-out Sign Up action.
+- `signUpAction`: object for the logged-out Sign Up action. The `label` field sets the button text and the `url` field (default: `https://solidproject.org/get_a_pod`) is the destination opened in a new tab when the button is clicked.
 - `accountLabel`: label for the logged-in dropdown trigger (default: `Accounts`).
 - `accountAvatar`: avatar URL used as the logged-in dropdown icon.
 - `accountMenu`: array of account entries for the logged-in dropdown.
-- `logoutAction`: object for the final logged-in dropdown action (default: `Log out`). Set to `null` to hide it.
+- `logoutLabel`: string label for the logout button at the bottom of the logged-in dropdown (default: `Sign out`). Set to `null` to hide it.
 
 Slots:
 
@@ -109,12 +109,12 @@ Use `auth-state="logged-out"` to render the `<solid-ui-login-button>` and a Sign
   header.authState = 'logged-out'
   // Optionally override the login button label:
   header.loginAction = { label: 'Log in' }
-  // Optionally override sign-up (URL-based, no built-in flow):
-  header.signUpAction = { label: 'Sign Up', url: '/sign-up' }
+  // Optionally override the sign-up destination (opens in a new tab):
+  header.signUpAction = { label: 'Sign Up', url: 'https://myprovider.example/signup' }
 
   header.addEventListener('auth-action-select', ({ detail }) => {
     if (detail.role === 'login') {
-      // login completed — detail.webId is available via login-success on the button
+      // login completed
       header.authState = 'logged-in'
     }
   })

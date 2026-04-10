@@ -349,3 +349,5 @@ In the new header component I need to be flexible and receive from consumer - th
 * Raptor mini: When I am not logged in I want the header to display: Log in button and Sign Up button.
 When the suer is logged in, there is only one button, a drop down button called Accounts. The icon of the button is the avatar of the profile and it displays a list of availabel accounts of the user.
 I want this all to be presented flexible in the component.
+
+* Claude Sonet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.

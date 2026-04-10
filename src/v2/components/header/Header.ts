@@ -1,10 +1,14 @@
 import { LitElement, html, css } from 'lit'
 import { icons } from '../../../iconBase'
+import { authSession } from 'solid-logic'
 import '../loginButton/index'
 import '../signupButton/index'
+import { ifDefined } from 'lit/directives/if-defined.js'
 
 const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
+const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
+const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts'
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -18,7 +22,7 @@ export type HeaderMenuItem = {
 
 export type HeaderAccountMenuItem = HeaderMenuItem & {
   avatar?: string
-  description?: string
+  webid?: string
 }
 
 export class Header extends LitElement {
@@ -32,7 +36,7 @@ export class Header extends LitElement {
     loginAction: { type: Object, attribute: false },
     signUpAction: { type: Object, attribute: false },
     accountMenu: { type: Array, attribute: false },
-    logoutAction: { type: Object, attribute: false },
+    logoutLabel: { type: String, attribute: 'logout-label', reflect: true },
     accountLabel: { type: String, attribute: 'account-label', reflect: true },
     accountAvatar: { type: String, attribute: 'account-avatar', reflect: true },
     helpMenuList: { type: Array },
@@ -53,10 +57,12 @@ export class Header extends LitElement {
     --header-link-hover: var(--solid-header-link-hover, #e6dcff);
     --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
     --header-menu-bg: var(--solid-header-menu-bg, #f6f5f9);
-    --header-menu-text: var(--solid-header-menu-text, #d5cee1);
+    --header-menu-loggedin-bg: var(--solid-header-menu-loggedin-bg, #5e546d);
+    --header-menu-text: var(--solid-header-menu-text, #878192);
     --header-border-radius: var(--solid-header-border-radius, 0.3em);
     --header-button-bg: var(--solid-header-button-bg, #ffffff);
     --header-button-text: var(--solid-header-button-text, #0f172a);
+    --header-button-detail-text: var(--solid-header-button-detail-text, #878192);
     --header-icon-filter: var(--solid-header-icon-filter, invert(1) brightness(1.3));
     --header-shadow: var(--solid-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
     font-family: var(--solid-header-font, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
@@ -71,10 +77,12 @@ export class Header extends LitElement {
     --header-link-hover: var(--solid-header-link-hover-dark, #e6dcff);
     --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
     --header-menu-bg: var(--solid-header-menu-bg-dark, #f6f5f9);
-    --header-menu-text: var(--solid-header-menu-text-dark, #d5cee1);
+    --header-menu-loggedin-bg: var(--solid-header-menu-loggedin-bg-dark, #5e546d);
+    --header-menu-text: var(--solid-header-menu-text-dark, #878192);
     --header-border-radius: var(--solid-header-border-radius-dark, 0.3em);
     --header-button-bg: var(--solid-header-button-bg-dark, #ffffff);
     --header-button-text: var(--solid-header-button-text-dark, #0f172a);
+    --header-button-detail-text: var(--solid-header-button-detail-text-dark, #878192);
     --header-icon-filter: var(--solid-header-icon-filter, invert(1) brightness(1.3));
     --header-shadow: var(--solid-header-shadow-dark, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
     font-family: var(--solid-header-font, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
@@ -158,10 +166,10 @@ export class Header extends LitElement {
     background: color-mix(in srgb, var(--header-menu-bg) 78%, var(--header-link-selected) 22%);
   }
 
-  .menu-separator {
-    color: var(--header-line-color);
-    width: 17%;
-    transform: rotate(90deg);
+  .header-menu-separator {
+    background: var(--header-line-color);
+    width: 1px;
+    height: 2.3rem;
   }
 
   .account-menu-container {
@@ -175,10 +183,9 @@ export class Header extends LitElement {
     align-items: center;
     gap: 0.625rem;
     min-height: 2.5rem;
-    padding: 0.375rem 0.75rem 0.375rem 0.375rem;
-    border: 1px solid var(--header-border);
+    border: 1px solid var(--header-menu-loggedin-bg);
     border-radius: 999px;
-    background: var(--header-menu-bg);
+    background: var(--header-menu-loggedin-bg);
     color: var(--header-button-text);
     cursor: pointer;
     font: inherit;
@@ -201,7 +208,6 @@ export class Header extends LitElement {
     justify-content: center;
     flex-shrink: 0;
     overflow: hidden;
-    border-radius: 999px;
     background: color-mix(in srgb, var(--header-bg) 18%, #ded8e7 82%);
     color: var(--header-button-text);
     font-size: 0.75rem;
@@ -212,6 +218,36 @@ export class Header extends LitElement {
   .account-avatar {
     width: 1.75rem;
     height: 1.75rem;
+    border-radius: 999px;
+    border: 1.5px solid var(--header-border);
+  }
+
+  .account-avatar-text {
+    width: auto;
+    min-width: auto;
+    height: auto;
+    padding: 0.25rem 0.75rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    border: 1px solid var(--header-border);
+  }
+
+  .account-menu-avatar {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.5rem;
+  }
+
+  .account-menu-avatar.account-avatar-text {
+    width: 2rem;
+    height: 2rem;
+    padding: 0.25rem;
+    border-radius: 0.5rem;
+    white-space: normal;
+    line-height: 1;
+    text-align: center;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
 
   .account-avatar img,
@@ -281,23 +317,21 @@ export class Header extends LitElement {
     transform: translateY(1px);
   }
 
-  .account-menu-avatar {
-    width: 2rem;
-    height: 2rem;
-  }
-
   .account-switch {
     display: block;
     width: 100%;
     color: var(--header-menu-text);
     text-align: left;
     text-transform: uppercase;
+    font-size: 80%;
   }
 
-  .account-menu-separator {
+  .dropdown-menu-separator {
+    display: block;
+    width: calc(100% + 1rem);
+    margin: 0.5rem -0.5rem;
     border: 0;
     border-top: 1px solid var(--header-border);
-    margin: 0.5rem 0;
   }
 
   .account-menu-copy {
@@ -306,9 +340,16 @@ export class Header extends LitElement {
     min-width: 0;
   }
 
-  .account-menu-description {
-    color: color-mix(in srgb, var(--header-link) 72%, #ffffff 28%);
-    font-size: 0.8125rem;
+  .account-menu-label {
+    color: var(--header-button-text);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .account-menu-webid {
+    color: var(--header-button-detail-text);
+    font-size: 0.5rem;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
@@ -427,7 +468,7 @@ export class Header extends LitElement {
   declare loginAction: HeaderMenuItem
   declare signUpAction: HeaderMenuItem
   declare accountMenu: HeaderAccountMenuItem[]
-  declare logoutAction: HeaderMenuItem | null
+  declare logoutLabel: string | null
   declare accountLabel: string
   declare accountAvatar: string
   declare helpMenuList: HeaderMenuItem[]
@@ -445,9 +486,9 @@ export class Header extends LitElement {
     this.brandLink = '#'
     this.authState = 'logged-out'
     this.loginAction = { label: 'Log In', action: 'login' }
-    this.signUpAction = { label: 'Sign Up', action: 'sign-up' }
+    this.signUpAction = { label: 'Sign Up', action: 'sign-up', url: DEFAULT_SIGNUP_URL }
     this.accountMenu = []
-    this.logoutAction = { label: 'Log out', action: 'logout' }
+    this.logoutLabel = 'Log Out'
     this.accountLabel = 'Accounts'
     this.accountAvatar = ''
     this.helpMenuList = []
@@ -530,7 +571,7 @@ export class Header extends LitElement {
   }
 
   private hasAccountMenuItems () {
-    return Boolean(this.accountMenu?.length || this.hasSlottedAccountMenu || this.logoutAction)
+    return Boolean(this.accountMenu?.length || this.hasSlottedAccountMenu || this.logoutLabel)
   }
 
   private hasHelpMenuItems () {
@@ -541,16 +582,22 @@ export class Header extends LitElement {
     return true
   }
 
-  private getAvatarInitial (label: string) {
-    return (label || this.accountLabel || '?').trim().charAt(0) || '?'
-  }
-
-  private renderAvatar (label: string, avatar?: string, className = 'account-avatar') {
+  private renderLoggedInAvatar (avatar?: string) {
     return html`
-      <span class="${className}" aria-hidden="true">
+       <span class="account-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
         ${avatar
           ? html`<img src="${avatar}" alt="" />`
-          : html`${this.getAvatarInitial(label)}`}
+          : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}
+      </span>
+    `
+  }
+
+  private renderAccountsMenuAvatar (avatar?: string) {
+    return html`
+      <span class="account-menu-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
+        ${avatar
+          ? html`<img src="${avatar}" alt="" />`
+          : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}
       </span>
     `
   }
@@ -561,6 +608,7 @@ export class Header extends LitElement {
         <slot name="login-action">
           <solid-ui-login-button
             label="${this.loginAction.label}"
+            theme="${this.theme}"
             part="login-action"
             @login-success="${() => this.handleLoginSuccess()}"
           ></solid-ui-login-button>
@@ -568,9 +616,9 @@ export class Header extends LitElement {
         <slot name="sign-up-action">
           <solid-ui-signup-button
             label="${this.signUpAction.label}"
-            signup-url="${this.signUpAction.url || ''}"
+            signup-url="${ifDefined(this.signUpAction.url)}"
+            theme="${this.theme}"
             part="sign-up-action"
-            @signup-success="${(e: CustomEvent) => this.handleSignupSuccess(e)}"
           ></solid-ui-signup-button>
         </slot>
       </div>
@@ -586,9 +634,15 @@ export class Header extends LitElement {
     }))
   }
 
-  private handleSignupSuccess (e: CustomEvent) {
-    this.dispatchEvent(new CustomEvent('auth-action-select', {
-      detail: { role: 'sign-up', webId: e.detail.webId },
+  private async handleLogout () {
+    this.accountMenuOpen = false
+    try {
+      await authSession.logout()
+    } catch (_err) {
+      // logout errors are non-fatal — proceed to clear state
+    }
+    this.authState = 'logged-out'
+    this.dispatchEvent(new CustomEvent('logout-select', {
       bubbles: true,
       composed: true
     }))
@@ -596,10 +650,10 @@ export class Header extends LitElement {
 
   private renderAccountMenuItem (item: HeaderAccountMenuItem) {
     const content = html`
-      ${this.renderAvatar(item.label, item.avatar, 'account-menu-avatar')}
+      ${this.renderAccountsMenuAvatar(item.avatar)}
       <span class="account-menu-copy">
-        <span>${item.label}</span>
-        ${item.description ? html`<span class="account-menu-description">${item.description}</span>` : ''}
+        <span class="account-menu-label">${item.label}</span>
+        ${item.webid ? html`<span class="account-menu-webid">${item.webid}</span>` : ''}
       </span>
     `
 
@@ -640,12 +694,12 @@ export class Header extends LitElement {
             class="account-menu-trigger"
             type="button"
             aria-haspopup="menu"
-            aria-expanded="${String(this.accountMenuOpen)}"
+            aria-expanded="${this.accountMenuOpen ? 'true' : 'false'}"
             ?disabled="${!this.hasAccountMenuItems()}"
             @click="${(e: MouseEvent) => this.toggleAccountMenu(e)}"
             part="account-menu-trigger"
           >
-            ${this.renderAvatar(this.accountLabel, this.accountAvatar)}
+            ${this.renderLoggedInAvatar(this.accountAvatar)}
             <span class="account-menu-trigger-label">${this.accountLabel}</span>
           </button>
         </slot>
@@ -654,32 +708,36 @@ export class Header extends LitElement {
           id="accountMenu"
           class="account-dropdown"
           role="menu"
-          aria-hidden="${String(!this.accountMenuOpen)}"
+          aria-hidden="${this.accountMenuOpen ? 'false' : 'true'}"
           ?hidden="${!this.accountMenuOpen || !this.hasAccountMenuItems()}"
           part="account-dropdown"
         >
           <slot name="account-switch" class="account-switch">Switch account</slot>
-          <hr class="account-menu-separator" />
+          <hr class="dropdown-menu-separator" />
           <slot name="account-menu" @slotchange="${(e: Event) => this.handleAccountSlotChange(e)}"></slot>
-          ${this.accountMenu && this.accountMenu.length ? html`
+          ${this.accountMenu && this.accountMenu.length
+          ? html`
             <ul class="account-menu-list">
               ${this.accountMenu.map((item: HeaderAccountMenuItem) => html`
                 <li>${this.renderAccountMenuItem(item)}</li>
               `)}
             </ul>
-          ` : ''}
-          ${this.logoutAction ? html`
-            <hr class="account-menu-separator" />
+          `
+          : ''}
+          ${this.logoutLabel
+          ? html`
+            <hr class="dropdown-menu-separator" />
             <button
               class="account-menu-item-button"
               type="button"
-              @click="${() => this.handleAccountMenuClick(this.logoutAction as HeaderAccountMenuItem)}"
+              @click="${() => this.handleLogout()}"
               part="logout-action"
               role="menuitem"
             >
-              ${this.logoutAction.label}
+              ${this.logoutLabel}
             </button>
-          ` : ''}
+          `
+          : ''}
         </nav>
       </div>
     `
@@ -724,10 +782,12 @@ export class Header extends LitElement {
         <div class="menu" part="menu">
           ${this.renderUserArea()}
 
-          ${this.authState === 'logged-in' && this.hasHelpMenuItems() ? 
-            html`<hr class="account-menu-separator" />` : 
-            this.hasAuthContent() && this.hasHelpMenuItems() ? 
-              html`<hr class="menu-separator" />` : ''}
+          ${this.authState === 'logged-in' && this.hasHelpMenuItems()
+          ? html`
+            <div class="header-menu-separator" />`
+          : this.hasAuthContent() && this.hasHelpMenuItems()
+            ? html`<div class="header-menu-separator" />`
+            : ''}
 
           <div class="help-menu-container" part="help-menu-container">
             <button
@@ -735,7 +795,7 @@ export class Header extends LitElement {
               class="help-menu-trigger"
               type="button"
               aria-haspopup="menu"
-              aria-expanded="${String(this.helpMenuOpen)}"
+              aria-expanded="${this.helpMenuOpen ? 'true' : 'false'}"
               ?disabled="${!this.hasHelpMenuItems()}"
               @click="${(e: MouseEvent) => this.toggleHelpMenu(e)}"
               part="help-menu-trigger"
@@ -747,17 +807,19 @@ export class Header extends LitElement {
               id="helpMenu"
               class="help-dropdown"
               role="menu"
-              aria-hidden="${String(!this.helpMenuOpen)}"
+              aria-hidden="${this.helpMenuOpen ? 'false' : 'true'}"
               ?hidden="${!this.helpMenuOpen || !this.hasHelpMenuItems()}"
               part="help-dropdown"
             >
               <div class="help-dropdown-content" @click="${() => { this.helpMenuOpen = false }}">
                 <slot name="help-menu" @slotchange="${(e: Event) => this.handleHelpSlotChange(e)}"></slot>
-                ${this.helpMenuList && this.helpMenuList.length ? html`
+                ${this.helpMenuList && this.helpMenuList.length
+                ? html`
                   <ul class="help-menu-list">
                     ${this.helpMenuList.map((item: HeaderMenuItem) => html`
                       <li>
-                        ${item.url ? html`
+                        ${item.url
+                        ? html`
                           <a
                             href="${item.url}"
                             target="${item.target || '_blank'}"
@@ -767,7 +829,8 @@ export class Header extends LitElement {
                           >
                             ${item.label}
                           </a>
-                        ` : html`
+                        `
+                        : html`
                           <button
                             type="button"
                             @click="${(e: MouseEvent) => this.handleHelpMenuClick(item, e)}"
@@ -780,7 +843,8 @@ export class Header extends LitElement {
                       </li>
                     `)}
                   </ul>
-                ` : ''}
+                `
+                : ''}
               </div>
             </nav>
           </div>
@@ -789,4 +853,3 @@ export class Header extends LitElement {
     `
   }
 }
-

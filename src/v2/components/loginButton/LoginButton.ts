@@ -4,6 +4,7 @@ import { authSession, authn, getSuggestedIssuers, offlineTestID, solidLogicSingl
 export class LoginButton extends LitElement {
   static properties = {
     label: { type: String, reflect: true },
+    theme: { type: String, reflect: true },
     issuerUrl: { type: String, attribute: 'issuer-url', reflect: true },
     _popupOpen: { state: true },
     _issuerInputValue: { state: true }
@@ -15,30 +16,30 @@ export class LoginButton extends LitElement {
     }
 
     .login-button {
-      display: inline-flex;
+      display: flex;
+      height: 35px;
+      padding: 5px 12px;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
-      min-height: 2.25rem;
-      padding: 0.5rem 0.875rem;
-      border: 1px solid var(--login-button-border, var(--header-border, #efecf3));
-      border-radius: 999px;
-      background: var(--login-button-bg, var(--header-menu-bg, #f6f5f9));
+      gap: 5px;
+      border-radius: 5px;
+      background: var(--primary-royal-lavender, #7C4DFF);
+      border: none;
       color: var(--login-button-text, var(--header-button-text, #0f172a));
       cursor: pointer;
       font: inherit;
       line-height: 1;
+      white-space: nowrap;
       text-decoration: none;
       box-sizing: border-box;
-      transition: border-color 0.2s ease, transform 0.2s ease;
-    }
-
-    .login-button:hover {
-      border-color: var(--login-button-border-hover, var(--header-link-hover, #e6dcff));
+      transition: transform 0.2s ease;
     }
 
     .login-button:active {
       transform: translateY(1px);
+    }
+
+    :host([theme='dark']) .login-button {
+      color: #ffffff;
     }
 
     /* Popup overlay */
@@ -159,6 +160,7 @@ export class LoginButton extends LitElement {
   `
 
   declare label: string
+  declare theme: 'light' | 'dark'
   declare issuerUrl: string
   declare _popupOpen: boolean
   declare _issuerInputValue: string
@@ -167,7 +169,7 @@ export class LoginButton extends LitElement {
 
   constructor () {
     super()
-    this.label = 'Log in'
+    this.label = 'Log In'
     this.issuerUrl = ''
     this._popupOpen = false
     this._issuerInputValue = ''

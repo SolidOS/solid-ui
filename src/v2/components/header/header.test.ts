@@ -88,8 +88,8 @@ describe('SolidUIHeaderElement', () => {
     header.accountLabel = 'Accounts'
     header.accountAvatar = 'https://example.com/avatar.png'
     header.accountMenu = [
-      { label: 'Personal Pod', description: 'https://pod.example/profile/card#me', action: 'switch-personal' },
-      { label: 'Work Pod', description: 'https://work.example/profile/card#me', url: '/work' }
+      { label: 'Personal Pod', webid: 'https://pod.example/profile/card#me', action: 'switch-personal' },
+      { label: 'Work Pod', webid: 'https://work.example/profile/card#me', url: '/work' }
     ]
 
     header.addEventListener('account-menu-select', (event: Event) => {
