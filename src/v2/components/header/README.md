@@ -156,8 +156,10 @@ If you want a fully custom login UI you can override the slot:
 </script>
 ```
 
-The component dispatches `auth-action-select` for logged-out actions and `account-menu-select` for logged-in account choices.
-When `authState` is `logged-in`, the dropdown always renders the configured `logoutAction` as the last item.
+The built-in logout button automatically transitions the header from `logged-in` to `logged-out`, and emits a bubbling, composed `logout-select` event with `detail: { role: 'logout' }`.
+
+The component also dispatches `auth-action-select` for logged-out actions and `account-menu-select` for logged-in account choices.
+When `authState` is `logged-in`, the dropdown always renders the configured `logoutLabel` as the last item.
 
 ## Styles
 

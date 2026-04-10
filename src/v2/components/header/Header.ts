@@ -665,6 +665,7 @@ export class Header extends LitElement {
     }
     this.authState = 'logged-out'
     this.dispatchEvent(new CustomEvent('logout-select', {
+      detail: { role: 'logout' },
       bubbles: true,
       composed: true
     }))
