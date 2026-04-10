@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
-const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts'
+const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts' // empty space to preserve button size when no avatar is provided
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -601,15 +601,20 @@ export class Header extends LitElement {
   }
 
   private renderLoggedInAvatar (avatar?: string) {
+    const hasAvatar = Boolean(avatar)
+    const avatarContent = hasAvatar
+      ? html`<img src="${avatar}" alt="" />`
+      : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL
+
     if (this.layout === 'mobile') {
-      return avatar ? html`<img class="account-avatar-img" src="${avatar}" alt="" />` : html``
+      return hasAvatar
+        ? html`<img class="account-avatar-img" src="${avatar}" alt="" />`
+        : html`<span class="account-avatar account-avatar-text">${DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}</span>`
     }
 
     return html`
-       <span class="account-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
-        ${avatar
-          ? html`<img src="${avatar}" alt="" />`
-          : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}
+      <span class="account-avatar ${hasAvatar ? '' : 'account-avatar-text'}" aria-hidden="true">
+        ${avatarContent}
       </span>
     `
   }
@@ -619,7 +624,7 @@ export class Header extends LitElement {
       <span class="account-menu-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
         ${avatar
           ? html`<img src="${avatar}" alt="" />`
-          : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}
+          : '?'}
       </span>
     `
   }
