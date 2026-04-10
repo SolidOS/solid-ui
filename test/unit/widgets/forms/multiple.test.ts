@@ -16,12 +16,22 @@ const subform = namedNode('http://example.com/#subForm')
 const property = namedNode('http://schema.org/knowsLanguage')
 const xsdBoolean = namedNode('http://www.w3.org/2001/XMLSchema#boolean')
 
+/** Helper: return all list-head triples for subject/property in the test document */
+function getListHeads () {
+  return store.each(subject, property, null as any, doc)
+}
+
+/** Helper: wait for pending microtasks and short async operations to settle */
+function waitForAsync () {
+  return new Promise(resolve => setTimeout(resolve, 10))
+}
+
 /** Set up the minimum store triples needed for an ordered Multiple field */
 function setupOrderedMultipleForm () {
   store.add(form, ns.rdf('type'), ns.ui('Multiple'), doc)
   store.add(form, ns.ui('property'), property, doc)
   // ui:ordered true as a proper xsd:boolean literal
-  store.add(form, ns.ui('ordered'), literal('true', null as any, xsdBoolean), doc)
+  store.add(form, ns.ui('ordered'), literal('true', undefined, xsdBoolean), doc)
   store.add(form, ns.ui('part'), subform, doc)
   // Subform: an empty Group (no parts)
   store.add(subform, ns.rdf('type'), ns.ui('Group'), doc)
@@ -51,7 +61,7 @@ describe('Multiple ordered field', () => {
       renderMultipleField()
 
       // After rendering, there should still be exactly ONE list head
-      const heads = store.each(subject, property, null as any, doc)
+      const heads = getListHeads()
       expect(heads.length).toBe(1)
       expect(heads[0]).toBe(existingCollection)
     })
@@ -62,8 +72,7 @@ describe('Multiple ordered field', () => {
       renderMultipleField()
 
       // No list head should exist until the user adds an item
-      const heads = store.each(subject, property, null as any, doc)
-      expect(heads.length).toBe(0)
+      expect(getListHeads().length).toBe(0)
     })
   })
 
@@ -87,7 +96,7 @@ describe('Multiple ordered field', () => {
       renderMultipleField()
 
       // The list head should remain intact with the original 2 elements
-      const heads = store.each(subject, property, null as any, doc)
+      const heads = getListHeads()
       expect(heads.length).toBe(1)
       expect((heads[0] as Collection).elements.length).toBe(2)
     })
@@ -107,14 +116,14 @@ describe('Multiple ordered field', () => {
       const reloadedCollection = new Collection([namedNode('http://example.com/#item1')])
       store.add(subject, property, reloadedCollection, doc)
 
-      expect(store.each(subject, property, null as any, doc).length).toBe(2)
+      expect(getListHeads().length).toBe(2)
 
       // After refresh, the field's internal list should be synced to one of the collections.
       // The refresh function itself does not remove duplicates — that happens in saveListThenRefresh.
       body.refresh!()
 
       // Both heads still exist (removal happens during save)
-      expect(store.each(subject, property, null as any, doc).length).toBe(2)
+      expect(getListHeads().length).toBe(2)
     })
   })
 
@@ -125,7 +134,7 @@ describe('Multiple ordered field', () => {
       const { box } = renderMultipleField()
 
       // Initially no list head
-      expect(store.each(subject, property, null as any, doc).length).toBe(0)
+      expect(getListHeads().length).toBe(0)
 
       // Find and click the add/tail div (second child of box, after body)
       const children = box.children
@@ -133,10 +142,10 @@ describe('Multiple ordered field', () => {
       tail.click()
 
       // Allow async operations (addItem + saveListThenRefresh) to complete
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await waitForAsync()
 
       // After clicking add, exactly one list head should exist in the store
-      const heads = store.each(subject, property, null as any, doc)
+      const heads = getListHeads()
       expect(heads.length).toBe(1)
       expect(heads[0].termType).toBe('Collection')
     })
@@ -151,11 +160,11 @@ describe('Multiple ordered field', () => {
 
       // Click add twice
       tail.click()
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await waitForAsync()
       tail.click()
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await waitForAsync()
 
-      const heads = store.each(subject, property, null as any, doc)
+      const heads = getListHeads()
       expect(heads.length).toBe(1)
       const collection = heads[0] as Collection
       expect(collection.termType).toBe('Collection')
@@ -177,20 +186,21 @@ describe('Multiple ordered field', () => {
       const reloadedCollection = new Collection([namedNode('http://example.com/#item1')])
       store.add(subject, property, reloadedCollection, doc)
 
-      expect(store.each(subject, property, null as any, doc).length).toBe(2)
+      expect(getListHeads().length).toBe(2)
 
       // Click add — this triggers createListIfNecessary (no-op, list already set)
       // and saveListThenRefresh (which should deduplicate)
       const children = box.children
       const tail = children[children.length - 1] as HTMLElement
       tail.click()
-      await new Promise(resolve => setTimeout(resolve, 10))
+      await waitForAsync()
 
       // After the save, there should be exactly ONE list head
-      const heads = store.each(subject, property, null as any, doc)
+      const heads = getListHeads()
       expect(heads.length).toBe(1)
       expect(heads[0].termType).toBe('Collection')
     })
   })
 })
+
 
