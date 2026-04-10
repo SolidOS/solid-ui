@@ -264,7 +264,7 @@ solid-ui ships self-contained Lit-based custom elements as subpath exports. Each
 
 ### solid-ui-header
 
-A header bar with branding, auth state (logged-out / logged-in), an account dropdown, and a help menu.
+A header bar with branding, auth state (logged-out / logged-in), an account dropdown, and a desktop-only help menu.
 
 **Subpath export:** `solid-ui/components/header`
 
@@ -351,3 +351,5 @@ When the suer is logged in, there is only one button, a drop down button called 
 I want this all to be presented flexible in the component.
 
 * Claude Sonet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
+
+* Raptor mini: when we are on layout mobile we do not want to display the help menu at all.

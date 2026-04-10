@@ -2,6 +2,8 @@
 
 A Lit-based custom element that renders the Solid application header, including branding, auth actions, account management, and a help menu.
 
+When `layout="mobile"`, the header hides the help menu entirely, even if `helpMenuList` items or `help-menu` slotted content are provided.
+
 When `auth-state="logged-out"`, the header renders a `<solid-ui-login-button>` as the login action. The login button opens a Solid IDP selection popup and handles the full OIDC login flow via `solid-logic`. On success it emits a `login-success` event and the header transitions to `logged-in` state automatically.
 
 ## Installation
@@ -73,7 +75,7 @@ Properties/attributes:
 - `logo`: URL string for the brand image (default: Solid emblem URL).
 - `helpIcon`: URL string for the help icon, default from icons asset.
 - `brandLink`: URL string for the brand link (default: `#`).
-- `layout`: `desktop` or `mobile`.
+- `layout`: `desktop` or `mobile`. Mobile layout hides the brand logo link and does not render the help menu.
 - `theme`: `light` or `dark`.
 - `authState`: `logged-out` or `logged-in`.
 - `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link.
@@ -90,9 +92,9 @@ Slots:
 - `sign-up-action` to override the logged-out Sign Up action.
 - `account-trigger` to override the logged-in Accounts trigger.
 - `account-menu` for custom logged-in account entries.
-- `help-menu` for help related actions rendered inside the help icon dropdown.
+- `help-menu` for help related actions rendered inside the help icon dropdown on desktop layout.
 
-The `helpMenuList` property also renders inside the same help icon dropdown menu.
+The `helpMenuList` property also renders inside the same help icon dropdown menu on desktop layout.
 
 ## Auth Modes
 
@@ -163,6 +165,7 @@ Customization is supported through CSS variables:
 - `--header-bg`, `--header-text`, `--header-border`, etc.
 
 The brand logo link is only rendered when the incoming `layout` is `desktop`.
+The help menu trigger and dropdown are only rendered when the incoming `layout` is `desktop`.
 
 ## Testing
 

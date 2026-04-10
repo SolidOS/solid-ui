@@ -17,7 +17,6 @@ export type HeaderMenuItem = {
   url?: string
   target?: string
   action?: string
-  pane?: string
 }
 
 export type HeaderAccountMenuItem = HeaderMenuItem & {
@@ -578,8 +577,8 @@ export class Header extends LitElement {
     return Boolean(this.helpMenuList?.length || this.hasSlottedHelpMenu)
   }
 
-  private hasAuthContent () {
-    return true
+  private shouldRenderHelpMenu () {
+    return this.layout !== 'mobile' && this.hasHelpMenuItems()
   }
 
   private renderLoggedInAvatar (avatar?: string) {
@@ -662,7 +661,6 @@ export class Header extends LitElement {
         <a
           class="account-menu-item-link"
           href="${item.url}"
-          target="${item.target || '_self'}"
           @click="${() => this.handleAccountMenuClick(item)}"
           part="account-menu-item"
           role="menuitem"
@@ -782,26 +780,26 @@ export class Header extends LitElement {
         <div class="menu" part="menu">
           ${this.renderUserArea()}
 
-          ${this.authState === 'logged-in' && this.hasHelpMenuItems()
+          ${this.shouldRenderHelpMenu()
           ? html`
             <div class="header-menu-separator" />`
-          : this.hasAuthContent() && this.hasHelpMenuItems()
-            ? html`<div class="header-menu-separator" />`
-            : ''}
+          : ''}
 
-          <div class="help-menu-container" part="help-menu-container">
-            <button
-              id="helpMenuTrigger"
-              class="help-menu-trigger"
-              type="button"
-              aria-haspopup="menu"
-              aria-expanded="${this.helpMenuOpen ? 'true' : 'false'}"
-              ?disabled="${!this.hasHelpMenuItems()}"
-              @click="${(e: MouseEvent) => this.toggleHelpMenu(e)}"
-              part="help-menu-trigger"
-            >
-              <img id="helpIcon" class="help-icon" src="${this.helpIcon}" alt="Help" part="help-icon" />
-            </button>
+          ${this.shouldRenderHelpMenu()
+          ? html`
+            <div class="help-menu-container" part="help-menu-container">
+              <button
+                id="helpMenuTrigger"
+                class="help-menu-trigger"
+                type="button"
+                aria-haspopup="menu"
+                aria-expanded="${this.helpMenuOpen ? 'true' : 'false'}"
+                ?disabled="${!this.hasHelpMenuItems()}"
+                @click="${(e: MouseEvent) => this.toggleHelpMenu(e)}"
+                part="help-menu-trigger"
+              >
+                <img id="helpIcon" class="help-icon" src="${this.helpIcon}" alt="Help" part="help-icon" />
+              </button>
 
             <nav
               id="helpMenu"
@@ -847,7 +845,8 @@ export class Header extends LitElement {
                 : ''}
               </div>
             </nav>
-          </div>
+          </div>`
+          : ''}
         </div>
       </div>
     `
