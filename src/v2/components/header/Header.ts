@@ -191,6 +191,18 @@ export class Header extends LitElement {
     line-height: 1;
   }
 
+  :host([layout='mobile']) .account-menu-trigger {
+    gap: 0;
+    min-height: auto;
+    padding: 0;
+    border: 1.5px solid var(--header-border);
+    background: var(--header-menu-loggedin-bg);
+  }
+
+  :host([layout='mobile']) .account-menu-trigger-label {
+    display: none;
+  }
+
   .account-menu-trigger:disabled {
     cursor: default;
     opacity: 0.7;
@@ -253,6 +265,13 @@ export class Header extends LitElement {
   .account-menu-avatar img {
     width: 100%;
     height: 100%;
+    object-fit: cover;
+  }
+
+  .account-avatar-img {
+    width: 1.75rem;
+    height: 1.75rem;
+    border-radius: 999px;
     object-fit: cover;
   }
 
@@ -582,6 +601,10 @@ export class Header extends LitElement {
   }
 
   private renderLoggedInAvatar (avatar?: string) {
+    if (this.layout === 'mobile') {
+      return avatar ? html`<img class="account-avatar-img" src="${avatar}" alt="" />` : html``
+    }
+
     return html`
        <span class="account-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
         ${avatar
@@ -698,7 +721,7 @@ export class Header extends LitElement {
             part="account-menu-trigger"
           >
             ${this.renderLoggedInAvatar(this.accountAvatar)}
-            <span class="account-menu-trigger-label">${this.accountLabel}</span>
+            ${this.layout !== 'mobile' ? html`<span class="account-menu-trigger-label">${this.accountLabel}</span>` : ''}
           </button>
         </slot>
 
