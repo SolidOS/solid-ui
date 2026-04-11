@@ -1,6 +1,5 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
-import CopyPlugin from 'copy-webpack-plugin'
 
 const externalsBase = {
   fs: 'null',

@@ -9,9 +9,7 @@ describe('SolidUIHeaderElement', () => {
       writable: true,
       value: jest.fn()
     })
-
   })
-
 
   it('is defined as a custom element', () => {
     const defined = customElements.get('solid-ui-header')

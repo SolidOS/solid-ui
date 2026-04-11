@@ -283,7 +283,8 @@ export class LoginButton extends LitElement {
             ${this._errorMsg ? html`<div class="error-msg">${this._errorMsg}</div>` : ''}
           </div>
 
-          ${suggestedIssuers.length ? html`
+          ${suggestedIssuers.length
+? html`
             <div class="issuer-button-section">
               <span class="issuer-button-label">Or pick an identity provider from the list below:</span>
               ${suggestedIssuers.map(issuerInfo => html`
@@ -296,7 +297,8 @@ export class LoginButton extends LitElement {
                 </button>
               `)}
             </div>
-          ` : ''}
+          `
+: ''}
         </div>
       </div>
     `
