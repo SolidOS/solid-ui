@@ -103,6 +103,18 @@ export class Header extends LitElement {
     height: 3.75rem;
   }
 
+  ::slotted([slot='navigation-toggle']) {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-right: 0.75rem;
+  }
+
+  :host([layout='desktop']) ::slotted([slot='navigation-toggle']) {
+    display: none !important;
+  }
+
   .brand {
     display: flex;
     align-items: center;
@@ -797,6 +809,7 @@ export class Header extends LitElement {
   render () {
     return html`
       <div class="headerInner">
+        <slot name="navigation-toggle"></slot>
         <a
           id="brandLink"
           class="brand"
