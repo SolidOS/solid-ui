@@ -20,6 +20,10 @@ const esmExternals = {
 
 const common = {
   entry: {
+    // Keep the legacy UMD global export for the main bundle only.
+    // Component entrypoints should build as standalone scripts without assigning
+    // a shared global like window.UI, so they do not clobber the main bundle
+    // or each other when loaded via script tags.
     main: {
       import: './src/index.ts',
       library: {
@@ -27,9 +31,18 @@ const common = {
         type: 'umd'
       }
     },
-    header: './src/v2/components/header/index.ts',
-    loginButton: './src/v2/components/loginButton/index.ts',
-    signupButton: './src/v2/components/signupButton/index.ts'
+    header: {
+      import: './src/v2/components/header/index.ts',
+      library: false
+    },
+    loginButton: {
+      import: './src/v2/components/loginButton/index.ts',
+      library: false
+    },
+    signupButton: {
+      import: './src/v2/components/signupButton/index.ts',
+      library: false
+    }
   },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
