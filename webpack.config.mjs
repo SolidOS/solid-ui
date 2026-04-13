@@ -57,12 +57,20 @@ const common = {
     fallback: { path: false }
   },
   devtool: 'source-map',
+  cache: {
+    type: 'filesystem'
+  },
   module: {
     rules: [
       {
         test: /\.(mjs|js|ts)$/,
         exclude: /(node_modules|bower_components|dist)/,
-        use: 'babel-loader'
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true
+          }
+        }
       }, {
         test: /\.sparql$/i,
         type: 'asset/source'
@@ -165,9 +173,11 @@ const esmUnminified = {
   }
 }
 
-export default [
-  minified,
-  unminified,
-  esmMinified,
-  esmUnminified
-]
+export default (env, argv) => {
+  const isDev = argv?.mode === 'development'
+  const devtool = isDev ? 'eval-cheap-module-source-map' : 'source-map'
+  return [minified, unminified, esmMinified, esmUnminified].map(config => ({
+    ...config,
+    devtool
+  }))
+}
