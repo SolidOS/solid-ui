@@ -179,16 +179,24 @@ export class LoginButton extends LitElement {
   connectedCallback () {
     super.connectedCallback()
     document.addEventListener('click', this._handleDocumentClick)
+    document.addEventListener('keydown', this._handleDocumentKeydown)
   }
 
   disconnectedCallback () {
     document.removeEventListener('click', this._handleDocumentClick)
+    document.removeEventListener('keydown', this._handleDocumentKeydown)
     super.disconnectedCallback()
   }
 
   private readonly _handleDocumentClick = (event: MouseEvent) => {
     if (this._popupOpen && !event.composedPath().includes(this)) {
       this._popupOpen = false
+    }
+  }
+
+  private readonly _handleDocumentKeydown = (event: KeyboardEvent) => {
+    if (this._popupOpen && event.key === 'Escape') {
+      this._closePopup()
     }
   }
 
