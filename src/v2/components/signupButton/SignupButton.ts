@@ -51,6 +51,7 @@ export class SignupButton extends LitElement {
     super()
     this.label = 'Sign Up'
     this.signupUrl = DEFAULT_SIGNUP_URL
+    this.theme = 'light'
   }
 
   private _handleClick () {

@@ -171,6 +171,7 @@ export class LoginButton extends LitElement {
   constructor () {
     super()
     this.label = 'Log In'
+    this.theme = 'light'
     this.issuerUrl = ''
     this._popupOpen = false
     this._issuerInputValue = ''

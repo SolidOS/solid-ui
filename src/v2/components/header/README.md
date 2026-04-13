@@ -89,7 +89,7 @@ Properties/attributes:
 - `accountLabel`: label for the logged-in dropdown trigger (default: `Accounts`).
 - `accountAvatar`: avatar URL used as the logged-in dropdown icon.
 - `accountMenu`: array of account entries for the logged-in dropdown.
-- `logoutLabel`: string label for the logout button at the bottom of the logged-in dropdown (default: `Sign out`). Set to `null` to hide it.
+- `logoutLabel`: string label for the logout button at the bottom of the logged-in dropdown (default: `Log out`). Set to `null` to hide it.
 
 Slots:
 
@@ -133,7 +133,7 @@ If you want a fully custom login UI you can override the slot:
 
 ```html
 <solid-ui-header>
-  <a slot="login-action" href="/login"Log In</a>
+  <a slot="login-action" href="/login>"Log In</a>
 </solid-ui-header>
 ```
 

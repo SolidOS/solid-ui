@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
-const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts' // empty space to preserve button size when no avatar is provided
+const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts'
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -549,7 +549,9 @@ export class Header extends LitElement {
       composed: true
     }))
     if (item.url) {
-      window.open(item.url, item.target || '_blank')
+      const target = item.target || '_blank'
+      const features = target === '_blank' ? 'noopener,noreferrer' : undefined
+      window.open(item.url, target, features)
     }
   }
 
@@ -863,6 +865,7 @@ export class Header extends LitElement {
                           <a
                             href="${item.url}"
                             target="${item.target || '_blank'}"
+                            rel="${ifDefined((item.target || '_blank') === '_blank' ? 'noopener noreferrer' : undefined)}"
                             @click="${(e: MouseEvent) => this.handleHelpMenuClick(item, e)}"
                             part="help-menu-item"
                             role="menuitem"

@@ -338,7 +338,7 @@ We have added comments in the code to make it explicit which parts are 100% writ
 * Raptor mini: If I want to make the header a web component with a self contained CSS which only consumes CSS variables from a theme, how would I do this? 
 
 * Raptor mini: Go ahead and create a header web component, for backward compatibility keep the current code too.
-In the new header component I need to be flexible and receive from consumer - the layout (mobile or desktop) and the theme (light or dark) and its according CSS variables for light ot dark.
+In the new header component I need to be flexible and receive from consumer - the layout (mobile or desktop) and the theme (light or dark) and its according CSS variables for light to dark.
 
 * Raptor mini: Propose code. how about webpack config for distribution?
 
@@ -350,6 +350,6 @@ In the new header component I need to be flexible and receive from consumer - th
 When the user is logged in, there is only one button, a drop down button called Accounts. The icon of the button is the avatar of the profile and it displays a list of available accounts of the user.
 I want this all to be presented flexible in the component.
 
-* Claude Sonet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
+* Claude Sonnet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
 
 * Raptor mini: when we are on layout mobile we do not want to display the help menu at all.

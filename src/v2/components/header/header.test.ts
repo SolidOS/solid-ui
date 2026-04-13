@@ -200,8 +200,16 @@ describe('SolidUIHeaderElement', () => {
     expect(helpMenu?.hidden).toBe(false)
     expect(helpLink?.textContent?.trim()).toBe('Docs')
 
+    const originalWindowOpen = window.open
+    window.open = jest.fn()
+
+    expect(helpLink?.getAttribute('rel')).toBe('noopener noreferrer')
+
     helpLink?.click()
 
     expect(helpMenuClicked).toHaveBeenCalledWith({ label: 'Docs', url: 'https://example.com/docs', target: '_blank' })
+    expect(window.open).toHaveBeenCalledWith('https://example.com/docs', '_blank', 'noopener,noreferrer')
+
+    window.open = originalWindowOpen
   })
 })

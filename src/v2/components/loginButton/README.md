@@ -52,7 +52,7 @@ btn.addEventListener('login-success', (e: CustomEvent) => {
 
 | Property    | Attribute     | Type               | Default  | Description |
 |-------------|---------------|--------------------|----------|-------------|
-| `label`     | `label`       | `string`           | `Log in` | Button text. Overridable via the default slot. |
+| `label`     | `label`       | `string`           | `Log In` | Button text. Overridable via the default slot. |
 | `issuerUrl` | `issuer-url`  | `string`           | `''`     | Pre-fills the IDP URL input in the popup. If `localStorage.loginIssuer` is set it takes precedence. |
 | `theme`     | `theme`       | `'light' \| 'dark'` | `'light'` | Sets the colour theme. Use `'dark'` when placing the button on a dark background. |
 
