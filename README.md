@@ -19,7 +19,7 @@ See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation
   - [ESM Bundle](#esm-bundle-import-as-module)
 - [Web Components](#web-components)
   - [solid-ui-header](#solid-ui-header)
-- [Development](#development-new-components)
+- [Development](#development)
 - [Testing](#adding-tests)
 - [Further Documentation](#further-documentation)
 - [Generative AI usage](#generative-ai-usage)
@@ -256,8 +256,6 @@ Use import maps for cleaner module specifiers:
 </html>
 ```
 
-### Development new components
-
 ## Web Components
 
 solid-ui ships self-contained Lit-based custom elements as subpath exports. Each component is independently importable, registers its custom element on import, and ships its own styles encapsulated in a Shadow DOM.
@@ -295,7 +293,7 @@ This keeps the `package.json` subpath export fully aligned:
 
 Consumers never see the internal `v2` path; it is an implementation detail of the source tree.
 
-### Development new components
+## Development
 
 When developing a component in solid-ui you can test it in isolation using storybook
 
