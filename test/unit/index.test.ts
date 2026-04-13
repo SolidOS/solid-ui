@@ -6,7 +6,6 @@ silenceDebugMessages()
 describe('Index', () => {
   it('exists', () => {
     expect(Object.keys(Index).sort()).toEqual([
-      'SolidUIHeaderElement',
       'acl',
       'aclControl',
       'create',
