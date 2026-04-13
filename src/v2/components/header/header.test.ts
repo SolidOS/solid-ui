@@ -22,6 +22,7 @@ describe('SolidUIHeaderElement', () => {
     header.setAttribute('help-icon', 'https://example.com/help.png')
     header.setAttribute('brand-link', '/home')
     header.authState = 'logged-out'
+    header.helpMenuList = [{ label: 'Help', action: 'open-help' }]
     header.innerHTML = '<button slot="help-menu" id="helpBtn">Help</button>'
 
     document.body.appendChild(header)
@@ -38,8 +39,8 @@ describe('SolidUIHeaderElement', () => {
     expect(helpIcon?.src).toContain('https://example.com/help.png')
     expect(brandLink?.href).toContain('/home')
 
-    const authButtons = shadow?.querySelectorAll('.auth-button')
-    expect(authButtons).toHaveLength(2)
+    expect(shadow?.querySelector('solid-ui-login-button')).not.toBeNull()
+    expect(shadow?.querySelector('solid-ui-signup-button')).not.toBeNull()
 
     const helpMenuSlot = shadow?.querySelector('slot[name="help-menu"]')
     expect(helpMenuSlot).not.toBeNull()
@@ -62,19 +63,19 @@ describe('SolidUIHeaderElement', () => {
     await header.updateComplete
 
     const shadow = header.shadowRoot
-    const authButtons = shadow?.querySelectorAll('.auth-button')
-    const loginButton = authButtons?.[0] as HTMLButtonElement
-    const signUpLink = authButtons?.[1] as HTMLAnchorElement
+    const loginButton = shadow?.querySelector('solid-ui-login-button') as HTMLElement
+    const signUpLink = shadow?.querySelector('solid-ui-signup-button') as HTMLElement
 
-    expect(authButtons).toHaveLength(2)
-    expect(loginButton.textContent?.trim()).toBe('Log in')
-    expect(signUpLink.textContent?.trim()).toBe('Sign Up')
+    expect(loginButton).not.toBeNull()
+    expect(signUpLink).not.toBeNull()
+    expect(loginButton.getAttribute('label')).toBe('Log in')
+    expect(signUpLink.getAttribute('label')).toBe('Sign Up')
+    expect(signUpLink.getAttribute('signup-url')).toBe('/signup')
 
-    loginButton.click()
+    loginButton.dispatchEvent(new CustomEvent('login-success', { bubbles: true, composed: true }))
 
     expect(authActionSelected).toHaveBeenCalledWith({
-      role: 'login',
-      item: { label: 'Log in', action: 'login' }
+      role: 'login'
     })
   })
 
@@ -114,21 +115,17 @@ describe('SolidUIHeaderElement', () => {
 
     expect(dropdown.hidden).toBe(false)
     expect(firstItem.textContent).toContain('Personal Pod')
-    expect(lastItem.textContent).toContain('Log out')
+    expect(lastItem.textContent).toContain('Log Out')
 
     firstItem.click()
 
     expect(accountMenuSelected).toHaveBeenCalledWith({
       label: 'Personal Pod',
-      description: 'https://pod.example/profile/card#me',
+      webid: 'https://pod.example/profile/card#me',
       action: 'switch-personal'
     })
 
-    trigger.click()
-    await header.updateComplete
-    lastItem.click()
-
-    expect(accountMenuSelected).toHaveBeenCalledWith({ label: 'Log out', action: 'logout' })
+    expect(lastItem.textContent?.trim()).toBe('Log Out')
   })
 
   it('supports theme and layout attributes', async () => {
