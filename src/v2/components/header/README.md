@@ -32,7 +32,11 @@ Then use the element in HTML or in your framework templates:
 
 ## Usage in a plain HTML page (CDN / script tag)
 
+The UMD/standalone bundles externalize `rdflib` and `solid-logic`, and `<solid-ui-header>` renders `<solid-ui-login-button>` when `auth-state="logged-out"`. Load those dependencies first so the login button works correctly.
+
 ```html
+<script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
+<script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
 <script src="node_modules/solid-ui/dist/components/header/index.js"></script>
 
 <solid-ui-header brand-link="/"></solid-ui-header>
@@ -41,6 +45,8 @@ Then use the element in HTML or in your framework templates:
 Or via a CDN that supports npm packages:
 
 ```html
+<script src="https://cdn.jsdelivr.net/npm/rdflib/dist/rdflib.min.js"></script>
+<script src="https://unpkg.com/solid-logic/dist/solid-logic.min.js"></script>
 <script type="module">
   import 'https://cdn.skypack.dev/solid-ui/components/header'
 </script>
