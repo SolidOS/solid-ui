@@ -20,7 +20,13 @@ const esmExternals = {
 
 const common = {
   entry: {
-    main: './src/index.ts',
+    main: {
+      import: './src/index.ts',
+      library: {
+        name: 'UI',
+        type: 'umd'
+      }
+    },
     header: './src/v2/components/header/index.ts',
     loginButton: './src/v2/components/loginButton/index.ts',
     signupButton: './src/v2/components/signupButton/index.ts'
@@ -28,7 +34,6 @@ const common = {
   output: {
     path: path.resolve(process.cwd(), 'dist'),
     library: {
-      name: 'UI',
       type: 'umd'
     },
     globalObject: 'this',
@@ -97,6 +102,10 @@ const unminified = {
 // ESM minified, rdflib external
 const esmMinified = {
   ...common,
+  entry: {
+    ...common.entry,
+    main: './src/index.ts'
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
     filename: pathData => pathData.chunk.name === 'main'
@@ -123,6 +132,10 @@ const esmMinified = {
 // ESM unminified, rdflib external
 const esmUnminified = {
   ...common,
+  entry: {
+    ...common.entry,
+    main: './src/index.ts'
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
     filename: pathData => pathData.chunk.name === 'main'
