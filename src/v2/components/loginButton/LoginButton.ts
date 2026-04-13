@@ -165,6 +165,7 @@ export class LoginButton extends LitElement {
   declare _popupOpen: boolean
   declare _issuerInputValue: string
 
+  private _issuerInputId = `issuer-url-input-${Math.random().toString(36).slice(2, 10)}`
   private _errorMsg = ''
 
   constructor () {
@@ -267,9 +268,10 @@ export class LoginButton extends LitElement {
           </div>
 
           <div class="issuer-text-section">
-            <label class="issuer-text-label">Enter the URL of your identity provider:</label>
+            <label class="issuer-text-label" for="${this._issuerInputId}">Enter the URL of your identity provider:</label>
             <div class="issuer-text-row">
               <input
+                id="${this._issuerInputId}"
                 class="issuer-text-input"
                 type="text"
                 placeholder="https://example.com"
