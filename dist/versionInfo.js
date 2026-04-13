@@ -1,10 +1,10 @@
 export default {
-    buildTime: '2026-03-30T15:00:51Z',
-    commit: '588b74c82924f3ae2714a6cb30a85e2a500772c9',
+    buildTime: '2026-04-13T12:49:17Z',
+    commit: '0ea2510ced3ca87e2568a5e9e19339c8d495a52c',
     npmInfo: {
         'solid-ui': '3.0.6',
-        npm: '10.9.4',
-        node: '22.22.1',
+        npm: '10.9.7',
+        node: '22.22.2',
         acorn: '8.15.0',
         ada: '2.9.2',
         amaro: '1.1.5',
@@ -24,11 +24,11 @@ export default {
         simdutf: '6.4.2',
         sqlite: '3.51.2',
         tz: '2025c',
-        undici: '6.23.0',
+        undici: '6.24.1',
         unicode: '17.0',
         uv: '1.51.0',
         uvwasi: '0.0.23',
-        v8: '12.4.254.21-node.35',
+        v8: '12.4.254.21-node.39',
         zlib: '1.3.1-e00f703',
         zstd: '1.5.7',
     }
