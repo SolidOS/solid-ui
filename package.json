@@ -83,7 +83,6 @@
   "dependencies": {
     "@noble/curves": "^2.0.1",
     "@noble/hashes": "^2.0.1",
-    "copy-webpack-plugin": "^14.0.0",
     "escape-html": "^1.0.3",
     "lit": "^3.3.2",
     "mime-types": "^3.0.2",
