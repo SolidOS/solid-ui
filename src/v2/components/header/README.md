@@ -116,7 +116,7 @@ Use `auth-state="logged-out"` to render the `<solid-ui-login-button>` and a Sign
   const header = document.querySelector('solid-ui-header')
   header.authState = 'logged-out'
   // Optionally override the login button label:
-  header.loginAction = { label: 'Log in' }
+  header.loginAction = { label: 'Log In' }
   // Optionally override the sign-up destination (opens in a new tab):
   header.signUpAction = { label: 'Sign Up', url: 'https://myprovider.example/signup' }
 
@@ -133,7 +133,7 @@ If you want a fully custom login UI you can override the slot:
 
 ```html
 <solid-ui-header>
-  <a slot="login-action" href="/login">Log in</a>
+  <a slot="login-action" href="/login"Log In</a>
 </solid-ui-header>
 ```
 
