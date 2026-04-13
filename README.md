@@ -260,6 +260,8 @@ Use import maps for cleaner module specifiers:
 
 solid-ui ships self-contained Lit-based custom elements as subpath exports. Each component is independently importable, registers its custom element on import, and ships its own styles encapsulated in a Shadow DOM.
 
+> Component UMD bundles do not export a shared global like `window.UI`. They only register the custom element on import, while the legacy main bundle still provides the `UI` global.
+
 ### solid-ui-header
 
 A header bar with branding, auth state (logged-out / logged-in), an account dropdown, and a desktop-only help menu.

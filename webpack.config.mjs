@@ -32,23 +32,17 @@ const common = {
       }
     },
     header: {
-      import: './src/v2/components/header/index.ts',
-      library: false
+      import: './src/v2/components/header/index.ts'
     },
     loginButton: {
-      import: './src/v2/components/loginButton/index.ts',
-      library: false
+      import: './src/v2/components/loginButton/index.ts'
     },
     signupButton: {
-      import: './src/v2/components/signupButton/index.ts',
-      library: false
+      import: './src/v2/components/signupButton/index.ts'
     }
   },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    library: {
-      type: 'umd'
-    },
     globalObject: 'this',
     publicPath: '',
     iife: true,
