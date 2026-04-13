@@ -337,7 +337,7 @@ We have added comments in the code to make it explicit which parts are 100% writ
 
 * Raptor mini: If I want to make the header a web component with a self contained CSS which only consumes CSS variables from a theme, how would I do this? 
 
-* Raptor mini: Go ahead and reate a header web component, for backward compatibility keep the current code too.
+* Raptor mini: Go ahead and create a header web component, for backward compatibility keep the current code too.
 In the new header component I need to be flexible and receive from consumer - the layout (mobile or desktop) and the theme (light or dark) and its according CSS variables for light ot dark.
 
 * Raptor mini: Propose code. how about webpack config for distribution?
