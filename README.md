@@ -69,6 +69,8 @@ Solid-UI provides both **UMD** and **ESM** bundles for direct browser usage. Bot
 
 ### UMD Bundle (Global Variable)
 
+If you use the legacy UMD bundle (`solid-ui.js` / `solid-ui.min.js`), `rdflib` must define `window.$rdf` before `solid-ui` loads. If `rdflib` is missing, `solid-ui` will throw `ReferenceError: $rdf is not defined`.
+
 Load via `<script>` tags and access through global variables `window.$rdf`, `window.SolidLogic`, and `window.UI`.
 
 ```html
@@ -273,17 +275,58 @@ import { Header } from 'solid-ui/components/header'
 import type { HeaderMenuItem, HeaderAccountMenuItem, HeaderAuthState } from 'solid-ui/components/header'
 ```
 
-Importing this module automatically registers `<solid-ui-header>` as a custom element. See [src/v2/components/header/README.md](src/v2/components/header/README.md) for the full API reference and usage examples.
+```html
+<solid-ui-header theme="dark" layout="desktop" brand-link="/">
+  <a slot="help-menu" href="/help">Help</a>
+</solid-ui-header>
+```
+
+Importing this module automatically registers `<solid-ui-header>` as a custom element.
+
+### solid-ui-login-button
+
+A standalone login button that encapsulates the Solid OIDC login flow and emits `login-success` when authentication succeeds.
+
+**Subpath export:** `solid-ui/components/login-button`
+
+```typescript
+import { LoginButton } from 'solid-ui/components/login-button'
+```
+
+```html
+<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net"></solid-ui-login-button>
+```
+
+```typescript
+const loginButton = document.querySelector('solid-ui-login-button') as LoginButton
+loginButton.addEventListener('login-success', (event: CustomEvent) => {
+  console.log('Logged in as', event.detail.webId)
+})
+```
+
+### solid-ui-signup-button
+
+A standalone sign-up button that opens a signup URL in a new browser tab.
+
+**Subpath export:** `solid-ui/components/signup-button`
+
+```typescript
+import { SignupButton } from 'solid-ui/components/signup-button'
+```
+
+```html
+<solid-ui-signup-button label="Get a Pod" signup-url="https://solidproject.org/get_a_pod"></solid-ui-signup-button>
+```
 
 ### Component build pipeline
 
-Web components use a two-stage build to produce a clean public layout without exposing internal source paths:
+Web components use a two-stage build to produce a clean public runtime layout while keeping internal TypeScript artifacts separate:
 
 1. **webpack** (`npm run build-dist`) bundles each component entrypoint and emits the runtime files to `dist/components/<name>/index.js` and `dist/components/<name>/index.esm.js`.
-2. **tsc** (`npm run build-js`) emits declaration files mirroring the source tree, so they land at `dist/v2/components/<name>/index.d.ts`.
-3. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes a thin re-export wrapper at `dist/components/<name>/index.d.ts`, bridging the tsc output to the public package location.
+2. **tsc** (`npm run build-js`) emits internal declaration and JS artifacts mirroring the source tree under `dist/v2/components/<name>/`.
+3. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes thin public declaration wrappers at `dist/components/<name>/index.d.ts`, re-exporting from the internal `dist/v2/components/<name>/` output.
 
-This keeps the `package.json` subpath export fully aligned:
+This keeps the `package.json` subpath export fully aligned while exposing only the public `dist/components/...` layout:
 
 ```json
 "./components/header": {
@@ -293,7 +336,7 @@ This keeps the `package.json` subpath export fully aligned:
 }
 ```
 
-Consumers never see the internal `v2` path; it is an implementation detail of the source tree.
+Consumers never import from `dist/v2/components/...`; that path is an internal build artifact only.
 
 ## Development
 

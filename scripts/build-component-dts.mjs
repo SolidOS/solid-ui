@@ -1,29 +1,34 @@
-import { mkdirSync, writeFileSync } from 'fs'
+import { existsSync, mkdirSync, readdirSync, statSync, writeFileSync } from 'fs'
+import path from 'path'
 
-// Generates thin declaration wrappers under dist/components/ that re-export
-// from the tsc output under dist/v2/components/, keeping v2 internal and the
-// public package layout clean.
+const distDir = path.resolve(process.cwd(), 'dist')
+const v2ComponentsDir = path.join(distDir, 'v2', 'components')
+const publicComponentsDir = path.join(distDir, 'components')
 
-const componentWrappers = [
-  {
-    outputDir: 'header',
-    exportPath: '../../v2/components/header/index'
-  },
-  {
-    outputDir: 'loginButton',
-    exportPath: '../../v2/components/loginButton/index'
-  },
-  {
-    outputDir: 'signupButton',
-    exportPath: '../../v2/components/signupButton/index'
+if (!existsSync(v2ComponentsDir)) {
+  throw new Error(`Missing expected directory: ${v2ComponentsDir}`)
+}
+
+const componentDirs = readdirSync(v2ComponentsDir).filter(name => {
+  const fullPath = path.join(v2ComponentsDir, name)
+  return statSync(fullPath).isDirectory()
+})
+
+for (const componentDir of componentDirs) {
+  const sourceIndex = path.join(v2ComponentsDir, componentDir, 'index.d.ts')
+  if (!existsSync(sourceIndex)) {
+    continue
   }
-]
 
-for (const { outputDir, exportPath } of componentWrappers) {
-  mkdirSync(`dist/components/${outputDir}`, { recursive: true })
+  const outputDir = path.join(publicComponentsDir, componentDir)
+  mkdirSync(outputDir, { recursive: true })
+
+  const relativePath = path.relative(outputDir, path.join(v2ComponentsDir, componentDir, 'index.d.ts'))
+    .replace(/\\/g, '/')
+    .replace(/\.d\.ts$/, '')
 
   writeFileSync(
-    `dist/components/${outputDir}/index.d.ts`,
-    `export * from '${exportPath}';\n`
+    path.join(outputDir, 'index.d.ts'),
+    `export * from '${relativePath}';\n`
   )
 }

@@ -32,7 +32,7 @@
     "LICENSE"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
+    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
     "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
     "build-js": "tsc",
@@ -47,9 +47,10 @@
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "test-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
     "watch:js": "tsc --watch --preserveWatchOutput",
+    "watch:component-dts": "node scripts/watch-component-dts.mjs",
     "watch:dist": "webpack --watch --mode development",
-    "watch": "npm run build-version && npm run build-js && npm run postbuild-js && sh -c 'npm run watch:js & npm run watch:dist & wait'",
-    "dev": "npm run build-version && sh -c 'npm run watch:js & npm run watch:dist & wait'",
+    "watch": "npm run build-version && npm run build-js && npm run postbuild-js && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:dist & wait'",
+    "dev": "npm run build-version && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:dist & wait'",
     "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
     "prepublishOnly": "npm run build && npm run lint && npm test && npm run doc",
     "preversion": "npm run lint && npm run typecheck && npm test",
