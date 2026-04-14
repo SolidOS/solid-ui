@@ -11,20 +11,58 @@ export class LoginButton extends LitElement {
   }
 
   static styles = css`
-    :host {
+    :host { // default theme
       display: inline-block;
+      --login-button-background: var(--lavender-900, #7c4cff);
+      --login-button-text: var(--color-header-text, #ffffff);
+      --popup-background: var(--color-background, #F8F9FB);
+      --popup-text: var(--color-text, #1A1A1A);
+      --popup-border: var(--color-border, #E5E7EB);
+      --popup-shadow: var(--box-shadow-sm, 0 1px 4px rgba(124,77,255,0.12));
+      --popup-overlay-background: rgba(0, 0, 0, 0.2);
+      --issuer-input-background: var(--color-background, #F8F9FB);
+      --issuer-input-text: var(--color-text, #1A1A1A);
+      --issuer-input-border: var(--color-border, #E5E7EB);
+      --issuer-button-background: var(--color-background, #F8F9FB);
+      --issuer-button-text: var(--color-text, #1A1A1A);
+      --issuer-button-border: var(--color-border, #E5E7EB);
+      --issuer-button-hover-background: var(--lavender-900, #7c4cff);
+      --issuer-label-color: var(--grey-purple-700, #5e546d);
+      --issuer-placeholder-color: var(--grey-purple-700, #5e546d);;
+      --error-text-color: var(--color-error, #B00020);
+    }
+
+    :host([theme='dark']) {
+      display: inline-block;
+      --login-button-background: var(--lavender-900, #7c4cff);
+      --login-button-text: var(--color-header-text, #ffffff);
+      --popup-background: var(--color-background, #F8F9FB);
+      --popup-text: var(--color-text, #1A1A1A);
+      --popup-border: var(--color-border, #E5E7EB);
+      --popup-shadow: var(--box-shadow-sm, 0 1px 4px rgba(124,77,255,0.12));
+      --popup-overlay-background: rgba(0, 0, 0, 0.2);
+      --issuer-input-background: var(--color-background, #F8F9FB);
+      --issuer-input-text: var(--color-text, #1A1A1A);
+      --issuer-input-border: var(--color-border, #E5E7EB);
+      --issuer-button-background: var(--color-background, #F8F9FB);
+      --issuer-button-text: var(--color-text, #1A1A1A);
+      --issuer-button-border: var(--color-border, #E5E7EB);
+      --issuer-button-hover-background: var(--lavender-900, #7c4cff);
+      --issuer-label-color: var(--grey-purple-700, #5e546d);
+      --issuer-placeholder-color: var(--grey-purple-700, #5e546d);;
+      --error-text-color: var(--color-error, #B00020);
     }
 
     .login-button {
       display: flex;
       height: 35px;
-      padding: 5px 12px;
+      padding: var(--spacing-xxs, 0.3125rem) var(--spacing-xs, 0.75rem);
       align-items: center;
-      gap: 5px;
-      border-radius: 5px;
-      background: var(--primary-royal-lavender, #7C4DFF);
+      gap: var(--spacing-xxs, 0.3125rem);
+      border-radius: var(--border-radius-base, 0.3125rem);
+      background: var(--login-button-background);
       border: none;
-      color: var(--login-button-text, var(--header-button-text, #0f172a));
+      color: var(--login-button-text);
       cursor: pointer;
       font: inherit;
       line-height: 1;
@@ -38,11 +76,6 @@ export class LoginButton extends LitElement {
       transform: translateY(1px);
     }
 
-    :host([theme='dark']) .login-button {
-      color: #ffffff;
-    }
-
-    /* Popup overlay */
     .popup-overlay {
       position: fixed;
       top: 0;
@@ -53,13 +86,15 @@ export class LoginButton extends LitElement {
       justify-content: center;
       align-items: center;
       z-index: 1000;
-      background: rgba(0, 0, 0, 0.2);
+      background: var(--popup-overlay-background);
     }
 
     .popup-box {
-      background: #ffffff;
-      box-shadow: 0px 1px 4px rgba(0, 0, 0, 0.2);
-      border-radius: 4px;
+      background: var(--popup-background);
+      color: var(--popup-text);
+      box-shadow: var(--popup-shadow);
+      border: 1px solid var(--popup-border);
+      border-radius: var(--border-radius-sm, 0.2rem);
       min-width: 400px;
       padding: 10px;
       z-index: 1001;
@@ -97,7 +132,7 @@ export class LoginButton extends LitElement {
     }
 
     .issuer-text-label {
-      color: #888;
+      color: var(--issuer-label-color);
       margin-bottom: 6px;
     }
 
@@ -110,22 +145,29 @@ export class LoginButton extends LitElement {
     .issuer-text-input {
       flex: 1;
       padding: 0.375rem 0.5rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
+      border: 1px solid var(--issuer-input-border);
+      border-radius: var(--border-radius-sm, 0.2rem);
+      background: var(--issuer-input-background);
+      color: var(--issuer-input-text);
       font: inherit;
+    }
+
+    .issuer-text-input::placeholder {
+      color: var(--issuer-placeholder-color);
     }
 
     .issuer-go-button {
       padding: 0.375rem 0.75rem;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #f6f5f9;
+      border: 1px solid var(--issuer-button-border);
+      border-radius: var(--border-radius-sm, 0.2rem);
+      background: var(--issuer-button-background);
+      color: var(--issuer-button-text);
       cursor: pointer;
       font: inherit;
     }
 
     .issuer-go-button:hover {
-      background: #e6dcff;
+      background: var(--issuer-button-hover-background);
     }
 
     .issuer-button-section {
@@ -136,24 +178,25 @@ export class LoginButton extends LitElement {
     }
 
     .issuer-button-label {
-      color: #888;
+      color: var(--issuer-label-color);
     }
 
     .issuer-button {
       height: 38px;
-      border: 1px solid #ccc;
-      border-radius: 4px;
-      background: #f6f5f9;
+      border: 1px solid var(--issuer-button-border);
+      border-radius: var(--border-radius-sm, 0.2rem);
+      background: var(--issuer-button-background);
+      color: var(--issuer-button-text);
       cursor: pointer;
       font: inherit;
     }
 
     .issuer-button:hover {
-      background: #e6dcff;
+      background: var(--issuer-button-hover-background);
     }
 
     .error-msg {
-      color: #c00;
+      color: var(--error-text-color);
       font-size: 0.875rem;
       margin-top: 8px;
     }

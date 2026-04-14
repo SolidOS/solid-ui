@@ -12,18 +12,27 @@ export class SignupButton extends LitElement {
   static styles = css`
     :host {
       display: inline-block;
+      --signup-button-background: transparent;
+      --signup-button-border: var(--color-border, #E5E7EB);
+      --signup-button-text: var(--color-header-text, #ffffff);
+    }
+
+    :host([theme='dark']) {
+      --signup-button-background: transparent;
+      --signup-button-border: var(--color-border, #E5E7EB);
+      --signup-button-text: var(--color-header-text, #ffffff);
     }
 
     .signup-button {
       display: flex;
       height: 35px;
-      padding: 5px 12px;
+      padding: var(--spacing-xxs, 0.3125rem) var(--spacing-xs, 0.75rem);
       align-items: center;
-      gap: 5px;
-      border-radius: 5px;
-      background: transparent;
-      border: 1px solid var(--white, #FFF);
-      color: var(--signup-button-text, var(--header-button-text, #0f172a));
+      gap: var(--spacing-xxs, 0.3125rem);
+      border-radius: var(--border-radius-base, 0.3125rem);
+      background: var(--signup-button-background);
+      border: 1px solid var(--signup-button-border);
+      color: var(--signup-button-text);
       cursor: pointer;
       font: inherit;
       line-height: 1;
@@ -35,11 +44,6 @@ export class SignupButton extends LitElement {
 
     .signup-button:active {
       transform: translateY(1px);
-    }
-
-    :host([theme='dark']) .signup-button {
-      color: #ffffff;
-      border-color: #ffffff;
     }
   `
 

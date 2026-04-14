@@ -46,45 +46,47 @@ export class Header extends LitElement {
   }
 
   static styles = css`
-  :host {
+  :host { // default theme
     display: block;
     --header-bg: var(--color-header-row-bg, #332746);
-    --header-text: var(--solid-header-text, #ffffff);
-    --header-border: var(--solid-header-border, #efecf3);
-    --header-line-color: var(--solid-header-line-color, #5e546d);
-    --header-link: var(--solid-header-link, #332746);
-    --header-link-hover: var(--solid-header-link-hover, #e6dcff);
-    --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
-    --header-menu-bg: var(--solid-header-menu-bg, #f6f5f9);
-    --header-menu-loggedin-bg: var(--solid-header-menu-loggedin-bg, #5e546d);
-    --header-menu-text: var(--solid-header-menu-text, #878192);
-    --header-border-radius: var(--solid-header-border-radius, 0.3em);
-    --header-button-bg: var(--solid-header-button-bg, #ffffff);
-    --header-button-text: var(--solid-header-button-text, #0f172a);
-    --header-button-detail-text: var(--solid-header-button-detail-text, #878192);
-    --header-icon-filter: var(--solid-header-icon-filter, invert(1) brightness(1.3));
-    --header-shadow: var(--solid-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
-    font-family: var(--solid-header-font, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
+    --header-text: var(--color-header-text, #ffffff);
+    --header-border: var(--color-border, #efecf3);
+    --header-line: var(--color-header-menu-separator-line, #5e546d);
+    --header-link: var(--color-text-heading, #000000);
+    --header-menu-item-hover: var(--color-header-menu-item-hover, #e6dcff);
+    --header-menu-item-selected: var(--color-header-menu-item-selected, #cbb9ff);
+    --header-menu-bg: var(--color-menu-bg, #f6f5f9);
+    --header-menu-loggedin-bg: var(--color-header-menu-loggedin-bg, #5e546d);
+    --header-menu-text: var(--color-menu-item-text, #654d6c);
+    --header-border-radius: var(--border-radius-sm, 0.2rem);
+    --header-button-bg: var(--color-menu-bg, #ffffff);
+    --header-button-text: var(--color-header-button-text, #0F172B);
+    --header-button-detail-text: var(--color-header-button-detail-text, #99A1AF);
+    --header-icon-filter: invert(1) brightness(1.3); /* special way to invert SVG color of icons, from back to white */
+    --header-shadow: var(--color-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
+    font-family: var(--font-family-base, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
   }
 
+  // for now light and dark are the same
   :host([theme='dark']) {
-    --header-bg: var(--color-header-row-bg-dark, #332746);
-    --header-text: var(--solid-header-text-dark, #ffffff);
-    --header-border: var(--solid-header-border-dark, #efecf3);
-    --header-line-color: var(--solid-header-line-color-dark, #5e546d);
-    --header-link: var(--solid-header-link-dark, #332746);
-    --header-link-hover: var(--solid-header-link-hover-dark, #e6dcff);
-    --header-link-selected: var(--solid-header-link-selected-dark, #cbb9ff);
-    --header-menu-bg: var(--solid-header-menu-bg-dark, #f6f5f9);
-    --header-menu-loggedin-bg: var(--solid-header-menu-loggedin-bg-dark, #5e546d);
-    --header-menu-text: var(--solid-header-menu-text-dark, #878192);
-    --header-border-radius: var(--solid-header-border-radius-dark, 0.3em);
-    --header-button-bg: var(--solid-header-button-bg-dark, #ffffff);
-    --header-button-text: var(--solid-header-button-text-dark, #0f172a);
-    --header-button-detail-text: var(--solid-header-button-detail-text-dark, #878192);
-    --header-icon-filter: var(--solid-header-icon-filter, invert(1) brightness(1.3));
-    --header-shadow: var(--solid-header-shadow-dark, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
-    font-family: var(--solid-header-font, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
+    display: block;
+    --header-bg: var(--color-header-row-bg, #332746);
+    --header-text: var(--color-header-text, #ffffff);
+    --header-border: var(--color-border, #efecf3);
+    --header-line: var(--color-header-menu-separator-line, #5e546d);
+    --header-link: var(--color-text-heading, #000000);
+    --header-menu-item-hover: var(--color-header-menu-item-hover, #e6dcff);
+    --header-menu-item-selected: var(--color-header-menu-item-selected, #cbb9ff);
+    --header-menu-bg: var(--color-menu-bg, #f6f5f9);
+    --header-menu-loggedin-bg: var(--color-header-menu-loggedin-bg, #5e546d);
+    --header-menu-text: var(--color-menu-item-text, #654d6c);
+    --header-border-radius: var(--border-radius-sm, 0.2rem);
+    --header-button-bg: var(--color-menu-bg, #ffffff);
+    --header-button-text: var(--color-header-button-text, #0f172a);
+    --header-button-detail-text: var(--color-header-button-detail-text, #878192);
+    --header-icon-filter: invert(1) brightness(1.3); /* special way to invert SVG color of icons, from back to white */
+    --header-shadow: var(--color-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
+    font-family: var(--font-family-base, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
   }
 
   :host([layout='mobile']) .headerInner {
@@ -99,7 +101,7 @@ export class Header extends LitElement {
     justify-content: space-between;
     background: var(--header-bg);
     color: var(--header-text);
-    padding: 0 1.5em;
+    padding: 0 1.5rem;
     height: 3.75rem;
   }
 
@@ -166,7 +168,7 @@ export class Header extends LitElement {
   }
 
   .auth-button:hover {
-    border-color: var(--header-link-hover);
+    border-color: var(--header-menu-item-hover);
   }
 
   .auth-button:active {
@@ -174,11 +176,11 @@ export class Header extends LitElement {
   }
 
   .auth-button-sign-up {
-    background: color-mix(in srgb, var(--header-menu-bg) 78%, var(--header-link-selected) 22%);
+    background: color-mix(in srgb, var(--header-menu-bg) 78%, var(--header-menu-item-selected) 22%);
   }
 
   .header-menu-separator {
-    background: var(--header-line-color);
+    background: var(--header-line);
     width: 1px;
     height: 2.3rem;
   }
@@ -335,15 +337,15 @@ export class Header extends LitElement {
   .account-menu-item-link:hover,
   .account-menu-item-button:hover {
     color: var(--header-link);
-    background: var(--header-link-hover);
-    border-color: var(--header-link-hover);
+    background: var(--header-menu-item-hover);
+    border-color: var(--header-menu-item-hover);
   }
 
   .account-menu-item-link:active,
   .account-menu-item-button:active {
     color: var(--header-link);
-    background: var(--header-link-selected);
-    border-color: var(--header-link-selected);
+    background: var(--header-menu-item-selected);
+    border-color: var(--header-menu-item-selected);
     transform: translateY(1px);
   }
 
@@ -458,15 +460,15 @@ export class Header extends LitElement {
   .help-menu-list a:hover,
   .help-menu-list button:hover {
     color: var(--header-link);
-    background: var(--header-link-hover);
-    border-color: var(--header-link-hover);
+    background: var(--header-menu-item-hover);
+    border-color: var(--header-menu-item-hover);
   }
 
   .help-menu-list a:active,
   .help-menu-list button:active {
     color: var(--header-link);
-    background: var(--header-link-selected);
-    border-color: var(--header-link-selected);
+    background: var(--header-menu-item-selected);
+    border-color: var(--header-menu-item-selected);
     transform: translateY(1px);
   }
 
