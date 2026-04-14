@@ -8,7 +8,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
-const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL = 'Accounts'
+const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR = icons.iconBase + 'emptyProfileAvatar.png'
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -247,32 +247,10 @@ export class Header extends LitElement {
     border: 1.5px solid var(--header-border);
   }
 
-  .account-avatar-text {
-    width: auto;
-    min-width: auto;
-    height: auto;
-    padding: 0.25rem 0.75rem;
-    border-radius: 999px;
-    white-space: nowrap;
-    border: 1px solid var(--header-border);
-  }
-
   .account-menu-avatar {
     width: 2rem;
     height: 2rem;
     border-radius: 0.5rem;
-  }
-
-  .account-menu-avatar.account-avatar-text {
-    width: 2rem;
-    height: 2rem;
-    padding: 0.25rem;
-    border-radius: 0.5rem;
-    white-space: normal;
-    line-height: 1;
-    text-align: center;
-    overflow: hidden;
-    text-overflow: ellipsis;
   }
 
   .account-avatar img,
@@ -616,31 +594,18 @@ export class Header extends LitElement {
     return this.layout !== 'mobile' && this.hasHelpMenuItems()
   }
 
-  private renderLoggedInAvatar (avatar?: string) {
+  private renderLoggedInAvatar (avatar?: string, wrapperClass = 'account-avatar') {
     const hasAvatar = Boolean(avatar)
-    const avatarContent = hasAvatar
-      ? html`<img src="${avatar}" alt="" />`
-      : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL
+    const imageSrc = hasAvatar ? avatar : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR
+    const imageAlt = hasAvatar ? 'Profile Avatar' : 'Default Avatar'
 
-    if (this.layout === 'mobile') {
-      return hasAvatar
-        ? html`<img class="account-avatar-img" src="${avatar}" alt="" />`
-        : html`<span class="account-avatar account-avatar-text">${DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR_LABEL}</span>`
+    if (this.layout === 'mobile' && wrapperClass === 'account-avatar') {
+      return html`<img class="account-avatar-img" src="${imageSrc}" alt="${imageAlt}" />`
     }
 
     return html`
-      <span class="account-avatar ${hasAvatar ? '' : 'account-avatar-text'}" aria-hidden="true">
-        ${avatarContent}
-      </span>
-    `
-  }
-
-  private renderAccountsMenuAvatar (avatar?: string) {
-    return html`
-      <span class="account-menu-avatar ${avatar ? '' : 'account-avatar-text'}" aria-hidden="true">
-        ${avatar
-          ? html`<img src="${avatar}" alt="" />`
-          : '?'}
+      <span class="${wrapperClass}" aria-hidden="true">
+        <img src="${imageSrc}" alt="${imageAlt}" />
       </span>
     `
   }
@@ -694,7 +659,7 @@ export class Header extends LitElement {
 
   private renderAccountMenuItem (item: HeaderAccountMenuItem) {
     const content = html`
-      ${this.renderAccountsMenuAvatar(item.avatar)}
+      ${this.renderLoggedInAvatar(item.avatar, 'account-menu-avatar')}
       <span class="account-menu-copy">
         <span class="account-menu-label">${item.label}</span>
         ${item.webid ? html`<span class="account-menu-webid">${item.webid}</span>` : ''}
