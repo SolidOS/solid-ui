@@ -40,6 +40,10 @@ export function cameraCaptureControl (
   const div = dom.createElement('div')
   let destination, imageBlob, player, canvas
 
+  const setButtonVisible = (button: HTMLElement, visible: boolean) => {
+    button.style.display = visible ? 'inline-flex' : 'none'
+  }
+
   const table = div.appendChild(dom.createElement('table'))
   const mainTR = table.appendChild(dom.createElement('tr'))
   const main = mainTR.appendChild(dom.createElement('td'))
@@ -61,7 +65,8 @@ export function cameraCaptureControl (
   retakeButton.addEventListener('click', _event => {
     retake()
   })
-  retakeButton.style.visibility = 'collapse' // Hide for now
+  retakeButton.textContent = 'Retake'
+  setButtonVisible(retakeButton, false)
 
   const shutterButton = buttons
     .appendChild(dom.createElement('td')) // Trigger capture button
@@ -69,7 +74,8 @@ export function cameraCaptureControl (
       widgets.button(dom, icons.iconBase + 'noun_10636.svg', 'Snap')
     )
   shutterButton.addEventListener('click', grabCanvas)
-  shutterButton.style.visibility = 'collapse' // Hide for now
+  shutterButton.textContent = 'Take Photo'
+  setButtonVisible(shutterButton, false)
 
   const sendButton = buttons
     .appendChild(dom.createElement('td')) // Confirm and save button
@@ -77,7 +83,8 @@ export function cameraCaptureControl (
   sendButton.addEventListener('click', _event => {
     saveBlob(imageBlob, destination)
   })
-  sendButton.style.visibility = 'collapse' // Hide for now
+  sendButton.textContent = 'Use Photo'
+  setButtonVisible(sendButton, false)
 
   function displayPlayer () {
     player = main.appendChild(dom.createElement('video'))
@@ -89,9 +96,12 @@ export function cameraCaptureControl (
     }
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       player.srcObject = stream
-      shutterButton.style.visibility = 'visible' // Enable
-      sendButton.style.visibility = 'collapse'
-      retakeButton.style.visibility = 'collapse'
+         setButtonVisible(shutterButton, true)
+      setButtonVisible(sendButton, false)
+      setButtonVisible(retakeButton, false)
+    }).catch(err => {
+      console.error('Unable to start camera preview', err)
+      doneCallback(null)
     })
   }
 
@@ -128,9 +138,9 @@ export function cameraCaptureControl (
   }
 
   function reviewImage () {
-    sendButton.style.visibility = 'visible'
-    retakeButton.style.visibility = 'visible'
-    shutterButton.style.visibility = 'collapse' // Hide for now
+    setButtonVisible(sendButton, true)
+    setButtonVisible(retakeButton, true)
+    setButtonVisible(shutterButton, false)
   }
 
   function stopVideo () {
