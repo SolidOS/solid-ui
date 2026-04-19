@@ -96,7 +96,7 @@ export function cameraCaptureControl (
     }
     navigator.mediaDevices.getUserMedia(constraints).then(stream => {
       player.srcObject = stream
-         setButtonVisible(shutterButton, true)
+      setButtonVisible(shutterButton, true)
       setButtonVisible(sendButton, false)
       setButtonVisible(retakeButton, false)
     }).catch(err => {
