@@ -39,6 +39,9 @@ const common = {
     },
     signupButton: {
       import: './src/v2/components/signupButton/index.ts'
+    },
+    footer: {
+      import: './src/v2/components/footer/index.ts'
     }
   },
   output: {
