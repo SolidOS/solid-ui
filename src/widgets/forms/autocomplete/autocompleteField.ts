@@ -2,7 +2,8 @@
  */
 import * as ns from '../../../ns'
 import { store } from 'solid-logic'
-import * as widgets from '../../../widgets'
+import { errorMessageBlock } from '../../error'
+import { fieldLabel } from '../basic'
 import * as style from '../../../style'
 import { renderAutocompleteControl } from './autocompleteBar'
 import { QueryParameters } from './publicData'
@@ -67,7 +68,7 @@ export function autocompleteField (
       await kb.updater?.updateMany(deletables, insertables)
     } catch (err) {
       callbackFunction(false, err)
-      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete form data update error:' + err, null, err))
+      box.appendChild(errorMessageBlock(dom, 'Autocomplete form data update error:' + err, null, err))
       return
     }
     callbackFunction(true, '')
@@ -77,7 +78,7 @@ export function autocompleteField (
     const oldValue = kb.the(subject, property as any, null, doc)
     if (!oldValue) {
       callbackFunction(false, 'NO data to elete')
-      box.appendChild(widgets.errorMessageBlock(dom, 'Autocomplete delete: no old data!'))
+      box.appendChild(errorMessageBlock(dom, 'Autocomplete delete: no old data!'))
       return
     }
     // const oldName = kb.any(oldValue as any, labelProperty as any, null, doc)
@@ -92,7 +93,7 @@ export function autocompleteField (
     } catch (err) {
       const e2 = new Error('Autocomplete form data delete error:' + err)
       callbackFunction(false, err)
-      box.appendChild(widgets.errorMessageBlock(dom, e2, null, err))
+      box.appendChild(errorMessageBlock(dom, e2, null, err))
       return
     }
     callbackFunction(true, '') // changed
@@ -117,7 +118,7 @@ export function autocompleteField (
   const property = kb.any(form, ns.ui('property'))
   if (!property) {
     return box.appendChild(
-      widgets.errorMessageBlock(dom, 'Error: No property given for autocomplete field: ' + form)
+      errorMessageBlock(dom, 'Error: No property given for autocomplete field: ' + form)
     )
   }
   const labelProperty = kb.any(form, ns.ui('labelProperty')) || ns.schema('name')
@@ -128,7 +129,7 @@ export function autocompleteField (
   if (!dataSource) {
     // console.log('@@ connectedStatements ACF ', kb.connectedStatements(form).map(x => x.toNT()).join('\n'))
     return box.appendChild(
-      widgets.errorMessageBlock(dom, 'Error: No data source given for autocomplete field: ' + form)
+      errorMessageBlock(dom, 'Error: No data source given for autocomplete field: ' + form)
     )
   }
   const queryParams:QueryParameters = {
@@ -163,16 +164,16 @@ export function autocompleteField (
     queryParams.searchByNameQuery = kb.anyJS(dataSource, ns.ui('searchByNameQuery'), null, dataSource.doc())
     if (!queryParams.searchByNameQuery) {
       return box.appendChild(
-        widgets.errorMessageBlock(dom, 'Error: No searchByNameQuery given for endpoint data Source: ' + form))
+        errorMessageBlock(dom, 'Error: No searchByNameQuery given for endpoint data Source: ' + form))
     }
     queryParams.insitituteDetailsQuery = kb.anyJS(dataSource, ns.ui('insitituteDetailsQuery'), null, dataSource.doc())
   } else {
     // return box.appendChild(
-    //  widgets.errorMessageBlock(dom, 'Error: No SPARQL endpoint given for autocomplete field: ' + form))
+    //  errorMessageBlock(dom, 'Error: No SPARQL endpoint given for autocomplete field: ' + form))
     const searchByNameURI = kb.anyJS(dataSource, ns.ui('searchByNameURI'))
     if (!searchByNameURI) {
       return box.appendChild(
-        widgets.errorMessageBlock(dom, 'Error: No searchByNameURI OR sparql endpoint given for dataSource: ' + dataSource)
+        errorMessageBlock(dom, 'Error: No searchByNameURI OR sparql endpoint given for dataSource: ' + dataSource)
       )
     }
     queryParams.searchByNameURI = searchByNameURI
@@ -206,7 +207,7 @@ export function autocompleteField (
     autocompleteOptions.currentName = kb.any(autocompleteOptions.currentObject, labelProperty, null, doc) as Literal
   }
 
-  lhs.appendChild(widgets.fieldLabel(dom, property as any, form))
+  lhs.appendChild(fieldLabel(dom, property as any, form))
 
   const barOptions = {
     editable,
@@ -216,7 +217,7 @@ export function autocompleteField (
   renderAutocompleteControl(dom, subject as NamedNode, barOptions, autocompleteOptions, addOneIdAndRefresh, deleteOne).then((control) => {
     rhs.appendChild(control)
   }, (err) => {
-    rhs.appendChild(widgets.errorMessageBlock(dom, `Error rendering autocomplete ${form}: ${err}`, '#fee', err)) //
+    rhs.appendChild(errorMessageBlock(dom, `Error rendering autocomplete ${form}: ${err}`, '#fee', err)) //
   })
   return box
 }

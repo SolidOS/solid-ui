@@ -7,7 +7,8 @@ and so on.  See the state diagram in the documentation.  The AUtocomplete Picker
 import * as ns from '../../../ns'
 import { icons } from '../../../iconBase'
 import { store } from 'solid-logic'
-import * as widgets from '../../../widgets'
+import { askName, button, cancelButton as makeCancelButton, continueButton, deleteButtonWithCheck } from '../../buttons'
+import { makeDropTarget } from '../../dragAndDrop'
 import * as utils from '../../../utils'
 
 import { renderAutoComplete, AutocompleteDecoration, setVisible } from './autocompletePicker' // dbpediaParameters
@@ -40,7 +41,7 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
   }
 
   async function greenButtonHandler (_event) {
-    const webid = await widgets.askName(dom, store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN)
+    const webid = await askName(dom, store, creationArea, ns.vcard('url'), undefined, WEBID_NOUN)
     if (!webid) {
       return // cancelled by user
     }
@@ -87,16 +88,16 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     }
   }
 
-  const acceptButton = widgets.continueButton(dom)
+  const acceptButton = continueButton(dom)
   acceptButton.setAttribute('data-testid', 'accept-button')
 
-  const cancelButton = widgets.cancelButton(dom)
+  const cancelButton = makeCancelButton(dom)
   cancelButton.setAttribute('data-testid', 'cancel-button')
   const deleteButtonContainer = dom.createElement('div')
   const noun = acOptions.targetClass ? utils.label(acOptions.targetClass) : 'item'
-  const deleteButton = widgets.deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
+  const deleteButton = deleteButtonWithCheck(dom, deleteButtonContainer, noun, deleteOne) // need to knock out this UI or caller does that
   deleteButton.setAttribute('data-testid', 'delete-button')
-  const editButton = widgets.button(dom, EDIT_ICON, 'Edit', _event => {
+  const editButton = button(dom, EDIT_ICON, 'Edit', _event => {
     editing = !editing
     syncEditingStatus()
   })
@@ -132,11 +133,11 @@ export async function renderAutocompleteControl (dom:HTMLDocument,
     // creationArea.appendChild(await renderAutoComplete(dom, barOptions, autoCompleteDone)) wait for searchButton
     creationArea.style.width = '100%'
     if (barOptions.manualURIEntry) {
-      const plus = creationArea.appendChild(widgets.button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler))
-      widgets.makeDropTarget(plus, droppedURIHandler, undefined)
+      const plus = creationArea.appendChild(button(dom, GREEN_PLUS, barOptions.idNoun, greenButtonHandler))
+      makeDropTarget(plus, droppedURIHandler, undefined)
     }
     if (barOptions.dbLookup && !acOptions.currentObject && !acOptions.permanent) {
-      creationArea.appendChild(widgets.button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
+      creationArea.appendChild(button(dom, SEARCH_ICON, barOptions.idNoun, searchButtonHandler))
     }
   }
   syncEditingStatus()
