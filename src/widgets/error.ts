@@ -11,7 +11,7 @@
  *  where it happened!
  */
 /* eslint-disable no-console */
-import { cancelButton } from '../widgets'
+import { cancelButton } from './buttons'
 import * as style from '../style'
 import styleConstants from '../styleConstants'
 
