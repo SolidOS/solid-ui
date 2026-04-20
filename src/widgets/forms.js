@@ -23,7 +23,6 @@ import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
 import { IconicMultiSelect } from './multiSelect'
-import * as widgets from '../widgets'
 export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
 export { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
@@ -1329,7 +1328,7 @@ export function makeDescription (
   const editable = kb.updater.editable(dataDoc.uri)
   let submit
   if (editable) {
-    submit = widgets.continueButton(dom, saveChange)
+    submit = buttons.continueButton(dom, saveChange)
     submit.disabled = true // until the filled has been modified
     submit.style.visibility = 'hidden'
     submit.style.float = 'right'
@@ -1879,7 +1878,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
       const negation = holdsAll(del)
       if (state && negation) {
         box.appendChild(
-          widgets.errorMessageBlock(
+          errorMessageBlock(
             dom,
             'Inconsistent data in dataDoc!\n' + ins + ' and\n' + del
           )

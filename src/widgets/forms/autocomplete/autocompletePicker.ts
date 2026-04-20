@@ -6,7 +6,7 @@
 import * as debug from '../../../debug'
 import { style } from '../../../style'
 import styleConstants from '../../../styleConstants'
-import * as widgets from '../../../widgets'
+import { errorMessageBlock } from '../../error'
 import { store } from 'solid-logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'
@@ -61,7 +61,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     const errorRow = table.appendChild(dom.createElement('tr'))
     debug.log(message)
     const err = new Error(message)
-    errorRow.appendChild(widgets.errorMessageBlock(dom, err, 'pink'))
+    errorRow.appendChild(errorMessageBlock(dom, err, 'pink'))
     // errorMessageBlock will log the stack to the console
     style.setStyle(errorRow, 'autocompleteRowStyle')
     errorRow.style.padding = '1em'
