@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import { rdf } from '../../src/ns'
+import { rdf } from '../../src/core/ns'
 
 silenceDebugMessages()
 

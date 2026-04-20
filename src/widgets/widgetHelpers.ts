@@ -1,6 +1,6 @@
 import {
   imageDivStyle
-} from '../style'
+} from '../core/style'
 
 /**
  * Wraps a Div in a TR/RD

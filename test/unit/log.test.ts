@@ -1,7 +1,7 @@
 /* eslint-disable no-console */
 import { silenceDebugMessages } from '../helpers/setup'
 import * as api from '../../src/index'
-import * as log from '../../src/log'
+import * as log from '../../src/core/log'
 import { JSDOM } from 'jsdom'
 
 silenceDebugMessages()

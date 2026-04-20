@@ -5,14 +5,14 @@
  * @packageDocumentation
  */
 
-import * as ns from '../ns'
-import * as utils from '../utils'
+import * as ns from '../core/ns'
+import * as utils from '../core/utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
 import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
-import * as style from '../style'
-import { log, warn } from '../debug'
+import * as style from '../core/style'
+import { log, warn } from '../core/debug'
 
 let global: Window = window
 const preventBrowserDropEventsDone = Symbol('prevent double triggering of drop event')

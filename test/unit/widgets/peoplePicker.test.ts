@@ -15,7 +15,7 @@ it.skip('only here to make tests run', () => null)
 //   GroupBuilder,
 //   Person
 // } from '../../../src/widgets/peoplePicker'
-// import ns from '../../../src/ns'
+// import ns from '../../../src/core/ns'
 // jest.mock('rdflib')
 // const kb = require('../../../src/store')
 // const fetcher = kb.fetcher

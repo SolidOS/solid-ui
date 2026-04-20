@@ -3,12 +3,12 @@
  */
 /* global confirm */
 
-import * as debug from './debug'
-import { icons } from './iconBase'
+import * as debug from './core/debug'
+import { icons } from './core/iconBase'
 import { solidLogicSingleton } from 'solid-logic'
-import * as ns from './ns'
+import * as ns from './core/ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from './style'
+import * as style from './core/style'
 import * as widgets from './widgets'
 
 const UI = { icons, ns, rdf, style, widgets }

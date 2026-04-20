@@ -7,7 +7,7 @@ import {
   createImageDiv
 } from '../../../src/widgets/widgetHelpers'
 
-const style = require('../../../src/style')
+const style = require('../../../src/core/style')
 
 silenceDebugMessages()
 let window: DOMWindow

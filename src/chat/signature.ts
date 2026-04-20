@@ -2,7 +2,7 @@ import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
 import { sha256 } from '@noble/hashes/sha256'
 
-// import {utf8Encoder} from './utils'
+// import {utf8Encoder} from './core/utils'
 // import { getPublicKey } from './keys'
 
 export const utf8Decoder = new TextDecoder('utf-8')

@@ -4,11 +4,11 @@
 
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { solidLogicSingleton } from 'solid-logic'
-import * as debug from '../debug'
-import { icons } from '../iconBase'
+import * as debug from '../core/debug'
+import { icons } from '../core/iconBase'
 import { ensureLoadedProfile, selectWorkspace } from '../login/login'
-import * as ns from '../ns'
-import * as utils from '../utils'
+import * as ns from '../core/ns'
+import * as utils from '../core/utils'
 import * as widgets from '../widgets'
 import { CreateContext, NewAppInstanceOptions } from './types'
 

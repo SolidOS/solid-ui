@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import { icons } from '../../src/iconBase'
+import { icons } from '../../src/core/iconBase'
 
 const { iconBase, originalIconBase } = icons
 

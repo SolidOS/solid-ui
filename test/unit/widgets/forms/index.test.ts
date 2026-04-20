@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import { namedNode } from 'rdflib'
-import * as ns from '../../../../src/ns'
+import * as ns from '../../../../src/core/ns'
 import { store } from 'solid-logic'
 
 // console.log('@@ solidLogicSingleton', solidLogicSingleton)

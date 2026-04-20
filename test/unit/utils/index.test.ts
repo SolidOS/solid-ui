@@ -29,7 +29,7 @@ import {
   stackString,
   syncTableToArray,
   syncTableToArrayReOrdered
-} from '../../../src/utils'
+} from '../../../src/core/utils'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()

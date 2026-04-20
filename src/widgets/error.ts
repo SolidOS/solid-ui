@@ -12,8 +12,8 @@
  */
 /* eslint-disable no-console */
 import { cancelButton } from './buttons'
-import * as style from '../style'
-import styleConstants from '../styleConstants'
+import * as style from '../core/style'
+import styleConstants from '../core/styleConstants'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
   const div = dom.createElement('div')

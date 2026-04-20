@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdflib'
-import { originalIconBase } from '../../iconBase'
+import { originalIconBase } from '../../core/iconBase'
 
 /**
  * Creates an anchor tag for a NamedNode

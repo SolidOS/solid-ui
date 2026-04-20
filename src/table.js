@@ -13,13 +13,13 @@
 // 2014 Core table widget moved into common/table.js - timbl
 //
 
-import * as debug from './debug'
-import { icons } from './iconBase'
+import * as debug from './core/debug'
+import { icons } from './core/iconBase'
 import { store } from 'solid-logic'
-import * as log from './log'
-import * as ns from './ns'
+import * as log from './core/log'
+import * as ns from './core/ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as utils from './utils'
+import * as utils from './core/utils'
 import * as widgets from './widgets'
 
 const UI = { icons, log, ns, utils, widgets }

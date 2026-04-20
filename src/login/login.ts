@@ -42,12 +42,12 @@ import {
   UnauthorizedError,
   WebOperationError
 } from 'solid-logic'
-import * as debug from '../debug'
-import * as style from '../style'
-import { alert } from '../log'
-import * as ns from '../ns.js'
+import * as debug from '../core/debug'
+import * as style from '../core/style'
+import { alert } from '../core/log'
+import * as ns from '../core/ns.js'
 import { Signup } from '../signup/signup.js'
-import * as utils from '../utils'
+import * as utils from '../core/utils'
 import * as widgets from '../widgets'
 
 const store = solidLogicSingleton.store

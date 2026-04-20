@@ -2,7 +2,7 @@
     Copied from mashlib/src/global/metadata.ts
  */
 import { IndexedFormula, LiveStore, NamedNode, parse, sym } from 'rdflib'
-import { ns } from '..'
+import * as ns from '../ns'
 
 /* @ts-ignore  no-console */
 type ThrottleOptions = {

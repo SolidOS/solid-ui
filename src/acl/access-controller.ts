@@ -8,9 +8,9 @@ import { fetcher, graph, NamedNode, UpdateManager } from 'rdflib'
 import { AccessGroups } from './access-groups'
 import { DataBrowserContext } from 'pane-registry'
 import { shortNameForFolder } from './acl-control'
-import * as utils from '../utils'
-import * as debug from '../debug'
-import * as style from '../style'
+import * as utils from '../core/utils'
+import * as debug from '../core/debug'
+import * as style from '../core/style'
 
 /**
  * Rendered HTML component used in the databrowser's Sharing pane.

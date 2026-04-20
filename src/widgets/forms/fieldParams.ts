@@ -1,5 +1,5 @@
-import * as ns from '../../ns'
-import { commentStyle, formHeadingStyle, formGroupStyle } from '../../style'
+import * as ns from '../../core/ns'
+import { commentStyle, formHeadingStyle, formGroupStyle } from '../../core/style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute

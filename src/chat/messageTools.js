@@ -7,14 +7,14 @@
  * If you made it originally: edit, delete, attach
  * @packageDocumentation
  */
-import * as debug from '../debug'
-import { icons } from '../iconBase'
+import * as debug from '../core/debug'
+import { icons } from '../core/iconBase'
 // import { media } from '../media/index'
-import * as ns from '../ns'
+import * as ns from '../core/ns'
 // import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-// import * as style from '../style'
-import * as utils from '../utils'
+// import * as style from '../core/style'
+import * as utils from '../core/utils'
 import * as widgets from '../widgets'
 import { renderBookmarksButton } from './bookmarks'
 import { authn, store } from 'solid-logic'

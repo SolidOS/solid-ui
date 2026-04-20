@@ -1,12 +1,12 @@
-import * as debug from '../debug'
+import * as debug from '../core/debug'
 import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
-import * as ns from '../ns'
+import * as ns from '../core/ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'
-import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } from '../utils/keyHelpers/accessData'
-import { setAcl, keyContainerAclBody, keyAclBody } from '../utils/keyHelpers/acl'
+import { getExistingPublicKey, pubKeyUrl, privKeyUrl, getExistingPrivateKey } from '../core/utils/keyHelpers/accessData'
+import { setAcl, keyContainerAclBody, keyAclBody } from '../core/utils/keyHelpers/acl'
 
 export function generatePrivateKey (): string {
   return bytesToHex(schnorr.utils.randomPrivateKey())

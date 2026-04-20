@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../../helpers/setup'
-import * as Style from '../../../src/style'
+import * as Style from '../../../src/core/style'
 
 silenceDebugMessages()
 

@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../helpers/setup'
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
 import { lightColorHash, notepad } from '../../src/pad'
-import { log } from '../../src/debug'
+import { log } from '../../src/core/debug'
 
 silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window

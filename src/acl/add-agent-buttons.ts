@@ -5,13 +5,13 @@
 
 import { NamedNode, Store } from 'rdflib'
 import { AuthenticationContext } from 'solid-logic'
-import * as debug from '../debug'
-import { icons } from '../iconBase'
+import * as debug from '../core/debug'
+import { icons } from '../core/iconBase'
 import { ensureLoadedProfile } from '../login/login'
-import * as ns from '../ns'
-import * as utils from '../utils'
+import * as ns from '../core/ns'
+import * as utils from '../core/utils'
 import * as widgets from '../widgets'
-import * as style from '../style'
+import * as style from '../core/style'
 import { AccessGroups } from './access-groups'
 
 /**

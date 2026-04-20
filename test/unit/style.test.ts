@@ -9,7 +9,7 @@ import {
   pendingeditModifier,
   signInAndUpButtonStyle,
   textInputStyle
-} from '../../src/style'
+} from '../../src/core/style'
 
 silenceDebugMessages()
 

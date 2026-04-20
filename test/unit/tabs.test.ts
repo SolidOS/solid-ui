@@ -4,11 +4,11 @@ import { tabWidget } from '../../src/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { clearStore } from './helpers/clearStore'
-import { label } from '../../src/utils'
+import { label } from '../../src/core/utils'
 import { solidLogicSingleton } from 'solid-logic'
 
 // @ts-ignore
-import { meeting, rdfs } from '../../src/ns'
+import { meeting, rdfs } from '../../src/core/ns'
 
 const store = solidLogicSingleton.store
 
