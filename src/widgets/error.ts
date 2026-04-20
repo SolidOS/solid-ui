@@ -10,9 +10,8 @@
  *  Meanwhile the stack is dumped to the console for the developer, so you actually know
  *  where it happened!
  */
-
-import { cancelButton } from '../widgets'
-import { style } from '../style'
+import { cancelButton } from './buttons'
+import * as style from '../style'
 import styleConstants from '../styleConstants'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
