@@ -22,9 +22,9 @@ import {
   propertiesForClass,
   sortByLabel,
   sortBySequence
-} from '../../../../src/widgets/forms'
+} from 'ui-forms'
 
-import { basicField } from '../../../../src/widgets/forms/basic'
+import { basicField } from 'ui-forms/basic'
 
 const doc = store.sym('http://example.com/doc.ttl')
 

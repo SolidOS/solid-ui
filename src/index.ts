@@ -44,7 +44,7 @@ import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore
 import { icons } from 'solid-ui-core/iconBase'
-import * as language from './widgets/forms/autocomplete/language'
+import * as language from 'ui-forms/autocomplete/language'
 import * as log from 'solid-ui-core/log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'

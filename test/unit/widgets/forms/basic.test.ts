@@ -4,7 +4,7 @@ import {
   fieldLabel,
   fieldStore,
   basicField
-} from '../../../../src/widgets/forms/basic'
+} from 'ui-forms/basic'
 import ns from 'solid-ui-core/ns'
 import { textInputStyle } from 'solid-ui-core/style'
 import { clearStore } from '../../helpers/clearStore'

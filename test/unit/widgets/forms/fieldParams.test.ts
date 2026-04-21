@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../../../helpers/setup'
 import ns from 'solid-ui-core/ns'
-import { fieldParams } from '../../../../src/widgets/forms/fieldParams'
+import { fieldParams } from 'ui-forms/fieldParams'
 
 silenceDebugMessages()
 

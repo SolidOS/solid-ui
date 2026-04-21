@@ -11,6 +11,9 @@ module.exports = {
   moduleNameMapper: {
     '^solid-ui-core/(.+)$': '<rootDir>/node_modules/solid-ui-core/lib/$1',
     '^solid-ui-core$': '<rootDir>/node_modules/solid-ui-core/lib/index.js',
+    '^ui-forms/autocomplete/(.+)$': '<rootDir>/node_modules/ui-forms/lib/autocomplete/$1',
+    '^ui-forms/(.+)$': '<rootDir>/node_modules/ui-forms/lib/$1',
+    '^ui-forms$': '<rootDir>/node_modules/ui-forms/lib/index.js',
     '^solid-logic$': '<rootDir>/node_modules/solid-logic',
     '^rdflib$': '<rootDir>/node_modules/rdflib'
   },

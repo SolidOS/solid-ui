@@ -6,11 +6,11 @@ import { solidLogicSingleton, store } from 'solid-logic'
 /*
 import {
   commentField
-} from '../../../../src/widgets/forms/comment'
+} from 'ui-forms/comment'
 */
 import { clearStore } from '../../helpers/clearStore'
 
-import { field } from '../../../../src/widgets/forms'
+import { field } from 'ui-forms'
 // const commentField = {} // @@@@@@
 
 silenceDebugMessages()

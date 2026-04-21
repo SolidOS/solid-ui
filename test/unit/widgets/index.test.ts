@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../../helpers/setup'
 import * as DragAndDrop from 'solid-ui-core/dragAndDrop'
 import * as Error from 'solid-ui-core/error'
 import * as Buttons from 'solid-ui-core/buttons'
-import * as Forms from '../../../src/widgets/forms'
+import * as Forms from 'ui-forms'
 import * as PeoplePicker from '../../../src/widgets/peoplePicker'
 import * as Index from '../../../src/widgets/index'
 

@@ -23,12 +23,12 @@ export * from 'solid-ui-core/dragAndDrop'
 export * from 'solid-ui-core/buttons'
 export * from 'solid-ui-core/buttons/iconLinks'
 export * from 'solid-ui-core/error'
-export * from './forms'
+export * from 'ui-forms'
 
-export * from './forms/autocomplete/autocompleteBar'
-export * from './forms/autocomplete/autocompletePicker'
+export * from 'ui-forms/autocomplete/autocompleteBar'
+export * from 'ui-forms/autocomplete/autocompletePicker'
 
-export * as publicData from './forms/autocomplete/publicData'
+export * as publicData from 'ui-forms/autocomplete/publicData'
 
 /*
 import * as peoplePicker from './peoplePicker'

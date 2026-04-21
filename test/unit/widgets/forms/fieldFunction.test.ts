@@ -4,13 +4,13 @@ import { silenceDebugMessages } from '../../../helpers/setup'
 // @ts-ignore
 import {
   mostSpecificClassURI
-} from '../../../../src/widgets/forms'
+} from 'ui-forms'
 
 import { // trying to import this way lead to bizarre  chaos
 // field,
 // fieldFunction,
 // mostSpecificClassURI
-} from '../../../../src/widgets/forms/fieldFunction' // '../../../../src/widgets/forms/fieldFunction'
+} from 'ui-forms/fieldFunction' // '../../../../src/widgets/forms/fieldFunction'
 import { clearStore } from '../../helpers/clearStore'
 
 silenceDebugMessages()

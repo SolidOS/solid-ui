@@ -7,7 +7,7 @@ import { getFileContent } from '../../../helpers/getFileContent'
 import { parse } from 'rdflib'
 import {
   autocompleteField
-} from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
+} from 'ui-forms/autocomplete/autocompleteField'
 import ns from 'solid-ui-core/ns'
 import { store } from 'solid-logic'
 // import { textInputStyle } from 'solid-ui-core/style'
