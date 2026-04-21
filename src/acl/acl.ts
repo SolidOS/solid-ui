@@ -5,11 +5,11 @@
  * @packageDocumentation
  */
 
-import * as ns from '../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { solidLogicSingleton, ACL_LINK } from 'solid-logic'
-import * as utils from '../core/utils'
+import * as utils from 'solid-ui-core/utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'
-import * as debug from '../core/debug'
+import * as debug from 'solid-ui-core/debug'
 import { graph, Store, NamedNode, serialize, st, Statement, sym, LiveStore } from 'rdflib'
 
 const kb = solidLogicSingleton.store

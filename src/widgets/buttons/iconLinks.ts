@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdflib'
-import { originalIconBase } from '../../core/iconBase'
+import { originalIconBase } from 'solid-ui-core/iconBase'
 
 /**
  * Creates an anchor tag for a NamedNode

@@ -7,12 +7,12 @@
 import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
-import * as ns from '../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'
-import * as debug from '../core/debug'
-import * as style from '../core/style'
+import * as debug from 'solid-ui-core/debug'
+import * as style from 'solid-ui-core/style'
 
 const ACL = ns.acl
 

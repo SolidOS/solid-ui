@@ -3,14 +3,14 @@
  * @packageDocumentation
  */
 
-import * as debug from '../core/debug'
-import { icons } from '../core/iconBase'
+import * as debug from 'solid-ui-core/debug'
+import { icons } from 'solid-ui-core/iconBase'
 import { media } from '../media/index'
-import * as ns from '../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../core/style'
-import * as utils from '../core/utils'
+import * as style from 'solid-ui-core/style'
+import * as utils from 'solid-ui-core/utils'
 import * as widgets from '../widgets'
 import { store, registerInTypeIndex, authn } from 'solid-logic'
 import { findAppInstances } from '../login/login'

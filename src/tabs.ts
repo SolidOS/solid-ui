@@ -1,7 +1,7 @@
 import { cancelButton } from './widgets'
-import { label } from './core/utils'
+import { label } from 'solid-ui-core/utils'
 import { NamedNode } from 'rdflib'
-import * as style from './core/style'
+import * as style from 'solid-ui-core/style'
 import { store } from 'solid-logic'
 
 /**

@@ -1,6 +1,6 @@
 import {
   imageDivStyle
-} from '../core/style'
+} from 'solid-ui-core/style'
 
 /**
  * Wraps a Div in a TR/RD

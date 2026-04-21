@@ -1,10 +1,10 @@
 /* Form field for doing autocompleete
  */
-import * as ns from '../../../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { store } from 'solid-logic'
 import { errorMessageBlock } from '../../error'
 import { fieldLabel } from '../basic'
-import * as style from '../../../core/style'
+import * as style from 'solid-ui-core/style'
 import { renderAutocompleteControl } from './autocompleteBar'
 import { QueryParameters } from './publicData'
 import { NamedNode, BlankNode, Literal, Variable, st } from 'rdflib'

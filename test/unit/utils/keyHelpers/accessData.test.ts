@@ -1,5 +1,5 @@
 import { store } from 'solid-logic'
-import { getKeyIfExists, pubKeyUrl, privKeyUrl, getExistingPublicKey, getExistingPrivateKey } from '../../../../src/core/utils/keyHelpers/accessData'
+import { getKeyIfExists, pubKeyUrl, privKeyUrl, getExistingPublicKey, getExistingPrivateKey } from 'solid-ui-core/utils/keyHelpers/accessData'
 import { NamedNode } from 'rdflib'
 
 /* data */
@@ -12,7 +12,7 @@ store.fetcher.webOperation = jest.fn()
 store.each = jest.fn()
 store.any = jest.fn()
 
-jest.mock('../../../../src/core/utils/keyHelpers/otherHelpers', () => {
+jest.mock('../../../../node_modules/solid-ui-core/src/utils/keyHelpers/otherHelpers.ts', () => {
   return {
     getRootIfPreferencesExist: jest.fn().mockImplementationOnce(() => {
       throw new Error()

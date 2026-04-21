@@ -8,9 +8,9 @@
  * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
  * desktop. You may want to upload it into the pod.
  */
-import * as debug from '../core/debug'
+import * as debug from 'solid-ui-core/debug'
 import * as mime from 'mime-types'
-import * as style from '../core/style'
+import * as style from 'solid-ui-core/style'
 
 /* global FileReader alert */
 

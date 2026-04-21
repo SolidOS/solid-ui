@@ -4,12 +4,12 @@ This control has the buttons which control the state between editing, viewing, s
 and so on.  See the state diagram in the documentation.  The AUtocomplete Picker does the main work.
 
 */
-import * as ns from '../../../core/ns'
-import { icons } from '../../../core/iconBase'
+import * as ns from 'solid-ui-core/ns'
+import { icons } from 'solid-ui-core/iconBase'
 import { store } from 'solid-logic'
 import { askName, button, cancelButton as makeCancelButton, continueButton, deleteButtonWithCheck } from '../../buttons'
 import { makeDropTarget } from '../../dragAndDrop'
-import * as utils from '../../../core/utils'
+import * as utils from 'solid-ui-core/utils'
 
 import { renderAutoComplete, AutocompleteDecoration, setVisible } from './autocompletePicker' // dbpediaParameters
 

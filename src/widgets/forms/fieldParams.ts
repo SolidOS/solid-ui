@@ -1,5 +1,5 @@
-import * as ns from '../../core/ns'
-import { commentStyle, formHeadingStyle, formGroupStyle } from '../../core/style'
+import * as ns from 'solid-ui-core/ns'
+import { commentStyle, formHeadingStyle, formGroupStyle } from 'solid-ui-core/style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute

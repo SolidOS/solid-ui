@@ -6,8 +6,8 @@
 /* eslint-disable no-console */
 import { Literal, NamedNode, parse } from 'rdflib'
 import { store } from 'solid-logic'
-import * as debug from '../../../core/debug'
-import * as ns from '../../../core/ns'
+import * as debug from 'solid-ui-core/debug'
+import * as ns from 'solid-ui-core/ns'
 import { defaultPreferredLanguages, getPreferredLanguages } from './language'
 
 export const AUTOCOMPLETE_LIMIT = 200 // How many to get from server

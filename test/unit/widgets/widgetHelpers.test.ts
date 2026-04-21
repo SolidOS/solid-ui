@@ -7,7 +7,7 @@ import {
   createImageDiv
 } from '../../../src/widgets/widgetHelpers'
 
-const style = require('../../../src/core/style')
+const style = require('solid-ui-core/style')
 
 silenceDebugMessages()
 let window: DOMWindow

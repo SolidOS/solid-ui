@@ -39,13 +39,13 @@ https://github.com/solidos/solid
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import * as ns from './core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore
-import { icons } from './core/iconBase'
+import { icons } from 'solid-ui-core/iconBase'
 import * as language from './widgets/forms/autocomplete/language'
-import * as log from './core/log'
+import * as log from 'solid-ui-core/log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'
 // @ts-ignore
@@ -59,12 +59,12 @@ import * as participation from './participation'
 // @ts-ignore
 import * as preferences from './preferences'
 // @ts-ignore
-import * as style from './core/style'
+import * as style from 'solid-ui-core/style'
 // @ts-ignore
 import { renderTableViewPane as table } from './table'
 import * as tabs from './tabs'
 // @ts-ignore
-import * as utils from './core/utils'
+import * as utils from 'solid-ui-core/utils'
 import * as login from './login/login'
 import * as widgets from './widgets/index'
 import { versionInfo } from './versionInfo'

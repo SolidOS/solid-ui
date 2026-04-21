@@ -29,7 +29,7 @@ import {
   stackString,
   syncTableToArray,
   syncTableToArrayReOrdered
-} from '../../../src/core/utils'
+} from 'solid-ui-core/utils'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()

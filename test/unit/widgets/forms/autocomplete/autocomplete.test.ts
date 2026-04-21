@@ -8,9 +8,9 @@ import { parse } from 'rdflib'
 import {
   autocompleteField
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
-import ns from '../../../../../src/core/ns'
+import ns from 'solid-ui-core/ns'
 import { store } from 'solid-logic'
-// import { textInputStyle } from '../../../../../src/core/style'
+// import { textInputStyle } from 'solid-ui-core/style'
 import {
 //  findByAltText,
   findByTestId,

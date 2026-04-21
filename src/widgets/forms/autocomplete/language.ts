@@ -4,11 +4,11 @@
 * See https://solidos.solidcommunity.net/public/2021/01%20Building%20Solid%20Apps%20which%20use%20Public%20Data.html
 */
 /* eslint-disable no-console */
-import * as debug from '../../../core/debug'
+import * as debug from 'solid-ui-core/debug'
 // import * as logic from '../index'
 // import { authn } from '../../../authn/index'
 import { authn, store } from 'solid-logic'
-import * as ns from '../../../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { Collection, NamedNode, Node } from 'rdflib'
 // import { Binding } from '../widgets/forms/autocomplete/publicData'
 // import { nativeNameForLanguageCode, englishNameForLanguageCode } from './nativeNameForLanguageCode'

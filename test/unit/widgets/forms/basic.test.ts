@@ -5,8 +5,8 @@ import {
   fieldStore,
   basicField
 } from '../../../../src/widgets/forms/basic'
-import ns from '../../../../src/core/ns'
-import { textInputStyle } from '../../../../src/core/style'
+import ns from 'solid-ui-core/ns'
+import { textInputStyle } from 'solid-ui-core/style'
 import { clearStore } from '../../helpers/clearStore'
 import { store } from 'solid-logic'
 

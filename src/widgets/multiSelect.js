@@ -9,7 +9,7 @@
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-import * as style from '../core/style_multiSelect'
+import * as style from 'solid-ui-core/style_multiSelect'
 
 export class IconicMultiSelect {
   _data

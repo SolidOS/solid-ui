@@ -5,14 +5,14 @@
  * @packageDocumentation
  */
 
-import * as ns from '../core/ns'
-import * as utils from '../core/utils'
+import * as ns from 'solid-ui-core/ns'
+import * as utils from 'solid-ui-core/utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
 import { Store, NamedNode } from 'rdflib'
 import { DataBrowserContext } from 'pane-registry'
 import { AccessController } from './access-controller'
-import * as style from '../core/style'
-import { log, warn } from '../core/debug'
+import * as style from 'solid-ui-core/style'
+import { log, warn } from 'solid-ui-core/debug'
 
 let global: Window = window
 const preventBrowserDropEventsDone = Symbol('prevent double triggering of drop event')

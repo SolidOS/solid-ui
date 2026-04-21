@@ -9,9 +9,9 @@ import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
-import * as style from '../core/style'
+import * as style from 'solid-ui-core/style'
 import { emptyProfile } from './empty-profile'
-import { getPod, throttle } from '../core/utils/headerFooterHelpers'
+import { getPod, throttle } from 'solid-ui-core/utils/headerFooterHelpers'
 
 /**
  * menu icons

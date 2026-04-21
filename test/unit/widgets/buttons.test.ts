@@ -44,13 +44,13 @@ import {
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
-import { foaf, rdf, sioc, vcard } from '../../../src/core/ns'
+import { foaf, rdf, sioc, vcard } from 'solid-ui-core/ns'
 // @ts-ignore
-import { icons } from '../../../src/core/iconBase'
+import { icons } from 'solid-ui-core/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from 'solid-logic'
-import * as style from '../../../src/core/style'
+import * as style from 'solid-ui-core/style'
 const { iconBase } = icons
 const store = solidLogicSingleton.store
 

@@ -1,11 +1,11 @@
 import { generatePrivateKey, generatePublicKey, getPublicKey } from '../../../src/chat/keys'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
-import * as helpers from '../../../src/core/utils/keyHelpers/accessData'
+import * as helpers from 'solid-ui-core/utils/keyHelpers/accessData'
 const PRIV_KEY = 'a11bc5d2eee6cdb3b37f5473a712cad905ccfb13fb2ccdbf1be0a1ac4fdc7d2a'
 const PUB_KEY = '023a9da707bee1302f66083c9d95673ff969b41607a66f52686fa774d64ceb87'
 
-jest.mock('../../../src/core/utils/keyHelpers/accessData')
+// @@ jest.mock('../../../src/core/utils/keyHelpers/accessData')
 store.fetcher.load = jest.fn().mockImplementation(() => {})
 store.any = jest.fn()
 

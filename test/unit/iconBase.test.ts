@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import { icons } from '../../src/core/iconBase'
+import { icons } from 'solid-ui-core/iconBase'
 
 const { iconBase, originalIconBase } = icons
 

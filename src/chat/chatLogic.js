@@ -3,12 +3,12 @@
  * @packageDocumentation
  */
 
-import * as debug from '../core/debug'
+import * as debug from 'solid-ui-core/debug'
 import { DateFolder } from './dateFolder'
 import { store, authn } from 'solid-logic'
-import * as ns from '../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-import * as utils from '../core/utils'
+import * as utils from 'solid-ui-core/utils'
 import { getBlankMsg, signMsg, SEC } from './signature'
 import { getPrivateKey } from './keys'
 

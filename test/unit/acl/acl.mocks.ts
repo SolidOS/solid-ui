@@ -1,5 +1,5 @@
 import { sym } from 'rdflib'
-import * as ns from '../../../src/core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { getFileContent } from '../helpers/getFileContent'
 import { resolve } from 'path'
 

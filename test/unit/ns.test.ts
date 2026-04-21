@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../helpers/setup'
-import { rdf } from '../../src/core/ns'
+import { rdf } from 'solid-ui-core/ns'
 
 silenceDebugMessages()
 

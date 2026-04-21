@@ -8,6 +8,10 @@ module.exports = {
     './test/helpers/setup.ts'
   ],
   transformIgnorePatterns: ["/node_modules/(?!lit-html).+\\.js"],
+  moduleNameMapper: {
+    '^solid-ui-core/(.+)$': '<rootDir>/node_modules/solid-ui-core/lib/$1',
+    '^solid-ui-core$': '<rootDir>/node_modules/solid-ui-core/lib/index.js'
+  },
   testEnvironmentOptions: {
       customExportConditions: ['node']
   }

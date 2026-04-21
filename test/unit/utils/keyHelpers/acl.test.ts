@@ -1,5 +1,5 @@
 import { store } from 'solid-logic'
-import { setAcl, keyAclBody } from '../../../../src/core/utils/keyHelpers/acl'
+import { setAcl, keyAclBody } from 'solid-ui-core/utils/keyHelpers/acl'
 
 store.fetcher.load = jest.fn().mockImplementation(() => {})
 store.any = jest.fn()

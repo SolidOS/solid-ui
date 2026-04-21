@@ -12,12 +12,12 @@
 import escape from 'escape-html'
 import uuid from 'uuid'
 import * as rdf from 'rdflib'
-import * as debug from '../core/debug'
+import * as debug from 'solid-ui-core/debug'
 
 import { makeDropTarget } from './dragAndDrop'
 import { errorMessageBlock } from './error'
-import { iconBase } from '../core/iconBase'
-import * as ns from '../core/ns'
+import { iconBase } from 'solid-ui-core/iconBase'
+import * as ns from 'solid-ui-core/ns'
 import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store

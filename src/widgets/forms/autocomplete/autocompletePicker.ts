@@ -3,9 +3,9 @@
 ** As the data source is passed as a parameter, all kinds of APIa and query services can be used
 **
 */
-import * as debug from '../../../core/debug'
-import * as style from '../../../core/style'
-import styleConstants from '../../../core/styleConstants'
+import * as debug from 'solid-ui-core/debug'
+import * as style from 'solid-ui-core/style'
+import styleConstants from 'solid-ui-core/styleConstants'
 import { errorMessageBlock } from '../../error'
 import { store } from 'solid-logic'
 import { NamedNode, Literal } from 'rdflib'

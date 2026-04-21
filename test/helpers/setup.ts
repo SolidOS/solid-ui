@@ -1,6 +1,6 @@
 import { toContainGraph } from '../custom-matchers/toContainGraph'
 import { toEqualGraph } from '../custom-matchers/toEqualGraph'
-import { error, log, trace, warn } from '../../src/core/debug'
+import { error, log, trace, warn } from 'solid-ui-core/debug'
 import 'isomorphic-fetch'
 import { TextEncoder, TextDecoder } from 'util'
 
@@ -17,7 +17,7 @@ global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 
 // We don't want to output debug messages to console as part of the tests
-jest.mock('../../src/core/debug')
+jest.mock('solid-ui-core/debug')
 
 export function silenceDebugMessages () {
   ;(log as any).mockImplementation(() => null)

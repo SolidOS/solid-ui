@@ -3,15 +3,15 @@
  * @packageDocumentation
  */
 
-import { icons } from '../core/iconBase'
+import { icons } from 'solid-ui-core/iconBase'
 import { store } from 'solid-logic'
 import { media } from '../media/index'
-import * as ns from '../core/ns'
+import * as ns from 'solid-ui-core/ns'
 import * as login from '../login/login'
 import * as pad from '../pad'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-import * as style from '../core/style'
-import * as utils from '../core/utils'
+import * as style from 'solid-ui-core/style'
+import * as utils from 'solid-ui-core/utils'
 import * as widgets from '../widgets'
 
 const UI = { icons, ns, media, pad, style, utils, widgets }

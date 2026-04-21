@@ -9,7 +9,7 @@ import {
   pendingeditModifier,
   signInAndUpButtonStyle,
   textInputStyle
-} from '../../src/core/style'
+} from 'solid-ui-core/style'
 
 silenceDebugMessages()
 

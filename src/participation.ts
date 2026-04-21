@@ -2,15 +2,15 @@
 */
 
 // import { currentUser } from './authn/authn'
-import * as debug from './core/debug'
+import * as debug from 'solid-ui-core/debug'
 import { LiveStore, NamedNode, st, UpdateManager } from 'rdflib'
-import * as ns from './core/ns'
+import * as ns from 'solid-ui-core/ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
-import { syncTableToArray } from './core/utils'
+import { syncTableToArray } from 'solid-ui-core/utils'
 import { lightColorHash } from './pad'
-import { log } from './core/debug'
-import * as style from './core/style'
-import styleConstants from './core/styleConstants'
+import { log } from 'solid-ui-core/debug'
+import * as style from 'solid-ui-core/style'
+import styleConstants from 'solid-ui-core/styleConstants'
 import { solidLogicSingleton, authn } from 'solid-logic'
 
 type ParticipationOptions = {
