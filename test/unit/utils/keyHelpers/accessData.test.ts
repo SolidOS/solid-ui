@@ -12,7 +12,7 @@ store.fetcher.webOperation = jest.fn()
 store.each = jest.fn()
 store.any = jest.fn()
 
-jest.mock('../../../../node_modules/solid-ui-core/src/utils/keyHelpers/otherHelpers.ts', () => {
+jest.mock('solid-ui-core/utils/keyHelpers/otherHelpers', () => {
   return {
     getRootIfPreferencesExist: jest.fn().mockImplementationOnce(() => {
       throw new Error()
