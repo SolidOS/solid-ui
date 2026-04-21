@@ -6,12 +6,12 @@
 
 /* global alert */
 
-import * as buttons from './buttons'
+import * as buttons from 'solid-ui-core/buttons'
 import { fieldParams } from './forms/fieldParams'
 import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
 import { setFieldStyle } from './forms/formStyle'
 import * as debug from 'solid-ui-core/debug'
-import { errorMessageBlock } from './error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 import { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic'
 import { autocompleteField } from './forms/autocomplete/autocompleteField'
 import * as style from 'solid-ui-core/style'
@@ -23,7 +23,7 @@ import * as ns from 'solid-ui-core/ns'
 import * as $rdf from 'rdflib'
 import { store } from 'solid-logic'
 import * as utils from 'solid-ui-core/utils'
-import { IconicMultiSelect } from './multiSelect'
+import { IconicMultiSelect } from 'solid-ui-core/multiSelect'
 export { basicField, fieldLabel, fieldStore, renderNameValuePair } from './forms/basic' // Note default export
 
 export { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'

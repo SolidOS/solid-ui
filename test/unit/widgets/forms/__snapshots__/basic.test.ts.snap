@@ -64,7 +64,7 @@ exports[`basicField shows error if no property given 1`] = `
 >
   Error: No property given for text field: &lt;http://example.com/#form&gt;
   <button
-    style="width: 2em; height: 2em;"
+    style="width: 2em; height: 2em; align: right;"
     type="button"
   >
     <img

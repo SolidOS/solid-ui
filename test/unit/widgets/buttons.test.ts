@@ -41,7 +41,7 @@ import {
   shortDate,
   shortTime,
   timestamp
-} from '../../../src/widgets/buttons'
+} from 'solid-ui-core/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
 import { foaf, rdf, sioc, vcard } from 'solid-ui-core/ns'

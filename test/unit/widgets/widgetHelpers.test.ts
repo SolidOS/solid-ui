@@ -5,7 +5,7 @@ import {
   wrapDivInATR,
   addClickListenerToElement,
   createImageDiv
-} from '../../../src/widgets/widgetHelpers'
+} from 'solid-ui-core/widgetHelpers'
 
 const style = require('solid-ui-core/style')
 

@@ -4,7 +4,7 @@ import * as ns from 'solid-ui-core/ns'
 import { formFieldNameBoxStyle, textInputStyle, textInputStyleUneditable } from 'solid-ui-core/style'
 import styleConstants from 'solid-ui-core/styleConstants'
 import { label } from 'solid-ui-core/utils'
-import { errorMessageBlock } from '../error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 import { mostSpecificClassURI } from './fieldFunction'
 import { fieldParams } from './fieldParams'
 

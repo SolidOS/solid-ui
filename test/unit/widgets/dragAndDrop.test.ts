@@ -4,7 +4,7 @@ import {
   makeDropTarget,
   makeDraggable,
   uploadFiles
-} from '../../../src/widgets/dragAndDrop'
+} from 'solid-ui-core/dragAndDrop'
 import { fetcher } from 'rdflib'
 
 silenceDebugMessages()

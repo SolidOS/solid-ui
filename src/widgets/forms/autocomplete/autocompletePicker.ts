@@ -6,7 +6,7 @@
 import * as debug from 'solid-ui-core/debug'
 import * as style from 'solid-ui-core/style'
 import styleConstants from 'solid-ui-core/styleConstants'
-import { errorMessageBlock } from '../../error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 import { store } from 'solid-logic'
 import { NamedNode, Literal } from 'rdflib'
 import { queryPublicDataByName, bindingToTerm, AUTOCOMPLETE_LIMIT, QueryParameters } from './publicData'

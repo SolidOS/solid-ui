@@ -1,7 +1,7 @@
 import { Node } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
 import { debug } from 'solid-ui-core/log'
-import { errorMessageBlock } from '../error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 
 const store = solidLogicSingleton.store
 

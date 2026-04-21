@@ -6,7 +6,7 @@ exports[`errorMessageBlock creates an error message div 1`] = `
 >
   my error message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: 2em; height: 2em; align: right;"
     type="button"
   >
     <img
@@ -24,7 +24,7 @@ exports[`errorMessageBlock escapes the HTML 1`] = `
 >
   my &lt;script&gt; kiddie &lt;/script&gt; message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: 2em; height: 2em; align: right;"
     type="button"
   >
     <img
@@ -42,7 +42,7 @@ exports[`errorMessageBlock sets the background color 1`] = `
 >
   my colored message
   <button
-    style="width: 2em; height: 2em;"
+    style="width: 2em; height: 2em; align: right;"
     type="button"
   >
     <img

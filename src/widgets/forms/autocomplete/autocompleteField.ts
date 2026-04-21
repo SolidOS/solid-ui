@@ -2,7 +2,7 @@
  */
 import * as ns from 'solid-ui-core/ns'
 import { store } from 'solid-logic'
-import { errorMessageBlock } from '../../error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 import { fieldLabel } from '../basic'
 import * as style from 'solid-ui-core/style'
 import { renderAutocompleteControl } from './autocompleteBar'

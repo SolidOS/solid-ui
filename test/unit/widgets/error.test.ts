@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from '../../helpers/setup'
 import { JSDOM } from 'jsdom'
-import { errorMessageBlock } from '../../../src/widgets/error'
+import { errorMessageBlock } from 'solid-ui-core/error'
 
 silenceDebugMessages()
 const dom = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window.document

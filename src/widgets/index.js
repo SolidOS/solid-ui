@@ -19,10 +19,10 @@
 // export widgets with the same name)
 
 export * from './peoplePicker'
-export * from './dragAndDrop'
-export * from './buttons'
-export * from './buttons/iconLinks'
-export * from './error'
+export * from 'solid-ui-core/dragAndDrop'
+export * from 'solid-ui-core/buttons'
+export * from 'solid-ui-core/buttons/iconLinks'
+export * from 'solid-ui-core/error'
 export * from './forms'
 
 export * from './forms/autocomplete/autocompleteBar'

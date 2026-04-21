@@ -4,7 +4,7 @@ import { NamedNode } from 'rdflib'
 import {
   linkIcon,
   createLinkForURI
-} from '../../../../src/widgets/buttons/iconLinks'
+} from 'solid-ui-core/buttons/iconLinks'
 
 silenceDebugMessages()
 let window: DOMWindow
