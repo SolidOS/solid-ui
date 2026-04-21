@@ -10,7 +10,9 @@ module.exports = {
   transformIgnorePatterns: ["/node_modules/(?!lit-html).+\\.js"],
   moduleNameMapper: {
     '^solid-ui-core/(.+)$': '<rootDir>/node_modules/solid-ui-core/lib/$1',
-    '^solid-ui-core$': '<rootDir>/node_modules/solid-ui-core/lib/index.js'
+    '^solid-ui-core$': '<rootDir>/node_modules/solid-ui-core/lib/index.js',
+    '^solid-logic$': '<rootDir>/node_modules/solid-logic',
+    '^rdflib$': '<rootDir>/node_modules/rdflib'
   },
   testEnvironmentOptions: {
       customExportConditions: ['node']
