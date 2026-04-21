@@ -16,7 +16,7 @@ describe('SolidUIFooterElement', () => {
     const shadow = footer.shadowRoot
     expect(shadow).not.toBeNull()
     expect(shadow?.textContent).toContain('Public View')
-    expect(shadow?.textContent).toContain('You are viewing this profile as a guest,')
+    expect(shadow?.textContent).toContain('You are viewing this profile as a guest.')
   })
 
   it('renders a logged in view when the user is authenticated', async () => {
@@ -30,7 +30,10 @@ describe('SolidUIFooterElement', () => {
     const shadow = footer.shadowRoot
     expect(shadow).not.toBeNull()
     expect(shadow?.textContent).toContain('Logged in View')
-    expect(shadow?.textContent).toContain('You are logged in as https://alice.example/profile/card#me user.')
+    expect(shadow?.textContent).toContain('You are logged in as')
+    const link = shadow?.querySelector('a')
+    expect(link?.getAttribute('href')).toBe('https://alice.example/profile/card#me')
+    expect(link?.textContent).toBe('https://alice.example/profile/card#me')
 
     currentUserSpy.mockRestore()
   })
