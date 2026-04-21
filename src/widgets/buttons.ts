@@ -49,6 +49,11 @@ export type RenderAsDivOptions = {
   wrapInATR?: boolean
 }
 
+export type AttachmentSupportingInfo = string | HTMLElement | null | undefined
+export type RenderSupportingInfo = (target: NamedNode, dom: HTMLDocument) => AttachmentSupportingInfo
+export type AttachmentInlineInfo = string | HTMLElement | null | undefined
+export type RenderNameSuffix = (target: NamedNode, dom: HTMLDocument) => AttachmentInlineInfo
+
 function getStatusArea (context?: StatusAreaContext) {
   let box = (context && context.statusArea) || (context && context.div) || null
   if (box) return box
@@ -721,10 +726,38 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;')
   td1.appendChild(image)
 
+  const nameLine = td2.appendChild(dom.createElement('div'))
+  const nameText = nameLine.appendChild(dom.createElement('span'))
   if (options.title) {
-    td2.textContent = options.title
+    nameText.textContent = options.title
   } else {
-    setName(td2, obj) // This is async
+    setName(nameText, obj) // This is async
+  }
+
+  if (typeof options.renderNameSuffix === 'function') {
+    const inlineInfo = options.renderNameSuffix(obj, dom)
+    if (inlineInfo) {
+      const nameSuffix = nameLine.appendChild(dom.createElement('span'))
+      nameSuffix.setAttribute('style', 'margin-left: 0.4em; opacity: 0.8;')
+      if (typeof inlineInfo === 'string') {
+        nameSuffix.textContent = inlineInfo
+      } else {
+        nameSuffix.appendChild(inlineInfo)
+      }
+    }
+  }
+
+  if (typeof options.renderSupportingInfo === 'function') {
+    const supportingInfo = options.renderSupportingInfo(obj, dom)
+    if (supportingInfo) {
+      const supportingLine = td2.appendChild(dom.createElement('div'))
+      supportingLine.setAttribute('style', 'font-size: 90%; opacity: 0.8;')
+      if (typeof supportingInfo === 'string') {
+        supportingLine.textContent = supportingInfo
+      } else {
+        supportingLine.appendChild(supportingInfo)
+      }
+    }
   }
 
   if (options.deleteFunction) {
@@ -833,6 +866,8 @@ export type attachmentListOptions = {
   predicate?: NamedNode
   uploadFolder?: NamedNode
   noun?: string
+  renderSupportingInfo?: RenderSupportingInfo
+  renderNameSuffix?: RenderNameSuffix
 }
 
 /**
@@ -866,6 +901,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   function createNewRow (target) {
     const theTarget = target
     const opt: any = { noun }
+    opt.renderSupportingInfo = options.renderSupportingInfo
+    opt.renderNameSuffix = options.renderNameSuffix
     if (modify) {
       opt.deleteFunction = function () {
         deleteAttachment(theTarget)
