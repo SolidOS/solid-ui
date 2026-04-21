@@ -396,3 +396,17 @@ I want this all to be presented flexible in the component.
 * Claude Sonnet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
 
 * Raptor mini: when we are on layout mobile we do not want to display the help menu at all.
+
+* Raptor mini: Create for me a footer Lit Component in tsy style of the components I have and under v2. Take the code from this index.ts to start with.
+
+* Raptor mini: Good. Now, I want the footer to be a rectangular with round corners, grey background and it should have an adjustable position.
+
+* Raptor mini: The content of the footer should be different upon loggedin or not.
+If not logged in, it should say:
+Title Public View
+You are viewving this profile as a guest,
+And if logged in:
+Title: Logged in View
+You are logged in as nameOfLoggedIn user.
+
+* Raptor mini: add a readme to the Footer component with example.

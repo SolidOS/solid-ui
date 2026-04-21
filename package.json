@@ -24,6 +24,11 @@
       "types": "./dist/components/signupButton/index.d.ts",
       "import": "./dist/components/signupButton/index.esm.js",
       "require": "./dist/components/signupButton/index.js"
+    },
+    "./components/footer": {
+      "types": "./dist/components/footer/index.d.ts",
+      "import": "./dist/components/footer/index.esm.js",
+      "require": "./dist/components/footer/index.js"
     }
   },
   "files": [
@@ -35,6 +40,7 @@
     "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
     "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
+    "prebuild-js": "rm -f .tsbuildinfo",
     "build-js": "tsc",
     "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map && node scripts/build-component-dts.mjs",
     "build-dist": "webpack --progress",
