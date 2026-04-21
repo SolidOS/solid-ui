@@ -266,7 +266,7 @@ solid-ui ships self-contained Lit-based custom elements as subpath exports. Each
 
 ### solid-ui-header
 
-A header bar with branding, auth state (logged-out / logged-in), an account dropdown, and a desktop-only help menu.
+A header bar with branding, auth state (logged-out / logged-in), an account dropdown, an optional logout icon, and a desktop-only help menu.
 
 **Subpath export:** `solid-ui/components/header`
 
@@ -294,7 +294,7 @@ import { LoginButton } from 'solid-ui/components/login-button'
 ```
 
 ```html
-<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net"></solid-ui-login-button>
+<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net" icon="https://example.com/login-icon.svg"></solid-ui-login-button>
 ```
 
 ```typescript
@@ -315,7 +315,7 @@ import { SignupButton } from 'solid-ui/components/signup-button'
 ```
 
 ```html
-<solid-ui-signup-button label="Get a Pod" signup-url="https://solidproject.org/get_a_pod"></solid-ui-signup-button>
+<solid-ui-signup-button label="Get a Pod" signup-url="https://solidproject.org/get_a_pod" icon="https://example.com/icon.svg"></solid-ui-signup-button>
 ```
 
 ### Component build pipeline

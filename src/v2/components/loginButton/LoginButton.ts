@@ -6,6 +6,7 @@ export class LoginButton extends LitElement {
     label: { type: String, reflect: true },
     theme: { type: String, reflect: true },
     issuerUrl: { type: String, attribute: 'issuer-url', reflect: true },
+    icon: { type: String, reflect: true },
     _popupOpen: { state: true },
     _issuerInputValue: { state: true }
   }
@@ -70,6 +71,13 @@ export class LoginButton extends LitElement {
       text-decoration: none;
       box-sizing: border-box;
       transition: transform 0.2s ease;
+    }
+
+    .login-button-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      object-fit: contain;
     }
 
     .login-button:active {
@@ -205,6 +213,7 @@ export class LoginButton extends LitElement {
   declare label: string
   declare theme: 'light' | 'dark'
   declare issuerUrl: string
+  declare icon: string
   declare _popupOpen: boolean
   declare _issuerInputValue: string
 
@@ -216,6 +225,7 @@ export class LoginButton extends LitElement {
     this.label = 'Log In'
     this.theme = 'light'
     this.issuerUrl = ''
+    this.icon = ''
     this._popupOpen = false
     this._issuerInputValue = ''
   }
@@ -366,6 +376,7 @@ export class LoginButton extends LitElement {
         part="login-button"
         @click="${() => this._openPopup()}"
       >
+        ${this.icon ? html`<img class="login-button-icon" src="${this.icon}" alt="" aria-hidden="true" part="login-button-icon" />` : ''}
         <slot>${this.label}</slot>
       </button>
 

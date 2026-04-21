@@ -15,9 +15,8 @@ import { SignupButton } from 'solid-ui/components/signup-button'
 ```
 
 ```html
-<solid-ui-signup-button label="Sign Up" signup-url="https://solidproject.org/get_a_pod"></solid-ui-signup-button>
+<solid-ui-signup-button label="Sign Up" signup-url="https://solidproject.org/get_a_pod" icon="https://example.com/icon.svg"></solid-ui-signup-button>
 ```
-
 ## Usage in a plain HTML page (CDN / script tag)
 
 ```html
@@ -44,6 +43,8 @@ btn.signupUrl = 'https://solidproject.org/get_a_pod'
 |-------------|--------------|---------------------|--------------------------------------|-------------|
 | `label`     | `label`      | `string`            | `Sign Up`                            | Button text. Overridable via the default slot. |
 | `signupUrl` | `signup-url` | `string`            | `https://solidproject.org/get_a_pod` | URL opened in a new tab when the button is clicked. |
+| `icon`      | `icon`       | `string`            | `''`                                 | URL of a decorative icon displayed on the left side of the label. |
+| `layout`    | `layout`     | `'desktop' \| 'mobile'` | `'desktop'`                       | When set to `mobile`, removes the button border for a compact header appearance. |
 | `theme`     | `theme`      | `'light' \| 'dark'` | `'light'`                            | Sets the colour theme. Use `'dark'` when placing the button on a dark background. |
 
 ### Slots
@@ -78,6 +79,8 @@ When used inside `<solid-ui-header>`, the `theme` attribute is forwarded automat
 ## Behaviour
 
 Clicking the button calls `window.open(signupUrl, '_blank', 'noopener,noreferrer')`, opening the signup page in a new tab.
+
+When the `layout` attribute is set to `mobile`, the button renders without a border for a cleaner compact mobile/header presentation. When used inside `<solid-ui-header layout="mobile">`, the header also suppresses the signup button icon.
 
 ## Build
 

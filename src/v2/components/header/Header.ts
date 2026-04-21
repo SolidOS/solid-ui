@@ -5,7 +5,7 @@ import '../loginButton/index'
 import '../signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
-const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
+const DEFAULT_HELP_MENU_ICON = ''
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
 const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR = icons.iconBase + 'emptyProfileAvatar.png'
@@ -17,6 +17,7 @@ export type HeaderMenuItem = {
   url?: string
   target?: string
   action?: string
+  icon?: string
 }
 
 export type HeaderAccountMenuItem = HeaderMenuItem & {
@@ -36,8 +37,12 @@ export class Header extends LitElement {
     signUpAction: { type: Object, attribute: false },
     accountMenu: { type: Array, attribute: false },
     logoutLabel: { type: String, attribute: 'logout-label', reflect: true },
+    logoutIcon: { type: String, attribute: 'logout-icon', reflect: true },
     accountLabel: { type: String, attribute: 'account-label', reflect: true },
     accountAvatar: { type: String, attribute: 'account-avatar', reflect: true },
+    accountAvatarFallback: { type: String, attribute: 'account-avatar-fallback', reflect: true },
+    loginIcon: { type: String, attribute: 'login-icon', reflect: true },
+    signUpIcon: { type: String, attribute: 'sign-up-icon', reflect: true },
     helpMenuList: { type: Array },
     accountMenuOpen: { state: true },
     helpMenuOpen: { state: true },
@@ -62,7 +67,6 @@ export class Header extends LitElement {
     --header-button-bg: var(--color-menu-bg, #ffffff);
     --header-button-text: var(--color-header-button-text, #0F172B);
     --header-button-detail-text: var(--color-header-button-detail-text, #99A1AF);
-    --header-icon-filter: invert(1) brightness(1.3); /* special way to invert SVG color of icons, from back to white */
     --header-shadow: var(--color-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
     font-family: var(--font-family-base, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
   }
@@ -84,7 +88,7 @@ export class Header extends LitElement {
     --header-button-bg: var(--color-menu-bg, #ffffff);
     --header-button-text: var(--color-header-button-text, #0f172a);
     --header-button-detail-text: var(--color-header-button-detail-text, #878192);
-    --header-icon-filter: invert(1) brightness(1.3); /* special way to invert SVG color of icons, from back to white */
+    --header-icon-filter: invert(1) brightness(1.3); /* special way to invert SVG color of icons, from white to black */
     --header-shadow: var(--color-header-shadow, 2px 6px 10px 0 rgba(0, 0, 0, 0.4), 2px 8px 24px 0 rgba(0, 0, 0, 0.19));
     font-family: var(--font-family-base, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
   }
@@ -265,6 +269,7 @@ export class Header extends LitElement {
     height: 1.75rem;
     border-radius: 999px;
     object-fit: cover;
+    background-color: var(--header-border);
   }
 
   .account-dropdown {
@@ -462,10 +467,22 @@ export class Header extends LitElement {
   }
 
   .help-icon {
-    width: 24px;
-    height: 24px;
-    filter: var(--header-icon-filter);
+    width: 35px;
+    height: 35px;
     cursor: pointer;
+  }
+
+  .help-text {
+    color: var(--header-text, #ffffff);
+    font: inherit;
+  }
+
+  .logout-action-icon {
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    object-fit: contain;
+    margin-right: 0.5rem;
   }
   `
 
@@ -479,8 +496,12 @@ export class Header extends LitElement {
   declare signUpAction: HeaderMenuItem
   declare accountMenu: HeaderAccountMenuItem[]
   declare logoutLabel: string | null
+  declare logoutIcon: string
   declare accountLabel: string
   declare accountAvatar: string
+  declare accountAvatarFallback: string
+  declare loginIcon: string
+  declare signUpIcon: string
   declare helpMenuList: HeaderMenuItem[]
   declare accountMenuOpen: boolean
   declare helpMenuOpen: boolean
@@ -499,8 +520,12 @@ export class Header extends LitElement {
     this.signUpAction = { label: 'Sign Up', action: 'sign-up', url: DEFAULT_SIGNUP_URL }
     this.accountMenu = []
     this.logoutLabel = 'Log Out'
+    this.logoutIcon = ''
     this.accountLabel = 'Accounts'
     this.accountAvatar = ''
+    this.accountAvatarFallback = ''
+    this.loginIcon = ''
+    this.signUpIcon = ''
     this.helpMenuList = []
     this.accountMenuOpen = false
     this.helpMenuOpen = false
@@ -596,7 +621,7 @@ export class Header extends LitElement {
 
   private renderLoggedInAvatar (avatar?: string, wrapperClass = 'account-avatar') {
     const hasAvatar = Boolean(avatar)
-    const imageSrc = hasAvatar ? avatar : DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR
+    const imageSrc = hasAvatar ? avatar : this.accountAvatarFallback || DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR
     const imageAlt = hasAvatar ? 'Profile Avatar' : 'Default Avatar'
 
     if (this.layout === 'mobile' && wrapperClass === 'account-avatar') {
@@ -616,6 +641,7 @@ export class Header extends LitElement {
         <slot name="login-action">
           <solid-ui-login-button
             label="${this.loginAction.label}"
+            icon=${ifDefined(this.layout !== 'mobile' ? (this.loginIcon || this.loginAction.icon) : undefined)}
             theme="${this.theme}"
             part="login-action"
             @login-success="${() => this.handleLoginSuccess()}"
@@ -625,6 +651,8 @@ export class Header extends LitElement {
           <solid-ui-signup-button
             label="${this.signUpAction.label}"
             signup-url="${ifDefined(this.signUpAction.url)}"
+            layout="${this.layout}"
+            .icon=${ifDefined(this.layout !== 'mobile' ? (this.signUpIcon || this.signUpAction.icon) : undefined)}
             theme="${this.theme}"
             part="sign-up-action"
           ></solid-ui-signup-button>
@@ -662,7 +690,7 @@ export class Header extends LitElement {
       ${this.renderLoggedInAvatar(item.avatar, 'account-menu-avatar')}
       <span class="account-menu-copy">
         <span class="account-menu-label">${item.label}</span>
-        ${item.webid ? html`<span class="account-menu-webid">${item.webid}</span>` : ''}
+        ${item.webid && this.layout !== 'mobile' ? html`<span class="account-menu-webid">${item.webid}</span>` : ''}
       </span>
     `
 
@@ -742,6 +770,9 @@ export class Header extends LitElement {
               part="logout-action"
               role="menuitem"
             >
+              ${this.logoutIcon && this.layout !== 'mobile'
+                ? html`<img class="logout-action-icon" src="${this.logoutIcon}" alt="" aria-hidden="true" part="logout-action-icon" />`
+                : ''}
               ${this.logoutLabel}
             </button>
           `
@@ -809,7 +840,9 @@ export class Header extends LitElement {
                 @click="${(e: MouseEvent) => this.toggleHelpMenu(e)}"
                 part="help-menu-trigger"
               >
-                <img id="helpIcon" class="help-icon" src="${this.helpIcon}" alt="Help" part="help-icon" />
+                ${this.helpIcon
+                  ? html`<img id="helpIcon" class="help-icon" src="${this.helpIcon}" alt="Help" part="help-icon" />`
+                  : html`<span class="help-text" part="help-text">Help</span>`}
               </button>
 
             <nav

@@ -52,8 +52,10 @@ describe('SolidUIHeaderElement', () => {
     const authActionSelected = jest.fn()
 
     header.authState = 'logged-out'
-    header.loginAction = { label: 'Log in', action: 'login' }
-    header.signUpAction = { label: 'Sign Up', url: '/signup' }
+    header.loginAction = { label: 'Log in', action: 'login', icon: 'https://example.com/login-icon.svg' }
+    header.signUpAction = { label: 'Sign Up', url: '/signup', icon: 'https://example.com/signup-icon.svg' }
+    header.loginIcon = 'https://example.com/login-icon-top.svg'
+    header.signUpIcon = 'https://example.com/signup-icon-top.svg'
 
     header.addEventListener('auth-action-select', (event: Event) => {
       authActionSelected((event as CustomEvent).detail)
@@ -69,14 +71,53 @@ describe('SolidUIHeaderElement', () => {
     expect(loginButton).not.toBeNull()
     expect(signUpLink).not.toBeNull()
     expect(loginButton.getAttribute('label')).toBe('Log in')
+    expect(loginButton.getAttribute('icon')).toBe('https://example.com/login-icon-top.svg')
     expect(signUpLink.getAttribute('label')).toBe('Sign Up')
     expect(signUpLink.getAttribute('signup-url')).toBe('/signup')
+    expect(signUpLink.getAttribute('icon')).toBe('https://example.com/signup-icon-top.svg')
 
     loginButton.dispatchEvent(new CustomEvent('login-success', { bubbles: true, composed: true }))
 
     expect(authActionSelected).toHaveBeenCalledWith({
       role: 'login'
     })
+  })
+
+  it('does not show login or signup icons on mobile layout', async () => {
+    const header = new Header()
+    header.authState = 'logged-out'
+    header.layout = 'mobile'
+    header.loginAction = { label: 'Log in', action: 'login', icon: 'https://example.com/login-icon.svg' }
+    header.signUpAction = { label: 'Sign Up', url: '/signup', icon: 'https://example.com/signup-icon.svg' }
+    header.loginIcon = 'https://example.com/login-icon-top.svg'
+    header.signUpIcon = 'https://example.com/signup-icon-top.svg'
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const loginButton = shadow?.querySelector('solid-ui-login-button') as HTMLElement
+    const signUpButton = shadow?.querySelector('solid-ui-signup-button') as HTMLElement
+
+    expect(loginButton?.shadowRoot?.querySelector('.login-button-icon')).toBeNull()
+    expect(signUpButton?.shadowRoot?.querySelector('.signup-button-icon')).toBeNull()
+  })
+
+  it('uses a custom fallback avatar when no accountAvatar is configured', async () => {
+    const header = new Header()
+
+    header.authState = 'logged-in'
+    header.accountAvatar = ''
+    header.accountAvatarFallback = 'https://example.com/fallback-avatar.png'
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const avatarImg = shadow?.querySelector('.account-avatar img') as HTMLImageElement
+
+    expect(avatarImg).not.toBeNull()
+    expect(avatarImg.src).toContain('https://example.com/fallback-avatar.png')
   })
 
   it('renders an accounts dropdown with avatar when logged in', async () => {
@@ -86,6 +127,7 @@ describe('SolidUIHeaderElement', () => {
     header.authState = 'logged-in'
     header.accountLabel = 'Accounts'
     header.accountAvatar = 'https://example.com/avatar.png'
+    header.logoutIcon = 'https://example.com/logout-icon.svg'
     header.accountMenu = [
       { label: 'Personal Pod', webid: 'https://pod.example/profile/card#me', action: 'switch-personal' },
       { label: 'Work Pod', webid: 'https://work.example/profile/card#me', url: '/work' }
@@ -116,6 +158,7 @@ describe('SolidUIHeaderElement', () => {
     expect(dropdown.hidden).toBe(false)
     expect(firstItem.textContent).toContain('Personal Pod')
     expect(lastItem.textContent).toContain('Log Out')
+    expect((lastItem.querySelector('img.logout-action-icon') as HTMLImageElement)?.src).toContain('https://example.com/logout-icon.svg')
 
     firstItem.click()
 
@@ -126,6 +169,53 @@ describe('SolidUIHeaderElement', () => {
     })
 
     expect(lastItem.textContent?.trim()).toBe('Log Out')
+  })
+
+  it('does not render the logout icon on mobile layout', async () => {
+    const header = new Header()
+    header.layout = 'mobile'
+    header.authState = 'logged-in'
+    header.logoutIcon = 'https://example.com/logout-icon.svg'
+    header.logoutLabel = 'Log Out'
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const trigger = shadow?.getElementById('accountMenuTrigger') as HTMLButtonElement
+    expect(trigger).not.toBeNull()
+
+    trigger.click()
+    await header.updateComplete
+
+    const lastItem = shadow?.querySelectorAll('.account-menu-item-button')[0] as HTMLButtonElement
+    expect(lastItem).not.toBeNull()
+    expect(lastItem.querySelector('img.logout-action-icon')).toBeNull()
+    expect(lastItem.textContent?.trim()).toBe('Log Out')
+  })
+
+  it('does not render account webid on mobile layout', async () => {
+    const header = new Header()
+    header.layout = 'mobile'
+    header.authState = 'logged-in'
+    header.accountMenu = [
+      { label: 'Personal Pod', webid: 'https://pod.example/profile/card#me', action: 'switch-personal' }
+    ]
+
+    document.body.appendChild(header)
+    await header.updateComplete
+
+    const shadow = header.shadowRoot
+    const trigger = shadow?.getElementById('accountMenuTrigger') as HTMLButtonElement
+    expect(trigger).not.toBeNull()
+
+    trigger.click()
+    await header.updateComplete
+
+    const firstItem = shadow?.querySelector('.account-menu-item-button') as HTMLButtonElement
+    expect(firstItem).not.toBeNull()
+    expect(firstItem.querySelector('.account-menu-webid')).toBeNull()
+    expect(firstItem.textContent?.trim()).toBe('Personal Pod')
   })
 
   it('supports theme and layout attributes', async () => {
@@ -177,6 +267,7 @@ describe('SolidUIHeaderElement', () => {
     const helpMenuClicked = jest.fn()
 
     header.authState = 'logged-in'
+    header.helpIcon = ''
     header.helpMenuList = [{ label: 'Docs', url: 'https://example.com/docs', target: '_blank' }]
 
     header.addEventListener('help-menu-select', (event: Event) => {
@@ -190,6 +281,7 @@ describe('SolidUIHeaderElement', () => {
     const helpTrigger = shadow?.getElementById('helpMenuTrigger') as HTMLButtonElement
 
     expect(helpTrigger?.disabled).toBe(false)
+    expect(helpTrigger?.textContent?.trim()).toBe('Help')
 
     helpTrigger?.click()
     await header.updateComplete

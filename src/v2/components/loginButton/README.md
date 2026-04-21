@@ -17,7 +17,7 @@ import { LoginButton } from 'solid-ui/components/login-button'
 ```
 
 ```html
-<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net"></solid-ui-login-button>
+<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net" icon="https://example.com/login-icon.svg"></solid-ui-login-button>
 
 <script type="module">
   document.querySelector('solid-ui-login-button').addEventListener('login-success', ({ detail }) => {
@@ -54,6 +54,7 @@ btn.addEventListener('login-success', (e: CustomEvent) => {
 |-------------|---------------|--------------------|----------|-------------|
 | `label`     | `label`       | `string`           | `Log In` | Button text. Overridable via the default slot. |
 | `issuerUrl` | `issuer-url`  | `string`           | `''`     | Pre-fills the IDP URL input in the popup. If `localStorage.loginIssuer` is set it takes precedence. |
+| `icon`      | `icon`        | `string`           | `''`     | URL of a decorative icon displayed on the left side of the button text. When used inside `<solid-ui-header layout="mobile">`, the header suppresses the icon. |
 | `theme`     | `theme`       | `'light' \| 'dark'` | `'light'` | Sets the colour theme. Use `'dark'` when placing the button on a dark background. |
 
 ### Events
@@ -85,7 +86,7 @@ Set `theme="dark"` for dark backgrounds. The button background (`--primary-royal
 <solid-ui-login-button theme="dark"></solid-ui-login-button>
 ```
 
-When used inside `<solid-ui-header>`, the `theme` attribute is forwarded automatically.
+When used inside `<solid-ui-header>`, the theme attribute is forwarded automatically. When the header is in `mobile` layout, its built-in login button suppresses the `icon`.
 
 ## Popup behaviour
 

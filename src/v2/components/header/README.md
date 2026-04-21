@@ -2,7 +2,7 @@
 
 A Lit-based custom element that renders the Solid application header, including branding, auth actions, account management, and a help menu.
 
-When `layout="mobile"`, the header hides the help menu entirely, even if `helpMenuList` items or `help-menu` slotted content are provided.
+When `layout="mobile"`, the header hides the help menu entirely, even if `helpMenuList` items or `help-menu` slotted content are provided. In this mode the header also omits icons from the built-in login/sign-up buttons, hides the account webid text in the account dropdown, and hides the logout icon.
 
 When `auth-state="logged-out"`, the header renders a `<solid-ui-login-button>` as the login action. The login button opens a Solid IDP selection popup and handles the full OIDC login flow via `solid-logic`. On success it emits a `login-success` event and the header transitions to `logged-in` state automatically.
 
@@ -79,17 +79,21 @@ The header automatically imports and registers it — no separate import is need
 Properties/attributes:
 
 - `logo`: URL string for the brand image (default: Solid emblem URL).
-- `helpIcon`: URL string for the help icon, default from icons asset.
+- `helpIcon`: URL string for the help icon, default from icons asset. If `help-icon` is empty or not provided, the help trigger renders the text `Help` instead.
 - `brandLink`: URL string for the brand link (default: `#`).
-- `layout`: `desktop` or `mobile`. Mobile layout hides the brand logo link and does not render the help menu.
+- `layout`: `desktop` or `mobile`. Mobile layout hides the brand logo link, does not render the help menu, omits icons from the built-in login and sign-up buttons, hides the account webid text in the dropdown, and hides the logout icon.
 - `theme`: `light` or `dark`.
 - `authState`: `logged-out` or `logged-in`.
-- `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link.
-- `signUpAction`: object for the logged-out Sign Up action. The `label` field sets the button text and the `url` field (default: `https://solidproject.org/get_a_pod`) is the destination opened in a new tab when the button is clicked.
+- `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link. The optional `icon` field supplies a left-aligned icon URL for the rendered login button, but icons are hidden on mobile layout.
+- `signUpAction`: object for the logged-out Sign Up action. The `label` field sets the button text, the `url` field (default: `https://solidproject.org/get_a_pod`) is the destination opened in a new tab when the button is clicked, and the optional `icon` field supplies a left-aligned icon URL for the rendered signup button, but icons are hidden on mobile layout.
 - `accountLabel`: label for the logged-in dropdown trigger (default: `Accounts`).
 - `accountAvatar`: avatar URL used as the logged-in dropdown icon.
+- `accountAvatarFallback`: avatar URL used when `accountAvatar` is not provided. This replaces the internal default profile placeholder image.
+- `loginIcon`: optional URL string for a left-aligned icon on the login action button, taking precedence over `loginAction.icon`. Icons are still hidden on mobile layout.
+- `signUpIcon`: optional URL string for a left-aligned icon on the sign-up action button, taking precedence over `signUpAction.icon`. Icons are still hidden on mobile layout.
 - `accountMenu`: array of account entries for the logged-in dropdown.
 - `logoutLabel`: string label for the logout button at the bottom of the logged-in dropdown (default: `Log out`). Set to `null` to hide it.
+- `logoutIcon`: URL string for a left-aligned icon displayed in the logout menu item. Hidden on mobile layout.
 
 Slots:
 
@@ -115,10 +119,14 @@ Use `auth-state="logged-out"` to render the `<solid-ui-login-button>` and a Sign
 
   const header = document.querySelector('solid-ui-header')
   header.authState = 'logged-out'
-  // Optionally override the login button label:
-  header.loginAction = { label: 'Log In' }
-  // Optionally override the sign-up destination (opens in a new tab):
-  header.signUpAction = { label: 'Sign Up', url: 'https://myprovider.example/signup' }
+  // Optionally add an icon to the login button:
+  header.loginAction = { label: 'Log In', icon: 'https://example.com/login-icon.svg' }
+  // Optionally override the sign-up destination and add an icon (opens in a new tab):
+  header.signUpAction = {
+    label: 'Sign Up',
+    url: 'https://myprovider.example/signup',
+    icon: 'https://example.com/signup-icon.svg'
+  }
 
   header.addEventListener('auth-action-select', ({ detail }) => {
     if (detail.role === 'login') {

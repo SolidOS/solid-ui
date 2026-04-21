@@ -43,4 +43,15 @@ describe('SolidUILoginButton', () => {
     expect(label?.getAttribute('for')).toBe(input?.id)
     expect(input?.id).toBeTruthy()
   })
+
+  it('renders an icon when the icon property is set', async () => {
+    const loginButton = new LoginButton()
+    loginButton.icon = 'https://example.com/login-icon.svg'
+    document.body.appendChild(loginButton)
+    await loginButton.updateComplete
+
+    const icon = loginButton.shadowRoot?.querySelector('img.login-button-icon') as HTMLImageElement
+    expect(icon).not.toBeNull()
+    expect(icon.src).toContain('https://example.com/login-icon.svg')
+  })
 })

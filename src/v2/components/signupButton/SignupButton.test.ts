@@ -28,4 +28,27 @@ describe('SolidUISignupButton', () => {
     button.click()
     expect(window.open).toHaveBeenCalledWith('https://example.com/register', '_blank', 'noopener,noreferrer')
   })
+
+  it('renders an icon when the icon property is set', async () => {
+    const signupButton = new SignupButton()
+    signupButton.icon = 'https://example.com/icon.svg'
+    document.body.appendChild(signupButton)
+    await signupButton.updateComplete
+
+    const icon = signupButton.shadowRoot?.querySelector('img.signup-button-icon') as HTMLImageElement
+    expect(icon).not.toBeNull()
+    expect(icon.src).toContain('https://example.com/icon.svg')
+  })
+
+  it('applies mobile layout styles by removing the border on mobile', async () => {
+    const signupButton = new SignupButton()
+    signupButton.layout = 'mobile'
+    document.body.appendChild(signupButton)
+    await signupButton.updateComplete
+
+    const style = signupButton.shadowRoot?.querySelector('style')?.textContent
+    expect(style).toContain(':host([layout=\'mobile\']) .signup-button')
+    expect(style).toContain('border: none;')
+    expect(signupButton.getAttribute('layout')).toBe('mobile')
+  })
 })

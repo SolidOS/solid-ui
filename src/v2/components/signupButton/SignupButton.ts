@@ -6,7 +6,9 @@ export class SignupButton extends LitElement {
   static properties = {
     label: { type: String, reflect: true },
     theme: { type: String, reflect: true },
-    signupUrl: { type: String, attribute: 'signup-url', reflect: true }
+    signupUrl: { type: String, attribute: 'signup-url', reflect: true },
+    icon: { type: String, reflect: true },
+    layout: { type: String, reflect: true }
   }
 
   static styles = css`
@@ -42,6 +44,17 @@ export class SignupButton extends LitElement {
       transition: transform 0.2s ease;
     }
 
+    :host([layout='mobile']) .signup-button {
+      border: none;
+    }
+
+    .signup-button-icon {
+      width: 16px;
+      height: 16px;
+      display: inline-block;
+      object-fit: contain;
+    }
+
     .signup-button:active {
       transform: translateY(1px);
     }
@@ -50,12 +63,16 @@ export class SignupButton extends LitElement {
   declare label: string
   declare theme: 'light' | 'dark'
   declare signupUrl: string
+  declare icon: string
+  declare layout: 'desktop' | 'mobile'
 
   constructor () {
     super()
     this.label = 'Sign Up'
     this.signupUrl = DEFAULT_SIGNUP_URL
     this.theme = 'light'
+    this.icon = ''
+    this.layout = 'desktop'
   }
 
   private _handleClick () {
@@ -70,6 +87,7 @@ export class SignupButton extends LitElement {
         part="signup-button"
         @click="${() => this._handleClick()}"
       >
+        ${this.icon ? html`<img class="signup-button-icon" src="${this.icon}" alt="" aria-hidden="true" part="signup-button-icon" />` : ''}
         <slot>${this.label}</slot>
       </button>
     `
