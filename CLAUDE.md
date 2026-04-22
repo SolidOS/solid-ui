@@ -50,19 +50,28 @@ Git hooks (Husky): pre-commit runs lint-staged; pre-push runs `npm test`.
 
 **Data layer:** The library relies on `solid-logic` for the RDF store (`store`) and authentication (`authn`). RDF namespaces come from `solid-namespace`. Widgets read/write RDF data through `rdflib` quad-store APIs — no REST calls are made directly; all persistence goes through the store.
 
-## solid-ui-core
+## Related packages
 
-Pure utility modules (namespaces, style, debug, logging, icons, key helpers) live in a separate package at `../solid-ui-core/` (repo: `github.com/solidos/solid-ui-core`). They are imported here as `solid-ui-core`.
+This repo depends on two sibling packages, both cloned next to this directory:
 
-**Local development:** After editing solid-ui-core, run `npm run build-lib` there, then tests here will pick up the changes via the npm link. The link is set up with `npm link solid-ui-core` from this directory.
+| Package | Repo | Local path |
+|---------|------|------------|
+| `solid-ui-core` | `github.com/solidos/solid-ui-core` | `../solid-ui-core/` |
+| `ui-forms` | `github.com/solidos/ui-forms` | `../ui-forms/` |
 
-**Critical:** `solid-logic` and `rdflib` must not exist inside `node_modules/solid-ui-core/node_modules/` — npm 7 sometimes auto-installs peer deps there, which creates duplicate store instances. Delete them if they appear.
+**`solid-ui-core`** holds pure utility modules: namespaces (`ns`), style constants, debug/log, icons, buttons, error, dragAndDrop, multiSelect, widgetHelpers, and utils/keyHelpers.
 
-**Jest mocking:** When mocking solid-ui-core modules in tests, use the package alias form:
+**`ui-forms`** holds the W3C UI vocabulary form renderer: fieldParams, fieldFunction, formStyle, basic, comment, and autocomplete components.
+
+**Local development:** Neither package is published to npm yet — they are npm-linked. After editing either sibling, run `npm run build-lib` there before running tests here. Links are set up as symlinks in `node_modules/`.
+
+**Critical:** `solid-logic` and `rdflib` must not exist inside `node_modules/solid-ui-core/node_modules/` or `node_modules/ui-forms/node_modules/` — npm 7 auto-installs peer deps there, creating duplicate store instances. Delete them if they appear.
+
+**Jest mocking:** When mocking sub-path imports in tests, use the package alias form:
 ```ts
 jest.mock('solid-ui-core/utils/keyHelpers/otherHelpers', () => { ... })
 ```
-Not the raw `node_modules/solid-ui-core/src/...ts` path — that never intercepts the compiled `require()` calls.
+Not the raw `node_modules/.../src/...ts` path — that never intercepts the compiled `require()` calls.
 
 **Build outputs:**
 - `lib/` — Babel-transpiled CommonJS modules (npm consumers)
