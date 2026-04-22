@@ -120,11 +120,12 @@ function genUuid () {
  * @param {DomElement} table - will have a tr for each thing
  * @param {Array<NamedNode>} things - ORDERED array of NamedNode objects
  * @param {function({NamedNode})} createNewRow(thing) returns a TR table row for a new thing
+ * @param {function(DomElement, NamedNode)} updateExistingRow(row, thing) optional hook for refreshing matched rows
  *
  * Tolerates out of order elements but puts new ones in order.
  * Can be used for any element type; does not have to be a table and tr.
  */
-function syncTableToArray (table, things, createNewRow) {
+function syncTableToArray (table, things, createNewRow, updateExistingRow) {
   let foundOne
   let row
   let i
@@ -141,6 +142,14 @@ function syncTableToArray (table, things, createNewRow) {
     for (i = 0; i < table.children.length; i++) {
       row = table.children[i]
       if (row.subject && row.subject.sameTerm(thing)) {
+        if (updateExistingRow) {
+          const replacement = updateExistingRow(row, thing)
+          if (replacement && replacement !== row) {
+            row.parentNode.replaceChild(replacement, row)
+            replacement.subject = thing
+            row = replacement
+          }
+        }
         row.trashMe = false
         foundOne = true
         break

@@ -891,6 +891,7 @@ export type attachmentListOptions = {
 export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTMLElement, options: attachmentListOptions = {}) {
   // options = options || {}
   const docsWaitingForRowRefresh = new Set<string>()
+  const hasAsyncEnrichedRowOptions = !!(options.renderSupportingInfo || options.renderNameSuffix)
 
   const deleteAttachment = function (target) {
     if (!kb.updater) {
@@ -917,9 +918,11 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     opt.renderSupportingInfo = options.renderSupportingInfo
     opt.renderNameSuffix = options.renderNameSuffix
 
-    if ((options.renderSupportingInfo || options.renderNameSuffix) && target?.uri && kb.fetcher) {
+    if (hasAsyncEnrichedRowOptions && target?.uri && kb.fetcher) {
       const targetDoc = target.doc()
-      if (targetDoc?.uri && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
+      const requestState = targetDoc?.uri ? kb.fetcher.requested?.[targetDoc.uri] : undefined
+      const shouldWaitForFetch = requestState !== 'done' && requestState !== 'failed'
+      if (targetDoc?.uri && shouldWaitForFetch && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
         docsWaitingForRowRefresh.add(targetDoc.uri)
         // Root fix: these row options can depend on async profile data, so rerender once fetch completes.
         kb.fetcher.nowOrWhenFetched(targetDoc, undefined, () => {
@@ -940,7 +943,18 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   const refresh = function () {
     const things = kb.each(subject, predicate)
     things.sort()
-    utils.syncTableToArray(attachmentTable, things, createNewRow)
+    utils.syncTableToArray(
+      attachmentTable,
+      things,
+      createNewRow,
+      hasAsyncEnrichedRowOptions
+        ? function (row, thing) {
+            // When row content depends on async profile data, recreate matched rows on refresh.
+            const replacement = createNewRow(thing)
+            return replacement
+          }
+        : undefined
+    )
   }
 
   function droppedURIHandler (uris) {
