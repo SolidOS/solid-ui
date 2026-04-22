@@ -744,7 +744,7 @@ export class Header extends LitElement {
           id="accountMenu"
           class="account-dropdown"
           role="menu"
-          aria-hidden="${this.accountMenuOpen ? 'false' : 'true'}"
+          ?inert="${!this.accountMenuOpen || !this.hasAccountMenuItems()}"
           ?hidden="${!this.accountMenuOpen || !this.hasAccountMenuItems()}"
           part="account-dropdown"
         >
@@ -849,7 +849,7 @@ export class Header extends LitElement {
               id="helpMenu"
               class="help-dropdown"
               role="menu"
-              aria-hidden="${this.helpMenuOpen ? 'false' : 'true'}"
+              ?inert="${!this.helpMenuOpen || !this.hasHelpMenuItems()}"
               ?hidden="${!this.helpMenuOpen || !this.hasHelpMenuItems()}"
               part="help-dropdown"
             >

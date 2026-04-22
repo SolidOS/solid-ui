@@ -12,8 +12,7 @@ export class Footer extends LitElement {
     bottom: { type: String, reflect: true },
     left: { type: String, reflect: true },
     store: { type: Object, attribute: false },
-    _user: { state: true },
-    _userName: { state: true }
+    _user: { state: true }
   }
 
   static styles = css`
@@ -74,7 +73,6 @@ export class Footer extends LitElement {
   declare left: string
   declare store: LiveStore | null
   declare _user: NamedNode | null
-  declare _userName: string
 
   constructor () {
     super()
@@ -86,7 +84,6 @@ export class Footer extends LitElement {
     this.left = 'auto'
     this.store = null
     this._user = null
-    this._userName = ''
     this._updateFooter = this._updateFooter.bind(this)
   }
 
@@ -109,10 +106,6 @@ export class Footer extends LitElement {
   }
 
   updated (changedProperties: Map<string, unknown>) {
-    if (changedProperties.has('store')) {
-      this._updateFooter()
-    }
-
     if (
       changedProperties.has('position') ||
       changedProperties.has('top') ||
@@ -132,19 +125,8 @@ export class Footer extends LitElement {
     this.style.setProperty('--footer-left', this.left)
   }
 
-  private async _updateFooter () {
+  private _updateFooter () {
     this._user = authn.currentUser()
-    this._userName = ''
-
-    if (!this._user) {
-      return
-    }
-
-    if (this.store) {
-      this._userName = getName(this.store, this._user)
-    } else {
-      this._userName = this._user.uri
-    }
   }
 
   render () {
@@ -165,12 +147,14 @@ export class Footer extends LitElement {
       `
     }
 
+    const userName = this.store ? getName(this.store, this._user) : this._user.uri
+
     return html`
       <div>
         <strong>Logged in View</strong>
         <div>
           You are logged in as
-          <a href=${this._user?.uri ?? '#'} target="_blank" rel="noopener noreferrer">${this._userName || this._user?.uri}</a>.
+          <a href=${this._user.uri} target="_blank" rel="noopener noreferrer">${userName}</a>.
         </div>
       </div>
     `
