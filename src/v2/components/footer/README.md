@@ -59,6 +59,7 @@ footer.bottom = '1rem'
 
 Properties / attributes:
 
+- `layout`: `desktop` (default) or `mobile`. In mobile layout, the border, box-shadow and border-radius are removed.
 - `position`: `static`, `absolute`, `relative`, `fixed`, or `sticky`.
 - `top`: CSS offset for the top edge when `position` is not `static`.
 - `right`: CSS offset for the right edge when `position` is not `static`.

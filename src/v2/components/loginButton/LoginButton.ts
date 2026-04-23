@@ -8,6 +8,7 @@ export class LoginButton extends LitElement {
     theme: { type: String, reflect: true },
     issuerUrl: { type: String, attribute: 'issuer-url', reflect: true },
     icon: { type: String, reflect: true },
+    layout: { type: String, reflect: true },
     _popupOpen: { state: true },
     _issuerInputValue: { state: true },
     _dropdownOpen: { state: true }
@@ -309,6 +310,7 @@ export class LoginButton extends LitElement {
   declare theme: 'light' | 'dark'
   declare issuerUrl: string
   declare icon: string
+  declare layout: 'desktop' | 'mobile'
   declare _popupOpen: boolean
   declare _issuerInputValue: string
   declare _dropdownOpen: boolean
@@ -322,6 +324,7 @@ export class LoginButton extends LitElement {
     this.theme = 'light'
     this.issuerUrl = ''
     this.icon = ''
+    this.layout = 'desktop'
     this._popupOpen = false
     this._issuerInputValue = ''
     this._dropdownOpen = false

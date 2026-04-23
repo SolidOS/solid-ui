@@ -6,6 +6,7 @@ import { getName } from '../../../utils/headerFooterHelpers'
 export class Footer extends LitElement {
   static properties = {
     theme: { type: String, reflect: true },
+    layout: { type: String, reflect: true },
     position: { type: String, reflect: true },
     top: { type: String, reflect: true },
     right: { type: String, reflect: true },
@@ -63,9 +64,16 @@ export class Footer extends LitElement {
       display: block;
       margin-bottom: 0.5rem;
     }
+
+    :host([layout='mobile']) {
+      border: none;
+      box-shadow: none;
+      border-radius: 0;
+    }
   `
 
   declare theme: 'light' | 'dark'
+  declare layout: 'desktop' | 'mobile'
   declare position: 'static' | 'absolute' | 'relative' | 'fixed' | 'sticky'
   declare top: string
   declare right: string
@@ -77,6 +85,7 @@ export class Footer extends LitElement {
   constructor () {
     super()
     this.theme = 'light'
+    this.layout = 'desktop'
     this.position = 'static'
     this.top = 'auto'
     this.right = 'auto'

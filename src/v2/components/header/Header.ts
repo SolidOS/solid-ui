@@ -645,6 +645,7 @@ export class Header extends LitElement {
           <solid-ui-login-button
             label="${this.loginAction.label}"
             icon=${ifDefined(this.layout !== 'mobile' ? (this.loginIcon || this.loginAction.icon) : undefined)}
+            layout="${this.layout}"
             theme="${this.theme}"
             part="login-action"
             @login-success="${() => this.handleLoginSuccess()}"

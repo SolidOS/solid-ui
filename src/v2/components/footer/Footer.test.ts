@@ -37,4 +37,26 @@ describe('SolidUIFooterElement', () => {
 
     currentUserSpy.mockRestore()
   })
+
+  it('defaults layout to desktop', async () => {
+    const footer = new Footer()
+    document.body.appendChild(footer)
+    await footer.updateComplete
+
+    expect(footer.layout).toBe('desktop')
+    expect(footer.getAttribute('layout')).toBe('desktop')
+  })
+
+  it('applies mobile layout styles by removing border, box-shadow and border-radius', async () => {
+    const footer = new Footer()
+    footer.layout = 'mobile'
+    document.body.appendChild(footer)
+    await footer.updateComplete
+
+    const style = footer.shadowRoot?.querySelector('style')?.textContent
+    expect(style).toContain(':host([layout=\'mobile\'])')
+    expect(style).toContain('border: none;')
+    expect(style).toContain('box-shadow: none;')
+    expect(footer.getAttribute('layout')).toBe('mobile')
+  })
 })
