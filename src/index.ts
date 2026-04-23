@@ -39,7 +39,7 @@ https://github.com/solidos/solid
 // REMOVE @ts-ignore as you migrate files to TypeScript
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 // @ts-ignore
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore

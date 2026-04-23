@@ -17,7 +17,7 @@ import * as debug from 'solid-ui-core/debug'
 import { makeDropTarget } from 'solid-ui-core/dragAndDrop'
 import { errorMessageBlock } from 'solid-ui-core/error'
 import { iconBase } from 'solid-ui-core/iconBase'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store

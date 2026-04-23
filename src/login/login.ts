@@ -45,7 +45,7 @@ import {
 import * as debug from 'solid-ui-core/debug'
 import * as style from 'solid-ui-core/style'
 import { alert } from 'solid-ui-core/log'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from 'solid-ui-core/utils'
 import * as widgets from '../widgets'

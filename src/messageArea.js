@@ -4,7 +4,7 @@
 import { icons } from 'solid-ui-core/iconBase'
 import * as login from './login/login'
 import { solidLogicSingleton } from 'solid-logic'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from 'solid-ui-core/style'
 import * as utils from 'solid-ui-core/utils'

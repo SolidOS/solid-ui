@@ -1,7 +1,7 @@
 import * as debug from 'solid-ui-core/debug'
 import { schnorr } from '@noble/curves/secp256k1'
 import { bytesToHex } from '@noble/hashes/utils'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { store } from 'solid-logic'
 import { NamedNode } from 'rdflib'
 import * as $rdf from 'rdflib'

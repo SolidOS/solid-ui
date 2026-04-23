@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as utils from 'solid-ui-core/utils'
 import { getACLorDefault, getProspectiveHolder } from './acl'
 import { Store, NamedNode } from 'rdflib'

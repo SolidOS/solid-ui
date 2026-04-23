@@ -5,7 +5,7 @@
  * @packageDocumentation
  */
 
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { solidLogicSingleton, ACL_LINK } from 'solid-logic'
 import * as utils from 'solid-ui-core/utils'
 import { AgentMapMap, AgentMapUnion, ComboList } from './types'

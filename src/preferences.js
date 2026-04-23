@@ -6,7 +6,7 @@ import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from 'solid-ui-core/debug'
 import { ensureLoadedPreferences } from './login/login'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as participation from './participation' // @ts-ignore
 import * as widgets from './widgets'
 

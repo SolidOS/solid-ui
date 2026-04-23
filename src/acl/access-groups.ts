@@ -7,7 +7,7 @@
 import { NamedNode, sym, Store } from 'rdflib'
 import { ACLbyCombination, readACL } from './acl'
 import * as widgets from '../widgets'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { AccessController } from './access-controller'
 import { AgentMapMap, ComboList, PartialAgentTriple } from './types'
 import { AddAgentButtons } from './add-agent-buttons'

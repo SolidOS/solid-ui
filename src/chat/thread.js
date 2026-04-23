@@ -6,7 +6,7 @@
 import { icons } from 'solid-ui-core/iconBase'
 import { store } from 'solid-logic'
 import { media } from '../media/index'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as login from '../login/login'
 import * as pad from '../pad'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs

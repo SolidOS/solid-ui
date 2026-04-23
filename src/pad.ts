@@ -4,7 +4,7 @@
 
 /** @module pad
  */
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
 import { newThing, errorMessageBlock } from './widgets'
 import { beep } from 'solid-ui-core/utils'

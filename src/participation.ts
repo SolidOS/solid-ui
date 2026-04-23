@@ -4,7 +4,7 @@
 // import { currentUser } from './authn/authn'
 import * as debug from 'solid-ui-core/debug'
 import { LiveStore, NamedNode, st, UpdateManager } from 'rdflib'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import { personTR, newThing, errorMessageBlock } from './widgets'
 import { syncTableToArray } from 'solid-ui-core/utils'
 import { lightColorHash } from './pad'

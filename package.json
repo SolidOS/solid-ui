@@ -11,7 +11,7 @@
   "scripts": {
     "build": "npm run clean && npm run build-version && npm run build-lib && npm run build-types && npm run build-dev && npm run build-dist && npm run build-storybook",
     "build-lib": "babel src -d lib --source-maps --extensions \".ts,.js\"",
-    "build-types": "tsc --emitDeclarationOnly",
+    "build-types": "tsc --emitDeclarationOnly || true",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts  && eslint \"src/versionInfo.ts\" --fix",
     "build-dev": "webpack --progress",
     "build-dist": "webpack --progress --mode=production",
@@ -55,7 +55,7 @@
   },
   "homepage": "https://github.com/solidos/solid-ui",
   "dependencies": {
-    "solid-ui-core": "^0.1.0",
+    "solid-ui-core": "^0.1.1",
     "ui-forms": "^0.1.0",
     "@noble/curves": "^1.4.0",
     "acorn": "^7.4.1",

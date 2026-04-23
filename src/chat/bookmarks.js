@@ -6,7 +6,7 @@
 import * as debug from 'solid-ui-core/debug'
 import { icons } from 'solid-ui-core/iconBase'
 import { media } from '../media/index'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as pad from '../pad'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import * as style from 'solid-ui-core/style'

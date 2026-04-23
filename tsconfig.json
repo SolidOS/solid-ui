@@ -56,8 +56,15 @@
       "typings"
     ] /* List of folders to include type definitions from. */,
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
-    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */,
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
+    "baseUrl": ".",
+    "paths": {
+      "solid-ui-core": ["node_modules/solid-ui-core/lib/index"],
+      "solid-ui-core/*": ["node_modules/solid-ui-core/lib/*"],
+      "ui-forms": ["node_modules/ui-forms/lib/index"],
+      "ui-forms/*": ["node_modules/ui-forms/lib/*"]
+    }
 
     /* Source Map Options */
     // "sourceRoot": "",                      /* Specify the location where debugger should locate TypeScript files instead of source locations. */

@@ -5,7 +5,7 @@
  */
 import * as debug from 'solid-ui-core/debug'
 import { store } from 'solid-logic'
-import * as ns from 'solid-ui-core/ns'
+import ns from 'solid-ui-core/ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 
 export async function emptyLeaf (leafDocument) {
