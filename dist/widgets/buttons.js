@@ -9,6 +9,7 @@ import { info } from '../log';
 import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop';
 import { store } from 'solid-logic';
 import * as utils from '../utils';
+import newPersonIconDataURI from '../newperson';
 import { errorMessageBlock } from './error';
 import { addClickListenerToElement, createImageDiv, wrapDivInATR } from './widgetHelpers';
 import { linkIcon, createLinkForURI } from './buttons/iconLinks';
@@ -204,9 +205,10 @@ export const iconForClass = {
     'solid:Pod': 'noun_Cabinet_1434380.svg',
     'vcard:Group': 'noun_339237.svg',
     'vcard:Organization': 'noun_143899.svg',
-    'vcard:Individual': 'noun_15059.svg',
-    'schema:Person': 'noun_15059.svg',
-    'foaf:Person': 'noun_15059.svg',
+    // TEMP HACK: Use locally bundled icon; switch to solid-assets icon mapping soon.
+    'vcard:Individual': newPersonIconDataURI,
+    'schema:Person': newPersonIconDataURI,
+    'foaf:Person': newPersonIconDataURI,
     'foaf:Agent': 'noun_98053.svg',
     'acl:AuthenticatedAgent': 'noun_99101.svg',
     'prov:SoftwareAgent': 'noun_Robot_849764.svg', // Bot
@@ -352,7 +354,14 @@ export function setImage(element, thing) {
         const pref = k.split(':')[0];
         const id = k.split(':')[1];
         const theClass = ns[pref](id);
-        iconForClassMap[theClass.uri] = uri.join(iconForClass[k], iconBase);
+        const iconRef = iconForClass[k];
+        /* Temporary hack for a new design icon */
+        if (iconRef.startsWith('data:')) {
+            iconForClassMap[theClass.uri] = iconRef;
+        }
+        else {
+            iconForClassMap[theClass.uri] = uri.join(iconRef, iconBase);
+        }
     }
     const happy = trySetImage(element, thing, iconForClassMap);
     if (!happy && thing.uri) {
@@ -630,11 +639,39 @@ export function renderAsRow(dom, pred, obj, options) {
     td2.setAttribute('style', 'vertical-align: middle; text-align:left;');
     td3.setAttribute('style', 'vertical-align: middle; width:2em; padding:0.5em; height: 4em;');
     td1.appendChild(image);
+    const nameLine = td2.appendChild(dom.createElement('div'));
+    const nameText = nameLine.appendChild(dom.createElement('span'));
     if (options.title) {
-        td2.textContent = options.title;
+        nameText.textContent = options.title;
     }
     else {
-        setName(td2, obj); // This is async
+        setName(nameText, obj); // This is async
+    }
+    if (typeof options.renderNameSuffix === 'function') {
+        const inlineInfo = options.renderNameSuffix(obj, dom);
+        if (inlineInfo) {
+            const nameSuffix = nameLine.appendChild(dom.createElement('span'));
+            nameSuffix.setAttribute('style', 'margin-left: 0.4em; opacity: 0.8;');
+            if (typeof inlineInfo === 'string') {
+                nameSuffix.textContent = inlineInfo;
+            }
+            else {
+                nameSuffix.appendChild(inlineInfo);
+            }
+        }
+    }
+    if (typeof options.renderSupportingInfo === 'function') {
+        const supportingInfo = options.renderSupportingInfo(obj, dom);
+        if (supportingInfo) {
+            const supportingLine = td2.appendChild(dom.createElement('div'));
+            supportingLine.setAttribute('style', 'font-size: 90%; opacity: 0.8;');
+            if (typeof supportingInfo === 'string') {
+                supportingLine.textContent = supportingInfo;
+            }
+            else {
+                supportingLine.appendChild(supportingInfo);
+            }
+        }
     }
     if (options.deleteFunction) {
         deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction);
@@ -733,6 +770,8 @@ export function refreshTree(root) {
  */
 export function attachmentList(dom, subject, div, options = {}) {
     // options = options || {}
+    const docsWaitingForRowRefresh = new Set();
+    const hasAsyncEnrichedRowOptions = !!(options.renderSupportingInfo || options.renderNameSuffix);
     const deleteAttachment = function (target) {
         if (!kb.updater) {
             throw new Error('kb has no updater');
@@ -747,8 +786,24 @@ export function attachmentList(dom, subject, div, options = {}) {
         });
     };
     function createNewRow(target) {
+        var _a;
         const theTarget = target;
         const opt = { noun };
+        opt.renderSupportingInfo = options.renderSupportingInfo;
+        opt.renderNameSuffix = options.renderNameSuffix;
+        if (hasAsyncEnrichedRowOptions && (target === null || target === void 0 ? void 0 : target.uri) && kb.fetcher) {
+            const targetDoc = target.doc();
+            const requestState = (targetDoc === null || targetDoc === void 0 ? void 0 : targetDoc.uri) ? (_a = kb.fetcher.requested) === null || _a === void 0 ? void 0 : _a[targetDoc.uri] : undefined;
+            const shouldWaitForFetch = requestState !== 'done' && requestState !== 'failed';
+            if ((targetDoc === null || targetDoc === void 0 ? void 0 : targetDoc.uri) && shouldWaitForFetch && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
+                docsWaitingForRowRefresh.add(targetDoc.uri);
+                // Root fix: these row options can depend on async profile data, so rerender once fetch completes.
+                kb.fetcher.nowOrWhenFetched(targetDoc, undefined, () => {
+                    docsWaitingForRowRefresh.delete(targetDoc.uri);
+                    refresh();
+                });
+            }
+        }
         if (modify) {
             opt.deleteFunction = function () {
                 deleteAttachment(theTarget);
@@ -759,7 +814,13 @@ export function attachmentList(dom, subject, div, options = {}) {
     const refresh = function () {
         const things = kb.each(subject, predicate);
         things.sort();
-        utils.syncTableToArray(attachmentTable, things, createNewRow);
+        utils.syncTableToArray(attachmentTable, things, createNewRow, hasAsyncEnrichedRowOptions
+            ? function (row, thing) {
+                // When row content depends on async profile data, recreate matched rows on refresh.
+                const replacement = createNewRow(thing);
+                return replacement;
+            }
+            : undefined);
     };
     function droppedURIHandler(uris) {
         const ins = [];

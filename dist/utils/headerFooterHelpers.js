@@ -7,8 +7,17 @@ import { ns } from '..';
  * @ignore exporting this only for the unit test
  */
 export function getPod() {
-    // @@ TODO: This is given that mashlib runs on NSS - might need to change when we want it to run on other Pod servers
-    return sym(document.location.origin).site();
+    var _a, _b;
+    const { origin, pathname } = document.location;
+    const isDatabrowserShell = ((_b = (_a = document.body) === null || _a === void 0 ? void 0 : _a.dataset) === null || _b === void 0 ? void 0 : _b.appShell) === 'databrowser';
+    const segments = pathname.split('/').filter(Boolean);
+    const lastSegment = segments[segments.length - 1] || '';
+    const looksLikeFile = /\.[^/]+$/.test(lastSegment);
+    if (isDatabrowserShell && segments.length > 0 && !looksLikeFile) {
+        return sym(`${origin}/${segments[0]}/`);
+    }
+    // Root-hosted pods and static databrowser pages still use the site root.
+    return sym(origin).site();
 }
 /**
  */

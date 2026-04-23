@@ -20,6 +20,10 @@ export type RenderAsDivOptions = {
     onClickFunction?: () => void;
     wrapInATR?: boolean;
 };
+export type AttachmentSupportingInfo = string | HTMLElement | null | undefined;
+export type RenderSupportingInfo = (target: NamedNode, dom: HTMLDocument) => AttachmentSupportingInfo;
+export type AttachmentInlineInfo = string | HTMLElement | null | undefined;
+export type RenderNameSuffix = (target: NamedNode, dom: HTMLDocument) => AttachmentInlineInfo;
 /**
  * Display an error message block
  */
@@ -87,9 +91,9 @@ export declare const iconForClass: {
     'solid:Pod': string;
     'vcard:Group': string;
     'vcard:Organization': string;
-    'vcard:Individual': string;
-    'schema:Person': string;
-    'foaf:Person': string;
+    'vcard:Individual': any;
+    'schema:Person': any;
+    'foaf:Person': any;
     'foaf:Agent': string;
     'acl:AuthenticatedAgent': string;
     'prov:SoftwareAgent': string;
@@ -171,6 +175,8 @@ export type attachmentListOptions = {
     predicate?: NamedNode;
     uploadFolder?: NamedNode;
     noun?: string;
+    renderSupportingInfo?: RenderSupportingInfo;
+    renderNameSuffix?: RenderNameSuffix;
 };
 /**
  * Component that displays a list of resources, for instance

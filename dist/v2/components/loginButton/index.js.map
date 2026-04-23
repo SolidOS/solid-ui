@@ -1,0 +1,1 @@
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/v2/components/loginButton/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,eAAe,CAAA;AAE3C,OAAO,EAAE,WAAW,EAAE,CAAA;AAEtB,MAAM,qBAAqB,GAAG,uBAAuB,CAAA;AAErD,IAAI,CAAC,cAAc,CAAC,GAAG,CAAC,qBAAqB,CAAC,EAAE,CAAC;IAC/C,cAAc,CAAC,MAAM,CAAC,qBAAqB,EAAE,WAAW,CAAC,CAAA;AAC3D,CAAC"}

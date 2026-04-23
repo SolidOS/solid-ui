@@ -34,10 +34,17 @@ export function rebuildFooter(footer, store, pod, podOwner, options) {
  */
 export function createControllerInfoBlock(store, user, pod, podOwner, options) {
     const profileLinkContainer = document.createElement('div');
+    profileLinkContainer.setAttribute('style', style.footer);
+    const solidProjectLink = document.createElement('a');
+    solidProjectLink.href = options && options.solidProjectUrl ? options.solidProjectUrl : DEFAULT_SOLID_PROJECT_URL;
+    solidProjectLink.innerText = options && options.solidProjectName ? options.solidProjectName : DEFAULT_SOLID_PROJECT_NAME;
     if (!pod || !podOwner || (user && user.equals(podOwner))) {
+        const defaultPrefix = document.createElement('span');
+        defaultPrefix.innerText = 'Powered by ';
+        profileLinkContainer.appendChild(defaultPrefix);
+        profileLinkContainer.appendChild(solidProjectLink);
         return profileLinkContainer;
     }
-    profileLinkContainer.setAttribute('style', style.footer);
     const podLinkPre = document.createElement('span');
     podLinkPre.innerText = 'You\'re visiting ';
     const podLink = document.createElement('a');
@@ -50,9 +57,6 @@ export function createControllerInfoBlock(store, user, pod, podOwner, options) {
     profileLink.innerText = getName(store, podOwner);
     const solidProjectLinkPre = document.createElement('span');
     solidProjectLinkPre.innerText = '. For more info, check out ';
-    const solidProjectLink = document.createElement('a');
-    solidProjectLink.href = options && options.solidProjectUrl ? options.solidProjectUrl : DEFAULT_SOLID_PROJECT_URL;
-    solidProjectLink.innerText = options && options.solidProjectName ? options.solidProjectName : DEFAULT_SOLID_PROJECT_NAME;
     const solidProjectLinkPost = document.createElement('span');
     solidProjectLinkPost.innerText = '.';
     profileLinkContainer.appendChild(podLinkPre);

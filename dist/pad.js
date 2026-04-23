@@ -125,7 +125,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         const next = kb.any(chunk, PAD('next'));
         if (prev.sameTerm(subject) && next.sameTerm(subject)) {
             // Last one
-            log("You can't delete the only line.");
+            log('You can\'t delete the only line.');
             return;
         }
         const del = kb
@@ -170,7 +170,7 @@ export function notepad(dom, padDoc, subject, me, options) {
             }
             else {
                 log('    removePart FAILED ' + chunk + ': ' + errorMessage);
-                log("    removePart was deleting :'" + del);
+                log('    removePart was deleting :\'' + del);
                 setPartStyle(part, 'color: black;  background-color: #fdd;'); // failed
                 const res = response
                     ? response.status
@@ -192,9 +192,9 @@ export function notepad(dom, padDoc, subject, me, options) {
         }
         updater.update(del, ins, function (uri, ok, errorBody) {
             if (!ok) {
-                log("Indent change FAILED '" +
+                log('Indent change FAILED \'' +
                     newIndent +
-                    "' for " +
+                    '\' for ' +
                     padDoc +
                     ': ' +
                     errorBody);
@@ -298,11 +298,11 @@ export function notepad(dom, padDoc, subject, me, options) {
             if (part.lastSent) {
                 if (old !== part.lastSent) {
                     // Non-fatal: log a warning instead of throwing, to avoid crashing the pad UI.
-                    console.warn("Out of order, last sent expected '" +
+                    console.warn('Out of order, last sent expected \'' +
                         old +
-                        "' but found '" +
+                        '\' but found \'' +
                         part.lastSent +
-                        "'");
+                        '\'');
                 }
             }
             part.lastSent = newOne;
@@ -323,11 +323,11 @@ export function notepad(dom, padDoc, subject, me, options) {
                     // alert("clash " + errorBody);
                     log('    patch FAILED ' +
                         xhr.status +
-                        " for '" +
+                        ' for \'' +
                         old +
-                        "' -> '" +
+                        '\' -> \'' +
                         newOne +
-                        "': " +
+                        '\': ' +
                         errorBody);
                     if (xhr.status === 409) {
                         // Conflict -  @@ we assume someone else
@@ -363,7 +363,7 @@ export function notepad(dom, padDoc, subject, me, options) {
                 else {
                     clearStatus(true); // upstream
                     setPartStyle(part); // synced
-                    log("    Patch ok '" + old + "' -> '" + newOne + "' ");
+                    log('    Patch ok \'' + old + '\' -> \'' + newOne + '\' ');
                     if (part.state === 4) {
                         //  delete me
                         part.state = 3;
@@ -386,7 +386,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         part.addEventListener('input', function inputChangeListener(_event) {
             // debug.log("input changed "+part.value);
             setPartStyle(part, undefined, true); // grey out - not synced
-            log('Input event state ' + part.state + " value '" + part.value + "'");
+            log('Input event state ' + part.state + ' value \'' + part.value + '\'');
             switch (part.state) {
                 case 3: // being deleted
                     return;
@@ -440,7 +440,7 @@ export function notepad(dom, padDoc, subject, me, options) {
         }
         else {
             setPartStyle(part, 'color: #222; background-color: #fff');
-            log("Note can't add listeners - not logged in");
+            log('Note can\'t add listeners - not logged in');
         }
         return part;
     };

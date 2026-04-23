@@ -1,0 +1,23 @@
+export declare const birthdayIcon: import("lit-html").TemplateResult<1>;
+export declare const locationIcon: import("lit-html").TemplateResult<1>;
+export declare const checkMarkIcon: import("lit-html").TemplateResult<1>;
+export declare const plusDarkIcon: import("lit-html").TemplateResult<1>;
+export declare const plusIcon: import("lit-html").TemplateResult<1>;
+export declare const searchIcon: import("lit-html").TemplateResult<1>;
+export declare const trashIcon: import("lit-html").TemplateResult<1>;
+export declare const bentoIcon: import("lit-html").TemplateResult<1>;
+export declare const starIcon: import("lit-html").TemplateResult<1>;
+export declare const addIcon: import("lit-html").TemplateResult<1>;
+export declare const personInCircleIcon: import("lit-html").TemplateResult<1>;
+export declare const globeIcon: import("lit-html").TemplateResult<1>;
+export declare const lighteningIcon: import("lit-html").TemplateResult<1>;
+export declare const commentIcon: import("lit-html").TemplateResult<1>;
+export declare const envelopeIcon: import("lit-html").TemplateResult<1>;
+export declare const pasteIcon: import("lit-html").TemplateResult<1>;
+export declare const closeIcon: import("lit-html").TemplateResult<1>;
+export declare const editIcon: import("lit-html").TemplateResult<1>;
+export declare const deleteIcon: import("lit-html").TemplateResult<1>;
+export declare const purpleFilledCheckboxIcon: import("lit-html").TemplateResult<1>;
+export declare const cameraIcon: import("lit-html").TemplateResult<1>;
+export declare const twoDownArrowsIcon: import("lit-html").TemplateResult<1>;
+//# sourceMappingURL=profileIcons.d.ts.map
