@@ -125,7 +125,7 @@ describe('SolidUIHeaderElement', () => {
     const accountMenuSelected = jest.fn()
 
     header.authState = 'logged-in'
-    header.accountLabel = 'Accounts'
+    header.accountIcon = 'https://example.com/account-icon.svg'
     header.accountAvatar = 'https://example.com/avatar.png'
     header.logoutIcon = 'https://example.com/logout-icon.svg'
     header.accountMenu = [
@@ -144,7 +144,7 @@ describe('SolidUIHeaderElement', () => {
     const trigger = shadow?.getElementById('accountMenuTrigger') as HTMLButtonElement
 
     expect(trigger).not.toBeNull()
-    expect(trigger.textContent).toContain('Accounts')
+    expect((trigger.querySelector('img.account-menu-trigger-icon') as HTMLImageElement)?.src).toContain('https://example.com/account-icon.svg')
     expect((shadow?.querySelector('.account-avatar img') as HTMLImageElement)?.src).toContain('https://example.com/avatar.png')
 
     trigger.click()

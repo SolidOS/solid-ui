@@ -86,7 +86,7 @@ Properties/attributes:
 - `authState`: `logged-out` or `logged-in`.
 - `loginAction`: object with a `label` for the login button. When `authState` is `logged-out` this is rendered as a `<solid-ui-login-button>` which handles the full OIDC flow; supplying a `url` instead opts out of the built-in flow and renders a plain link. The optional `icon` field supplies a left-aligned icon URL for the rendered login button, but icons are hidden on mobile layout.
 - `signUpAction`: object for the logged-out Sign Up action. The `label` field sets the button text, the `url` field (default: `https://solidproject.org/get_a_pod`) is the destination opened in a new tab when the button is clicked, and the optional `icon` field supplies a left-aligned icon URL for the rendered signup button, but icons are hidden on mobile layout.
-- `accountLabel`: label for the logged-in dropdown trigger (default: `Accounts`).
+- `accountIcon`: URL string for the icon displayed in the logged-in dropdown trigger button (default: `▼`). Always rendered as an `<img>` element. Hidden on mobile layout.
 - `accountAvatar`: avatar URL used as the logged-in dropdown icon.
 - `accountAvatarFallback`: avatar URL used when `accountAvatar` is not provided. This replaces the internal default profile placeholder image.
 - `loginIcon`: optional URL string for a left-aligned icon on the login action button, taking precedence over `loginAction.icon`. Icons are still hidden on mobile layout.
@@ -152,7 +152,7 @@ If you want a fully custom login UI you can override the slot:
 <script type="module">
   const header = document.querySelector('solid-ui-header')
   header.authState = 'logged-in'
-  header.accountLabel = 'Accounts'
+  header.accountIcon = 'https://example.com/chevron-down.svg'
   header.accountAvatar = 'https://example.com/alice.jpg'
   header.accountMenu = [
     {

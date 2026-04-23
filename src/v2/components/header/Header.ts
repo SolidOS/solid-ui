@@ -38,7 +38,7 @@ export class Header extends LitElement {
     accountMenu: { type: Array, attribute: false },
     logoutLabel: { type: String, attribute: 'logout-label', reflect: true },
     logoutIcon: { type: String, attribute: 'logout-icon', reflect: true },
-    accountLabel: { type: String, attribute: 'account-label', reflect: true },
+    accountIcon: { type: String, attribute: 'account-icon', reflect: true },
     accountAvatar: { type: String, attribute: 'account-avatar', reflect: true },
     accountAvatarFallback: { type: String, attribute: 'account-avatar-fallback', reflect: true },
     loginIcon: { type: String, attribute: 'login-icon', reflect: true },
@@ -226,8 +226,11 @@ export class Header extends LitElement {
     opacity: 0.7;
   }
 
-  .account-menu-trigger-label {
-    white-space: nowrap;
+  .account-menu-trigger-icon {
+    width: 1rem;
+    height: 1rem;
+    object-fit: contain;
+    flex-shrink: 0;
   }
 
   .account-avatar,
@@ -497,7 +500,7 @@ export class Header extends LitElement {
   declare accountMenu: HeaderAccountMenuItem[]
   declare logoutLabel: string | null
   declare logoutIcon: string
-  declare accountLabel: string
+  declare accountIcon: string
   declare accountAvatar: string
   declare accountAvatarFallback: string
   declare loginIcon: string
@@ -521,7 +524,7 @@ export class Header extends LitElement {
     this.accountMenu = []
     this.logoutLabel = 'Log Out'
     this.logoutIcon = ''
-    this.accountLabel = 'Accounts'
+    this.accountIcon = '▼'
     this.accountAvatar = ''
     this.accountAvatarFallback = ''
     this.loginIcon = ''
@@ -736,7 +739,8 @@ export class Header extends LitElement {
             part="account-menu-trigger"
           >
             ${this.renderLoggedInAvatar(this.accountAvatar)}
-            ${this.layout !== 'mobile' ? html`<span class="account-menu-trigger-label">${this.accountLabel}</span>` : ''}
+            ${this.layout !== 'mobile' && this.accountIcon ? html`
+              <img class="account-menu-trigger-icon" src="${this.accountIcon}" alt="" aria-hidden="true" />` : ''}
           </button>
         </slot>
 
