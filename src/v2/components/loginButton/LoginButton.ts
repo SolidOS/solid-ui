@@ -447,7 +447,8 @@ export class LoginButton extends LitElement {
                     @keydown="${this._handleInputKeydown}"
                     autocomplete="url"
                   />
-                  ${suggestedIssuers.length ? html`
+                  ${suggestedIssuers.length
+? html`
                     <button
                       class="issuer-dropdown-toggle"
                       type="button"
@@ -455,9 +456,11 @@ export class LoginButton extends LitElement {
                       aria-expanded="${this._dropdownOpen}"
                       @click="${() => this._toggleDropdown()}"
                     >${downArrowIcon}</button>
-                  ` : ''}
+                  `
+: ''}
                 </div>
-                ${this._dropdownOpen && suggestedIssuers.length ? html`
+                ${this._dropdownOpen && suggestedIssuers.length
+? html`
                   <div class="issuer-dropdown-list" role="listbox">
                     ${suggestedIssuers.map(issuerInfo => html`
                       <button
@@ -468,7 +471,8 @@ export class LoginButton extends LitElement {
                       >${issuerInfo.name}</button>
                     `)}
                   </div>
-                ` : ''}
+                `
+: ''}
               </div>
             </div>
             ${this._errorMsg ? html`<div class="error-msg">${this._errorMsg}</div>` : ''}

@@ -740,8 +740,10 @@ export class Header extends LitElement {
             part="account-menu-trigger"
           >
             ${this.renderLoggedInAvatar(this.accountAvatar)}
-            ${this.layout !== 'mobile' && this.accountIcon ? html`
-              <img class="account-menu-trigger-icon" src="${this.accountIcon}" alt="" aria-hidden="true" />` : ''}
+            ${this.layout !== 'mobile' && this.accountIcon
+? html`
+              <img class="account-menu-trigger-icon" src="${this.accountIcon}" alt="" aria-hidden="true" />`
+: ''}
           </button>
         </slot>
 
