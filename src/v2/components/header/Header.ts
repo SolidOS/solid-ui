@@ -217,7 +217,7 @@ export class Header extends LitElement {
     background: var(--header-menu-loggedin-bg);
   }
 
-  :host([layout='mobile']) .account-menu-trigger-label {
+  :host([layout='mobile']) .account-menu-trigger-icon {
     display: none;
   }
 
