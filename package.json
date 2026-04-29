@@ -34,6 +34,11 @@
       "types": "./dist/components/select/index.d.ts",
       "import": "./dist/components/select/index.esm.js",
       "require": "./dist/components/select/index.js"
+    },
+    "./components/combobox": {
+      "types": "./dist/components/combobox/index.d.ts",
+      "import": "./dist/components/combobox/index.esm.js",
+      "require": "./dist/components/combobox/index.js"
     }
   },
   "files": [

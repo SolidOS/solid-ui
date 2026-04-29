@@ -45,6 +45,9 @@ const common = {
     },
     select: {
       import: './src/v2/components/select/index.ts'
+    },
+    combobox: {
+      import: './src/v2/components/combobox/index.ts'
     }
   },
   output: {

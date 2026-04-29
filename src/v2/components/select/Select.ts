@@ -242,7 +242,7 @@ export class Select extends LitElement {
     return this.options[0]
   }
 
-  private _getPopupOptions() {
+  private _getDisplayedOptions() {
     const selectedOption = this._getSelectedOption()
 
     if (!selectedOption) {
@@ -256,7 +256,7 @@ export class Select extends LitElement {
   }
 
   private _getActiveOption() {
-    const popupOptions = this._getPopupOptions()
+    const popupOptions = this._getDisplayedOptions()
 
     if (this._activeIndex < 0) {
       return undefined
@@ -286,7 +286,7 @@ export class Select extends LitElement {
   }
 
   private _openPopup() {
-    const popupOptions = this._getPopupOptions()
+    const popupOptions = this._getDisplayedOptions()
 
     this._popupOpen = true
     this._activeIndex = findOptionIndexByValue(popupOptions, this.value)
@@ -297,7 +297,7 @@ export class Select extends LitElement {
   }
 
   private _handleTriggerKeydown(event: KeyboardEvent) {
-    const popupOptions = this._getPopupOptions()
+    const popupOptions = this._getDisplayedOptions()
     const action = getListboxActionFromKey(event.key)
 
     if (action === 'none') {
@@ -361,7 +361,7 @@ export class Select extends LitElement {
   }
 
   private _renderPopup() {
-    const popupOptions = this._getPopupOptions()
+    const popupOptions = this._getDisplayedOptions()
     const selectedOption = this._getSelectedOption()
     const activeOption = this._getActiveOption()
 
