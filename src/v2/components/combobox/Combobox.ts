@@ -335,11 +335,11 @@ export class Combobox extends LitElement {
     }
   }
 
-  private _getSelectedIndex() {
+  private _getSelectedIndex () {
     return findOptionIndexByValue(this.options, this.value)
   }
 
-  private _getSelectedOption() {
+  private _getSelectedOption () {
     const selectedIndex = this._getSelectedIndex()
 
     if (selectedIndex >= 0) {
@@ -349,7 +349,7 @@ export class Combobox extends LitElement {
     return this.options[0]
   }
 
-  private _getDisplayedOptions() {
+  private _getDisplayedOptions () {
     const selectedOption = this._getSelectedOption()
 
     if (!selectedOption) {
@@ -362,7 +362,7 @@ export class Combobox extends LitElement {
     ]
   }
 
-  private _getActiveOption() {
+  private _getActiveOption () {
     const popupOptions = this._getDisplayedOptions()
 
     if (this._activeIndex < 0) {
@@ -389,7 +389,7 @@ export class Combobox extends LitElement {
     this._openPopup()
   }
 
-  private _handleInputChange (e: Event) {
+  private async _handleInputChange (e: Event) {
     const query = (e.target as HTMLInputElement).value
 
     this.inputValue = query
@@ -399,7 +399,7 @@ export class Combobox extends LitElement {
       bubbles: true,
       composed: true
     }))
-    void this._loadSuggestions(query)
+    await this._loadSuggestions(query)
   }
 
   private _handleInputKeydown (e: KeyboardEvent) {

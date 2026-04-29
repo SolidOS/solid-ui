@@ -10,7 +10,7 @@ export interface RenderListboxArgs {
   onOptionSelect: (option: SelectOption) => void
 }
 
-export function renderListbox(args: RenderListboxArgs) {
+export function renderListbox (args: RenderListboxArgs) {
   const {
     options,
     selectedOption,

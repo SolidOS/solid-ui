@@ -1,7 +1,7 @@
-import { SelectOption } from "./optionTypes"
+import { SelectOption } from './optionTypes'
 
 /* Move up or down, skip disabled options */
-export function getNextEnabledIndex(
+export function getNextEnabledIndex (
   currentIndex: number,
   options: SelectOption[],
   direction: 1 | -1
@@ -25,7 +25,7 @@ export function getNextEnabledIndex(
 }
 
 /* Handle 'Home' and 'End' keys and initial highlight */
-export function getFirstEnabledIndex(options: SelectOption[]): number {
+export function getFirstEnabledIndex (options: SelectOption[]): number {
   if (!options.length) {
     return -1
   }
@@ -33,7 +33,7 @@ export function getFirstEnabledIndex(options: SelectOption[]): number {
   return getNextEnabledIndex(-1, options, 1)
 }
 
-export function getLastEnabledIndex(options: SelectOption[]): number {
+export function getLastEnabledIndex (options: SelectOption[]): number {
   if (!options.length) {
     return -1
   }
@@ -42,7 +42,7 @@ export function getLastEnabledIndex(options: SelectOption[]): number {
 }
 
 /* Sync current value to active index */
-export function findOptionIndexByValue(
+export function findOptionIndexByValue (
   options: SelectOption[],
   value?: string
 ): number {
@@ -53,7 +53,7 @@ export function findOptionIndexByValue(
 }
 
 /* Map keyboard events to actions */
-export function getListboxActionFromKey(key: string): 
+export function getListboxActionFromKey (key: string):
   | 'open'
   | 'close'
   | 'next'
@@ -79,4 +79,4 @@ export function getListboxActionFromKey(key: string):
     default:
       return 'none'
   }
-} 
+}

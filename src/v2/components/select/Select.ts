@@ -199,7 +199,7 @@ export class Select extends LitElement {
 
   private readonly _listboxId = `solid-ui-select-listbox-${Select._nextId++}`
 
-  constructor() {
+  constructor () {
     super()
     this.label = 'Select an option'
     this.theme = 'light'
@@ -209,30 +209,30 @@ export class Select extends LitElement {
     this._activeIndex = -1
   }
 
-  connectedCallback() {
+  connectedCallback () {
     super.connectedCallback()
     document.addEventListener('pointerdown', this._handleDocumentPointerDown)
   }
 
-  disconnectedCallback() {
+  disconnectedCallback () {
     document.removeEventListener('pointerdown', this._handleDocumentPointerDown)
     super.disconnectedCallback()
   }
 
-  protected updated() {
+  protected updated () {
     this.toggleAttribute('popup-open', this._popupOpen)
   }
 
-  private _closePopup() {
+  private _closePopup () {
     this._popupOpen = false
     this._activeIndex = -1
   }
 
-  private _getSelectedIndex() {
+  private _getSelectedIndex () {
     return findOptionIndexByValue(this.options, this.value)
   }
 
-  private _getSelectedOption() {
+  private _getSelectedOption () {
     const selectedIndex = this._getSelectedIndex()
 
     if (selectedIndex >= 0) {
@@ -242,7 +242,7 @@ export class Select extends LitElement {
     return this.options[0]
   }
 
-  private _getDisplayedOptions() {
+  private _getDisplayedOptions () {
     const selectedOption = this._getSelectedOption()
 
     if (!selectedOption) {
@@ -255,7 +255,7 @@ export class Select extends LitElement {
     ]
   }
 
-  private _getActiveOption() {
+  private _getActiveOption () {
     const popupOptions = this._getDisplayedOptions()
 
     if (this._activeIndex < 0) {
@@ -265,7 +265,7 @@ export class Select extends LitElement {
     return popupOptions[this._activeIndex]
   }
 
-  private _selectValueFromDropdown(uri: string) {
+  private _selectValueFromDropdown (uri: string) {
     this.value = uri
     this.dispatchEvent(
       new CustomEvent('change', {
@@ -277,7 +277,7 @@ export class Select extends LitElement {
     this._closePopup()
   }
 
-  private _selectActiveOption() {
+  private _selectActiveOption () {
     const activeOption = this._getActiveOption()
 
     if (activeOption && !activeOption.disabled) {
@@ -285,7 +285,7 @@ export class Select extends LitElement {
     }
   }
 
-  private _openPopup() {
+  private _openPopup () {
     const popupOptions = this._getDisplayedOptions()
 
     this._popupOpen = true
@@ -296,7 +296,7 @@ export class Select extends LitElement {
     }
   }
 
-  private _handleTriggerKeydown(event: KeyboardEvent) {
+  private _handleTriggerKeydown (event: KeyboardEvent) {
     const popupOptions = this._getDisplayedOptions()
     const action = getListboxActionFromKey(event.key)
 
@@ -356,11 +356,11 @@ export class Select extends LitElement {
     }
   }
 
-  private _getOptionId(option: SelectOption, index: number) {
+  private _getOptionId (option: SelectOption, index: number) {
     return `${this._listboxId}-option-${index}-${option.value}`
   }
 
-  private _renderPopup() {
+  private _renderPopup () {
     const popupOptions = this._getDisplayedOptions()
     const selectedOption = this._getSelectedOption()
     const activeOption = this._getActiveOption()
@@ -382,7 +382,7 @@ export class Select extends LitElement {
     `
   }
 
-  render() {
+  render () {
     const selectedOption = this._getSelectedOption()
     const activeOption = this._getActiveOption()
     const triggerLabel = selectedOption?.label ?? this.label
