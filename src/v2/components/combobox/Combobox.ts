@@ -63,10 +63,7 @@ export class Combobox extends LitElement {
     :host { // default theme
       display: inline-block;
       position: relative;
-      z-index: var(--combobox-z-index, 400);
       box-sizing: border-box;
-      --combobox-open-z-index: 1000;
-      --combobox-popup-z-index: 1001;
       --popup-background: var(--color-background, #F8F9FB);
       --popup-text: var(--color-text, #1A1A1A);
       --popup-border: var(--color-border, #E5E7EB);
@@ -81,10 +78,7 @@ export class Combobox extends LitElement {
     :host([theme='dark']) {
       display: inline-block;
       position: relative;
-      z-index: var(--combobox-z-index, 900);
       box-sizing: border-box;
-      --combobox-open-z-index: 1000;
-      --combobox-popup-z-index: 1001;
       --popup-background: var(--color-background, #F8F9FB);
       --popup-text: var(--color-text, #1A1A1A);
       --popup-border: var(--color-border, #E5E7EB);
@@ -94,10 +88,6 @@ export class Combobox extends LitElement {
       --input-border: var(--color-text, #1A1A1A);
       --label-color: var(--grey-purple-700, #1A1A1A);
       --placeholder-color: var(--grey-purple-700, #5e546d);
-    }
-
-    :host([popup-open]) {
-      z-index: var(--combobox-open-z-index);
     }
 
     .popup-box {
@@ -114,7 +104,6 @@ export class Combobox extends LitElement {
       overflow: hidden;
       box-sizing: border-box;
       isolation: isolate;
-      z-index: var(--combobox-popup-z-index);
     }
 
     .select-options-section {
@@ -316,8 +305,6 @@ export class Combobox extends LitElement {
   }
 
   protected updated (changedProperties: Map<string, unknown>) {
-    this.toggleAttribute('popup-open', this._popupOpen)
-
     if (this._popupOpen) {
       this._updatePopupPosition()
       if (this._popupPortalRoot) {

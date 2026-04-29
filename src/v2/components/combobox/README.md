@@ -127,9 +127,6 @@ These can be set on `solid-ui-combobox`, on a container element, or on `:root`.
 
 | Variable | Fallback | Description |
 |----------|----------|-------------|
-| `--combobox-z-index` | `400` / `900` in dark theme | Base host stacking level before the popup opens. |
-| `--combobox-open-z-index` | `1000` | Host stacking level while the popup is open. |
-| `--combobox-popup-z-index` | `1001` | Popup stacking level inside the open host or portal. |
 | `--popup-background` | `--color-background` | Popup surface background. |
 | `--popup-text` | `--color-text` | Popup text colour. |
 | `--popup-border` | `--color-border` / `#E5E7EB` | Popup border colour. |
