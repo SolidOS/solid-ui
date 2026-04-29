@@ -1,5 +1,5 @@
 import { css, html, LitElement } from 'lit'
-import { downArrowIcon } from './downArrow'
+import { downArrowIcon } from '../selectShared/downArrow'
 import { renderListbox } from '../selectShared/listboxTemplate'
 import { SelectOption } from '../selectShared/optionTypes'
 import { listboxStyles } from '../selectShared/listboxStyles'
