@@ -29,6 +29,11 @@
       "types": "./dist/components/footer/index.d.ts",
       "import": "./dist/components/footer/index.esm.js",
       "require": "./dist/components/footer/index.js"
+    },
+    "./components/select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.esm.js",
+      "require": "./dist/components/select/index.js"
     }
   },
   "files": [
