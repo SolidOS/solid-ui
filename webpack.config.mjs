@@ -42,6 +42,9 @@ const common = {
     },
     footer: {
       import: './src/v2/components/footer/index.ts'
+    },
+    select: {
+      import: './src/v2/components/select/index.ts'
     }
   },
   output: {

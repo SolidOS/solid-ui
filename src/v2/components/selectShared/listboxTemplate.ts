@@ -24,6 +24,7 @@ export function renderListbox(args: RenderListboxArgs) {
     <ul
       class="listbox"
       id="${listboxId ?? ''}"
+      part="listbox"
       role="listbox"
       aria-orientation="vertical"
     >
@@ -36,6 +37,7 @@ export function renderListbox(args: RenderListboxArgs) {
           <li
             id="${optionId ?? ''}"
             class="listbox-item${isSelected ? ' listbox-item-selected' : ''}${isActive ? ' listbox-item-active' : ''}${option.disabled ? ' listbox-item-disabled' : ''}"
+            part="option${isSelected ? ' selected-option' : ''}${isActive ? ' active-option' : ''}${option.disabled ? ' disabled-option' : ''}"
             role="option"
             aria-selected="${isSelected}"
             aria-disabled="${option.disabled ? 'true' : 'false'}"

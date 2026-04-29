@@ -2,47 +2,54 @@ import { css } from 'lit'
 
 export const listboxStyles = css`
     :host { // default theme
-      display: inline-block;
-      position: relative;
-      z-index: 200;
       --input-background: var(--color-background, #F8F9FB);
       --item-text: var(--color-text, #1A1A1A);
-      --item-hover-background: var(--lavender-900, #7c4cff);
+      --item-selected-text: var(--color-primary, #7c4dff);
+      --item-hover-background: var(--lavender-300, #e6dcff);
+      --item-selected-background: var(--lavender-400, #cbb9ff);
+      --listbox-z-index: 1;
     }
 
     :host([theme='dark']) {
-      display: inline-block;
-      position: relative;
-      z-index: 200;
-      --input-background: var(--color-background, #F8F9FB);
-      --item-text: var(--color-text, #1A1A1A);
-      --item-hover-background: var(--lavender-900, #7c4cff);
+      --input-background: var(--color-background, #1A1A1A);
+      --item-text: var(--color-text, #F8F9FB);
+      --item-selected-text: var(--color-primary, #7c4dff);
+      --item-hover-background: var(--lavender-300, #e6dcff);
+      --item-selected-background: var(--lavender-400, #cbb9ff);
+      --listbox-z-index: 1;
     }
 
     .listbox {
-      position: absolute;
-      top: calc(100% + 6px);
+      position: relative;
+      top: 0;
       left: 0;
       right: 0;
-      border: 1px solid var(--color-border, #E5E7EB);
-      border-top: none;
-      border-radius: 0 0 var(--border-radius-base, 0.3125rem) var(--border-radius-base, 0.3125rem);
+      margin: 0;
+      padding: 0;
+      list-style: none;
+      border: none;
+      border-radius: inherit;
       background: var(--input-background);
-      overflow: visible;
-      z-index: 10;
+      background-color: var(--input-background);
+      opacity: 1;
+      overflow: hidden;
+      z-index: var(--listbox-z-index);
       box-shadow: 0 4px 12px rgba(124, 77, 255, 0.12);
     }
 
     .listbox-item {
-      display: block;
+      display: flex;
+      align-items: center;
       width: 100%;
-      padding: 0.625rem 0.75rem;
+      min-height: var(--select-trigger-height, var(--min-touch-target, 44px));
+      padding: var(--spacing-xxs, 0.3125rem) var(--spacing-xs, 0.75rem);
       border: none;
       border-bottom: 1px solid var(--color-border, #E5E7EB);
-      background: transparent;
+      background: var(--input-background);
       color: var(--item-text);
       cursor: pointer;
       font: inherit;
+      line-height: normal;
       text-align: left;
       box-sizing: border-box;
     }
@@ -53,12 +60,13 @@ export const listboxStyles = css`
 
     .listbox-item:hover {
       background: var(--item-hover-background);
-      border-radius: var(--border-radius-base-md, 0.5rem);
+      border-radius: var(--border-radius-sm, 0.2rem);
     }
 
     .listbox-item-active {
-      background: var(--item-hover-background);
-      border-radius: var(--border-radius-base-md, 0.5rem);
+      background: var(--item-selected-background);
+      color: var(--item-selected-text);
+      border-radius: var(--border-radius-sm, 0.2rem);
       outline: none;
     }
 
