@@ -1,8 +1,8 @@
 import { LitElement, css, html, nothing, type PropertyValues } from 'lit'
 /* The original code was written by Sir Tim Berners-Lee. It was made into a
-web component by AI Model GPT-5.4 
-Prompt: Take the code from src/media/media-capture.ts and make it a 
-web component. Make it work in forms as well as not. Make it 
+web component by AI Model GPT-5.4
+Prompt: Take the code from src/media/media-capture.ts and make it a
+web component. Make it work in forms as well as not. Make it
 configurable and follow LoginButton. */
 export interface PhotoCapturedDetail {
   file: File
@@ -300,7 +300,7 @@ export class PhotoCapture extends LitElement {
   private readonly _handleFormReset = () => {
     this._clearValue({ emitEvents: false })
     if (this.open) {
-      void this._startPreview()
+      this._queuePreviewStart()
     }
   }
 
@@ -426,7 +426,7 @@ export class PhotoCapture extends LitElement {
       !this._startingPreview &&
       (changed.has('open') || changed.has('presentation') || changed.has('_previewUrl') || changed.has('value'))
     ) {
-      void this._startPreview()
+      this._queuePreviewStart()
     }
 
     if (changed.has('name') || changed.has('disabled') || changed.has('value')) {
@@ -547,6 +547,10 @@ export class PhotoCapture extends LitElement {
     const extension = this._fileExtensionForMimeType(contentType)
     const safePrefix = (this.fileNamePrefix || this.name || 'photo').trim() || 'photo'
     return new File([blob], `${safePrefix}-${Date.now()}.${extension}`, { type: contentType })
+  }
+
+  private _queuePreviewStart () {
+    this._startPreview().catch(() => undefined)
   }
 
   private _resolveMediaConstraints (): MediaStreamConstraints {
