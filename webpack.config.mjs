@@ -40,6 +40,9 @@ const common = {
     signupButton: {
       import: './src/v2/components/signupButton/index.ts'
     },
+    photoCapture: {
+      import: './src/v2/components/photoCapture/index.ts'
+    },
     footer: {
       import: './src/v2/components/footer/index.ts'
     },

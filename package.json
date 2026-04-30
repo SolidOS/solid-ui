@@ -25,6 +25,11 @@
       "import": "./dist/components/signupButton/index.esm.js",
       "require": "./dist/components/signupButton/index.js"
     },
+    "./components/photo-capture": {
+      "types": "./dist/components/photoCapture/index.d.ts",
+      "import": "./dist/components/photoCapture/index.esm.js",
+      "require": "./dist/components/photoCapture/index.js"
+    },
     "./components/footer": {
       "types": "./dist/components/footer/index.d.ts",
       "import": "./dist/components/footer/index.esm.js",
