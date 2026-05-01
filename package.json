@@ -20,6 +20,11 @@
       "import": "./dist/components/header/index.esm.js",
       "require": "./dist/components/header/index.js"
     },
+    "./components/loginButton": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
     "./components/login-button": {
       "types": "./dist/components/loginButton/index.d.ts",
       "import": "./dist/components/loginButton/index.esm.js",

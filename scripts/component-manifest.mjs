@@ -7,7 +7,7 @@ export const v2Components = [
   {
     sourceDir: 'loginButton',
     sourcePath: 'auth/loginButton',
-    exportNames: ['login-button', 'auth/login-button']
+    exportNames: ['loginButton', 'login-button', 'auth/login-button']
   },
   {
     sourceDir: 'signupButton',
