@@ -1,8 +1,8 @@
 import { LitElement, html, css } from 'lit'
-import { icons } from '../../../iconBase'
+import { icons } from '../../../../iconBase'
 import { authSession } from 'solid-logic'
-import '../loginButton/index'
-import '../signupButton/index'
+import '../../auth/loginButton/index'
+import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
 const DEFAULT_HELP_MENU_ICON = ''

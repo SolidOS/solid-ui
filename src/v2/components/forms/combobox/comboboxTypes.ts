@@ -1,4 +1,4 @@
-import { SelectOption } from '../selectShared/optionTypes'
+import { SelectOption } from '../shared/optionTypes'
 
 export interface ComboboxSuggestion extends SelectOption {
   publicId?: string

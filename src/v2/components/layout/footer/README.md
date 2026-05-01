@@ -102,4 +102,4 @@ footer.store = myRdflibStore as LiveStore
 
 ## Testing
 
-The component is covered by unit tests under `src/v2/components/footer/Footer.test.ts`.
+The component is covered by unit tests under `src/v2/components/layout/footer/Footer.test.ts`.

@@ -1,10 +1,10 @@
 import { LitElement, html, css, nothing } from 'lit'
 import { render as renderPortal } from 'lit/html.js'
-import { downArrowIcon } from '../selectShared/downArrow'
-import { listboxStyles } from '../selectShared/listboxStyles'
-import { findOptionIndexByValue, getFirstEnabledIndex, getLastEnabledIndex, getListboxActionFromKey, getNextEnabledIndex } from '../selectShared/keyboard'
+import { downArrowIcon } from '../shared/downArrow'
+import { listboxStyles } from '../shared/listboxStyles'
+import { findOptionIndexByValue, getFirstEnabledIndex, getLastEnabledIndex, getListboxActionFromKey, getNextEnabledIndex } from '../shared/keyboard'
 import { ComboboxSuggestion } from './comboboxTypes'
-import { renderListbox } from '../selectShared/listboxTemplate'
+import { renderListbox } from '../shared/listboxTemplate'
 
 export class Combobox extends LitElement {
   private static _nextId = 0

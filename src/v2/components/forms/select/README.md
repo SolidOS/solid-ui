@@ -11,8 +11,10 @@ npm install solid-ui
 ## Usage in a bundled project (webpack, Vite, Rollup, etc.)
 
 ```javascript
-import { Select } from 'solid-ui/components/select'
+import { Select } from 'solid-ui/components/forms/select'
 ```
+
+The legacy flat import path `solid-ui/components/select` still works, but the grouped `forms/select` path is the preferred long-term entrypoint.
 
 ```html
 <solid-ui-select id="language-select" label="Language"></solid-ui-select>
@@ -51,7 +53,7 @@ import { Select } from 'solid-ui/components/select'
 ## TypeScript
 
 ```typescript
-import { Select } from 'solid-ui/components/select'
+import { Select } from 'solid-ui/components/forms/select'
 
 const select = document.querySelector('solid-ui-select') as Select
 select.options = [

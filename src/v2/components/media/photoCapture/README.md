@@ -11,8 +11,10 @@ npm install solid-ui
 ## Usage
 
 ```javascript
-import { PhotoCapture } from 'solid-ui/components/photo-capture'
+import { PhotoCapture } from 'solid-ui/components/media/photo-capture'
 ```
+
+The legacy flat import path `solid-ui/components/photo-capture` still works, but the grouped `media/photo-capture` path is the preferred long-term entrypoint.
 
 ```html
 <solid-ui-photo-capture

@@ -11,8 +11,10 @@ npm install solid-ui
 ## Usage in a bundled project (webpack, Vite, Rollup, etc.)
 
 ```javascript
-import { Combobox } from 'solid-ui/components/combobox'
+import { Combobox } from 'solid-ui/components/forms/combobox'
 ```
+
+The legacy flat import path `solid-ui/components/combobox` still works, but the grouped `forms/combobox` path is the preferred long-term entrypoint.
 
 ```html
 <solid-ui-combobox id="person-combobox" label="Person"></solid-ui-combobox>
@@ -69,7 +71,7 @@ import { Combobox } from 'solid-ui/components/combobox'
 ## TypeScript
 
 ```typescript
-import { Combobox } from 'solid-ui/components/combobox'
+import { Combobox } from 'solid-ui/components/forms/combobox'
 
 const combobox = document.querySelector('solid-ui-combobox') as Combobox
 
