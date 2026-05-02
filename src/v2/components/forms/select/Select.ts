@@ -63,8 +63,14 @@ export class Select extends LitElement {
         --select-popup-extra-width: 2px;
         --select-popup-background: var(--color-background, #f8f9fb);
         --select-trigger-background: var(--color-background, #f8f9fb);
+        --select-trigger-hover-background: var(
+          --color-surface-subtle,
+          rgba(15, 23, 43, 0.04)
+        );
         --select-trigger-border: 1px solid var(--gray-400, #99a1af);
+        --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
         --select-trigger-text: var(--color-text-subheading, #101828);
+        --select-trigger-hover-text: var(--color-text-subheading, #101828);
         --select-popup-width: 100%;
         --popup-background: var(--select-popup-background);
         --popup-text: var(--color-text, #1a1a1a);
@@ -85,8 +91,14 @@ export class Select extends LitElement {
         --select-popup-extra-width: 2px;
         --select-popup-background: var(--color-background, #1a1a1a);
         --select-trigger-background: var(--color-background, #1a1a1a);
+        --select-trigger-hover-background: var(
+          --color-surface-subtle,
+          rgba(15, 23, 43, 0.04)
+        );
         --select-trigger-border: 1px solid var(--gray-400, #99a1af);
+        --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
         --select-trigger-text: var(--color-text-subheading, #f8f9fb);
+        --select-trigger-hover-text: var(--color-text-subheading, #f8f9fb);
         --select-popup-width: 100%;
         --popup-background: var(--select-popup-background);
         --popup-text: var(--color-text, #f8f9fb);
@@ -132,6 +144,32 @@ export class Select extends LitElement {
 
       .select-trigger:active {
         transform: translateY(1px);
+      }
+
+      .select-trigger:hover {
+        background: var(
+          --select-trigger-hover-background,
+          var(--select-trigger-background)
+        );
+        border: var(
+          --select-trigger-hover-border,
+          var(--select-trigger-border)
+        );
+        color: var(--select-trigger-hover-text, var(--select-trigger-text));
+      }
+
+      .select-trigger:focus-visible {
+        outline: 2px solid var(--color-focus-ring, var(--color-primary, #7C4DFF));
+        outline-offset: 2px;
+        background: var(
+          --select-trigger-hover-background,
+          var(--select-trigger-background)
+        );
+        border: var(
+          --select-trigger-hover-border,
+          var(--select-trigger-border)
+        );
+        color: var(--select-trigger-hover-text, var(--select-trigger-text));
       }
 
       .select-trigger-label {

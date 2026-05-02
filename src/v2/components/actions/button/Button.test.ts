@@ -18,7 +18,9 @@ describe('SolidUIButton', () => {
     document.body.appendChild(button)
     await button.updateComplete
 
-    const nativeButton = button.shadowRoot?.querySelector('button') as HTMLButtonElement
+    const nativeButton = button.shadowRoot?.querySelector(
+      'button'
+    ) as HTMLButtonElement
 
     expect(button.variant).toBe('secondary')
     expect(nativeButton.type).toBe('button')
@@ -32,7 +34,9 @@ describe('SolidUIButton', () => {
     document.body.appendChild(button)
     await button.updateComplete
 
-    const nativeButton = button.shadowRoot?.querySelector('button') as HTMLButtonElement
+    const nativeButton = button.shadowRoot?.querySelector(
+      'button'
+    ) as HTMLButtonElement
 
     expect(button.hasAttribute('selected')).toBe(true)
     expect(nativeButton.hasAttribute('aria-pressed')).toBe(false)
@@ -49,7 +53,9 @@ describe('SolidUIButton', () => {
     document.body.appendChild(button)
     await button.updateComplete
 
-    const nativeButton = button.shadowRoot?.querySelector('button') as HTMLButtonElement
+    const nativeButton = button.shadowRoot?.querySelector(
+      'button'
+    ) as HTMLButtonElement
     nativeButton.click()
 
     expect(handleClick).toHaveBeenCalledTimes(1)
@@ -63,7 +69,9 @@ describe('SolidUIButton', () => {
     document.body.appendChild(button)
     await button.updateComplete
 
-    const icon = button.shadowRoot?.querySelector('.button__icon-image') as HTMLImageElement
+    const icon = button.shadowRoot?.querySelector(
+      '.button__icon-image'
+    ) as HTMLImageElement
     expect(icon.getAttribute('src')).toBe(button.icon)
   })
 
@@ -76,8 +84,12 @@ describe('SolidUIButton', () => {
     document.body.appendChild(button)
     await button.updateComplete
 
-    const label = button.shadowRoot?.querySelector('.button__label') as HTMLSpanElement
-    const icon = button.shadowRoot?.querySelector('.button__icon-image') as HTMLImageElement
+    const label = button.shadowRoot?.querySelector(
+      '.button__label'
+    ) as HTMLSpanElement
+    const icon = button.shadowRoot?.querySelector(
+      '.button__icon-image'
+    ) as HTMLImageElement
 
     expect(button.variant).toBe('icon')
     expect(label).not.toBeNull()
@@ -118,5 +130,35 @@ describe('SolidUIButton', () => {
     expect(button.shadowRoot?.querySelector('slot[name="icon"]')).not.toBeNull()
     expect(button.shadowRoot?.querySelector('.button__icon')).not.toBeNull()
     expect(button.shadowRoot?.querySelector('.button__icon-image')).toBeNull()
+  })
+
+  it('applies layout styling hooks exposed through CSS custom properties', async () => {
+    const stylesheetText = Array.isArray(Button.styles)
+      ? Button.styles.map((styleSheet) => styleSheet.toString()).join('\n')
+      : Button.styles.toString()
+
+    expect(stylesheetText).toContain(
+      '--button-padding-sm: 0 var(--button-padding-x-sm);'
+    )
+    expect(stylesheetText).toContain('--button-border-width: 1px;')
+    expect(stylesheetText).toContain('padding: var(--button-padding-md);')
+    expect(stylesheetText).toContain(
+      'border: var(--button-border-width) solid var(--button-border);'
+    )
+    expect(stylesheetText).toContain(
+      'border-radius: var(--button-border-radius);'
+    )
+    expect(stylesheetText).toContain('font-weight: var(--button-font-weight);')
+    expect(stylesheetText).toContain('line-height: var(--button-line-height);')
+    expect(stylesheetText).toContain(
+      'justify-content: var(--button-justify-content);'
+    )
+    expect(stylesheetText).toContain(
+      'box-shadow: var(--button-hover-box-shadow, var(--button-box-shadow));'
+    )
+    expect(stylesheetText).toContain('outline: var(--button-focus-outline);')
+    expect(stylesheetText).toContain(
+      'transform: var(--button-active-transform);'
+    )
   })
 })

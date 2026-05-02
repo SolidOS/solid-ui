@@ -47,6 +47,22 @@ export class Button extends LitElement {
       --button-icon-size-sm: var(--icon-xxxs, 0.75rem);
       --button-icon-size-md: var(--icon-xxs, 1rem);
       --button-icon-size-lg: var(--icon-xxs, 1rem);
+      --button-padding-sm: 0 var(--button-padding-x-sm);
+      --button-padding-md: 0 var(--button-padding-x-md);
+      --button-padding-lg: 0 var(--button-padding-x-lg);
+      --button-border-width: 1px;
+      --button-border-radius: var(--border-radius-base, 0.3125rem);
+      --button-font-weight: var(--font-weight-bold, 600);
+      --button-line-height: 1;
+      --button-justify-content: center;
+      --button-box-shadow: none;
+      --button-hover-box-shadow: var(--button-box-shadow);
+      --button-active-box-shadow: var(--button-hover-box-shadow);
+      --button-active-transform: translateY(1px);
+      --button-focus-outline: 2px solid var(--button-focus-ring);
+      --button-focus-outline-offset: 2px;
+      --button-focus-box-shadow: none;
+      --button-transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
     :host([theme='dark']) {
@@ -90,46 +106,49 @@ export class Button extends LitElement {
       display: inline-flex;
       width: 100%;
       min-height: var(--button-height-md);
-      padding: 0 var(--button-padding-x-md);
+      padding: var(--button-padding-md);
       align-items: center;
-      justify-content: center;
+      justify-content: var(--button-justify-content);
       gap: var(--spacing-xxs, 0.375rem);
-      border-radius: var(--border-radius-base, 0.3125rem);
+      border-radius: var(--button-border-radius);
       background: var(--button-background);
-      border: 1px solid var(--button-border);
+      border: var(--button-border-width) solid var(--button-border);
+      box-shadow: var(--button-box-shadow);
       color: var(--button-text);
       cursor: pointer;
       font: inherit;
       font-size: var(--button-font-size-md);
-      font-weight: var(--font-weight-bold, 600);
-      line-height: 1;
+      font-weight: var(--button-font-weight);
+      line-height: var(--button-line-height);
       white-space: nowrap;
       text-decoration: none;
       box-sizing: border-box;
-      transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+      transition: var(--button-transition);
     }
 
     :host([size='sm']) .button {
       min-height: var(--button-height-sm);
-      padding: 0 var(--button-padding-x-sm);
+      padding: var(--button-padding-sm);
       font-size: var(--button-font-size-sm);
     }
 
     :host([size='lg']) .button {
       min-height: var(--button-height-lg);
-      padding: 0 var(--button-padding-x-lg);
+      padding: var(--button-padding-lg);
       font-size: var(--button-font-size-lg);
     }
 
     .button:hover:not(:disabled) {
       background: var(--button-hover-background);
       border-color: var(--button-hover-border, var(--button-border));
+      box-shadow: var(--button-hover-box-shadow, var(--button-box-shadow));
       color: var(--button-hover-text);
     }
 
     .button:focus-visible {
-      outline: 2px solid var(--button-focus-ring);
-      outline-offset: 2px;
+      outline: var(--button-focus-outline);
+      outline-offset: var(--button-focus-outline-offset);
+      box-shadow: var(--button-focus-box-shadow);
     }
 
     .button:disabled {
@@ -193,7 +212,8 @@ export class Button extends LitElement {
     }
 
     .button:active {
-      transform: translateY(1px);
+      transform: var(--button-active-transform);
+      box-shadow: var(--button-active-box-shadow, var(--button-hover-box-shadow, var(--button-box-shadow)));
     }
   `
 

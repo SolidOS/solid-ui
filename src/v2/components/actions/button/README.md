@@ -34,57 +34,75 @@ The legacy flat import path `solid-ui/components/button` still works, but the gr
 
 ### Properties / attributes
 
-| Property | Attribute | Type | Default | Description |
-|----------|-----------|------|---------|-------------|
-| `label` | `label` | `string` | `''` | Button text. Overridable through the default slot. |
-| `type` | `type` | `'button' \| 'submit' \| 'reset'` | `'button'` | Native button type. |
-| `disabled` | `disabled` | `boolean` | `false` | Disables the inner button. |
-| `selected` | `selected` | `boolean` | `false` | Applies the active/current visual state for things like selected group or address buttons. This is visual state only; it does not automatically add toggle or tab semantics. |
-| `ariaLabel` | `aria-label` | `string` | `''` | Accessible label for icon-only or custom-label buttons. |
-| `name` | `name` | `string` | `''` | Passed through to the inner native button. |
-| `value` | `value` | `string` | `''` | Passed through to the inner native button. |
-| `variant` | `variant` | `'primary' \| 'secondary' \| 'icon'` | `'secondary'` | Visual treatment for the button. |
-| `size` | `size` | `'sm' \| 'md' \| 'lg'` | `'md'` | Button size. |
-| `theme` | `theme` | `'light' \| 'dark'` | `'light'` | Light or dark token mapping. |
-| `fullWidth` | `full-width` | `boolean` | `false` | Expands the host and inner button to the available width. Useful for stacked mobile actions, form footers, or full-row menu buttons. |
-| `icon` | `icon` | `string` | `''` | URL or data URL for a fallback `<img>` icon. |
-| `iconPosition` | `icon-position` | `'start' \| 'end'` | `'start'` | Places the icon before or after the label. |
-| `handleClick` | n/a | `(event: MouseEvent) => void` | `undefined` | Property-only callback invoked on click. Native `click` events still bubble normally. |
+| Property       | Attribute       | Type                                 | Default       | Description                                                                                                                                                                  |
+| -------------- | --------------- | ------------------------------------ | ------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `label`        | `label`         | `string`                             | `''`          | Button text. Overridable through the default slot.                                                                                                                           |
+| `type`         | `type`          | `'button' \| 'submit' \| 'reset'`    | `'button'`    | Native button type.                                                                                                                                                          |
+| `disabled`     | `disabled`      | `boolean`                            | `false`       | Disables the inner button.                                                                                                                                                   |
+| `selected`     | `selected`      | `boolean`                            | `false`       | Applies the active/current visual state for things like selected group or address buttons. This is visual state only; it does not automatically add toggle or tab semantics. |
+| `ariaLabel`    | `aria-label`    | `string`                             | `''`          | Accessible label for icon-only or custom-label buttons.                                                                                                                      |
+| `name`         | `name`          | `string`                             | `''`          | Passed through to the inner native button.                                                                                                                                   |
+| `value`        | `value`         | `string`                             | `''`          | Passed through to the inner native button.                                                                                                                                   |
+| `variant`      | `variant`       | `'primary' \| 'secondary' \| 'icon'` | `'secondary'` | Visual treatment for the button.                                                                                                                                             |
+| `size`         | `size`          | `'sm' \| 'md' \| 'lg'`               | `'md'`        | Button size.                                                                                                                                                                 |
+| `theme`        | `theme`         | `'light' \| 'dark'`                  | `'light'`     | Light or dark token mapping.                                                                                                                                                 |
+| `fullWidth`    | `full-width`    | `boolean`                            | `false`       | Expands the host and inner button to the available width. Useful for stacked mobile actions, form footers, or full-row menu buttons.                                         |
+| `icon`         | `icon`          | `string`                             | `''`          | URL or data URL for a fallback `<img>` icon.                                                                                                                                 |
+| `iconPosition` | `icon-position` | `'start' \| 'end'`                   | `'start'`     | Places the icon before or after the label.                                                                                                                                   |
+| `handleClick`  | n/a             | `(event: MouseEvent) => void`        | `undefined`   | Property-only callback invoked on click. Native `click` events still bubble normally.                                                                                        |
 
 ### Slots
 
-| Slot | Description |
-|------|-------------|
-| `icon` | Preferred icon path for inline SVG or custom markup. When present it overrides the `icon` property fallback. |
-| (default) | Replaces the button label text. |
+| Slot      | Description                                                                                                  |
+| --------- | ------------------------------------------------------------------------------------------------------------ |
+| `icon`    | Preferred icon path for inline SVG or custom markup. When present it overrides the `icon` property fallback. |
+| (default) | Replaces the button label text.                                                                              |
 
 ### CSS custom properties
 
-| Variable | Fallback | Description |
-|----------|----------|-------------|
-| `--button-background` | `--color-background` | Button background colour |
-| `--button-text` | `--color-text-subheading` | Button text colour |
-| `--button-border` | `--color-border-button` | Button border colour |
-| `--button-hover-background` | `--color-surface-subtle` | Hover background colour |
-| `--button-hover-border` | `--color-border-button-hover` | Hover border colour |
-| `--button-hover-text` | `--button-text` | Hover text colour |
-| `--button-selected-background` | `--color-surface-selected` | Selected/current-state background colour |
-| `--button-selected-text` | `--color-text-selected` | Selected/current-state text colour |
-| `--button-selected-border` | `--color-border-selected` | Selected/current-state border colour |
-| `--button-icon-color` | `currentColor` | Icon colour for slotted SVG content |
-| `--button-focus-ring` | `--color-focus-ring` | Focus outline colour |
-| `--button-height-sm` | `1.875rem` | Compact button height used for the `sm` size |
-| `--button-height-md` | `var(--min-touch-target, 44px)` | Standard action button height used for the `md` size |
-| `--button-height-lg` | `calc(var(--min-touch-target, 44px) + 0.5rem)` | Larger mobile or stacked action height used for the `lg` size |
-| `--button-padding-x-sm` | `var(--spacing-xs, 0.75rem)` | Horizontal padding used when `size="sm"` |
-| `--button-padding-x-md` | `var(--spacing-sm, 0.9375rem)` | Horizontal padding used when `size="md"` |
-| `--button-padding-x-lg` | `var(--spacing-md, 1.25rem)` | Horizontal padding used when `size="lg"` |
-| `--button-icon-size-sm` | `var(--icon-xxxs, 0.75rem)` | Icon size used when `size="sm"` |
-| `--button-icon-size-md` | `var(--icon-xxs, 1rem)` | Icon size used when `size="md"` |
-| `--button-icon-size-lg` | `var(--icon-xxs, 1rem)` | Icon size used when `size="lg"` |
-| `--button-font-size-sm` | `0.875rem` | Text size used when `size="sm"` |
-| `--button-font-size-md` | `0.9375rem` | Text size used when `size="md"` |
-| `--button-font-size-lg` | `1rem` | Text size used when `size="lg"` |
+| Variable                        | Fallback                                            | Description                                                   |
+| ------------------------------- | --------------------------------------------------- | ------------------------------------------------------------- |
+| `--button-background`           | `--color-background`                                | Button background colour                                      |
+| `--button-text`                 | `--color-text-subheading`                           | Button text colour                                            |
+| `--button-border`               | `--color-border-button`                             | Button border colour                                          |
+| `--button-hover-background`     | `--color-surface-subtle`                            | Hover background colour                                       |
+| `--button-hover-border`         | `--color-border-button-hover`                       | Hover border colour                                           |
+| `--button-hover-text`           | `--button-text`                                     | Hover text colour                                             |
+| `--button-selected-background`  | `--color-surface-selected`                          | Selected/current-state background colour                      |
+| `--button-selected-text`        | `--color-text-selected`                             | Selected/current-state text colour                            |
+| `--button-selected-border`      | `--color-border-selected`                           | Selected/current-state border colour                          |
+| `--button-icon-color`           | `currentColor`                                      | Icon colour for slotted SVG content                           |
+| `--button-focus-ring`           | `--color-focus-ring`                                | Focus outline colour                                          |
+| `--button-height-sm`            | `1.875rem`                                          | Compact button height used for the `sm` size                  |
+| `--button-height-md`            | `var(--min-touch-target, 44px)`                     | Standard action button height used for the `md` size          |
+| `--button-height-lg`            | `calc(var(--min-touch-target, 44px) + 0.5rem)`      | Larger mobile or stacked action height used for the `lg` size |
+| `--button-padding-sm`           | `0 var(--button-padding-x-sm)`                      | Full padding shorthand used when `size="sm"`                  |
+| `--button-padding-md`           | `0 var(--button-padding-x-md)`                      | Full padding shorthand used when `size="md"`                  |
+| `--button-padding-lg`           | `0 var(--button-padding-x-lg)`                      | Full padding shorthand used when `size="lg"`                  |
+| `--button-border-width`         | `1px`                                               | Border width applied to the inner native button                |
+| `--button-padding-x-sm`         | `var(--spacing-xs, 0.75rem)`                        | Horizontal padding used when `size="sm"`                      |
+| `--button-padding-x-md`         | `var(--spacing-sm, 0.9375rem)`                      | Horizontal padding used when `size="md"`                      |
+| `--button-padding-x-lg`         | `var(--spacing-md, 1.25rem)`                        | Horizontal padding used when `size="lg"`                      |
+| `--button-border-radius`        | `var(--border-radius-base, 0.3125rem)`              | Border radius applied to the inner native button              |
+| `--button-font-weight`          | `var(--font-weight-bold, 600)`                      | Font weight applied to the button label                       |
+| `--button-line-height`          | `1`                                                 | Line height applied to the inner native button                |
+| `--button-justify-content`      | `center`                                            | Horizontal alignment of the button content                    |
+| `--button-box-shadow`           | `none`                                              | Base box shadow for the button                                |
+| `--button-hover-box-shadow`     | `var(--button-box-shadow)`                          | Hover-state box shadow                                        |
+| `--button-active-box-shadow`    | `var(--button-hover-box-shadow)`                    | Active-state box shadow                                       |
+| `--button-active-transform`     | `translateY(1px)`                                   | Transform applied while the button is active                  |
+| `--button-focus-outline`        | `2px solid var(--button-focus-ring)`                | Focus-visible outline shorthand                               |
+| `--button-focus-outline-offset` | `2px`                                               | Focus-visible outline offset                                  |
+| `--button-focus-box-shadow`     | `none`                                              | Additional focus-visible box shadow                           |
+| `--button-transition`           | `transform/background/color/border-color 0.2s ease` | Transition shorthand for the inner native button              |
+| `--button-icon-size-sm`         | `var(--icon-xxxs, 0.75rem)`                         | Icon size used when `size="sm"`                               |
+| `--button-icon-size-md`         | `var(--icon-xxs, 1rem)`                             | Icon size used when `size="md"`                               |
+| `--button-icon-size-lg`         | `var(--icon-xxs, 1rem)`                             | Icon size used when `size="lg"`                               |
+| `--button-font-size-sm`         | `0.875rem`                                          | Text size used when `size="sm"`                               |
+| `--button-font-size-md`         | `1rem`                                              | Text size used when `size="md"`                               |
+| `--button-font-size-lg`         | `1.125rem`                                          | Text size used when `size="lg"`                               |
+
+These hooks are intended to cover most app-level button theming without requiring `::part(button)` overrides. Use the host custom properties first, and fall back to `::part(button)` only when a consuming app needs behavior that still cannot be expressed through the token surface.
 
 ## Layout and sizing
 
@@ -97,7 +115,11 @@ Set `full-width` when you want the button to fill the available row instead. Tha
 - menu or sidebar buttons that should use the full hit area
 
 ```html
-<solid-ui-button full-width variant="primary" label="Save changes"></solid-ui-button>
+<solid-ui-button
+  full-width
+  variant="primary"
+  label="Save changes"
+></solid-ui-button>
 ```
 
 The built-in size scale is now aligned to the profile-pane button patterns and the shared touch-target token already used by other controls in this repo:
