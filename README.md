@@ -17,9 +17,12 @@ See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation
 - [Use Directly in Browser](#use-directly-in-a-browser)
   - [UMD Bundle](#umd-bundle-global-variable)
   - [ESM Bundle](#esm-bundle-import-as-module)
-- [Development](#development-new-components)
+- [Web Components](#web-components)
+  - [solid-ui-header](#solid-ui-header)
+- [Development](#development)
 - [Testing](#adding-tests)
 - [Further Documentation](#further-documentation)
+- [Generative AI usage](#generative-ai-usage)
 
 
 ## Getting started
@@ -65,6 +68,8 @@ Solid-UI provides both **UMD** and **ESM** bundles for direct browser usage. Bot
   - Production: `dist/solid-ui.esm.min.js` (minified)
 
 ### UMD Bundle (Global Variable)
+
+If you use the legacy UMD bundle (`solid-ui.js` / `solid-ui.min.js`), `rdflib` must define `window.$rdf` before `solid-ui` loads. If `rdflib` is missing, `solid-ui` will throw `ReferenceError: $rdf is not defined`.
 
 Load via `<script>` tags and access through global variables `window.$rdf`, `window.SolidLogic`, and `window.UI`.
 
@@ -253,7 +258,87 @@ Use import maps for cleaner module specifiers:
 </html>
 ```
 
-### Development new components
+## Web Components
+
+solid-ui ships self-contained Lit-based custom elements as subpath exports. Each component is independently importable, registers its custom element on import, and ships its own styles encapsulated in a Shadow DOM.
+
+> Component UMD bundles do not export a shared global like `window.UI`. They only register the custom element on import, while the legacy main bundle still provides the `UI` global.
+
+### solid-ui-header
+
+A header bar with branding, auth state (logged-out / logged-in), an account dropdown, an optional logout icon, and a desktop-only help menu.
+
+**Subpath export:** `solid-ui/components/header`
+
+```typescript
+import { Header } from 'solid-ui/components/header'
+import type { HeaderMenuItem, HeaderAccountMenuItem, HeaderAuthState } from 'solid-ui/components/header'
+```
+
+```html
+<solid-ui-header theme="dark" layout="desktop" brand-link="/">
+  <a slot="help-menu" href="/help">Help</a>
+</solid-ui-header>
+```
+
+Importing this module automatically registers `<solid-ui-header>` as a custom element.
+
+### solid-ui-login-button
+
+A standalone login button that encapsulates the Solid OIDC login flow and emits `login-success` when authentication succeeds.
+
+**Subpath export:** `solid-ui/components/login-button`
+
+```typescript
+import { LoginButton } from 'solid-ui/components/login-button'
+```
+
+```html
+<solid-ui-login-button label="Log in" issuer-url="https://solidcommunity.net" icon="https://example.com/login-icon.svg"></solid-ui-login-button>
+```
+
+```typescript
+const loginButton = document.querySelector('solid-ui-login-button') as LoginButton
+loginButton.addEventListener('login-success', (event: CustomEvent) => {
+  console.log('Logged in as', event.detail.webId)
+})
+```
+
+### solid-ui-signup-button
+
+A standalone sign-up button that opens a signup URL in a new browser tab.
+
+**Subpath export:** `solid-ui/components/signup-button`
+
+```typescript
+import { SignupButton } from 'solid-ui/components/signup-button'
+```
+
+```html
+<solid-ui-signup-button label="Get a Pod" signup-url="https://solidproject.org/get_a_pod" icon="https://example.com/icon.svg"></solid-ui-signup-button>
+```
+
+### Component build pipeline
+
+Web components use a two-stage build to produce a clean public runtime layout while keeping internal TypeScript artifacts separate:
+
+1. **webpack** (`npm run build-dist`) bundles each component entrypoint and emits the runtime files to `dist/components/<name>/index.js` and `dist/components/<name>/index.esm.js`.
+2. **tsc** (`npm run build-js`) emits internal declaration and JS artifacts mirroring the source tree under `dist/v2/components/<name>/`.
+3. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes thin public declaration wrappers at `dist/components/<name>/index.d.ts`, re-exporting from the internal `dist/v2/components/<name>/` output.
+
+This keeps the `package.json` subpath export fully aligned while exposing only the public `dist/components/...` layout:
+
+```json
+"./components/header": {
+  "types":   "./dist/components/header/index.d.ts",
+  "import":  "./dist/components/header/index.esm.js",
+  "require": "./dist/components/header/index.js"
+}
+```
+
+Consumers never import from `dist/v2/components/...`; that path is an internal build artifact only.
+
+## Development
 
 When developing a component in solid-ui you can test it in isolation using storybook
 
@@ -286,3 +371,44 @@ The following document gives guidance on how to add and perform testing in solid
 ## Further documentation
 
 - [Some code know-how](https://github.com/SolidOS/solidos/wiki/2.-Solid-UI-know-how)
+
+## Generative AI usage
+The SolidOS team is using GitHub Copilot integrated in Visual Studio Code. 
+We have added comments in the code to make it explicit which parts are 100% written by AI. 
+
+### Prompt usage history:
+
+* Raptor mini: If I want to make the header a web component with a self contained CSS which only consumes CSS variables from a theme, how would I do this? 
+
+* Raptor mini: Go ahead and create a header web component, for backward compatibility keep the current code too.
+In the new header component I need to be flexible and receive from consumer - the layout (mobile or desktop) and the theme (light or dark) and its according CSS variables for light to dark.
+
+* Raptor mini: Propose code. how about webpack config for distribution?
+
+* Raptor mini: pls add a readme in the component documenting it usage and test and all
+
+* Raptor mini: the helpMenuList should be menu items inside the help icon drop down menu
+
+* Raptor mini: When I am not logged in I want the header to display: Log in button and Sign Up button.
+When the user is logged in, there is only one button, a drop down button called Accounts. The icon of the button is the avatar of the profile and it displays a list of available accounts of the user.
+I want this all to be presented flexible in the component.
+
+* Claude Sonnet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
+
+* Raptor mini: when we are on layout mobile we do not want to display the help menu at all.
+
+* Raptor mini: Create for me a footer Lit Component in tsy style of the components I have and under v2. Take the code from this index.ts to start with.
+
+* Raptor mini: Good. Now, I want the footer to be a rectangular with round corners, grey background and it should have an adjustable position.
+
+* Raptor mini: The content of the footer should be different upon loggedin or not.
+If not logged in, it should say:
+Title Public View
+You are viewving this profile as a guest,
+And if logged in:
+Title: Logged in View
+You are logged in as nameOfLoggedIn user.
+
+* Raptor mini: add a readme to the Footer component with example.
+
+* Claude Sonnet 4.6: Make the dop down as a list under the input field and entlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
