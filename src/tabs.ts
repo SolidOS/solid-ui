@@ -178,7 +178,7 @@ export function tabWidget (options: TabWidgetOptions) {
   const onClose = options.onClose
 
   const [selectedColor, color] = getColors(backgroundColor)
-  const bodyMainStyle = `flex: 2; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
+  const bodyMainStyle = `display: grid; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${selectedColor}; padding: 1em;`
   const rootElement: TabWidgetElement = dom.createElement('div') // 20200117a
 
   rootElement.setAttribute('style', style.tabsRootElement)

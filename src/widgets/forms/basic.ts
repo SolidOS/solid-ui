@@ -136,6 +136,8 @@ export function basicField (
   ;(field as any).style = inputStyle
   rhs.appendChild(field)
   field.setAttribute('type', params.type ? params.type : 'text')
+  const fieldType = (field.getAttribute('type') || '').toLowerCase()
+  const deferWhileFocused = fieldType === 'date' || fieldType === 'datetime-local'
 
   const size = kb.anyJS(form, ns.ui('size')) || styleConstants.textInputSize || 20
   field.setAttribute('size', size)
@@ -189,9 +191,18 @@ export function basicField (
   field.addEventListener(
     'change',
     function (_e) {
+      if (deferWhileFocused && dom.activeElement === field) {
+        if (field.dataset) {
+          field.dataset.deferredChange = 'true'
+        }
+        return
+      }
       // i.e. lose focus with changed data
       if (params.pattern && !field.value.match(params.pattern)) return
-      field.disabled = true // See if this stops getting two dates from fumbling e.g the chrome datepicker.
+      const disabledForSave = !deferWhileFocused
+      if (disabledForSave) {
+        field.disabled = true // See if this stops getting two dates from fumbling, e.g., the chrome datepicker.
+      }
       field.setAttribute('style', inputStyle + 'color: gray;') // pending
       const ds = kb.statementsMatching(subject, property as any) // remove any multiple values
       let result
@@ -255,13 +266,30 @@ export function basicField (
       updateMany(ds, is as any, function (uri, ok, body) {
         // kb.updater.update(ds, is, function (uri, ok, body) {
         if (ok) {
-          field.disabled = false
+          if (disabledForSave) {
+            field.disabled = false
+          }
           field.setAttribute('style', inputStyle)
         } else {
           box.appendChild(errorMessageBlock(dom, body))
         }
         callbackFunction(ok, body)
       })
+    },
+    true
+  )
+  field.addEventListener(
+    'blur',
+    function (_e) {
+      if (
+        deferWhileFocused &&
+        field.dataset &&
+        field.dataset.deferredChange === 'true'
+      ) {
+        delete field.dataset.deferredChange
+        const event = new Event('change', { bubbles: true })
+        field.dispatchEvent(event)
+      }
     },
     true
   )

@@ -1,15 +1,34 @@
 {
   "name": "solid-ui",
-  "version": "3.0.4",
+  "version": "3.1.0",
   "description": "UI library for Solid applications",
   "main": "dist/solid-ui.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/solid-ui.esm.js",
       "require": "./dist/solid-ui.js"
+    },
+    "./components/header": {
+      "types": "./dist/components/header/index.d.ts",
+      "import": "./dist/components/header/index.esm.js",
+      "require": "./dist/components/header/index.js"
+    },
+    "./components/login-button": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
+    "./components/signup-button": {
+      "types": "./dist/components/signupButton/index.d.ts",
+      "import": "./dist/components/signupButton/index.esm.js",
+      "require": "./dist/components/signupButton/index.js"
+    },
+    "./components/footer": {
+      "types": "./dist/components/footer/index.d.ts",
+      "import": "./dist/components/footer/index.esm.js",
+      "require": "./dist/components/footer/index.js"
     }
   },
   "files": [
@@ -18,11 +37,12 @@
     "LICENSE"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
+    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
     "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
+    "prebuild-js": "rm -f .tsbuildinfo",
     "build-js": "tsc",
-    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
+    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map && node scripts/build-component-dts.mjs",
     "build-dist": "webpack --progress",
     "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",
@@ -32,7 +52,11 @@
     "test": "jest --no-coverage",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "test-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",
+    "watch:js": "tsc --watch --preserveWatchOutput",
+    "watch:component-dts": "node scripts/watch-component-dts.mjs",
+    "watch:dist": "webpack --watch --mode development",
+    "watch": "npm run build-version && npm run build-js && npm run postbuild-js && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:dist & wait'",
+    "dev": "npm run build-version && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:dist & wait'",
     "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
     "prepublishOnly": "npm run build && npm run lint && npm test && npm run doc",
     "preversion": "npm run lint && npm run typecheck && npm test",
@@ -68,14 +92,15 @@
     "@noble/curves": "^2.0.1",
     "@noble/hashes": "^2.0.1",
     "escape-html": "^1.0.3",
+    "lit": "^3.3.2",
     "mime-types": "^3.0.2",
-    "pane-registry": "^3.0.1",
+    "pane-registry": "^3.1.0",
     "solid-namespace": "^0.5.4",
     "uuid": "^13.0.0"
   },
   "peerDependencies": {
-    "rdflib": "^2.3.5",
-    "solid-logic": "^4.0.2"
+    "rdflib": "^2.3.6",
+    "solid-logic": "^4.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
@@ -102,6 +127,7 @@
     "@typescript-eslint/parser": "^8.54.0",
     "babel-jest": "^30.2.0",
     "babel-loader": "^10.0.0",
+    "css-loader": "^6.11.0",
     "eslint": "^9.39.2",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -120,11 +146,12 @@
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "storybook": "8.6.15",
+    "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.16",
     "typedoc": "^0.28.16",
     "typescript": "^5.9.3",
     "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^7.0.2"
   },
   "optionalDependencies": {
     "fsevents": "*"
