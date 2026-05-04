@@ -67,6 +67,10 @@ export class Select extends LitElement {
           --color-surface-subtle,
           rgba(15, 23, 43, 0.04)
         );
+        --select-trigger-toggle-hover-background: var(
+          --color-header-menu-item-hover,
+          #e6dcff
+        );
         --select-trigger-border: 1px solid var(--gray-400, #99a1af);
         --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
         --select-trigger-text: var(--color-text-subheading, #101828);
@@ -94,6 +98,10 @@ export class Select extends LitElement {
         --select-trigger-hover-background: var(
           --color-surface-subtle,
           rgba(15, 23, 43, 0.04)
+        );
+        --select-trigger-toggle-hover-background: var(
+          --color-header-menu-item-hover,
+          #e6dcff
         );
         --select-trigger-border: 1px solid var(--gray-400, #99a1af);
         --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
@@ -146,30 +154,9 @@ export class Select extends LitElement {
         transform: translateY(1px);
       }
 
-      .select-trigger:hover {
-        background: var(
-          --select-trigger-hover-background,
-          var(--select-trigger-background)
-        );
-        border: var(
-          --select-trigger-hover-border,
-          var(--select-trigger-border)
-        );
-        color: var(--select-trigger-hover-text, var(--select-trigger-text));
-      }
-
       .select-trigger:focus-visible {
         outline: 2px solid var(--color-focus-ring, var(--color-primary, #7C4DFF));
         outline-offset: 2px;
-        background: var(
-          --select-trigger-hover-background,
-          var(--select-trigger-background)
-        );
-        border: var(
-          --select-trigger-hover-border,
-          var(--select-trigger-border)
-        );
-        color: var(--select-trigger-hover-text, var(--select-trigger-text));
       }
 
       .select-trigger-label {
@@ -178,6 +165,30 @@ export class Select extends LitElement {
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
+      }
+
+      .select-trigger-toggle {
+        display: inline-flex;
+        flex: 0 0 auto;
+        align-items: center;
+        justify-content: center;
+        width: 26px;
+        height: 26px;
+        border-radius: var(--border-radius-base, 0.3125rem);
+      }
+
+      .select-trigger-toggle:hover {
+        background: var(
+          --select-trigger-toggle-hover-background,
+          var(--color-header-menu-item-hover, #e6dcff)
+        );
+      }
+
+      .select-trigger:focus-visible .select-trigger-toggle {
+        background: var(
+          --select-trigger-toggle-hover-background,
+          var(--color-header-menu-item-hover, #e6dcff)
+        );
       }
 
       .select-trigger-icon {
@@ -444,9 +455,11 @@ export class Select extends LitElement {
         <span class="select-trigger-label" part="trigger-label"
           >${triggerLabel}</span
         >
-        <span class="select-trigger-icon" part="trigger-icon" aria-hidden="true"
-          >${downArrowIcon}</span
-        >
+        <span class="select-trigger-toggle" part="trigger-toggle">
+          <span class="select-trigger-icon" part="trigger-icon" aria-hidden="true"
+            >${downArrowIcon}</span
+          >
+        </span>
       </button>
 
       <div
