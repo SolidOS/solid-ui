@@ -1047,10 +1047,20 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
+   const sessionInfo = authSession.info
+  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
+    return []
+  }
+  
+  const currentUser = authn.currentUser()
+  if (!currentUser) {
+    return []
+  }
+
   try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({ me: currentUser })
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError)
+      throw new Error(preferencesFileError || 'Unable to load user preferences file.')
     }
     return solidLogicSingleton.store.each(
       me,
