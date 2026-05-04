@@ -1,5 +1,5 @@
 import { silenceDebugMessages } from '../../helpers/debugger'
-import { namedNode } from 'rdflib'
+import { namedNode, st } from 'rdflib'
 import ns from '../../../../src/ns'
 import { store } from 'solid-logic'
 
@@ -593,6 +593,57 @@ describe('buildCheckboxForm', () => {
         false
       )
     ).toBeInstanceOf(HTMLDivElement)
+  })
+
+  it('ignores rapid second click while async update is in progress and reenables button afterward', async () => {
+    const dataDoc = namedNode('http://example.com/#doc')
+    const form = namedNode('http://example.com/#form')
+    const subject = namedNode('http://example.com/#subject')
+    const predicate = namedNode('http://example.com/#predicate')
+    const object = namedNode('http://example.com/#object')
+    const statement = st(subject, predicate, object, dataDoc)
+
+    const originalEditable = store.updater.editable
+    const originalUpdate = store.updater.update
+
+    const updateSpy = jest.fn((_deletes, _inserts, callback) => {
+      return new Promise(resolve => {
+        setTimeout(() => {
+          callback('uri', true, 'ok')
+          resolve(true)
+        }, 0)
+      })
+    })
+
+    store.updater.editable = jest.fn(() => true) as any
+    store.updater.update = updateSpy as any
+
+    try {
+      const box = buildCheckboxForm(
+        document,
+        store,
+        'label',
+        [],
+        statement,
+        form,
+        dataDoc,
+        false
+      )
+      const checkboxButton = box.querySelector('button') as HTMLButtonElement
+
+      checkboxButton.click()
+      checkboxButton.click()
+
+      expect(updateSpy).toHaveBeenCalledTimes(1)
+      expect(checkboxButton.disabled).toEqual(true)
+
+      await new Promise(resolve => setTimeout(resolve, 5))
+
+      expect(checkboxButton.disabled).toEqual(false)
+    } finally {
+      store.updater.editable = originalEditable
+      store.updater.update = originalUpdate
+    }
   })
 })
 
