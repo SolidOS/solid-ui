@@ -38,6 +38,11 @@ export const v2Components = [
     sourceDir: 'combobox',
     sourcePath: 'forms/combobox',
     exportNames: ['forms/combobox', 'combobox']
+  },
+  {
+    sourceDir: 'peopleSearch',
+    sourcePath: 'forms/peopleSearch',
+    exportNames: ['forms/people-search', 'people-search']
   }
 ]
 

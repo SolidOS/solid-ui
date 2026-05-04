@@ -4,6 +4,7 @@ export const listboxStyles = css`
     :host { // default theme
       --input-background: var(--color-background, #F8F9FB);
       --item-text: var(--color-text, #1A1A1A);
+      --item-description-text: var(--color-text-subtle, #667085);
       --item-selected-text: var(--color-primary, #7c4dff);
       --item-hover-background: var(--lavender-300, #e6dcff);
       --item-selected-background: var(--lavender-400, #cbb9ff);
@@ -13,6 +14,7 @@ export const listboxStyles = css`
     :host([theme='dark']) {
       --input-background: var(--color-background, #1A1A1A);
       --item-text: var(--color-text, #F8F9FB);
+      --item-description-text: var(--color-text-subtle, #c7ced8);
       --item-selected-text: var(--color-primary, #7c4dff);
       --item-hover-background: var(--lavender-300, #e6dcff);
       --item-selected-background: var(--lavender-400, #cbb9ff);
@@ -39,7 +41,7 @@ export const listboxStyles = css`
 
     .listbox-item {
       display: flex;
-      align-items: center;
+      align-items: flex-start;
       width: 100%;
       min-height: var(--select-trigger-height, var(--min-touch-target, 44px));
       padding: var(--spacing-xxs, 0.3125rem) var(--spacing-xs, 0.75rem);
@@ -52,6 +54,24 @@ export const listboxStyles = css`
       line-height: normal;
       text-align: left;
       box-sizing: border-box;
+    }
+
+    .listbox-item-content {
+      display: flex;
+      flex: 1 1 auto;
+      min-width: 0;
+      flex-direction: column;
+      gap: 0.125rem;
+    }
+
+    .listbox-item-label {
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .listbox-item-description {
+      font-size: 0.75rem;
+      color: var(--item-description-text);
     }
 
     .listbox-item:last-child {

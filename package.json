@@ -94,6 +94,16 @@
       "types": "./dist/components/combobox/index.d.ts",
       "import": "./dist/components/combobox/index.esm.js",
       "require": "./dist/components/combobox/index.js"
+    },
+    "./components/forms/people-search": {
+      "types": "./dist/components/peopleSearch/index.d.ts",
+      "import": "./dist/components/peopleSearch/index.esm.js",
+      "require": "./dist/components/peopleSearch/index.js"
+    },
+    "./components/people-search": {
+      "types": "./dist/components/peopleSearch/index.d.ts",
+      "import": "./dist/components/peopleSearch/index.esm.js",
+      "require": "./dist/components/peopleSearch/index.js"
     }
   },
   "files": [

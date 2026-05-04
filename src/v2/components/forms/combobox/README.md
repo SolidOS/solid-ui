@@ -95,6 +95,7 @@ The component works with suggestion objects shaped like:
 type ComboboxSuggestion = {
 	label: string
 	value: string
+	description?: string
 	disabled?: boolean
 	publicId?: string
 	meta?: Record<string, unknown>

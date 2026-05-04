@@ -47,7 +47,12 @@ export function renderListbox (args: RenderListboxArgs) {
               }
             }}"
           >
-            ${option.label}
+            <span class="listbox-item-content">
+              <span class="listbox-item-label">${option.label}</span>
+              ${option.description
+                ? html`<span class="listbox-item-description">${option.description}</span>`
+                : ''}
+            </span>
           </li>
         `
       })}

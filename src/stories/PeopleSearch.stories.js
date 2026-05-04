@@ -1,4 +1,4 @@
-import * as UI from '../../src/index'
+import '../v2/components/forms/peopleSearch/index'
 import ContactsModuleRdfLib from '@solid-data-modules/contacts-rdflib'
 
 const CATALOG_URL =
@@ -154,12 +154,14 @@ function installPeopleSearchMocks () {
 }
 
 export default {
-  title: 'Widgets/PeopleSearch'
+  title: 'Forms/PeopleSearch'
 }
 
 export const SignedOut = {
   render: () => {
-    return UI.widgets.createPeopleSearch(document, makeMockKb(), null)
+    const element = document.createElement('solid-ui-people-search')
+    element.store = makeMockKb()
+    return element
   },
   name: 'signed out'
 }
@@ -174,12 +176,21 @@ export const WithMockData = {
       'Mocked sources: address book, foaf:knows, and Solid catalog. Type to filter.'
     wrapper.appendChild(info)
 
+    const originalCurrentUser = window.SolidLogic?.authn?.currentUser
     const me = $rdf.namedNode('https://demo.example/profile/card#me')
-    const picker = UI.widgets.createPeopleSearch(document, makeMockKb(), me)
+    if (window.SolidLogic?.authn) {
+      window.SolidLogic.authn.currentUser = () => me
+    }
+    const picker = document.createElement('solid-ui-people-search')
+    picker.store = makeMockKb()
+    picker.openProfilesOnSelect = false
     wrapper.appendChild(picker)
 
     const cleanup = function () {
       restoreMocks()
+      if (window.SolidLogic?.authn) {
+        window.SolidLogic.authn.currentUser = originalCurrentUser
+      }
       wrapper.removeEventListener('DOMNodeRemovedFromDocument', cleanup)
     }
     wrapper.addEventListener('DOMNodeRemovedFromDocument', cleanup)

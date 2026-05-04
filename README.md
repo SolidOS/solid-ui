@@ -318,6 +318,27 @@ import { SignupButton } from 'solid-ui/components/signup-button'
 <solid-ui-signup-button label="Get a Pod" signup-url="https://solidproject.org/get_a_pod" icon="https://example.com/icon.svg"></solid-ui-signup-button>
 ```
 
+### solid-ui-people-search
+
+A standalone people-search component built on top of `<solid-ui-combobox>`. It discovers people from the authenticated user's FOAF graph, linked address books, and the Solid catalog, then emits `person-select` with the selected person's details.
+
+**Subpath exports:** `solid-ui/components/forms/people-search`, `solid-ui/components/people-search`
+
+```typescript
+import { PeopleSearch } from 'solid-ui/components/forms/people-search'
+```
+
+```html
+<solid-ui-people-search></solid-ui-people-search>
+```
+
+```typescript
+const peopleSearch = document.querySelector('solid-ui-people-search') as PeopleSearch
+peopleSearch.addEventListener('person-select', (event: CustomEvent) => {
+  console.log(event.detail.person)
+})
+```
+
 ### Component build pipeline
 
 Web components use a two-stage build to produce a clean public runtime layout while keeping internal TypeScript artifacts separate:
