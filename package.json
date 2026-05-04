@@ -1,15 +1,99 @@
 {
   "name": "solid-ui",
-  "version": "3.0.5",
+  "version": "3.1.0",
   "description": "UI library for Solid applications",
   "main": "dist/solid-ui.js",
   "types": "dist/index.d.ts",
-  "sideEffects": false,
   "exports": {
     ".": {
       "types": "./dist/index.d.ts",
       "import": "./dist/solid-ui.esm.js",
       "require": "./dist/solid-ui.js"
+    },
+    "./components/header": {
+      "types": "./dist/components/header/index.d.ts",
+      "import": "./dist/components/header/index.esm.js",
+      "require": "./dist/components/header/index.js"
+    },
+    "./components/layout/header": {
+      "types": "./dist/components/header/index.d.ts",
+      "import": "./dist/components/header/index.esm.js",
+      "require": "./dist/components/header/index.js"
+    },
+    "./components/loginButton": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
+    "./components/login-button": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
+    "./components/auth/login-button": {
+      "types": "./dist/components/loginButton/index.d.ts",
+      "import": "./dist/components/loginButton/index.esm.js",
+      "require": "./dist/components/loginButton/index.js"
+    },
+    "./components/auth/signup-button": {
+      "types": "./dist/components/signupButton/index.d.ts",
+      "import": "./dist/components/signupButton/index.esm.js",
+      "require": "./dist/components/signupButton/index.js"
+    },
+    "./components/signup-button": {
+      "types": "./dist/components/signupButton/index.d.ts",
+      "import": "./dist/components/signupButton/index.esm.js",
+      "require": "./dist/components/signupButton/index.js"
+    },
+    "./components/media/photo-capture": {
+      "types": "./dist/components/photoCapture/index.d.ts",
+      "import": "./dist/components/photoCapture/index.esm.js",
+      "require": "./dist/components/photoCapture/index.js"
+    },
+    "./components/photo-capture": {
+      "types": "./dist/components/photoCapture/index.d.ts",
+      "import": "./dist/components/photoCapture/index.esm.js",
+      "require": "./dist/components/photoCapture/index.js"
+    },
+    "./components/actions/button": {
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.esm.js",
+      "require": "./dist/components/button/index.js"
+    },
+    "./components/button": {
+      "types": "./dist/components/button/index.d.ts",
+      "import": "./dist/components/button/index.esm.js",
+      "require": "./dist/components/button/index.js"
+    },
+    "./components/footer": {
+      "types": "./dist/components/footer/index.d.ts",
+      "import": "./dist/components/footer/index.esm.js",
+      "require": "./dist/components/footer/index.js"
+    },
+    "./components/layout/footer": {
+      "types": "./dist/components/footer/index.d.ts",
+      "import": "./dist/components/footer/index.esm.js",
+      "require": "./dist/components/footer/index.js"
+    },
+    "./components/forms/select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.esm.js",
+      "require": "./dist/components/select/index.js"
+    },
+    "./components/select": {
+      "types": "./dist/components/select/index.d.ts",
+      "import": "./dist/components/select/index.esm.js",
+      "require": "./dist/components/select/index.js"
+    },
+    "./components/forms/combobox": {
+      "types": "./dist/components/combobox/index.d.ts",
+      "import": "./dist/components/combobox/index.esm.js",
+      "require": "./dist/components/combobox/index.js"
+    },
+    "./components/combobox": {
+      "types": "./dist/components/combobox/index.d.ts",
+      "import": "./dist/components/combobox/index.esm.js",
+      "require": "./dist/components/combobox/index.js"
     }
   },
   "files": [
@@ -18,11 +102,13 @@
     "LICENSE"
   ],
   "scripts": {
-    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api",
-    "build": "npm run clean && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
+    "clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
+    "build": "npm run clean && npm run sync-component-exports && npm run typecheck && npm run build-version && npm run build-dist && npm run build-js && npm run postbuild-js && npm run build-storybook",
     "build-version": "sh ./timestamp.sh > src/versionInfo.ts && eslint 'src/versionInfo.ts' --fix",
+    "prebuild-js": "rm -f .tsbuildinfo",
     "build-js": "tsc",
-    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map",
+    "sync-component-exports": "node scripts/sync-component-exports.mjs",
+    "postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map && node scripts/build-component-dts.mjs",
     "build-dist": "webpack --progress",
     "build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
     "lint": "eslint",
@@ -32,10 +118,15 @@
     "test": "jest --no-coverage",
     "test-coverage": "jest --coverage --collectCoverageFrom=src/**/*.[jt]s",
     "test-debug": "node --inspect-brk ./node_modules/jest/bin/jest.js --runInBand --watch",
-    "watch": "npm run build-version && babel src --out-dir dist --watch --source-maps --extensions '.ts,.js'",
+    "watch:js": "tsc --watch --preserveWatchOutput",
+    "watch:component-dts": "node scripts/watch-component-dts.mjs",
+    "watch:component-exports": "node scripts/watch-component-exports.mjs",
+    "watch:dist": "webpack --watch --mode development",
+    "watch": "npm run sync-component-exports && npm run build-version && npm run build-js && npm run postbuild-js && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:component-exports & npm run watch:dist & wait'",
+    "dev": "npm run sync-component-exports && npm run build-version && sh -c 'npm run watch:js & npm run watch:component-dts & npm run watch:component-exports & npm run watch:dist & wait'",
     "doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
     "prepublishOnly": "npm run build && npm run lint && npm test && npm run doc",
-    "preversion": "npm run lint && npm run typecheck && npm test",
+    "preversion": "npm run sync-component-exports && npm run lint && npm run typecheck && npm test",
     "postpublish": "git push origin main --follow-tags",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build  --output-dir ./examples/storybook"
@@ -69,8 +160,9 @@
     "@noble/hashes": "^2.0.1",
     "@solid-data-modules/contacts-rdflib": "^0.7.1",
     "escape-html": "^1.0.3",
+    "lit": "^3.3.2",
     "mime-types": "^3.0.2",
-    "pane-registry": "^3.0.2",
+    "pane-registry": "^3.1.0",
     "solid-namespace": "^0.5.4",
     "uuid": "^13.0.0"
   },
@@ -103,6 +195,7 @@
     "@typescript-eslint/parser": "^8.54.0",
     "babel-jest": "^30.2.0",
     "babel-loader": "^10.0.0",
+    "css-loader": "^6.11.0",
     "eslint": "^9.39.2",
     "eslint-import-resolver-typescript": "^4.4.4",
     "eslint-plugin-import": "^2.32.0",
@@ -121,11 +214,12 @@
     "react-dom": "^17.0.2",
     "react-is": "^17.0.2",
     "storybook": "8.6.15",
+    "style-loader": "^3.3.4",
     "terser-webpack-plugin": "^5.3.16",
     "typedoc": "^0.28.16",
     "typescript": "^5.9.3",
     "webpack": "^5.104.1",
-    "webpack-cli": "^6.0.1"
+    "webpack-cli": "^7.0.2"
   },
   "optionalDependencies": {
     "fsevents": "*"

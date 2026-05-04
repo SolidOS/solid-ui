@@ -1,5 +1,6 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import { componentEntries } from './scripts/component-manifest.mjs'
 
 const externalsBase = {
   fs: 'null',
@@ -19,13 +20,22 @@ const esmExternals = {
 }
 
 const common = {
-  entry: './src/index.ts',
+  entry: {
+    // Keep the legacy UMD global export for the main bundle only.
+    // Component entrypoints should build as standalone scripts without assigning
+    // a shared global like window.UI, so they do not clobber the main bundle
+    // or each other when loaded via script tags.
+    main: {
+      import: './src/index.ts',
+      library: {
+        name: 'UI',
+        type: 'umd'
+      }
+    },
+    ...componentEntries
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    library: {
-      name: 'UI',
-      type: 'umd'
-    },
     globalObject: 'this',
     publicPath: '',
     iife: true,
@@ -40,6 +50,9 @@ const common = {
     fallback: { path: false }
   },
   devtool: 'source-map',
+  cache: {
+    type: 'filesystem'
+  },
   module: {
     rules: [
       {
@@ -48,12 +61,7 @@ const common = {
         use: {
           loader: 'babel-loader',
           options: {
-            presets: [
-              ['@babel/preset-env', {
-                modules: false // Preserve ES modules for webpack
-              }],
-              '@babel/preset-typescript'
-            ]
+            cacheDirectory: true
           }
         }
       }, {
@@ -72,7 +80,9 @@ const minified = {
   mode: 'production',
   output: {
     ...common.output,
-    filename: 'solid-ui.min.js'
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.min.js'
+      : 'components/[name]/index.min.js'
   },
   externals: externalsBase,
   optimization: {
@@ -87,7 +97,9 @@ const unminified = {
   mode: 'production',
   output: {
     ...common.output,
-    filename: 'solid-ui.js'
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.js'
+      : 'components/[name]/index.js'
   },
   externals: externalsBase,
   optimization: {
@@ -98,9 +110,15 @@ const unminified = {
 // ESM minified, rdflib external
 const esmMinified = {
   ...common,
+  entry: {
+    ...common.entry,
+    main: './src/index.ts'
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.min.js',
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.esm.min.js'
+      : 'components/[name]/index.esm.min.js',
     library: {
       type: 'module'
     },
@@ -122,9 +140,15 @@ const esmMinified = {
 // ESM unminified, rdflib external
 const esmUnminified = {
   ...common,
+  entry: {
+    ...common.entry,
+    main: './src/index.ts'
+  },
   output: {
     path: path.resolve(process.cwd(), 'dist'),
-    filename: 'solid-ui.esm.js',
+    filename: pathData => pathData.chunk.name === 'main'
+      ? 'solid-ui.esm.js'
+      : 'components/[name]/index.esm.js',
     library: {
       type: 'module'
     },
@@ -142,9 +166,11 @@ const esmUnminified = {
   }
 }
 
-export default [
-  minified,
-  unminified,
-  esmMinified,
-  esmUnminified
-]
+export default (env, argv) => {
+  const isDev = argv?.mode === 'development'
+  const devtool = isDev ? 'eval-cheap-module-source-map' : 'source-map'
+  return [minified, unminified, esmMinified, esmUnminified].map(config => ({
+    ...config,
+    devtool
+  }))
+}

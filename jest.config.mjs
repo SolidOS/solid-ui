@@ -11,12 +11,15 @@ export default {
     '^.+\\.(mjs|[tj]sx?)$': ['babel-jest', { configFile: './babel.config.mjs' }],
   },
   transformIgnorePatterns: [
-    '<rootDir>/node_modules/(?!(lit-html|@noble/curves|@noble/hashes|@exodus/bytes|uuid|jsdom|parse5|@asamuzakjp/css-color|@csstools|@solid-data-modules/contacts-rdflib)/)',
+    '<rootDir>/node_modules/(?!(lit|lit-html|lit-element|@lit|@lit-labs|@lit-labs/ssr-dom-shim|@lit/reactive-element|@noble/curves|@noble/hashes|@exodus/bytes|uuid|jsdom|parse5|@asamuzakjp/css-color|@csstools)/)',
   ],
   moduleNameMapper: {
     '^@solid-data-modules/contacts-rdflib$': '<rootDir>/__mocks__/contacts-rdflib.ts',
   },
   setupFilesAfterEnv: ['./test/helpers/setup.ts'],
+  moduleNameMapper: {
+    '^.+\\.css$': '<rootDir>/__mocks__/styleMock.js'
+  },
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/__mocks__'],
 }
