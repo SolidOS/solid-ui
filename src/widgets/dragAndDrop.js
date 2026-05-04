@@ -15,12 +15,22 @@ import { style } from '../style'
 /* global FileReader alert */
 
 export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
+  const normalizeDroppedUris = function (uriText) {
+    return uriText
+      .split('\n')
+      .map(uri => uri.trim())
+      .filter(uri => uri && uri[0] !== '#')
+  }
+
   const dragoverListener = function (e) {
     e.preventDefault() // Need this; otherwise, drop does not work.
+    e.stopPropagation()
     e.dataTransfer.dropEffect = 'copy'
   }
 
   const dragenterListener = function (e) {
+    e.preventDefault()
+    e.stopPropagation()
     debug.log('dragenter event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.localStyle) {
       //  necessary not sure when
@@ -33,6 +43,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
     debug.log('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect)
   }
   const dragleaveListener = function (e) {
+    e.stopPropagation()
     debug.log('dragleave event dropEffect: ' + e.dataTransfer.dropEffect)
     if (this.savedStyle) {
       this.localStyle = this.savedStyle
@@ -43,6 +54,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
 
   const dropListener = function (e) {
     if (e.preventDefault) e.preventDefault() // stops the browser from redirecting off to the text.
+    if (e.stopPropagation) e.stopPropagation()
     debug.log('Drop event. dropEffect: ' + e.dataTransfer.dropEffect)
     debug.log(
       'Drop event. types: ' +
@@ -55,7 +67,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
       for (let t = 0; t < e.dataTransfer.types.length; t++) {
         const type = e.dataTransfer.types[t]
         if (type === 'text/uri-list') {
-          uris = e.dataTransfer.getData(type).split('\n') // @ ignore those starting with #
+          uris = normalizeDroppedUris(e.dataTransfer.getData(type))
           debug.log('Dropped text/uri-list: ' + uris)
         } else if (type === 'text/plain') {
           text = e.dataTransfer.getData(type)
@@ -79,13 +91,14 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
           droppedFileHandler(files)
         }
       }
-      if (uris === null && text && text.slice(0, 4) === 'http') {
-        uris = text
+      const trimmedText = text ? text.trim() : ''
+      if (uris === null && trimmedText && trimmedText.slice(0, 4) === 'http') {
+        uris = [trimmedText]
         debug.log('Waring: Poor man\'s drop: using text for URI') // chrome disables text/uri-list??
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
-      uris = [e.dataTransfer.getData('Text')]
+      uris = normalizeDroppedUris(e.dataTransfer.getData('Text'))
       debug.log('WARNING non-standard drop event: ' + uris[0])
     }
     debug.log('Dropped URI list (2): ' + uris)
