@@ -355,14 +355,11 @@ export class Header extends LitElement {
   .account-menu-copy {
     display: flex;
     flex-direction: column;
-    flex: 1 1 auto;
     min-width: 0;
   }
 
   .account-menu-label {
     color: var(--header-button-text);
-    display: block;
-    max-width: 100%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
