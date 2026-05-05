@@ -182,9 +182,17 @@ export async function ensureLoadedProfile (
 ): Promise<AuthenticationContext> {
   const handleNotLoggedInProfile = (logMessage: (message: string) => void) => {
     const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
+    const notLoggedInMessageKey = 'not-logged-in-profile'
     logMessage(notLoggedInMessage)
     if (context.div && context.dom) {
-      context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
+      const existingMessage = context.div.querySelector(
+        `[data-login-message="${notLoggedInMessageKey}"]`
+      )
+      if (!existingMessage) {
+        const errorBlock = widgets.errorMessageBlock(context.dom, notLoggedInMessage)
+        errorBlock.setAttribute('data-login-message', notLoggedInMessageKey)
+        context.div.appendChild(errorBlock)
+      }
     }
     return context
   }
