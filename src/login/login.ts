@@ -135,7 +135,7 @@ export async function ensureLoadedPreferences (
   } catch (err) {
     let m2: string
     const errorMessage = err instanceof Error ? err.message : `${err}`
-    if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(errorMessage)) {
+    if (err instanceof UnauthorizedError || /(?:status:\s*401\b|unauthorized)/i.test(errorMessage)) {
       m2 =
         'Not logged in, so preferences were not loaded.'
       context.preferencesFileError = m2
