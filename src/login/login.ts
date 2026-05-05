@@ -758,7 +758,7 @@ export function selectWorkspace (
   const box = dom.createElement('div')
   const context: AuthenticationContext = { me, dom, div: box }
 
-  function say (s, background) {
+  function say (s, background?) {
     box.appendChild(widgets.errorMessageBlock(dom, s, background))
   }
 
