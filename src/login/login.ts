@@ -227,7 +227,11 @@ export async function ensureLoadedProfile (
     if (context.div && context.dom) {
       context.div.appendChild(widgets.errorMessageBlock(context.dom, message))
     }
-    throw new Error(`Can't log in: ${err}`)
+    const loginError = new Error(`Can't log in: ${message}`) as Error & { cause?: unknown }
+    if (err instanceof Error) {
+      loginError.cause = err
+    }
+    throw loginError
   }
   return context
 }
