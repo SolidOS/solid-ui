@@ -180,6 +180,15 @@ export async function ensureLoadedPreferences (
 export async function ensureLoadedProfile (
   context: AuthenticationContext
 ): Promise<AuthenticationContext> {
+  const handleNotLoggedInProfile = (logMessage: (message: string) => void) => {
+    const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
+    logMessage(notLoggedInMessage)
+    if (context.div && context.dom) {
+      context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
+    }
+    return context
+  }
+
   if (context.publicProfile) {
     return context
   } // already done
@@ -187,23 +196,13 @@ export async function ensureLoadedProfile (
   try {
     logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
-      const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
-      debug.log(notLoggedInMessage)
-      if (context.div && context.dom) {
-        context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
-      }
-      return context
+      return handleNotLoggedInProfile(debug.log)
     }
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
     const message = err instanceof Error ? err.message : `${err}`
     if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(message)) {
-      const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
-      debug.warn(notLoggedInMessage)
-      if (context.div && context.dom) {
-        context.div.appendChild(widgets.errorMessageBlock(context.dom, notLoggedInMessage))
-      }
-      return context
+      return handleNotLoggedInProfile(debug.warn)
     }
     const loggedInUser = logInContext && logInContext.me
     const isNonFatalProfileSideLoadFailure =
