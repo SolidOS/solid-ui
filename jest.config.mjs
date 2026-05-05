@@ -15,11 +15,9 @@ export default {
   ],
   moduleNameMapper: {
     '^@solid-data-modules/contacts-rdflib$': '<rootDir>/__mocks__/contacts-rdflib.ts',
-  },
-  setupFilesAfterEnv: ['./test/helpers/setup.ts'],
-  moduleNameMapper: {
     '^.+\\.css$': '<rootDir>/__mocks__/styleMock.js'
   },
+  setupFilesAfterEnv: ['./test/helpers/setup.ts'],
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],
   roots: ['<rootDir>/src', '<rootDir>/test', '<rootDir>/__mocks__'],
 }

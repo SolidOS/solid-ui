@@ -10,8 +10,7 @@ import {
   matchesPeopleSearchNameWords,
   mergePeopleSearchPerson,
   sortPeopleSearchPeople,
-  type PeopleSearchPerson,
-  type PeopleSearchRelationshipLabel
+  type PeopleSearchPerson
 } from './peopleSearchHelpers'
 
 export interface PeopleSearchSelectDetail {
@@ -96,7 +95,7 @@ export class PeopleSearch extends LitElement {
     this._user = authn.currentUser()
     this._resetDiscoveryState()
     if (this._user) {
-      void this._ensureDiscovery()
+      this._ensureDiscovery()
     }
   }
 
@@ -109,7 +108,7 @@ export class PeopleSearch extends LitElement {
     }
 
     if (!this._discoveryPromise) {
-      void this._ensureDiscovery()
+      this._ensureDiscovery()
     }
 
     const suggestions = this._buildSuggestions(query)
@@ -162,7 +161,7 @@ export class PeopleSearch extends LitElement {
     if (changedProperties.has('store') && !changedProperties.has('_user')) {
       this._resetDiscoveryState()
       if (this._user) {
-        void this._ensureDiscovery()
+        this._ensureDiscovery()
       }
     }
   }
@@ -248,11 +247,10 @@ export class PeopleSearch extends LitElement {
     this._updateStatus(this._query, 0)
 
     this._discoveryPromise = (async () => {
-      const renderPerson = async (person: PeopleSearchPerson) => {
-        const merged = this._mergePerson(person)
+      const renderPerson = async (person: PeopleSearchPerson): Promise<void> => {
+        this._mergePerson(person)
         this._refreshComboboxOptions(this._query)
         this._updateStatus(this._query, this._buildSuggestions(this._query).length)
-        return merged
       }
 
       await discoverPeopleSearchEntries({
@@ -283,7 +281,7 @@ export class PeopleSearch extends LitElement {
 
   private _handleComboboxFocusIn () {
     if (!this._discoveryPromise && this._user) {
-      void this._ensureDiscovery()
+      this._ensureDiscovery()
     }
     this._refreshComboboxOptions(this._query)
     this._updateStatus(this._query, this._buildSuggestions(this._query).length)
