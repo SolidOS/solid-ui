@@ -840,6 +840,9 @@ export function selectWorkspace (
   function displayOptions (context) {
     // console.log('displayOptions!', context)
     if (!context.preferencesFile) {
+      say(
+        context.preferencesFileError || 'Preferences not available.'
+      )
       return
     }
 
