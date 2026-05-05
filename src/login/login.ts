@@ -154,16 +154,19 @@ export async function ensureLoadedPreferences (
     } else if (err instanceof SameOriginForbiddenError) {
       m2 =
         'You are not authorized to read your preference file. This may be because you are using an untrusted web app.'
+      context.preferencesFileError = m2
       debug.warn(m2)
       return context
     } else if (err instanceof NotEditableError) {
       m2 =
         'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      context.preferencesFileError = m2
       debug.warn(m2)
       return context
     } else if (err instanceof WebOperationError) {
       m2 =
         'You are not authorized to edit your preference file. This may be because you are using an untrusted web app.'
+      context.preferencesFileError = m2
       debug.warn(m2)
     } else if (err instanceof FetchError) {
       m2 = `Strange: Error ${err.status} trying to read your preference file.${err.message}`
