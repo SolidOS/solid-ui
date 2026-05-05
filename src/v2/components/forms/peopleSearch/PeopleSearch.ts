@@ -190,6 +190,7 @@ export class PeopleSearch extends LitElement {
     }
 
     combobox.options = this._buildSuggestions(query)
+    combobox.requestUpdate()
   }
 
   private _updateStatus (query: string, visibleCount: number) {
