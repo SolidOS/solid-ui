@@ -126,6 +126,12 @@ export async function ensureLoadedPreferences (
   try {
     context = await ensureLoadedProfile(context)
 
+    if (!context.me || !context.publicProfile) {
+      context.preferencesFileError =
+        context.preferencesFileError || 'Not logged in, so preferences were not loaded.'
+      return context
+    }
+
     // console.log('back in Solid UI after logInLoadProfile', context)
     const preferencesFile = await loadPreferences(context.me as NamedNode)
     if (progressDisplay) {
@@ -833,6 +839,10 @@ export function selectWorkspace (
 
   function displayOptions (context) {
     // console.log('displayOptions!', context)
+    if (!context.preferencesFile) {
+      return
+    }
+
     async function makeNewWorkspace (_event) {
       const row = table.appendChild(dom.createElement('tr'))
       const cell = row.appendChild(dom.createElement('td'))
