@@ -1,8 +1,7 @@
 import { beforeEach, describe, expect, it, jest } from '@jest/globals'
-import { namedNode } from 'rdflib'
+import { namedNode, type NamedNode } from 'rdflib'
 import { authSession, authn } from 'solid-logic'
 import { PeopleSearch } from './PeopleSearch'
-import './index'
 import ns from '../../../../ns'
 
 jest.mock('@solid-data-modules/contacts-rdflib', () => ({
@@ -32,6 +31,10 @@ const mockCurrentUser = authn.currentUser as jest.Mock
 const mockOn = authSession.events.on as jest.Mock
 const mockOff = authSession.events.off as jest.Mock
 
+if (!customElements.get('solid-ui-people-search')) {
+  customElements.define('solid-ui-people-search', PeopleSearch)
+}
+
 function getPortalRoot () {
   const portalHost = document.querySelector('[data-solid-ui-combobox-portal]') as HTMLDivElement | null
   return portalHost?.shadowRoot ?? null
@@ -49,7 +52,7 @@ describe('SolidUIPeopleSearch', () => {
     mockCurrentUser.mockReset()
     mockOn.mockReset()
     mockOff.mockReset()
-    ;(globalThis as typeof globalThis & { fetch?: typeof fetch }).fetch = undefined
+    Reflect.deleteProperty(globalThis, 'fetch')
   })
 
   it('is defined as a custom element', () => {

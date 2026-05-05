@@ -2,11 +2,13 @@ import { PeopleSearch } from './PeopleSearch'
 
 export { PeopleSearch }
 export type {
-  PeopleSearchPerson,
-  PeopleSearchRelationshipLabel,
   PeopleSearchSelectDetail,
   PeopleSearchSuggestion
 } from './PeopleSearch'
+export type {
+  PeopleSearchPerson,
+  PeopleSearchRelationshipLabel
+} from './peopleSearchHelpers'
 export {
   DEFAULT_CATALOG_URL,
   discoverPeopleSearchEntries,
