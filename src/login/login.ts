@@ -207,7 +207,7 @@ export async function ensureLoadedProfile (
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
     const message = err instanceof Error ? err.message : `${err}`
-    if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(message)) {
+    if (err instanceof UnauthorizedError || /(status:\s*401\b|unauthorized)/i.test(message)) {
       return handleNotLoggedInProfile(debug.warn)
     }
     const loggedInUser = logInContext && logInContext.me
