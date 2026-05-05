@@ -195,7 +195,7 @@ export async function ensureLoadedProfile (
         `[data-login-message="${notLoggedInMessageKey}"]`
       )
       if (!existingMessage) {
-        const errorBlock = widgets.errorMessageBlock(context.dom, notLoggedInMessage)
+        const errorBlock = widgets.errorMessageBlock(context.dom, notLoggedInMessage, 'white')
         errorBlock.setAttribute('data-login-message', notLoggedInMessageKey)
         context.div.appendChild(errorBlock)
       }
