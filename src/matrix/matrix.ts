@@ -26,12 +26,18 @@ import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 
+type MatrixQuery = object
+
+type MatrixVariable = {
+  toString: () => string
+}
+
 export function matrixForQuery (
   dom: HTMLDocument,
-  query: $rdf.Query,
-  vx: $rdf.Variable,
-  vy: $rdf.Variable,
-  vvalue: $rdf.Variable,
+  query: MatrixQuery,
+  vx: MatrixVariable,
+  vy: MatrixVariable,
+  vvalue: MatrixVariable,
   options: MatrixOptions,
   whenDone: () => void
 ) {
@@ -220,7 +226,7 @@ export function matrixForQuery (
 
   matrix.refresh = function () {
     markOldCells()
-    kb.query(query, addCellFromBindings, undefined, clearOldCells)
+    kb.query(query as any, addCellFromBindings, undefined, clearOldCells)
   }
 
   const addCellFromBindings = function (bindings) {
@@ -245,6 +251,6 @@ export function matrixForQuery (
     }
   }
 
-  kb.query(query, addCellFromBindings, undefined, whenDone) // Populate the matrix
+  kb.query(query as any, addCellFromBindings, undefined, whenDone) // Populate the matrix
   return matrix
 }
