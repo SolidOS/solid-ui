@@ -210,7 +210,7 @@ export async function ensureLoadedProfile (
   try {
     logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
-      const webId = authSession?.webId || await authn.checkUser()
+      const webId = authSession.info?.webId || await authn.checkUser()
       if (webId) {
         authn.saveUser(webId, logInContext)
       }
