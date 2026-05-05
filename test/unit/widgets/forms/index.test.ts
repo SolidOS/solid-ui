@@ -609,7 +609,7 @@ describe('buildCheckboxForm', () => {
     const updateSpy = jest.fn((_deletes, _inserts, callback) => {
       return new Promise(resolve => {
         setTimeout(() => {
-          callback(undefined, true, 'ok')
+          callback('uri', true, 'ok')
           resolve(true)
         }, 0)
       })
