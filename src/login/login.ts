@@ -196,6 +196,12 @@ export async function ensureLoadedProfile (
   try {
     logInContext = await ensureLoggedIn(context)
     if (!logInContext.me) {
+      const webId = authSession?.webId || await authn.checkUser()
+      if (webId) {
+        authn.saveUser(webId, logInContext)
+      }
+    }
+    if (!logInContext.me) {
       return handleNotLoggedInProfile(debug.log)
     }
     context.publicProfile = await loadProfile(logInContext.me)
