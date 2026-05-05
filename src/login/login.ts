@@ -135,7 +135,7 @@ export async function ensureLoadedPreferences (
   } catch (err) {
     let m2: string
     const errorMessage = err instanceof Error ? err.message : `${err}`
-    if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(errorMessage)) {
+    if (err instanceof UnauthorizedError || /(?:status:\s*401\b|unauthorized)/i.test(errorMessage)) {
       m2 =
         'Not logged in, so preferences were not loaded.'
       context.preferencesFileError = m2
@@ -197,7 +197,7 @@ export async function ensureLoadedProfile (
     context.publicProfile = await loadProfile(logInContext.me)
   } catch (err) {
     const message = err instanceof Error ? err.message : `${err}`
-    if (/status:\s*401|unauthorized/i.test(message)) {
+    if (err instanceof UnauthorizedError || /status:\s*401|unauthorized/i.test(message)) {
       const notLoggedInMessage = 'Not logged in, so profile was not loaded.'
       debug.warn(notLoggedInMessage)
       if (context.div && context.dom) {
