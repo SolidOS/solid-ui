@@ -1028,6 +1028,10 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     attachmentLeft.appendChild(paperclip)
     const fhandler = options.uploadFolder ? droppedFileHandler : null
     makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    const paperclipImage = paperclip.querySelector('img')
+    if (paperclipImage) {
+      makeDropTarget(paperclipImage, droppedURIHandler, fhandler)
+    }
     makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
 
     if (options.uploadFolder) { // Addd an explicit file upload button as well
