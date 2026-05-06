@@ -60,7 +60,8 @@ export class Combobox extends LitElement {
   static styles = [
     listboxStyles,
     css`
-    :host { // default theme
+    :host {
+      /* default theme */
       display: inline-block;
       position: relative;
       box-sizing: border-box;
