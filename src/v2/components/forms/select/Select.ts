@@ -53,7 +53,7 @@ export class Select extends LitElement {
     listboxStyles,
     css`
       :host {
-        // default theme
+        /* default theme */
         display: inline-block;
         position: relative;
         z-index: var(--select-z-index, 400);
