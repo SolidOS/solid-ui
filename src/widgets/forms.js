@@ -1911,6 +1911,26 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
     }
     isUpdating = true
     input.disabled = true // Disable button to provide user feedback
+    let didFinishUpdate = false
+    const finishUpdate = function () {
+      if (didFinishUpdate) return false
+      didFinishUpdate = true
+      isUpdating = false
+      input.disabled = false
+      return true
+    }
+    const showUpdateError = function (errorBody) {
+      colorCarrier.style.color = '#000'
+      colorCarrier.style.backgroundColor = '#fee'
+      box.appendChild(
+        errorMessageBlock(
+          dom,
+          `Checkbox: Error updating dataDoc from ${input.state} to ${
+            input.newState
+          }:\n\n${errorBody}`
+        )
+      )
+    }
     colorCarrier.style.color = '#bbb' // grey -- not saved yet
     const toDelete = input.state === true ? ins : input.state === false ? del : []
     input.newState =
@@ -1927,13 +1947,12 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
     debug.log(`  Deleting  ${toDelete}`)
     debug.log(`  Inserting ${toInsert}`)
     try {
-      kb.updater.update(toDelete, toInsert, function (
+      const updateResult = kb.updater.update(toDelete, toInsert, function (
         uri,
         success,
         errorBody
       ) {
-        isUpdating = false
-        input.disabled = false
+        if (!finishUpdate()) return
         if (!success) {
           if (toDelete.why) {
             const hmmm = kb.holds(
@@ -1946,16 +1965,7 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
               debug.log(' @@@@@ weird if 409 - does hold statement')
             }
           }
-          colorCarrier.style.color = '#000'
-          colorCarrier.style.backgroundColor = '#fee'
-          box.appendChild(
-            errorMessageBlock(
-              dom,
-              `Checkbox: Error updating dataDoc from ${input.state} to ${
-                input.newState
-              }:\n\n${errorBody}`
-            )
-          )
+          showUpdateError(errorBody)
         } else {
           colorCarrier.style.color = '#000'
           input.state = input.newState
@@ -1966,9 +1976,18 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
           }[input.state] // @@
         }
       })
+      if (updateResult && typeof updateResult.then === 'function') {
+        updateResult
+          .catch(function (error) {
+            if (!finishUpdate()) return
+            showUpdateError(error instanceof Error ? error.message : error)
+          })
+          .finally(function () {
+            finishUpdate()
+          })
+      }
     } catch (error) {
-      isUpdating = false
-      input.disabled = false
+      finishUpdate()
       throw error
     }
   }
