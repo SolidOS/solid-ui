@@ -26,18 +26,12 @@ import { solidLogicSingleton } from 'solid-logic'
 
 const kb = solidLogicSingleton.store
 
-type MatrixQuery = object
-
-type MatrixVariable = {
-  toString: () => string
-}
-
 export function matrixForQuery (
   dom: HTMLDocument,
-  query: MatrixQuery,
-  vx: MatrixVariable,
-  vy: MatrixVariable,
-  vvalue: MatrixVariable,
+  query: $rdf.Query,
+  vx: $rdf.Variable,
+  vy: $rdf.Variable,
+  vvalue: $rdf.Variable,
   options: MatrixOptions,
   whenDone: () => void
 ) {
