@@ -94,7 +94,7 @@ export function makeDropTarget (ele, droppedURIHandler, droppedFileHandler) {
       const trimmedText = text ? text.trim() : ''
       if (uris === null && trimmedText && trimmedText.slice(0, 4) === 'http') {
         uris = [trimmedText]
-        debug.log('Waring: Poor man\'s drop: using text for URI') // chrome disables text/uri-list??
+        debug.log('Warning: Poor man\'s drop: using text for URI') // chrome disables text/uri-list??
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
