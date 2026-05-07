@@ -53,6 +53,7 @@ export class Combobox extends LitElement {
     layout: { type: String, reflect: true },
     value: { type: String, reflect: true },
     inputValue: { type: String },
+    options: { type: Array, attribute: false },
     _popupOpen: { state: true },
     _activeIndex: { state: true }
   }
