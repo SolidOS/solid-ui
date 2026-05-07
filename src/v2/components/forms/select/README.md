@@ -84,7 +84,7 @@ type SelectOption = {
 |----------|-----------|------|---------|-------------|
 | `label` | `label` | `string` | `Select an option` | Fallback label shown when there is no selected value and no options are available. |
 | `theme` | `theme` | `'light' \| 'dark'` | `'light'` | Sets the colour theme. |
-| `options` | `options` | `SelectOption[]` | `[]` | Array of selectable options. In practice this should be set as a property from JavaScript rather than as an HTML attribute. |
+| `options` | none | `SelectOption[]` | `[]` | Array of selectable options. This is a JavaScript-only property and is not available as an HTML attribute. |
 | `layout` | `layout` | `'desktop' \| 'mobile'` | `'desktop'` | Layout mode reserved for integration with other responsive components. |
 | `value` | `value` | `string` | `''` | The currently selected option value. If it matches an option, that option is shown in the trigger and moved to the top of the popup when opened. |
 

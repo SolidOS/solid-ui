@@ -42,7 +42,7 @@ export class Select extends LitElement {
   static properties = {
     label: { type: String, reflect: true },
     theme: { type: String, reflect: true },
-    options: { type: Array },
+    options: { type: Array, attribute: false },
     layout: { type: String, reflect: true },
     value: { type: String, reflect: true },
     _popupOpen: { state: true },
