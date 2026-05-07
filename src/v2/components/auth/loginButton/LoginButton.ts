@@ -97,8 +97,9 @@ export class LoginButton extends LitElement {
       background: transparent;
       outline: none;
       overflow: visible;
-      max-height: none;
-      max-width: none;
+      width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
     }
 
     .popup-dialog::backdrop {
@@ -111,7 +112,11 @@ export class LoginButton extends LitElement {
       box-shadow: var(--popup-shadow);
       border: 1px solid var(--popup-border);
       border-radius: var(--border-radius-md, 0.5rem);
-      min-width: 480px;
+      width: min(30rem, calc(100vw - 2rem));
+      min-width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
+      overflow: auto;
       z-index: 1001;
     }
 
@@ -303,6 +308,43 @@ export class LoginButton extends LitElement {
       color: var(--error-text-color);
       font-size: 0.875rem;
       margin-top: 8px;
+    }
+
+    @media (max-width: 40rem) {
+      .popup-dialog {
+        width: calc(100vw - 1rem);
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+      }
+
+      .popup-box {
+        width: calc(100vw - 1rem);
+        min-width: 0;
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+        border-radius: var(--border-radius-base, 0.3125rem);
+      }
+
+      .popup-top-menu,
+      .issuer-text-section,
+      .popup-footer {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      .popup-footer {
+        flex-wrap: wrap;
+        gap: 0.625rem;
+      }
+
+      .popup-footer > button {
+        flex: 1 1 100%;
+      }
+
+      .issuer-text-row,
+      .issuer-input-field-row {
+        width: 100%;
+      }
     }
   `
 
