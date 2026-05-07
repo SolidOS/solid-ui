@@ -346,8 +346,8 @@ Consumers never import from `dist/v2/components/...`; that path is an internal b
 
 When adding a new v2 component:
 
-1. Create the component folder under `src/v2/components/<ComponentName>/` with its `index.ts` entrypoint.
-2. Add one record to `scripts/component-manifest.mjs`.
+1. Create the component folder under `src/v2/components/` with its `index.ts` entrypoint. Components can be grouped in nested directories such as `src/v2/components/forms/select/`, `src/v2/components/auth/loginButton/`, or `src/v2/components/layout/header/`.
+2. Add one record to `scripts/component-manifest.mjs`. If the component lives in a nested directory, set its `sourcePath` in the manifest to match that grouped path.
 3. Run `npm run sync-component-exports` if you want to update `package.json` immediately, or just run `npm run build` and let the build do it automatically.
 
 You should not need to hand-edit the webpack component entry list or the `package.json` component export map anymore.
