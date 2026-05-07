@@ -322,7 +322,7 @@ export class PhotoCapture extends LitElement {
     this.constraints = ''
     this.captureFormat = DEFAULT_CAPTURE_FORMAT
     this.captureQuality = undefined
-    this.open = true
+    this.open = false
     this.disabled = false
     this.name = ''
     this.required = false

@@ -40,7 +40,7 @@ The legacy flat import path `solid-ui/components/photo-capture` still works, but
 | `label` | `label` | `string` | `Take Photo` | Trigger button label. Ignored when `show-trigger` is false and `presentation="inline"`. |
 | `heading` | `heading` | `string` | `Take a photo` | Panel heading. |
 | `presentation` | `presentation` | `'inline' \| 'dialog'` | `'inline'` | Controls whether the capture UI sits in-page or inside a native dialog. |
-| `open` | `open` | `boolean` | `true` | Controls whether the capture panel is visible. |
+| `open` | `open` | `boolean` | `false` | Controls whether the capture panel is visible. |
 | `name` | `name` | `string` | `''` | Form field name used when the component participates in form submission. |
 | `required` | `required` | `boolean` | `false` | Marks the control as required for form validation. |
 | `value` | none | `File \| null` | `null` | The current captured file. Settable from JavaScript. |
@@ -74,7 +74,7 @@ The legacy flat import path `solid-ui/components/photo-capture` still works, but
 
 ## Notes
 
-- Inline mode is the default, so the component can be embedded directly inside a page or form.
+- Inline mode is the default presentation, and the panel starts closed until `open` is set or the trigger button is used.
 - Dialog mode uses the native `<dialog>` element and is useful when the capture flow should float above the current page.
 - The component does not upload the photo itself. Consumers can persist it by reading `value`, listening for `change`, or handling `photo-captured`.
 - When form-associated custom elements are supported, the component uses `ElementInternals`. Otherwise it still supports form-style submission via the form's `formdata` event.

@@ -72,10 +72,16 @@ describe('SolidUIPhotoCapture', () => {
     expect(customElements.get('solid-ui-photo-capture')).toBe(PhotoCapture)
   })
 
-  it('starts the preview inline using the default environment-facing video constraint', async () => {
+  it('is closed by default and only starts the inline preview when opened', async () => {
     const photoCapture = new PhotoCapture()
 
     document.body.appendChild(photoCapture)
+    await photoCapture.updateComplete
+
+    expect(photoCapture.open).toBe(false)
+    expect(getUserMedia).not.toHaveBeenCalled()
+
+    photoCapture.open = true
     await photoCapture.updateComplete
     await Promise.resolve()
     await photoCapture.updateComplete
@@ -90,11 +96,13 @@ describe('SolidUIPhotoCapture', () => {
   it('accepts dialog presentation and custom constraints JSON', async () => {
     const photoCapture = new PhotoCapture()
     photoCapture.presentation = 'dialog'
-    photoCapture.open = false
     photoCapture.constraints = JSON.stringify({ video: true, audio: false })
 
     document.body.appendChild(photoCapture)
     await photoCapture.updateComplete
+
+    expect(photoCapture.open).toBe(false)
+    expect(HTMLDialogElement.prototype.showModal).not.toHaveBeenCalled()
 
     const trigger = photoCapture.shadowRoot?.querySelector('button.trigger-button') as HTMLButtonElement
     trigger.click()
@@ -111,6 +119,7 @@ describe('SolidUIPhotoCapture', () => {
     const photoCapture = new PhotoCapture()
     const captured = jest.fn()
     const changed = jest.fn()
+    photoCapture.open = true
 
     photoCapture.addEventListener('photo-captured', (event: Event) => {
       captured((event as CustomEvent).detail)
@@ -147,6 +156,7 @@ describe('SolidUIPhotoCapture', () => {
   it('can participate in a form-like submission while still exposing a value property', async () => {
     const form = document.createElement('form')
     const photoCapture = new PhotoCapture()
+    photoCapture.open = true
     photoCapture.name = 'avatar'
     form.appendChild(photoCapture)
     document.body.appendChild(form)
