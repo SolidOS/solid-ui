@@ -252,6 +252,7 @@ export class Select extends LitElement {
     super()
     this.label = 'Select an option'
     this.theme = 'light'
+    this.options = []
     this.layout = 'desktop'
     this.value = ''
     this._popupOpen = false

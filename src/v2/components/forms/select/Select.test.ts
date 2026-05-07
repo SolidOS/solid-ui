@@ -32,6 +32,20 @@ describe('SolidUISelect', () => {
     expect(trigger.textContent).toContain('English')
   })
 
+  it('renders the fallback label when no options are provided', async () => {
+    const select = new Select()
+    select.label = 'Language'
+
+    document.body.appendChild(select)
+    await select.updateComplete
+
+    const trigger = select.shadowRoot?.querySelector('button.select-trigger') as HTMLButtonElement
+
+    expect(trigger).not.toBeNull()
+    expect(trigger.textContent).toContain('Language')
+    expect(trigger.getAttribute('aria-expanded')).toBe('false')
+  })
+
   it('opens the popup and updates the value when an option is clicked', async () => {
     const select = new Select()
     const changed = jest.fn()
