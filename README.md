@@ -425,8 +425,8 @@ You are logged in as nameOfLoggedIn user.
 
 * Raptor mini: add a readme to the Footer component with example.
 
-* Claude Sonnet 4.6: Make the dop down as a list under the input field and entlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
+* Claude Sonnet 4.6: Make the drop down as a list under the input field and enlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
 
-* GPT-5.4 Model: can you wire up the keyboard interactions and aria attributes for Select.
+* GPT-5.4 Model: can you wire up the keyboard interactions and aria attributes for Select?
 
 * GPT-5.4 Model: Take the code from /Users/sharon/2025Dev/solid-ui/src/media/media-capture.ts and make it a web component. Make it work in forms as well as not. Make it configurable and follow LoginButton.

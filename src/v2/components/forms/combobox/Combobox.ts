@@ -53,6 +53,7 @@ export class Combobox extends LitElement {
     layout: { type: String, reflect: true },
     value: { type: String, reflect: true },
     inputValue: { type: String },
+    options: { type: Array, attribute: false },
     _popupOpen: { state: true },
     _activeIndex: { state: true }
   }
@@ -60,7 +61,8 @@ export class Combobox extends LitElement {
   static styles = [
     listboxStyles,
     css`
-    :host { // default theme
+    :host {
+      /* default theme */
       display: inline-block;
       position: relative;
       box-sizing: border-box;
