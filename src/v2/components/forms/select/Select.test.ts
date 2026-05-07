@@ -90,6 +90,20 @@ describe('SolidUISelect', () => {
     expect(options[0].textContent).toContain('French')
     expect(options[0].getAttribute('aria-selected')).toBe('true')
   })
+
+  it('does not reflect options to an HTML attribute', async () => {
+    const select = new Select()
+    select.options = [
+      { label: 'English', value: 'en' },
+      { label: 'French', value: 'fr' }
+    ]
+
+    document.body.appendChild(select)
+    await select.updateComplete
+
+    expect(select.hasAttribute('options')).toBe(false)
+  })
+
   it('supports keyboard selection from the trigger', async () => {
     const select = new Select()
     const changed = jest.fn()
