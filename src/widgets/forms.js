@@ -119,40 +119,46 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
         parts = kb.each(form, ui('part'), null, formDoc) //  Warning: unordered
         subfields = sortBySequence(parts)
       }
-      if (!parts) {
-        return box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
-      }
-
-      for (let i = 0; i < subfields.length; i++) {
-        const field = subfields[i]
-        const subFieldFunction = fieldFunction(dom, field) //
-
-        const itemChanged = function (ok, body) {
-          if (ok && body && body.widget && body.widget === 'select') {
-            refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFunction, box, subfields)
-          }
-          callbackFunction(ok, { widget: 'group', change: body })
-        }
-        box.appendChild(subFieldFunction(dom, null, already2, subject, field, dataDoc, itemChanged))
-      }
-      return box
+      try {
+        kb.updater.update(toDelete, toInsert, function (
+          uri,
+          success,
+          errorBody
+        ) {
+          isUpdating = false
+          input.disabled = false
+          if (!success) {
+            if (toDelete.why) {
+              const hmmm = kb.holds(
+                toDelete.subject,
+                toDelete.predicate,
+                toDelete.object,
+                toDelete.why
+              )
+              if (hmmm) {
+                debug.log(' @@@@@ weird if 409 - does hold statement')
+              }
     }
+            colorCarrier.style.color = '#000'
+            colorCarrier.style.backgroundColor = '#fee'
+            box.appendChild(
+              errorMessageBlock(
+                dom,
+                'Error writing data: ' + errorBody,
+                'pink'
+              )
+            )
+            return
 
-/**          Options field: Select one or more cases
- **
- ** @param {Document} dom The HTML Document object aka Document Object Model
- ** @param {Element?} container  If present, the created widget will be appended to this
- ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
- ** @param {Node} subject The thing about which the form displays/edits data
- ** @param {Node} form The form or field to be rendered
- ** @param {Node} dataDoc The web document in which the data is
- ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
- **
- ** @returns {Element} The HTML widget created
- */
-
-field[ns.ui('Options').uri] = function (
-  dom,
+          input.state = input.newState
+          resetButton()
+          refresh()
+        })
+      } catch (error) {
+        isUpdating = false
+        input.disabled = false
+        throw error
+      }
   container,
   already,
   subject,
