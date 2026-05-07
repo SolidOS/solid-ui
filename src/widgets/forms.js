@@ -119,46 +119,40 @@ field[ns.ui('Form').uri] = field[ns.ui('Group').uri] =
         parts = kb.each(form, ui('part'), null, formDoc) //  Warning: unordered
         subfields = sortBySequence(parts)
       }
-      try {
-        kb.updater.update(toDelete, toInsert, function (
-          uri,
-          success,
-          errorBody
-        ) {
-          isUpdating = false
-          input.disabled = false
-          if (!success) {
-            if (toDelete.why) {
-              const hmmm = kb.holds(
-                toDelete.subject,
-                toDelete.predicate,
-                toDelete.object,
-                toDelete.why
-              )
-              if (hmmm) {
-                debug.log(' @@@@@ weird if 409 - does hold statement')
-              }
-    }
-            colorCarrier.style.color = '#000'
-            colorCarrier.style.backgroundColor = '#fee'
-            box.appendChild(
-              errorMessageBlock(
-                dom,
-                'Error writing data: ' + errorBody,
-                'pink'
-              )
-            )
-            return
-
-          input.state = input.newState
-          resetButton()
-          refresh()
-        })
-      } catch (error) {
-        isUpdating = false
-        input.disabled = false
-        throw error
+      if (!parts) {
+        return box.appendChild(errorMessageBlock(dom, 'No parts to form! '))
       }
+
+      for (let i = 0; i < subfields.length; i++) {
+        const field = subfields[i]
+        const subFieldFunction = fieldFunction(dom, field) //
+
+        const itemChanged = function (ok, body) {
+          if (ok && body && body.widget && body.widget === 'select') {
+            refreshOpionsSubfieldinGroup(dom, already, subject, dataDoc, callbackFunction, box, subfields)
+          }
+          callbackFunction(ok, { widget: 'group', change: body })
+        }
+        box.appendChild(subFieldFunction(dom, null, already2, subject, field, dataDoc, itemChanged))
+      }
+      return box
+    }
+
+/**          Options field: Select one or more cases
+ **
+ ** @param {Document} dom The HTML Document object aka Document Object Model
+ ** @param {Element?} container  If present, the created widget will be appended to this
+ ** @param {Map} already A hash table of (form, subject) kept to prevent recursive forms looping
+ ** @param {Node} subject The thing about which the form displays/edits data
+ ** @param {Node} form The form or field to be rendered
+ ** @param {Node} dataDoc The web document in which the data is
+ ** @param {function(ok, errorMessage)} callbackFunction Called when data is changed?
+ **
+ ** @returns {Element} The HTML widget created
+ */
+
+field[ns.ui('Options').uri] = function (
+  dom,
   container,
   already,
   subject,
@@ -1932,45 +1926,51 @@ export function buildCheckboxForm (dom, kb, lab, del, ins, form, dataDoc, trista
       input.newState === true ? ins : input.newState === false ? del : []
     debug.log(`  Deleting  ${toDelete}`)
     debug.log(`  Inserting ${toInsert}`)
-    kb.updater.update(toDelete, toInsert, function (
-      uri,
-      success,
-      errorBody
-    ) {
+    try {
+      kb.updater.update(toDelete, toInsert, function (
+        uri,
+        success,
+        errorBody
+      ) {
+        isUpdating = false
+        input.disabled = false
+        if (!success) {
+          if (toDelete.why) {
+            const hmmm = kb.holds(
+              toDelete.subject,
+              toDelete.predicate,
+              toDelete.object,
+              toDelete.why
+            )
+            if (hmmm) {
+              debug.log(' @@@@@ weird if 409 - does hold statement')
+            }
+          }
+          colorCarrier.style.color = '#000'
+          colorCarrier.style.backgroundColor = '#fee'
+          box.appendChild(
+            errorMessageBlock(
+              dom,
+              `Checkbox: Error updating dataDoc from ${input.state} to ${
+                input.newState
+              }:\n\n${errorBody}`
+            )
+          )
+        } else {
+          colorCarrier.style.color = '#000'
+          input.state = input.newState
+          input.textContent = {
+            true: checkMarkCharacter,
+            false: cancelCharacter,
+            null: dashCharacter
+          }[input.state] // @@
+        }
+      })
+    } catch (error) {
       isUpdating = false
       input.disabled = false
-      if (!success) {
-        if (toDelete.why) {
-          const hmmm = kb.holds(
-            toDelete.subject,
-            toDelete.predicate,
-            toDelete.object,
-            toDelete.why
-          )
-          if (hmmm) {
-            debug.log(' @@@@@ weird if 409 - does hold statement')
-          }
-        }
-        colorCarrier.style.color = '#000'
-        colorCarrier.style.backgroundColor = '#fee'
-        box.appendChild(
-          errorMessageBlock(
-            dom,
-            `Checkbox: Error updating dataDoc from ${input.state} to ${
-              input.newState
-            }:\n\n${errorBody}`
-          )
-        )
-      } else {
-        colorCarrier.style.color = '#000'
-        input.state = input.newState
-        input.textContent = {
-          true: checkMarkCharacter,
-          false: cancelCharacter,
-          null: dashCharacter
-        }[input.state] // @@
-      }
-    })
+      throw error
+    }
   }
   input.addEventListener('click', boxHandler, false)
   return box
