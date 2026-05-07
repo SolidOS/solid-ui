@@ -15,7 +15,7 @@ export class LoginButton extends LitElement {
   }
 
   static styles = css`
-    :host { // default theme
+    :host { /* default theme */
       display: inline-block;
       position: relative;
       z-index: 400;

@@ -51,7 +51,7 @@ export class Header extends LitElement {
   }
 
   static styles = css`
-  :host { // default theme
+  :host { /* default theme */
     display: block;
     --header-bg: var(--color-header-row-bg, #332746);
     --header-text: var(--color-header-text, #ffffff);
@@ -71,7 +71,7 @@ export class Header extends LitElement {
     font-family: var(--font-family-base, 'Segoe UI', 'Helvetica Neue', Arial, sans-serif);
   }
 
-  // for now light and dark are the same
+  /* for now light and dark are the same */
   :host([theme='dark']) {
     display: block;
     --header-bg: var(--color-header-row-bg, #332746);

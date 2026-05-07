@@ -1,7 +1,7 @@
 import { css } from 'lit'
 
 export const listboxStyles = css`
-    :host { // default theme
+  :host { /* default theme */
       --input-background: var(--color-background, #F8F9FB);
       --item-text: var(--color-text, #1A1A1A);
       --item-selected-text: var(--color-primary, #7c4dff);
