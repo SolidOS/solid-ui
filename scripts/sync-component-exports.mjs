@@ -9,9 +9,16 @@ const preservedExports = Object.fromEntries(
   Object.entries(packageJson.exports || {}).filter(([subpath]) => !subpath.startsWith('./components/'))
 )
 
-packageJson.exports = {
+const nextExports = {
   ...preservedExports,
   ...componentExports
 }
+
+if (JSON.stringify(packageJson.exports || {}) === JSON.stringify(nextExports)) {
+  console.log('package.json exports are already in sync')
+  process.exit(0)
+}
+
+packageJson.exports = nextExports
 
 writeFileSync(packageJsonPath, `${JSON.stringify(packageJson, null, 2)}\n`)
