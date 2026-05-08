@@ -54,7 +54,10 @@ export class Select extends LitElement {
     css`
       :host {
         /* default theme */
-        display: inline-block;
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
         position: relative;
         z-index: var(--select-z-index, 400);
         box-sizing: border-box;
@@ -86,7 +89,10 @@ export class Select extends LitElement {
       }
 
       :host([theme='dark']) {
-        display: inline-block;
+        display: block;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
         position: relative;
         z-index: var(--select-z-index, 900);
         box-sizing: border-box;
