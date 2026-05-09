@@ -15,6 +15,7 @@ export class Button extends LitElement {
     fullWidth: { type: Boolean, attribute: 'full-width', reflect: true },
     icon: { type: String, reflect: true },
     iconPosition: { type: String, attribute: 'icon-position', reflect: true },
+    contentAlign: { type: String, attribute: 'content-align', reflect: true },
     handleClick: { attribute: false },
     _hasSlottedIcon: { state: true }
   }
@@ -55,6 +56,8 @@ export class Button extends LitElement {
       --button-font-weight: var(--font-weight-bold, 600);
       --button-line-height: 1;
       --button-justify-content: center;
+      --button-content-justify-content: var(--button-justify-content);
+      --button-label-text-align: center;
       --button-box-shadow: none;
       --button-hover-box-shadow: var(--button-box-shadow);
       --button-active-box-shadow: var(--button-hover-box-shadow);
@@ -91,6 +94,18 @@ export class Button extends LitElement {
 
     :host([full-width]) {
       width: 100%;
+    }
+
+    :host([content-align='start']) {
+      --button-justify-content: flex-start;
+      --button-content-justify-content: flex-start;
+      --button-label-text-align: left;
+    }
+
+    :host([content-align='end']) {
+      --button-justify-content: flex-end;
+      --button-content-justify-content: flex-end;
+      --button-label-text-align: right;
     }
 
     :host([selected]) {
@@ -160,7 +175,7 @@ export class Button extends LitElement {
     .button__content {
       display: inline-flex;
       align-items: center;
-      justify-content: center;
+      justify-content: var(--button-content-justify-content);
       gap: inherit;
       width: 100%;
     }
@@ -204,7 +219,10 @@ export class Button extends LitElement {
     .button__label {
       display: inline-flex;
       align-items: center;
+      justify-content: var(--button-content-justify-content);
       min-width: 0;
+      width: 100%;
+      text-align: var(--button-label-text-align);
     }
 
     :host([variant='icon']) .button__label {
@@ -230,6 +248,7 @@ export class Button extends LitElement {
   declare fullWidth: boolean
   declare icon: string
   declare iconPosition: 'start' | 'end'
+  declare contentAlign: 'start' | 'center' | 'end'
   declare handleClick?: (event: MouseEvent) => void
   declare _hasSlottedIcon: boolean
   private _iconSlotObserver?: MutationObserver
@@ -249,6 +268,7 @@ export class Button extends LitElement {
     this.fullWidth = false
     this.icon = ''
     this.iconPosition = 'start'
+    this.contentAlign = 'center'
     this.handleClick = undefined
     this._hasSlottedIcon = false
   }

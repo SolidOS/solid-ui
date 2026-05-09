@@ -20,6 +20,7 @@ The legacy flat import path `solid-ui/components/button` still works, but the gr
 <solid-ui-button label="Upload"></solid-ui-button>
 <solid-ui-button variant="primary" label="Save"></solid-ui-button>
 <solid-ui-button icon="data:image/svg+xml,..." label="Camera"></solid-ui-button>
+<solid-ui-button content-align="start" full-width label="Address Book"></solid-ui-button>
 ```
 
 ```html
@@ -49,6 +50,7 @@ The legacy flat import path `solid-ui/components/button` still works, but the gr
 | `fullWidth`    | `full-width`    | `boolean`                            | `false`       | Expands the host and inner button to the available width. Useful for stacked mobile actions, form footers, or full-row menu buttons.                                         |
 | `icon`         | `icon`          | `string`                             | `''`          | URL or data URL for a fallback `<img>` icon.                                                                                                                                 |
 | `iconPosition` | `icon-position` | `'start' \| 'end'`                   | `'start'`     | Places the icon before or after the label.                                                                                                                                   |
+| `contentAlign` | `content-align` | `'start' \| 'center' \| 'end'`      | `'center'`    | Aligns the inner button content and label text without requiring `::part(button)` overrides. Useful for full-width list or menu buttons.                                     |
 | `handleClick`  | n/a             | `(event: MouseEvent) => void`        | `undefined`   | Property-only callback invoked on click. Native `click` events still bubble normally.                                                                                        |
 
 ### Slots
@@ -87,6 +89,8 @@ The legacy flat import path `solid-ui/components/button` still works, but the gr
 | `--button-font-weight`          | `var(--font-weight-bold, 600)`                      | Font weight applied to the button label                       |
 | `--button-line-height`          | `1`                                                 | Line height applied to the inner native button                |
 | `--button-justify-content`      | `center`                                            | Horizontal alignment of the button content                    |
+| `--button-content-justify-content` | `var(--button-justify-content)`                  | Horizontal alignment used by the inner content wrapper        |
+| `--button-label-text-align`     | `center`                                            | Text alignment applied to the label region                    |
 | `--button-box-shadow`           | `none`                                              | Base box shadow for the button                                |
 | `--button-hover-box-shadow`     | `var(--button-box-shadow)`                          | Hover-state box shadow                                        |
 | `--button-active-box-shadow`    | `var(--button-hover-box-shadow)`                    | Active-state box shadow                                       |
@@ -133,6 +137,22 @@ The icon scale is intentionally flatter than the button-height scale:
 - `sm`: `12px` icon, matching compact inline action icons in `profile-pane`
 - `md`: `16px` icon, matching the common menu, header, and button-leading icon size
 - `lg`: `16px` icon by default, because the larger profile-pane buttons mostly keep the same leading-icon size rather than scaling the icon up
+
+## Content alignment
+
+By default, button content is centered.
+
+Set `content-align="start"` or `content-align="end"` when the button needs to behave more like a full-row list item or menu action:
+
+```html
+<solid-ui-button
+  full-width
+  content-align="start"
+  label="Personal Address Book"
+></solid-ui-button>
+```
+
+That attribute updates both the inner flex alignment and the label text alignment, so consumers should not usually need `::part(button)` just to left-align button text.
 
 ## Text size and text color
 
