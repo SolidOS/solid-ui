@@ -68,6 +68,10 @@ export class Button extends LitElement {
       --button-transition: transform 0.2s ease, background-color 0.2s ease, color 0.2s ease, border-color 0.2s ease;
     }
 
+    :host([hidden]) {
+      display: none;
+    }
+
     :host([theme='dark']) {
       --button-background: var(--color-background, #242a31);
       --button-text: var(--color-text-subheading, #f8f9fb);
@@ -112,9 +116,6 @@ export class Button extends LitElement {
       --button-background: var(--button-selected-background);
       --button-text: var(--button-selected-text);
       --button-border: var(--button-selected-border);
-      --button-hover-background: var(--button-selected-background);
-      --button-hover-border: var(--button-selected-border);
-      --button-hover-text: var(--button-selected-text);
     }
 
     .button {
@@ -160,6 +161,12 @@ export class Button extends LitElement {
       color: var(--button-hover-text);
     }
 
+    :host([selected]) .button:hover:not(:disabled) {
+      background: var(--button-hover-background);
+      border-color: var(--button-selected-border);
+      color: var(--button-selected-text);
+    }
+      
     .button:focus-visible {
       outline: var(--button-focus-outline);
       outline-offset: var(--button-focus-outline-offset);
