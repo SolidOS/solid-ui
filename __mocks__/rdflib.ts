@@ -1,52 +1,41 @@
 // @@ TODO: Remove currently untyped methods as they are added
 
-import { IndexedFormula } from 'rdflib/lib/index.js'
+// Use require() to load the actual rdflib module, bypassing Jest mock interception
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const rdflib = require('rdflib')
 
-export {
-  BlankNode,
-  Collection,
-  convert,
-  DataFactory,
-  Empty,
-  Formula,
-  // Store, // Not currently supported in @types/rdflib
-  // jsonParser, // Not currently supported in @types/rdflib
-  Literal,
-  log,
-  // N3Parser, // Not currently supported in @types/rdflib
-  NamedNode,
-  Namespace,
-  Node,
-  parse,
-  Query,
-  // queryToSPARQL, // Not currently supported in @types/rdflib
-  // RDFaProcessor, // Not currently supported in @types/rdflib
-  // RDFParser, // Not currently supported in @types/rdflib
-  // serialize, // Not currently supported in @types/rdflib
-  // Serializer, // Not currently supported in @types/rdflib
-  // SPARQLToQuery, // Not currently supported in @types/rdflib
-  // sparqlUpdateParser, // Not currently supported in @types/rdflib
-  Statement,
-  term,
-  // UpdatesSocket, // Not currently supported in @types/rdflib
-  // UpdatesVia, // Not currently supported in @types/rdflib
-  uri,
-  Util,
-  Variable,
-  NextId,
-  fromNT,
-  graph,
-  lit,
-  st,
-  namedNode as sym,
-  blankNode,
-  defaultGraph,
-  literal,
-  namedNode,
-  quad,
-  triple,
-  variable
-} from 'rdflib/lib/index.js'
+export const IndexedFormula = rdflib.IndexedFormula
+export const BlankNode = rdflib.BlankNode
+export const Collection = rdflib.Collection
+export const convert = rdflib.convert
+export const DataFactory = rdflib.DataFactory
+export const Empty = rdflib.Empty
+export const Formula = rdflib.Formula
+export const Literal = rdflib.Literal
+export const log = rdflib.log
+export const NamedNode = rdflib.NamedNode
+export const Namespace = rdflib.Namespace
+export const Node = rdflib.Node
+export const parse = rdflib.parse
+export const Query = rdflib.Query
+export const Statement = rdflib.Statement
+export const term = rdflib.term
+export const uri = rdflib.uri
+export const Util = rdflib.Util
+export const Variable = rdflib.Variable
+export const NextId = rdflib.NextId
+export const fromNT = rdflib.fromNT
+export const graph = rdflib.graph
+export const lit = rdflib.lit
+export const st = rdflib.st
+export const sym = rdflib.namedNode
+export const blankNode = rdflib.blankNode
+export const defaultGraph = rdflib.defaultGraph
+export const literal = rdflib.literal
+export const namedNode = rdflib.namedNode
+export const quad = rdflib.quad
+export const triple = rdflib.triple
+export const variable = rdflib.variable
 
 export function fetcher (store: any) {
   const fetcher = new Fetcher()
