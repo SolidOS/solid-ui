@@ -1,6 +1,6 @@
 // @@ TODO: Remove currently untyped methods as they are added
 
-import { IndexedFormula } from 'rdflib'
+import { IndexedFormula } from 'rdflib/lib/index.js'
 
 export {
   BlankNode,
@@ -46,7 +46,7 @@ export {
   quad,
   triple,
   variable
-} from 'rdflib'
+} from 'rdflib/lib/index.js'
 
 export function fetcher (store: any) {
   const fetcher = new Fetcher()
