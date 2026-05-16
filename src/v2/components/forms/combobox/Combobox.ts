@@ -63,7 +63,10 @@ export class Combobox extends LitElement {
     css`
     :host {
       /* default theme */
-      display: inline-block;
+      display: block;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
       position: relative;
       box-sizing: border-box;
       --popup-background: var(--color-background, #F8F9FB);
@@ -75,10 +78,16 @@ export class Combobox extends LitElement {
       --input-border: var(--color-text, #1A1A1A);
       --label-color: var(--grey-purple-700, #1A1A1A);
       --placeholder-color: var(--grey-purple-700, #5e546d);
+      --combobox-input-height: var(--select-trigger-height, var(--min-touch-target, 44px));
+      --combobox-input-inline-padding: var(--select-trigger-inline-padding, var(--spacing-2xs, 0.625rem));
+      --combobox-input-block-padding: var(--spacing-xxs, 0.3125rem);
     }
 
     :host([theme='dark']) {
-      display: inline-block;
+      display: block;
+      width: 100%;
+      min-width: 0;
+      max-width: 100%;
       position: relative;
       box-sizing: border-box;
       --popup-background: var(--color-background, #F8F9FB);
@@ -90,6 +99,9 @@ export class Combobox extends LitElement {
       --input-border: var(--color-text, #1A1A1A);
       --label-color: var(--grey-purple-700, #1A1A1A);
       --placeholder-color: var(--grey-purple-700, #5e546d);
+      --combobox-input-height: var(--select-trigger-height, var(--min-touch-target, 44px));
+      --combobox-input-inline-padding: var(--select-trigger-inline-padding, var(--spacing-2xs, 0.625rem));
+      --combobox-input-block-padding: var(--spacing-xxs, 0.3125rem);
     }
 
     .popup-box {
@@ -130,17 +142,29 @@ export class Combobox extends LitElement {
       display: flex;
       flex-direction: row;
       position: relative;
+      width: 100%;
+      min-width: 0;
     }
 
     .text-input {
+      display: block;
       flex: 1;
-      padding: 0.375rem 2.75rem 0.375rem 0.5rem;
+      width: 100%;
+      min-width: 0;
+      min-height: var(--combobox-input-height);
+      height: var(--combobox-input-height);
+      padding: var(--combobox-input-block-padding) calc(26px + (var(--combobox-input-inline-padding) * 2) + 6px) var(--combobox-input-block-padding) var(--combobox-input-inline-padding);
       border: 1px solid var(--input-border);
       border-radius: var(--border-radius-base, 0.3125rem);
       background: var(--input-background);
       color: var(--input-text);
       font: inherit;
-      min-width: 0;
+      font-size: var(--font-size-sm, 0.875rem);
+      font-weight: var(--font-weight-md, 500);
+      line-height: normal;
+      appearance: none;
+      -webkit-appearance: none;
+      box-sizing: border-box;
     }
 
     .text-input::placeholder {
@@ -510,6 +534,7 @@ export class Combobox extends LitElement {
           <input
             id="${this._inputId}"
             class="text-input"
+            part="input"
             type="text"
             role="combobox"
             aria-autocomplete="list"

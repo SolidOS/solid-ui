@@ -151,6 +151,7 @@ These parts can be styled from a consuming repo using `::part(...)`.
 
 | Part | Description |
 |------|-------------|
+| `input` | The text input inside the combobox field. |
 | `listbox` | The `<ul>` element that contains the suggestions. |
 | `option` | Every suggestion row. |
 | `selected-option` | Added to the currently selected suggestion row. |

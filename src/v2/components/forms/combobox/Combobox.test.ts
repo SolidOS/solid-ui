@@ -37,6 +37,7 @@ describe('SolidUICombobox', () => {
     expect(label.textContent).toContain('Person')
     expect(input).not.toBeNull()
     expect(input.placeholder).toBe('Search people')
+    expect(input.getAttribute('part')).toBe('input')
     expect(input.getAttribute('role')).toBe('combobox')
     expect(input.getAttribute('aria-expanded')).toBe('false')
     expect(toggle).not.toBeNull()
