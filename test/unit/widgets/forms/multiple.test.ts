@@ -21,9 +21,11 @@ function getListHeads () {
   return store.each(subject, property, null as any, doc)
 }
 
-/** Helper: wait for pending microtasks and short async operations to settle */
-function waitForAsync () {
-  return new Promise(resolve => setTimeout(resolve, 10))
+/** Helper: flush pending promise-based async work without relying on wall-clock delays */
+async function waitForAsync () {
+  for (let i = 0; i < 10; i += 1) {
+    await Promise.resolve()
+  }
 }
 
 /** Set up the minimum store triples needed for an ordered Multiple field */
