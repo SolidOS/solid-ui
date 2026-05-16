@@ -99,8 +99,8 @@
     "uuid": "^13.0.0"
   },
   "peerDependencies": {
-    "rdflib": "^2.3.6",
-    "solid-logic": "^4.0.6"
+    "rdflib": "^2.3.8",
+    "solid-logic": "^4.0.7"
   },
   "devDependencies": {
     "@babel/cli": "^7.28.6",
