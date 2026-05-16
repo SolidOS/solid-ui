@@ -76,7 +76,7 @@ describe('tabWidget', () => {
 
     describe('bodyContainer', () => {
       it('adds property bodyContainer', () => {
-        expect(tabWidgetElement.bodyContainer).toBe(tabWidgetElement.querySelector('main'))
+        expect(tabWidgetElement.bodyContainer).toBe(tabWidgetElement.querySelector('nav + div'))
       })
     })
 
@@ -123,7 +123,7 @@ describe('tabWidget', () => {
       tabWidgetElement = tabs.tabWidget({ backgroundColor: '#ff0000', ...minimalOptions })
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style['background-color']).toEqual('rgb(178, 0, 0)')
       expect(tabWidgetElement.tabContainer.querySelector('[style]').style.color).toEqual('rgb(255, 255, 255)')
-      expect(tabWidgetElement.bodyContainer.querySelector('main').style['border-color']).toEqual('rgb(178, 0, 0)')
+      expect((tabWidgetElement.bodyContainer.children[0].children[0] as HTMLElement).style.borderColor).toEqual('rgb(178, 0, 0)')
     })
 
     it('considers lighter colors and set color of text accordingly', () => {

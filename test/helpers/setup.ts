@@ -7,17 +7,16 @@ import { TransformStream, ReadableStream, WritableStream } from 'stream/web'
 // https://stackoverflow.com/questions/52612122/how-to-use-jest-to-test-functions-using-crypto-or-window-mscrypto
 
 import crypto from 'crypto'
-global.crypto = {
-  getRandomValues: function (buffer) {
-    return crypto.randomFillSync(buffer)
-  }
-}
+Object.defineProperty(globalThis, 'crypto', {
+  value: crypto.webcrypto,
+  configurable: true
+})
 
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
-global.TransformStream = TransformStream
-global.ReadableStream = ReadableStream
-global.WritableStream = WritableStream
+global.TransformStream = TransformStream as unknown as typeof globalThis.TransformStream
+global.ReadableStream = ReadableStream as unknown as typeof globalThis.ReadableStream
+global.WritableStream = WritableStream as unknown as typeof globalThis.WritableStream
 
 // Node provides MessagePort via worker_threads; jsdom/undici expects it in global scope
 try {
