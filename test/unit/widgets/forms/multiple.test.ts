@@ -18,7 +18,7 @@ const xsdBoolean = namedNode('http://www.w3.org/2001/XMLSchema#boolean')
 
 /** Helper: return all list-head triples for subject/property in the test document */
 function getListHeads () {
-  return store.each(subject, property, null as any, doc)
+  return store.each(subject, property, undefined, doc)
 }
 
 /** Helper: flush pending promise-based async work without relying on wall-clock delays */
