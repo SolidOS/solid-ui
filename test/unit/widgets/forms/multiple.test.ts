@@ -202,5 +202,3 @@ describe('Multiple ordered field', () => {
     })
   })
 })
-
-
