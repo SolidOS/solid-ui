@@ -99,7 +99,7 @@
     "uuid": "^13.0.2"
   },
   "peerDependencies": {
-    "rdflib": "^2.3.7",
+    "rdflib": "^2.3.8",
     "solid-logic": "^4.0.7"
   },
   "devDependencies": {
