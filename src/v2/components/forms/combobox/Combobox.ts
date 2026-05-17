@@ -171,6 +171,11 @@ export class Combobox extends LitElement {
       color: var(--placeholder-color);
     }
 
+    .text-input:focus-visible {
+      outline: 2px solid var(--color-focus-ring, var(--color-primary, #7C4DFF));
+      outline-offset: 2px;
+    }
+
     .dropdown-toggle {
       position: absolute;
       right: 6px;
@@ -190,6 +195,16 @@ export class Combobox extends LitElement {
     }
 
     .dropdown-toggle:hover {
+      background: var(--color-header-menu-item-hover, #e6dcff);
+    }
+
+    .input-field-row:focus-within .dropdown-toggle {
+      background: var(--color-header-menu-item-hover, #e6dcff);
+    }
+
+    .dropdown-toggle:focus-visible {
+      outline: 2px solid var(--color-focus-ring, var(--color-primary, #7C4DFF));
+      outline-offset: 2px;
       background: var(--color-header-menu-item-hover, #e6dcff);
     }
 
