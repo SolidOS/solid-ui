@@ -5,7 +5,7 @@
 import { DataBrowserContext, NewPaneOptions, PaneDefinition } from 'pane-registry'
 import { solidLogicSingleton } from 'solid-logic'
 import * as debug from '../debug'
-import { icons } from '../iconBase'
+import { lucideIcons } from '../icons/lucide'
 import { ensureLoadedProfile, selectWorkspace } from '../login/login'
 import ns from '../ns'
 import * as utils from '../utils'
@@ -37,7 +37,7 @@ export function newThingUI (
   let visible = false // the inividual tools tools
   //   noun_272948.svg = black star
   // noun_34653_green.svg = green plus
-  star.setAttribute('src', icons.iconBase + 'noun_34653_green.svg')
+  star.setAttribute('src', lucideIcons.plus) // was noun_34653_green.svg
   star.setAttribute('style', iconStyle)
   star.setAttribute('title', 'Add another tool')
 

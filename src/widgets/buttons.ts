@@ -10,9 +10,11 @@ import { uploadFiles, makeDraggable, makeDropTarget } from './dragAndDrop'
 import { store } from 'solid-logic'
 import * as utils from '../utils'
 import newPersonIconDataURI from '../newperson'
+import '../v2/components/actions/button'
 import { errorMessageBlock } from './error'
 import { addClickListenerToElement, createImageDiv, wrapDivInATR } from './widgetHelpers'
 import { linkIcon, createLinkForURI } from './buttons/iconLinks'
+import { lucideIcons } from '../icons/lucide'
 
 /**
  * UI Widgets such as buttons
@@ -23,8 +25,8 @@ import { linkIcon, createLinkForURI } from './buttons/iconLinks'
 
 const { iconBase } = icons
 
-const cancelIconURI = iconBase + 'noun_1180156.svg' // black X
-const checkIconURI = iconBase + 'noun_1180158.svg' // green checkmark; Continue
+const cancelIconURI = lucideIcons.x // lucide x (was noun_1180156.svg)
+const checkIconURI = lucideIcons.check // lucide check (was noun_1180158.svg)
 
 export type StatusAreaContext = {
   statusArea?: HTMLElement
@@ -246,30 +248,31 @@ export function imagesOf (x: NamedNode | null, kb: IndexedFormula): any[] {
  * Best logo or avatar or photo etc to represent someone or some group etc
  */
 export const iconForClass = {
-  // Potentially extendable by other apps, panes, etc
-  // Relative URIs to the iconBase
-  'solid:AppProviderClass': 'noun_144.svg', //  @@ classs name should not contain 'Class'
-  'solid:AppProvider': 'noun_15177.svg', // @@
-  'solid:Pod': 'noun_Cabinet_1434380.svg',
-  'vcard:Group': 'noun_339237.svg',
-  'vcard:Organization': 'noun_143899.svg',
+  // Map from CURIE → icon. May be either an iconBase-relative filename (legacy)
+  // or a full URL (e.g. data: URI from lucide). The setImage() helper below
+  // detects "data:" prefixes and skips the iconBase join.
+  'solid:AppProviderClass': lucideIcons.appWindow, // was noun_144.svg
+  'solid:AppProvider': lucideIcons.appWindow, // was noun_15177.svg
+  'solid:Pod': lucideIcons.database, // was noun_Cabinet_1434380.svg
+  'vcard:Group': lucideIcons.users, // was noun_339237.svg (the filled-group icon)
+  'vcard:Organization': lucideIcons.building2, // was noun_143899.svg
   // TEMP HACK: Use locally bundled icon; switch to solid-assets icon mapping soon.
   'vcard:Individual': newPersonIconDataURI,
   'schema:Person': newPersonIconDataURI,
   'foaf:Person': newPersonIconDataURI,
-  'foaf:Agent': 'noun_98053.svg',
-  'acl:AuthenticatedAgent': 'noun_99101.svg',
-  'prov:SoftwareAgent': 'noun_Robot_849764.svg', // Bot
-  'vcard:AddressBook': 'noun_15695.svg',
-  'trip:Trip': 'noun_581629.svg',
-  'meeting:LongChat': 'noun_1689339.svg',
-  'meeting:Meeting': 'noun_66617.svg',
-  'meeting:Project': 'noun_1036577.svg',
-  'ui:Form': 'noun_122196.svg',
-  'rdfs:Class': 'class-rectangle.svg', // For RDF developers
+  'foaf:Agent': lucideIcons.globe, // was noun_98053.svg
+  'acl:AuthenticatedAgent': lucideIcons.userCheck, // was noun_99101.svg
+  'prov:SoftwareAgent': lucideIcons.bot, // was noun_Robot_849764.svg
+  'vcard:AddressBook': lucideIcons.bookUser, // was noun_15695.svg
+  'trip:Trip': lucideIcons.route, // was noun_581629.svg
+  'meeting:LongChat': lucideIcons.messagesSquare, // the stacked-chat icon (was noun_1689339.svg)
+  'meeting:Meeting': lucideIcons.usersRound, // was noun_66617.svg
+  'meeting:Project': lucideIcons.briefcase, // was noun_1036577.svg
+  'ui:Form': lucideIcons.formInput, // was noun_122196.svg
+  'rdfs:Class': 'class-rectangle.svg', // For RDF developers — left as legacy
   'rdf:Property': 'property-diamond.svg',
   'owl:Ontology': 'noun_classification_1479198.svg',
-  'wf:Tracker': 'noun_122196.svg',
+  'wf:Tracker': lucideIcons.formInput, // was noun_122196.svg
   'wf:Task': 'noun_17020_gray-tick.svg',
   'wf:Open': 'noun_17020_sans-tick.svg',
   'wf:Closed': 'noun_17020.svg'
@@ -305,15 +308,15 @@ export function findImageFromURI (x: NamedNode | string): string | null {
       !x.uri.split('/')[1] &&
       !x.uri.split('/')[3]
     ) {
-      return iconDir + 'noun_15177.svg' // App -- this is an origin
+      return lucideIcons.appWindow // App (origin); was noun_15177.svg
     }
     // Non-HTTP URI types imply types
     if (x.uri.startsWith('message:') || x.uri.startsWith('mid:')) {
       // message: is apple bug-- should be mid:
-      return iconDir + 'noun_480183.svg' // envelope  noun_567486
+      return lucideIcons.mail // was noun_480183.svg
     }
     if (x.uri.startsWith('mailto:')) {
-      return iconDir + 'noun_567486.svg' // mailbox - an email desitination
+      return lucideIcons.mail // mailto target; was noun_567486.svg (mailbox)
     }
     // For HTTP(s) documents, we could look at the MIME type if we know it.
     if (x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
@@ -347,9 +350,8 @@ export function findImageFromURI (x: NamedNode | string): string | null {
  */
 export function findImage (thing: NamedNode): string {
   const kb = store
-  const iconDir = iconBase
   if (thing.sameTerm(ns.foaf('Agent')) || thing.sameTerm(ns.rdf('Resource'))) {
-    return iconDir + 'noun_98053.svg' // Globe
+    return lucideIcons.globe // was noun_98053.svg
   }
   const image =
     kb.any(thing, ns.sioc('avatar')) ||
@@ -398,7 +400,7 @@ function trySetImage (element, thing, iconForClassMap) {
       return false // maybe we can do better
     }
   }
-  element.setAttribute('src', iconBase + 'noun_10636_grey.svg') // Grey Circle -  some thing
+  element.setAttribute('src', lucideIcons.circle) // lucide circle (was noun_10636_grey.svg)
   return false // we can do better
 }
 
@@ -447,7 +449,7 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
   }
   image.setAttribute(
     'src',
-    iconBase + (isOrigin(x) ? 'noun_15177.svg' : 'noun_681601.svg') // App symbol vs document
+    isOrigin(x) ? lucideIcons.appWindow : lucideIcons.formInput // App vs document; were noun_15177.svg / noun_681601.svg
   )
   if (x.uri && x.uri.startsWith('https:') && x.uri.indexOf('#') < 0) {
     const res = dom.createElement('object') // favico with a fallback of a default image if no favicon
@@ -497,7 +499,7 @@ function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFuncti
   cancelPrompt.style.gridColumn = '2'
   cancelPrompt.textContent = 'Cancel' // @@ I18n
 
-  const affirmIcon = button(dom, icons.iconBase + 'noun_925021.svg', 'Delete it') // trashcan
+  const affirmIcon = button(dom, lucideIcons.trash2, 'Delete it') // lucide trash-2 (was noun_925021.svg)
   popup.appendChild(affirmIcon)
   affirmIcon.style.gridRow = '1'
   affirmIcon.style.gridColumn = '1'
@@ -533,7 +535,7 @@ export function deleteButtonWithCheck (
     refererenceElement.style.position = 'relative' // Needed as reference for popup
     refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction))
   }
-  const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
+  const minusIconURI = lucideIcons.circleMinus // lucide circle-minus (was noun_2188_red.svg)
   const deleteButton = dom.createElement('img')
   deleteButton.setAttribute('src', minusIconURI)
 
@@ -565,64 +567,30 @@ export function deleteButtonWithCheck (
 export function button (dom: HTMLDocument, iconURI: string | undefined, text: string,
   handler?: (_event: any) => void,
   options: ButtonWidgetOptions = { buttonColor: 'Primary', needsBorder: false }) {
-  const button = dom.createElement('button')
-  button.setAttribute('type', 'button')
-  // button.innerHTML = text  // later, user preferences may make text preferred for some
   if (iconURI) {
+    // Icon buttons stay as plain <button> elements (icon variant is handled elsewhere).
+    const button = dom.createElement('button')
+    button.setAttribute('type', 'button')
     const img = button.appendChild(dom.createElement('img'))
     img.setAttribute('src', iconURI)
     img.setAttribute('style', 'width: 2em; height: 2em;') // trial and error. 2em disappears
     img.title = text
     button.setAttribute('style', style.buttonStyle)
-  } else {
-    button.textContent = text.toLocaleUpperCase()
-
-    button.onmouseover = function () {
-      if (options.buttonColor === 'Secondary') {
-        if (options.needsBorder) {
-          button.setAttribute('style', style.secondaryButtonNoBorderHover)
-        } else {
-          button.setAttribute('style', style.secondaryButtonHover)
-        }
-      } else {
-        if (options.needsBorder) {
-          button.setAttribute('style', style.primaryButtonNoBorderHover)
-        } else {
-          button.setAttribute('style', style.primaryButtonHover)
-        }
-      }
+    if (handler) {
+      button.addEventListener('click', handler, false)
     }
-    button.onmouseout = function () {
-      if (options.buttonColor === 'Secondary') {
-        if (options.needsBorder) {
-          button.setAttribute('style', style.secondaryButtonNoBorder)
-        } else {
-          button.setAttribute('style', style.secondaryButton)
-        }
-      } else {
-        if (options.needsBorder) {
-          button.setAttribute('style', style.primaryButtonNoBorder)
-        } else {
-          button.setAttribute('style', style.primaryButton)
-        }
-      }
-    }
-
-    if (options.buttonColor === 'Secondary') {
-      if (options.needsBorder) {
-        button.setAttribute('style', style.secondaryButtonNoBorder)
-      } else {
-        button.setAttribute('style', style.secondaryButton)
-      }
-    } else {
-      if (options.needsBorder) {
-        button.setAttribute('style', style.primaryButtonNoBorder)
-      } else {
-        button.setAttribute('style', style.primaryButton)
-      }
-    }
+    return button
   }
 
+  // Text buttons now use the <solid-ui-button> design-system component.
+  // buttonColor 'Primary' (the default) -> variant="primary", 'Secondary' -> variant="secondary".
+  const button = dom.createElement('solid-ui-button')
+  button.setAttribute('type', 'button')
+  button.setAttribute(
+    'variant',
+    options.buttonColor === 'Secondary' ? 'secondary' : 'primary'
+  )
+  button.textContent = text.toLocaleUpperCase()
   if (handler) {
     button.addEventListener('click', handler, false)
   }
@@ -1002,7 +970,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   const doc = options.doc || subject.doc()
   if (options.modify === undefined) options.modify = true
   const modify = options.modify
-  const promptIcon: string = options.promptIcon || (iconBase + 'noun_748003.svg' as string) //    target
+  const promptIcon: string = options.promptIcon || (lucideIcons.target as string) // lucide target (was noun_748003.svg)
   // const promptIcon = options.promptIcon || (iconBase + 'noun_25830.svg') //  paperclip
   const predicate = options.predicate || ns.wf('attachment')
   const noun = options.noun || 'attachment'
@@ -1291,7 +1259,7 @@ export function selectorPanelRefresh (
       iconDiv.setAttribute('class', already.length === 0 ? 'hideTillHover' : '') // See tabbedtab.css
       image.setAttribute(
         'src',
-        options.connectIcon || iconBase + 'noun_25830.svg'
+        options.connectIcon || lucideIcons.paperclip // was noun_25830.svg
       )
       image.setAttribute('title', already.length ? already.length : 'attach' as any)
     }
@@ -1531,7 +1499,7 @@ export function fileUploadButtonDiv (
   const buttonElt = div.appendChild(
     button(
       dom,
-      iconBase + 'noun_Upload_76574_000000.svg',
+      lucideIcons.upload, // was noun_Upload_76574_000000.svg
       'Upload files',
       _event => {
         input.click()

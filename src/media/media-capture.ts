@@ -15,13 +15,13 @@ import * as debug from '../debug'
 
 /** @module mediaCapture */
 
-import { icons } from '../iconBase'
+import { lucideIcons } from '../icons/lucide'
 import { style } from '../style'
 import * as widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 
-const cameraIcon = icons.iconBase + 'noun_Camera_1618446_000000.svg' // Get it from github
-const retakeIcon = icons.iconBase + 'noun_479395.svg' // Get it from github
+const cameraIcon = lucideIcons.camera // was noun_Camera_1618446_000000.svg
+const retakeIcon = lucideIcons.refreshCw // was noun_479395.svg
 
 const contentType = 'image/png'
 
@@ -66,7 +66,7 @@ export function cameraCaptureControl (
   const shutterButton = buttons
     .appendChild(dom.createElement('td')) // Trigger capture button
     .appendChild(
-      widgets.button(dom, icons.iconBase + 'noun_10636.svg', 'Snap')
+      widgets.button(dom, lucideIcons.camera, 'Snap')
     )
   shutterButton.addEventListener('click', grabCanvas)
   shutterButton.style.visibility = 'collapse' // Hide for now

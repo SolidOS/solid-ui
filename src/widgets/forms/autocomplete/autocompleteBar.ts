@@ -5,7 +5,7 @@ and so on.  See the state diagram in the documentation.  The AUtocomplete Picker
 
 */
 import ns from '../../../ns'
-import { icons } from '../../../iconBase'
+import { lucideIcons } from '../../../icons/lucide'
 import { store } from 'solid-logic'
 import * as widgets from '../../../widgets'
 import * as utils from '../../../utils'
@@ -16,10 +16,10 @@ import { NamedNode } from 'rdflib'
 
 const WEBID_NOUN = 'Solid ID'
 
-const GREEN_PLUS = icons.iconBase + 'noun_34653_green.svg'
-const SEARCH_ICON = icons.iconBase + 'noun_Search_875351.svg'
-const EDIT_ICON = icons.iconBase + 'noun_253504.svg'
-// const DELETE_ICON = icons.iconBase + 'noun_2188_red.svg'
+const GREEN_PLUS = lucideIcons.plus // was noun_34653_green.svg
+const SEARCH_ICON = lucideIcons.search // was noun_Search_875351.svg
+const EDIT_ICON = lucideIcons.pencil // was noun_253504.svg
+// const DELETE_ICON = lucideIcons.trash2 // was noun_2188_red.svg
 
 export async function renderAutocompleteControl (dom:HTMLDocument,
   person:NamedNode,

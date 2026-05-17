@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdflib'
-import { originalIconBase } from '../../iconBase'
+import { lucideIcons } from '../../icons/lucide'
 
 /**
  * Creates an anchor tag for a NamedNode
@@ -24,9 +24,8 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
   const img = anchor.appendChild(dom.createElement('img'))
   img.setAttribute(
     'src',
-    iconURI || originalIconBase + 'go-to-this.png'
+    iconURI || lucideIcons.arrowRight // was go-to-this.png
   )
-  img.setAttribute('style', 'margin: 0.3em;')
   return anchor
 }
 /**

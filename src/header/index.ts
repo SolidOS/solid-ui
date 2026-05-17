@@ -4,7 +4,7 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { icons } from '../index'
+import { lucideIcons } from '../icons/lucide'
 import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
@@ -16,7 +16,7 @@ import { getPod, throttle } from '../utils/headerFooterHelpers'
 /**
  * menu icons
 */
-const DEFAULT_HELP_MENU_ICON = icons.iconBase + 'noun_help.svg'
+const DEFAULT_HELP_MENU_ICON = lucideIcons.circleHelp // was noun_help.svg
 const DEFAUL_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 
 export type MenuItemLink = {
@@ -137,7 +137,7 @@ export function createHelpMenu (options: HeaderOptions, helpMenuItems: MenuItems
   helpMenuTrigger.type = 'button'
 
   const helpMenuIcon = document.createElement('img')
-  helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : icons.iconBase + DEFAULT_HELP_MENU_ICON
+  helpMenuIcon.src = (options && options.helpIcon) ? options.helpIcon : DEFAULT_HELP_MENU_ICON // already a full data: URI
   helpMenuIcon.setAttribute('style', style.headerUserMenuTriggerImg)
   helpMenuContainer.appendChild(helpMenuTrigger)
   helpMenuTrigger.appendChild(helpMenuIcon)
