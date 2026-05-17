@@ -166,7 +166,7 @@
     "uuid": "^13.0.0"
   },
   "peerDependencies": {
-    "rdflib": "^2.3.6",
+    "rdflib": "^2.3.8",
     "solid-logic": "^4.0.6"
   },
   "devDependencies": {
