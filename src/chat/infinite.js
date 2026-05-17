@@ -7,6 +7,7 @@ import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from '../debug'
 import { icons } from '../iconBase'
+import { lucideIcons } from '../icons/lucide'
 import ns from '../ns'
 // import { style } from '../style'
 // import * as utils from '../utils'
@@ -283,7 +284,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
         if (scrollBackbutton) {
           scrollBackbutton.firstChild.setAttribute(
             'src',
-            icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+            lucideIcons.ban // was noun_T-Block_1114655_000000.svg
           ) // T
           scrollBackbutton.disabled = true
         }
@@ -301,15 +302,15 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       }
       const sense = messageTable.extendedBack ? !newestFirst : newestFirst
       const scrollBackIcon = messageTable.initial
-        ? 'noun_T-Block_1114655_000000.svg'
+        ? lucideIcons.ban
         : getScrollbackIcon(sense)
       scrollBackbutton.firstChild.setAttribute(
         'src',
-        icons.iconBase + scrollBackIcon
+        scrollBackIcon
       )
 
       function getScrollbackIcon (sense) {
-        return sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+        return sense ? lucideIcons.arrowDown : lucideIcons.arrowUp
       }
     }
 
@@ -321,7 +322,7 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       if (done) {
         scrollForwardButton.firstChild.setAttribute(
           'src',
-          icons.iconBase + 'noun_T-Block_1114655_000000.svg'
+          lucideIcons.ban // was noun_T-Block_1114655_000000.svg
         )
         scrollForwardButton.disabled = true
         messageTable.final = true
@@ -337,15 +338,15 @@ export async function infiniteMessageArea (dom, wasStore, chatChannel, options) 
       if (!scrollForwardButton) return
       const sense = messageTable.extendedForwards ? !newestFirst : newestFirst // noun_T-Block_1114657_000000.svg
       const scrollForwardIcon = messageTable.final
-        ? 'noun_T-Block_1114657_000000.svg'
+        ? lucideIcons.ban
         : getScrollForwardButtonIcon(sense)
       scrollForwardButton.firstChild.setAttribute(
         'src',
-        icons.iconBase + scrollForwardIcon
+        scrollForwardIcon
       )
 
       function getScrollForwardButtonIcon (sense) {
-        return !sense ? 'noun_1369241.svg' : 'noun_1369237.svg'
+        return !sense ? lucideIcons.arrowDown : lucideIcons.arrowUp
       }
     }
 
