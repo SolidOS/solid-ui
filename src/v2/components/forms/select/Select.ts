@@ -79,22 +79,18 @@ export class Select extends LitElement {
         box-sizing: border-box;
         --select-open-z-index: 1000;
         --select-popup-z-index: 1001;
-        --select-popup-extra-width: 2px;
         --select-popup-background: var(--color-background, #f8f9fb);
         --select-trigger-background: var(--color-background, #f8f9fb);
-        --select-trigger-hover-background: var(
-          --color-surface-subtle,
-          rgba(15, 23, 43, 0.04)
-        );
         --select-trigger-toggle-hover-background: var(
           --color-header-menu-item-hover,
           #e6dcff
         );
-        --select-trigger-border: 1px solid var(--gray-400, #99a1af);
-        --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
-        --select-trigger-text: var(--color-text-subheading, #101828);
-        --select-trigger-hover-text: var(--color-text-subheading, #101828);
-        --select-popup-width: 100%;
+        --input-background: var(--color-background, #f8f9fb);
+        --input-text: var(--color-text, #1a1a1a);
+        --input-border: var(--color-text, #1a1a1a);
+        --label-color: var(--grey-purple-700, #1a1a1a);
+        --placeholder-color: var(--grey-purple-700, #5e546d);
+        --select-trigger-text: var(--input-text);
         --popup-background: var(--select-popup-background);
         --popup-text: var(--color-text, #1a1a1a);
         --popup-border: var(--color-border, #e5e7eb);
@@ -114,22 +110,18 @@ export class Select extends LitElement {
         box-sizing: border-box;
         --select-open-z-index: 1000;
         --select-popup-z-index: 1001;
-        --select-popup-extra-width: 2px;
         --select-popup-background: var(--color-background, #1a1a1a);
         --select-trigger-background: var(--color-background, #1a1a1a);
-        --select-trigger-hover-background: var(
-          --color-surface-subtle,
-          rgba(15, 23, 43, 0.04)
-        );
         --select-trigger-toggle-hover-background: var(
           --color-header-menu-item-hover,
           #e6dcff
         );
-        --select-trigger-border: 1px solid var(--gray-400, #99a1af);
-        --select-trigger-hover-border: 1px solid var(--gray-400, #99a1af);
-        --select-trigger-text: var(--color-text-subheading, #f8f9fb);
-        --select-trigger-hover-text: var(--color-text-subheading, #f8f9fb);
-        --select-popup-width: 100%;
+        --input-background: var(--color-background, #1a1a1a);
+        --input-text: var(--color-text, #f8f9fb);
+        --input-border: var(--color-text, #f8f9fb);
+        --label-color: var(--grey-purple-700, #f8f9fb);
+        --placeholder-color: var(--grey-purple-700, #c7bfd3);
+        --select-trigger-text: var(--input-text);
         --popup-background: var(--select-popup-background);
         --popup-text: var(--color-text, #f8f9fb);
         --popup-border: var(--color-border, #e5e7eb);
@@ -143,24 +135,31 @@ export class Select extends LitElement {
         z-index: var(--select-open-z-index);
       }
 
-      .select-trigger {
+      .select-field-row {
         display: flex;
+        flex-direction: row;
+        position: relative;
         width: 100%;
+        min-width: 0;
+      }
+
+      .select-trigger {
+        display: block;
+        width: 100%;
+        min-width: 0;
         min-height: var(--select-trigger-height, var(--min-touch-target, 44px));
         height: var(--select-trigger-height, var(--min-touch-target, 44px));
         padding: var(--spacing-xxs, 0.3125rem)
+          calc(26px + (var(--select-trigger-inline-padding, var(--spacing-2xs, 0.625rem)) * 2) + 6px)
+          var(--spacing-xxs, 0.3125rem)
           var(--select-trigger-inline-padding, var(--spacing-2xs, 0.625rem));
-        align-items: center;
-        justify-content: space-between;
-        gap: var(--spacing-xxs, 0.3125rem);
         border-radius: var(--border-radius-base, 0.3125rem);
         background: var(--select-trigger-background);
-        border: var(
-          --select-trigger-border,
-          1px solid var(--gray-400, #99a1af)
-        );
+        border: 1px solid var(--input-border);
         color: var(--select-trigger-text);
         cursor: pointer;
+        appearance: none;
+        -webkit-appearance: none;
         font-family: inherit;
         font-size: var(--font-size-sm, 0.875rem);
         font-weight: var(--font-weight-md, 500);
@@ -169,11 +168,6 @@ export class Select extends LitElement {
         white-space: nowrap;
         text-decoration: none;
         box-sizing: border-box;
-        transition: transform 0.2s ease;
-      }
-
-      .select-trigger:active {
-        transform: translateY(1px);
       }
 
       .select-trigger:focus-visible {
@@ -182,21 +176,28 @@ export class Select extends LitElement {
       }
 
       .select-trigger-label {
-        flex: 1 1 auto;
-        min-width: 0;
+        display: block;
         text-align: left;
         overflow: hidden;
         text-overflow: ellipsis;
       }
 
       .select-trigger-toggle {
-        display: inline-flex;
-        flex: 0 0 auto;
+        position: absolute;
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        display: flex;
         align-items: center;
         justify-content: center;
         width: 26px;
         height: 26px;
+        padding: 0;
+        border: none;
+        background: transparent;
+        cursor: pointer;
         border-radius: var(--border-radius-base, 0.3125rem);
+        flex-shrink: 0;
       }
 
       .select-trigger-toggle:hover {
@@ -206,7 +207,7 @@ export class Select extends LitElement {
         );
       }
 
-      .select-trigger:focus-visible .select-trigger-toggle {
+      .select-field-row:focus-within .select-trigger-toggle {
         background: var(
           --select-trigger-toggle-hover-background,
           var(--color-header-menu-item-hover, #e6dcff)
@@ -238,21 +239,17 @@ export class Select extends LitElement {
 
       .popup-box {
         position: absolute;
-        top: calc(100% - 1px);
-        left: calc(var(--select-popup-extra-width) / -2);
-        width: calc(
-          var(--select-popup-width) + var(--select-popup-extra-width)
-        );
-        min-width: calc(
-          var(--select-popup-width) + var(--select-popup-extra-width)
-        );
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-width: 100%;
         background: var(--popup-background);
         opacity: 1;
         overflow: hidden;
         color: var(--popup-text);
         box-shadow: var(--popup-shadow);
         border: 1px solid var(--popup-border);
-        border-radius: var(--border-radius-sm, 0.2rem);
+        border-radius: var(--border-radius-md, 0.5rem);
         box-sizing: border-box;
         isolation: isolate;
         z-index: var(--select-popup-z-index);
@@ -550,26 +547,28 @@ export class Select extends LitElement {
         : undefined
 
     return html`
-      <button
-        class="select-trigger"
-        type="button"
-        aria-haspopup="listbox"
-        aria-expanded="${this._popupOpen}"
-        aria-controls="${this._listboxId}"
-        aria-activedescendant="${activeDescendant ?? ''}"
-        part="select-trigger"
-        @click="${() => this._openPopup()}"
-        @keydown="${this._handleTriggerKeydown}"
-      >
-        <span class="select-trigger-label" part="trigger-label"
-          >${triggerLabel}</span
+      <div class="select-field-row">
+        <button
+          class="select-trigger"
+          type="button"
+          aria-haspopup="listbox"
+          aria-expanded="${this._popupOpen}"
+          aria-controls="${this._listboxId}"
+          aria-activedescendant="${activeDescendant ?? ''}"
+          part="select-trigger"
+          @click="${() => this._popupOpen ? this._closePopup() : this._openPopup()}"
+          @keydown="${this._handleTriggerKeydown}"
         >
+          <span class="select-trigger-label" part="trigger-label"
+            >${triggerLabel}</span
+          >
+        </button>
         <span class="select-trigger-toggle" part="trigger-toggle">
           <span class="select-trigger-icon" part="trigger-icon" aria-hidden="true"
             >${downArrowIcon}</span
           >
         </span>
-      </button>
+      </div>
 
       <div
         class="select-root"
