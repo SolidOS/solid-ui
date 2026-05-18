@@ -175,6 +175,31 @@ describe('SolidUICombobox', () => {
     })
   })
 
+  it('does not treat space as a selection while typing', async () => {
+    const combobox = new Combobox()
+
+    combobox.options = [
+      { label: 'Self Employed', value: 'self-employed' },
+      { label: 'Microsoft', value: 'microsoft' }
+    ]
+
+    document.body.appendChild(combobox)
+    await combobox.updateComplete
+
+    const input = combobox.shadowRoot?.querySelector('input.text-input') as HTMLInputElement
+
+    input.dispatchEvent(new KeyboardEvent('keydown', { key: 'ArrowDown', bubbles: true }))
+    await combobox.updateComplete
+
+    const event = new KeyboardEvent('keydown', { key: ' ', bubbles: true, cancelable: true })
+    input.dispatchEvent(event)
+    await combobox.updateComplete
+
+    expect(event.defaultPrevented).toBe(false)
+    expect(combobox.value).toBe('')
+    expect(input.getAttribute('aria-expanded')).toBe('true')
+  })
+
   it('closes the popup when clicking outside the component', async () => {
     const combobox = new Combobox()
     combobox.options = [

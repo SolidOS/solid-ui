@@ -431,6 +431,10 @@ export class Combobox extends LitElement {
   }
 
   private _handleInputKeydown (e: KeyboardEvent) {
+    if (e.key === ' ' || e.key === 'Spacebar') {
+      return
+    }
+
     const popupOptions = this._getDisplayedOptions()
     const action = getListboxActionFromKey(e.key)
 
