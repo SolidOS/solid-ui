@@ -79,6 +79,11 @@ export const listboxStyles = css`
       outline: none;
     }
 
+    .listbox-item-active:hover,
+    .listbox-item-active:focus {
+      color: var(--item-text);
+    }
+
     .listbox-item-disabled {
       opacity: 0.55;
       cursor: not-allowed;
