@@ -145,6 +145,7 @@ export class Select extends LitElement {
 
       .select-trigger {
         display: block;
+        position: relative;
         width: 100%;
         min-width: 0;
         min-height: var(--select-trigger-height, var(--min-touch-target, 44px));
@@ -562,12 +563,12 @@ export class Select extends LitElement {
           <span class="select-trigger-label" part="trigger-label"
             >${triggerLabel}</span
           >
+          <span class="select-trigger-toggle" part="trigger-toggle">
+            <span class="select-trigger-icon" part="trigger-icon" aria-hidden="true"
+              >${downArrowIcon}</span
+            >
+          </span>
         </button>
-        <span class="select-trigger-toggle" part="trigger-toggle">
-          <span class="select-trigger-icon" part="trigger-icon" aria-hidden="true"
-            >${downArrowIcon}</span
-          >
-        </span>
       </div>
 
       <div

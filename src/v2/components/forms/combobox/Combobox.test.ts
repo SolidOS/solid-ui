@@ -135,6 +135,28 @@ describe('SolidUICombobox', () => {
     })
   })
 
+  it('opens the popup when clicking the dropdown toggle button', async () => {
+    const combobox = new Combobox()
+    combobox.options = [
+      { label: 'Alice', value: 'alice' },
+      { label: 'Bob', value: 'bob' }
+    ]
+
+    document.body.appendChild(combobox)
+    await combobox.updateComplete
+
+    const toggle = combobox.shadowRoot?.querySelector('button.dropdown-toggle') as HTMLButtonElement
+
+    expect(toggle).not.toBeNull()
+
+    toggle.click()
+    await combobox.updateComplete
+
+    const input = combobox.shadowRoot?.querySelector('input.text-input') as HTMLInputElement
+    expect(input.getAttribute('aria-expanded')).toBe('true')
+    expect(getPortalRoot()?.querySelector('[role="listbox"]')).not.toBeNull()
+  })
+
   it('supports keyboard selection from the input', async () => {
     const combobox = new Combobox()
     const changed = jest.fn()

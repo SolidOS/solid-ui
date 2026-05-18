@@ -88,6 +88,29 @@ describe('SolidUISelect', () => {
     expect(changed).toHaveBeenCalledWith({ value: 'fr' })
   })
 
+  it('opens the popup when clicking the visible trigger toggle', async () => {
+    const select = new Select()
+    select.label = 'Language'
+    select.options = [
+      { label: 'English', value: 'en' },
+      { label: 'French', value: 'fr' }
+    ]
+
+    document.body.appendChild(select)
+    await select.updateComplete
+
+    const toggle = select.shadowRoot?.querySelector('.select-trigger-toggle') as HTMLSpanElement
+
+    expect(toggle).not.toBeNull()
+
+    toggle.click()
+    await select.updateComplete
+
+    const trigger = select.shadowRoot?.querySelector('button.select-trigger') as HTMLButtonElement
+    expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(getPortalRoot()?.querySelector('[role="listbox"]')).not.toBeNull()
+  })
+
   it('renders the selected option first in the popup', async () => {
     const select = new Select()
     select.options = [
