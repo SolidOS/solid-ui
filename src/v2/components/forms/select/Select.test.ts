@@ -2,6 +2,11 @@ import { beforeEach, describe, expect, it, jest } from '@jest/globals'
 import { Select } from './Select'
 import './index'
 
+function getPortalRoot () {
+  const portalHost = document.querySelector('[data-solid-ui-select-portal]') as HTMLDivElement | null
+  return portalHost?.shadowRoot ?? null
+}
+
 describe('SolidUISelect', () => {
   beforeEach(() => {
     document.body.innerHTML = ''
@@ -67,8 +72,9 @@ describe('SolidUISelect', () => {
     trigger.click()
     await select.updateComplete
 
-    const listbox = select.shadowRoot?.querySelector('[role="listbox"]') as HTMLElement
-    const options = select.shadowRoot?.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>
+    const portalRoot = getPortalRoot()
+    const listbox = portalRoot?.querySelector('[role="listbox"]') as HTMLElement
+    const options = portalRoot?.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>
 
     expect(listbox).not.toBeNull()
     expect(options).toHaveLength(2)
@@ -98,7 +104,7 @@ describe('SolidUISelect', () => {
     trigger.click()
     await select.updateComplete
 
-    const options = Array.from(select.shadowRoot?.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>)
+    const options = Array.from(getPortalRoot()?.querySelectorAll('[role="option"]') as NodeListOf<HTMLElement>)
 
     expect(options).toHaveLength(3)
     expect(options[0].textContent).toContain('French')
@@ -170,6 +176,7 @@ describe('SolidUISelect', () => {
     await select.updateComplete
 
     expect(trigger.getAttribute('aria-expanded')).toBe('true')
+    expect(getPortalRoot()).not.toBeNull()
 
     document.body.dispatchEvent(new Event('pointerdown', { bubbles: true }))
     await select.updateComplete

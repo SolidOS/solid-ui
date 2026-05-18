@@ -1,4 +1,5 @@
 import { css, html, LitElement } from 'lit'
+import { render as renderPortal } from 'lit/html.js'
 import { downArrowIcon } from '../shared/downArrow'
 import { renderListbox } from '../shared/listboxTemplate'
 import { SelectOption } from '../shared/optionTypes'
@@ -16,6 +17,9 @@ import {
 /* Prompt: can you wire up the keyboard interactions and aria attributes for Select */
 export class Select extends LitElement {
   private static _nextId = 0
+  private _popupPortalHost: HTMLDivElement | null = null
+  private _popupPortalRoot: ShadowRoot | null = null
+  private _popupPortalContainer: Element | null = null
   private readonly _handleDocumentPointerDown = (event: Event) => {
     const eventTarget = event.target
 
@@ -34,9 +38,21 @@ export class Select extends LitElement {
       return
     }
 
+    if (
+      (this._popupPortalHost && eventPath.includes(this._popupPortalHost)) ||
+      (this._popupPortalRoot && eventPath.includes(this._popupPortalRoot))
+    ) {
+      return
+    }
+
     if (!this.contains(eventTarget)) {
       this._closePopup()
     }
+  }
+
+  private readonly _handleViewportChange = () => {
+    if (!this._popupOpen) return
+    this._updatePopupPosition()
   }
 
   static properties = {
@@ -268,20 +284,105 @@ export class Select extends LitElement {
   connectedCallback () {
     super.connectedCallback()
     document.addEventListener('pointerdown', this._handleDocumentPointerDown)
+    window.addEventListener('resize', this._handleViewportChange)
+    window.addEventListener('scroll', this._handleViewportChange, true)
   }
 
   disconnectedCallback () {
+    this._detachPopupPortal()
     document.removeEventListener('pointerdown', this._handleDocumentPointerDown)
+    window.removeEventListener('resize', this._handleViewportChange)
+    window.removeEventListener('scroll', this._handleViewportChange, true)
     super.disconnectedCallback()
   }
 
   protected updated () {
     this.toggleAttribute('popup-open', this._popupOpen)
+
+    if (this._popupOpen) {
+      this._updatePopupPosition()
+      if (this._popupPortalRoot) {
+        renderPortal(this._renderPopup(), this._popupPortalRoot)
+      }
+    } else if (this._popupPortalRoot) {
+      renderPortal(null, this._popupPortalRoot)
+    }
+  }
+
+  private _getPopupPortalContainer () {
+    return this.closest('dialog[open]') || document.body
+  }
+
+  private _ensurePopupPortal () {
+    const nextContainer = this._getPopupPortalContainer()
+
+    if (
+      this._popupPortalHost &&
+      this._popupPortalRoot &&
+      this._popupPortalContainer === nextContainer
+    ) {
+      return
+    }
+
+    this._detachPopupPortal()
+
+    this._popupPortalHost = document.createElement('div')
+    this._popupPortalHost.setAttribute('data-solid-ui-select-portal', '')
+    this._popupPortalHost.style.position = 'fixed'
+    this._popupPortalHost.style.inset = '0 auto auto 0'
+    this._popupPortalHost.style.zIndex = '2147483647'
+    this._popupPortalHost.style.pointerEvents = 'none'
+    this._popupPortalHost.style.boxSizing = 'border-box'
+
+    this._popupPortalRoot = this._popupPortalHost.attachShadow({ mode: 'open' })
+    const styleSheets = (Array.isArray(Select.styles) ? Select.styles : [Select.styles])
+      .map((style) => style?.styleSheet)
+      .filter((styleSheet): styleSheet is CSSStyleSheet => Boolean(styleSheet))
+
+    if (styleSheets.length > 0) {
+      this._popupPortalRoot.adoptedStyleSheets = styleSheets
+    }
+
+    nextContainer.appendChild(this._popupPortalHost)
+    this._popupPortalContainer = nextContainer
+  }
+
+  private _detachPopupPortal () {
+    if (this._popupPortalRoot) {
+      renderPortal(null, this._popupPortalRoot)
+    }
+
+    if (this._popupPortalHost?.parentNode) {
+      this._popupPortalHost.parentNode.removeChild(this._popupPortalHost)
+    }
+
+    this._popupPortalHost = null
+    this._popupPortalRoot = null
+    this._popupPortalContainer = null
+  }
+
+  private _updatePopupPosition () {
+    this._ensurePopupPortal()
+
+    const rect = this.getBoundingClientRect()
+    const maxHeight = Math.min(288, Math.max(120, window.innerHeight - rect.bottom - 12))
+
+    if (this._popupPortalHost) {
+      this._popupPortalHost.style.top = `${Math.round(rect.bottom + 2)}px`
+      this._popupPortalHost.style.left = `${Math.round(rect.left)}px`
+      this._popupPortalHost.style.width = `${Math.round(rect.width)}px`
+      this._popupPortalHost.style.maxHeight = `${Math.round(maxHeight)}px`
+      this._popupPortalHost.style.height = '0px'
+    }
   }
 
   private _closePopup () {
     this._popupOpen = false
     this._activeIndex = -1
+
+    if (this._popupPortalRoot) {
+      renderPortal(null, this._popupPortalRoot)
+    }
   }
 
   private _getSelectedIndex () {
@@ -345,6 +446,7 @@ export class Select extends LitElement {
     const popupOptions = this._getDisplayedOptions()
 
     this._popupOpen = true
+    this._updatePopupPosition()
     this._activeIndex = findOptionIndexByValue(popupOptions, this.value)
 
     if (this._activeIndex < 0) {
@@ -422,7 +524,7 @@ export class Select extends LitElement {
     const activeOption = this._getActiveOption()
 
     return html`
-      <div class="popup-box" part="popup-box">
+      <div class="popup-box" part="popup-box" style="pointer-events: auto; max-height: inherit; overflow: auto;">
         <div class="select-options-section">
           ${renderListbox({
             selectedOption,
@@ -475,9 +577,7 @@ export class Select extends LitElement {
         @click="${(e: MouseEvent) => {
           if (e.target === e.currentTarget) this._closePopup()
         }}"
-      >
-        ${this._popupOpen ? this._renderPopup() : ''}
-      </div>
+      ></div>
     `
   }
 }
