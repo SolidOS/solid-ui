@@ -88,7 +88,7 @@ describe('SolidUIPhotoCapture', () => {
 
     expect(getUserMedia).toHaveBeenCalledWith({
       video: {
-        facingMode: { ideal: 'environment' }
+        facingMode: { ideal: 'user' }
       }
     })
   })

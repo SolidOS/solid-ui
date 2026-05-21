@@ -318,7 +318,7 @@ export class PhotoCapture extends LitElement {
     this.cancelLabel = 'Cancel'
     this.presentation = 'inline'
     this.theme = 'light'
-    this.facingMode = 'environment'
+    this.facingMode = 'user'
     this.constraints = ''
     this.captureFormat = DEFAULT_CAPTURE_FORMAT
     this.captureQuality = undefined
