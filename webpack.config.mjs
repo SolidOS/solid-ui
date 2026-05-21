@@ -1,6 +1,9 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import Icons from 'unplugin-icons/webpack'
 import { componentEntries } from './scripts/component-manifest.mjs'
+import iconsConfig from './config/icons'
+import postCSSConfig from './config/postcss'
 
 const externalsBase = {
   fs: 'null',
@@ -57,7 +60,25 @@ const common = {
     rules: [
       {
         test: /\.(mjs|js|ts)$/,
-        exclude: /(node_modules|bower_components|dist)/,
+        include: [
+          path.resolve(process.cwd(), 'src/design-system')
+        ],
+        use: {
+          loader: 'babel-loader',
+          options: {
+            cacheDirectory: true,
+            plugins: [
+              ['@babel/plugin-proposal-decorators', { version: 'legacy' }],
+              ['@babel/plugin-transform-class-properties', { loose: true }]
+            ]
+          }
+        }
+      }, {
+        test: /\.(mjs|js|ts)$/,
+        exclude: [
+          /(node_modules|bower_components|dist)/,
+          path.resolve(process.cwd(), 'src/design-system')
+        ],
         use: {
           loader: 'babel-loader',
           options: {
@@ -65,13 +86,20 @@ const common = {
           }
         }
       }, {
+        test: /\.styles\.css$/,
+        loader: 'lit-css-loader',
+        options: postCSSConfig
+      }, {
         test: /\.sparql$/i,
         type: 'asset/source'
       }, {
         test: /\.ttl$/i,
         type: 'asset/source'
       }]
-  }
+  },
+  plugins: [
+    Icons(iconsConfig)
+  ]
 }
 
 // UMD Minified, rdflib external

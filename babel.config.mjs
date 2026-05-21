@@ -5,7 +5,12 @@ export default {
         browsers: ['> 1%', 'last 3 versions', 'not dead']
       }
     }],
-    ['@babel/preset-typescript', { allowDeclareFields: true }],
+    [
+      '@babel/preset-typescript', {
+        allowDeclareFields: true,
+        useDefineForClassFields: false,
+      }
+    ],
   ],
   plugins: [
     '@babel/plugin-transform-runtime'
