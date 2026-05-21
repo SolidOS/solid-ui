@@ -1,0 +1,32 @@
+@import '../../styles/common.styles.css';
+
+:host {
+    position: absolute;
+    top: calc(anchor(bottom) + 5px);
+    right: anchor(right);
+    left: auto;
+    bottom: auto;
+    overflow: visible;
+    position-try-fallbacks: flip-block, flip-inline;
+
+    /* Also set in JS for global tree-scoped reference */
+    position-anchor: --menu-anchor;
+
+    /* [popover] resets */
+    border: none;
+    background: transparent;
+    padding: 0;
+
+
+    div {
+        min-width: 300px;
+        background: var(--solid-ui-color-slate-50);
+        border: 1px solid var(--solid-ui-color-slate-200);
+        border-radius: 5px;
+        box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+        padding: 10px 5px;
+        display: flex;
+        flex-direction: column;
+        gap: 5px;
+    }
+}
