@@ -713,6 +713,12 @@ authSession.events.on('logout', async () => {
           await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
         }
       }
+
+      try {
+        await fetch('/.well-known/solid/logout', { credentials: 'include' })
+      } catch (_err) {
+        // Not all deployments expose NSS-compatible well-known logout endpoint.
+      }
     } catch (_err) {
       // Do nothing
     }

@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { icons } from '../../../../iconBase'
-import { authSession } from 'solid-logic'
+import { authSession, authn } from 'solid-logic'
 import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -514,6 +514,9 @@ export class Header extends LitElement {
   declare helpMenuOpen: boolean
   declare hasSlottedAccountMenu: boolean
   declare hasSlottedHelpMenu: boolean
+  private readonly handleAuthSessionChange = () => {
+    this.refreshAuthStateFromSession()
+  }
 
   constructor () {
     super()
@@ -544,12 +547,32 @@ export class Header extends LitElement {
     super.connectedCallback()
     document.addEventListener('click', this.handleDocumentClick)
     window.addEventListener('keydown', this.handleWindowKeydown)
+    if (typeof authSession.events?.on === 'function') {
+      authSession.events.on('login', this.handleAuthSessionChange)
+      authSession.events.on('logout', this.handleAuthSessionChange)
+      authSession.events.on('sessionRestore', this.handleAuthSessionChange)
+    }
+    this.refreshAuthStateFromSession()
   }
 
   disconnectedCallback () {
     document.removeEventListener('click', this.handleDocumentClick)
     window.removeEventListener('keydown', this.handleWindowKeydown)
+    if (typeof authSession.events?.off === 'function') {
+      authSession.events.off('login', this.handleAuthSessionChange)
+      authSession.events.off('logout', this.handleAuthSessionChange)
+      authSession.events.off('sessionRestore', this.handleAuthSessionChange)
+    }
     super.disconnectedCallback()
+  }
+
+  private async refreshAuthStateFromSession () {
+    try {
+      await authn.checkUser()
+    } catch (_err) {
+      // Keep rendering even if session refresh cannot complete.
+    }
+    this.authState = authn.currentUser() ? 'logged-in' : 'logged-out'
   }
 
   private handleHelpMenuClick (item: HeaderMenuItem, event: MouseEvent) {
@@ -669,8 +692,8 @@ export class Header extends LitElement {
     `
   }
 
-  private handleLoginSuccess () {
-    this.authState = 'logged-in'
+  private async handleLoginSuccess () {
+    await this.refreshAuthStateFromSession()
     this.dispatchEvent(new CustomEvent('auth-action-select', {
       detail: { role: 'login' },
       bubbles: true,
@@ -680,17 +703,48 @@ export class Header extends LitElement {
 
   private async handleLogout () {
     this.accountMenuOpen = false
+    const issuer = window.localStorage.getItem('loginIssuer') || ''
+
     try {
       await authSession.logout()
     } catch (_err) {
       // logout errors are non-fatal — proceed to clear state
     }
-    this.authState = 'logged-out'
+
+    await this.performServerLogout(issuer)
+
+    await this.refreshAuthStateFromSession()
     this.dispatchEvent(new CustomEvent('logout-select', {
       detail: { role: 'logout' },
       bubbles: true,
       composed: true
     }))
+  }
+
+  private async performServerLogout (issuer: string) {
+    // Best-effort server logout for cookie-backed sessions on NSS-like servers.
+    try {
+      if (issuer) {
+        const wellKnownUri = new URL(issuer)
+        wellKnownUri.pathname = '/.well-known/openid-configuration'
+        const wellKnownResult = await fetch(wellKnownUri.toString(), { credentials: 'include' })
+
+        if (wellKnownResult.status === 200) {
+          const openidConfiguration = await wellKnownResult.json()
+          if (openidConfiguration && openidConfiguration.end_session_endpoint) {
+            await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
+          }
+        }
+      }
+    } catch (_err) {
+      // Continue with local logout state even if remote IdP logout is unavailable.
+    }
+
+    try {
+      await fetch('/.well-known/solid/logout', { credentials: 'include' })
+    } catch (_err) {
+      // Not all deployments expose NSS-compatible well-known logout.
+    }
   }
 
   private renderAccountMenuItem (item: HeaderAccountMenuItem) {
