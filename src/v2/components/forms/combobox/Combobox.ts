@@ -75,7 +75,7 @@ export class Combobox extends LitElement {
       --popup-shadow: var(--box-shadow-sm, 0 1px 4px rgba(124,77,255,0.12));
       --input-background: var(--color-background, #F8F9FB);
       --input-text: var(--color-text, #1A1A1A);
-      --input-border: var(--color-text, #1A1A1A);
+      --input-border: var(--color-border-button-hover, var(--gray-400, #99A1AF));
       --label-color: var(--grey-purple-700, #1A1A1A);
       --placeholder-color: var(--grey-purple-700, #5e546d);
       --combobox-input-height: var(--select-trigger-height, var(--min-touch-target, 44px));
@@ -96,7 +96,7 @@ export class Combobox extends LitElement {
       --popup-shadow: var(--box-shadow-sm, 0 1px 4px rgba(124,77,255,0.12));
       --input-background: var(--color-background, #F8F9FB);
       --input-text: var(--color-text, #1A1A1A);
-      --input-border: var(--color-text, #1A1A1A);
+      --input-border: var(--color-border-button-hover, var(--gray-400, #99A1AF));
       --label-color: var(--grey-purple-700, #1A1A1A);
       --placeholder-color: var(--grey-purple-700, #5e546d);
       --combobox-input-height: var(--select-trigger-height, var(--min-touch-target, 44px));

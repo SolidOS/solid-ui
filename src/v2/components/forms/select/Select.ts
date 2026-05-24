@@ -87,7 +87,7 @@ export class Select extends LitElement {
         );
         --input-background: var(--color-background, #f8f9fb);
         --input-text: var(--color-text, #1a1a1a);
-        --input-border: var(--color-text, #1a1a1a);
+        --input-border: var(--color-border-button-hover, var(--gray-400, #99A1AF));
         --label-color: var(--grey-purple-700, #1a1a1a);
         --placeholder-color: var(--grey-purple-700, #5e546d);
         --select-trigger-text: var(--input-text);
@@ -118,7 +118,7 @@ export class Select extends LitElement {
         );
         --input-background: var(--color-background, #1a1a1a);
         --input-text: var(--color-text, #f8f9fb);
-        --input-border: var(--color-text, #f8f9fb);
+        --input-border: var(--color-border-button-hover, var(--gray-400, #99A1AF));
         --label-color: var(--grey-purple-700, #f8f9fb);
         --placeholder-color: var(--grey-purple-700, #c7bfd3);
         --select-trigger-text: var(--input-text);
