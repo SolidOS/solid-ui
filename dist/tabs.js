@@ -155,7 +155,7 @@ export function tabWidget(options) {
     rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse' : '');
     const navElement = rootElement.appendChild(dom.createElement('nav'));
     navElement.setAttribute('style', style.tabsNavElement);
-    const mainElement = rootElement.appendChild(dom.createElement('main'));
+    const mainElement = rootElement.appendChild(dom.createElement('div'));
     mainElement.setAttribute('style', style.tabsMainElement); // override tabbedtab.css
     const tabContainer = navElement.appendChild(dom.createElement('ul'));
     tabContainer.setAttribute('style', style.tabContainer);
@@ -288,7 +288,7 @@ export function tabWidget(options) {
             const bodyMain = (_a = ele.bodyTR) === null || _a === void 0 ? void 0 : _a.children[0];
             if (bodyMain)
                 return bodyMain;
-            const newBodyMain = ele.bodyTR.appendChild(dom.createElement('main'));
+            const newBodyMain = ele.bodyTR.appendChild(dom.createElement('div'));
             newBodyMain.setAttribute('style', bodyMainStyle);
             return newBodyMain;
         }

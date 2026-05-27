@@ -1,7 +1,7 @@
 import * as __WEBPACK_EXTERNAL_MODULE_solid_logic_bb75353e__ from "solid-logic";
 /******/ var __webpack_modules__ = ({
 
-/***/ 1209
+/***/ 4614
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -9,7 +9,7 @@ import * as __WEBPACK_EXTERNAL_MODULE_solid_logic_bb75353e__ from "solid-logic";
 /* harmony export */ });
 /* harmony import */ var lit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(6161);
 /* harmony import */ var solid_logic__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3138);
-/* harmony import */ var _downArrow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(1353);
+/* harmony import */ var _downArrow__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6454);
 
 
 
@@ -47,7 +47,7 @@ class LoginButton extends lit__WEBPACK_IMPORTED_MODULE_0__/* .LitElement */ .WF 
     }
   };
   static styles = (0,lit__WEBPACK_IMPORTED_MODULE_0__/* .css */ .AH)`
-    :host { // default theme
+    :host { /* default theme */
       display: inline-block;
       position: relative;
       z-index: 400;
@@ -129,8 +129,9 @@ class LoginButton extends lit__WEBPACK_IMPORTED_MODULE_0__/* .LitElement */ .WF 
       background: transparent;
       outline: none;
       overflow: visible;
-      max-height: none;
-      max-width: none;
+      width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
     }
 
     .popup-dialog::backdrop {
@@ -143,7 +144,11 @@ class LoginButton extends lit__WEBPACK_IMPORTED_MODULE_0__/* .LitElement */ .WF 
       box-shadow: var(--popup-shadow);
       border: 1px solid var(--popup-border);
       border-radius: var(--border-radius-md, 0.5rem);
-      min-width: 480px;
+      width: min(30rem, calc(100vw - 2rem));
+      min-width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
+      overflow: auto;
       z-index: 1001;
     }
 
@@ -335,6 +340,43 @@ class LoginButton extends lit__WEBPACK_IMPORTED_MODULE_0__/* .LitElement */ .WF 
       color: var(--error-text-color);
       font-size: 0.875rem;
       margin-top: 8px;
+    }
+
+    @media (max-width: 40rem) {
+      .popup-dialog {
+        width: calc(100vw - 1rem);
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+      }
+
+      .popup-box {
+        width: calc(100vw - 1rem);
+        min-width: 0;
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+        border-radius: var(--border-radius-base, 0.3125rem);
+      }
+
+      .popup-top-menu,
+      .issuer-text-section,
+      .popup-footer {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      .popup-footer {
+        flex-wrap: wrap;
+        gap: 0.625rem;
+      }
+
+      .popup-footer > button {
+        flex: 1 1 100%;
+      }
+
+      .issuer-text-row,
+      .issuer-input-field-row {
+        width: 100%;
+      }
     }
   `;
   _issuerInputId = `issuer-url-input-${Math.random().toString(36).slice(2, 10)}`;
@@ -528,7 +570,7 @@ class LoginButton extends lit__WEBPACK_IMPORTED_MODULE_0__/* .LitElement */ .WF 
 
 /***/ },
 
-/***/ 1353
+/***/ 6454
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -706,7 +748,7 @@ var __webpack_exports__ = {};
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   M: () => (/* reexport safe */ _LoginButton__WEBPACK_IMPORTED_MODULE_0__.M)
 /* harmony export */ });
-/* harmony import */ var _LoginButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(1209);
+/* harmony import */ var _LoginButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4614);
 
 
 const LOGIN_BUTTON_TAG_NAME = 'solid-ui-login-button';

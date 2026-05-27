@@ -769,9 +769,15 @@ export function refreshTree(root) {
  * Accepts dropping URLs onto it to add attachments to it.
  */
 export function attachmentList(dom, subject, div, options = {}) {
+    var _a;
     // options = options || {}
     const docsWaitingForRowRefresh = new Set();
     const hasAsyncEnrichedRowOptions = !!(options.renderSupportingInfo || options.renderNameSuffix);
+    // Keep the generic default on for simple consumers: if row decoration depends on
+    // linked-profile data arriving later, attachmentList will rerender once that
+    // target document finishes loading. Complex callers with their own streaming or
+    // batched refresh pipeline can opt out to avoid duplicate whole-list refreshes.
+    const refreshOnDocumentLoad = (_a = options.refreshOnDocumentLoad) !== null && _a !== void 0 ? _a : true;
     const deleteAttachment = function (target) {
         if (!kb.updater) {
             throw new Error('kb has no updater');
@@ -791,13 +797,16 @@ export function attachmentList(dom, subject, div, options = {}) {
         const opt = { noun };
         opt.renderSupportingInfo = options.renderSupportingInfo;
         opt.renderNameSuffix = options.renderNameSuffix;
-        if (hasAsyncEnrichedRowOptions && (target === null || target === void 0 ? void 0 : target.uri) && kb.fetcher) {
+        if (hasAsyncEnrichedRowOptions && refreshOnDocumentLoad && (target === null || target === void 0 ? void 0 : target.uri) && kb.fetcher) {
             const targetDoc = target.doc();
             const requestState = (targetDoc === null || targetDoc === void 0 ? void 0 : targetDoc.uri) ? (_a = kb.fetcher.requested) === null || _a === void 0 ? void 0 : _a[targetDoc.uri] : undefined;
             const shouldWaitForFetch = requestState !== 'done' && requestState !== 'failed';
             if ((targetDoc === null || targetDoc === void 0 ? void 0 : targetDoc.uri) && shouldWaitForFetch && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
                 docsWaitingForRowRefresh.add(targetDoc.uri);
-                // Root fix: these row options can depend on async profile data, so rerender once fetch completes.
+                // The row renderer may need data from the target profile that is not loaded yet.
+                // Register one follow-up refresh per target document so simple attachmentList
+                // consumers eventually show the enriched row contents without building their own
+                // async refresh orchestration.
                 kb.fetcher.nowOrWhenFetched(targetDoc, undefined, () => {
                     docsWaitingForRowRefresh.delete(targetDoc.uri);
                     refresh();
@@ -887,6 +896,10 @@ export function attachmentList(dom, subject, div, options = {}) {
         attachmentLeft.appendChild(paperclip);
         const fhandler = options.uploadFolder ? droppedFileHandler : null;
         makeDropTarget(paperclip, droppedURIHandler, fhandler); // beware missing the wire of the paparclip!
+        const paperclipImage = paperclip.querySelector('img');
+        if (paperclipImage) {
+            makeDropTarget(paperclipImage, droppedURIHandler, fhandler);
+        }
         makeDropTarget(attachmentLeft, droppedURIHandler, fhandler); // just the outer won't do it
         if (options.uploadFolder) { // Addd an explicit file upload button as well
             const buttonDiv = fileUploadButtonDiv(dom, droppedFileHandler);

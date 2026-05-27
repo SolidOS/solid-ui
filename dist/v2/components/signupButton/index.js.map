@@ -1,1 +1,0 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../src/v2/components/signupButton/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,YAAY,EAAE,MAAM,gBAAgB,CAAA;AAE7C,OAAO,EAAE,YAAY,EAAE,CAAA;AAEvB,MAAM,sBAAsB,GAAG,wBAAwB,CAAA;AAEvD,IAAI,CAAC,cAAc,CAAC,GAAG,CAAC,sBAAsB,CAAC,EAAE,CAAC;IAChD,cAAc,CAAC,MAAM,CAAC,sBAAsB,EAAE,YAAY,CAAC,CAAA;AAC7D,CAAC"}

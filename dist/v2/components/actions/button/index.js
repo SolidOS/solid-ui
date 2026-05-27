@@ -1,0 +1,7 @@
+import { Button } from './Button';
+export { Button };
+const BUTTON_TAG_NAME = 'solid-ui-button';
+if (!customElements.get(BUTTON_TAG_NAME)) {
+    customElements.define(BUTTON_TAG_NAME, Button);
+}
+//# sourceMappingURL=index.js.map

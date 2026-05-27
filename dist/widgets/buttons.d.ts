@@ -177,6 +177,7 @@ export type attachmentListOptions = {
     noun?: string;
     renderSupportingInfo?: RenderSupportingInfo;
     renderNameSuffix?: RenderNameSuffix;
+    refreshOnDocumentLoad?: boolean;
 };
 /**
  * Component that displays a list of resources, for instance

@@ -1,1 +1,1 @@
-export * from '../../v2/components/signupButton/index';
+export * from '../../v2/components/auth/signupButton/index';

@@ -107,6 +107,11 @@ describe('askName', () => {
 })
 
 describe('attachmentList', () => {
+  afterEach(() => {
+    clearStore()
+    jest.restoreAllMocks()
+  })
+
   it('exists', () => {
     expect(attachmentList).toBeInstanceOf(Function)
   })
@@ -115,6 +120,70 @@ describe('attachmentList', () => {
     const div = element
     const options = {}
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
+  })
+
+  it('refreshes rows after pending profile fetches by default', () => {
+    const subject = sym('https://subject.example/profile/card#me')
+    const predicate = ns.foaf('knows')
+    const target = sym('https://friend.example/profile/card#me')
+    const div = element
+    const fetcher = store.fetcher as any
+
+    store.add(subject, predicate, target, subject.doc())
+    fetcher.requested = {
+      ...fetcher.requested,
+      [target.doc().uri]: 'requested'
+    }
+
+    const nowOrWhenFetched = jest
+      .spyOn(fetcher, 'nowOrWhenFetched')
+      .mockImplementation(() => undefined as any)
+
+    attachmentList(dom, subject, div, {
+      predicate,
+      renderSupportingInfo: () => null
+    })
+
+    expect(nowOrWhenFetched).toHaveBeenCalledWith(
+      target.doc(),
+      undefined,
+      expect.any(Function)
+    )
+  })
+
+  it('adds one extra document-load refresh hook only when enabled', () => {
+    const subject = sym('https://subject.example/profile/card#me')
+    const predicate = ns.foaf('knows')
+    const target = sym('https://friend.example/profile/card#me')
+    const div = element
+    const fetcher = store.fetcher as any
+
+    store.add(subject, predicate, target, subject.doc())
+    fetcher.requested = {
+      ...fetcher.requested,
+      [target.doc().uri]: 'requested'
+    }
+
+    const nowOrWhenFetched = jest
+      .spyOn(fetcher, 'nowOrWhenFetched')
+      .mockImplementation(() => undefined as any)
+
+    attachmentList(dom, subject, div, {
+      predicate,
+      refreshOnDocumentLoad: false,
+      renderSupportingInfo: () => null
+    })
+    const disabledCallCount = nowOrWhenFetched.mock.calls.length
+
+    nowOrWhenFetched.mockClear()
+    div.innerHTML = ''
+
+    attachmentList(dom, subject, div, {
+      predicate,
+      renderSupportingInfo: () => null
+    })
+
+    expect(nowOrWhenFetched.mock.calls.length).toBe(disabledCallCount + 1)
   })
 })
 

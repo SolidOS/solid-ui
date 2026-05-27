@@ -87,7 +87,7 @@ const originalIconBase = icons.originalIconBase;
 
 /***/ },
 
-/***/ 325
+/***/ 788
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -1629,21 +1629,10 @@ async function getProspectiveHolder(targetDirectory) {
 // EXTERNAL MODULE: ./node_modules/escape-html/index.js
 var escape_html = __webpack_require__(580);
 var escape_html_default = /*#__PURE__*/__webpack_require__.n(escape_html);
-;// ./node_modules/uuid/dist/native.js
-const randomUUID = typeof crypto !== 'undefined' && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-/* harmony default export */ const dist_native = ({ randomUUID });
-
 ;// ./node_modules/uuid/dist/rng.js
-let getRandomValues;
 const rnds8 = new Uint8Array(16);
 function rng() {
-    if (!getRandomValues) {
-        if (typeof crypto === 'undefined' || !crypto.getRandomValues) {
-            throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
-        }
-        getRandomValues = crypto.getRandomValues.bind(crypto);
-    }
-    return getRandomValues(rnds8);
+    return crypto.getRandomValues(rnds8);
 }
 
 ;// ./node_modules/uuid/dist/stringify.js
@@ -1687,7 +1676,12 @@ function stringify(arr, offset = 0) {
 ;// ./node_modules/uuid/dist/v4.js
 
 
-
+function v4(options, buf, offset) {
+    if (!buf && !options && crypto.randomUUID) {
+        return crypto.randomUUID();
+    }
+    return _v4(options, buf, offset);
+}
 function _v4(options, buf, offset) {
     options = options || {};
     const rnds = options.random ?? options.rng?.() ?? rng();
@@ -1707,12 +1701,6 @@ function _v4(options, buf, offset) {
         return buf;
     }
     return unsafeStringify(rnds);
-}
-function v4(options, buf, offset) {
-    if (dist_native.randomUUID && !buf && !options) {
-        return dist_native.randomUUID();
-    }
-    return _v4(options, buf, offset);
 }
 /* harmony default export */ const dist_v4 = (v4);
 
@@ -1916,11 +1904,17 @@ style.setStyle = function setStyle(ele, styleName) {
 /* global FileReader alert */
 
 function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
+  const normalizeDroppedUris = function (uriText) {
+    return uriText.split('\n').map(uri => uri.trim()).filter(uri => uri && uri[0] !== '#');
+  };
   const dragoverListener = function (e) {
     e.preventDefault(); // Need this; otherwise, drop does not work.
+    e.stopPropagation();
     e.dataTransfer.dropEffect = 'copy';
   };
   const dragenterListener = function (e) {
+    e.preventDefault();
+    e.stopPropagation();
     src_debug/* log */.Rm('dragenter event dropEffect: ' + e.dataTransfer.dropEffect);
     if (this.localStyle) {
       //  necessary not sure when
@@ -1932,6 +1926,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
     src_debug/* log */.Rm('dragenter event dropEffect 2: ' + e.dataTransfer.dropEffect);
   };
   const dragleaveListener = function (e) {
+    e.stopPropagation();
     src_debug/* log */.Rm('dragleave event dropEffect: ' + e.dataTransfer.dropEffect);
     if (this.savedStyle) {
       this.localStyle = this.savedStyle;
@@ -1941,6 +1936,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
   };
   const dropListener = function (e) {
     if (e.preventDefault) e.preventDefault(); // stops the browser from redirecting off to the text.
+    if (e.stopPropagation) e.stopPropagation();
     src_debug/* log */.Rm('Drop event. dropEffect: ' + e.dataTransfer.dropEffect);
     src_debug/* log */.Rm('Drop event. types: ' + (e.dataTransfer.types ? e.dataTransfer.types.join(', ') : 'NOPE'));
     let uris = null;
@@ -1949,7 +1945,7 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
       for (let t = 0; t < e.dataTransfer.types.length; t++) {
         const type = e.dataTransfer.types[t];
         if (type === 'text/uri-list') {
-          uris = e.dataTransfer.getData(type).split('\n'); // @ ignore those starting with #
+          uris = normalizeDroppedUris(e.dataTransfer.getData(type));
           src_debug/* log */.Rm('Dropped text/uri-list: ' + uris);
         } else if (type === 'text/plain') {
           text = e.dataTransfer.getData(type);
@@ -1962,13 +1958,14 @@ function makeDropTarget(ele, droppedURIHandler, droppedFileHandler) {
           droppedFileHandler(files);
         }
       }
-      if (uris === null && text && text.slice(0, 4) === 'http') {
-        uris = text;
-        src_debug/* log */.Rm('Waring: Poor man\'s drop: using text for URI'); // chrome disables text/uri-list??
+      const trimmedText = text ? text.trim() : '';
+      if (uris === null && trimmedText && trimmedText.slice(0, 4) === 'http') {
+        uris = [trimmedText];
+        src_debug/* log */.Rm('Warning: Poor man\'s drop: using text for URI'); // chrome disables text/uri-list??
       }
     } else {
       // ... however, if we're IE, we don't have the .types property, so we'll just get the Text value
-      uris = [e.dataTransfer.getData('Text')];
+      uris = normalizeDroppedUris(e.dataTransfer.getData('Text'));
       src_debug/* log */.Rm('WARNING non-standard drop event: ' + uris[0]);
     }
     src_debug/* log */.Rm('Dropped URI list (2): ' + uris);
@@ -3425,6 +3422,11 @@ function attachmentList(dom, subject, div, options = {}) {
   // options = options || {}
   const docsWaitingForRowRefresh = new Set();
   const hasAsyncEnrichedRowOptions = !!(options.renderSupportingInfo || options.renderNameSuffix);
+  // Keep the generic default on for simple consumers: if row decoration depends on
+  // linked-profile data arriving later, attachmentList will rerender once that
+  // target document finishes loading. Complex callers with their own streaming or
+  // batched refresh pipeline can opt out to avoid duplicate whole-list refreshes.
+  const refreshOnDocumentLoad = options.refreshOnDocumentLoad ?? true;
   const deleteAttachment = function (target) {
     if (!kb.updater) {
       throw new Error('kb has no updater');
@@ -3444,13 +3446,16 @@ function attachmentList(dom, subject, div, options = {}) {
     };
     opt.renderSupportingInfo = options.renderSupportingInfo;
     opt.renderNameSuffix = options.renderNameSuffix;
-    if (hasAsyncEnrichedRowOptions && target?.uri && kb.fetcher) {
+    if (hasAsyncEnrichedRowOptions && refreshOnDocumentLoad && target?.uri && kb.fetcher) {
       const targetDoc = target.doc();
       const requestState = targetDoc?.uri ? kb.fetcher.requested?.[targetDoc.uri] : undefined;
       const shouldWaitForFetch = requestState !== 'done' && requestState !== 'failed';
       if (targetDoc?.uri && shouldWaitForFetch && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
         docsWaitingForRowRefresh.add(targetDoc.uri);
-        // Root fix: these row options can depend on async profile data, so rerender once fetch completes.
+        // The row renderer may need data from the target profile that is not loaded yet.
+        // Register one follow-up refresh per target document so simple attachmentList
+        // consumers eventually show the enriched row contents without building their own
+        // async refresh orchestration.
         kb.fetcher.nowOrWhenFetched(targetDoc, undefined, () => {
           docsWaitingForRowRefresh.delete(targetDoc.uri);
           refresh();
@@ -3537,6 +3542,10 @@ function attachmentList(dom, subject, div, options = {}) {
     attachmentLeft.appendChild(paperclip);
     const fhandler = options.uploadFolder ? droppedFileHandler : null;
     makeDropTarget(paperclip, droppedURIHandler, fhandler); // beware missing the wire of the paparclip!
+    const paperclipImage = paperclip.querySelector('img');
+    if (paperclipImage) {
+      makeDropTarget(paperclipImage, droppedURIHandler, fhandler);
+    }
     makeDropTarget(attachmentLeft, droppedURIHandler, fhandler); // just the outer won't do it
 
     if (options.uploadFolder) {
@@ -7833,34 +7842,66 @@ function buildCheckboxForm(dom, kb, lab, del, ins, form, dataDoc, tristate) {
   }
   refresh();
   if (!editable) return box;
+  let isUpdating = false; // Prevent concurrent updates on double-click
+
   const boxHandler = function (_e) {
+    if (isUpdating) {
+      return; // Ignore clicks while update is in progress
+    }
+    isUpdating = true;
+    input.disabled = true; // Disable button to provide user feedback
+    let didFinishUpdate = false;
+    const finishUpdate = function () {
+      if (didFinishUpdate) return false;
+      didFinishUpdate = true;
+      isUpdating = false;
+      input.disabled = false;
+      return true;
+    };
+    const showUpdateError = function (errorBody) {
+      colorCarrier.style.color = '#000';
+      colorCarrier.style.backgroundColor = '#fee';
+      box.appendChild(errorMessageBlock(dom, `Checkbox: Error updating dataDoc from ${input.state} to ${input.newState}:\n\n${errorBody}`));
+    };
     colorCarrier.style.color = '#bbb'; // grey -- not saved yet
     const toDelete = input.state === true ? ins : input.state === false ? del : [];
     input.newState = input.state === null ? true : input.state === true ? false : tristate ? null : true;
     const toInsert = input.newState === true ? ins : input.newState === false ? del : [];
     src_debug/* log */.Rm(`  Deleting  ${toDelete}`);
     src_debug/* log */.Rm(`  Inserting ${toInsert}`);
-    kb.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
-      if (!success) {
-        if (toDelete.why) {
-          const hmmm = kb.holds(toDelete.subject, toDelete.predicate, toDelete.object, toDelete.why);
-          if (hmmm) {
-            src_debug/* log */.Rm(' @@@@@ weird if 409 - does hold statement');
+    try {
+      const updateResult = kb.updater.update(toDelete, toInsert, function (uri, success, errorBody) {
+        if (!finishUpdate()) return;
+        if (!success) {
+          if (toDelete.why) {
+            const hmmm = kb.holds(toDelete.subject, toDelete.predicate, toDelete.object, toDelete.why);
+            if (hmmm) {
+              src_debug/* log */.Rm(' @@@@@ weird if 409 - does hold statement');
+            }
           }
+          showUpdateError(errorBody);
+        } else {
+          colorCarrier.style.color = '#000';
+          input.state = input.newState;
+          input.textContent = {
+            true: checkMarkCharacter,
+            false: cancelCharacter,
+            null: dashCharacter
+          }[input.state]; // @@
         }
-        colorCarrier.style.color = '#000';
-        colorCarrier.style.backgroundColor = '#fee';
-        box.appendChild(errorMessageBlock(dom, `Checkbox: Error updating dataDoc from ${input.state} to ${input.newState}:\n\n${errorBody}`));
-      } else {
-        colorCarrier.style.color = '#000';
-        input.state = input.newState;
-        input.textContent = {
-          true: checkMarkCharacter,
-          false: cancelCharacter,
-          null: dashCharacter
-        }[input.state]; // @@
+      });
+      if (updateResult && typeof updateResult.then === 'function') {
+        updateResult.catch(function (error) {
+          if (!finishUpdate()) return;
+          showUpdateError(error instanceof Error ? error.message : error);
+        }).finally(function () {
+          finishUpdate();
+        });
       }
-    });
+    } catch (error) {
+      finishUpdate();
+      throw error;
+    }
   };
   input.addEventListener('click', boxHandler, false);
   return box;
@@ -9175,14 +9216,24 @@ function newAppInstance(dom, appDetails, callback) {
  * and/or a developer
  */
 async function getUserRoles() {
+  const sessionInfo = external_SolidLogic_.authSession.info;
+  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
+    return [];
+  }
+  const currentUser = external_SolidLogic_.authn.currentUser();
+  if (!currentUser) {
+    return [];
+  }
   try {
     const {
       me,
       preferencesFile,
       preferencesFileError
-    } = await ensureLoadedPreferences({});
+    } = await ensureLoadedPreferences({
+      me: currentUser
+    });
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError);
+      throw new Error(preferencesFileError || 'Unable to load user preferences file.');
     }
     return external_SolidLogic_.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc());
   } catch (error) {
@@ -21613,7 +21664,7 @@ function tabWidget(options) {
   rootElement.style.flexDirection = (vertical ? 'row' : 'column') + (flipped ? '-reverse' : '');
   const navElement = rootElement.appendChild(dom.createElement('nav'));
   navElement.setAttribute('style', style.tabsNavElement);
-  const mainElement = rootElement.appendChild(dom.createElement('main'));
+  const mainElement = rootElement.appendChild(dom.createElement('div'));
   mainElement.setAttribute('style', style.tabsMainElement); // override tabbedtab.css
   const tabContainer = navElement.appendChild(dom.createElement('ul'));
   tabContainer.setAttribute('style', style.tabContainer);
@@ -21735,7 +21786,7 @@ function tabWidget(options) {
     function getOrCreateContainerElement(ele) {
       const bodyMain = ele.bodyTR?.children[0];
       if (bodyMain) return bodyMain;
-      const newBodyMain = ele.bodyTR.appendChild(dom.createElement('main'));
+      const newBodyMain = ele.bodyTR.appendChild(dom.createElement('div'));
       newBodyMain.setAttribute('style', bodyMainStyle);
       return newBodyMain;
     }
@@ -22329,7 +22380,7 @@ if (typeof window !== 'undefined') {
 /* harmony export */ });
 /* harmony import */ var rdflib__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(511);
 /* harmony import */ var rdflib__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(rdflib__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(325);
+/* harmony import */ var ___WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(788);
 /*
     Copied from mashlib/src/global/metadata.ts
  */
@@ -23054,7 +23105,7 @@ module.exports = /*#__PURE__*/JSON.parse('{"application/1d-interleaved-parityfec
 /******/ 	// startup
 /******/ 	// Load entry module and return exports
 /******/ 	// This entry module is referenced by other modules so it can't be inlined
-/******/ 	var __webpack_exports__ = __webpack_require__(325);
+/******/ 	var __webpack_exports__ = __webpack_require__(788);
 /******/ 	
 /******/ 	return __webpack_exports__;
 /******/ })()

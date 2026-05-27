@@ -152,7 +152,7 @@ var __webpack_exports__ = {};
 
 // EXTERNAL MODULE: ./node_modules/lit/index.js
 var lit = __webpack_require__(161);
-;// ./src/v2/components/signupButton/SignupButton.ts
+;// ./src/v2/components/auth/signupButton/SignupButton.ts
 
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod';
 class SignupButton extends lit/* LitElement */.WF {
@@ -252,7 +252,7 @@ class SignupButton extends lit/* LitElement */.WF {
     `;
   }
 }
-;// ./src/v2/components/signupButton/index.ts
+;// ./src/v2/components/auth/signupButton/index.ts
 
 
 const SIGNUP_BUTTON_TAG_NAME = 'solid-ui-signup-button';

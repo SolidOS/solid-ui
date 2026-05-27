@@ -1,6 +1,6 @@
 /******/ var __webpack_modules__ = ({
 
-/***/ 3591
+/***/ 8228
 (__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
@@ -257,7 +257,7 @@ var __webpack_exports__ = {};
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   X: () => (/* reexport safe */ _SignupButton__WEBPACK_IMPORTED_MODULE_0__.X)
 /* harmony export */ });
-/* harmony import */ var _SignupButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3591);
+/* harmony import */ var _SignupButton__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(8228);
 
 
 const SIGNUP_BUTTON_TAG_NAME = 'solid-ui-signup-button';

@@ -163,7 +163,7 @@ var lit = __webpack_require__(161);
 var external_SolidLogic_ = __webpack_require__(892);
 // EXTERNAL MODULE: ./node_modules/lit-html/lit-html.js
 var lit_html = __webpack_require__(752);
-;// ./src/v2/components/loginButton/downArrow.ts
+;// ./src/v2/components/auth/loginButton/downArrow.ts
 
 const phoneIcon = (0,lit_html/* html */.qy)`
   <svg xmlns="http://www.w3.org/2000/svg" 
@@ -173,7 +173,7 @@ const phoneIcon = (0,lit_html/* html */.qy)`
     <path d="M0.679688 0.678955L5.50729 5.50656L10.3349 0.678955" stroke="#6A7282" stroke-width="1.35776" stroke-linecap="round" stroke-linejoin="round"/>
   </svg>
 `;
-;// ./src/v2/components/loginButton/LoginButton.ts
+;// ./src/v2/components/auth/loginButton/LoginButton.ts
 
 
 
@@ -211,7 +211,7 @@ class LoginButton extends lit/* LitElement */.WF {
     }
   };
   static styles = (0,lit/* css */.AH)`
-    :host { // default theme
+    :host { /* default theme */
       display: inline-block;
       position: relative;
       z-index: 400;
@@ -293,8 +293,9 @@ class LoginButton extends lit/* LitElement */.WF {
       background: transparent;
       outline: none;
       overflow: visible;
-      max-height: none;
-      max-width: none;
+      width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
     }
 
     .popup-dialog::backdrop {
@@ -307,7 +308,11 @@ class LoginButton extends lit/* LitElement */.WF {
       box-shadow: var(--popup-shadow);
       border: 1px solid var(--popup-border);
       border-radius: var(--border-radius-md, 0.5rem);
-      min-width: 480px;
+      width: min(30rem, calc(100vw - 2rem));
+      min-width: min(30rem, calc(100vw - 2rem));
+      max-width: calc(100vw - 2rem);
+      max-height: calc(100dvh - 2rem);
+      overflow: auto;
       z-index: 1001;
     }
 
@@ -500,6 +505,43 @@ class LoginButton extends lit/* LitElement */.WF {
       font-size: 0.875rem;
       margin-top: 8px;
     }
+
+    @media (max-width: 40rem) {
+      .popup-dialog {
+        width: calc(100vw - 1rem);
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+      }
+
+      .popup-box {
+        width: calc(100vw - 1rem);
+        min-width: 0;
+        max-width: calc(100vw - 1rem);
+        max-height: calc(100dvh - 1rem);
+        border-radius: var(--border-radius-base, 0.3125rem);
+      }
+
+      .popup-top-menu,
+      .issuer-text-section,
+      .popup-footer {
+        padding-left: 0.75rem;
+        padding-right: 0.75rem;
+      }
+
+      .popup-footer {
+        flex-wrap: wrap;
+        gap: 0.625rem;
+      }
+
+      .popup-footer > button {
+        flex: 1 1 100%;
+      }
+
+      .issuer-text-row,
+      .issuer-input-field-row {
+        width: 100%;
+      }
+    }
   `;
   _issuerInputId = `issuer-url-input-${Math.random().toString(36).slice(2, 10)}`;
   _errorMsg = '';
@@ -689,7 +731,7 @@ class LoginButton extends lit/* LitElement */.WF {
     `;
   }
 }
-;// ./src/v2/components/loginButton/index.ts
+;// ./src/v2/components/auth/loginButton/index.ts
 
 
 const LOGIN_BUTTON_TAG_NAME = 'solid-ui-login-button';

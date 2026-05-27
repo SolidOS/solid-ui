@@ -3,7 +3,7 @@ import { silenceDebugMessages } from '../helpers/debugger'
 // SHARON IS WORKING ON THIS FILE
 // NOT DOING ANYTHING FOR NOW AS SHE WILL CLEAN IT UP LATER
 silenceDebugMessages()
-it.skip('only here to make tests run', () => null)
+it.skip('only here to make tests run', () => {})
 
 // import * as RdfLib from 'rdflib'
 // import { JSDOM } from 'jsdom'
