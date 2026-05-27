@@ -1,7 +1,7 @@
 import { LitElement, html, css } from 'lit'
 import type { LiveStore, NamedNode } from 'rdflib'
 import { authSession, authn } from 'solid-logic'
-import { getName } from '../../../utils/headerFooterHelpers'
+import { getName } from '../../../../utils/headerFooterHelpers'
 
 export class Footer extends LitElement {
   static properties = {

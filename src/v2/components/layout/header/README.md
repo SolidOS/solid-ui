@@ -68,7 +68,7 @@ header.authState = 'logged-in' satisfies HeaderAuthState
 
 ## solid-ui-login-button
 
-The login button is a self-contained component with its own README: [`src/v2/components/loginButton/README.md`](../loginButton/README.md).
+The login button is a self-contained component with its own README: [`src/v2/components/auth/loginButton/README.md`](../../auth/loginButton/README.md).
 
 The header automatically imports and registers it — no separate import is needed.
 
@@ -185,12 +185,12 @@ The help menu trigger and dropdown are only rendered when the incoming `layout` 
 
 ## Testing
 
-Unit test file: `src/v2/components/header/header.test.ts`
+Unit test file: `src/v2/components/layout/header/header.test.ts`
 
 Run tests:
 
 ```bash
-npm test -- --runInBand --testPathPatterns=src/v2/components/header/header.test.ts
+npm test -- --runInBand --testPathPatterns=src/v2/components/layout/header/header.test.ts
 ```
 
 Run full suite:

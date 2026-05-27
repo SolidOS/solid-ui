@@ -220,7 +220,7 @@ export function matrixForQuery (
 
   matrix.refresh = function () {
     markOldCells()
-    kb.query(query, addCellFromBindings, undefined, clearOldCells)
+    kb.query(query as any, addCellFromBindings, undefined, clearOldCells)
   }
 
   const addCellFromBindings = function (bindings) {
@@ -245,6 +245,6 @@ export function matrixForQuery (
     }
   }
 
-  kb.query(query, addCellFromBindings, undefined, whenDone) // Populate the matrix
+  kb.query(query as any, addCellFromBindings, undefined, whenDone) // Populate the matrix
   return matrix
 }

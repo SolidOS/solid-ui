@@ -1,5 +1,6 @@
 import path from 'path'
 import TerserPlugin from 'terser-webpack-plugin'
+import { componentEntries } from './scripts/component-manifest.mjs'
 
 const externalsBase = {
   fs: 'null',
@@ -31,18 +32,7 @@ const common = {
         type: 'umd'
       }
     },
-    header: {
-      import: './src/v2/components/header/index.ts'
-    },
-    loginButton: {
-      import: './src/v2/components/loginButton/index.ts'
-    },
-    signupButton: {
-      import: './src/v2/components/signupButton/index.ts'
-    },
-    footer: {
-      import: './src/v2/components/footer/index.ts'
-    }
+    ...componentEntries
   },
   output: {
     path: path.resolve(process.cwd(), 'dist'),

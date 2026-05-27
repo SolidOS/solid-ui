@@ -10,6 +10,11 @@ import { style } from '../../../../src/style'
 import { clearStore } from '../../helpers/clearStore'
 import { store } from 'solid-logic'
 
+const mockUpdater = store.updater as typeof store.updater & {
+  updated: boolean
+  reportSuccess: boolean
+}
+
 silenceDebugMessages()
 afterEach(clearStore)
 
@@ -292,7 +297,7 @@ describe('basicField', () => {
     inputElement.value = 'changed value'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('defers date change while focused', () => {
@@ -441,7 +446,7 @@ describe('basicField', () => {
     inputElement.value = 'http://example.com/#changed-value'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('calls updater on change for a field with uriPrefix', () => {
@@ -470,7 +475,7 @@ describe('basicField', () => {
     inputElement.value = '999000'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('calls updater on change for a field with dt', () => {
@@ -484,7 +489,7 @@ describe('basicField', () => {
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
     store.add(form, ns.rdf('type'), formType, doc)
-    store.add(subject, property, 1.1111, doc)
+    store.add(subject, property, lit('1.1111'), doc)
 
     const result = basicField(
       document,
@@ -499,7 +504,7 @@ describe('basicField', () => {
     inputElement.value = '9.99000'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('creates triple if missing', () => {
@@ -525,7 +530,7 @@ describe('basicField', () => {
     inputElement.value = '9.99000'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('Can update multiple docs', () => {
@@ -540,9 +545,9 @@ describe('basicField', () => {
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc1)
     store.add(form, ns.rdf('type'), formType, doc1)
-    store.add(subject, property, 1.1111, doc1)
-    store.add(subject, property, 1.5, doc1)
-    store.add(subject, property, 1.1111, doc2)
+    store.add(subject, property, lit('1.1111'), doc1)
+    store.add(subject, property, lit('1.5'), doc1)
+    store.add(subject, property, lit('1.1111'), doc2)
 
     const result = basicField(
       document,
@@ -557,7 +562,7 @@ describe('basicField', () => {
     inputElement.value = '1.1111'
     const event = new Event('change')
     inputElement.dispatchEvent(event)
-    expect(store.updater.updated).toEqual(true)
+    expect(mockUpdater.updated).toEqual(true)
   })
 
   it('Reports update success', () => {
@@ -569,7 +574,7 @@ describe('basicField', () => {
     const doc = namedNode('http://example.com/')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
-    store.add(subject, property, 1.1111, doc)
+    store.add(subject, property, lit('1.1111'), doc)
 
     const result = basicField(
       document,
@@ -583,7 +588,7 @@ describe('basicField', () => {
     const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
     inputElement.value = '1.1111'
     const event = new Event('change')
-    store.updater.reportSuccess = true
+    mockUpdater.reportSuccess = true
     inputElement.dispatchEvent(event)
     expect(callbackFunction.mock.calls).toEqual([[true, 'body']])
   })
@@ -597,7 +602,7 @@ describe('basicField', () => {
     const doc = namedNode('http://example.com/')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
-    store.add(subject, property, 1.1111, doc)
+    store.add(subject, property, lit('1.1111'), doc)
 
     const result = basicField(
       document,
@@ -611,7 +616,7 @@ describe('basicField', () => {
     const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
     inputElement.value = '1.1111'
     const event = new Event('change')
-    store.updater.reportSuccess = false
+    mockUpdater.reportSuccess = false
     inputElement.dispatchEvent(event)
     expect(callbackFunction.mock.calls).toEqual([[false, 'body']])
   })
@@ -626,8 +631,8 @@ describe('basicField', () => {
     const doc2 = namedNode('http://example.com/2')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
-    store.add(subject, property, 1.1111, doc)
-    store.add(subject, property, 1.1111, doc2)
+    store.add(subject, property, lit('1.1111'), doc)
+    store.add(subject, property, lit('1.1111'), doc2)
 
     const result = basicField(
       document,
@@ -641,7 +646,7 @@ describe('basicField', () => {
     const inputElement = result.childNodes[1].childNodes[0] as HTMLInputElement
     inputElement.value = '1.1111'
     const event = new Event('change')
-    store.updater.reportSuccess = false
+    mockUpdater.reportSuccess = false
     inputElement.dispatchEvent(event)
     expect(callbackFunction.mock.calls).toEqual([[false, 'body']])
   })
@@ -856,7 +861,7 @@ describe('basicField', () => {
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.rdf('type'), formType, doc)
     store.add(form, ns.ui('property'), property, doc)
-    store.add(form, ns.ui('size'), 30, doc)
+    store.add(form, ns.ui('size'), lit('30'), doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
     const result = basicField(
@@ -932,7 +937,7 @@ describe('basicField', () => {
     const doc = namedNode('http://example.com/')
     const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     store.add(form, ns.ui('property'), property, doc)
-    store.add(form, ns.ui('maxLength'), 100, doc)
+    store.add(form, ns.ui('maxLength'), lit('100'), doc)
     store.add(subject, property, namedNode('tel:123412341234'), doc)
 
     const result = basicField(

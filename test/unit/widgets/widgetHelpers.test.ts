@@ -25,8 +25,8 @@ describe('wrapDivInATR ', () => {
   const obj = namedNode('https://test.com/#name')
   it('wraps a given div in a tr and td', () => {
     wrapDivInATR(dom, element, obj)
-    expect(element.parentElement.nodeName).toEqual('TD')
-    expect(element.parentElement.parentElement.nodeName).toEqual('TR')
+    expect(element.parentElement!.nodeName).toEqual('TD')
+    expect(element.parentElement!.parentElement!.nodeName).toEqual('TR')
   })
 })
 
@@ -42,7 +42,7 @@ describe('addClickListenerToElement', () => {
 describe('createImageDiv', () => {
   it('creates a div for the image and attaches them to the element', () => {
     createImageDiv(dom, element, image)
-    expect(image.parentElement.nodeName).toEqual('DIV')
+    expect(image.parentElement!.nodeName).toEqual('DIV')
     expect(element.children[0].nodeName).toEqual('DIV')
   })
 

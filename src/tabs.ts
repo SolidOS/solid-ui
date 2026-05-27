@@ -187,7 +187,7 @@ export function tabWidget (options: TabWidgetOptions) {
   const navElement = rootElement.appendChild(dom.createElement('nav'))
   navElement.setAttribute('style', style.tabsNavElement)
 
-  const mainElement = rootElement.appendChild(dom.createElement('main'))
+  const mainElement = rootElement.appendChild(dom.createElement('div'))
 
   mainElement.setAttribute('style', style.tabsMainElement) // override tabbedtab.css
   const tabContainer = navElement.appendChild(dom.createElement('ul'))
@@ -333,7 +333,7 @@ export function tabWidget (options: TabWidgetOptions) {
     function getOrCreateContainerElement (ele: TabElement): ContainerElement {
       const bodyMain = ele.bodyTR?.children[0] as ContainerElement
       if (bodyMain) return bodyMain
-      const newBodyMain = ele.bodyTR!.appendChild(dom.createElement('main'))
+      const newBodyMain = ele.bodyTR!.appendChild(dom.createElement('div'))
       newBodyMain.setAttribute('style', bodyMainStyle)
       return newBodyMain
     }

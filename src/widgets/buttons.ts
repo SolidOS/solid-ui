@@ -880,6 +880,7 @@ export type attachmentListOptions = {
   noun?: string
   renderSupportingInfo?: RenderSupportingInfo
   renderNameSuffix?: RenderNameSuffix
+  refreshOnDocumentLoad?: boolean
 }
 
 /**
@@ -892,6 +893,11 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   // options = options || {}
   const docsWaitingForRowRefresh = new Set<string>()
   const hasAsyncEnrichedRowOptions = !!(options.renderSupportingInfo || options.renderNameSuffix)
+  // Keep the generic default on for simple consumers: if row decoration depends on
+  // linked-profile data arriving later, attachmentList will rerender once that
+  // target document finishes loading. Complex callers with their own streaming or
+  // batched refresh pipeline can opt out to avoid duplicate whole-list refreshes.
+  const refreshOnDocumentLoad = options.refreshOnDocumentLoad ?? true
 
   const deleteAttachment = function (target) {
     if (!kb.updater) {
@@ -918,13 +924,16 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     opt.renderSupportingInfo = options.renderSupportingInfo
     opt.renderNameSuffix = options.renderNameSuffix
 
-    if (hasAsyncEnrichedRowOptions && target?.uri && kb.fetcher) {
+    if (hasAsyncEnrichedRowOptions && refreshOnDocumentLoad && target?.uri && kb.fetcher) {
       const targetDoc = target.doc()
       const requestState = targetDoc?.uri ? kb.fetcher.requested?.[targetDoc.uri] : undefined
       const shouldWaitForFetch = requestState !== 'done' && requestState !== 'failed'
       if (targetDoc?.uri && shouldWaitForFetch && !docsWaitingForRowRefresh.has(targetDoc.uri)) {
         docsWaitingForRowRefresh.add(targetDoc.uri)
-        // Root fix: these row options can depend on async profile data, so rerender once fetch completes.
+        // The row renderer may need data from the target profile that is not loaded yet.
+        // Register one follow-up refresh per target document so simple attachmentList
+        // consumers eventually show the enriched row contents without building their own
+        // async refresh orchestration.
         kb.fetcher.nowOrWhenFetched(targetDoc, undefined, () => {
           docsWaitingForRowRefresh.delete(targetDoc.uri)
           refresh()
@@ -1028,6 +1037,10 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     attachmentLeft.appendChild(paperclip)
     const fhandler = options.uploadFolder ? droppedFileHandler : null
     makeDropTarget(paperclip, droppedURIHandler, fhandler) // beware missing the wire of the paparclip!
+    const paperclipImage = paperclip.querySelector('img')
+    if (paperclipImage) {
+      makeDropTarget(paperclipImage, droppedURIHandler, fhandler)
+    }
     makeDropTarget(attachmentLeft, droppedURIHandler, fhandler) // just the outer won't do it
 
     if (options.uploadFolder) { // Addd an explicit file upload button as well

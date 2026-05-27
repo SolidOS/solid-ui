@@ -322,9 +322,13 @@ import { SignupButton } from 'solid-ui/components/signup-button'
 
 Web components use a two-stage build to produce a clean public runtime layout while keeping internal TypeScript artifacts separate:
 
-1. **webpack** (`npm run build-dist`) bundles each component entrypoint and emits the runtime files to `dist/components/<name>/index.js` and `dist/components/<name>/index.esm.js`.
-2. **tsc** (`npm run build-js`) emits internal declaration and JS artifacts mirroring the source tree under `dist/v2/components/<name>/`.
-3. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes thin public declaration wrappers at `dist/components/<name>/index.d.ts`, re-exporting from the internal `dist/v2/components/<name>/` output.
+1. **`scripts/component-manifest.mjs`** is the source of truth for v2 web components. It defines the component entrypoints used by webpack and the public subpath names exposed from the package.
+2. **webpack** (`npm run build-dist`) bundles each component entrypoint from the manifest and emits the runtime files to `dist/components/<name>/index.js` and `dist/components/<name>/index.esm.js`.
+3. **tsc** (`npm run build-js`) emits internal declaration and JS artifacts mirroring the source tree under `dist/v2/components/<name>/`.
+4. **`scripts/build-component-dts.mjs`** (runs automatically after tsc as part of `postbuild-js`) writes thin public declaration wrappers at `dist/components/<name>/index.d.ts`, re-exporting from the internal `dist/v2/components/<name>/` output.
+5. **`scripts/sync-component-exports.mjs`** keeps the `package.json` `exports` map aligned with the manifest. It runs automatically as part of `npm run build` and `npm version` workflows.
+
+The legacy main bundle remains a special case. In [webpack.config.mjs](webpack.config.mjs) only the `main` entry keeps the UMD `UI` global export; component entries are generated from the manifest and built as standalone scripts so they do not clobber one another when loaded directly.
 
 This keeps the `package.json` subpath export fully aligned while exposing only the public `dist/components/...` layout:
 
@@ -337,6 +341,16 @@ This keeps the `package.json` subpath export fully aligned while exposing only t
 ```
 
 Consumers never import from `dist/v2/components/...`; that path is an internal build artifact only.
+
+### Adding a new web component
+
+When adding a new v2 component:
+
+1. Create the component folder under `src/v2/components/` with its `index.ts` entrypoint. Components can be grouped in nested directories such as `src/v2/components/forms/select/`, `src/v2/components/auth/loginButton/`, or `src/v2/components/layout/header/`.
+2. Add one record to `scripts/component-manifest.mjs`. If the component lives in a nested directory, set its `sourcePath` in the manifest to match that grouped path.
+3. Run `npm run sync-component-exports` if you want to update `package.json` immediately, or just run `npm run build` and let the build do it automatically.
+
+You should not need to hand-edit the webpack component entry list or the `package.json` component export map anymore.
 
 ## Development
 
@@ -411,4 +425,8 @@ You are logged in as nameOfLoggedIn user.
 
 * Raptor mini: add a readme to the Footer component with example.
 
-* Claude Sonnet 4.6: Make the dop down as a list under the input field and entlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
+* Claude Sonnet 4.6: Make the drop down as a list under the input field and enlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
+
+* GPT-5.4 Model: can you wire up the keyboard interactions and aria attributes for Select?
+
+* GPT-5.4 Model: Take the code from /Users/sharon/2025Dev/solid-ui/src/media/media-capture.ts and make it a web component. Make it work in forms as well as not. Make it configurable and follow LoginButton.
