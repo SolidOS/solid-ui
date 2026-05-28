@@ -10,6 +10,7 @@
 			"import": "./dist/solid-ui.esm.js",
 			"require": "./dist/solid-ui.js"
 		},
+		"./design-system.css": "./src/design-system/styles/variables.css",
 		"./components/header": {
 			"types": "./dist/components/header/index.d.ts",
 			"import": "./dist/components/header/index.esm.js",
@@ -99,7 +100,8 @@
 	"files": [
 		"dist/",
 		"README.md",
-		"LICENSE"
+		"LICENSE",
+		"src/design-system/styles/variables.css"
 	],
 	"scripts": {
 		"clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
@@ -163,6 +165,7 @@
 		"mime-types": "^3.0.2",
 		"pane-registry": "^3.1.1",
 		"solid-namespace": "^0.5.4",
+		"tailwindcss": "^4.3.0",
 		"uuid": "^14.0.0"
 	},
 	"peerDependencies": {
@@ -172,11 +175,14 @@
 	"devDependencies": {
 		"@babel/cli": "^7.28.6",
 		"@babel/core": "^7.29.0",
+		"@babel/plugin-proposal-decorators": "^7.29.7",
+		"@babel/plugin-transform-class-properties": "^7.29.7",
 		"@babel/plugin-transform-runtime": "^7.29.0",
 		"@babel/preset-env": "^7.29.5",
 		"@babel/preset-typescript": "^7.28.5",
 		"@babel/runtime": "^7.29.2",
 		"@eslint/js": "^9.39.4",
+		"@iconify-json/lucide": "^1.2.110",
 		"@mdx-js/react": "^3.1.1",
 		"@storybook/addon-actions": "8.6.18",
 		"@storybook/addon-docs": "8.6.18",
@@ -186,6 +192,7 @@
 		"@storybook/addon-webpack5-compiler-swc": "^3.0.0",
 		"@storybook/html": "8.6.18",
 		"@storybook/html-webpack5": "8.6.18",
+		"@tailwindcss/postcss": "^4.3.0",
 		"@testing-library/dom": "^10.4.1",
 		"@testing-library/user-event": "^13.5.0",
 		"@types/jest": "^30.0.0",
@@ -194,6 +201,7 @@
 		"@typescript-eslint/parser": "^8.59.3",
 		"babel-jest": "^30.4.1",
 		"babel-loader": "^10.1.1",
+		"css-loader": "^7.1.4",
 		"eslint": "^9.39.4",
 		"eslint-import-resolver-typescript": "^4.4.4",
 		"eslint-plugin-import": "^2.32.0",
@@ -206,8 +214,10 @@
 		"jest": "^30.4.2",
 		"jest-environment-jsdom": "^30.4.1",
 		"jsdom": "^28.1.0",
+		"lit-css-loader": "^4.0.1",
 		"neostandard": "^0.13.0",
 		"nock": "^15.0.0",
+		"postcss": "^8.5.15",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
 		"react-is": "^17.0.2",
@@ -216,6 +226,7 @@
 		"terser-webpack-plugin": "^5.6.0",
 		"typedoc": "^0.28.19",
 		"typescript": "^5.9.3",
+		"unplugin-icons": "^23.0.1",
 		"webpack": "^5.106.2",
 		"webpack-cli": "^7.0.2"
 	},
