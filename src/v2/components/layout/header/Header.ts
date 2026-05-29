@@ -5,6 +5,10 @@ import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
+import '../../../../design-system/components/account'
+import '../../../../design-system/components/provider'
+import Features from '../../../../features'
+
 const DEFAULT_HELP_MENU_ICON = ''
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
@@ -790,6 +794,14 @@ export class Header extends LitElement {
   }
 
   private renderUserArea () {
+    if (Features.DESIGN_SYSTEM_HEADER_ACCOUNT) {
+      return html`
+        <solid-ui-provider>
+          <solid-ui-account></solid-ui-account>
+        </solid-ui-provider>
+      `
+    }
+
     if (this.authState === 'logged-out') {
       return this.renderLoggedOutActions()
     }

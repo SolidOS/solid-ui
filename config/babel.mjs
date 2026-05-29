@@ -8,8 +8,7 @@ import path from 'path'
 
 const pathsUsingDecorators = ['src/design-system', 'src/primitives', 'src/storybook']
 
-export const litDecoratorsLoaderOptions = {
-  cacheDirectory: true,
+export const litDecoratorsBabelOptions = {
   assumptions: {
     setPublicClassFields: false
   },
@@ -19,6 +18,11 @@ export const litDecoratorsLoaderOptions = {
     ['@babel/plugin-proposal-decorators', { version: '2023-05' }],
     ['@babel/plugin-transform-class-properties', { loose: true }]
   ]
+}
+
+export const litDecoratorsLoaderOptions = {
+  cacheDirectory: true,
+  ...litDecoratorsBabelOptions,
 }
 
 export function resolvePathsUsingDecorators (projectRoot) {
