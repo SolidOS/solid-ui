@@ -30,6 +30,12 @@ jest.mock('solid-logic', () => ({
 }))
 
 describe('SolidUIHeaderElement', () => {
+  async function waitForAuthRefresh (header: Header): Promise<void> {
+    await Promise.resolve()
+    await Promise.resolve()
+    await header.updateComplete
+  }
+
   beforeEach(() => {
     Features.DESIGN_SYSTEM_HEADER_ACCOUNT = false
     document.body.innerHTML = ''
@@ -55,6 +61,7 @@ describe('SolidUIHeaderElement', () => {
     header.setAttribute('help-icon', 'https://example.com/help.png')
     header.setAttribute('brand-link', '/home')
     header.authState = 'logged-out'
+    header.authResolved = true
     header.helpMenuList = [{ label: 'Help', action: 'open-help' }]
     header.innerHTML = '<button slot="help-menu" id="helpBtn">Help</button>'
 
@@ -85,6 +92,7 @@ describe('SolidUIHeaderElement', () => {
     const authActionSelected = jest.fn()
 
     header.authState = 'logged-out'
+    header.authResolved = true
     header.loginAction = { label: 'Log in', action: 'login', icon: 'https://example.com/login-icon.svg' }
     header.signUpAction = { label: 'Sign Up', url: '/signup', icon: 'https://example.com/signup-icon.svg' }
     header.loginIcon = 'https://example.com/login-icon-top.svg'
@@ -110,8 +118,7 @@ describe('SolidUIHeaderElement', () => {
     expect(signUpLink.getAttribute('icon')).toBe('https://example.com/signup-icon-top.svg')
 
     loginButton.dispatchEvent(new CustomEvent('login-success', { bubbles: true, composed: true }))
-    await Promise.resolve()
-    await header.updateComplete
+    await waitForAuthRefresh(header)
 
     expect(authActionSelected).toHaveBeenCalledWith({
       role: 'login'
@@ -121,6 +128,7 @@ describe('SolidUIHeaderElement', () => {
   it('does not show login or signup icons on mobile layout', async () => {
     const header = new Header()
     header.authState = 'logged-out'
+    header.authResolved = true
     header.layout = 'mobile'
     header.loginAction = { label: 'Log in', action: 'login', icon: 'https://example.com/login-icon.svg' }
     header.signUpAction = { label: 'Sign Up', url: '/signup', icon: 'https://example.com/signup-icon.svg' }
@@ -143,6 +151,7 @@ describe('SolidUIHeaderElement', () => {
     ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
 
     header.authState = 'logged-in'
+    header.authResolved = true
     header.accountAvatar = ''
     header.accountAvatarFallback = 'https://example.com/fallback-avatar.png'
 
@@ -162,6 +171,7 @@ describe('SolidUIHeaderElement', () => {
     ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
 
     header.authState = 'logged-in'
+    header.authResolved = true
     header.accountIcon = 'https://example.com/account-icon.svg'
     header.accountAvatar = 'https://example.com/avatar.png'
     header.logoutIcon = 'https://example.com/logout-icon.svg'
@@ -213,6 +223,7 @@ describe('SolidUIHeaderElement', () => {
     ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
     header.layout = 'mobile'
     header.authState = 'logged-in'
+    header.authResolved = true
     header.logoutIcon = 'https://example.com/logout-icon.svg'
     header.logoutLabel = 'Log Out'
 
@@ -237,6 +248,7 @@ describe('SolidUIHeaderElement', () => {
     ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
     header.layout = 'mobile'
     header.authState = 'logged-in'
+    header.authResolved = true
     header.accountMenu = [
       { label: 'Personal Pod', webid: 'https://pod.example/profile/card#me', action: 'switch-personal' }
     ]
@@ -307,6 +319,7 @@ describe('SolidUIHeaderElement', () => {
     const helpMenuClicked = jest.fn()
 
     header.authState = 'logged-in'
+    header.authResolved = true
     header.helpIcon = ''
     header.helpMenuList = [{ label: 'Docs', url: 'https://example.com/docs', target: '_blank' }]
 
@@ -351,8 +364,7 @@ describe('SolidUIHeaderElement', () => {
 
     document.body.appendChild(header)
     await header.updateComplete
-    await Promise.resolve()
-    await header.updateComplete
+    await waitForAuthRefresh(header)
 
     expect(authn.checkUser).toHaveBeenCalled()
     expect(header.authState).toBe('logged-in')
@@ -386,14 +398,12 @@ describe('SolidUIHeaderElement', () => {
 
     ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
     ;(authSession.events as any).emit('login')
-    await Promise.resolve()
-    await header.updateComplete
+    await waitForAuthRefresh(header)
     expect(header.authState).toBe('logged-in')
 
     ;(authn.currentUser as jest.Mock).mockReturnValue(null)
     ;(authSession.events as any).emit('logout')
-    await Promise.resolve()
-    await header.updateComplete
+    await waitForAuthRefresh(header)
     expect(header.authState).toBe('logged-out')
   })
 })
