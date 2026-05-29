@@ -6,7 +6,7 @@ import path from 'path'
  * @see https://lit.dev/docs/components/decorators/#using-decorators-with-babel
  */
 
-const pathsUsingDecorators = ['src/design-system']
+const pathsUsingDecorators = ['src/design-system', 'src/primitives', 'src/storybook']
 
 export const litDecoratorsLoaderOptions = {
   cacheDirectory: true,
