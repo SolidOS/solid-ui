@@ -11,6 +11,7 @@
 			"require": "./dist/solid-ui.js"
 		},
 		"./design-system.css": "./src/design-system/styles/variables.css",
+		"./primitives.css": "./src/primitives/styles/variables.css",
 		"./components/header": {
 			"types": "./dist/components/header/index.d.ts",
 			"import": "./dist/components/header/index.esm.js",
@@ -101,7 +102,8 @@
 		"dist/",
 		"README.md",
 		"LICENSE",
-		"src/design-system/styles/variables.css"
+		"src/design-system/styles/variables.css",
+        "src/primitives/styles/variables.css"
 	],
 	"scripts": {
 		"clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",

@@ -1,4 +1,5 @@
 import '../src/design-system/styles/variables.css'
+import '../src/primitives/styles/variables.css'
 
 // For backward compatibility, provide rdflib and solid-logic as globals
 import * as rdflib from 'rdflib'
