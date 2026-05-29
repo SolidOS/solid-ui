@@ -1,0 +1,6 @@
+@import '../../styles/common.styles.css';
+
+:host {
+  display: flex;
+  padding: 15px;
+}

@@ -1,0 +1,9 @@
+@import '../../styles/common.styles.css';
+
+solid-ui-combobox {
+    width: 100%;
+}
+
+solid-ui-button {
+    flex: 1;
+}

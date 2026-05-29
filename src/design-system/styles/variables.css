@@ -18,4 +18,6 @@
   --solid-ui-font-size-md: 1rem; /* 16px */
   --solid-ui-font-size-lg: 1.125rem; /* 18px */
   --solid-ui-font-size-xl: 1.25rem; /* 20px */
+
+  --solid-ui-clickable-area: 42px;
 }
