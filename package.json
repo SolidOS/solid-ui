@@ -103,7 +103,7 @@
 		"README.md",
 		"LICENSE",
 		"src/design-system/styles/variables.css",
-        "src/primitives/styles/variables.css"
+		"src/primitives/styles/variables.css"
 	],
 	"scripts": {
 		"clean": "rm -rf ./dist ./src/versionInfo.ts ./docs/api .tsbuildinfo",
@@ -133,7 +133,8 @@
 		"preversion": "npm run sync-component-exports && npm run lint && npm run typecheck && npm test",
 		"postpublish": "git push origin main --follow-tags",
 		"storybook": "storybook dev -p 6006",
-		"build-storybook": "storybook build  --output-dir ./examples/storybook"
+		"build-storybook": "storybook build  --output-dir ./examples/storybook",
+		"postinstall": "patch-package"
 	},
 	"repository": {
 		"type": "git",
@@ -220,6 +221,7 @@
 		"lit-css-loader": "^4.0.1",
 		"neostandard": "^0.13.0",
 		"nock": "^15.0.0",
+		"patch-package": "^8.0.1",
 		"postcss": "^8.5.15",
 		"react": "^17.0.2",
 		"react-dom": "^17.0.2",
