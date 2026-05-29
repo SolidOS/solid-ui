@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { icons } from '../../../../iconBase'
-import { authSession, authn } from 'solid-logic'
+import { authSession, authn, performServerSideLogout } from 'solid-logic'
 import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -13,6 +13,36 @@ const DEFAULT_HELP_MENU_ICON = ''
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
 const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR = icons.iconBase + 'emptyProfileAvatar.png'
+
+async function clearPersistedAuthState (): Promise<void> {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const explicitKeys = ['loginIssuer', 'preLoginRedirectHash']
+  for (const key of explicitKeys) {
+    window.localStorage.removeItem(key)
+    window.sessionStorage.removeItem(key)
+  }
+
+  if (typeof indexedDB === 'undefined') {
+    return
+  }
+
+  const databases = ['soidc', 'solid-client-authn-store', 'solid-client-authn']
+  for (const dbName of databases) {
+    await new Promise<void>((resolve) => {
+      try {
+        const request = indexedDB.deleteDatabase(dbName)
+        request.onsuccess = () => resolve()
+        request.onerror = () => resolve()
+        request.onblocked = () => resolve()
+      } catch (_err) {
+        resolve()
+      }
+    })
+  }
+}
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -51,7 +81,8 @@ export class Header extends LitElement {
     accountMenuOpen: { state: true },
     helpMenuOpen: { state: true },
     hasSlottedAccountMenu: { state: true },
-    hasSlottedHelpMenu: { state: true }
+    hasSlottedHelpMenu: { state: true },
+    authResolved: { state: true }
   }
 
   static styles = css`
@@ -514,8 +545,11 @@ export class Header extends LitElement {
   declare helpMenuOpen: boolean
   declare hasSlottedAccountMenu: boolean
   declare hasSlottedHelpMenu: boolean
+  declare authResolved: boolean
+  private _refreshPromise: Promise<void> | null = null
+
   private readonly handleAuthSessionChange = () => {
-    this.refreshAuthStateFromSession()
+    void this.refreshAuthStateFromSession()
   }
 
   constructor () {
@@ -541,6 +575,7 @@ export class Header extends LitElement {
     this.helpMenuOpen = false
     this.hasSlottedAccountMenu = false
     this.hasSlottedHelpMenu = false
+    this.authResolved = false
   }
 
   connectedCallback () {
@@ -552,7 +587,7 @@ export class Header extends LitElement {
       authSession.events.on('logout', this.handleAuthSessionChange)
       authSession.events.on('sessionRestore', this.handleAuthSessionChange)
     }
-    this.refreshAuthStateFromSession()
+    void this.refreshAuthStateFromSession()
   }
 
   disconnectedCallback () {
@@ -567,12 +602,28 @@ export class Header extends LitElement {
   }
 
   private async refreshAuthStateFromSession () {
-    try {
-      await authn.checkUser()
-    } catch (_err) {
-      // Keep rendering even if session refresh cannot complete.
+    if (!this._refreshPromise) {
+      this._refreshPromise = (async () => {
+        try {
+          await authn.checkUser()
+          // Some auth stacks resolve session state asynchronously after first check.
+          if (!authn.currentUser()) {
+            await authn.checkUser()
+          }
+        } catch (_err) {
+          // Keep rendering even if session refresh cannot complete.
+        }
+      })()
     }
+
+    try {
+      await this._refreshPromise
+    } finally {
+      this._refreshPromise = null
+    }
+
     this.authState = authn.currentUser() ? 'logged-in' : 'logged-out'
+    this.authResolved = true
   }
 
   private handleHelpMenuClick (item: HeaderMenuItem, event: MouseEvent) {
@@ -711,7 +762,15 @@ export class Header extends LitElement {
       // logout errors are non-fatal — proceed to clear state
     }
 
-    await this.performServerLogout(issuer)
+    await clearPersistedAuthState()
+
+    const redirectedToServerLogout = await performServerSideLogout({
+      issuer,
+      postLogoutRedirectPath: '/'
+    })
+    if (redirectedToServerLogout) {
+      return
+    }
 
     await this.refreshAuthStateFromSession()
     this.dispatchEvent(new CustomEvent('logout-select', {
@@ -719,32 +778,6 @@ export class Header extends LitElement {
       bubbles: true,
       composed: true
     }))
-  }
-
-  private async performServerLogout (issuer: string) {
-    // Best-effort server logout for cookie-backed sessions on NSS-like servers.
-    try {
-      if (issuer) {
-        const wellKnownUri = new URL(issuer)
-        wellKnownUri.pathname = '/.well-known/openid-configuration'
-        const wellKnownResult = await fetch(wellKnownUri.toString(), { credentials: 'include' })
-
-        if (wellKnownResult.status === 200) {
-          const openidConfiguration = await wellKnownResult.json()
-          if (openidConfiguration && openidConfiguration.end_session_endpoint) {
-            await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
-          }
-        }
-      }
-    } catch (_err) {
-      // Continue with local logout state even if remote IdP logout is unavailable.
-    }
-
-    try {
-      await fetch('/.well-known/solid/logout', { credentials: 'include' })
-    } catch (_err) {
-      // Not all deployments expose NSS-compatible well-known logout.
-    }
   }
 
   private renderAccountMenuItem (item: HeaderAccountMenuItem) {
@@ -854,6 +887,10 @@ export class Header extends LitElement {
           <solid-ui-account></solid-ui-account>
         </solid-ui-provider>
       `
+    }
+
+    if (!this.authResolved) {
+      return html`<div class="auth-actions" part="auth-actions"></div>`
     }
 
     if (this.authState === 'logged-out') {

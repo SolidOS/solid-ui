@@ -11,6 +11,7 @@ jest.mock('solid-logic', () => ({
     checkUser: jest.fn(async () => null),
     currentUser: jest.fn(() => null)
   },
+  performServerSideLogout: jest.fn(async () => false),
   authSession: {
     logout: jest.fn(async () => undefined),
     events: {
@@ -354,6 +355,27 @@ describe('SolidUIHeaderElement', () => {
     await header.updateComplete
 
     expect(authn.checkUser).toHaveBeenCalled()
+    expect(header.authState).toBe('logged-in')
+  })
+
+  it('retries session resolution once before settling logged-out state', async () => {
+    const header = new Header()
+    let callCount = 0
+    ;(authn.currentUser as jest.Mock).mockImplementation(() => {
+      return callCount >= 2 ? { uri: 'https://alice.example/profile/card#me' } : null
+    })
+    ;(authn.checkUser as jest.Mock).mockImplementation(async () => {
+      callCount += 1
+      return callCount >= 2 ? { uri: 'https://alice.example/profile/card#me' } : null
+    })
+
+    document.body.appendChild(header)
+    await header.updateComplete
+    await Promise.resolve()
+    await header.updateComplete
+
+    expect(authn.checkUser).toHaveBeenCalledTimes(2)
+    expect(header.authResolved).toBe(true)
     expect(header.authState).toBe('logged-in')
   })
 
