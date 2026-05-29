@@ -14,21 +14,27 @@ export default abstract class WebComponent extends LitElement {
       return
     }
 
-    this.internals ??= this.attachInternals()
+    const internals = this.getInternals()
 
     for (const [state, condition] of Object.entries(states)) {
       const matches = condition(this)
 
-      if (matches && !this.internals.states.has(state)) {
-        this.internals.states.add(state)
-      } else if (!matches && this.internals.states.has(state)) {
-        this.internals.states.delete(state)
+      if (matches && !internals.states.has(state)) {
+        internals.states.add(state)
+      } else if (!matches && internals.states.has(state)) {
+        internals.states.delete(state)
       }
     }
   }
 
   protected render () {
     return html`<slot></slot>`
+  }
+
+  protected getInternals (): ElementInternals {
+    this.internals ??= this.attachInternals()
+
+    return this.internals
   }
 
   private static (): typeof WebComponent {

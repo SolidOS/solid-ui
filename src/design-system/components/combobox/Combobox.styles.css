@@ -1,0 +1,68 @@
+@import '../../styles/common.styles.css';
+
+:host {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 5px;
+
+    label {
+        color: var(--solid-ui-color-gray-600);
+        font-size: var(--solid-ui-font-size-sm);
+        font-weight: 500;
+    }
+
+    .input-wrapper {
+        position: relative;
+        anchor-name: --combobox-anchor;
+        width: 100%;
+
+        input {
+            border: 1px solid var(--solid-ui-color-gray-400);
+            border-radius: 5px;
+            padding: 10px;
+            padding-right: 40px;
+            width: 100%;
+        }
+
+        icon-lucide-chevron-down {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--solid-ui-color-gray-500);
+            width: var(--solid-ui-font-size-lg);
+            height: var(--solid-ui-font-size-lg);
+            pointer-events: none;
+        }
+    }
+
+    [popover]:popover-open {
+        position: fixed;
+        top: calc(anchor(bottom) + 5px);
+        left: anchor(left);
+        right: auto;
+        bottom: auto;
+        min-width: anchor-size(width);
+        overflow: visible;
+        position-try-fallbacks: flip-block, flip-inline;
+        position-anchor: --combobox-anchor;
+        background: white;
+        border: 1px solid var(--solid-ui-color-gray-100);
+        border-radius: 5px;
+        box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+        display: flex;
+        flex-direction: column;
+
+        [role="option"] {
+            padding: 12px 8px;
+            color: var(--solid-ui-color-gray-700);
+            border-bottom: 1px solid var(--solid-ui-color-gray-100);
+
+            &:hover {
+                background: rgba(0, 0, 0, 0.05);
+            }
+        }
+    }
+
+}
