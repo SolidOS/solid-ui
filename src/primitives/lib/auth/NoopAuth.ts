@@ -17,4 +17,8 @@ export default class NoopAuth implements AuthContext {
   async logout () {
     throw new Error('Can\'t use auth, missing context provider')
   }
+
+  onSessionUpdated () {
+    return () => undefined
+  }
 }

@@ -15,4 +15,8 @@ export default class StorybookAuth implements AuthContext {
   async logout () {
     alert('Log out!')
   }
+
+  onSessionUpdated () {
+    return () => undefined
+  }
 }

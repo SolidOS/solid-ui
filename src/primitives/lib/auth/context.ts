@@ -7,6 +7,7 @@ export interface AuthContext {
   login(loginUrl?: string): Promise<void>;
   signup(): Promise<void>;
   logout(): Promise<void>;
+  onSessionUpdated(callback: () => unknown): () => void;
 }
 
 export const DEFAULT_AUTH_CONTEXT = new NoopAuth()
