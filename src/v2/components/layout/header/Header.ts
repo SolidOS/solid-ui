@@ -549,7 +549,9 @@ export class Header extends LitElement {
   private _refreshPromise: Promise<void> | null = null
 
   private readonly handleAuthSessionChange = () => {
-    void this.refreshAuthStateFromSession()
+    this.refreshAuthStateFromSession().catch(() => {
+      // Keep auth event handling resilient on transient refresh failures.
+    })
   }
 
   constructor () {
@@ -587,7 +589,9 @@ export class Header extends LitElement {
       authSession.events.on('logout', this.handleAuthSessionChange)
       authSession.events.on('sessionRestore', this.handleAuthSessionChange)
     }
-    void this.refreshAuthStateFromSession()
+    this.refreshAuthStateFromSession().catch(() => {
+      // Keep initial header render resilient on transient refresh failures.
+    })
   }
 
   disconnectedCallback () {
