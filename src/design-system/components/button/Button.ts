@@ -1,9 +1,11 @@
-import { html } from 'lit'
+import { html, nothing } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
 import styles from './Button.styles.css'
 import WebComponent from '../../../primitives/lib/WebComponent'
 
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'tertiary'] as const
+import '~icons/svg-spinners/180-ring'
+
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'tertiary', 'outline'] as const
 export type ButtonVariant = typeof BUTTON_VARIANTS[number]
 
 @customElement('solid-ui-button')
@@ -18,15 +20,17 @@ export default class Button extends WebComponent {
   accessor type = 'button'
 
   @property({ type: Boolean })
-  accessor disabled = false
+  accessor disabled: boolean | undefined = undefined
+
+  @property({ type: Boolean })
+  accessor loading = false
 
   render () {
+    const disabled = this.disabled ?? this.loading
+
     return html`
-        <button
-            type=${this.type}
-            ?disabled=${this.disabled}
-            @click=${this.onClick}
-        >
+        <button type=${this.type} ?disabled=${disabled} @click=${this.onClick}>
+            ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
             <slot></slot>
             <slot name="right-icon"></slot>

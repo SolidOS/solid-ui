@@ -186,7 +186,7 @@
 		"@babel/preset-typescript": "^7.28.5",
 		"@babel/runtime": "^7.29.2",
 		"@eslint/js": "^9.39.4",
-		"@iconify-json/lucide": "^1.2.110",
+		"@iconify/json": "2.2.481",
 		"@mdx-js/react": "^3.1.1",
 		"@storybook/addon-actions": "8.6.18",
 		"@storybook/addon-docs": "8.6.18",

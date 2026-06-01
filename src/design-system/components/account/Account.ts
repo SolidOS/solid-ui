@@ -52,7 +52,7 @@ export default class Account extends WebComponent {
             </solid-ui-button>
         </solid-login-button>
         <solid-signup-button>
-            <solid-ui-button slot="trigger" variant="secondary">
+            <solid-ui-button slot="trigger" variant="outline">
                 <icon-lucide-log-in slot="left-icon"></icon-lucide-log-in>
                 Sign Up
             </solid-ui-button>
