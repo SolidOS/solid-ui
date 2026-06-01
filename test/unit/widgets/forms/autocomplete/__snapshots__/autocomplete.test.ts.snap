@@ -5,7 +5,7 @@ exports[`autocompleteField adds the autocomplete field to the container, if prov
   <div>
     <div
       class="formFieldName"
-      style="padding: 0.3em; vertical-align: middle; width:8em;"
+      style="undefined"
     >
       <a
         href="http://www.w3.org/ns/solid/terms#publicId"
@@ -25,7 +25,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="undefined"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
@@ -116,7 +116,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="undefined"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
@@ -242,7 +242,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
 <div>
   <div
     class="formFieldName"
-    style="padding: 0.3em; vertical-align: middle; width:8em;"
+    style="undefined"
   >
     <a
       href="http://www.w3.org/ns/solid/terms#publicId"
