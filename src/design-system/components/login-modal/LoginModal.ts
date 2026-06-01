@@ -1,4 +1,4 @@
-import { html } from 'lit'
+import { html, nothing } from 'lit'
 import { consume } from '@lit/context'
 import { customElement, property, query, state } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
@@ -28,6 +28,12 @@ export default class LoginModal extends WebComponent {
   @state()
   private accessor issuerInputValue = ''
 
+  @state()
+  private accessor failed: boolean = false
+
+  @state()
+  private accessor submitting: boolean = false
+
   @consume({ context: authContext, subscribe: true })
   private accessor auth: AuthContext = DEFAULT_AUTH_CONTEXT
 
@@ -50,18 +56,20 @@ export default class LoginModal extends WebComponent {
                     <solid-ui-combobox label="Solid Identity Provider" .value=${this.issuerInputValue} @input=${this.onIssuerInputChange}>
                         ${suggestedIssuers.map(issuer => html`<solid-ui-combobox-option value="${issuer.uri}">${issuer.name}</solid-ui-combobox-option>`)}
                     </solid-ui-combobox>
+
+                    ${this.failed ? html`<p class="error-message">Something went wrong</p>` : nothing}
                 </solid-ui-dialog-content>
 
                 <solid-ui-dialog-footer>
                     <solid-ui-button
                         variant="secondary"
-                        size="small"
                         @click="${() => this.dialog?.close()}"
                     >
                         Cancel
                     </solid-ui-button>
                     <solid-ui-button
-                        ?disabled="${!this.issuerInputValue}"
+                        ?disabled=${!this.issuerInputValue || this.submitting}
+                        ?loading=${this.submitting}
                         type="submit"
                     >
                         Login
@@ -72,21 +80,29 @@ export default class LoginModal extends WebComponent {
     `
   }
 
-  private async loginToIssuer (issuerUri: string) {
-    if (!issuerUri) {
-      return
-    }
-
-    await this.auth.login(issuerUri)
-  }
-
   private onIssuerInputChange (e: Event) {
     this.issuerInputValue = (e.target as Combobox).value
   }
 
-  private onSubmit (e: Event) {
+  private async onSubmit (e: Event) {
     e.preventDefault()
 
-    this.loginToIssuer(this.issuerInputValue)
+    this.failed = false
+
+    if (!this.issuerInputValue) {
+      return
+    }
+
+    this.submitting = true
+
+    try {
+      await this.auth.login(this.issuerInputValue)
+    } catch (error) {
+      console.error(error)
+
+      this.failed = true
+    } finally {
+      this.submitting = false
+    }
   }
 }

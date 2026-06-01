@@ -18,4 +18,10 @@ export default class DialogProvider extends WebComponent {
       this.dialog = { id: this.dialogId }
     }
   }
+
+  protected firstUpdated () {
+    const slot = this.shadowRoot?.lastChild as HTMLSlotElement | undefined
+
+    this.dispatchEvent(new CustomEvent('mounted', { bubbles: true, composed: true, detail: slot?.assignedElements()[0] }))
+  }
 }

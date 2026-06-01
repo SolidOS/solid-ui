@@ -29,6 +29,13 @@ export default class DialogsRoot extends WebComponent {
   }
 
   protected render () {
-    return html`${this.dialogs.map(dialog => html`<solid-ui-dialog-provider dialogId="${dialog.id}">${dialog.template}</solid-ui-dialog-provider>`)}`
+    return html`${this.dialogs.map(dialog => html`
+        <solid-ui-dialog-provider
+            dialogId="${dialog.id}"
+            @mounted=${(event) => dialog.setElement(event.detail)}
+        >
+            ${dialog.template}
+        </solid-ui-dialog-provider>
+    `)}`
   }
 }
