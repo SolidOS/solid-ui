@@ -1,0 +1,8 @@
+@import '../../styles/common.styles.css';
+
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  padding: 15px;
+}

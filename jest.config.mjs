@@ -15,6 +15,7 @@ export default {
   ],
   setupFilesAfterEnv: ['./test/helpers/setup.ts'],
   moduleNameMapper: {
+    '^~icons/(.*)$': '<rootDir>/__mocks__/iconsMock.js',
     '^.+\\.css$': '<rootDir>/__mocks__/styleMock.js'
   },
   testMatch: ['**/?(*.)+(spec|test).[tj]s?(x)'],

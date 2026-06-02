@@ -1,3 +1,10 @@
+import path from 'path'
+import { fileURLToPath } from 'url'
+import { resolvePathsUsingDecorators, litDecoratorsBabelOptions } from './config/babel.mjs'
+
+const projectRoot = path.dirname(fileURLToPath(import.meta.url))
+const pathsUsingDecorators = resolvePathsUsingDecorators(projectRoot)
+
 export default {
   presets: [
     ['@babel/preset-env', {
@@ -9,5 +16,11 @@ export default {
   ],
   plugins: [
     '@babel/plugin-transform-runtime'
+  ],
+  overrides: [
+    {
+      include: pathsUsingDecorators,
+      ...litDecoratorsBabelOptions,
+    }
   ]
 }
