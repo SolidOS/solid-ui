@@ -11,6 +11,7 @@
     display: inline-flex;
 
     button {
+        position: relative;
         padding: 7px 12px;
         border-radius: 5px;
         font-size: var(--solid-ui-font-size-md);
@@ -39,6 +40,25 @@
             width: var(--solid-ui-font-size-md);
             height: var(--solid-ui-font-size-md);
         }
+
+      &::after {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: var(--solid-ui-clickable-area);
+        height: var(--solid-ui-clickable-area);
+      }
+    }
+}
+
+:host(:has([slot="icon"])) button {
+    padding: 4px;
+
+    ::slotted([slot="icon"]) {
+        width: var(--solid-ui-font-size-2xl);
+        height: var(--solid-ui-font-size-2xl);
     }
 }
 
@@ -71,5 +91,14 @@
     --background-color: transparent;
     --hover-text-color: currentColor;
     --hover-border-color: currentColor;
+    --hover-background-color: color-mix(in srgb, currentColor 25%, transparent);
+}
+
+:host([variant='ghost']) button {
+    --text-color: currentColor;
+    --border-color: transparent;
+    --background-color: transparent;
+    --hover-text-color: currentColor;
+    --hover-border-color: transparent;
     --hover-background-color: color-mix(in srgb, currentColor 25%, transparent);
 }

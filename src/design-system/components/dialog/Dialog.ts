@@ -8,6 +8,7 @@ import { CloseDialogEvent } from '../../lib/dialogs/events/close-dialog'
 
 import '~icons/lucide/x'
 import '../dialog-header'
+import '../button'
 
 @customElement('solid-ui-dialog')
 export default class Dialog extends WebComponent {
@@ -44,10 +45,11 @@ export default class Dialog extends WebComponent {
       ? html`
         <solid-ui-dialog-header>
             <h1>${this.title}</h1>
-            <button type="button" @click=${this.close}>
+
+            <solid-ui-button variant="ghost" @click=${this.close}>
                 <span class="sr-only">Close</span>
-                <icon-lucide-x @click=${this.close}></icon-lucide-x>
-            </button>
+                <icon-lucide-x slot="icon"></icon-lucide-x>
+            </solid-ui-button>
         </solid-ui-dialog-header>
         `
       : nothing

@@ -5,7 +5,7 @@ import WebComponent from '../../../primitives/lib/WebComponent'
 
 import '~icons/svg-spinners/180-ring'
 
-export const BUTTON_VARIANTS = ['primary', 'secondary', 'tertiary', 'outline'] as const
+export const BUTTON_VARIANTS = ['primary', 'secondary', 'tertiary', 'outline', 'ghost'] as const
 export type ButtonVariant = typeof BUTTON_VARIANTS[number]
 
 @customElement('solid-ui-button')
@@ -32,6 +32,7 @@ export default class Button extends WebComponent {
         <button type=${this.type} ?disabled=${disabled} @click=${this.onClick}>
             ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
+            <slot name="icon"></slot>
             <slot></slot>
             <slot name="right-icon"></slot>
         </button>
