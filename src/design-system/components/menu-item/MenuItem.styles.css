@@ -1,6 +1,6 @@
 @import '../../styles/common.styles.css';
 
-button {
+a, button {
     width: 100%;
     display: flex;
     justify-content: flex-start;
