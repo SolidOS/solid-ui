@@ -162,6 +162,8 @@ export async function ensureLoadedPreferences (
     } else {
       throw new Error(`(via loadPrefs) ${err}`)
     }
+
+    context.preferencesFileError = m2
   }
   return context
 }
