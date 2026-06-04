@@ -5158,6 +5158,7 @@ async function ensureLoadedPreferences(context) {
     } else {
       throw new Error(`(via loadPrefs) ${err}`);
     }
+    context.preferencesFileError = m2;
   }
   return context;
 }
@@ -5897,24 +5898,14 @@ function newAppInstance(dom, appDetails, callback) {
  * and/or a developer
  */
 async function getUserRoles() {
-  const sessionInfo = solid_logic__WEBPACK_IMPORTED_MODULE_1__.authSession.info;
-  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
-    return [];
-  }
-  const currentUser = solid_logic__WEBPACK_IMPORTED_MODULE_1__.authn.currentUser();
-  if (!currentUser) {
-    return [];
-  }
   try {
     const {
       me,
       preferencesFile,
       preferencesFileError
-    } = await ensureLoadedPreferences({
-      me: currentUser
-    });
+    } = await ensureLoadedPreferences({});
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError || 'Unable to load user preferences file.');
+      throw new Error(preferencesFileError);
     }
     return solid_logic__WEBPACK_IMPORTED_MODULE_1__.solidLogicSingleton.store.each(me, _ns__WEBPACK_IMPORTED_MODULE_5__/* ["default"] */ .A.rdf('type'), null, preferencesFile.doc());
   } catch (error) {

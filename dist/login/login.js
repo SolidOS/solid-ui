@@ -109,6 +109,7 @@ export async function ensureLoadedPreferences(context) {
         else {
             throw new Error(`(via loadPrefs) ${err}`);
         }
+        context.preferencesFileError = m2;
     }
     return context;
 }
@@ -832,20 +833,10 @@ export function newAppInstance(dom, appDetails, callback) {
  * and/or a developer
  */
 export async function getUserRoles() {
-    const sessionInfo = authSession.info;
-    if (!(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.isLoggedIn) || !(sessionInfo === null || sessionInfo === void 0 ? void 0 : sessionInfo.webId)) {
-        return [];
-    }
-    const currentUser = authn.currentUser();
-    if (!currentUser) {
-        return [];
-    }
     try {
-        const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({
-            me: currentUser
-        });
+        const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({});
         if (!preferencesFile || preferencesFileError) {
-            throw new Error(preferencesFileError || 'Unable to load user preferences file.');
+            throw new Error(preferencesFileError);
         }
         return solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc());
     }

@@ -8477,6 +8477,7 @@ async function ensureLoadedPreferences(context) {
     } else {
       throw new Error(`(via loadPrefs) ${err}`);
     }
+    context.preferencesFileError = m2;
   }
   return context;
 }
@@ -9216,24 +9217,14 @@ function newAppInstance(dom, appDetails, callback) {
  * and/or a developer
  */
 async function getUserRoles() {
-  const sessionInfo = external_SolidLogic_.authSession.info;
-  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
-    return [];
-  }
-  const currentUser = external_SolidLogic_.authn.currentUser();
-  if (!currentUser) {
-    return [];
-  }
   try {
     const {
       me,
       preferencesFile,
       preferencesFileError
-    } = await ensureLoadedPreferences({
-      me: currentUser
-    });
+    } = await ensureLoadedPreferences({});
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError || 'Unable to load user preferences file.');
+      throw new Error(preferencesFileError);
     }
     return external_SolidLogic_.solidLogicSingleton.store.each(me, ns.rdf('type'), null, preferencesFile.doc());
   } catch (error) {
