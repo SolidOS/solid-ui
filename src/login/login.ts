@@ -52,45 +52,6 @@ import * as widgets from '../widgets'
 
 const store = solidLogicSingleton.store
 
-let oidcBootstrapInFlight: Promise<void> | null = null
-
-function hasOidcCallbackParams (): boolean {
-  if (typeof window === 'undefined') {
-    return false
-  }
-  try {
-    const params = new URL(window.location.href).searchParams
-    return params.has('code') && params.has('state')
-  } catch (_err) {
-    return false
-  }
-}
-
-function ensureOidcCallbackBootstrap (): Promise<void> {
-  if (!hasOidcCallbackParams()) {
-    return Promise.resolve()
-  }
-  if (oidcBootstrapInFlight) {
-    return oidcBootstrapInFlight
-  }
-
-  oidcBootstrapInFlight = (async () => {
-    try {
-      await authn.checkUser()
-      // Some auth stacks settle session state asynchronously after first check.
-      if (!authn.currentUser() && hasOidcCallbackParams()) {
-        await authn.checkUser()
-      }
-    } catch (err) {
-      debug.log('OIDC callback bootstrap failed in loginStatusBox: ' + err)
-    } finally {
-      oidcBootstrapInFlight = null
-    }
-  })()
-
-  return oidcBootstrapInFlight
-}
-
 const {
   loadPreferences,
   loadProfile
@@ -728,7 +689,6 @@ export function loginStatusBox (
     box.refresh()
   }
   trackSession()
-  void ensureOidcCallbackBootstrap().then(trackSession)
 
   authSession.events.on('login', trackSession)
   authSession.events.on('logout', trackSession)
@@ -762,17 +722,6 @@ authSession.events.on('logout', async () => {
     } catch (_err) {
       // Do nothing
     }
-  }
-
-  // Prevent re-processing stale OIDC callback parameters after logout reload.
-  try {
-    const url = new URL(window.location.href)
-    url.searchParams.delete('code')
-    url.searchParams.delete('state')
-    url.searchParams.delete('iss')
-    history.replaceState(null, document.title, `${url.pathname}${url.search}${url.hash}`)
-  } catch (_err) {
-    // Keep current URL if normalization fails.
   }
   window.location.reload()
 })
