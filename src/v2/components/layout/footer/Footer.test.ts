@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest'
 import { Footer } from './Footer'
 import './index'
 import { authn } from 'solid-logic'
@@ -20,8 +21,8 @@ describe('SolidUIFooterElement', () => {
   })
 
   it('renders a logged in view when the user is authenticated', async () => {
-    const currentUser = { uri: 'https://alice.example/profile/card#me', equals: jest.fn(() => true) }
-    const currentUserSpy = jest.spyOn(authn, 'currentUser').mockReturnValue(currentUser as any)
+    const currentUser = { uri: 'https://alice.example/profile/card#me', equals: vi.fn(() => true) }
+    const currentUserSpy = vi.spyOn(authn, 'currentUser').mockReturnValue(currentUser as any)
 
     const footer = new Footer()
     document.body.appendChild(footer)

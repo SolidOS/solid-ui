@@ -1,3 +1,4 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { findBookmarkDocument, renderBookmarksButton, toggleBookmark } from '../../../src/chat/bookmarks'
 import { NamedNode, Namespace } from 'rdflib'
@@ -37,7 +38,7 @@ describe('findBookmarkDocument', () => {
       publicTypeIndex: new NamedNode('http://example.com/pubType.ttl')
     }
 
-    window.alert = jest.fn()
+    window.alert = vi.fn()
     store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile)
     // announce private index in settings:
     store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile)
@@ -67,7 +68,7 @@ describe('findBookmarkDocument', () => {
       publicTypeIndex: new NamedNode('http://example.com/pubType.ttl')
     }
 
-    window.alert = jest.fn()
+    window.alert = vi.fn()
     store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile)
     // announce private index in settings:
     store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile)
@@ -104,7 +105,7 @@ describe('findBookmarkDocument', () => {
       publicTypeIndex: new NamedNode('http://example.com/pubType.ttl')
     }
 
-    window.alert = jest.fn()
+    window.alert = vi.fn()
     store.add(context.me, ns.space('preferencesFile'), context.preferencesFile, context.publicProfile)
     // announce private index in settings:
     store.add(context.me, ns.solid('privateTypeIndex'), context.privateTypeIndex, context.preferencesFile)

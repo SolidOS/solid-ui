@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import {
   initHeader,
@@ -96,7 +97,7 @@ describe('createBanner', () => {
 // getProfileImg, need to mock widgets.findImage(user)
 describe('getProfileImg', () => {
   it.skip('returns an empty image', () => {
-    const findImageSpy = jest.spyOn(widgets, 'findImage').mockImplementation(() => { return 'test' })
+    const findImageSpy = vi.spyOn(widgets, 'findImage').mockImplementation(() => { return 'test' })
     const user = new NamedNode('http://test.com')
     expect(getProfileImg(store, user)).toMatchSnapshot()
     expect(findImageSpy).toBeCalled()

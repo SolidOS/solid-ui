@@ -1,33 +1,40 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import Features from '../../../../lib/features'
 import { Header } from './Header'
 import './index'
 import { authn, authSession } from 'solid-logic'
 
 type Listener = () => void
-const mockSessionListeners = new Map<string, Set<Listener>>()
 
-jest.mock('solid-logic', () => ({
+const { mockSessionListeners } = vi.hoisted(() => {
+  const mockSessionListeners = new Map<string, Set<Listener>>()
+  return { mockSessionListeners }
+})
+
+vi.mock('solid-logic', () => ({
   authn: {
-    checkUser: jest.fn(async () => null),
-    currentUser: jest.fn(() => null)
+    checkUser: vi.fn(async () => null),
+    currentUser: vi.fn(() => null)
   },
-  performServerSideLogout: jest.fn(async () => false),
+  performServerSideLogout: vi.fn(async () => false),
   authSession: {
-    logout: jest.fn(async () => undefined),
+    logout: vi.fn(async () => undefined),
     events: {
-      on: jest.fn((event: string, handler: Listener) => {
+      on: vi.fn((event: string, handler: Listener) => {
         if (!mockSessionListeners.has(event)) mockSessionListeners.set(event, new Set())
         mockSessionListeners.get(event)?.add(handler)
       }),
-      off: jest.fn((event: string, handler: Listener) => {
+      off: vi.fn((event: string, handler: Listener) => {
         mockSessionListeners.get(event)?.delete(handler)
       }),
-      emit: jest.fn((event: string) => {
+      emit: vi.fn((event: string) => {
         mockSessionListeners.get(event)?.forEach(handler => handler())
       })
     }
   }
 }))
+
+const aliceWebId = { uri: 'https://alice.example/profile/card#me' } as ReturnType<typeof authn.currentUser>
 
 describe('SolidUIHeaderElement', () => {
   async function waitForAuthRefresh (header: Header): Promise<void> {
@@ -39,14 +46,14 @@ describe('SolidUIHeaderElement', () => {
   beforeEach(() => {
     Features.DESIGN_SYSTEM_HEADER_ACCOUNT = false
     document.body.innerHTML = ''
-    jest.clearAllMocks()
+    vi.clearAllMocks()
     mockSessionListeners.clear()
-    ;(authn.currentUser as jest.Mock).mockReturnValue(null)
-    ;(authn.checkUser as jest.Mock).mockResolvedValue(null)
+    vi.mocked(authn.currentUser).mockReturnValue(null)
+    vi.mocked(authn.checkUser).mockResolvedValue(null)
     Object.defineProperty(window, 'open', {
       configurable: true,
       writable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
   })
 
@@ -89,7 +96,7 @@ describe('SolidUIHeaderElement', () => {
 
   it('renders login and sign up actions when logged out', async () => {
     const header = new Header()
-    const authActionSelected = jest.fn()
+    const authActionSelected = vi.fn()
 
     header.authState = 'logged-out'
     header.authResolved = true
@@ -148,7 +155,7 @@ describe('SolidUIHeaderElement', () => {
 
   it('uses a custom fallback avatar when no accountAvatar is configured', async () => {
     const header = new Header()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
 
     header.authState = 'logged-in'
     header.authResolved = true
@@ -167,8 +174,8 @@ describe('SolidUIHeaderElement', () => {
 
   it('renders an accounts dropdown with avatar when logged in', async () => {
     const header = new Header()
-    const accountMenuSelected = jest.fn()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    const accountMenuSelected = vi.fn()
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
 
     header.authState = 'logged-in'
     header.authResolved = true
@@ -220,7 +227,7 @@ describe('SolidUIHeaderElement', () => {
 
   it('does not render the logout icon on mobile layout', async () => {
     const header = new Header()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
     header.layout = 'mobile'
     header.authState = 'logged-in'
     header.authResolved = true
@@ -245,7 +252,7 @@ describe('SolidUIHeaderElement', () => {
 
   it('does not render account webid on mobile layout', async () => {
     const header = new Header()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
     header.layout = 'mobile'
     header.authState = 'logged-in'
     header.authResolved = true
@@ -314,9 +321,9 @@ describe('SolidUIHeaderElement', () => {
 
   it('renders helpMenuList inside the help dropdown and dispatches events', async () => {
     const header = new Header()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
 
-    const helpMenuClicked = jest.fn()
+    const helpMenuClicked = vi.fn()
 
     header.authState = 'logged-in'
     header.authResolved = true
@@ -346,7 +353,7 @@ describe('SolidUIHeaderElement', () => {
     expect(helpLink?.textContent?.trim()).toBe('Docs')
 
     const originalWindowOpen = window.open
-    window.open = jest.fn()
+    window.open = vi.fn()
 
     expect(helpLink?.getAttribute('rel')).toBe('noopener noreferrer')
 
@@ -360,7 +367,7 @@ describe('SolidUIHeaderElement', () => {
 
   it('derives auth state from session on connect', async () => {
     const header = new Header()
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
 
     document.body.appendChild(header)
     await header.updateComplete
@@ -373,12 +380,12 @@ describe('SolidUIHeaderElement', () => {
   it('retries session resolution once before settling logged-out state', async () => {
     const header = new Header()
     let callCount = 0
-    ;(authn.currentUser as jest.Mock).mockImplementation(() => {
-      return callCount >= 2 ? { uri: 'https://alice.example/profile/card#me' } : null
+    vi.mocked(authn.currentUser).mockImplementation(() => {
+      return callCount >= 2 ? aliceWebId : null
     })
-    ;(authn.checkUser as jest.Mock).mockImplementation(async () => {
+    vi.mocked(authn.checkUser).mockImplementation(async () => {
       callCount += 1
-      return callCount >= 2 ? { uri: 'https://alice.example/profile/card#me' } : null
+      return callCount >= 2 ? aliceWebId : null
     })
 
     document.body.appendChild(header)
@@ -396,12 +403,12 @@ describe('SolidUIHeaderElement', () => {
     document.body.appendChild(header)
     await header.updateComplete
 
-    ;(authn.currentUser as jest.Mock).mockReturnValue({ uri: 'https://alice.example/profile/card#me' })
+    vi.mocked(authn.currentUser).mockReturnValue(aliceWebId)
     ;(authSession.events as any).emit('login')
     await waitForAuthRefresh(header)
     expect(header.authState).toBe('logged-in')
 
-    ;(authn.currentUser as jest.Mock).mockReturnValue(null)
+    vi.mocked(authn.currentUser).mockReturnValue(null)
     ;(authSession.events as any).emit('logout')
     await waitForAuthRefresh(header)
     expect(header.authState).toBe('logged-out')

@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import { lit, sym } from 'rdflib'
 import { label } from '../../../src/utils'
 import { silenceDebugMessages } from '../helpers/debugger'

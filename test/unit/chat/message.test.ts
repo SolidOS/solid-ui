@@ -1,3 +1,4 @@
+import { describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import {
   elementForImageURI,
@@ -23,23 +24,22 @@ const bindings = {
   sameTerm: () => ''
 }
 
-store.any = jest.fn()
-store.the = jest.fn()
+store.any = vi.fn()
+store.the = vi.fn()
 
-jest.mock('../../../src/widgets', () => {
-  const originalModule = jest.requireActual('../../../src/widgets')
+vi.mock('../../../src/widgets', async (importOriginal) => {
+  const originalModule = await importOriginal<typeof import('../../../src/widgets')>()
   return {
-    __esModule: true,
     ...originalModule,
     setImage: () => '',
     shortDate: () => ''
   }
 })
 
-jest.mock('../../../src/chat/chatLogic', () => {
+vi.mock('../../../src/chat/chatLogic', () => {
   return {
-    mostRecentVersion: jest.fn(() => ''),
-    originalVersion: jest.fn(() => bindings)
+    mostRecentVersion: vi.fn(() => ''),
+    originalVersion: vi.fn(() => bindings)
   }
 })
 

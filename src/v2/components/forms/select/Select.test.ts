@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Select } from './Select'
 import './index'
 
@@ -53,7 +53,7 @@ describe('SolidUISelect', () => {
 
   it('opens the popup and updates the value when an option is clicked', async () => {
     const select = new Select()
-    const changed = jest.fn()
+    const changed = vi.fn()
 
     select.label = 'Language'
     select.options = [
@@ -149,7 +149,7 @@ describe('SolidUISelect', () => {
 
   it('supports keyboard selection from the trigger', async () => {
     const select = new Select()
-    const changed = jest.fn()
+    const changed = vi.fn()
 
     select.label = 'Language'
     select.options = [

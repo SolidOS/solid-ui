@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import * as api from '../../src/index'
 import * as log from '../../src/lib/log'
@@ -68,7 +69,7 @@ describe('log', () => {
     })
 
     describe('alert', () => {
-      beforeEach(() => (window.alert = jest.fn())) // not supported by JSDOM anyway
+      beforeEach(() => (window.alert = vi.fn())) // not supported by JSDOM anyway
       beforeEach(() => (log.alert('foo')))
       it('calls alert', () => expect(window.alert).toHaveBeenCalledWith('foo'))
     })
@@ -109,7 +110,7 @@ describe('log', () => {
     beforeEach(() => (log.setInternals(undefined, undefined)))
     beforeEach(() => {
       _log = console.log
-      console.log = jest.fn() // could have used jest.spyOn(console, 'log'), but that does not prevent logging to console
+      console.log = vi.fn() // could have used vi.spyOn(console, 'log'), but that does not prevent logging to console
     })
     afterEach(() => (console.assert = _log))
 

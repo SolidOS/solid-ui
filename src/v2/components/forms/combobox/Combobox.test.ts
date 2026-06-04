@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Combobox } from './Combobox'
 import './index'
 
@@ -45,8 +45,8 @@ describe('SolidUICombobox', () => {
 
   it('loads suggestions from suggestionProvider and emits input events', async () => {
     const combobox = new Combobox()
-    const inputEvents = jest.fn()
-    const suggestionProvider = jest.fn(async (query: string) => [
+    const inputEvents = vi.fn()
+    const suggestionProvider = vi.fn(async (query: string) => [
       { label: `Alice ${query}`, value: 'alice' },
       { label: `Bob ${query}`, value: 'bob' }
     ])
@@ -102,7 +102,7 @@ describe('SolidUICombobox', () => {
 
   it('updates value and emits change when an option is clicked', async () => {
     const combobox = new Combobox()
-    const changed = jest.fn()
+    const changed = vi.fn()
 
     combobox.options = [
       { label: 'Alice', value: 'alice', publicId: 'https://example.com/alice' },
@@ -159,7 +159,7 @@ describe('SolidUICombobox', () => {
 
   it('supports keyboard selection from the input', async () => {
     const combobox = new Combobox()
-    const changed = jest.fn()
+    const changed = vi.fn()
 
     combobox.options = [
       { label: 'Alice', value: 'alice' },

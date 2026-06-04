@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import * as DragAndDrop from '../../../src/widgets/dragAndDrop'
 import * as Error from '../../../src/widgets/error'

@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import * as Acl from '../../../src/acl/acl'
 import * as AclControl from '../../../src/acl/acl-control'
