@@ -16,14 +16,14 @@ export default class DialogsRoot extends WebComponent {
   connectedCallback (): void {
     super.connectedCallback()
 
-    window.addEventListener(ShowDialogEvent.eventName, (event) => {
+    this.addGlobalEventListener(ShowDialogEvent.eventName, (event) => {
       event.stopImmediatePropagation()
 
       this.dialogs = [...this.dialogs, event.dialog]
     })
 
-    window.addEventListener(CloseDialogEvent.eventName, (event) => {
-      event.stopPropagation()
+    this.addGlobalEventListener(CloseDialogEvent.eventName, (event) => {
+      event.stopImmediatePropagation()
 
       this.dialogs = this.dialogs.filter(dialog => dialog.id !== event.id)
     })
