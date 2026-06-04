@@ -8,9 +8,9 @@
  * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
  * desktop. You may want to upload it into the pod.
  */
-import * as debug from '../debug'
+import * as debug from '../lib/debug'
 import * as mime from 'mime-types'
-import { style } from '../style'
+import { style } from '../lib/style'
 
 /* global FileReader alert */
 

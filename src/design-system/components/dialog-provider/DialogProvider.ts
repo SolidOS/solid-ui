@@ -1,5 +1,6 @@
 import { provide } from '@lit/context'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { property } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import { DialogContext, dialogContext } from '../../lib/dialogs/context'
 

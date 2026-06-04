@@ -6,8 +6,8 @@
  */
 import ns from './ns'
 import { Namespace, NamedNode, st, IndexedFormula } from 'rdflib'
-import { newThing, errorMessageBlock } from './widgets'
-import { beep } from './utils'
+import { newThing, errorMessageBlock } from '../widgets'
+import { beep } from '../utils'
 import { log } from './debug'
 import { solidLogicSingleton } from 'solid-logic'
 import { style } from './style'

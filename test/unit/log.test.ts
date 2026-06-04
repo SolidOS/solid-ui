@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from './helpers/debugger'
 import * as api from '../../src/index'
-import * as log from '../../src/log'
+import * as log from '../../src/lib/log'
 import { JSDOM } from 'jsdom'
 
 silenceDebugMessages()

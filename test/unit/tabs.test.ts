@@ -1,6 +1,6 @@
 import { silenceDebugMessages } from './helpers/debugger'
 import { tabs } from '../../src/index'
-import { tabWidget } from '../../src/tabs'
+import { tabWidget } from '../../src/lib/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { clearStore } from './helpers/clearStore'

@@ -1,5 +1,6 @@
 import { html } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { state } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import Dialog from '../../lib/dialogs/Dialog'
 import { ShowDialogEvent } from '../../lib/dialogs/events/show-dialog'

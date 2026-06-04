@@ -61,7 +61,7 @@ jobs:
         run: gh pr merge --auto --merge "$PR_URL" # Use Github CLI to merge automatically the PR
         env:
           PR_URL: ${{github.event.pull_request.html_url}}
-          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}} 
+          GITHUB_TOKEN: ${{secrets.GITHUB_TOKEN}}
 
   npm-publish-dev:
     needs: build
@@ -107,12 +107,12 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           TAG="v$(node -p 'require("./package.json").version')"
-      
+
           if gh release view "$TAG" >/dev/null 2>&1; then
             echo "Release $TAG already exists. Skipping."
             exit 0
           fi
-      
+
           if git ls-remote --exit-code --tags origin "refs/tags/$TAG" >/dev/null 2>&1; then
             echo "Tag $TAG already exists on origin. Creating release from existing tag."
             gh release create "$TAG" --verify-tag --generate-notes

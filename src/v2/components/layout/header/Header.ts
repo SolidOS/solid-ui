@@ -1,5 +1,5 @@
 import { LitElement, html, css } from 'lit'
-import { icons } from '../../../../iconBase'
+import { icons } from '../../../../lib/iconBase'
 import { authSession, authn, performServerSideLogout } from 'solid-logic'
 import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
@@ -7,7 +7,7 @@ import { ifDefined } from 'lit/directives/if-defined.js'
 
 import '../../../../design-system/components/account'
 import '../../../../design-system/components/provider'
-import Features from '../../../../features'
+import Features from '../../../../lib/features'
 
 const DEFAULT_HELP_MENU_ICON = ''
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'

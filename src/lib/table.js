@@ -19,8 +19,8 @@ import { store } from 'solid-logic'
 import * as log from './log'
 import ns from './ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
-import * as utils from './utils'
-import * as widgets from './widgets'
+import * as utils from '../utils'
+import * as widgets from '../widgets'
 
 const UI = { icons, log, ns, utils, widgets }
 

@@ -2,7 +2,7 @@ import { silenceDebugMessages } from '../helpers/debugger'
 import { findBookmarkDocument, renderBookmarksButton, toggleBookmark } from '../../../src/chat/bookmarks'
 import { NamedNode, Namespace } from 'rdflib'
 import { clearStore } from '../helpers/clearStore'
-import { ns } from '../../../src/'
+import ns from '../../../src/lib/ns'
 import { solidLogicSingleton } from 'solid-logic'
 
 const store = solidLogicSingleton.store

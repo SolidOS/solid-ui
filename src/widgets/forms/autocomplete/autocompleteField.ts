@@ -1,9 +1,9 @@
 /* Form field for doing autocompleete
  */
-import ns from '../../../ns'
+import ns from '../../../lib/ns'
 import { store } from 'solid-logic'
 import * as widgets from '../../../widgets'
-import { style } from '../../../style'
+import { style } from '../../../lib/style'
 import { renderAutocompleteControl } from './autocompleteBar'
 import { QueryParameters } from './publicData'
 import { NamedNode, BlankNode, Literal, Variable, st } from 'rdflib'

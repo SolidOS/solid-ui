@@ -5,10 +5,10 @@
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import { store } from 'solid-logic'
 import * as debug from './debug'
-import { ensureLoadedPreferences } from './login/login'
+import { ensureLoadedPreferences } from '../login/login'
 import ns from './ns'
 import * as participation from './participation' // @ts-ignore
-import * as widgets from './widgets'
+import * as widgets from '../widgets'
 
 const kb = store
 

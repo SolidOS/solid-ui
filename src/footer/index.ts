@@ -4,7 +4,7 @@
  */
 import { LiveStore, NamedNode } from 'rdflib'
 import { authn, authSession } from 'solid-logic'
-import { style } from '../style'
+import { style } from '../lib/style'
 import { getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
 const DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org'

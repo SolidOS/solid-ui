@@ -1,7 +1,7 @@
 import { provide } from '@lit/context'
 import { html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
-
+import { customElement } from '../../../primitives/lib/customElement'
+import { property } from 'lit/decorators.js'
 import { authContext } from '../../../primitives/lib/auth/context'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import SolidAuth, { DEFAULT_SIGNUP_URL } from '../../lib/auth/SolidAuth'

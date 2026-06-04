@@ -1,4 +1,4 @@
-import Features from '../../../../features'
+import Features from '../../../../lib/features'
 import { Header } from './Header'
 import './index'
 import { authn, authSession } from 'solid-logic'

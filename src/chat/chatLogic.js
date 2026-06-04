@@ -3,10 +3,10 @@
  * @packageDocumentation
  */
 
-import * as debug from '../debug'
+import * as debug from '../lib/debug'
 import { DateFolder } from './dateFolder'
 import { store, authn } from 'solid-logic'
-import ns from '../ns'
+import ns from '../lib/ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 import * as utils from '../utils'
 import { getBlankMsg, signMsg, SEC } from './signature'

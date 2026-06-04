@@ -20,7 +20,7 @@ declare let $SolidTestEnvironment
 // Do not export. Always us this module to find the icons, as they vary
 const iconsOnGithub = 'https://solidos.github.io/solid-ui/src' // changed org 2022-05
 
-export const icons = (module as any).scriptURI // Firefox extension
+export const icons = typeof module !== 'undefined' && (module as any).scriptURI // Firefox extension
   ? {
       iconBase:
         (module as any).scriptURI.slice(0, (module as any).scriptURI.lastIndexOf('/')) + '/icons/',
