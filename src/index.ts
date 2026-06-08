@@ -43,7 +43,6 @@ import { acl, aclControl } from './acl/index'
 import { create } from './create/index'
 // @ts-ignore
 import { icons } from './iconBase'
-import * as language from './widgets/forms/autocomplete/language'
 import * as log from './log'
 import { matrix } from './matrix/index'
 import { media } from './media/index'
@@ -81,7 +80,6 @@ if (typeof window !== 'undefined') {
     createTypes,
     dom,
     icons,
-    language,
     log,
     login,
     matrix,
@@ -110,7 +108,6 @@ export {
   createTypes,
   dom,
   icons,
-  language,
   log,
   login,
   matrix,

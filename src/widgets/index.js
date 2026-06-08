@@ -17,36 +17,18 @@
 // (In order to avoid name collisions, it is safely assumed that modules don't
 // export widgets with the same name)
 
+import * as $rdf from 'rdflib'
+
 export * from './peoplePicker'
 export * from './dragAndDrop'
 export * from './buttons'
 export * from './buttons/iconLinks'
 export * from './error'
-export * from './forms'
 
-export * from './forms/autocomplete/autocompleteBar'
-export * from './forms/autocomplete/autocompletePicker'
-
-export * as publicData from './forms/autocomplete/publicData'
-
-/*
-import * as peoplePicker from './peoplePicker'
-import * as dragAndDrop from './dragAndDrop'
-import * as buttons from './buttons'
-import * as error from './error'
-import { forms } from './forms'
-
-const widgets = Object.assign(
-  {},
-  buttons,
-  peoplePicker,
-  dragAndDrop,
-  error,
-  forms
-)
-
-// export default widgets .. Policy is not to use exports default
-module.export = widgets // @@ Apparently no way to do this (yet?) in esm
-console.log('widgets exported:', widgets)
-*/
-// ends
+/** Mint local ID using timestamp
+ * @param {NamedNode} doc - the document in which the ID is to be generated
+ */
+export function newThing (doc) {
+  const now = new Date()
+  return $rdf.sym(doc.uri + '#' + 'id' + ('' + now.getTime()))
+}

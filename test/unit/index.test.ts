@@ -15,7 +15,6 @@ describe('Index', () => {
       'infiniteMessageArea',
       'initFooter',
       'initHeader',
-      'language',
       'log',
       'login',
       'matrix',

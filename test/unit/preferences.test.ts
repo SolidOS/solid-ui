@@ -37,21 +37,6 @@ describe('Preferences.set', () => {
   })
 })
 
-describe('Preferences.renderPreferencesForm', () => {
-  it('exists', () => {
-    expect(Preferences.renderPreferencesForm).toBeInstanceOf(Function)
-  })
-  it('runs', () => {
-    const subject = sym('https://test.test')
-    const theClass = {}
-    const preferencesForm = {}
-    const context = { dom }
-    expect(Preferences.renderPreferencesForm(
-      subject, theClass, preferencesForm, context
-    )).toBeTruthy()
-  })
-})
-
 describe('Preferences.recordSharedPreferences', () => {
   it('exists', () => {
     expect(Preferences.recordSharedPreferences).toBeInstanceOf(Function)
