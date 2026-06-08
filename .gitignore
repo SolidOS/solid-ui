@@ -7,5 +7,4 @@ coverage
 docs/api
 examples/storybook
 .history/
-docs/form-examples/solid-ui.js
 .tsbuildinfo

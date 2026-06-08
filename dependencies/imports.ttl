@@ -21,7 +21,3 @@
 <../src/widgets/peoplePicker.js> :dependsOn <../store>.
 <../src/widgets/index.js> :dependsOn <../debug>.
 <../src/widgets/dragAndDrop.js> :dependsOn <../debug>.
-<../src/widgets/forms.js> :dependsOn <./forms/fieldParams>.
-<../src/widgets/forms.js> :dependsOn <./forms/fieldFunction>.
-<../src/widgets/forms.js> :dependsOn <../debug>.
-<../src/widgets/forms.js> :dependsOn <./forms/basic>.

@@ -118,19 +118,8 @@
 ../src/widgets/index.js:  require('./dragAndDrop'), // uploadFiles etc
 ../src/widgets/index.js:  require('./error'), // UI.widgets.errorMessageBlock
 ../src/widgets/index.js:  require('./buttons'),
-../src/widgets/index.js:  require('./forms')
 ../src/widgets/dragAndDrop.js:const mime = require('mime-types')
 ../src/widgets/dragAndDrop.js:// const UI = require('../index.js') // this package
-../src/widgets/forms.js:  icons: require('../iconBase'),
-../src/widgets/forms.js:  log: require('../log'),
-../src/widgets/forms.js:  ns: require('../ns'),
-../src/widgets/forms.js:  store: require('../store'),
-../src/widgets/forms.js:  style: require('../style'),
-../src/widgets/forms.js:const $rdf = require('rdflib')
-../src/widgets/forms.js:const error = require('./error')
-../src/widgets/forms.js:const buttons = require('./buttons')
-../src/widgets/forms.js:const ns = require('../ns')
-../src/widgets/forms.js:const utils = require('../utils')
 ../src/messageArea.js:  authn: require('./authn/authn'),
 ../src/messageArea.js:  icons: require('./iconBase'),
 ../src/messageArea.js:  ns: require('./ns'),

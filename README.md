@@ -9,7 +9,6 @@ Vanilla JS. Includes large widgets like chat, table, matrix, form fields, and sm
 
 See [Solid-Ui Storybook](http://solidos.github.io/solid-ui/examples/storybook/) for UI widgets.
 See [Solid-UI API](https://solidos.github.io/solid-ui/docs/api/) for UI functions.
-See [Forms introduction](./docs/FormsReadme.md) for UI vocabulary implementation.
 
 ## Table of Contents
 - [Getting Started](#getting-started)

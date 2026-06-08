@@ -21,7 +21,3 @@
 ../src/widgets/peoplePicker.js:import kb from '../store'
 ../src/widgets/index.js:import * as debug from '../debug'
 ../src/widgets/dragAndDrop.js:import * as debug from '../debug'
-../src/widgets/forms.js:import { fieldParams } from './forms/fieldParams'
-../src/widgets/forms.js:import { field, mostSpecificClassURI, fieldFunction } from './forms/fieldFunction'
-../src/widgets/forms.js:import * as debug from '../debug'
-../src/widgets/forms.js:import { basicField } from './forms/basic'

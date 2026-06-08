@@ -12,7 +12,6 @@ document.addEventListener('DOMContentLoaded', function () {
   // var me_uri = testDocURI + '#a0'
   // var me = kb.sym(me_uri)
 
-  //    var forms_uri = window.document.title = base+ 'forms.ttl';
 
   // var subject = kb.sym(subject_uri)
   const div = dom.getElementById('UITestArea')

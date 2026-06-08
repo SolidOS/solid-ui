@@ -114,7 +114,6 @@
 		"sync-component-exports": "node scripts/sync-component-exports.mjs",
 		"postbuild-js": "rm -f dist/versionInfo.d.ts dist/versionInfo.d.ts.map && node scripts/build-component-dts.mjs",
 		"build-dist": "webpack --progress",
-		"build-form-examples": "npm run build-js && npm run build-version && npm run build-dist && cp ./dist/solid-ui.js ./docs/form-examples/",
 		"lint": "eslint",
 		"lint-fix": "eslint --fix",
 		"typecheck": "tsc --noEmit",

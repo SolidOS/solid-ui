@@ -39,25 +39,6 @@ export const style = { // styleModule
   signUpBackground: 'background-color: #eef;',
   signInBackground: 'background-color: #efe;',
 
-  // Forms
-  heading1Style: 'font-size: 180%; font-weight: bold; color: #888888; padding: 0.5em; margin: 0.7em 0.0m;', // originally was brown; now grey
-  heading2Style: 'font-size: 130%; font-weight: bold; color: #888888; padding: 0.4em; margin: 0.7em 0.0em;', // originally was brown; now grey
-  heading3Style: 'font-size: 120%; font-weight: bold; color: #888888; padding: 0.3em; margin: 0.7em 0.0em;', // For example, in large forms or before a small form
-  heading4Style: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em; margin: 0.7em 0.0em;', // Lowest level used by default in small things
-
-  formHeadingStyle: 'font-size: 110%; font-weight: bold; color: #888888; padding: 0.2em;  margin: 0.7em 0.0em;', // originally was brown; now grey
-  formTextInput: 'font-size: 100%; margin: 0.1em; padding: 0.1em;', // originally used this
-  formGroupStyle: [`padding-left: 0em; border: 0.0em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`, // weight 0
-    `padding-left: 2em; border: 0.05em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`,
-    `padding-left: 2em; border: 0.1em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;`,
-    `padding-left: 2em; border: 0.2em solid ${styleConstants.formBorderColor}; border-radius: 0.2em;` // @@ pink
-  ],
-
-  formFieldLabelStyle: `color: ${styleConstants.lowProfileLinkColor}; text-decoration: none;`,
-  formFieldNameBoxStyle: `padding: 0.3em; vertical-align: middle; width:${styleConstants.formFieldNameBoxWidth};`,
-  multilineTextInputStyle: 'font-size:100%; white-space: pre-wrap; background-color: #eef;' +
-  ' border: 0.07em solid gray; padding: 1em 0.5em; margin: 1em 1em;',
-
   // Buttons
   renderAsDivStyle: 'display: flex; align-items: center; justify-content: space-between; height: 2.5em; padding: 1em;',
   imageDivStyle: 'width:2.5em; padding:0.5em; height: 2.5em;',

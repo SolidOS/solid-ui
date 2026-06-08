@@ -118,19 +118,8 @@
 
 
 <widgets/index.js> :dependsOn <./buttons>.
-<widgets/index.js> :dependsOn <./forms>.
 <widgets/dragAndDrop.js> :dependsOn <mime-types>.
 
-<widgets/forms.js> :dependsOn <../iconBase>.
-<widgets/forms.js> :dependsOn <../log>.
-<widgets/forms.js> :dependsOn <../ns>.
-<widgets/forms.js> :dependsOn <../store>.
-<widgets/forms.js> :dependsOn <../style>.
-<widgets/forms.js> :dependsOn <rdflib>.
-<widgets/forms.js> :dependsOn <./error>.
-<widgets/forms.js> :dependsOn <./buttons>.
-<widgets/forms.js> :dependsOn <../ns>.
-<widgets/forms.js> :dependsOn <../utils>.
 <messageArea.js> :dependsOn <./authn/authn>.
 <messageArea.js> :dependsOn <./iconBase>.
 <messageArea.js> :dependsOn <./ns>.

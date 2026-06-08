@@ -22,10 +22,6 @@ peoplePicker  ->  ns;
 peoplePicker  ->  store;
 index  ->  debug;
 dragAndDrop  ->  debug;
-forms  ->  fieldParams;
-forms  ->  fieldFunction;
-forms  ->  debug;
-forms  ->  basic;
 media_capture  ->  rdflib;
 media_capture  ->  iconBase;
 media_capture  ->  ns;
@@ -145,19 +141,8 @@ index  ->  peoplePicker;
 
 
 index  ->  buttons;
-index  ->  forms;
 dragAndDrop  ->  mime_types;
 
-forms  ->  iconBase;
-forms  ->  log;
-forms  ->  ns;
-forms  ->  store;
-forms  ->  style;
-forms  ->  rdflib;
-forms  ->  error;
-forms  ->  buttons;
-forms  ->  ns;
-forms  ->  utils;
 messageArea  ->  authn;
 messageArea  ->  iconBase;
 messageArea  ->  ns;

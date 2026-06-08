@@ -23,5 +23,4 @@
 ../src/widgets/peoplePicker.js
 ../src/widgets/index.js
 ../src/widgets/dragAndDrop.js
-../src/widgets/forms.js
 ../src/messageArea.js
