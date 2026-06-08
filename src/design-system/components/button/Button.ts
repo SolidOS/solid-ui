@@ -36,7 +36,7 @@ export default class Button extends WebComponent {
             ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
             <slot name="icon"></slot>
-            <slot class="text"></slot>
+            <slot></slot>
             <slot name="right-icon"></slot>
         </button>
     `
