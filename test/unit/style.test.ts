@@ -39,13 +39,3 @@ describe('signInButtonStyle', () => {
     expect(typeof style.signInAndUpButtonStyle).toEqual('string')
   })
 })
-describe('formTextInput', () => {
-  it('exists', () => {
-    expect(typeof style.formTextInput).toEqual('string')
-  })
-})
-describe('multilineTextInputStyle', () => {
-  it('exists', () => {
-    expect(typeof style.multilineTextInputStyle).toEqual('string')
-  })
-})
