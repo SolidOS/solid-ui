@@ -53,13 +53,19 @@
     }
 }
 
-:host(:has([slot="icon"])) button {
-    padding: 4px;
+:host([icon-only]) button {
+    inline-size: var(--solid-ui-clickable-area);
+    block-size: var(--solid-ui-clickable-area);
+    padding: 0;
 
     ::slotted([slot="icon"]) {
-        width: var(--solid-ui-font-size-2xl);
-        height: var(--solid-ui-font-size-2xl);
+        width: 22px;
+        height: 22px;
     }
+}
+
+:host([icon-only]) slot:not([name]) {
+    display: none;
 }
 
 :host([variant='secondary']) button {

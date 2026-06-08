@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit'
 import { customElement, property } from 'lit/decorators.js'
+import { ifDefined } from 'lit/directives/if-defined.js'
 import styles from './Button.styles.css'
 import WebComponent from '../../../primitives/lib/WebComponent'
 
@@ -25,15 +26,21 @@ export default class Button extends WebComponent {
   @property({ type: Boolean })
   accessor loading = false
 
+  @property({ type: Boolean, reflect: true, attribute: 'icon-only' })
+  accessor iconOnly = false
+
+  @property({ type: String, attribute: 'aria-label' })
+  accessor ariaLabel = ''
+
   render () {
     const disabled = this.disabled ?? this.loading
 
     return html`
-        <button type=${this.type} ?disabled=${disabled} @click=${this.onClick}>
+        <button type=${this.type} ?disabled=${disabled} aria-label=${ifDefined(this.ariaLabel || undefined)} @click=${this.onClick}>
             ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
             <slot name="icon"></slot>
-            <slot></slot>
+            <slot class="text"></slot>
             <slot name="right-icon"></slot>
         </button>
     `

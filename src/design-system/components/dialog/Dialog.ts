@@ -46,7 +46,7 @@ export default class Dialog extends WebComponent {
         <solid-ui-dialog-header>
             <h1>${this.title}</h1>
 
-            <solid-ui-button variant="ghost" @click=${this.close}>
+            <solid-ui-button variant="ghost" @click=${this.close} icon-only>
                 <span class="sr-only">Close</span>
                 <icon-lucide-x slot="icon"></icon-lucide-x>
             </solid-ui-button>

@@ -8,6 +8,13 @@ dialog {
 
   solid-ui-dialog-header solid-ui-button {
     color: var(--solid-ui-color-gray-600);
+
+    icon-lucide-x {
+      width: 22px;
+      height: 22px;
+      justify-content: center;
+      align-items: center;
+    }
   }
 }
 

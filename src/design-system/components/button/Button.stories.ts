@@ -26,6 +26,7 @@ const meta = {
     rightIcon: 'None',
     disabled: false,
     loading: false,
+    iconOnly: false,
   },
   argTypes: {
     variant: {
@@ -39,16 +40,23 @@ const meta = {
     text: { control: 'text' },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
+    iconOnly: { control: 'boolean' },
   },
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ text, title, variant, icon, leftIcon, rightIcon, disabled, loading }) => {
+const render = defineStoryRender<typeof meta.argTypes>(({ text, title, variant, icon, leftIcon, rightIcon, disabled, loading, iconOnly }) => {
   const resolvedIcon = ICON_OPTIONS.resolve(icon)
   const resolvedLeftIcon = ICON_OPTIONS.resolve(leftIcon)
   const resolvedRightIcon = ICON_OPTIONS.resolve(rightIcon)
 
   return html`
-        <solid-ui-button variant="${variant}" .disabled=${disabled} ?loading=${loading} title=${title}>
+        <solid-ui-button
+            variant="${variant}"
+            .disabled=${disabled}
+            ?loading=${loading}
+            ?icon-only=${iconOnly}
+            title=${title}
+        >
             ${resolvedLeftIcon ? unsafeHTML(`<icon-lucide-${resolvedLeftIcon} slot="left-icon"></icon-lucide-${resolvedLeftIcon}>`) : nothing}
             ${resolvedIcon ? unsafeHTML(`<icon-lucide-${resolvedIcon} slot="icon"></icon-lucide-${resolvedIcon}>`) : nothing}
             ${text}
@@ -90,9 +98,20 @@ export const Outline = {
 export const Ghost = {
   render,
   args: {
+    text: 'Help',
+    variant: 'ghost',
+    icon: 'Help',
+    title: 'Open help',
+  },
+}
+
+export const IconOnly = {
+  render,
+  args: {
     text: '',
     variant: 'ghost',
     icon: 'Help',
+    iconOnly: true,
     title: 'Open help',
   },
 }
