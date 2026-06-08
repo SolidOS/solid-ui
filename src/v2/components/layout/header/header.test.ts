@@ -1,8 +1,10 @@
+import Features from '../../../../features'
 import { Header } from './Header'
 import './index'
 
 describe('SolidUIHeaderElement', () => {
   beforeEach(() => {
+    Features.DESIGN_SYSTEM_HEADER_ACCOUNT = false
     document.body.innerHTML = ''
     Object.defineProperty(window, 'open', {
       configurable: true,

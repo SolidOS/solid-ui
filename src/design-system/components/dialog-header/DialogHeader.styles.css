@@ -1,0 +1,13 @@
+@import "../../styles/common.styles.css";
+
+:host {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  gap: 15px;
+  background: var(--solid-ui-color-slate-50);
+  border-bottom: 1px solid var(--solid-ui-color-slate-200);
+  font-size: var(--solid-ui-font-size-lg);
+  font-weight: 500;
+}
