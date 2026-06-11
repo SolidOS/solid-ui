@@ -513,10 +513,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       // Login
       const locationUrl = new URL(window.location.href)
       locationUrl.hash = '' // remove hash part
-      await authSession.login({
-        redirectUrl: locationUrl.href,
-        oidcIssuer: issuerUri
-      })
+      await authSession.login(issuerUri, locationUrl.href)
     } catch (err) {
       alert(err.message)
     }
@@ -669,9 +666,9 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = solidLogicSingleton.store.sym(sessionInfo.webId)
+    const webId = authSession.webId
+    if (webId) {
+      me = solidLogicSingleton.store.sym(webId)
     } else {
       me = null
     }
