@@ -1,25 +1,39 @@
 import { authSession, solidLogicSingleton } from 'solid-logic'
 import Account from '../../../primitives/lib/auth/Account'
-import { findImage } from '../../../widgets/buttons'
 import { AuthContext } from '../../../primitives/lib/auth/context'
 import { showDialog } from '../dialogs'
 import { html } from 'lit'
+import ns from '../../../ns'
 
 import '../../components/login-modal'
 
 export const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
 
+function findAccountImage (webId: string): string | undefined {
+  const store = solidLogicSingleton.store
+  const me = store.sym(webId)
+  const image =
+    store.any(me, ns.sioc('avatar')) ||
+    store.any(me, ns.foaf('img')) ||
+    store.any(me, ns.vcard('logo')) ||
+    store.any(me, ns.vcard('hasPhoto')) ||
+    store.any(me, ns.vcard('photo')) ||
+    store.any(me, ns.foaf('depiction'))
+
+  return image ? (image as any).value : undefined
+}
+
 export default class SolidAuth implements AuthContext {
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
 
   get account (): Account | null {
-    if (!authSession.info?.isLoggedIn || !authSession.info?.webId) {
+    const webId: string | undefined = authSession.webId ?? authSession.info?.webId
+    const isActive: boolean = authSession.isActive ?? authSession.info?.isLoggedIn ?? Boolean(webId)
+    if (!isActive || !webId) {
       return null
     }
 
-    const webId = authSession.info.webId
-    const me = solidLogicSingleton.store.sym(webId)
-    const avatarUrl = findImage(me) ?? undefined
+    const avatarUrl = findAccountImage(webId)
 
     return new Account(webId, avatarUrl)
   }
@@ -44,10 +58,7 @@ export default class SolidAuth implements AuthContext {
 
     locationUrl.hash = ''
 
-    await authSession.login({
-      redirectUrl: locationUrl.href,
-      oidcIssuer: loginUrl
-    })
+    await authSession.login(loginUrl, locationUrl.href)
   }
 
   async signup () {
@@ -59,14 +70,26 @@ export default class SolidAuth implements AuthContext {
   }
 
   onSessionUpdated (callback: () => unknown) {
-    authSession.events.on('login', callback)
-    authSession.events.on('logout', callback)
-    authSession.events.on('sessionRestore', callback)
+    const sessionEventTarget = authSession as unknown as EventTarget
+    const listener = () => {
+      callback()
+    }
+    if (typeof sessionEventTarget.addEventListener === 'function') {
+      sessionEventTarget.addEventListener('sessionStateChange', listener)
+    } else {
+      authSession.events.on('login', callback)
+      authSession.events.on('logout', callback)
+      authSession.events.on('sessionRestore', callback)
+    }
 
     return () => {
-      authSession.events.off('login', callback)
-      authSession.events.off('logout', callback)
-      authSession.events.off('sessionRestore', callback)
+      if (typeof sessionEventTarget.removeEventListener === 'function') {
+        sessionEventTarget.removeEventListener('sessionStateChange', listener)
+      } else {
+        authSession.events.off('login', callback)
+        authSession.events.off('logout', callback)
+        authSession.events.off('sessionRestore', callback)
+      }
     }
   }
 }

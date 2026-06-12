@@ -162,6 +162,8 @@ export async function ensureLoadedPreferences (
     } else {
       throw new Error(`(via loadPrefs) ${err}`)
     }
+
+    context.preferencesFileError = m2
   }
   return context
 }
@@ -513,10 +515,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       // Login
       const locationUrl = new URL(window.location.href)
       locationUrl.hash = '' // remove hash part
-      await authSession.login({
-        redirectUrl: locationUrl.href,
-        oidcIssuer: issuerUri
-      })
+      await authSession.login(issuerUri, locationUrl.href)
     } catch (err) {
       alert(err.message)
     }
@@ -669,9 +668,9 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = solidLogicSingleton.store.sym(sessionInfo.webId)
+    const webId = authSession.webId
+    if (webId) {
+      me = solidLogicSingleton.store.sym(webId)
     } else {
       me = null
     }
@@ -715,6 +714,12 @@ authSession.events.on('logout', async () => {
         if (openidConfiguration && openidConfiguration.end_session_endpoint) {
           await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
         }
+      }
+
+      try {
+        await fetch('/.well-known/solid/logout', { credentials: 'include' })
+      } catch (_err) {
+        // Not all deployments expose NSS-compatible well-known logout endpoint.
       }
     } catch (_err) {
       // Do nothing
@@ -1047,22 +1052,10 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
-  const sessionInfo = authSession.info
-  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
-    return []
-  }
-
-  const currentUser = authn.currentUser()
-  if (!currentUser) {
-    return []
-  }
-
   try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({
-      me: currentUser
-    })
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError || 'Unable to load user preferences file.')
+      throw new Error(preferencesFileError)
     }
     return solidLogicSingleton.store.each(
       me,

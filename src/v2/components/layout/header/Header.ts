@@ -1,6 +1,6 @@
 import { LitElement, html, css } from 'lit'
 import { icons } from '../../../../iconBase'
-import { authSession } from 'solid-logic'
+import { authSession, authn, performServerSideLogout } from 'solid-logic'
 import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
@@ -13,6 +13,36 @@ const DEFAULT_HELP_MENU_ICON = ''
 const DEFAULT_SOLID_ICON_URL = 'https://solidproject.org/assets/img/solid-emblem.svg'
 const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
 const DEFAULT_LOGGEDIN_MENU_BUTTON_AVATAR = icons.iconBase + 'emptyProfileAvatar.png'
+
+async function clearPersistedAuthState (): Promise<void> {
+  if (typeof window === 'undefined') {
+    return
+  }
+
+  const explicitKeys = ['loginIssuer', 'preLoginRedirectHash']
+  for (const key of explicitKeys) {
+    window.localStorage.removeItem(key)
+    window.sessionStorage.removeItem(key)
+  }
+
+  if (typeof indexedDB === 'undefined') {
+    return
+  }
+
+  const databases = ['soidc', 'solid-client-authn-store', 'solid-client-authn']
+  for (const dbName of databases) {
+    await new Promise<void>((resolve) => {
+      try {
+        const request = indexedDB.deleteDatabase(dbName)
+        request.onsuccess = () => resolve()
+        request.onerror = () => resolve()
+        request.onblocked = () => resolve()
+      } catch (_err) {
+        resolve()
+      }
+    })
+  }
+}
 
 export type HeaderAuthState = 'logged-out' | 'logged-in'
 
@@ -51,7 +81,8 @@ export class Header extends LitElement {
     accountMenuOpen: { state: true },
     helpMenuOpen: { state: true },
     hasSlottedAccountMenu: { state: true },
-    hasSlottedHelpMenu: { state: true }
+    hasSlottedHelpMenu: { state: true },
+    authResolved: { state: true }
   }
 
   static styles = css`
@@ -514,6 +545,14 @@ export class Header extends LitElement {
   declare helpMenuOpen: boolean
   declare hasSlottedAccountMenu: boolean
   declare hasSlottedHelpMenu: boolean
+  declare authResolved: boolean
+  private _refreshPromise: Promise<void> | null = null
+
+  private readonly handleAuthSessionChange = () => {
+    this.refreshAuthStateFromSession().catch(() => {
+      // Keep auth event handling resilient on transient refresh failures.
+    })
+  }
 
   constructor () {
     super()
@@ -538,18 +577,57 @@ export class Header extends LitElement {
     this.helpMenuOpen = false
     this.hasSlottedAccountMenu = false
     this.hasSlottedHelpMenu = false
+    this.authResolved = false
   }
 
   connectedCallback () {
     super.connectedCallback()
     document.addEventListener('click', this.handleDocumentClick)
     window.addEventListener('keydown', this.handleWindowKeydown)
+    if (typeof authSession.events?.on === 'function') {
+      authSession.events.on('login', this.handleAuthSessionChange)
+      authSession.events.on('logout', this.handleAuthSessionChange)
+      authSession.events.on('sessionRestore', this.handleAuthSessionChange)
+    }
+    this.refreshAuthStateFromSession().catch(() => {
+      // Keep initial header render resilient on transient refresh failures.
+    })
   }
 
   disconnectedCallback () {
     document.removeEventListener('click', this.handleDocumentClick)
     window.removeEventListener('keydown', this.handleWindowKeydown)
+    if (typeof authSession.events?.off === 'function') {
+      authSession.events.off('login', this.handleAuthSessionChange)
+      authSession.events.off('logout', this.handleAuthSessionChange)
+      authSession.events.off('sessionRestore', this.handleAuthSessionChange)
+    }
     super.disconnectedCallback()
+  }
+
+  private async refreshAuthStateFromSession () {
+    if (!this._refreshPromise) {
+      this._refreshPromise = (async () => {
+        try {
+          await authn.checkUser()
+          // Some auth stacks resolve session state asynchronously after first check.
+          if (!authn.currentUser()) {
+            await authn.checkUser()
+          }
+        } catch (_err) {
+          // Keep rendering even if session refresh cannot complete.
+        }
+      })()
+    }
+
+    try {
+      await this._refreshPromise
+    } finally {
+      this._refreshPromise = null
+    }
+
+    this.authState = authn.currentUser() ? 'logged-in' : 'logged-out'
+    this.authResolved = true
   }
 
   private handleHelpMenuClick (item: HeaderMenuItem, event: MouseEvent) {
@@ -669,8 +747,8 @@ export class Header extends LitElement {
     `
   }
 
-  private handleLoginSuccess () {
-    this.authState = 'logged-in'
+  private async handleLoginSuccess () {
+    await this.refreshAuthStateFromSession()
     this.dispatchEvent(new CustomEvent('auth-action-select', {
       detail: { role: 'login' },
       bubbles: true,
@@ -680,12 +758,25 @@ export class Header extends LitElement {
 
   private async handleLogout () {
     this.accountMenuOpen = false
+    const issuer = window.localStorage.getItem('loginIssuer') || ''
+
     try {
       await authSession.logout()
     } catch (_err) {
       // logout errors are non-fatal — proceed to clear state
     }
-    this.authState = 'logged-out'
+
+    await clearPersistedAuthState()
+
+    const redirectedToServerLogout = await performServerSideLogout({
+      issuer,
+      postLogoutRedirectPath: '/'
+    })
+    if (redirectedToServerLogout) {
+      return
+    }
+
+    await this.refreshAuthStateFromSession()
     this.dispatchEvent(new CustomEvent('logout-select', {
       detail: { role: 'logout' },
       bubbles: true,
@@ -800,6 +891,10 @@ export class Header extends LitElement {
           <solid-ui-account></solid-ui-account>
         </solid-ui-provider>
       `
+    }
+
+    if (!this.authResolved) {
+      return html`<div class="auth-actions" part="auth-actions"></div>`
     }
 
     if (this.authState === 'logged-out') {
