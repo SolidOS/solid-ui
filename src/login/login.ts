@@ -162,6 +162,8 @@ export async function ensureLoadedPreferences (
     } else {
       throw new Error(`(via loadPrefs) ${err}`)
     }
+
+    context.preferencesFileError = m2
   }
   return context
 }
@@ -1047,22 +1049,10 @@ export function newAppInstance (
  * and/or a developer
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
-  const sessionInfo = authSession.info
-  if (!sessionInfo?.isLoggedIn || !sessionInfo?.webId) {
-    return []
-  }
-
-  const currentUser = authn.currentUser()
-  if (!currentUser) {
-    return []
-  }
-
   try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({
-      me: currentUser
-    })
+    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
-      throw new Error(preferencesFileError || 'Unable to load user preferences file.')
+      throw new Error(preferencesFileError)
     }
     return solidLogicSingleton.store.each(
       me,
