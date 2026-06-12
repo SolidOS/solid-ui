@@ -27,9 +27,8 @@ export default class SolidAuth implements AuthContext {
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
 
   get account (): Account | null {
-    const sessionAny = authSession as any
-    const webId: string | undefined = sessionAny.webId ?? sessionAny.info?.webId
-    const isActive: boolean = sessionAny.isActive ?? sessionAny.info?.isLoggedIn ?? Boolean(webId)
+    const webId: string | undefined = authSession.webId ?? authSession.info?.webId
+    const isActive: boolean = authSession.isActive ?? authSession.info?.isLoggedIn ?? Boolean(webId)
     if (!isActive || !webId) {
       return null
     }
@@ -59,7 +58,7 @@ export default class SolidAuth implements AuthContext {
 
     locationUrl.hash = ''
 
-    await (authSession as any).login(loginUrl, locationUrl.href)
+    await authSession.login(loginUrl, locationUrl.href)
   }
 
   async signup () {
@@ -72,25 +71,24 @@ export default class SolidAuth implements AuthContext {
 
   onSessionUpdated (callback: () => unknown) {
     const sessionEventTarget = authSession as unknown as EventTarget
-    const sessionAny = authSession as any
     const listener = () => {
       callback()
     }
     if (typeof sessionEventTarget.addEventListener === 'function') {
       sessionEventTarget.addEventListener('sessionStateChange', listener)
     } else {
-      sessionAny.events.on('login', callback)
-      sessionAny.events.on('logout', callback)
-      sessionAny.events.on('sessionRestore', callback)
+      authSession.events.on('login', callback)
+      authSession.events.on('logout', callback)
+      authSession.events.on('sessionRestore', callback)
     }
 
     return () => {
       if (typeof sessionEventTarget.removeEventListener === 'function') {
         sessionEventTarget.removeEventListener('sessionStateChange', listener)
       } else {
-        sessionAny.events.off('login', callback)
-        sessionAny.events.off('logout', callback)
-        sessionAny.events.off('sessionRestore', callback)
+        authSession.events.off('login', callback)
+        authSession.events.off('logout', callback)
+        authSession.events.off('sessionRestore', callback)
       }
     }
   }
