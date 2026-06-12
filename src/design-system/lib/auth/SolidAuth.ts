@@ -1,13 +1,27 @@
 import { authSession, solidLogicSingleton } from 'solid-logic'
 import Account from '../../../primitives/lib/auth/Account'
-import { findImage } from '../../../widgets/buttons'
 import { AuthContext } from '../../../primitives/lib/auth/context'
 import { showDialog } from '../dialogs'
 import { html } from 'lit'
+import ns from '../../../ns'
 
 import '../../components/login-modal'
 
 export const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
+
+function findAccountImage (webId: string): string | undefined {
+  const store = solidLogicSingleton.store
+  const me = store.sym(webId)
+  const image =
+    store.any(me, ns.sioc('avatar')) ||
+    store.any(me, ns.foaf('img')) ||
+    store.any(me, ns.vcard('logo')) ||
+    store.any(me, ns.vcard('hasPhoto')) ||
+    store.any(me, ns.vcard('photo')) ||
+    store.any(me, ns.foaf('depiction'))
+
+  return image ? (image as any).value : undefined
+}
 
 export default class SolidAuth implements AuthContext {
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
@@ -20,8 +34,7 @@ export default class SolidAuth implements AuthContext {
       return null
     }
 
-    const me = solidLogicSingleton.store.sym(webId)
-    const avatarUrl = findImage(me) ?? undefined
+    const avatarUrl = findAccountImage(webId)
 
     return new Account(webId, avatarUrl)
   }
