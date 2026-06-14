@@ -541,14 +541,14 @@ describe('renderAsDiv ', () => {
     const element = renderAsDiv(dom, obj, options)
     expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
   })
-  it('the div is clickable if given true for the clickable option', () => {
+  it('the div is clickable if given true for the clickable option', async () => {
     const mockClickFunction = vi.fn()
     const options = {
       clickable: true,
       onClickFunction: mockClickFunction
     }
     const element = renderAsDiv(dom, obj, options)
-    userEvent.click(element)
+    await userEvent.click(element)
     expect(mockClickFunction).toHaveBeenCalled()
   })
   it('wraps the div in a TR if wrapInATR option is set to true', () => {
