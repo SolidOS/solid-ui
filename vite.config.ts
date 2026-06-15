@@ -66,6 +66,10 @@ function defaultConfig(): UserConfig {
         test: {
             environment: 'jsdom',
             setupFiles: ['test/helpers/setup.ts'],
+            include: [
+                'src/**/*.test.ts',
+                'test/**/*.test.ts',
+            ],
             coverage: {
                 include: ['src/**/*.[jt]s'],
             },
