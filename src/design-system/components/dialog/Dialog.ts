@@ -1,6 +1,7 @@
 import { consume } from '@lit/context'
 import { html, nothing } from 'lit'
-import { customElement, property, query } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { property, query } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import styles from './Dialog.styles.css'
 import { DialogContext, dialogContext } from '../../lib/dialogs/context'

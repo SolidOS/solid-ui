@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
-import { icons } from '../../src/iconBase'
+import { icons } from '../../src/lib/iconBase'
 
 const { iconBase, originalIconBase } = icons
 

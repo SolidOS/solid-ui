@@ -3,7 +3,7 @@ import Account from '../../../primitives/lib/auth/Account'
 import { AuthContext } from '../../../primitives/lib/auth/context'
 import { showDialog } from '../dialogs'
 import { html } from 'lit'
-import ns from '../../../ns'
+import ns from '../../../lib/ns'
 
 import '../../components/login-modal'
 

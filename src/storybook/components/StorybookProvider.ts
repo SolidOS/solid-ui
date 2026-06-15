@@ -1,6 +1,7 @@
 import { provide } from '@lit/context'
 import { html } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from '../../primitives/lib/customElement'
+import { property } from 'lit/decorators.js'
 import StorybookAuth from '../auth/StorybookAuth'
 import Account from '../../primitives/lib/auth/Account'
 import { authContext } from '../../primitives/lib/auth/context'

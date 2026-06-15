@@ -1,5 +1,6 @@
 import { html, nothing } from 'lit'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { property } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 
 @customElement('solid-ui-combobox-option')

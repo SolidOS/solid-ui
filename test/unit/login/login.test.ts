@@ -1,8 +1,10 @@
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
+import { authn, authSession, solidLogicSingleton } from 'solid-logic'
 import * as testLogin from '../../../src/login/login'
 
 describe('ensureLoggedIn', () => {
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   it('exists', () => {
     expect(testLogin.ensureLoggedIn).toBeInstanceOf(Function)
@@ -14,28 +16,25 @@ describe('ensureLoggedIn', () => {
 
 describe('getUserRoles', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
-    jest.resetModules()
+    vi.restoreAllMocks()
   })
 
   it('returns [] and does not load preferences when current user is missing', async () => {
-    const solidLogic = require('solid-logic')
-
-    solidLogic.authSession.info = {
+    vi.spyOn(authSession, 'info', 'get').mockReturnValue({
       isLoggedIn: true,
-      webId: 'https://alice.example.com/profile/card#me'
-    }
+      webId: 'https://alice.example.com/profile/card#me',
+      sessionId: 'test-session'
+    })
 
-    const currentUserSpy = jest
-      .spyOn(solidLogic.authn, 'currentUser')
+    const currentUserSpy = vi
+      .spyOn(authn, 'currentUser')
       .mockReturnValue(null)
-    const loadPreferencesSpy = jest.spyOn(
-      solidLogic.solidLogicSingleton.profile,
+    const loadPreferencesSpy = vi.spyOn(
+      solidLogicSingleton.profile,
       'loadPreferences'
     )
 
-    const loginModule = require('../../../src/login/login')
-    const roles = await loginModule.getUserRoles()
+    const roles = await testLogin.getUserRoles()
 
     expect(currentUserSpy).toHaveBeenCalled()
     expect(roles).toEqual([])

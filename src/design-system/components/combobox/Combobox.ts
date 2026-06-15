@@ -1,5 +1,6 @@
 import { html } from 'lit'
-import { customElement, property, query, state } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { property, query, state } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 
 import styles from './Combobox.styles.css'

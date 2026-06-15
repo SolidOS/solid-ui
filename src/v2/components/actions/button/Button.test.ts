@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { Button } from './Button'
 import './index'
 
@@ -45,8 +45,8 @@ describe('SolidUIButton', () => {
 
   it('calls the callback property and still emits the native click event', async () => {
     const button = new Button()
-    const handleClick = jest.fn()
-    const clickListener = jest.fn()
+    const handleClick = vi.fn()
+    const clickListener = vi.fn()
     button.handleClick = handleClick
     button.addEventListener('click', clickListener)
 

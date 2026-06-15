@@ -16,7 +16,7 @@ There are a lot of tests in `solid-ui`, so you will most likely want to run only
 
 ### Coverage
 Run the following command:
-`npm run test:coverage`
+`npm run test-coverage`
 
 The results will be found in `coverage/lcov-report/index.html`. If you are using VSCode, you can right click and select `Open in Browser Preview`. Alternatively, you can type the path in your browser; for instance, the following:
 ```
@@ -26,18 +26,65 @@ file:///Users/<yourhomedirectory>/2023Development/solid-ui/coverage/lcov-report/
 ## Tips and Tricks
 The following are some tips and tricks to make your testing easier.
 
-### VSCode Debugging
-There is an extension that can be used to aide in debugging `jest` tests. To find out more about it, you can look at [Jest Runner](https://marketplace.visualstudio.com/items?itemName=firsttris.vscode-jest-runner).
+### VSCode / Cursor debugging
+
+Tests run with [Vitest](https://vitest.dev/). Useful workflows:
+
+**Watch mode (re-runs on save)** — from the package root:
+
+```bash
+npx vitest
+```
+
+Pass a file path to limit the run, for example `npx vitest test/unit/widgets/forms/basic.test.ts`.
+
+**Single run (CI-style)** — same as `npm run test`:
+
+```bash
+npm test
+npm test test/unit/utils/keyHelpers/accessData.test.ts
+```
+
+**Editor integration** — install the [Vitest](https://marketplace.visualstudio.com/items?itemName=vitest.explorer) extension. It adds a testing sidebar, run/debug icons beside each test, and supports breakpoints in test and source files without extra configuration (Vitest picks up `vite.config.ts`).
+
+**Node inspector** — for stepping in the terminal:
+
+```bash
+npm run test-debug
+```
+
+Then attach your editor’s JavaScript debugger, or open `chrome://inspect` if you use the Chrome/Edge protocol.
 
 ### Mocking
 In `solid-ui`, we do not currently follow a MVC pattern, so testing is not always easy. The following are patterns to help with this.
 #### Store methods
 ##### Load
-In SolidOS, we use [`rdflib.js`](https://github.com/linkeddata/rdflib.js/) to work with LinkedData. First, you load the document you need to work with into the store. Once the document is loaded, you can access the data by using additional methods on the store such as `any`, `each`, etc. Since the data that gets returned will need to be mocked, `load` doesn't need to do anything. You need to put the following into your file to mock the `load` method:
-```
-import { store } from 'solid-logic'      /* at the top of your file */
-...
-store.fetcher.load = jest.fn().mockImplementation(() => {})
+In SolidOS, we use [`rdflib.js`](https://github.com/linkeddata/rdflib.js/) to work with LinkedData. First, you load the document you need to work with into the store. Once the document is loaded, you can access the data by using additional methods on the store such as `any`, `each`, etc.
+
+Vitest setup (`test/helpers/setup.ts`) stubs `store.fetcher.load` by default so unit tests do not hit the network when triples are already in the store. You normally do not need to repeat that in each test file.
+
+If a test must perform a real load (for example with [nock](https://github.com/nock/nock)), call `restoreFetcherLoad()` before the load and `stubFetcherLoad()` in `afterEach`:
+
+```js
+import { afterEach, beforeEach, describe } from 'vitest'
+import { restoreFetcherLoad, stubFetcherLoad } from '../stubs/fetcher'
+import nock from 'nock'
+
+describe('my test', () => {
+  beforeEach(() => {
+    restoreFetcherLoad()
+    nock.cleanAll()
+    nock.disableNetConnect()
+  })
+
+  afterEach(() => {
+    stubFetcherLoad()
+    nock.cleanAll()
+    nock.enableNetConnect()
+  })
+
+  // ...
+});
 ```
 
 ##### Any

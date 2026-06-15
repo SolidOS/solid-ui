@@ -1,6 +1,7 @@
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { tabs } from '../../src/index'
-import { tabWidget } from '../../src/tabs'
+import { tabWidget } from '../../src/lib/tabs'
 import { Collection, lit, NamedNode, namedNode } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { clearStore } from './helpers/clearStore'
@@ -8,7 +9,7 @@ import { label } from '../../src/utils'
 import { solidLogicSingleton } from 'solid-logic'
 
 // @ts-ignore
-import ns from '../../src/ns'
+import ns from '../../src/lib/ns'
 
 const store = solidLogicSingleton.store
 
@@ -136,7 +137,7 @@ describe('tabWidget', () => {
     let onCloseSpy
 
     beforeEach(() => {
-      onCloseSpy = jest.fn(() => null)
+      onCloseSpy = vi.fn(() => null)
       tabWidgetElement = tabs.tabWidget({ onClose: onCloseSpy, ...minimalOptions })
     })
 
@@ -199,7 +200,7 @@ describe('tabWidget', () => {
 
   describe('option renderMain', () => {
     it('allows overriding what is rendered in container', () => {
-      const renderMainSpy = jest.fn((bodyMain: HTMLElement, subject: NamedNode) => {
+      const renderMainSpy = vi.fn((bodyMain: HTMLElement, subject: NamedNode) => {
         expect(subject).toBe(item1)
       })
       tabWidgetElement = tabs.tabWidget({ renderMain: renderMainSpy, ...minimalOptions })
@@ -209,7 +210,7 @@ describe('tabWidget', () => {
 
   describe('option renderTab', () => {
     it('allows overriding what is rendered in tab', () => {
-      const renderTabSpy = jest.fn((div: HTMLElement, item: NamedNode) => {
+      const renderTabSpy = vi.fn((div: HTMLElement, item: NamedNode) => {
         div.innerHTML = item.uri
       })
       tabWidgetElement = tabs.tabWidget({ renderTab: renderTabSpy, ...minimalOptions })
@@ -219,7 +220,7 @@ describe('tabWidget', () => {
 
   describe('renderTabSettings', () => {
     it('allows overriding what is rendered in container when alt+clicking on tab', () => {
-      const renderTabSettingsSpy = jest.fn((bodyMain: HTMLElement, subject: NamedNode) => {
+      const renderTabSettingsSpy = vi.fn((bodyMain: HTMLElement, subject: NamedNode) => {
         expect(subject).toBe(item2)
       })
       tabWidgetElement = tabs.tabWidget({ renderTabSettings: renderTabSettingsSpy, ...minimalOptions })
@@ -246,7 +247,7 @@ describe('tabWidget', () => {
 
   describe('option startEmpty', () => {
     it.skip('will not render the main container if set to true', () => {
-      const renderMainSpy = jest.fn()
+      const renderMainSpy = vi.fn()
       tabWidgetElement = tabs.tabWidget({ renderMain: renderMainSpy, startEmpty: true, ...minimalOptions })
       expect(renderMainSpy).not.toHaveBeenCalled()
     })

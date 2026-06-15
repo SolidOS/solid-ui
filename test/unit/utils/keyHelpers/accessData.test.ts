@@ -1,18 +1,19 @@
+import { vi, describe, it, expect } from 'vitest'
 import { store } from 'solid-logic'
 import { pubKeyUrl, privKeyUrl } from '../../../../src/utils/keyHelpers/accessData'
 import { NamedNode } from 'rdflib'
 
 /* mocks */
-store.fetcher.load = jest.fn().mockImplementation(() => {})
-store.fetcher.webOperation = jest.fn()
-store.each = jest.fn()
-store.any = jest.fn()
+store.fetcher.webOperation = vi.fn()
+store.each = vi.fn()
+store.any = vi.fn()
 
-jest.mock('../../../../src/utils/keyHelpers/otherHelpers', () => {
+vi.mock('../../../../src/utils/keyHelpers/otherHelpers', () => {
   return {
-    getRootIfPreferencesExist: jest.fn().mockImplementationOnce(() => {
-      throw new Error()
-    })
+    getRootIfPreferencesExist: vi.fn()
+      .mockImplementationOnce(() => {
+        throw new Error()
+      })
       .mockImplementationOnce(() => 'https://alice.example.net')
       .mockImplementationOnce(() => {
         throw new Error()

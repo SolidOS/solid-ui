@@ -4,6 +4,17 @@ export default abstract class WebComponent extends LitElement {
   static states?: Record<string, Function>
 
   protected internals?: ElementInternals
+  protected globalListeners: [type: string, listener: EventListener][] = []
+
+  disconnectedCallback (): void {
+    super.disconnectedCallback()
+
+    for (const [type, listener] of this.globalListeners) {
+      window.removeEventListener(type, listener)
+    }
+
+    this.globalListeners = []
+  }
 
   protected willUpdate (changedProperties: Map<string, any>) {
     super.willUpdate(changedProperties)
@@ -25,6 +36,12 @@ export default abstract class WebComponent extends LitElement {
         internals.states.delete(state)
       }
     }
+  }
+
+  protected addGlobalEventListener <T extends keyof WindowEventMap>(type: T, listener: (this: Window, ev: WindowEventMap[T]) => any) {
+    this.globalListeners.push([type, listener as EventListener])
+
+    window.addEventListener(type, listener)
   }
 
   protected render () {

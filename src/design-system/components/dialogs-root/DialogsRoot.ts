@@ -1,5 +1,6 @@
 import { html } from 'lit'
-import { customElement, state } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { state } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import Dialog from '../../lib/dialogs/Dialog'
 import { ShowDialogEvent } from '../../lib/dialogs/events/show-dialog'
@@ -15,14 +16,14 @@ export default class DialogsRoot extends WebComponent {
   connectedCallback (): void {
     super.connectedCallback()
 
-    window.addEventListener(ShowDialogEvent.eventName, (event) => {
+    this.addGlobalEventListener(ShowDialogEvent.eventName, (event) => {
       event.stopImmediatePropagation()
 
       this.dialogs = [...this.dialogs, event.dialog]
     })
 
-    window.addEventListener(CloseDialogEvent.eventName, (event) => {
-      event.stopPropagation()
+    this.addGlobalEventListener(CloseDialogEvent.eventName, (event) => {
+      event.stopImmediatePropagation()
 
       this.dialogs = this.dialogs.filter(dialog => dialog.id !== event.id)
     })

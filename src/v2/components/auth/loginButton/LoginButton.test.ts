@@ -1,12 +1,13 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { LoginButton } from './LoginButton'
 import './index'
 
-jest.mock('solid-logic', () => ({
-  authSession: { login: jest.fn() },
-  authn: { saveUser: jest.fn() },
-  getSuggestedIssuers: jest.fn(() => []),
-  offlineTestID: jest.fn(() => false),
-  solidLogicSingleton: { store: { updater: { flagAuthorizationMetadata: jest.fn() } } }
+vi.mock('solid-logic', () => ({
+  authSession: { login: vi.fn() },
+  authn: { saveUser: vi.fn() },
+  getSuggestedIssuers: vi.fn(() => []),
+  offlineTestID: vi.fn(() => false),
+  solidLogicSingleton: { store: { updater: { flagAuthorizationMetadata: vi.fn() } } }
 }))
 
 describe('SolidUILoginButton', () => {
@@ -15,10 +16,10 @@ describe('SolidUILoginButton', () => {
     Object.defineProperty(window, 'open', {
       configurable: true,
       writable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
-    HTMLDialogElement.prototype.showModal = jest.fn()
-    HTMLDialogElement.prototype.close = jest.fn()
+    HTMLDialogElement.prototype.showModal = vi.fn()
+    HTMLDialogElement.prototype.close = vi.fn()
     localStorage.clear()
   })
 

@@ -1,7 +1,8 @@
 /* Test the language handling
 */
 
-import { parse } from 'rdflib'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { Node, parse } from 'rdflib'
 import {
   languageCodeURIBase,
   defaultPreferredLanguages,
@@ -12,9 +13,8 @@ import {
 } from '../../../../../src/widgets/forms/autocomplete/language'
 import { store } from 'solid-logic'
 
-// jest.unmock('rdflib') // we need Fetcher to work (mocked)
-jest.unmock('debug') // while debugging only @@
-jest.mock('solid-auth-client', () => ({
+vi.unmock('debug') // while debugging only @@
+vi.mock('solid-auth-client', () => ({
   currentSession: () => Promise.resolve(),
   trackSession: () => null
 }))
@@ -89,8 +89,7 @@ describe('defaultPreferredLanguages', () => {
 describe('getPreferredLanguages', () => {
   let languageGetter
   beforeEach(() => {
-    // languageGetter = jest.spyOn(navigator, 'language', 'get')
-    languageGetter = jest.spyOn(navigator, 'languages', 'get')
+    languageGetter = vi.spyOn(navigator, 'languages', 'get')
   })
   it('returns the italian language defined in browser, plus other defaults', async () => {
     languageGetter.mockReturnValue(['it'])
@@ -107,8 +106,8 @@ describe('getPreferredLanguagesFor', () => {
   })
   it.skip('returns just greek for Alice, plus defaults ', async () => {
     // Note to Tim: for some reason languageCodeURIBase doesn't find 'el'
-    const usersLanguages = { elements: [{ value: 'https://www.w3.org/ns/iana/language-code/el' }] }
-    const kbAnySpy = jest.spyOn(kb, 'any').mockReturnValueOnce(usersLanguages).mockReturnValueOnce(usersLanguages)
+    const usersLanguages = { elements: [{ value: 'https://www.w3.org/ns/iana/language-code/el' }] } as any as Node
+    const kbAnySpy = vi.spyOn(kb, 'any').mockReturnValueOnce(usersLanguages).mockReturnValueOnce(usersLanguages)
     const result = await getPreferredLanguagesFor(alice)
     expect(result).toEqual(['el'].concat(['en', 'fr', 'de', 'it', 'ar']))
     expect(kbAnySpy).toHaveBeenCalledTimes(2)
@@ -129,22 +128,22 @@ describe('filterByLanguage', () => {
   })
   it('filters picking english by default', async () => {
     const result = filterByLanguage(elephants, defaultPreferredLanguages)
-    const names = result.map(binding => binding.name.value)
+    const names = result.map(binding => binding.name?.value)
     expect(names).toEqual(['elephant'])
   })
   it('filters leaving french ', async () => {
     const result = filterByLanguage(elephants, ['fr'])
-    const names = result.map(binding => binding.name.value)
+    const names = result.map(binding => binding.name?.value)
     expect(names).toEqual(['éléphant'])
   })
   it('filters leaving Italian', async () => {
     const result = filterByLanguage(elephants, ['it'])
-    const names = result.map(binding => binding.name.value)
+    const names = result.map(binding => binding.name?.value)
     expect(names).toEqual(['elefante'])
   })
   it('filters leaving Italian even when unavailable greek comes first', async () => {
     const result = filterByLanguage(elephants, ['el', 'it'])
-    const names = result.map(binding => binding.name.value)
+    const names = result.map(binding => binding.name?.value)
     expect(names).toEqual(['elefante'])
   })
 })

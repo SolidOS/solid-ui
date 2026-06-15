@@ -1,10 +1,12 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { store } from 'solid-logic'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import * as RdfLib from 'rdflib'
-import { lightColorHash, notepad } from '../../src/pad'
-import { log } from '../../src/debug'
-import ns from '../../src/ns'
-import { solidLogicSingleton } from 'solid-logic'
+import { lightColorHash, notepad } from '../../src/lib/pad'
+import { log } from '../../src/lib/debug'
+import ns from '../../src/lib/ns'
+import { restoreUpdater, stubUpdater } from '../stubs/updater'
 
 silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
@@ -27,9 +29,7 @@ describe('lightColorHash', () => {
 })
 
 describe('notepad', () => {
-  const store: any = solidLogicSingleton.store
   const PAD = RdfLib.Namespace('http://www.w3.org/ns/pim/pad#')
-  let originalUpdater: any
 
   function setupExistingPadFixture () {
     const id = Date.now().toString() + Math.random().toString().slice(2)
@@ -51,13 +51,10 @@ describe('notepad', () => {
     return { padDoc, subject, chunk, me, part }
   }
 
-  beforeEach(() => {
-    originalUpdater = store.updater
-  })
-
+  beforeEach(() => stubUpdater((_del, _ins, cb) => cb?.(null, true, '', { status: 200 } as Response)))
   afterEach(() => {
-    store.updater = originalUpdater
-    jest.useRealTimers()
+    restoreUpdater()
+    vi.useRealTimers()
   })
 
   it('to be exposed by the Public API', () => {
@@ -79,8 +76,8 @@ describe('notepad', () => {
     const me = new RdfLib.NamedNode('https://sharonstrats.inrupt.net/profile/card#me')
     const options = {}
 
-      // use this instead jest.spyOn(window.console, 'log') Arne's PR Comments
-      ; (window as any).console = { log: jest.fn() }
+      // use this instead vi.spyOn(window.console, 'log') Arne's PR Comments
+      ; (window as any).console = { log: vi.fn() }
     expect(notepad(dom, padDoc, subject, me, options))
       .toMatchSnapshot()
     expect(log).toBeCalledWith(
@@ -112,15 +109,9 @@ describe('notepad', () => {
   })
 
   it('debounces rapid input and sends one update after pause', () => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
 
-    const update = jest.fn((_del, _ins, cb) => cb(null, true, '', { status: 200 }))
-    store.updater = {
-      update,
-      requestDownstreamAction: jest.fn(),
-      reload: jest.fn(),
-      store
-    }
+    const update = stubUpdater((_del, _ins, cb) => cb?.(null, true, '', { status: 200 } as Response))
 
     const { padDoc, subject, chunk, part } = setupExistingPadFixture()
 
@@ -134,9 +125,9 @@ describe('notepad', () => {
     }).not.toThrow()
 
     expect(update).toHaveBeenCalledTimes(0)
-    jest.advanceTimersByTime(399)
+    vi.advanceTimersByTime(399)
     expect(update).toHaveBeenCalledTimes(0)
-    jest.advanceTimersByTime(1)
+    vi.advanceTimersByTime(1)
     expect(update).toHaveBeenCalledTimes(1)
 
     // Cleanup this test fixture's statements.
@@ -146,40 +137,33 @@ describe('notepad', () => {
   })
 
   it('retries on transient 503 and keeps state/lastSent coherent', () => {
-    jest.useFakeTimers()
+    vi.useFakeTimers()
 
     let callCount = 0
-    const update = jest.fn((_del, _ins, cb) => {
+    const update = stubUpdater((_del, _ins, cb) => {
       callCount += 1
       if (callCount === 1) {
-        cb(null, false, 'transient', { status: 503 })
+        cb?.(null, false, 'transient', { status: 503 } as Response)
       } else {
-        cb(null, true, '', { status: 200 })
+        cb?.(null, true, '', { status: 200 } as Response)
       }
     })
-
-    store.updater = {
-      update,
-      requestDownstreamAction: jest.fn(),
-      reload: jest.fn(),
-      store
-    }
 
     const { padDoc, subject, chunk, part } = setupExistingPadFixture()
     part.value = 'queued text'
 
     expect(() => {
       part.dispatchEvent(new window.Event('input', { bubbles: true }))
-      jest.advanceTimersByTime(400) // debounce fires first PATCH
+      vi.advanceTimersByTime(400) // debounce fires first PATCH
     }).not.toThrow()
 
     expect(update).toHaveBeenCalledTimes(1)
     expect(part.state).toBe(0)
     expect(part.lastSent).toBeUndefined()
 
-    jest.advanceTimersByTime(1999)
+    vi.advanceTimersByTime(1999)
     expect(update).toHaveBeenCalledTimes(1)
-    jest.advanceTimersByTime(1)
+    vi.advanceTimersByTime(1)
 
     expect(update).toHaveBeenCalledTimes(2)
     expect(part.state).toBe(0)

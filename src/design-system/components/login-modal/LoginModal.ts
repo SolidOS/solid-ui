@@ -1,6 +1,7 @@
 import { html, nothing } from 'lit'
 import { consume } from '@lit/context'
-import { customElement, property, query, state } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { property, query, state } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import { AuthContext, authContext, DEFAULT_AUTH_CONTEXT } from '../../../primitives/lib/auth/context'
 

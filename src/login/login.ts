@@ -42,10 +42,10 @@ import {
   UnauthorizedError,
   WebOperationError
 } from 'solid-logic'
-import * as debug from '../debug'
-import { style } from '../style'
-import { alert } from '../log'
-import ns from '../ns'
+import * as debug from '../lib/debug'
+import { style } from '../lib/style'
+import { alert } from '../lib/log'
+import ns from '../lib/ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from '../utils'
 import * as widgets from '../widgets'

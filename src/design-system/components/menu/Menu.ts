@@ -1,6 +1,7 @@
 import { provide } from '@lit/context'
 import { html } from 'lit'
-import { customElement, queryAssignedElements } from 'lit/decorators.js'
+import { customElement } from '../../../primitives/lib/customElement'
+import { queryAssignedElements } from 'lit/decorators.js'
 import WebComponent from '../../../primitives/lib/WebComponent'
 import MenuItems from '../menu-items'
 import { MenuContext, menuContext } from '../../lib/menus/context'

@@ -1,34 +1,47 @@
+import '../../src/design-system/shims.d.ts'
+import '../../src/design-system/polyfills/css-anchor-positioning'
+
+import { expect, vi } from 'vitest'
 import { toContainGraph } from '../custom-matchers/toContainGraph'
 import { toEqualGraph } from '../custom-matchers/toEqualGraph'
 import 'isomorphic-fetch'
-import { TextEncoder, TextDecoder } from 'util'
-import { TransformStream, ReadableStream, WritableStream } from 'stream/web'
+import { TextEncoder, TextDecoder } from 'node:util'
+import { TransformStream, ReadableStream, WritableStream } from 'node:stream/web'
+import crypto from 'node:crypto'
+import { stubFetcherLoad } from '../stubs/fetcher'
+
+vi.mock('../../src/lib/debug')
 
 // https://stackoverflow.com/questions/52612122/how-to-use-jest-to-test-functions-using-crypto-or-window-mscrypto
-
-import crypto from 'crypto'
 Object.defineProperty(globalThis, 'crypto', {
   value: crypto.webcrypto,
-  configurable: true
+  configurable: true,
 })
 
-global.TextEncoder = TextEncoder
-global.TextDecoder = TextDecoder
-global.TransformStream = TransformStream as unknown as typeof globalThis.TransformStream
-global.ReadableStream = ReadableStream as unknown as typeof globalThis.ReadableStream
-global.WritableStream = WritableStream as unknown as typeof globalThis.WritableStream
+Object.defineProperty(globalThis, 'TextEncoder', {
+  value: TextEncoder,
+  configurable: true,
+  writable: true,
+})
+Object.defineProperty(globalThis, 'TextDecoder', {
+  value: TextDecoder,
+  configurable: true,
+  writable: true,
+})
+globalThis.TransformStream = TransformStream as unknown as typeof globalThis.TransformStream
+globalThis.ReadableStream = ReadableStream as unknown as typeof globalThis.ReadableStream
+globalThis.WritableStream = WritableStream as unknown as typeof globalThis.WritableStream
 
 // Node provides MessagePort via worker_threads; jsdom/undici expects it in global scope
 try {
-  const { MessageChannel, MessagePort } = require('worker_threads')
-  global.MessageChannel = MessageChannel
-  global.MessagePort = MessagePort
-} catch (err) {
+  const { MessageChannel, MessagePort } = require('node:worker_threads')
+  globalThis.MessageChannel = MessageChannel
+  globalThis.MessagePort = MessagePort
+} catch {
   // worker_threads not available (older Node), ignore
 }
 
-// Mock external dependencies that solid-logic expects
-jest.mock('$rdf', () => require('rdflib'), { virtual: true })
+stubFetcherLoad()
 
 // adding custom matchers
 expect.extend({
