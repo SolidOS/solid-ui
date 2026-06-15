@@ -1,5 +1,4 @@
 import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
-import { authn, authSession, solidLogicSingleton } from 'solid-logic'
 import * as testLogin from '../../../src/login/login'
 
 describe('ensureLoggedIn', () => {
@@ -20,24 +19,25 @@ describe('getUserRoles', () => {
   })
 
   it('returns [] and does not load preferences when current user is missing', async () => {
-    vi.spyOn(authSession, 'info', 'get').mockReturnValue({
+    vi.resetModules()
+
+    const { authn, authSession, solidLogicSingleton } = await import('solid-logic')
+
+    authSession.info = {
       isLoggedIn: true,
-      webId: 'https://alice.example.com/profile/card#me',
-      sessionId: 'test-session'
-    })
+      webId: 'https://alice.example.com/profile/card#me'
+    }
 
-    const currentUserSpy = vi
-      .spyOn(authn, 'currentUser')
-      .mockReturnValue(null)
-    const loadPreferencesSpy = vi.spyOn(
-      solidLogicSingleton.profile,
-      'loadPreferences'
-    )
+    vi.spyOn(authn, 'checkUser').mockResolvedValue(null)
 
-    const roles = await testLogin.getUserRoles()
+    const currentUserSpy = vi.spyOn(authn, 'currentUser').mockReturnValue(null)
+    const loadPreferencesSpy = vi.spyOn(solidLogicSingleton.profile, 'loadPreferences')
 
-    expect(currentUserSpy).toHaveBeenCalled()
+    const { getUserRoles } = await import('../../../src/login/login')
+    const roles = await getUserRoles()
+
     expect(roles).toEqual([])
+    expect(currentUserSpy).toHaveBeenCalled()
     expect(loadPreferencesSpy).not.toHaveBeenCalled()
   })
 })
