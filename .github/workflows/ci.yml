@@ -22,6 +22,7 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: npm ci
+      - run: scripts/setup-ci.sh
       - run: npm test
       - run: npm run build
       - run: npm run doc
