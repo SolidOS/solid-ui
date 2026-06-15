@@ -20,12 +20,6 @@ describe('getUserRoles', () => {
   })
 
   it('returns [] and does not load preferences when current user is missing', async () => {
-    vi.spyOn(authSession, 'info', 'get').mockReturnValue({
-      isLoggedIn: true,
-      webId: 'https://alice.example.com/profile/card#me',
-      sessionId: 'test-session'
-    })
-
     const currentUserSpy = vi
       .spyOn(authn, 'currentUser')
       .mockReturnValue(null)
