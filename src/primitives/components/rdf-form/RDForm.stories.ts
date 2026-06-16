@@ -1,11 +1,17 @@
 import { html } from 'lit'
 import { defineStoryRender } from '../../../storybook'
+import './RDFForm'
 
 const meta = {
   title: 'Design System/RDF Form',
   args: {
     rdfTurtleFormatSource: `
-      # A Form with 2 fields and a nested subgroup
+      @prefix : <https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl#>.
+@prefix dc: <http://purl.org/dc/elements/1.1/>.
+@prefix ui: <http://www.w3.org/ns/ui#>.
+@prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+
+# A Form with 2 fields and a nested subgroup
 
       :form a ui:Form;
         ui:parts (:nameField :emailField :addresses) .
@@ -55,9 +61,10 @@ const meta = {
                 a ui:SingleLineTextField ;
                 ui:maxLength "128" ;
                 ui:property vcard:country-name ;
-                ui:size "40" .`,
+                ui:size "40" .
+`,
     rdfURI: 'https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl',
-    whichForm: 'this',
+    whichForm: 'form',
     rdfName: 'dummyFormTestFile.ttl'
   },
 

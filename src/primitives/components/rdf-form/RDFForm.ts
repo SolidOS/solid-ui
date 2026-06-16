@@ -43,7 +43,22 @@ export default class RDFForm extends WebComponent {
 
       const parts = store.each(formThis, ns.ui('parts'), null, document)
       const partsBySequence = sortBySequence(store, parts)
-      const uiFields = partsBySequence.map(item => ((item as any).value || String(item)).split('#').pop())
+      const partItems = (partsBySequence || []).flatMap(item => {
+        if (item && typeof item === 'object' && 'elements' in item && Array.isArray((item as any).elements)) {
+          return (item as any).elements
+        }
+        return [item]
+      })
+      const uiFields = partItems.map(item => {
+        const types = store.each(item as any, ns.rdf('type'), null, document)
+        const typeNode = types[0]
+        const value = typeNode ? ((typeNode as any).value || String(typeNode)) : ((item as any).value || String(item))
+        const hashIndex = value.lastIndexOf('#')
+        return hashIndex >= 0 ? value.slice(hashIndex + 1) : value
+      })
+      console.log('parts:', parts)
+      console.log('partsBySequence:', partsBySequence)
+      console.log('partItems:', partItems)
       console.log('document:', document)
       console.log('exactForm:', exactForm)
       console.log('uiFields:', uiFields)
