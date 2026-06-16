@@ -21,6 +21,7 @@ function cdnSharedConfig(options: { basePlugins: PluginOption[]; globals?: Recor
 
     return {
         resolve: {
+            tsconfigPaths: true,
             alias: {
                 path: 'path-browserify',
             },

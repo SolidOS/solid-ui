@@ -16,6 +16,9 @@ const basePlugins = [
 
 function defaultConfig(): UserConfig {
     return {
+        resolve: {
+            tsconfigPaths: true,
+        },
         plugins: [
             ...basePlugins,
             babel(),
@@ -58,6 +61,7 @@ function defaultConfig(): UserConfig {
                 ],
                 external: (id) => {
                     return !id.startsWith('~icons/')
+                        && !id.startsWith('@/')
                         && !id.startsWith('.')
                         && !isAbsolute(id)
                 },

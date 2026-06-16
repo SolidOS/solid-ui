@@ -58,7 +58,7 @@ And don't forget to also include the CSS, either with a link tag or inside a CSS
 ```
 
 ```html
-  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/theme.css">
 ```
 
 You can also use some of the helpers exported from the default entry:
@@ -76,7 +76,7 @@ Solid-UI provides **ESM** bundles for direct browser usage. You'll also need to 
 ```html
 <html>
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/theme.css">
 </head>
 <body>
   <div id="app"></div>
@@ -98,7 +98,7 @@ You can also use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML
 ```html
 <html>
 <head>
-  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/styles.css">
+  <link rel="stylesheet" href="https://unpkg.com/solid-ui@^4.0.0/dist/theme.css">
 </head>
 <body>
   <div id="app"></div>
@@ -165,7 +165,7 @@ The build configuration uses [Vite](https://vite.dev/) and is centralized in the
 The config can be invoked with 4 different modes:
 
 - Default: This is the one used to generate ESM and CJS files to be consumed through npm (generates `*.cjs.js` and `*.esm.js` files respectively). It's also used to run Vitest tests and the Storybook.
-- `styles`: This mode generates the `styles.css` file that includes global styles (CSS variables for the Design System Tokens).
+- `styles`: This mode generates the `theme.css` file that includes global styles (CSS variables for the Design System Tokens).
 - `cdn`: This generates the ESM bundle to be consumed through CDNs, which has no external dependencies.
 - `cdn-legacy`: This generates the legacy UMD bundle to be consumed by legacy CDNs that externalize `rdflib` and `solid-logic` (no longer recommended).
 
