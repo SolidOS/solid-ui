@@ -1,44 +1,15 @@
-import { sym, Namespace, parse } from 'rdflib'
-import { widgets } from 'solid-ui'
+import { sym, LiveStore, parse, NamedNode } from 'rdflib'
 import ns from '../../lib/ns'
+import { label } from '../../utils'
 
 const baseUri = 'https://solidos.github.io/solid-ui/src/ontology/'
 
-export function renderForm (
-  div,
-  subject, // Represents the RDF that fills the form
-  formSource, // The imported form Turtle source
-  formName,   // The name of the form file (e.g., 'socialMedia.ttl')
-  store,
-  dom,
-  editableProfile,
-  whichForm) {
-  // --- Form resource setup ---
-  const formUri = baseUri + formName                   // Full URI to the form file
-  const exactForm = whichForm || 'this'                // If there are more 'a ui:Form' elements in a form file
-  const formThis = Namespace(formUri + '#')(exactForm) // NamedNode for #this in the form
-
-  loadDocument(store, formSource, formName, formUri)
-
-  widgets.appendForm(
-    dom,
-    div,
-    {},
-    subject,
-    formThis,
-    editableProfile,
-    (ok, mes) => {
-      if (!ok) widgets.errorMessageBlock(dom, mes)
-    }
-  )
-} // renderForm
-
 // we need to load into the store some additional information about Social Media accounts
 export function loadDocument (
-  store,
-  documentSource,
-  documentName,
-  documentURI
+  store: LiveStore,
+  documentSource: string,
+  documentName: string,
+  documentURI?: string
 ) {
   const finalDocumentUri = documentURI || baseUri + documentName   // Full URI to the file
   const document = sym(finalDocumentUri)      // rdflib NamedNode for the document
@@ -51,7 +22,7 @@ export function loadDocument (
 }
 
 export function sortBySequence (
-  store,
+  store: LiveStore,
   list
 ) {
   const subfields = list.map(function (p) {
@@ -64,4 +35,21 @@ export function sortBySequence (
   return subfields.map(function (pair) {
     return pair[1]
   })
+}
+
+/**
+ * Which class of field is this? Relies on http://www.w3.org/2000/01/rdf-schema#subClassOf and
+ * https://linkeddata.github.io/rdflib.js/doc/classes/formula.html#bottomtypeuris
+ * to find the most specific RDF type if there are multiple.
+ *
+ * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
+ * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
+ */
+export function mostSpecificClassURI (store: LiveStore,x: Node): string {
+  const ft = store.findTypeURIs(x as any)
+  const bot = store.bottomTypeURIs(ft) // most specific
+  const bots: any[] = []
+  for (const b in bot) bots.push(b)
+  // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
+  return bots[0]
 }
