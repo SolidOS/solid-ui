@@ -43,7 +43,7 @@
 		"lint-fix": "eslint --fix",
 		"typecheck": "tsc --noEmit",
 		"typecheck-test": "tsc --noEmit -p tsconfig.test.json",
-		"test": "vitest run",
+		"test": "npm run typecheck-test && vitest run",
 		"test-coverage": "vitest run --coverage",
 		"test-debug": "vitest --inspect-brk --no-file-parallelism",
 		"doc": "typedoc --out ./docs/api/ ./src/ --excludeInternal",
