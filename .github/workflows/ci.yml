@@ -12,7 +12,12 @@ on:
   workflow_dispatch:
 
 jobs:
+  update-deps:
+    uses: SolidOS/solidos/.github/workflows/update-solidos-deps.yml@main
+    secrets: inherit
+
   build:
+    needs: update-deps
     runs-on: ubuntu-latest
     strategy:
       matrix:
