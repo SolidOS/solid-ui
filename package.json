@@ -105,7 +105,9 @@
 		"escape-html": "^1.0.3",
 		"lit": "^3.3.3",
 		"mime-types": "^3.0.2",
-		"pane-registry": "^3.1.2-test.0",
+		"pane-registry": "3.1.2-0",
+		"rdflib": "2.3.9",
+		"solid-logic": "4.0.8-0",
 		"solid-namespace": "^0.5.4",
 		"tailwindcss": "^4.3.0",
 		"uuid": "^14.0.0"
