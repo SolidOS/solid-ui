@@ -20,26 +20,6 @@
 			"types": "./dist/components/*/index.d.ts",
 			"import": "./dist/components/*/index.esm.js",
 			"require": "./dist/components/*/index.cjs.js"
-		},
-		"./components/actions/button": {
-			"types": "./dist/components/button/index.d.ts",
-			"import": "./dist/components/button/index.esm.js",
-			"require": "./dist/components/button/index.cjs.js"
-		},
-		"./components/forms/select": {
-			"types": "./dist/components/select/index.d.ts",
-			"import": "./dist/components/select/index.esm.js",
-			"require": "./dist/components/select/index.cjs.js"
-		},
-		"./components/forms/combobox": {
-			"types": "./dist/components/combobox/index.d.ts",
-			"import": "./dist/components/combobox/index.esm.js",
-			"require": "./dist/components/combobox/index.cjs.js"
-		},
-		"./components/media/photo-capture": {
-			"types": "./dist/components/photo-capture/index.d.ts",
-			"import": "./dist/components/photo-capture/index.esm.js",
-			"require": "./dist/components/photo-capture/index.cjs.js"
 		}
 	},
 	"files": [
@@ -111,6 +91,10 @@
 		"solid-namespace": "^0.5.4",
 		"tailwindcss": "4.3.0",
 		"uuid": "^14.0.0"
+	},
+	"peerDependencies": {
+		"rdflib": "^2.3.8",
+		"solid-logic": "^4.0.7"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.28.6",
