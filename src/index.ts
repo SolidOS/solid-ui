@@ -62,3 +62,8 @@ export {
 }
 // uses in solid-panes
 export type { CreateContext, NewAppInstanceOptions } from './create/types'
+
+export * from './lib/auth'
+export * from './lib/components'
+export * from './lib/dialogs'
+export * from './lib/menus'

@@ -5,8 +5,8 @@ import '../../auth/loginButton/index'
 import '../../auth/signupButton/index'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
-import '../../../../design-system/components/account'
-import '../../../../design-system/components/provider'
+import '@/components/account'
+import '@/components/provider'
 import Features from '../../../../lib/features'
 
 const DEFAULT_HELP_MENU_ICON = ''

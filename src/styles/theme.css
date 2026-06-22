@@ -1,0 +1,31 @@
+:root {
+    --solid-ui-color-primary: #7c4dff;
+    --solid-ui-color-tertiary: #083575;
+    --solid-ui-color-white: #ffffff;
+    --solid-ui-color-error: #b00020;
+
+    --solid-ui-color-gray-100: #f3f4f6;
+    --solid-ui-color-gray-200: #cbd5e1;
+    --solid-ui-color-gray-400: #99a1af;
+    --solid-ui-color-gray-500: #6a7282;
+    --solid-ui-color-gray-600: #4a5565;
+    --solid-ui-color-gray-700: #364153;
+    --solid-ui-color-gray-800: #101828;
+
+    --solid-ui-color-slate-50: #f8fafc;
+    --solid-ui-color-slate-200: #e2e8f0;
+    --solid-ui-color-slate-400: #90a1b9;
+
+    --solid-ui-color-red-500: #fb2c36;
+
+    --solid-ui-color-body-grey: #666;
+
+    --solid-ui-font-size-xs: 0.75rem;  /* 12px */
+    --solid-ui-font-size-sm: 0.875rem; /* 14px */
+    --solid-ui-font-size-md: 1rem;     /* 16px */
+    --solid-ui-font-size-lg: 1.125rem; /* 18px */
+    --solid-ui-font-size-xl: 1.25rem;  /* 20px */
+    --solid-ui-font-size-2xl: 1.5rem;  /* 24px */
+
+    --solid-ui-clickable-area: 42px;
+}

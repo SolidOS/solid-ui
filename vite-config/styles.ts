@@ -11,9 +11,9 @@ export function stylesConfig(): UserConfig {
             emptyOutDir: false,
             cssMinify: true,
             rolldownOptions: {
-                input: resolve(projectRoot, 'src/styles.css'),
+                input: resolve(projectRoot, 'src/styles/theme.css'),
                 output: {
-                    assetFileNames: 'styles.css',
+                    assetFileNames: 'theme.css',
                 },
             },
         },

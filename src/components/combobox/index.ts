@@ -1,1 +1,4 @@
-export * from '../../v2/components/forms/combobox'
+import Combobox from './Combobox'
+
+export { Combobox }
+export default Combobox
