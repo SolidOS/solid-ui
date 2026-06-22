@@ -7,9 +7,15 @@ const meta = {
   args: {
     rdfTurtleFormatSource: `
       @prefix : <https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl#>.
-      @prefix dc: <http://purl.org/dc/elements/1.1/>.
-      @prefix ui: <http://www.w3.org/ns/ui#>.
+      @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
+      @prefix sched: <http://www.w3.org/ns/pim/schedule#>.
+      @prefix cal:   <http://www.w3.org/2002/12/cal/ical#>.
+      @prefix dc:    <http://purl.org/dc/elements/1.1/>.
+      @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#>.
+      @prefix ui:    <http://www.w3.org/ns/ui#>.
+      @prefix trip:  <http://www.w3.org/ns/pim/trip#>.
       @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+      @prefix xsd:   <http://www.w3.org/2001/XMLSchema#>.
 
       # A Form with 2 fields and a nested subgroup
 
@@ -65,24 +71,40 @@ const meta = {
     `,
     rdfURI: 'https://solidos.solidcommunity.net/public/2021/solidUiFormTestData/dummyFormTestFile.ttl', // we need a working URL
     whichForm: 'form',
-    rdfName: 'dummyFormTestFile.ttl'
+    rdfName: 'dummyFormTestFile.ttl',
+    whichSubject: 'me',
+    subjectTurtleFormatSource: `
+      @prefix : <https://solidos.solidcommunity.net/public/2021/alice.ttl#>.
+
+      :me a vcard:Individual ;
+      vcard:fn "Alice" ;
+      vcard:hasEmail <mailto:alice@example.com> .
+    `,
+    subjectName: 'alice.ttl',
+    subjectURI: 'https://solidos.solidcommunity.net/public/2021/alice.ttl'
   },
 
   argTypes: {
     rdfTurtleFormatSource: { control: 'text' },
     rdfURI: { control: 'text' },
     whichForm: { control: 'text' },
-    rdfName: { control: 'text' }
+    rdfName: { control: 'text' },
+    subjectTurtleFormatSource: { control: 'text' },
+    subjectName: { control: 'text' },
+    subjectURI: { control: 'text' }
   },
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ rdfTurtleFormatSource, rdfURI, whichForm, rdfName }) => {
+const render = defineStoryRender<typeof meta.argTypes>(({ rdfTurtleFormatSource, rdfURI, whichForm, rdfName, subjectTurtleFormatSource, subjectName, subjectURI }) => {
   return html`
         <solid-ui-rdf-form 
           rdfTurtleFormatSource=${rdfTurtleFormatSource}
           rdfURI=${rdfURI}
           whichForm=${whichForm}
-          rdfName=${rdfName}>
+          rdfName=${rdfName}
+          subjectTurtleFormatSource=${subjectTurtleFormatSource}
+          subjectName=${subjectName}
+          subjectURI=${subjectURI}>
         </solid-ui-rdf-form>
     `
 })

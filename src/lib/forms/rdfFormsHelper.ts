@@ -41,14 +41,14 @@ export function sortBySequence (
  * https://linkeddata.github.io/rdflib.js/doc/classes/formula.html#bottomtypeuris
  * to find the most specific RDF type if there are multiple.
  *
- * @param x a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
+ * @param subject a form field, e.g. `namedNode('https://timbl.com/timbl/Public/Test/Forms/individualForm.ttl#fullNameField')`
  * @returns the URI of the most specific known class, e.g. `http://www.w3.org/ns/ui#SingleLineTextField`
  */
-export function mostSpecificClassURI (store: LiveStore,x: Node): string {
-  const ft = store.findTypeURIs(x as any)
-  const bot = store.bottomTypeURIs(ft) // most specific
-  const bots: any[] = []
-  for (const b in bot) bots.push(b)
-  // if (bots.length > 1) throw "Didn't expect "+x+" to have multiple bottom types: "+bots
-  return bots[0]
+export function mostSpecificClassURI (store: LiveStore, subject: Node): string {
+  const typeUri = store.findTypeURIs(subject as any)
+  const specificTypes = store.bottomTypeURIs(typeUri) // most specific
+  const finalTypes: any[] = []
+  for (const t in specificTypes) finalTypes.push(t)
+  // if (finalTypes.length > 1) throw "Didn't expect "+subject+" to have multiple bottom types: "+finalTypes
+  return finalTypes[0]
 }

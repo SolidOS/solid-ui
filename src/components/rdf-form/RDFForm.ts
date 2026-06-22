@@ -5,11 +5,14 @@ import ns from '../../lib/ns'
 import { loadDocument, sortBySequence } from '../../lib/forms/rdfFormsHelper'
 import { sym, Namespace } from 'rdflib'
 import { store } from 'solid-logic'
+import '@/components/rdf-input'
 
 @customElement('solid-ui-rdf-form')
 export default class RDFForm extends WebComponent {
     @state()
     private accessor _parsedUrl: URL | null = null
+    @state()
+    private accessor _parsedUrl2: URL | null = null
 
     @property({ type: String })
     accessor whichForm = 'this'
@@ -33,9 +36,43 @@ export default class RDFForm extends WebComponent {
       return this._parsedUrl ? this._parsedUrl.href : ''
     }
 
+    private defaultContexts = `
+      @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
+      @prefix sched: <http://www.w3.org/ns/pim/schedule#>.
+      @prefix cal:   <http://www.w3.org/2002/12/cal/ical#>.
+      @prefix dc:    <http://purl.org/dc/elements/1.1/>.
+      @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#>.
+      @prefix ui:    <http://www.w3.org/ns/ui#>.
+      @prefix trip:  <http://www.w3.org/ns/pim/trip#>.
+      @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
+      @prefix xsd:   <http://www.w3.org/2001/XMLSchema#>.
+    `
+    @property({ type: String })
+    accessor whichSubject = 'me'
+
+    @property({ type: String })
+    accessor subjectTurtleFormatSource = ''
+
+    @property({ type: String })
+    accessor subjectName = ''
+
+    @property({ type: String })
+    set subjectURI (value: string) {
+      try {
+        this._parsedUrl2 = new URL(value)
+      } catch {
+        this._parsedUrl2 = null // Handle invalid URL
+      }
+    }
+
+    get subjectURI (): string {
+      return this._parsedUrl2 ? this._parsedUrl2.href : ''
+    }
+
     render () {
       // TODO: detect format
-      loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI)
+      loadDocument(store, this.rdfTurtleFormatSource + this.defaultContexts, this.rdfName, this.rdfURI) // load form
+      loadDocument(store, this.subjectTurtleFormatSource + this.defaultContexts, this.subjectName, this.subjectURI) // load data
       const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
       const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
@@ -79,7 +116,7 @@ export default class RDFForm extends WebComponent {
             case 'TextField':
             case 'SingleLineTextField':
             case 'NamedNodeURIField':
-                return html`<input rdf=${part}></input>`
+                return html` <solid-ui-rdf-input .store=${store} formSubject=${part} .inputSubject=${this.subjectURI}></solid-ui-rdf-input> `
             case 'MultiLineTextField':
                 return html`<input rdf=${part}></input>`
             case 'BooleanField':

@@ -2,40 +2,71 @@ import { property } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
 import { customElement, WebComponent } from '@/lib/components'
-import { store } from 'solid-logic'
-import { NamedNode, Namespace, sym } from 'rdflib'
+import { LiveStore, NamedNode } from 'rdflib'
 import { label } from '../../utils'
-import { loadDocument } from '../../lib/forms/rdfFormsHelper'
-
-// import '../input'
+import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
+import { fieldParams, InputType } from '../../lib/forms/fieldParams'
+import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('solid-ui-rdf-input')
 export default class RDFInput extends WebComponent {
-  // example RDF Turtle format source:   
+  // example RDF Turtle format source:
   // :nameField a ui:SingleLineTextField ;
   //   ui:property vcard:fn;
   //   ui:label "name" .
 
-  // form here is the subject :nameField 
-    @property({ type: String })
-    accessor rdf = ''
+  // store needs to contain the form and also the data it applies to
+  @property({ type: LiveStore })
+  accessor store
 
-    render () {
-      const exactForm = this.whichForm // nameField
-      const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
-      const document = sym(this.rdfURI) 
+  // form here is the subject :nameField
+  @property({ type: String })
+  accessor formSubject
 
-      const uiProperty = label(store.any(formThis, ns.ui('property')), true) as NamedNode | undefined
-      const uiLabel = store.any(formThis, ns.ui('label'))
-      const inputLabel = uiLabel ? uiLabel.value : uiProperty ? uiProperty.value.split('#').pop() : 'Input'
+  @property({ type: String })
+  accessor inputSubject
 
-      // TODO: I am not finding suppressEmptyUneditable in ui ontology
-      const suppressEmptyUneditable = store.anyJS(formThis, ns.ui('suppressEmptyUneditable'), null, document)
+  render () {
+    // HTML input part
+    const uiPropertyTerm = this.store.any(this.formSubject, ns.ui('property')) as NamedNode | undefined
+    const uiProperty = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
+    const uiLabel = this.store.any(this.formSubject, ns.ui('label'))
+    const inputLabel = uiLabel ? uiLabel.value : uiProperty
+    // readonly
+    let readonly = false
+    // TODO: I am not finding suppressEmptyUneditable in ui ontology
+    const suppressEmptyUneditable = this.store.anyJS(this.formSubject, ns.ui('suppressEmptyUneditable'))
+    if (suppressEmptyUneditable) {
+      readonly = true
+    }
 
-      const uri = mostSpecificClassURI(form)
-      let params = fieldParams[uri]
-      
+    const uri = mostSpecificClassURI(this.store, this.formSubject)
+    const params = fieldParams[uri] ?? {}
+    const inputType: InputType = params.type ?? 'text'
+
+    // input values
+    const defaultInputValueFromStore = this.store.any(this.formSubject, ns.ui('default'))
+    const inputValueFromStore = this.store.any(this.inputSubject, ns.ui('property'))
+
+    let inputTerm: string | undefined
+
+    const term = inputValueFromStore || defaultInputValueFromStore
+    if (term && 'value' in term && term.value) {
+      const decoded = decodeURIComponent(term.value)
+      inputTerm = params.defaultInputValue
+        ? decoded.replace(params.defaultInputValue, '').replace(/ /g, '')
+        : decoded
+    }
+
+    if (inputLabel) {
       return html`
-      <input name=${name} label=${inputLabel} ?required=${isRequired}></input>
-    `
+        <label>${inputLabel}</label>
+        <input type=${inputType} value=${ifDefined(inputTerm)} ?readonly=${readonly}>
+      `
+    } else {
+      return html`
+        <input type=${inputType} value=${ifDefined(inputTerm)} ?readonly=${readonly}>
+      `
+    }
+  }
 }
