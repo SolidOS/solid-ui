@@ -3,7 +3,6 @@ import { defineStoryRender } from '@/storybook'
 
 import '@/components/button'
 import '@/components/menu-item'
-import '@/components/menu-items'
 
 import './Menu'
 
@@ -17,11 +16,9 @@ const render = defineStoryRender(() => html`
             Open Menu
         </solid-ui-button>
 
-        <solid-ui-menu-items>
-            <solid-ui-menu-item @click=${() => alert('Clicked One!')}>One</solid-ui-menu-item>
-            <solid-ui-menu-item @click=${() => alert('Clicked Two!')}>Two</solid-ui-menu-item>
-            <solid-ui-menu-item @click=${() => alert('Clicked Three!')}>Three</solid-ui-menu-item>
-        </solid-ui-menu-items>
+        <solid-ui-menu-item @solid-ui-select=${() => alert('Selected One!')}>One</solid-ui-menu-item>
+        <solid-ui-menu-item @solid-ui-select=${() => alert('Selected Two!')}>Two</solid-ui-menu-item>
+        <solid-ui-menu-item href="https://solidproject.org">External Link</solid-ui-menu-item>
     </solid-ui-menu>
 `)
 

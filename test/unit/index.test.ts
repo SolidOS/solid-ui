@@ -34,7 +34,6 @@ describe('Index', () => {
       'login',
       'matrix',
       'media',
-      'menuContext',
       'messageArea',
       'ns',
       'pad',
