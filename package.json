@@ -20,6 +20,12 @@
 			"types": "./dist/components/*/index.d.ts",
 			"import": "./dist/components/*/index.esm.js",
 			"require": "./dist/components/*/index.cjs.js"
+		},
+		"./theme.css": {
+			"style": "./dist/theme.css",
+			"types": "./dist/theme.css.d.ts",
+			"import": "./dist/theme.css",
+			"require": "./dist/theme.css"
 		}
 	},
 	"files": [
