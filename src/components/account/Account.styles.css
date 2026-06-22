@@ -1,0 +1,34 @@
+:host {
+    display: inline-flex;
+    flex-direction: row;
+    gap: 10px;
+}
+
+:host(:state(loggedIn)) {
+    --padding: 4px;
+    --border-width: 1px;
+    --image-size: 1.875rem; /* 30px */
+
+    button {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 5px;
+        background-color: var(--solid-ui-color-body-grey);
+        padding: var(--padding);
+        border-radius: calc((var(--image-size) + 2 * var(--padding) + 2 * var(--border-width)) / 2);
+        color: var(--solid-ui-color-white);
+
+        solid-ui-avatar {
+            width: var(--image-size);
+            height: var(--image-size);
+            border: var(--border-width) solid var(--solid-ui-color-white);
+            border-radius: 50%;
+        }
+
+        icon-lucide-chevron-down {
+            width: 16px;
+            height: 16px;
+        }
+    }
+}

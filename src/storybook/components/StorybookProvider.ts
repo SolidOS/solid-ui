@@ -1,13 +1,11 @@
+import { customElement, WebComponent } from '@/lib/components'
 import { provide } from '@lit/context'
 import { html } from 'lit'
-import { customElement } from '../../primitives/lib/customElement'
 import { property } from 'lit/decorators.js'
 import StorybookAuth from '../auth/StorybookAuth'
-import Account from '../../primitives/lib/auth/Account'
-import { authContext } from '../../primitives/lib/auth/context'
-import WebComponent from '../../primitives/lib/WebComponent'
+import { Account, authContext } from '@/lib/auth'
 
-import '../../design-system/components/dialogs-root'
+import '@/components/dialogs-root'
 
 @customElement('storybook-provider')
 export class StorybookProvider extends WebComponent {

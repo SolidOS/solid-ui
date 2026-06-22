@@ -6,7 +6,7 @@
 	"types": "dist/index.d.ts",
 	"exports": {
 		".": {
-			"style": "./dist/styles.css",
+			"style": "./dist/theme.css",
 			"types": "./dist/index.d.ts",
 			"import": "./dist/index.esm.js",
 			"require": "./dist/index.cjs.js"
@@ -109,7 +109,7 @@
 		"rdflib": "2.3.9",
 		"solid-logic": "4.0.8-0",
 		"solid-namespace": "^0.5.4",
-		"tailwindcss": "^4.3.0",
+		"tailwindcss": "4.3.0",
 		"uuid": "^14.0.0"
 	},
 	"devDependencies": {

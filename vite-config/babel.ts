@@ -30,8 +30,7 @@ export default function (options: {
             // See https://lit.dev/docs/components/decorators/#using-decorators-with-babel
             {
                 include: [
-                    'src/design-system',
-                    'src/primitives',
+                    'src/components',
                     'src/storybook',
                 ],
                 assumptions: { setPublicClassFields: false },
