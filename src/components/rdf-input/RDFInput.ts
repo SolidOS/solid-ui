@@ -20,33 +20,44 @@ export default class RDFInput extends WebComponent {
   accessor store
 
   // form here is the subject :nameField
-  @property({ type: String })
+  @property({ type: NamedNode })
   accessor formSubject
 
-  @property({ type: String })
+  @property({ type: NamedNode })
   accessor inputSubject
 
   render () {
+    const formSubject = typeof this.formSubject === 'string'
+      ? this.store.sym(this.formSubject)
+      : this.formSubject
+    const inputSubject = typeof this.inputSubject === 'string'
+      ? this.store.sym(this.inputSubject)
+      : this.inputSubject
+
+    const formGraph = formSubject.doc ? formSubject.doc() : undefined
+
     // HTML input part
-    const uiPropertyTerm = this.store.any(this.formSubject, ns.ui('property')) as NamedNode | undefined
+    const uiPropertyTerm = this.store.any(formSubject, ns.ui('property'), null, formGraph) as NamedNode | undefined
     const uiProperty = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
-    const uiLabel = this.store.any(this.formSubject, ns.ui('label'))
+    const uiLabel = this.store.any(formSubject, ns.ui('label'), null, formGraph)
     const inputLabel = uiLabel ? uiLabel.value : uiProperty
-    // readonly
+
     let readonly = false
     // TODO: I am not finding suppressEmptyUneditable in ui ontology
-    const suppressEmptyUneditable = this.store.anyJS(this.formSubject, ns.ui('suppressEmptyUneditable'))
+    const suppressEmptyUneditable = this.store.anyJS(formSubject, ns.ui('suppressEmptyUneditable'), null, formGraph)
     if (suppressEmptyUneditable) {
       readonly = true
     }
 
-    const uri = mostSpecificClassURI(this.store, this.formSubject)
+    const uri = mostSpecificClassURI(this.store, formSubject)
     const params = fieldParams[uri] ?? {}
     const inputType: InputType = params.type ?? 'text'
 
     // input values
-    const defaultInputValueFromStore = this.store.any(this.formSubject, ns.ui('default'))
-    const inputValueFromStore = this.store.any(this.inputSubject, ns.ui('property'))
+    const defaultInputValueFromStore = this.store.any(formSubject, ns.ui('default'))
+    const inputValueFromStore = uiPropertyTerm
+      ? this.store.any(inputSubject, uiPropertyTerm)
+      : undefined
 
     let inputTerm: string | undefined
 

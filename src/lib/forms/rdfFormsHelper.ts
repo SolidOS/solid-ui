@@ -13,11 +13,16 @@ export function loadDocument (
   const finalDocumentUri = documentURI || baseUri + documentName   // Full URI to the file
   const document = sym(finalDocumentUri)      // rdflib NamedNode for the document
 
-  if (!store.holds(undefined, undefined, undefined, document)) {
-    // we are using the social media form because it contains the information we need
-    // the form can be used for both use cases: create UI  for edit and render UI for display
-    parse(documentSource, store, finalDocumentUri, 'text/turtle', () => null) // Load doc directly
+  if (store.holds(undefined, undefined, undefined, document)) {
+    store.removeStatements(store.statementsMatching(undefined, undefined, undefined, document))
   }
+  // we are using the social media form because it contains the information we need
+  // the form can be used for both use cases: create UI  for edit and render UI for display
+  parse(documentSource, store, finalDocumentUri, 'text/turtle', (err) => {
+    if (err) {
+      console.error('loadDocument parse error for', finalDocumentUri, err)
+    }
+  })
 }
 
 export function sortBySequence (

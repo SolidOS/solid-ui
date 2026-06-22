@@ -11,6 +11,7 @@ import '@/components/rdf-input'
 export default class RDFForm extends WebComponent {
     @state()
     private accessor _parsedUrl: URL | null = null
+
     @state()
     private accessor _parsedUrl2: URL | null = null
 
@@ -36,17 +37,6 @@ export default class RDFForm extends WebComponent {
       return this._parsedUrl ? this._parsedUrl.href : ''
     }
 
-    private defaultContexts = `
-      @prefix foaf:  <http://xmlns.com/foaf/0.1/>.
-      @prefix sched: <http://www.w3.org/ns/pim/schedule#>.
-      @prefix cal:   <http://www.w3.org/2002/12/cal/ical#>.
-      @prefix dc:    <http://purl.org/dc/elements/1.1/>.
-      @prefix rdfs:  <http://www.w3.org/2000/01/rdf-schema#>.
-      @prefix ui:    <http://www.w3.org/ns/ui#>.
-      @prefix trip:  <http://www.w3.org/ns/pim/trip#>.
-      @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
-      @prefix xsd:   <http://www.w3.org/2001/XMLSchema#>.
-    `
     @property({ type: String })
     accessor whichSubject = 'me'
 
@@ -71,12 +61,11 @@ export default class RDFForm extends WebComponent {
 
     render () {
       // TODO: detect format
-      loadDocument(store, this.rdfTurtleFormatSource + this.defaultContexts, this.rdfName, this.rdfURI) // load form
-      loadDocument(store, this.subjectTurtleFormatSource + this.defaultContexts, this.subjectName, this.subjectURI) // load data
+      loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
+      loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
       const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
       const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
-      console.log('formThis:', formThis.value)
 
       const parts = store.each(formThis, ns.ui('parts'), null, document)
       const partsBySequence = sortBySequence(store, parts)
@@ -91,18 +80,16 @@ export default class RDFForm extends WebComponent {
         const typeNode = types[0]
         const value = typeNode ? ((typeNode as any).value || String(typeNode)) : ((item as any).value || String(item))
         const hashIndex = value.lastIndexOf('#')
-        return hashIndex >= 0 ? value.slice(hashIndex + 1) : value
+        return {
+          value: item,
+          fieldValue: hashIndex >= 0 ? value.slice(hashIndex + 1) : value
+        }
       })
-      console.log('parts:', parts)
-      console.log('partsBySequence:', partsBySequence)
-      console.log('partItems:', partItems)
-      console.log('document:', document)
-      console.log('exactForm:', exactForm)
-      console.log('uiFields:', uiFields)
+      const me = Namespace(this.subjectURI + '#')(this.whichSubject)
 
       return html`
       ${uiFields.map(part => {
-        switch (part) {
+        switch (part.fieldValue) {
             case 'PhoneField':
             case 'EmailField':
             case 'ColorField':
@@ -115,8 +102,12 @@ export default class RDFForm extends WebComponent {
             case 'FloatField':
             case 'TextField':
             case 'SingleLineTextField':
-            case 'NamedNodeURIField':
-                return html` <solid-ui-rdf-input .store=${store} formSubject=${part} .inputSubject=${this.subjectURI}></solid-ui-rdf-input> `
+            case 'NamedNodeURIField': {
+              const formSubject = typeof part.value === 'string'
+                ? store.sym(part.value)
+                : part.value
+              return html` <solid-ui-rdf-input .store=${store} .formSubject=${formSubject} .inputSubject=${me}></solid-ui-rdf-input> `
+            }
             case 'MultiLineTextField':
                 return html`<input rdf=${part}></input>`
             case 'BooleanField':

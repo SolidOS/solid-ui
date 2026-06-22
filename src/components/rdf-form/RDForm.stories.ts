@@ -75,6 +75,7 @@ const meta = {
     whichSubject: 'me',
     subjectTurtleFormatSource: `
       @prefix : <https://solidos.solidcommunity.net/public/2021/alice.ttl#>.
+      @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
 
       :me a vcard:Individual ;
       vcard:fn "Alice" ;
