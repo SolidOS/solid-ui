@@ -5,7 +5,7 @@ import { customElement, WebComponent } from '@/lib/components'
 import { LiveStore, NamedNode } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
-import { fieldParams, InputType } from '../../lib/forms/fieldParams'
+import { fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
 import { ifDefined } from 'lit/directives/if-defined.js'
 
 @customElement('solid-ui-rdf-input')
@@ -15,69 +15,86 @@ export default class RDFInput extends WebComponent {
   //   ui:property vcard:fn;
   //   ui:label "name" .
 
-  // store needs to contain the form and also the data it applies to
-  @property({ type: LiveStore })
-  accessor store
+  // formSubject describes the field metadata
+  // dataSubject points to the data resource containing the value
 
-  // form here is the subject :nameField
-  @property({ type: NamedNode })
-  accessor formSubject
+  @property({ attribute: false })
+  accessor store!: LiveStore
 
-  @property({ type: NamedNode })
-  accessor inputSubject
+  @property({ attribute: false, type: Object })
+  accessor formSubject!: NamedNode
+
+  @property({ attribute: false, type: Object })
+  accessor dataSubject!: NamedNode
 
   render () {
-    const formSubject = typeof this.formSubject === 'string'
-      ? this.store.sym(this.formSubject)
-      : this.formSubject
-    const inputSubject = typeof this.inputSubject === 'string'
-      ? this.store.sym(this.inputSubject)
-      : this.inputSubject
+    const formGraph = this.getFormGraph(this.formSubject)
 
-    const formGraph = formSubject.doc ? formSubject.doc() : undefined
+    // for building the HTML input element
+    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formGraph)
+    const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formGraph)
+    const readonly = this.getReadOnly(this.formSubject, formGraph)
 
-    // HTML input part
-    const uiPropertyTerm = this.store.any(formSubject, ns.ui('property'), null, formGraph) as NamedNode | undefined
-    const uiProperty = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
-    const uiLabel = this.store.any(formSubject, ns.ui('label'), null, formGraph)
-    const inputLabel = uiLabel ? uiLabel.value : uiProperty
-
-    let readonly = false
-    // TODO: I am not finding suppressEmptyUneditable in ui ontology
-    const suppressEmptyUneditable = this.store.anyJS(formSubject, ns.ui('suppressEmptyUneditable'), null, formGraph)
-    if (suppressEmptyUneditable) {
-      readonly = true
-    }
-
-    const uri = mostSpecificClassURI(this.store, formSubject)
-    const params = fieldParams[uri] ?? {}
+    const fieldType = this.formSubject ? mostSpecificClassURI(this.store, this.formSubject) : undefined
+    const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
     const inputType: InputType = params.type ?? 'text'
 
-    // input values
-    const defaultInputValueFromStore = this.store.any(formSubject, ns.ui('default'))
-    const inputValueFromStore = uiPropertyTerm
-      ? this.store.any(inputSubject, uiPropertyTerm)
+    // for populating the HTML input element
+    const selectedTerm = this.getSelectedTerm(this.dataSubject, uiPropertyTerm, this.formSubject, params)
+    const inputValue = this.termToInputValue(selectedTerm, params)
+
+    return html`
+      ${inputLabel ? html`<label>${inputLabel}</label>` : ''}
+      <input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly}>
+    `
+  }
+
+  private getFormGraph (subject?: NamedNode) {
+    return subject?.doc ? subject.doc() : undefined
+  }
+
+  private getFormProperty (subject: NamedNode | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
+    if (!subject) return undefined
+    return this.store.any(subject, property, null, graph) as NamedNode | undefined
+  }
+
+  private getInputLabel (formFieldSubject: NamedNode | undefined, uiPropertyTerm?: NamedNode, graph?: any): string {
+    if (!formFieldSubject) return ''
+    const uiLabel = this.store.any(formFieldSubject, ns.ui('label'), null, graph)
+    const propertyLabel = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
+    return uiLabel ? uiLabel.value : propertyLabel
+  }
+
+  private getReadOnly (formFieldSubject?: NamedNode, graph?: any): boolean {
+    if (!formFieldSubject) return false
+    return !!this.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
+  }
+
+  private getSelectedTerm (
+    dataSubject?: NamedNode,
+    uiPropertyTerm?: NamedNode,
+    formFieldSubject?: NamedNode,
+    params?: { defaultInputValue?: string }
+  ) {
+    const defaultTerm = formFieldSubject
+      ? this.store.any(formFieldSubject, ns.ui('default'))
       : undefined
 
-    let inputTerm: string | undefined
-
-    const term = inputValueFromStore || defaultInputValueFromStore
-    if (term && 'value' in term && term.value) {
-      const decoded = decodeURIComponent(term.value)
-      inputTerm = params.defaultInputValue
-        ? decoded.replace(params.defaultInputValue, '').replace(/ /g, '')
-        : decoded
+    if (!uiPropertyTerm || !dataSubject) {
+      return defaultTerm
     }
 
-    if (inputLabel) {
-      return html`
-        <label>${inputLabel}</label>
-        <input type=${inputType} value=${ifDefined(inputTerm)} ?readonly=${readonly}>
-      `
-    } else {
-      return html`
-        <input type=${inputType} value=${ifDefined(inputTerm)} ?readonly=${readonly}>
-      `
-    }
+    const inputTerm = this.store.any(dataSubject, uiPropertyTerm)
+    return inputTerm || defaultTerm
+  }
+
+  private termToInputValue (term: any, params: { defaultInputValue?: string } = {}) {
+    if (!term || !('value' in term) || !term.value) return undefined
+
+    const decoded = decodeURIComponent(term.value)
+    if (!params.defaultInputValue) return decoded
+
+    const stripped = decoded.replace(params.defaultInputValue, '')
+    return stripped.replace(/ /g, '')
   }
 }
