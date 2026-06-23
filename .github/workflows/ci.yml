@@ -93,8 +93,8 @@ jobs:
           registry-url: 'https://registry.npmjs.org'
       - name: Update npm to latest (required for OIDC)
         run: npm install -g npm@latest
-      - name: Disable pre- and post-publish actions
-        run: 'sed -i -E "s/\"((pre|post)publish)/\"ignore:\1/" package.json'
+      - name: Disable publish and install actions
+        run: 'sed -i -E "s/\"((pre|post)(publish|install))/\"ignore:\1/" package.json'
       - name: Publish to npm
         if: github.actor != 'dependabot[bot]' && github.actor != 'dependabot-preview[bot]'
         run: npm publish --tag latest
