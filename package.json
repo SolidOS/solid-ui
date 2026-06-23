@@ -98,10 +98,6 @@
 		"tailwindcss": "4.3.0",
 		"uuid": "^14.0.0"
 	},
-	"peerDependencies": {
-		"rdflib": "^2.3.8",
-		"solid-logic": "^4.0.7"
-	},
 	"devDependencies": {
 		"@babel/cli": "^7.28.6",
 		"@babel/core": "^7.29.0",
