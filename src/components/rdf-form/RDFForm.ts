@@ -103,10 +103,11 @@ export default class RDFForm extends WebComponent {
             case 'TextField':
             case 'SingleLineTextField':
             case 'NamedNodeURIField': {
-              const formSubject = typeof part.value === 'string'
-                ? store.sym(part.value)
-                : part.value
-              return html` <solid-ui-rdf-input .store=${store} .formSubject=${formSubject} .inputSubject=${me}></solid-ui-rdf-input> `
+              return html` <solid-ui-rdf-input 
+                .store=${store} 
+                .formSubject=${sym(part.value)} 
+                .dataSubject=${me}
+              ></solid-ui-rdf-input>`
             }
             case 'MultiLineTextField':
                 return html`<input rdf=${part}></input>`
