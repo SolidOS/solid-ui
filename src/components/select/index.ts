@@ -1,1 +1,4 @@
-export * from '../../v2/components/forms/select'
+import Select from './Select'
+
+export { Select }
+export default Select
