@@ -1,9 +1,9 @@
+import { customElement, WebComponent } from '@/lib/components'
 import { consume } from '@lit/context'
 import { html, nothing } from 'lit'
 import { property, query } from 'lit/decorators.js'
-import { customElement, WebComponent } from '@/lib/components'
-import { DialogContext, dialogContext } from '../../lib/dialogs/context'
-import { CloseDialogEvent } from '../../lib/dialogs/events/close-dialog'
+import { DialogContext, dialogContext, DEFAULT_DIALOG_CONTEXT } from '@/lib/dialogs/context'
+import DialogTrait from '@/lib/components/traits/DialogTrait'
 
 import '~icons/lucide/x'
 import '@/components/dialog-header'
@@ -22,14 +22,20 @@ export default class Dialog extends WebComponent {
   private accessor nativeDialog: HTMLDialogElement | null = null
 
   @consume({ context: dialogContext, subscribe: true })
-  private accessor context!: DialogContext
+  private accessor context: DialogContext = DEFAULT_DIALOG_CONTEXT
 
-  public close () {
-    if (!this.context) {
-      throw new Error('Dialog context missing')
-    }
+  private dialogTrait: DialogTrait<unknown>
 
-    window.dispatchEvent(new CloseDialogEvent(this.context.id))
+  constructor () {
+    super()
+
+    this.dialogTrait = this.addTrait(new DialogTrait(this, {
+      getContext: () => this.context
+    }))
+  }
+
+  public close (data?: unknown) {
+    this.dialogTrait.close(data)
   }
 
   protected firstUpdated () {
