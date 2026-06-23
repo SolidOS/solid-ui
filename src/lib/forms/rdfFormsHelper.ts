@@ -32,19 +32,11 @@ export function sortBySequence (
   store: LiveStore,
   list: Term[]
 ) {
-  const subfields = list
-    .filter(
-      // eslint-disable-next-line camelcase
-      (p): p is Quad_Subject =>
-        p.termType === 'NamedNode' ||
-        p.termType === 'BlankNode' ||
-        p.termType === 'Variable'
-    )
-    .map((p) => {
-      const k = store.any(p, ns.ui('sequence'))
-      const seq = k ? Number((k as { value: string }).value) : 9999
-      return [Number.isNaN(seq) ? 9999 : seq, p] as const
-    })
+  const subfields = list.map((p) => {
+    const k = store.any(p as any, ns.ui('sequence'))
+    const seq = k ? Number((k as { value: string }).value) : 9999
+    return [Number.isNaN(seq) ? 9999 : seq, p] as const
+  })
 
   subfields.sort((a, b) => a[0] - b[0])
 

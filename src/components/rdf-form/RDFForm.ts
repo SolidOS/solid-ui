@@ -110,24 +110,24 @@ export default class RDFForm extends WebComponent {
               ></solid-ui-rdf-input>`
             }
             case 'MultiLineTextField':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'BooleanField':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'TristateField':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'Classifier':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'Choice':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'Multiple':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'Options':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'AutocompleteField':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             case 'Comment':
             case 'Heading':
-                return html`<input rdf=${part}></input>`
+                return html`<input .rdf=${part}></input>`
             default:
                 return html`<div>Unknown part type: ${part}</div>`
         }
