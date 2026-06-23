@@ -3,7 +3,7 @@ import Account from './Account'
 
 export default class NoopAuth implements AuthContext {
   get account (): Account | null {
-    throw new Error('Can\'t use auth, missing context provider')
+    return null
   }
 
   async login () {
