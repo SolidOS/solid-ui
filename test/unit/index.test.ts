@@ -12,6 +12,7 @@ describe('Index', () => {
       'DEFAULT_AUTH_CONTEXT',
       'DEFAULT_SIGNUP_URL',
       'Dialog',
+      'InputTrait',
       'NoopAuth',
       'ShowDialogEvent',
       'SolidAuth',
