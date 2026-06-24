@@ -3,7 +3,7 @@
     /* Basic Options */
     "target": "ES2022" /* Needed for standard decorators emit */,
     "module": "ESNext" /* Let bundlers handle module transformation for better tree-shaking */,
-    "moduleResolution": "node", /* Use Node.js-style module resolution for Webpack compatibility. */
+    "moduleResolution": "bundler", /* Use bundler module resolution for Vite compatibility. */
     /* Crucial for library compatibility: */
     "skipLibCheck": true, // if true, Type errors in library .d.ts files will be ignored, so you might miss some issues.
     "allowSyntheticDefaultImports": true, // Often helps with ESM interop
@@ -21,7 +21,7 @@
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
 
     "outDir": "dist" /* Redirect output structure to the directory. */,
-    "rootDir": "src/",
+    "rootDir": "./",
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
 
@@ -80,7 +80,8 @@
     "useDefineForClassFields": true,
   },
   "include": [
-    "src/**/*"
+    "src/**/*",
+    ".storybook/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }
