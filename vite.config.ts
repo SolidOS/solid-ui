@@ -6,8 +6,10 @@ import babel from './vite-config/babel'
 import css from './vite-config/css'
 import icons from './vite-config/icons'
 import { cdnLegacyConfig, cdnConfig } from './vite-config/cdn'
-import { discoverComponents } from './vite-config/components'
+import { discoverComponents, generateCustomElementsTypes } from './vite-config/components'
 import { stylesConfig } from './vite-config/styles'
+
+generateCustomElementsTypes()
 
 const basePlugins = [
     css(),
