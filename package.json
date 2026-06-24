@@ -1,6 +1,6 @@
 {
 	"name": "solid-ui",
-	"version": "3.1.3-1",
+	"version": "3.1.3-5",
 	"description": "UI library for Solid applications",
 	"main": "dist/index.cjs.js",
 	"types": "dist/index.d.ts",
@@ -21,25 +21,11 @@
 			"import": "./dist/components/*/index.esm.js",
 			"require": "./dist/components/*/index.cjs.js"
 		},
-		"./components/actions/button": {
-			"types": "./dist/components/button/index.d.ts",
-			"import": "./dist/components/button/index.esm.js",
-			"require": "./dist/components/button/index.cjs.js"
-		},
-		"./components/forms/select": {
-			"types": "./dist/components/select/index.d.ts",
-			"import": "./dist/components/select/index.esm.js",
-			"require": "./dist/components/select/index.cjs.js"
-		},
-		"./components/forms/combobox": {
-			"types": "./dist/components/combobox/index.d.ts",
-			"import": "./dist/components/combobox/index.esm.js",
-			"require": "./dist/components/combobox/index.cjs.js"
-		},
-		"./components/media/photo-capture": {
-			"types": "./dist/components/photo-capture/index.d.ts",
-			"import": "./dist/components/photo-capture/index.esm.js",
-			"require": "./dist/components/photo-capture/index.cjs.js"
+		"./theme.css": {
+			"style": "./dist/theme.css",
+			"types": "./dist/theme.css.d.ts",
+			"import": "./dist/theme.css",
+			"require": "./dist/theme.css"
 		}
 	},
 	"files": [
