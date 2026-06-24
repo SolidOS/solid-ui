@@ -22,9 +22,13 @@ export default class SignupButton extends WebComponent {
     `
   }
 
+  click () {
+    this.auth.signup()
+  }
+
   private onClick (e: MouseEvent) {
     e.preventDefault()
 
-    this.auth.signup()
+    this.click()
   }
 }

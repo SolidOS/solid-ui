@@ -22,9 +22,13 @@ export default class LoginButton extends WebComponent {
     `
   }
 
+  click () {
+    this.auth.login()
+  }
+
   private onClick (e: MouseEvent) {
     e.preventDefault()
 
-    this.auth.login()
+    this.click()
   }
 }

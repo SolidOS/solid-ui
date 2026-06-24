@@ -8,7 +8,6 @@ import '@/components/button'
 import '@/components/login-button'
 import '@/components/logout-button'
 import '@/components/menu-item'
-import '@/components/menu-items'
 import '@/components/menu'
 import '@/components/signup-button'
 import '~icons/lucide/chevron-down'
@@ -61,20 +60,18 @@ export default class Account extends WebComponent {
     }
 
     return html`
-        <solid-ui-menu>
+        <solid-ui-menu placement="bottom-end" distance="5">
             <button type="button" slot="trigger">
                 <solid-ui-avatar></solid-ui-avatar>
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>
             </button>
 
-            <solid-ui-menu-items>
-                <solid-ui-logout-button>
-                    <solid-ui-menu-item slot="trigger">
-                        <icon-lucide-log-out slot="left-icon"></icon-lucide-log-out>
-                        Sign out
-                    </solid-ui-menu-item>
-                </solid-ui-logout-button>
-            </solid-ui-menu-items>
+            <solid-ui-logout-button>
+                <solid-ui-menu-item slot="trigger">
+                    <icon-lucide-log-out slot="left-icon"></icon-lucide-log-out>
+                    Sign out
+                </solid-ui-menu-item>
+            </solid-ui-logout-button>
         </solid-ui-menu>
     `
   }

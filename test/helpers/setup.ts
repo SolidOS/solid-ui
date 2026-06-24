@@ -1,5 +1,7 @@
 import '@/types/env.d.ts'
 import '@/types/polyfills.d.ts'
+import '@/types/shims.d.ts'
+import '@/types/webawesome.d.ts'
 
 import { expect, vi } from 'vitest'
 import { toContainGraph } from '../custom-matchers/toContainGraph'

@@ -1,4 +1,5 @@
 import { html, LitElement, type CSSResultGroup } from 'lit'
+import type { WebComponentTrait, WebComponentTraitMethodKey } from '@/lib/components/traits/WebComponentTrait'
 
 import styles from './WebComponent.styles.css'
 
@@ -13,6 +14,7 @@ export default abstract class WebComponent extends LitElement {
 
   protected internals?: ElementInternals
   protected globalListeners: [type: string, listener: EventListener][] = []
+  protected traits: WebComponentTrait[] = []
 
   disconnectedCallback (): void {
     super.disconnectedCallback()
@@ -22,6 +24,24 @@ export default abstract class WebComponent extends LitElement {
     }
 
     this.globalListeners = []
+  }
+
+  protected addTrait<T extends WebComponentTrait>(trait: T): T {
+    this.traits.push(trait)
+
+    return trait
+  }
+
+  protected firstUpdated () {
+    this.forwardMethodCall('firstUpdated')
+  }
+
+  protected updated (changedProperties: Map<PropertyKey, unknown>) {
+    this.forwardMethodCall('updated', changedProperties)
+  }
+
+  protected formResetCallback () {
+    this.forwardMethodCall('formResetCallback')
   }
 
   protected willUpdate (changedProperties: Map<string, any>) {
@@ -64,5 +84,11 @@ export default abstract class WebComponent extends LitElement {
 
   private static (): typeof WebComponent {
     return this.constructor as typeof WebComponent
+  }
+
+  private forwardMethodCall<T extends WebComponentTraitMethodKey>(method: T, ...args: Parameters<Required<WebComponentTrait>[T]>) {
+    for (const trait of this.traits) {
+      (trait[method] as Function | undefined)?.(...args)
+    }
   }
 }
