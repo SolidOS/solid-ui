@@ -20,7 +20,7 @@ export default class DialogProvider extends WebComponent {
   }
 
   protected firstUpdated () {
-    const slot = this.shadowRoot?.lastChild as HTMLSlotElement | undefined
+    const slot = this.shadowRoot?.querySelector('slot') as HTMLSlotElement | undefined
 
     this.dispatchEvent(new CustomEvent('mounted', { bubbles: true, composed: true, detail: slot?.assignedElements()[0] }))
   }
