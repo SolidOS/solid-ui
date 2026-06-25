@@ -1,80 +1,125 @@
-import { customElement, WebComponent, generateId } from '@/lib/components'
-import { provide } from '@lit/context'
+import { customElement, WebComponent } from '@/lib/components'
 import { html } from 'lit'
-import { queryAssignedElements } from 'lit/decorators.js'
-import { MenuContext, menuContext } from '@/lib/menus/context'
-import type MenuItems from '@/components/menu-items'
+import { property, query, state } from 'lit/decorators.js'
+import type WaDropdown from '@awesome.me/webawesome/dist/components/dropdown/dropdown.js'
+import type WaDropdownItem from '@awesome.me/webawesome/dist/components/dropdown-item/dropdown-item.js'
+import type { WaDropdownSelectEvent } from '@awesome.me/webawesome'
+
+import '@awesome.me/webawesome/dist/components/dropdown/dropdown.js'
+import '@awesome.me/webawesome/dist/components/dropdown-item/dropdown-item.js'
+
+import styles from './Menu.styles.css'
 
 @customElement('solid-ui-menu')
 export default class Menu extends WebComponent {
-  @queryAssignedElements({ slot: 'trigger' })
-  private accessor triggers!: HTMLButtonElement[]
+  static styles = styles
 
-  @queryAssignedElements({ selector: '[popover]' })
-  private accessor popovers!: MenuItems[]
+  @property({ type: String, reflect: true })
+  accessor placement: WaDropdown['placement'] = 'bottom-start';
 
-  @provide({ context: menuContext })
-  // @ts-ignore
-  private accessor context: MenuContext = { id: generateId() }
+  @property({ type: Number, reflect: true })
+  accessor distance: number = 0;
 
-  private triggerClickedWhilstOpen = false
+  @query('wa-dropdown')
+  private accessor dropdown: WaDropdown | null = null;
 
-  protected updated () {
-    const trigger = this.triggers?.[0]
-    const popover = this.popovers?.[0]
+  @state()
+  private accessor items: { slot: string; }[] = []
 
-    if (!trigger || !popover) {
-      return
-    }
+  private observer: MutationObserver = new MutationObserver(() => this.syncItems())
 
-    trigger.setAttribute('aria-haspopup', 'menu')
-    trigger.setAttribute('aria-controls', popover.id)
-    trigger.style.anchorName = '--menu-anchor'
+  connectedCallback () {
+    super.connectedCallback()
+
+    this.syncItems()
+    this.observer.observe(this, { childList: true })
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+
+    this.observer.disconnect()
   }
 
   protected render () {
     return html`
-        <slot
-          name="trigger"
-          @pointerdown=${this.onTriggerPointerDown}
-          @click=${this.onTriggerClick}
-        ></slot>
-        <slot @click=${this.onMenuClick}></slot>
+      <wa-dropdown
+        placement=${this.placement}
+        distance=${this.distance}
+        @wa-select=${this.onWaSelect}
+      >
+        <slot name="trigger" slot="trigger"></slot>
+
+        ${this.items.map(
+          (item) =>
+            html`<wa-dropdown-item @click=${this.onItemClick}>
+                <slot name=${item.slot}></slot>
+            </wa-dropdown-item>`
+        )}
+      </wa-dropdown>
     `
   }
 
-  private onTriggerPointerDown (e: PointerEvent) {
-    e.preventDefault()
+  private syncItems (): void {
+    const items = Array.from(this.children).filter(
+      (child) => !child.hasAttribute('slot')
+    )
 
-    this.triggerClickedWhilstOpen = this.popovers?.[0]?.matches(':popover-open') ?? false
+    this.items = items.map((item, index) => {
+      const slotName = `menu-item-${index}`
+
+      if (item.getAttribute('slot') !== slotName) {
+        item.setAttribute('slot', slotName)
+      }
+
+      return { slot: slotName }
+    })
   }
 
-  private onTriggerClick (e: MouseEvent) {
-    e.preventDefault()
+  private onItemClick (event: Event) {
+    const waItem = event.currentTarget as WaDropdownItem
 
-    if (this.triggerClickedWhilstOpen) {
-      this.triggerClickedWhilstOpen = false
+    event.stopPropagation()
+
+    if (waItem.disabled) {
+      return
+    }
+
+    const selectedEvent = this.dispatchSelectEvent(waItem)
+
+    if (selectedEvent.defaultPrevented || !this.dropdown) {
+      return
+    }
+
+    this.dropdown.open = false
+  }
+
+  private onWaSelect (event: WaDropdownSelectEvent) {
+    const selectedEvent = this.dispatchSelectEvent(event.detail.item)
+
+    if (selectedEvent.defaultPrevented) {
+      event.preventDefault()
 
       return
     }
 
-    this.popovers?.[0]?.togglePopover()
+    const slotName = event.detail.item.children[0].getAttribute('name')
+    const item = this.querySelector<{ click?: () => void } & Element>(`[slot="${slotName}"]`)
+
+    item?.click?.()
   }
 
-  private onMenuClick (e: MouseEvent) {
-    const target = e.target
-    const targetIsClickable =
-        target instanceof HTMLElement && (
-          target.tagName === 'BUTTON' ||
-            target.tagName === 'A' ||
-            target.tagName === 'SOLID-UI-MENU-ITEM' ||
-            target.closest('button, a, [role="menuitem"]')
-        )
+  private dispatchSelectEvent (waItem: WaDropdownItem) {
+    const slotName = waItem.children[0].getAttribute('name')
+    const item = this.querySelector(`[slot="${slotName}"]`)
+    const event = new CustomEvent('solid-ui-select', {
+      bubbles: true,
+      composed: true,
+      cancelable: true,
+    })
 
-    if (!targetIsClickable) {
-      return
-    }
+    item?.dispatchEvent(event)
 
-    this.popovers?.[0]?.hidePopover()
+    return event
   }
 }

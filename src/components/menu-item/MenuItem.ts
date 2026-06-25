@@ -1,5 +1,5 @@
 import { customElement, WebComponent } from '@/lib/components'
-import { property } from 'lit/decorators.js'
+import { property, query } from 'lit/decorators.js'
 import { html } from 'lit'
 
 import styles from './MenuItem.styles.css'
@@ -8,8 +8,11 @@ import styles from './MenuItem.styles.css'
 export default class MenuItem extends WebComponent {
   static styles = styles
 
-  @property({ type: String })
+  @property({ type: String, reflect: true })
   accessor href: string | undefined
+
+  @query('a')
+  private accessor anchor: HTMLAnchorElement | null = null
 
   render () {
     if (this.href) {
@@ -23,11 +26,13 @@ export default class MenuItem extends WebComponent {
     }
 
     return html`
-        <button type="button">
-            <slot name="left-icon"></slot>
-            <slot></slot>
-            <slot name="right-icon"></slot>
-        </button>
+        <slot name="left-icon"></slot>
+        <slot></slot>
+        <slot name="right-icon"></slot>
     `
+  }
+
+  click () {
+    this.anchor?.click()
   }
 }

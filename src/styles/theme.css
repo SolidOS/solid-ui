@@ -1,3 +1,5 @@
+@import "@awesome.me/webawesome/dist/styles/webawesome.css";
+
 :root {
     --solid-ui-color-primary: #7c4dff;
     --solid-ui-color-tertiary: #083575;

@@ -24,7 +24,10 @@ export default class DialogsRoot extends WebComponent {
     this.addGlobalEventListener(CloseDialogEvent.eventName, (event) => {
       event.stopImmediatePropagation()
 
+      const dialog = this.dialogs.find(dialog => dialog.id === event.id)
       this.dialogs = this.dialogs.filter(dialog => dialog.id !== event.id)
+
+      dialog?.closed(event.data)
     })
   }
 

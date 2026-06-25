@@ -22,9 +22,13 @@ export default class LogoutButton extends WebComponent {
     `
   }
 
+  click () {
+    this.auth.logout()
+  }
+
   private onClick (e: MouseEvent) {
     e.preventDefault()
 
-    this.auth.logout()
+    this.click()
   }
 }
