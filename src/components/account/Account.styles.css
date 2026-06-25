@@ -4,7 +4,7 @@
     gap: 10px;
 }
 
-:host(:state(loggedIn)) {
+:host([data-state-loggedIn]) {
     --padding: 4px;
     --border-width: 1px;
     --image-size: 1.875rem; /* 30px */
