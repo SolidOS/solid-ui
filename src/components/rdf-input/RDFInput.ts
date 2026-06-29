@@ -45,11 +45,17 @@ export default class RDFInput extends WebComponent {
 
     // for populating the HTML input element
     const selectedTerm = this.getSelectedTerm(this.dataSubject, uiPropertyTerm, this.formSubject, params)
-    const inputValue = this.termToInputValue(selectedTerm, params)
+    const placeholder = this.defaultInputValue(params)
+    const inputValue = this.termToInputValue(selectedTerm)
 
     return html`
-      ${inputLabel ? html`<label>${inputLabel}</label>` : ''}
-      <input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly}>
+      ${inputLabel
+        ? html`
+                <label>
+                  ${inputLabel}
+                  <input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly} placeholder=${ifDefined(placeholder)}>
+              </label>`
+        : html`<input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly} placeholder=${ifDefined(placeholder)}>`}
     `
   }
 
@@ -92,13 +98,15 @@ export default class RDFInput extends WebComponent {
     return inputTerm || defaultTerm
   }
 
-  private termToInputValue (term: any, params: { defaultInputValue?: string } = {}) {
+  private termToInputValue (term: any) {
     if (!term || !('value' in term) || !term.value) return undefined
 
     const decoded = decodeURIComponent(term.value)
-    if (!params.defaultInputValue) return decoded
+    return decoded
+  }
 
-    const stripped = decoded.replace(params.defaultInputValue, '')
+  private defaultInputValue (params: { defaultInputValue?: string } = {}) {
+    const stripped = params.defaultInputValue ?? ''
     return stripped.replace(/ /g, '')
   }
 }
