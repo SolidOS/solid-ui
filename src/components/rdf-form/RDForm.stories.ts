@@ -20,15 +20,20 @@ const meta = {
       # A Form with 2 fields and a nested subgroup
 
       :form a ui:Form;
-      ui:parts (:nameField :emailField :addresses) .
+      ui:parts (:nameField :emailField :phoneField :addresses) .
 
       :nameField a ui:SingleLineTextField ;
       ui:property vcard:fn;
       ui:label "name" .
 
+
       :emailField a ui:EmailField ;
       ui:property vcard:hasEmail; # @@ check
       ui:label "email" .
+
+      :phoneField a ui:PhoneField ;
+      ui:property vcard:hasTelephone;
+      ui:label "phone" .
 
       :addresses
           a ui:Multiple ;  # -- Allows zero or one or more

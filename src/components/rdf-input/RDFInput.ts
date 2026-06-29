@@ -1,13 +1,14 @@
 import { property } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, generateId, WebComponent } from '@/lib/components'
 import { NamedNode } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
 import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
 import { consume } from '@lit/context'
+import '@/components/input'
 
 @customElement('solid-ui-rdf-input')
 export default class RDFInput extends WebComponent {
@@ -28,14 +29,13 @@ export default class RDFInput extends WebComponent {
   @property({ attribute: false, type: Object })
   accessor dataSubject!: NamedNode
 
-  @property({ type: String, reflect: true })
-  accessor name = '';
-
   @property({ type: Boolean, reflect: true })
   accessor readonly = true;
 
   render () {
     const formGraph = this.getFormGraph(this.formSubject)
+    const statementCount = this.storeContext.store?.statements?.length ?? 0
+    console.log('RDFInput render statement count:', statementCount)
 
     // for building the HTML input element
     const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formGraph)
@@ -48,13 +48,13 @@ export default class RDFInput extends WebComponent {
 
     // for populating the HTML input element
     const selectedTerm = this.getSelectedTerm(this.dataSubject, uiPropertyTerm, this.formSubject, params)
-    const placeholder = this.defaultInputValue(params)
+    const placeholder = readonly ? '' : this.defaultInputValue(params)
     const inputValue = this.termToInputValue(selectedTerm)
 
     return html`
       <solid-ui-input
         label="${inputLabel}"
-        name="${this.name}"
+        name="input-${inputLabel}"
         .value=${inputValue}
         placeholder="${placeholder}"
         type="${inputType}"
@@ -103,7 +103,7 @@ export default class RDFInput extends WebComponent {
   }
 
   private termToInputValue (term: any) {
-    if (!term || !('value' in term) || !term.value) return undefined
+    if (!term || !('value' in term) || !term.value) return ''
 
     const decoded = decodeURIComponent(term.value)
     return decoded

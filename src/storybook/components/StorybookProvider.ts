@@ -33,6 +33,7 @@ export class StorybookProvider extends WebComponent {
     }
 
     this.auth.account = new Account(this.webId, this.avatarUrl)
+    this.store = new StorybookStore()
   }
 
   protected render () {

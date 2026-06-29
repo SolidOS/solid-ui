@@ -105,49 +105,70 @@ export default class RDFForm extends WebComponent {
       const me = Namespace(this.subjectURI + '#')(this.whichSubject)
 
       return html`
-      ${uiFields.map(part => {
-        switch (part.fieldValue) {
-            case 'PhoneField':
-            case 'EmailField':
-            case 'ColorField':
-            case 'DateField':
-            case 'DateTimeField':
-            case 'TimeField':
-            case 'NumericField':
-            case 'IntegerField':
-            case 'DecimalField':
-            case 'FloatField':
-            case 'TextField':
-            case 'SingleLineTextField':
-            case 'NamedNodeURIField': {
-              return html` <solid-ui-rdf-input 
-                .formSubject=${sym(part.value)} 
-                .dataSubject=${me}
-              ></solid-ui-rdf-input>`
-            }
-            case 'MultiLineTextField':
-                return html`<input .rdf=${part}></input>`
-            case 'BooleanField':
-                return html`<input .rdf=${part}></input>`
-            case 'TristateField':
-                return html`<input .rdf=${part}></input>`
-            case 'Classifier':
-                return html`<input .rdf=${part}></input>`
-            case 'Choice':
-                return html`<input .rdf=${part}></input>`
-            case 'Multiple':
-                return html`<input .rdf=${part}></input>`
-            case 'Options':
-                return html`<input .rdf=${part}></input>`
-            case 'AutocompleteField':
-                return html`<input .rdf=${part}></input>`
-            case 'Comment':
-            case 'Heading':
-                return html`<input .rdf=${part}></input>`
-            default:
-                return html`<div>Unknown part type: ${part}</div>`
-        }
-      })}
+      <form @submit=${this.onSubmit}>
+        ${uiFields.map(part => {
+          switch (part.fieldValue) {
+              case 'PhoneField':
+              case 'EmailField':
+              case 'ColorField':
+              case 'DateField':
+              case 'DateTimeField':
+              case 'TimeField':
+              case 'NumericField':
+              case 'IntegerField':
+              case 'DecimalField':
+              case 'FloatField':
+              case 'TextField':
+              case 'SingleLineTextField':
+              case 'NamedNodeURIField': {
+                return html` <solid-ui-rdf-input 
+                  .formSubject=${sym(part.value)} 
+                  .dataSubject=${me}
+                ></solid-ui-rdf-input>
+                <br>`
+              }
+              case 'MultiLineTextField':
+                  return html`<input .rdf=${part}></input>`
+              case 'BooleanField':
+                  return html`<input .rdf=${part}></input>`
+              case 'TristateField':
+                  return html`<input .rdf=${part}></input>`
+              case 'Classifier':
+                  return html`<input .rdf=${part}></input>`
+              case 'Choice':
+                  return html`<input .rdf=${part}></input>`
+              case 'Multiple':
+                  return html`<input .rdf=${part}></input>`
+              case 'Options':
+                  return html`<input .rdf=${part}></input>`
+              case 'AutocompleteField':
+                  return html`<input .rdf=${part}></input>`
+              case 'Comment':
+              case 'Heading':
+                  return html`<input .rdf=${part}></input>`
+              default:
+                  return html`<div>Unknown part type: ${part}</div>`
+          }
+        })}
+      </form>
     `
+    }
+
+    private async onSubmit (e: Event) {
+      e.preventDefault()
+
+    /*  this.failed = false
+
+      this.submitting = true
+
+      try {
+        await this.auth.login(this.issuerInputValue)
+      } catch (error) {
+        console.error(error)
+
+        this.failed = true
+      } finally {
+        this.submitting = false
+      } */
     }
 }
