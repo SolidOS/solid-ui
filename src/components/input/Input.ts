@@ -28,6 +28,9 @@ export default class Input extends WebComponent {
   @property({ type: Boolean, reflect: true })
   accessor required = false;
 
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = false;
+
   @query('input')
   private accessor inputElement: HTMLInputElement | null = null;
 
@@ -54,6 +57,7 @@ export default class Input extends WebComponent {
           placeholder=${this.placeholder}
           ?required=${this.required}
           .value=${this.value}
+          ?readonly=${this.readonly}
           @input=${() => this.inputTrait.onInput()}
           @keydown=${this.onKeyDown}
         />

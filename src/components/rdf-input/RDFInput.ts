@@ -6,7 +6,6 @@ import { NamedNode } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
-import { ifDefined } from 'lit/directives/if-defined.js'
 import { DEFAULT_STORE, formsContext, FormsContext } from '@/lib/forms/FormsContext'
 import { consume } from '@lit/context'
 
@@ -31,13 +30,19 @@ export default class RDFInput extends WebComponent {
   @property({ attribute: false, type: Object })
   accessor dataSubject!: NamedNode
 
+  @property({ type: String, reflect: true })
+  accessor name = '';
+
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = true;
+
   render () {
     const formGraph = this.getFormGraph(this.formSubject)
 
     // for building the HTML input element
     const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formGraph)
     const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formGraph)
-    const readonly = this.getReadOnly(this.formSubject, formGraph)
+    const readonly = this.getReadOnly(this.readonly, this.formSubject, formGraph)
 
     const fieldType = this.formSubject ? mostSpecificClassURI(this.formsContext.store, this.formSubject) : undefined
     const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
@@ -49,14 +54,14 @@ export default class RDFInput extends WebComponent {
     const inputValue = this.termToInputValue(selectedTerm)
 
     return html`
-      ${inputLabel
-        ? html`
-                <label>
-                  ${inputLabel}
-                  <input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly} placeholder=${ifDefined(placeholder)}>
-              </label>`
-        : html`<input type=${inputType} value=${ifDefined(inputValue)} ?readonly=${readonly} placeholder=${ifDefined(placeholder)}>`}
-    `
+      <solid-ui-input
+        label="${inputLabel}"
+        name="${this.name}"
+        .value=${inputValue}
+        placeholder="${placeholder}"
+        type="${inputType}"
+        ?readonly=${readonly}
+      ></solid-ui-input>`
   }
 
   private getFormGraph (subject?: NamedNode) {
@@ -75,7 +80,8 @@ export default class RDFInput extends WebComponent {
     return uiLabel ? uiLabel.value : propertyLabel
   }
 
-  private getReadOnly (formFieldSubject?: NamedNode, graph?: any): boolean {
+  private getReadOnly (readonly?: boolean, formFieldSubject?: NamedNode, graph?: any): boolean {
+    if (readonly !== undefined) return readonly
     if (!formFieldSubject) return false
     return !!this.formsContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
   }

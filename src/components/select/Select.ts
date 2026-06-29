@@ -28,6 +28,9 @@ export default class Select extends WebComponent {
   @query('select')
   accessor inputElement: HTMLSelectElement | null = null;
 
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = false;
+
   private inputTrait: InputTrait
 
   constructor () {
@@ -48,6 +51,7 @@ export default class Select extends WebComponent {
           id="${this.inputTrait.inputId}"
           name=${this.name}
           ?required=${this.required}
+          ?readonly=${this.readonly}
           @change=${() => this.inputTrait.onInput()}
         >
           ${this.getOptions().map(
