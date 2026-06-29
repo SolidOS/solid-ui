@@ -17,7 +17,7 @@ const meta = {
       @prefix vcard: <http://www.w3.org/2006/vcard/ns#>.
       @prefix xsd:   <http://www.w3.org/2001/XMLSchema#>.
 
-      # A Form with 2 fields and a nested subgroup
+      # A Form with 3 fields and a nested subgroup
 
       :form a ui:Form;
       ui:parts (:nameField :emailField :phoneField :addresses) .

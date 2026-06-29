@@ -1,11 +1,11 @@
 import { property } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
-import { customElement, generateId, WebComponent } from '@/lib/components'
-import { NamedNode } from 'rdflib'
+import { customElement, WebComponent } from '@/lib/components'
+import { Literal, LiveStore, NamedNode, Statement, st } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
-import { fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
+import { FieldParamsObject, fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
 import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
 import { consume } from '@lit/context'
 import '@/components/input'
@@ -33,9 +33,7 @@ export default class RDFInput extends WebComponent {
   accessor readonly = true;
 
   render () {
-    const formGraph = this.getFormGraph(this.formSubject)
-    const statementCount = this.storeContext.store?.statements?.length ?? 0
-    console.log('RDFInput render statement count:', statementCount)
+    const formGraph = this.getGraph(this.formSubject)
 
     // for building the HTML input element
     const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formGraph)
@@ -59,10 +57,11 @@ export default class RDFInput extends WebComponent {
         placeholder="${placeholder}"
         type="${inputType}"
         ?readonly=${readonly}
+        @input=${this.updateData()}
       ></solid-ui-input>`
   }
 
-  private getFormGraph (subject?: NamedNode) {
+  private getGraph (subject?: NamedNode) {
     return subject?.doc ? subject.doc() : undefined
   }
 
@@ -112,5 +111,90 @@ export default class RDFInput extends WebComponent {
   private defaultInputValue (params: { defaultInputValue?: string } = {}) {
     const stripped = params.defaultInputValue ?? ''
     return stripped.replace(/ /g, '')
+  }
+
+  private updateData () {
+    return (e: CustomEvent) => {
+      const newValue = (e.target as HTMLInputElement).value
+
+      const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getGraph(this.formSubject))
+      if (!uiPropertyTerm || !this.dataSubject) return
+
+      const currentStoreContext = this.storeContext.store
+      if (!currentStoreContext.updater.editable(this.dataSubject)) return
+
+      const toDeleteSt = currentStoreContext.statementsMatching(this.dataSubject, uiPropertyTerm)
+
+      if (newValue) {
+        let objectFromNewValue
+        const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
+        const params: FieldParamsObject = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
+        if (params.namedNode) {
+          objectFromNewValue = currentStoreContext.sym(newValue)
+        } else if (params.defaultInputValue) {
+          objectFromNewValue = encodeURIComponent(newValue.replace(/ /g, ''))
+          objectFromNewValue = currentStoreContext.sym(params.defaultInputValue + objectFromNewValue)
+        } else {
+          if (params.dt) {
+            objectFromNewValue = new Literal(
+              newValue.trim(),
+              undefined,
+              ns.xsd(params.dt)
+            )
+          } else {
+            objectFromNewValue = new Literal(newValue)
+          }
+        }
+        let toInsertSt = toDeleteSt.map(statement => st(statement.subject, statement.predicate, objectFromNewValue, statement.why)) // can include >1 doc
+        if (toInsertSt.length === 0) {
+          toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getGraph(this.dataSubject))]
+        }
+
+        this.updateMany(currentStoreContext, toDeleteSt, toInsertSt)
+      }
+    }
+  }
+
+  private updateMany (
+    store: LiveStore,
+    ds: Statement[],
+    is: Statement[]
+  ) {
+    const getDocUri = (statement: Statement) => {
+      const why = statement.why as any
+      return why?.uri ?? why?.value
+    }
+
+    const docs: string[] = []
+    is.forEach(st => {
+      const uri = getDocUri(st)
+      if (uri && !docs.includes(uri)) docs.push(uri)
+    })
+    ds.forEach(st => {
+      const uri = getDocUri(st)
+      if (uri && !docs.includes(uri)) docs.push(uri)
+    })
+    if (docs.length === 0) {
+      throw new Error('No concrete document to update')
+    }
+    if (!store.updater) {
+      throw new Error('Store has no updater')
+    }
+    if (docs.length === 1) {
+      return store.updater.update(ds, is as any)
+    }
+
+    const doc = docs.pop()
+    const is1 = is.filter(st => getDocUri(st) === doc)
+    const is2 = is.filter(st => getDocUri(st) !== doc)
+    const ds1 = ds.filter(st => getDocUri(st) === doc)
+    const ds2 = ds.filter(st => getDocUri(st) !== doc)
+    store.updater.update(ds1, is1 as any, (uri, ok, body) => {
+      if (ok) {
+        this.updateMany(store, ds2, is2)
+      } else {
+        throw new Error(`Failed to update data for ${uri}: ${body}`)
+      }
+    })
   }
 }

@@ -16,6 +16,23 @@ export default class RDFForm extends WebComponent {
     @property({ attribute: false })
     accessor passedInStore: LiveStore | null = null
 
+    private get currentStoreContext (): StoreContext | null {
+      if (this.passedInStore) {
+        return { store: this.passedInStore }
+      }
+
+      return this.storeContext !== DEFAULT_STORE ? this.storeContext : null
+    }
+
+    @state()
+    private accessor failed: boolean = false
+
+    @state()
+    private accessor submitting: boolean = false
+
+     @state()
+    private accessor entireDataIsReadonly: boolean = true
+
     @state()
     private accessor _parsedUrl: URL | null = null
 
@@ -67,16 +84,19 @@ export default class RDFForm extends WebComponent {
     }
 
     render () {
-      const currentStoreContext = this.passedInStore
-        ? { store: this.passedInStore }
-        : this.storeContext
+      const currentStoreContext = this.currentStoreContext
 
-      if (!currentStoreContext?.store) {
+      if (!currentStoreContext) {
         console.warn('RDFForm: store context not available yet')
         return html``
       }
 
       const store = currentStoreContext.store
+
+      if (!store.updater?.editable(this.subjectURI)) {
+        this.entireDataIsReadonly = true
+      }
+
       // TODO: detect format
       loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
       loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
@@ -124,6 +144,7 @@ export default class RDFForm extends WebComponent {
                 return html` <solid-ui-rdf-input 
                   .formSubject=${sym(part.value)} 
                   .dataSubject=${me}
+                  readonly=${this.entireDataIsReadonly}
                 ></solid-ui-rdf-input>
                 <br>`
               }
@@ -150,6 +171,13 @@ export default class RDFForm extends WebComponent {
                   return html`<div>Unknown part type: ${part}</div>`
           }
         })}
+        <solid-ui-button
+            ?disabled=${!store.updater?.editable(this.subjectURI) || this.submitting}
+            ?loading=${this.submitting}
+            type="submit"
+        >
+            Save
+        </solid-ui-button>
       </form>
     `
     }
@@ -157,18 +185,21 @@ export default class RDFForm extends WebComponent {
     private async onSubmit (e: Event) {
       e.preventDefault()
 
-    /*  this.failed = false
+      this.failed = false
 
       this.submitting = true
 
       try {
-        await this.auth.login(this.issuerInputValue)
+        const currentStoreContext = this.currentStoreContext
+        if (currentStoreContext?.store.updater?.editable(this.subjectURI)) {
+          // this.saveStatements()
+        }
       } catch (error) {
         console.error(error)
 
         this.failed = true
       } finally {
         this.submitting = false
-      } */
+      }
     }
 }
