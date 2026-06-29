@@ -4,11 +4,17 @@ import { customElement, WebComponent } from '@/lib/components'
 import ns from '../../lib/ns'
 import { loadDocument, sortBySequence } from '../../lib/forms/rdfFormsHelper'
 import { sym, Namespace } from 'rdflib'
-import { store } from 'solid-logic'
 import '@/components/rdf-input'
+import { consume } from '@lit/context'
+import { DEFAULT_STORE, formsContext, FormsContext } from '@/lib/forms/FormsContext'
 
 @customElement('solid-ui-rdf-form')
 export default class RDFForm extends WebComponent {
+    @consume({ context: formsContext, subscribe: true })
+    private accessor formsContext: FormsContext = {
+      store: DEFAULT_STORE,
+    }
+
     @state()
     private accessor _parsedUrl: URL | null = null
 
@@ -61,14 +67,14 @@ export default class RDFForm extends WebComponent {
 
     render () {
       // TODO: detect format
-      loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
-      loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
+      loadDocument(this.formsContext.store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
+      loadDocument(this.formsContext.store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
       const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
       const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
 
-      const parts = store.each(formThis, ns.ui('parts'), null, document)
-      const partsBySequence = sortBySequence(store, parts)
+      const parts = this.formsContext.store.each(formThis, ns.ui('parts'), null, document)
+      const partsBySequence = sortBySequence(this.formsContext.store, parts)
       const partItems = (partsBySequence || []).flatMap(item => {
         if (item && typeof item === 'object' && 'elements' in item && Array.isArray((item as any).elements)) {
           return (item as any).elements
@@ -76,7 +82,7 @@ export default class RDFForm extends WebComponent {
         return [item]
       })
       const uiFields = partItems.map(item => {
-        const types = store.each(item as any, ns.rdf('type'), null, document)
+        const types = this.formsContext.store.each(item as any, ns.rdf('type'), null, document)
         const typeNode = types[0]
         const value = typeNode ? ((typeNode as any).value || String(typeNode)) : ((item as any).value || String(item))
         const hashIndex = value.lastIndexOf('#')
@@ -104,7 +110,6 @@ export default class RDFForm extends WebComponent {
             case 'SingleLineTextField':
             case 'NamedNodeURIField': {
               return html` <solid-ui-rdf-input 
-                .store=${store} 
                 .formSubject=${sym(part.value)} 
                 .dataSubject=${me}
               ></solid-ui-rdf-input>`
