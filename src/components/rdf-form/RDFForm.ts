@@ -1,19 +1,20 @@
 import { property, state } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
+import { consume } from '@lit/context'
 import { customElement, WebComponent } from '@/lib/components'
 import ns from '../../lib/ns'
 import { loadDocument, sortBySequence } from '../../lib/forms/rdfFormsHelper'
-import { sym, Namespace } from 'rdflib'
+import { sym, Namespace, LiveStore } from 'rdflib'
 import '@/components/rdf-input'
-import { consume } from '@lit/context'
-import { DEFAULT_STORE, formsContext, FormsContext } from '@/lib/forms/FormsContext'
+import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
 
 @customElement('solid-ui-rdf-form')
 export default class RDFForm extends WebComponent {
-    @consume({ context: formsContext, subscribe: true })
-    private accessor formsContext: FormsContext = {
-      store: DEFAULT_STORE,
-    }
+    @consume({ context: storeContext, subscribe: true })
+    private accessor storeContext: StoreContext = DEFAULT_STORE
+
+    @property({ attribute: false })
+    accessor passedInStore: LiveStore | null = null
 
     @state()
     private accessor _parsedUrl: URL | null = null
@@ -66,15 +67,25 @@ export default class RDFForm extends WebComponent {
     }
 
     render () {
+      const currentStoreContext = this.passedInStore
+        ? { store: this.passedInStore }
+        : this.storeContext
+
+      if (!currentStoreContext?.store) {
+        console.warn('RDFForm: store context not available yet')
+        return html``
+      }
+
+      const store = currentStoreContext.store
       // TODO: detect format
-      loadDocument(this.formsContext.store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
-      loadDocument(this.formsContext.store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
+      loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
+      loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
       const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
       const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
 
-      const parts = this.formsContext.store.each(formThis, ns.ui('parts'), null, document)
-      const partsBySequence = sortBySequence(this.formsContext.store, parts)
+      const parts = store.each(formThis, ns.ui('parts'), null, document)
+      const partsBySequence = sortBySequence(store, parts)
       const partItems = (partsBySequence || []).flatMap(item => {
         if (item && typeof item === 'object' && 'elements' in item && Array.isArray((item as any).elements)) {
           return (item as any).elements
@@ -82,7 +93,7 @@ export default class RDFForm extends WebComponent {
         return [item]
       })
       const uiFields = partItems.map(item => {
-        const types = this.formsContext.store.each(item as any, ns.rdf('type'), null, document)
+        const types = store.each(item as any, ns.rdf('type'), null, document)
         const typeNode = types[0]
         const value = typeNode ? ((typeNode as any).value || String(typeNode)) : ((item as any).value || String(item))
         const hashIndex = value.lastIndexOf('#')

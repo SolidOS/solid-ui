@@ -98,6 +98,7 @@ const meta = {
 
 const render = defineStoryRender<typeof meta.argTypes>(({ rdfTurtleFormatSource, rdfURI, whichForm, rdfName, subjectTurtleFormatSource, subjectName, subjectURI }) => {
   return html`
+      <storybook-provider>
         <solid-ui-rdf-form 
           rdfTurtleFormatSource=${rdfTurtleFormatSource}
           rdfURI=${rdfURI}
@@ -107,6 +108,7 @@ const render = defineStoryRender<typeof meta.argTypes>(({ rdfTurtleFormatSource,
           subjectName=${subjectName}
           subjectURI=${subjectURI}>
         </solid-ui-rdf-form>
+      </storybook-provider>
     `
 })
 

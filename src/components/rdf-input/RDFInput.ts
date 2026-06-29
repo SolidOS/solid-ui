@@ -6,7 +6,7 @@ import { NamedNode } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
-import { DEFAULT_STORE, formsContext, FormsContext } from '@/lib/forms/FormsContext'
+import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
 import { consume } from '@lit/context'
 
 @customElement('solid-ui-rdf-input')
@@ -19,10 +19,8 @@ export default class RDFInput extends WebComponent {
   // formSubject describes the field metadata
   // dataSubject points to the data resource containing the value
 
-  @consume({ context: formsContext, subscribe: true })
-  private accessor formsContext: FormsContext = {
-    store: DEFAULT_STORE,
-  }
+  @consume({ context: storeContext, subscribe: true })
+  private accessor storeContext: StoreContext = DEFAULT_STORE
 
   @property({ attribute: false, type: Object })
   accessor formSubject!: NamedNode
@@ -44,7 +42,7 @@ export default class RDFInput extends WebComponent {
     const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formGraph)
     const readonly = this.getReadOnly(this.readonly, this.formSubject, formGraph)
 
-    const fieldType = this.formSubject ? mostSpecificClassURI(this.formsContext.store, this.formSubject) : undefined
+    const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
     const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
     const inputType: InputType = params.type ?? 'text'
 
@@ -70,12 +68,12 @@ export default class RDFInput extends WebComponent {
 
   private getFormProperty (subject: NamedNode | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
     if (!subject) return undefined
-    return this.formsContext.store.any(subject, property, null, graph) as NamedNode | undefined
+    return this.storeContext.store.any(subject, property, null, graph) as NamedNode | undefined
   }
 
   private getInputLabel (formFieldSubject: NamedNode | undefined, uiPropertyTerm?: NamedNode, graph?: any): string {
     if (!formFieldSubject) return ''
-    const uiLabel = this.formsContext.store.any(formFieldSubject, ns.ui('label'), null, graph)
+    const uiLabel = this.storeContext.store.any(formFieldSubject, ns.ui('label'), null, graph)
     const propertyLabel = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
     return uiLabel ? uiLabel.value : propertyLabel
   }
@@ -83,7 +81,7 @@ export default class RDFInput extends WebComponent {
   private getReadOnly (readonly?: boolean, formFieldSubject?: NamedNode, graph?: any): boolean {
     if (readonly !== undefined) return readonly
     if (!formFieldSubject) return false
-    return !!this.formsContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
+    return !!this.storeContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
   }
 
   private getSelectedTerm (
@@ -93,14 +91,14 @@ export default class RDFInput extends WebComponent {
     params?: { defaultInputValue?: string }
   ) {
     const defaultTerm = formFieldSubject
-      ? this.formsContext.store.any(formFieldSubject, ns.ui('default'))
+      ? this.storeContext.store.any(formFieldSubject, ns.ui('default'))
       : undefined
 
     if (!uiPropertyTerm || !dataSubject) {
       return defaultTerm
     }
 
-    const inputTerm = this.formsContext.store.any(dataSubject, uiPropertyTerm)
+    const inputTerm = this.storeContext.store.any(dataSubject, uiPropertyTerm)
     return inputTerm || defaultTerm
   }
 
