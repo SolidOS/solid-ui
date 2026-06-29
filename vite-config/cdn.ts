@@ -1,7 +1,8 @@
 import { join, resolve } from 'node:path'
-import { babel } from 'solidos-toolkit/vite'
+import { babel, cssConfig } from 'solidos-toolkit/vite'
 import type { PluginOption, UserConfig } from 'vite'
 
+import resolveConfig from './resolve'
 import { componentsSrcDir, discoverComponents, litDecoratorPaths } from './components'
 
 const projectRoot = resolve(import.meta.dirname, '..')
@@ -19,9 +20,11 @@ function cdnSharedConfig(options: { basePlugins: PluginOption[]; globals?: Recor
     const externals = Object.keys(globals)
 
     return {
+        css: cssConfig(),
         resolve: {
-            tsconfigPaths: true,
+            ...resolveConfig,
             alias: {
+                ...resolveConfig.alias,
                 path: 'path-browserify',
             },
         },
