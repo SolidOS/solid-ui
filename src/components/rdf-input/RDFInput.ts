@@ -2,7 +2,7 @@ import { property } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
 import { customElement, WebComponent } from '@/lib/components'
-import { Literal, LiveStore, NamedNode, Statement, st } from 'rdflib'
+import { Literal, NamedNode, st } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { FieldParamsObject, fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
@@ -29,8 +29,14 @@ export default class RDFInput extends WebComponent {
   @property({ attribute: false, type: Object })
   accessor dataSubject!: NamedNode
 
+  @property({ type: Number })
+  accessor storeVersion = 0
+
+  private _updateInFlight = false
+  private _pendingUpdateValue: string | null = null
+
   @property({ type: Boolean, reflect: true })
-  accessor readonly = true;
+  accessor readonly = false;
 
   render () {
     const formGraph = this.getGraph(this.formSubject)
@@ -57,7 +63,7 @@ export default class RDFInput extends WebComponent {
         placeholder="${placeholder}"
         type="${inputType}"
         ?readonly=${readonly}
-        @input=${this.updateData()}
+        @input=${this.updateData}
       ></solid-ui-input>`
   }
 
@@ -113,88 +119,78 @@ export default class RDFInput extends WebComponent {
     return stripped.replace(/ /g, '')
   }
 
-  private updateData () {
-    return (e: CustomEvent) => {
-      const newValue = (e.target as HTMLInputElement).value
+  private async updateData (e: CustomEvent) {
+    const newValue = (e.target as HTMLInputElement).value
+    this._pendingUpdateValue = newValue
 
-      const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getGraph(this.formSubject))
-      if (!uiPropertyTerm || !this.dataSubject) return
-
-      const currentStoreContext = this.storeContext.store
-      if (!currentStoreContext.updater.editable(this.dataSubject)) return
-
-      const toDeleteSt = currentStoreContext.statementsMatching(this.dataSubject, uiPropertyTerm)
-
-      if (newValue) {
-        let objectFromNewValue
-        const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
-        const params: FieldParamsObject = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
-        if (params.namedNode) {
-          objectFromNewValue = currentStoreContext.sym(newValue)
-        } else if (params.defaultInputValue) {
-          objectFromNewValue = encodeURIComponent(newValue.replace(/ /g, ''))
-          objectFromNewValue = currentStoreContext.sym(params.defaultInputValue + objectFromNewValue)
-        } else {
-          if (params.dt) {
-            objectFromNewValue = new Literal(
-              newValue.trim(),
-              undefined,
-              ns.xsd(params.dt)
-            )
-          } else {
-            objectFromNewValue = new Literal(newValue)
-          }
-        }
-        let toInsertSt = toDeleteSt.map(statement => st(statement.subject, statement.predicate, objectFromNewValue, statement.why)) // can include >1 doc
-        if (toInsertSt.length === 0) {
-          toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getGraph(this.dataSubject))]
-        }
-
-        this.updateMany(currentStoreContext, toDeleteSt, toInsertSt)
-      }
+    if (this._updateInFlight) {
+      return
     }
+
+    await this.runPendingUpdate()
   }
 
-  private updateMany (
-    store: LiveStore,
-    ds: Statement[],
-    is: Statement[]
-  ) {
-    const getDocUri = (statement: Statement) => {
-      const why = statement.why as any
-      return why?.uri ?? why?.value
+  private async runPendingUpdate () {
+    if (this._pendingUpdateValue === null) {
+      return
     }
 
-    const docs: string[] = []
-    is.forEach(st => {
-      const uri = getDocUri(st)
-      if (uri && !docs.includes(uri)) docs.push(uri)
-    })
-    ds.forEach(st => {
-      const uri = getDocUri(st)
-      if (uri && !docs.includes(uri)) docs.push(uri)
-    })
-    if (docs.length === 0) {
-      throw new Error('No concrete document to update')
-    }
-    if (!store.updater) {
-      throw new Error('Store has no updater')
-    }
-    if (docs.length === 1) {
-      return store.updater.update(ds, is as any)
+    const newValue = this._pendingUpdateValue
+    this._pendingUpdateValue = null
+    this._updateInFlight = true
+
+    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getGraph(this.formSubject))
+    if (!uiPropertyTerm || !this.dataSubject) {
+      this._updateInFlight = false
+      return
     }
 
-    const doc = docs.pop()
-    const is1 = is.filter(st => getDocUri(st) === doc)
-    const is2 = is.filter(st => getDocUri(st) !== doc)
-    const ds1 = ds.filter(st => getDocUri(st) === doc)
-    const ds2 = ds.filter(st => getDocUri(st) !== doc)
-    store.updater.update(ds1, is1 as any, (uri, ok, body) => {
-      if (ok) {
-        this.updateMany(store, ds2, is2)
+    const currentStoreContext = this.storeContext.store
+    if (currentStoreContext.updater?.editable(this.dataSubject) === false) {
+      this._updateInFlight = false
+      return
+    }
+
+    const toDeleteSt = currentStoreContext.statementsMatching(this.dataSubject, uiPropertyTerm)
+    let toInsertSt: Array<ReturnType<typeof st>> = []
+
+    if (newValue) {
+      let objectFromNewValue
+      const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
+      const params: FieldParamsObject = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
+      if (params.namedNode) {
+        objectFromNewValue = currentStoreContext.sym(newValue)
+      } else if (params.defaultInputValue) {
+        objectFromNewValue = encodeURIComponent(newValue.replace(/ /g, ''))
+        objectFromNewValue = currentStoreContext.sym(params.defaultInputValue + objectFromNewValue)
       } else {
-        throw new Error(`Failed to update data for ${uri}: ${body}`)
+        if (params.dt) {
+          objectFromNewValue = new Literal(
+            newValue.trim(),
+            undefined,
+            ns.xsd(params.dt)
+          )
+        } else {
+          objectFromNewValue = new Literal(newValue)
+        }
       }
-    })
+      toInsertSt = toDeleteSt.map(statement => st(statement.subject, statement.predicate, objectFromNewValue, statement.why))
+      if (toInsertSt.length === 0) {
+        toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getGraph(this.dataSubject))]
+      }
+    }
+
+    try {
+      await currentStoreContext.updater.updateMany(toDeleteSt, toInsertSt as any)
+      this.storeVersion += 1
+    } catch (err) {
+      console.error('RDFInput update failed', err)
+    } finally {
+      this._updateInFlight = false
+    }
+
+    if (this._pendingUpdateValue !== null) {
+      await this.runPendingUpdate()
+    }
   }
 }

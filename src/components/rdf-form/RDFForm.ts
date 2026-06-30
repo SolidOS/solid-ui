@@ -24,20 +24,20 @@ export default class RDFForm extends WebComponent {
       return this.storeContext !== DEFAULT_STORE ? this.storeContext : null
     }
 
-    @state()
-    private accessor failed: boolean = false
-
-    @state()
-    private accessor submitting: boolean = false
-
      @state()
-    private accessor entireDataIsReadonly: boolean = true
+    private accessor entireDataIsReadonly: boolean = false
 
     @state()
     private accessor _parsedUrl: URL | null = null
 
     @state()
     private accessor _parsedUrl2: URL | null = null
+
+    @state()
+    private accessor _loadVersion = 0
+
+    @state()
+    private accessor _documentsLoaded = false
 
     @property({ type: String })
     accessor whichForm = 'this'
@@ -91,15 +91,16 @@ export default class RDFForm extends WebComponent {
         return html``
       }
 
+      if (!this._documentsLoaded) {
+        return html``
+      }
+
       const store = currentStoreContext.store
 
-      if (!store.updater?.editable(this.subjectURI)) {
+      if (store.updater?.editable(this.subjectURI) === false) {
         this.entireDataIsReadonly = true
       }
 
-      // TODO: detect format
-      loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, this.rdfURI) // load form
-      loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, this.subjectURI) // load data
       const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
       const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
@@ -125,7 +126,7 @@ export default class RDFForm extends WebComponent {
       const me = Namespace(this.subjectURI + '#')(this.whichSubject)
 
       return html`
-      <form @submit=${this.onSubmit}>
+      <form>
         ${uiFields.map(part => {
           switch (part.fieldValue) {
               case 'PhoneField':
@@ -144,7 +145,8 @@ export default class RDFForm extends WebComponent {
                 return html` <solid-ui-rdf-input 
                   .formSubject=${sym(part.value)} 
                   .dataSubject=${me}
-                  readonly=${this.entireDataIsReadonly}
+                  .storeVersion=${this._loadVersion}
+                  .readonly=${this.entireDataIsReadonly}
                 ></solid-ui-rdf-input>
                 <br>`
               }
@@ -171,35 +173,42 @@ export default class RDFForm extends WebComponent {
                   return html`<div>Unknown part type: ${part}</div>`
           }
         })}
-        <solid-ui-button
-            ?disabled=${!store.updater?.editable(this.subjectURI) || this.submitting}
-            ?loading=${this.submitting}
-            type="submit"
-        >
-            Save
-        </solid-ui-button>
       </form>
     `
     }
 
-    private async onSubmit (e: Event) {
-      e.preventDefault()
+    protected updated (changedProperties: Map<PropertyKey, unknown>) {
+      super.updated(changedProperties)
+      if (
+        changedProperties.has('rdfTurtleFormatSource') ||
+        changedProperties.has('rdfName') ||
+        changedProperties.has('rdfURI') ||
+        changedProperties.has('subjectTurtleFormatSource') ||
+        changedProperties.has('subjectName') ||
+        changedProperties.has('subjectURI') ||
+        changedProperties.has('passedInStore')
+      ) {
+        this.loadDocumentsIfNeeded()
+      }
+    }
 
-      this.failed = false
+    private async loadDocumentsIfNeeded () {
+      const currentStoreContext = this.currentStoreContext
+      if (!currentStoreContext) return
 
-      this.submitting = true
+      const store = currentStoreContext.store
+      const rdfURI = this.rdfURI
+      const subjectURI = this.subjectURI
+
+      if (!rdfURI || !subjectURI) return
 
       try {
-        const currentStoreContext = this.currentStoreContext
-        if (currentStoreContext?.store.updater?.editable(this.subjectURI)) {
-          // this.saveStatements()
-        }
+        await loadDocument(store, this.rdfTurtleFormatSource, this.rdfName, rdfURI, false)
+        await loadDocument(store, this.subjectTurtleFormatSource, this.subjectName, subjectURI, true)
+        this._loadVersion += 1
+        this._documentsLoaded = true
       } catch (error) {
-        console.error(error)
-
-        this.failed = true
-      } finally {
-        this.submitting = false
+        console.error('Failed to load RDF documents', error)
       }
     }
 }

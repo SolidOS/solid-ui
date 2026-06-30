@@ -6,12 +6,12 @@ import ns from '../../lib/ns'
 
 const baseUri = 'https://solidos.github.io/solid-ui/src/ontology/'
 
-// we need to load into the store some additional information about Social Media accounts
 export function loadDocument (
   store: LiveStore,
   documentSource: string,
   documentName: string,
-  documentURI?: string
+  documentURI?: string,
+  preferRemote = false
 ) {
   const finalDocumentUri = documentURI || baseUri + documentName   // Full URI to the file
   const document = sym(finalDocumentUri)      // rdflib NamedNode for the document
@@ -19,13 +19,44 @@ export function loadDocument (
   if (store.holds(undefined, undefined, undefined, document)) {
     store.removeStatements(store.statementsMatching(undefined, undefined, undefined, document))
   }
-  // we are using the social media form because it contains the information we need
-  // the form can be used for both use cases: create UI for edit and render UI for display
-  parse(documentSource, store, finalDocumentUri, 'text/turtle', (err) => {
-    if (err) {
-      console.error('loadDocument parse error for', finalDocumentUri, err)
-    }
-  })
+
+  const parseSource = () => {
+    return new Promise<void>((resolve, reject) => {
+      parse(documentSource, store, finalDocumentUri, 'text/turtle', (err) => {
+        if (err) {
+          console.error('Parse document error for ', finalDocumentUri, err)
+          reject(err)
+        } else {
+          resolve()
+        }
+      })
+    })
+  }
+
+  if (preferRemote && documentURI) {
+    return store.fetcher.load(documentURI, {
+      force: true,
+      clearPreviousData: true,
+    }).then(() => {}).catch((err) => {
+      if (documentSource && documentSource.trim().length > 0) {
+        return parseSource()
+      }
+      throw err
+    })
+  }
+
+  if (documentSource && documentSource.trim().length > 0) {
+    return parseSource()
+  }
+
+  if (documentURI) {
+    return store.fetcher.load(documentURI, {
+      force: true,
+      clearPreviousData: true,
+    }).then(() => {})
+  }
+
+  return Promise.reject(new Error(`No document source or URI for ${documentName}`))
 }
 
 export function sortBySequence (
