@@ -145,13 +145,12 @@ export default class RDFInput extends WebComponent {
       return
     }
 
-    const currentStoreContext = this.storeContext.store
-    if (currentStoreContext.updater?.editable(this.dataSubject) === false) {
+    if (this.storeContext.store.updater?.editable(this.dataSubject) === false) {
       this._updateInFlight = false
       return
     }
 
-    const toDeleteSt = currentStoreContext.statementsMatching(this.dataSubject, uiPropertyTerm)
+    const toDeleteSt = this.storeContext.store.statementsMatching(this.dataSubject, uiPropertyTerm)
     let toInsertSt: Array<ReturnType<typeof st>> = []
 
     if (newValue) {
@@ -159,10 +158,10 @@ export default class RDFInput extends WebComponent {
       const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
       const params: FieldParamsObject = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
       if (params.namedNode) {
-        objectFromNewValue = currentStoreContext.sym(newValue)
+        objectFromNewValue = this.storeContext.store.sym(newValue)
       } else if (params.defaultInputValue) {
         objectFromNewValue = encodeURIComponent(newValue.replace(/ /g, ''))
-        objectFromNewValue = currentStoreContext.sym(params.defaultInputValue + objectFromNewValue)
+        objectFromNewValue = this.storeContext.store.sym(params.defaultInputValue + objectFromNewValue)
       } else {
         if (params.dt) {
           objectFromNewValue = new Literal(
@@ -181,7 +180,7 @@ export default class RDFInput extends WebComponent {
     }
 
     try {
-      await currentStoreContext.updater.updateMany(toDeleteSt, toInsertSt as any)
+      await this.storeContext.store.updater.updateMany(toDeleteSt, toInsertSt as any)
       this.storeVersion += 1
     } catch (err) {
       console.error('RDFInput update failed', err)

@@ -16,15 +16,15 @@ export default class RDFForm extends WebComponent {
     @property({ attribute: false })
     accessor passedInStore: LiveStore | null = null
 
-    private get currentStoreContext (): StoreContext | null {
+    private get currentStoreContext (): StoreContext {
       if (this.passedInStore) {
-        return { store: this.passedInStore }
+        this.storeContext.store = this.passedInStore
       }
 
-      return this.storeContext !== DEFAULT_STORE ? this.storeContext : null
+      return this.storeContext
     }
 
-     @state()
+    @state()
     private accessor entireDataIsReadonly: boolean = false
 
     @state()
@@ -84,18 +84,11 @@ export default class RDFForm extends WebComponent {
     }
 
     render () {
-      const currentStoreContext = this.currentStoreContext
-
-      if (!currentStoreContext) {
-        console.warn('RDFForm: store context not available yet')
-        return html``
-      }
-
       if (!this._documentsLoaded) {
         return html``
       }
 
-      const store = currentStoreContext.store
+      const store = this.currentStoreContext.store
 
       if (store.updater?.editable(this.subjectURI) === false) {
         this.entireDataIsReadonly = true
@@ -193,10 +186,7 @@ export default class RDFForm extends WebComponent {
     }
 
     private async loadDocumentsIfNeeded () {
-      const currentStoreContext = this.currentStoreContext
-      if (!currentStoreContext) return
-
-      const store = currentStoreContext.store
+      const store = this.currentStoreContext.store
       const rdfURI = this.rdfURI
       const subjectURI = this.subjectURI
 
