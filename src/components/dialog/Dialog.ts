@@ -43,7 +43,14 @@ export default class Dialog extends WebComponent {
       return
     }
 
-    this.nativeDialog.showModal()
+    if (typeof this.nativeDialog.showModal === 'function') {
+      this.nativeDialog.showModal()
+    } else if (typeof this.nativeDialog.show === 'function') {
+      this.nativeDialog.show()
+    } else {
+      this.nativeDialog.setAttribute('open', '')
+    }
+
     this.nativeDialog.addEventListener('close', () => this.close())
   }
 

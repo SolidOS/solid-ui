@@ -1,9 +1,8 @@
-import { copyFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
+import { babel } from 'solidos-toolkit/vite'
 import type { PluginOption, UserConfig } from 'vite'
 
-import babel from './babel'
-import { componentsSrcDir, discoverComponents } from './components'
+import { componentsSrcDir, discoverComponents, litDecoratorPaths } from './components'
 
 const projectRoot = resolve(import.meta.dirname, '..')
 
@@ -42,6 +41,7 @@ function cdnSharedConfig(options: { basePlugins: PluginOption[]; globals?: Recor
         plugins: [
             ...options.basePlugins,
             babel({
+                litDecoratorPaths,
                 preserveModules: true,
                 transpileTargets: {
                     browsers: ['> 1%', 'last 3 versions', 'not dead'],
@@ -52,6 +52,7 @@ function cdnSharedConfig(options: { basePlugins: PluginOption[]; globals?: Recor
 }
 
 export function cdnLegacyConfig(basePlugins: PluginOption[]): UserConfig {
+    const baseName = 'solid-ui'
     const shared = cdnSharedConfig({
         basePlugins,
         globals: {
@@ -66,11 +67,18 @@ export function cdnLegacyConfig(basePlugins: PluginOption[]): UserConfig {
             ...shared.plugins,
             {
                 name: 'copy-legacy-aliases',
-                closeBundle() {
-                    const distDir = join(projectRoot, 'dist')
+                generateBundle(_, bundle) {
+                    const minifiedBundle = bundle[`${baseName}.min.js`]
 
-                    copyFileSync(join(distDir, 'solid-ui.min.js'), join(distDir, 'solid-ui.js'))
-                    copyFileSync(join(distDir, 'solid-ui.min.js.map'), join(distDir, 'solid-ui.js.map'))
+                    if (minifiedBundle?.type !== 'chunk') {
+                        return;
+                    }
+
+                    this.emitFile({
+                        type: 'asset',
+                        fileName: `${baseName}.js`,
+                        source: minifiedBundle.code,
+                    })
                 },
             },
         ],
@@ -80,7 +88,7 @@ export function cdnLegacyConfig(basePlugins: PluginOption[]): UserConfig {
                 entry: join(projectRoot, 'src/cdn/legacy.ts'),
                 name: 'UI',
                 formats: ['umd'],
-                fileName: () => 'solid-ui.min.js',
+                fileName: () => `${baseName}.min.js`,
             },
         },
     }

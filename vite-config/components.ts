@@ -4,6 +4,11 @@ import type { Plugin } from 'vite'
 
 const projectRoot = resolve(import.meta.dirname, '..')
 
+export const litDecoratorPaths = [
+    'src/components',
+    'src/storybook',
+]
+
 export const componentsSrcDir = join(projectRoot, 'src/components')
 export const customElementsTypesPath = join(projectRoot, 'src/types/custom-elements.d.ts')
 
