@@ -27,7 +27,7 @@
         input:read-only {
             border: none;
             padding: 0;
-            cursor: pointer;
+            cursor: not-allowed;
         }
     }
     
