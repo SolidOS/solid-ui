@@ -53,16 +53,9 @@ export default abstract class WebComponent extends LitElement {
       return
     }
 
-    const internals = this.getInternals()
-
     for (const [state, condition] of Object.entries(states)) {
-      const matches = condition(this)
-
-      if (matches && !internals.states.has(state)) {
-        internals.states.add(state)
-      } else if (!matches && internals.states.has(state)) {
-        internals.states.delete(state)
-      }
+      // FIXME when browser support is good enough, use the internals API instead with :state() selectors
+      this.toggleAttribute(`data-state-${state}`, !!condition(this))
     }
   }
 

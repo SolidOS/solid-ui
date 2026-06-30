@@ -1,12 +1,13 @@
 import dts from 'unplugin-dts/vite'
 import { isAbsolute } from 'node:path'
 import { defineConfig } from 'vitest/config'
+import { babel } from 'solidos-toolkit/vite'
 import type { UserConfig } from 'vite'
-import babel from './vite-config/babel'
+
 import css from './vite-config/css'
 import icons from './vite-config/icons'
 import { cdnLegacyConfig, cdnConfig } from './vite-config/cdn'
-import { discoverComponents } from './vite-config/components'
+import { discoverComponents, litDecoratorPaths } from './vite-config/components'
 import { stylesConfig } from './vite-config/styles'
 
 const basePlugins = [
@@ -21,7 +22,7 @@ function defaultConfig(): UserConfig {
         },
         plugins: [
             ...basePlugins,
-            babel(),
+            babel({ litDecoratorPaths }),
             dts({
                 tsconfigPath: 'tsconfig.json',
                 entryRoot: 'src',

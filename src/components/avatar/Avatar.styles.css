@@ -13,7 +13,7 @@
     }
 }
 
-:host(:state(fallback)) {
+:host([data-state-fallback]) {
     background: var(--solid-ui-color-gray-100);
     justify-content: center;
     align-items: center;

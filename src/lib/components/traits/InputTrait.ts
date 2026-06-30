@@ -20,12 +20,14 @@ export interface InputTraitConfig {
 
 export default class InputTrait implements WebComponentTrait {
   public inputId: string
+  public labelId: string
   public target: InputTraitTarget
   private config: InputTraitConfig
 
   constructor (target: InputTraitTarget, config: InputTraitConfig) {
     this.config = config
     this.inputId = `input-${generateId()}`
+    this.labelId = `label-${this.inputId}`
     this.target = target
   }
 
@@ -49,7 +51,7 @@ export default class InputTrait implements WebComponentTrait {
 
   renderLabel () {
     return this.target.label
-      ? html`<label for="${this.inputId}">${this.target.label}</label>`
+      ? html`<label id="${this.labelId}" for="${this.inputId}">${this.target.label}</label>`
       : nothing
   }
 

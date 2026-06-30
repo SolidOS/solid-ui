@@ -3,6 +3,11 @@ import { join, resolve } from 'node:path'
 
 const projectRoot = resolve(import.meta.dirname, '..')
 
+export const litDecoratorPaths = [
+    'src/components',
+    'src/storybook',
+]
+
 export const componentsSrcDir = join(projectRoot, 'src/components')
 
 export function discoverComponents(): string[] {
