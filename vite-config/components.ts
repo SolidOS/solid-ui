@@ -1,11 +1,11 @@
 import { existsSync, readdirSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
+import type { Plugin } from 'vite'
 
 const projectRoot = resolve(import.meta.dirname, '..')
 
 export const componentsSrcDir = join(projectRoot, 'src/components')
 export const customElementsTypesPath = join(projectRoot, 'src/types/custom-elements.d.ts')
-const rdfComponentPrefix = 'rdf-'
 
 export function discoverComponents(): string[] {
     return readdirSync(componentsSrcDir, { withFileTypes: true })
@@ -16,10 +16,6 @@ export function discoverComponents(): string[] {
         )
         .map((entry) => entry.name)
         .sort()
-}
-
-export function discoverRdfComponents(): string[] {
-    return discoverComponents().filter((name) => name.startsWith(rdfComponentPrefix))
 }
 
 function getPascalCase(name: string): string {
@@ -34,7 +30,7 @@ function getPascalCase(name: string): string {
 }
 
 export function generateCustomElementsTypes(): void {
-    const rdfComponents = discoverRdfComponents()
+    const components = discoverComponents()
 
     const lines = [
         '/**',
@@ -44,14 +40,14 @@ export function generateCustomElementsTypes(): void {
         '',
     ]
 
-    for (const component of rdfComponents) {
+    for (const component of components) {
         const className = getPascalCase(component)
         lines.push(`import type ${className} from '../components/${component}/${className}'`)
     }
 
     lines.push('', 'declare global {', '  interface HTMLElementTagNameMap {')
 
-    for (const component of rdfComponents) {
+    for (const component of components) {
         const className = getPascalCase(component)
         lines.push(`    'solid-ui-${component}': ${className}`)
     }
@@ -59,4 +55,18 @@ export function generateCustomElementsTypes(): void {
     lines.push('  }', '}', '')
 
     writeFileSync(customElementsTypesPath, lines.join('\n'), 'utf-8')
+}
+
+export function customElementsTypesPlugin(): Plugin {
+    return {
+        name: 'solid-ui-custom-elements-types',
+        buildStart() {
+            generateCustomElementsTypes()
+        },
+        handleHotUpdate(context) {
+            if (context.file.startsWith(componentsSrcDir)) {
+                generateCustomElementsTypes()
+            }
+        },
+    }
 }
