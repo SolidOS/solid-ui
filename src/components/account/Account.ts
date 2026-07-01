@@ -1,5 +1,6 @@
 import { consume } from '@lit/context'
-import { html } from 'lit'
+import { html, nothing, TemplateResult } from 'lit'
+import { property } from 'lit/decorators.js'
 import { customElement, WebComponent } from '@/lib/components'
 import { authContext, AuthContext, DEFAULT_AUTH_CONTEXT } from '@/lib/auth'
 
@@ -17,12 +18,21 @@ import '~icons/lucide/user'
 
 import styles from './Account.styles.css'
 
+export interface AccountMenuItem {
+  label: string | TemplateResult
+  href?: string
+  onSelected?(): void
+}
+
 @customElement('solid-ui-account')
 export default class Account extends WebComponent {
   static styles = styles
   static states = {
     loggedIn: (component: Account) => !!component.auth.account,
   }
+
+  @property({ type: Array })
+  accessor menuItems: AccountMenuItem[] = []
 
   @consume({ context: authContext, subscribe: true })
   private accessor auth: AuthContext = DEFAULT_AUTH_CONTEXT
@@ -66,6 +76,11 @@ export default class Account extends WebComponent {
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>
             </button>
 
+            ${this.menuItems.map(menuItem => html`
+                <solid-ui-menu-item .href=${menuItem.href ?? nothing} @solid-ui-select=${() => menuItem.onSelected?.()}>
+                    ${menuItem.label}
+                </solid-ui-menu-item>
+            `)}
             <solid-ui-logout-button>
                 <solid-ui-menu-item slot="trigger">
                     <icon-lucide-log-out slot="left-icon"></icon-lucide-log-out>
