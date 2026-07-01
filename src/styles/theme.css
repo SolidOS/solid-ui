@@ -1,6 +1,8 @@
 @import "@awesome.me/webawesome/dist/styles/webawesome.css";
+@import url('https://fonts.googleapis.com/css2?family=Atkinson+Hyperlegible+Next:wght@400;700&display=swap');
 
 :root {
+    font-family: "Atkinson Hyperlegible Next", "Inter", "Noto Sans", sans-serif;
     --solid-ui-color-primary: #7c4dff;
     --solid-ui-color-tertiary: #083575;
     --solid-ui-color-white: #ffffff;
