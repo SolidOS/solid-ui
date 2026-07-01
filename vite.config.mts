@@ -1,11 +1,10 @@
 import dts from 'unplugin-dts/vite'
 import { isAbsolute } from 'node:path'
 import { defineConfig } from 'vitest/config'
-import { babel } from 'solidos-toolkit/vite'
+import { babel, icons } from 'solidos-toolkit/vite'
 import type { UserConfig } from 'vite'
 
 import css from './vite-config/css'
-import icons from './vite-config/icons'
 import { cdnLegacyConfig, cdnConfig } from './vite-config/cdn'
 import { discoverComponents, litDecoratorPaths } from './vite-config/components'
 import { stylesConfig } from './vite-config/styles'
