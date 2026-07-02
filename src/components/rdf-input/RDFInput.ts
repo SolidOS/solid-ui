@@ -1,7 +1,7 @@
 import { property } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, generateId, WebComponent } from '@/lib/components'
 import { Literal, NamedNode, st } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
@@ -58,9 +58,9 @@ export default class RDFInput extends WebComponent {
     return html`
       <solid-ui-input
         label="${inputLabel}"
-        name="input-${inputLabel}"
+        name="name-${generateId()}"
         .value=${inputValue}
-        placeholder="${placeholder}"
+        .placeholder=${placeholder}
         type="${inputType}"
         ?readonly=${readonly}
         @input=${this.updateData}
