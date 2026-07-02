@@ -44,7 +44,7 @@ export default class RDFForm extends WebComponent {
     }
 
     @state()
-    private accessor entireDataIsReadonly: boolean = false
+    private accessor entireDataIsReadonly: boolean = true // to protect data, we default to not editable
 
     @state()
     private accessor _loadVersion = 0
@@ -66,9 +66,10 @@ export default class RDFForm extends WebComponent {
       const store = this.currentStoreContext.store
 
       const subjectUrl = hrefFromUrlValue(this.subjectUrl)
-      if (subjectUrl && store.updater?.editable(subjectUrl) === false) {
-        this.entireDataIsReadonly = true
+      if (subjectUrl && store.updater?.editable(subjectUrl) !== undefined && store.updater?.editable(subjectUrl) !== false) {
+        this.entireDataIsReadonly = false
       }
+      console.log(store.updater?.editable(subjectUrl), this.entireDataIsReadonly)
 
       const formRoot = findForm(this.currentStoreContext.store, hrefFromUrlValue(this.formUrl))                          // If there are more 'a ui:Form' elements in a form file
       if (!formRoot) throw new Error('No ui:Form found in ' + hrefFromUrlValue(this.formUrl))

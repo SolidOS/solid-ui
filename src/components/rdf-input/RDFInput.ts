@@ -36,7 +36,7 @@ export default class RDFInput extends WebComponent {
   private _pendingUpdateValue: string | null = null
 
   @property({ type: Boolean, reflect: true })
-  accessor readonly = false;
+  accessor readonly: boolean = true // to protect data, we default to not editable
 
   render () {
     const document = this.getDocument(this.formSubject)
@@ -83,10 +83,11 @@ export default class RDFInput extends WebComponent {
     return uiLabel ? uiLabel.value : propertyLabel
   }
 
-  private getReadOnly (readonly?: boolean, formFieldSubject?: NamedNode, graph?: any): boolean {
-    if (readonly !== undefined) return readonly
-    if (!formFieldSubject) return false
-    return !!this.storeContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
+  private getReadOnly (readonly: boolean, formFieldSubject?: NamedNode, graph?: any): boolean {
+    if (formFieldSubject && readonly === false) { // if readonly is false, we can ovverride it if the field is marked as uneditable in the form
+      return !!this.storeContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
+    }
+    return readonly
   }
 
   private getSelectedTerm (
