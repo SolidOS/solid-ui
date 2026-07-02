@@ -69,7 +69,7 @@ export default class RDFForm extends WebComponent {
       if (subjectUrl && store.updater?.editable(subjectUrl) !== undefined && store.updater?.editable(subjectUrl) !== false) {
         this.entireDataIsReadonly = false
       }
-      console.log(store.updater?.editable(subjectUrl), this.entireDataIsReadonly)
+      console.log(store.updater?.editable(sym(subjectUrl)), this.entireDataIsReadonly)
 
       const formRoot = findForm(this.currentStoreContext.store, hrefFromUrlValue(this.formUrl))                          // If there are more 'a ui:Form' elements in a form file
       if (!formRoot) throw new Error('No ui:Form found in ' + hrefFromUrlValue(this.formUrl))

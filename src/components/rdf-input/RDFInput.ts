@@ -39,12 +39,12 @@ export default class RDFInput extends WebComponent {
   accessor readonly: boolean = true // to protect data, we default to not editable
 
   render () {
-    const document = this.getDocument(this.formSubject)
+    const formDocument = this.getDocument(this.formSubject)
 
     // for building the HTML input element
-    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), document)
-    const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, document)
-    const readonly = this.getReadOnly(this.readonly, this.formSubject, document)
+    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formDocument)
+    const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formDocument)
+    const readonly = this.getReadOnly(this.readonly, this.formSubject, formDocument)
 
     const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
     const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
@@ -67,8 +67,8 @@ export default class RDFInput extends WebComponent {
       ></solid-ui-input>`
   }
 
-  private getDocument (subject?: NamedNode) {
-    return subject?.doc ? subject.doc() : undefined
+  private getDocument (subject: NamedNode) {
+    return subject.doc ? subject.doc() : undefined
   }
 
   private getFormProperty (subject: NamedNode | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
@@ -146,7 +146,8 @@ export default class RDFInput extends WebComponent {
       return
     }
 
-    if (this.storeContext.store.updater?.editable(this.dataSubject) === false) {
+    const dataDocument = this.getDocument(this.dataSubject)
+    if (dataDocument && this.storeContext.store.updater?.editable(dataDocument) === false) {
       this._updateInFlight = false
       return
     }
