@@ -39,12 +39,12 @@ export default class RDFInput extends WebComponent {
   accessor readonly = false;
 
   render () {
-    const formGraph = this.getGraph(this.formSubject)
+    const document = this.getDocument(this.formSubject)
 
     // for building the HTML input element
-    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), formGraph)
-    const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formGraph)
-    const readonly = this.getReadOnly(this.readonly, this.formSubject, formGraph)
+    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), document)
+    const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, document)
+    const readonly = this.getReadOnly(this.readonly, this.formSubject, document)
 
     const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
     const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
@@ -67,7 +67,7 @@ export default class RDFInput extends WebComponent {
       ></solid-ui-input>`
   }
 
-  private getGraph (subject?: NamedNode) {
+  private getDocument (subject?: NamedNode) {
     return subject?.doc ? subject.doc() : undefined
   }
 
@@ -139,7 +139,7 @@ export default class RDFInput extends WebComponent {
     this._pendingUpdateValue = null
     this._updateInFlight = true
 
-    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getGraph(this.formSubject))
+    const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getDocument(this.formSubject))
     if (!uiPropertyTerm || !this.dataSubject) {
       this._updateInFlight = false
       return
@@ -175,7 +175,7 @@ export default class RDFInput extends WebComponent {
       }
       toInsertSt = toDeleteSt.map(statement => st(statement.subject, statement.predicate, objectFromNewValue, statement.why))
       if (toInsertSt.length === 0) {
-        toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getGraph(this.dataSubject))]
+        toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getDocument(this.dataSubject))]
       }
     }
 

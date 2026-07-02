@@ -1,7 +1,7 @@
 import { sym, LiveStore, parse } from 'rdflib'
 import type { Term } from 'rdflib/lib/tf-types'
 // eslint-disable-next-line camelcase
-import type { Quad_Subject } from 'rdflib/lib/tf-types'
+import type { Quad_Subject, NamedNode } from 'rdflib/lib/tf-types'
 import ns from '../../lib/ns'
 
 const baseUri = 'https://solidos.github.io/solid-ui/src/ontology/'
@@ -59,6 +59,22 @@ export function loadDocument (
   return Promise.reject(new Error(`No document source or URI for ${documentName}`))
 }
 
+export async function fetchData (
+  store: LiveStore,
+  documentURI: string
+) {
+  const document = sym(documentURI)      // rdflib NamedNode for the document
+
+  if (store.holds(undefined, undefined, undefined, document)) {
+    store.removeStatements(store.statementsMatching(undefined, undefined, undefined, document))
+  }
+
+  return await store.fetcher.load(documentURI, {
+    force: true,
+    clearPreviousData: true,
+  })
+}
+
 export function sortBySequence (
   store: LiveStore,
   list: Term[]
@@ -90,4 +106,18 @@ export function mostSpecificClassURI (store: LiveStore, subject: Quad_Subject): 
   for (const t in specificTypes) finalTypes.push(t)
   // if (finalTypes.length > 1) throw "Didn't expect "+subject+" to have multiple bottom types: "+finalTypes
   return finalTypes[0]
+}
+
+// Find the first ui:Form node in a store, optionally matching a fragment.
+// code based on Jeff Zucker's sol-components: https://github.com/jeff-zucker/sol-components (core/form-utils.js)
+export function findForm (store: LiveStore, sourceUri: string): NamedNode | null {
+  const docUrl = sourceUri.split('#')[0]
+  const fragment = sourceUri.includes('#') ? sourceUri.split('#')[1] : null
+  if (fragment) {
+    const candidate = sym(docUrl + '#' + fragment)
+    if (store.holds(candidate, ns.rdf('type'), ns.ui('Form'))) return candidate
+  }
+  const forms = store.each(null, ns.rdf('type'), ns.ui('Form'))
+  const found = forms.find((term) => term.termType === 'NamedNode')
+  return found ? (found as NamedNode) : null
 }
