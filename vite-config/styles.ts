@@ -1,8 +1,12 @@
+import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
-import tailwindcss from '@tailwindcss/vite'
 import type { Plugin, UserConfig } from 'vite'
 
 const projectRoot = resolve(import.meta.dirname, '..')
+const breakpointsCss = readFileSync(
+    resolve(projectRoot, 'src/styles/breakpoints.css'),
+    'utf8',
+)
 
 function styleDeclarations(): Plugin {
     return {
@@ -10,14 +14,22 @@ function styleDeclarations(): Plugin {
         generateBundle() {
             this.emitFile({
                 type: 'asset',
-                fileName: 'theme.css.d.ts',
-                source: 'export {}\n',
+                fileName: 'breakpoints.css',
+                source: breakpointsCss,
             })
+
+            for (const name of ['breakpoints', 'theme']) {
+                this.emitFile({
+                    type: 'asset',
+                    fileName: `${name}.css.d.ts`,
+                    source: `export {}\n`,
+                })
+            }
         },
     }
 }
 
-export function stylesConfig(): UserConfig {
+export default function(): UserConfig {
     return {
         build: {
             outDir: 'dist',
@@ -30,6 +42,6 @@ export function stylesConfig(): UserConfig {
                 },
             },
         },
-        plugins: [tailwindcss(), styleDeclarations()],
+        plugins: [styleDeclarations()],
     }
 }

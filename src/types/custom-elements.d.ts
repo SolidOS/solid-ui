@@ -16,7 +16,6 @@ import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
 import type Footer from '../components/footer/Footer'
 import type Guard from '../components/guard/Guard'
-import type Header from '../components/header/Header'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
 import type LoginModal from '../components/login-modal/LoginModal'
@@ -30,6 +29,7 @@ import type RDFInput from '../components/rdf-input/RDFInput'
 import type Select from '../components/select/Select'
 import type SelectOption from '../components/select-option/SelectOption'
 import type SignupButton from '../components/signup-button/SignupButton'
+import type SolidEmblem from '../components/solid-emblem/SolidEmblem'
 
 declare global {
   interface HTMLElementTagNameMap {
@@ -46,7 +46,6 @@ declare global {
     'solid-ui-dialogs-root': DialogsRoot
     'solid-ui-footer': Footer
     'solid-ui-guard': Guard
-    'solid-ui-header': Header
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
     'solid-ui-login-modal': LoginModal
@@ -60,5 +59,6 @@ declare global {
     'solid-ui-select': Select
     'solid-ui-select-option': SelectOption
     'solid-ui-signup-button': SignupButton
+    'solid-ui-solid-emblem': SolidEmblem
   }
 }
