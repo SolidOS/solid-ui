@@ -105,7 +105,7 @@ const render = defineStoryRender<typeof meta.argTypes>(({ rdfTurtleFormatSource,
   return html`
       <solid-ui-rdf-form 
         rdfTurtleFormatSource=${rdfTurtleFormatSource}
-        rdfURI=${rdfURI}
+        .rdfURI=${new URL(rdfURI)}
         whichForm=${whichForm}
         rdfName=${rdfName}
         subjectTurtleFormatSource=${subjectTurtleFormatSource}

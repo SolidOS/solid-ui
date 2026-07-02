@@ -8,6 +8,25 @@ import { sym, Namespace, LiveStore } from 'rdflib'
 import '@/components/rdf-input'
 import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
 
+const urlConverter = {
+  fromAttribute (value: string | null): URL | null {
+    if (!value) return null
+
+    try {
+      return new URL(value)
+    } catch {
+      return null
+    }
+  },
+  toAttribute (value: URL | null) {
+    if (!value) return null
+    return value
+  }
+}
+
+const hrefFromUrlValue = (value: URL | null): string =>
+  value?.href ?? ''
+
 @customElement('solid-ui-rdf-form')
 export default class RDFForm extends WebComponent {
     @consume({ context: storeContext, subscribe: true })
@@ -28,12 +47,6 @@ export default class RDFForm extends WebComponent {
     private accessor entireDataIsReadonly: boolean = false
 
     @state()
-    private accessor _parsedUrl: URL | null = null
-
-    @state()
-    private accessor _parsedUrl2: URL | null = null
-
-    @state()
     private accessor _loadVersion = 0
 
     @state()
@@ -48,18 +61,8 @@ export default class RDFForm extends WebComponent {
     @property({ type: String })
     accessor rdfName = ''
 
-    @property({ type: String })
-    set rdfURI (value: string) {
-      try {
-        this._parsedUrl = new URL(value)
-      } catch {
-        this._parsedUrl = null // Handle invalid URL
-      }
-    }
-
-    get rdfURI (): string {
-      return this._parsedUrl ? this._parsedUrl.href : ''
-    }
+    @property({ converter: urlConverter })
+    accessor rdfURI: URL | null = null
 
     @property({ type: String })
     accessor whichSubject = 'me'
@@ -70,33 +73,26 @@ export default class RDFForm extends WebComponent {
     @property({ type: String })
     accessor subjectName = ''
 
-    @property({ type: String })
-    set subjectURI (value: string) {
-      try {
-        this._parsedUrl2 = new URL(value)
-      } catch {
-        this._parsedUrl2 = null // Handle invalid URL
-      }
-    }
-
-    get subjectURI (): string {
-      return this._parsedUrl2 ? this._parsedUrl2.href : ''
-    }
+    @property({ converter: urlConverter })
+    accessor subjectURI: URL | null = null
 
     render () {
+      console.log('subjectURI ', this.subjectURI)
+      console.log('rdfURI ', this.rdfURI)
       if (!this._documentsLoaded) {
         return html``
       }
 
       const store = this.currentStoreContext.store
+      const subjectURI = hrefFromUrlValue(this.subjectURI)
 
-      if (store.updater?.editable(this.subjectURI) === false) {
+      if (subjectURI && store.updater?.editable(subjectURI) === false) {
         this.entireDataIsReadonly = true
       }
 
-      const document = sym(this.rdfURI)                         // rdflib NamedNode for the document
+      const document = sym(hrefFromUrlValue(this.rdfURI))                         // rdflib NamedNode for the document
       const exactForm = this.whichForm                          // If there are more 'a ui:Form' elements in a form file
-      const formThis = Namespace(this.rdfURI + '#')(exactForm)  // NamedNode for #this in the form
+      const formThis = Namespace(`${hrefFromUrlValue(this.rdfURI)}#`)(exactForm)  // NamedNode for #this in the form
 
       const parts = store.each(formThis, ns.ui('parts'), null, document)
       const partsBySequence = sortBySequence(store, parts)
@@ -116,7 +112,7 @@ export default class RDFForm extends WebComponent {
           fieldValue: hashIndex >= 0 ? value.slice(hashIndex + 1) : value
         }
       })
-      const me = Namespace(this.subjectURI + '#')(this.whichSubject)
+      const me = Namespace(`${hrefFromUrlValue(this.subjectURI)}#`)(this.whichSubject)
 
       return html`
       <form>
@@ -187,8 +183,8 @@ export default class RDFForm extends WebComponent {
 
     private async loadDocumentsIfNeeded () {
       const store = this.currentStoreContext.store
-      const rdfURI = this.rdfURI
-      const subjectURI = this.subjectURI
+      const rdfURI = hrefFromUrlValue(this.rdfURI)
+      const subjectURI = hrefFromUrlValue(this.subjectURI)
 
       if (!rdfURI || !subjectURI) return
 
