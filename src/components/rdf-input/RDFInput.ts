@@ -111,8 +111,11 @@ export default class RDFInput extends WebComponent {
   private termToInputValue (term: any) {
     if (!term || !('value' in term) || !term.value) return ''
 
-    const decoded = decodeURIComponent(term.value)
-    return decoded
+    try {
+      return decodeURIComponent(term.value)
+    } catch {
+      return String(term.value)
+    }
   }
 
   private defaultInputValue (params: { defaultInputValue?: string } = {}) {
