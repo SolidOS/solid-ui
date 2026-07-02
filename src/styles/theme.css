@@ -3,6 +3,7 @@
 
 :root {
     font-family: "Atkinson Hyperlegible Next", "Inter", "Noto Sans", sans-serif;
+    --wa-font-family-body: "Atkinson Hyperlegible Next", "Inter", "Noto Sans", sans-serif;
     --solid-ui-color-primary: #7c4dff;
     --solid-ui-color-tertiary: #083575;
     --solid-ui-color-white: #ffffff;
