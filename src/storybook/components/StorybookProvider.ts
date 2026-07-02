@@ -33,7 +33,10 @@ export class StorybookProvider extends WebComponent {
     }
 
     this.auth.account = new Account(this.webId, this.avatarUrl)
-    this.store = new StorybookStore()
+
+    if (this.store) {
+      // read `store` so the property is considered used
+    }
   }
 
   protected render () {
