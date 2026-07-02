@@ -10,6 +10,7 @@ export type InputTraitTarget = WebComponent & {
   label: string;
   required: boolean;
   value: string;
+  readonly: boolean;
 }
 
 export interface InputTraitConfig {

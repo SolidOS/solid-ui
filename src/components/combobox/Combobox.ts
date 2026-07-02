@@ -34,6 +34,9 @@ export default class Combobox extends WebComponent {
   @query('input')
   private accessor inputElement: HTMLInputElement | null = null
 
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = false
+
   @state()
   private accessor filter = ''
 
@@ -117,6 +120,7 @@ export default class Combobox extends WebComponent {
             autocomplete="off"
             spellcheck="false"
             ?required=${this.required}
+            ?readonly=${this.readonly}
             .value=${this.value}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
