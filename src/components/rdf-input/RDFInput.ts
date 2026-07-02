@@ -175,9 +175,9 @@ export default class RDFInput extends WebComponent {
           objectFromNewValue = new Literal(newValue)
         }
       }
-      toInsertSt = toDeleteSt.map(statement => st(statement.subject, statement.predicate, objectFromNewValue, statement.why))
+      toInsertSt = toDeleteSt.map((statement) => st(statement.subject, statement.predicate, objectFromNewValue, statement.why))
       if (toInsertSt.length === 0) {
-        toInsertSt = [st(this.formSubject, property as any, objectFromNewValue, this.getDocument(this.dataSubject))]
+        toInsertSt = [st(this.dataSubject, uiPropertyTerm, objectFromNewValue, this.getDocument(this.dataSubject))]
       }
     }
 
