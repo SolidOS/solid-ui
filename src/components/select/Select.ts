@@ -51,7 +51,7 @@ export default class Select extends WebComponent {
           id="${this.inputTrait.inputId}"
           name=${this.name}
           ?required=${this.required}
-          ?readonly=${this.readonly}
+          ?disabled=${this.readonly}
           @change=${() => this.inputTrait.onInput()}
         >
           ${this.getOptions().map(
