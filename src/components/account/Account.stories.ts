@@ -13,7 +13,7 @@ const meta = {
   }
 } as const
 
-const render = defineAuthStoryRender<typeof meta.argTypes>(() => html`<solid-ui-account></solid-ui-account>`)
+const render = defineAuthStoryRender(() => html`<solid-ui-account></solid-ui-account>`)
 
 export default meta
 

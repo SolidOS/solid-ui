@@ -1,15 +1,18 @@
 :host {
-    width: 100%;
-    display: flex;
-    position: relative;
-    justify-content: flex-start;
-    align-items: center;
-    gap: 5px;
-    padding: 10px;
-    border-radius: 5px;
-    color: var(--solid-ui-color-gray-600);
-    font-weight: 500;
-    font-size: var(--solid-ui-font-size-md);
+    & > a,
+    & > div {
+        width: 100%;
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        color: var(--solid-ui-color-gray-600);
+        font-weight: 500;
+        font-size: var(--solid-ui-font-size-md);
+    }
 
     &:hover {
         background-color: var(--solid-ui-color-slate-200);

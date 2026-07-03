@@ -51,7 +51,7 @@
     }
 }
 
-:host(:has([slot="icon"])) button {
+:host([data-has-icon-slot]) button {
     padding: 4px;
 
     ::slotted([slot="icon"]) {

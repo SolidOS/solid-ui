@@ -1,4 +1,4 @@
-import Account from './Account'
+import Account, { type AccountMenuItem } from './Account'
 
-export { Account }
+export { Account, type AccountMenuItem }
 export default Account

@@ -26,9 +26,11 @@ export default class MenuItem extends WebComponent {
     }
 
     return html`
-        <slot name="left-icon"></slot>
-        <slot></slot>
-        <slot name="right-icon"></slot>
+        <div>
+            <slot name="left-icon"></slot>
+            <slot></slot>
+            <slot name="right-icon"></slot>
+        </div>
     `
   }
 
