@@ -48,9 +48,7 @@ const render = defineAuthStoryRender<StoryArgs>(({ subjectUri, friendExists }) =
 	const subject = sym(subjectUri)
 
 	return html`
-		<div style="padding: 1rem; display: inline-flex; flex-direction: column; align-items: flex-start; gap: 0.75rem;">
-			<solid-ui-button-add-friend .context=${context} .subject=${subject}></solid-ui-button-add-friend>
-		</div>
+		<solid-ui-button-add-friend .context=${context} .subject=${subject}></solid-ui-button-add-friend>
 	`
 })
 
