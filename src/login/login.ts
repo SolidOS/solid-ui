@@ -1053,7 +1053,11 @@ export function newAppInstance (
  */
 export async function getUserRoles (): Promise<Array<NamedNode>> {
   try {
-    const { me, preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
+    const me = authn.currentUser()
+    if (!me) {
+      return []
+    }
+    const { preferencesFile, preferencesFileError } = await ensureLoadedPreferences({})
     if (!preferencesFile || preferencesFileError) {
       throw new Error(preferencesFileError)
     }

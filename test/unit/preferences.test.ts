@@ -1,6 +1,11 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
+vi.mock('../../src/login/login', () => ({
+  ensureLoadedPreferences: vi.fn()
+}))
+
+import * as loginModule from '../../src/login/login'
 import * as Preferences from '../../src/lib/preferences'
 import { sym } from 'rdflib'
 
@@ -61,6 +66,18 @@ describe('Preferences.recordSharedPreferences', () => {
     const subject = sym('https://test.test/sub')
     const context = {}
     expect(Preferences.recordSharedPreferences(subject, context)).toBeTruthy()
+  })
+})
+
+describe('Preferences.recordPersonalDefaults', () => {
+  it('does not try to load preferences when there is no logged-in user', async () => {
+    const ensureLoadedPreferencesMock = vi.mocked(loginModule.ensureLoadedPreferences)
+
+    const context = { me: null }
+    const result = await Preferences.recordPersonalDefaults('https://test.example/class', context)
+
+    expect(result).toBe(context)
+    expect(ensureLoadedPreferencesMock).not.toHaveBeenCalled()
   })
 })
 

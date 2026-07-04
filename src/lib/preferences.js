@@ -69,6 +69,10 @@ export function recordSharedPreferences (subject, context) {
 //
 export function recordPersonalDefaults (theClass, context) {
   return new Promise(function (resolve, reject) {
+    if (!context.me) {
+      resolve(context)
+      return
+    }
     ensureLoadedPreferences(context).then(
       context => {
         if (!context.preferencesFile) {
