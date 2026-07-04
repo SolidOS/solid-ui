@@ -74,8 +74,7 @@ describe('Preferences.recordPersonalDefaults', () => {
     const ensureLoadedPreferencesMock = vi.mocked(loginModule.ensureLoadedPreferences)
 
     const context = { me: null }
-    const result = await Preferences.recordPersonalDefaults('https://test.example/class', context)
-
+    const result = await Preferences.recordPersonalDefaults(sym('https://test.example/class'), context)
     expect(result).toBe(context)
     expect(ensureLoadedPreferencesMock).not.toHaveBeenCalled()
   })
