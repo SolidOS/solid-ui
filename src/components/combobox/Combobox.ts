@@ -14,10 +14,16 @@ import styles from './Combobox.styles.css'
 
 class AsyncOptionsInfo extends Error {}
 
-type ComboboxOptionData = {
+export type ComboboxOptionData = {
   value: string;
   label: string | TemplateResult;
-  selectable: boolean;
+  selectable?: boolean;
+}
+
+export type AsyncComboboxOptionsProvider = (query: string) => Promise<ComboboxOptionData[]>
+
+export function defineAsyncComboboxOptionsProvider<T extends AsyncComboboxOptionsProvider> (provider: T): T {
+  return provider
 }
 
 @customElement('solid-ui-combobox')
@@ -51,6 +57,9 @@ export default class Combobox extends WebComponent {
 
   @property({ type: String, attribute: 'async-options-value-field' })
   accessor asyncOptionsValueField = ''
+
+  @property({ type: Function })
+  accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null = null
 
   @query('input')
   private accessor inputElement: HTMLInputElement | null = null
@@ -118,7 +127,7 @@ export default class Combobox extends WebComponent {
       this.displayValue = this.value
     }
 
-    if (changedProperties.has('asyncOptionsUrl')) {
+    if (changedProperties.has('asyncOptionsUrl') || changedProperties.has('asyncOptionsProvider')) {
       this.updateAsyncOptionsTask()
     }
   }
@@ -178,7 +187,7 @@ export default class Combobox extends WebComponent {
           @mousedown=${this.onListboxMouseDown}
         >
           ${options.map((option, index) => {
-            return option.selectable
+            return option.selectable !== false
               ? html`<div
                   id=${this.getOptionId(index)}
                   role="option"
@@ -238,7 +247,6 @@ export default class Combobox extends WebComponent {
     return Array.from(options).map((option) => ({
       value: option.value,
       label: option.textContent ?? '',
-      selectable: true,
     }))
   }
 
@@ -273,7 +281,7 @@ export default class Combobox extends WebComponent {
   }
 
   private updateAsyncOptionsTask () {
-    if (!this.asyncOptionsUrl) {
+    if (!this.asyncOptionsUrl && !this.asyncOptionsProvider) {
       this.asyncOptionsTask = undefined
 
       return
@@ -282,6 +290,16 @@ export default class Combobox extends WebComponent {
     this.asyncOptionsTask ??= new Task(
       this,
       async ([filter]) => {
+        if (this.asyncOptionsProvider) {
+          const results = await this.asyncOptionsProvider(filter)
+
+          if (results.length === 0) {
+            throw new AsyncOptionsInfo('No results found')
+          }
+
+          return results
+        }
+
         const response = await fetch(
           this.asyncOptionsUrl.replace('%search%', encodeURIComponent(filter))
         )
@@ -302,7 +320,6 @@ export default class Combobox extends WebComponent {
         return results.map((result) => ({
           label: String(Object(result)[labelField]),
           value: String(Object(result)[valueField]),
-          selectable: true,
         }))
       },
       () => [this.debouncedFilter]
