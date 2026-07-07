@@ -58,6 +58,9 @@ export default class Combobox extends WebComponent {
   private accessor filter = ''
 
   @state()
+  private accessor displayValue = ''
+
+  @state()
   private accessor open = false
 
   @state()
@@ -77,6 +80,7 @@ export default class Combobox extends WebComponent {
         getInternals: () => this.getInternals(),
         onValueChanged: (value) => {
           this.filter = value.toLowerCase()
+          this.displayValue = value
 
           const options = this.getFilteredOptions()
 
@@ -103,6 +107,10 @@ export default class Combobox extends WebComponent {
 
   protected willUpdate (changedProperties: Map<string, unknown>) {
     super.willUpdate(changedProperties)
+
+    if (changedProperties.has('value') && this.displayValue === '') {
+      this.displayValue = this.value
+    }
 
     if (changedProperties.has('asyncOptionsUrl')) {
       this.updateAsyncOptionsTask()
@@ -146,7 +154,7 @@ export default class Combobox extends WebComponent {
             autocomplete="off"
             spellcheck="false"
             ?required=${this.required}
-            .value=${this.value}
+            .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
             @input=${() => this.inputTrait.onInput()}
@@ -326,8 +334,11 @@ export default class Combobox extends WebComponent {
     this.removeOpenListeners()
   }
 
-  private selectOption (value: string) {
-    this.inputTrait.setValue(value)
+  private selectOption (option: ComboboxOptionData) {
+    this.inputTrait.setValue(option.value)
+
+    this.displayValue =
+      typeof option.label === 'string' ? option.label : option.value
     this.hide()
     this.inputElement?.focus({ preventScroll: true })
   }
@@ -434,7 +445,7 @@ export default class Combobox extends WebComponent {
       case 'Enter':
         if (this.open && this.activeIndex >= 0 && options[this.activeIndex]) {
           event.preventDefault()
-          this.selectOption(options[this.activeIndex].value)
+          this.selectOption(options[this.activeIndex])
         } else if (!this.open) {
           event.preventDefault()
           this.inputTrait.onSubmit()
@@ -472,7 +483,7 @@ export default class Combobox extends WebComponent {
     const option = this.getFilteredOptions()[index]
 
     if (option) {
-      this.selectOption(option.value)
+      this.selectOption(option)
     }
   }
 }
