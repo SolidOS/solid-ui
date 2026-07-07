@@ -1,15 +1,23 @@
 import { customElement, WebComponent } from '@/lib/components'
-import { html, nothing } from 'lit'
+import { Task } from '@lit/task'
+import { html, nothing, TemplateResult } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import InputTrait from '@/lib/components/traits/InputTrait'
 import type ComboboxOption from '@/components/combobox-option/ComboboxOption'
 
 import '~icons/lucide/chevron-down'
+import '~icons/svg-spinners/3-dots-fade'
 import '@awesome.me/webawesome/dist/components/popup/popup.js'
 
 import styles from './Combobox.styles.css'
 
-type ComboboxOptionData = { value: string; label: string }
+class AsyncOptionsInfo extends Error {}
+
+type ComboboxOptionData = {
+  value: string;
+  label: string | TemplateResult;
+  selectable: boolean;
+}
 
 @customElement('solid-ui-combobox')
 export default class Combobox extends WebComponent {
@@ -31,6 +39,18 @@ export default class Combobox extends WebComponent {
   @property({ type: Boolean, reflect: true })
   accessor required = false
 
+  @property({ type: String, attribute: 'async-options-url' })
+  accessor asyncOptionsUrl = ''
+
+  @property({ type: String, attribute: 'async-options-results-field' })
+  accessor asyncOptionsResultsField = ''
+
+  @property({ type: String, attribute: 'async-options-label-field' })
+  accessor asyncOptionsLabelField = ''
+
+  @property({ type: String, attribute: 'async-options-value-field' })
+  accessor asyncOptionsValueField = ''
+
   @query('input')
   private accessor inputElement: HTMLInputElement | null = null
 
@@ -45,6 +65,7 @@ export default class Combobox extends WebComponent {
 
   private inputTrait: InputTrait
   private openListenersAttached = false
+  private asyncOptionsTask?: Task<readonly [string], ComboboxOptionData[]>
   private readonly listboxId: string
 
   constructor () {
@@ -78,6 +99,14 @@ export default class Combobox extends WebComponent {
     super.disconnectedCallback()
 
     this.removeOpenListeners()
+  }
+
+  protected willUpdate (changedProperties: Map<string, unknown>) {
+    super.willUpdate(changedProperties)
+
+    if (changedProperties.has('asyncOptionsUrl')) {
+      this.updateAsyncOptionsTask()
+    }
   }
 
   protected render () {
@@ -134,32 +163,60 @@ export default class Combobox extends WebComponent {
           ?hidden=${!this.open}
           @mousedown=${this.onListboxMouseDown}
         >
-          ${options.map(
-            (option, index) =>
-              html`<div
-                id=${this.getOptionId(index)}
-                role="option"
-                aria-selected=${this.open && index === this.activeIndex
-                  ? 'true'
-                  : 'false'}
-                data-active=${index === this.activeIndex || nothing}
-                @mousemove=${() => this.setActiveIndex(index)}
-              >
-                ${option.label}
-              </div>`
-          )}
+          ${options.map((option, index) => {
+            return option.selectable
+              ? html`<div
+                  id=${this.getOptionId(index)}
+                  role="option"
+                  aria-selected=${this.open && index === this.activeIndex
+                    ? 'true'
+                    : 'false'}
+                  data-active=${index === this.activeIndex || nothing}
+                  @mousemove=${() => this.setActiveIndex(index)}
+                >
+                  ${option.label}
+                </div>`
+              : html`<div class="non-selectable-option">${option.label}</div>`
+          })}
         </div>
       </wa-popup>
     `
   }
 
   private getFilteredOptions (): ComboboxOptionData[] {
-    return this.getOptions().filter((option) =>
-      option.label.toLowerCase().includes(this.filter)
+    if (this.asyncOptionsTask) {
+      const options = this.asyncOptionsTask.render({
+        complete: (options) => options,
+        pending: () => [
+          {
+            value: '',
+            label: html`<icon-svg-spinners-3-dots-fade></icon-svg-spinners-3-dots-fade>`,
+            selectable: false
+          } as const,
+        ],
+        error: (error) => {
+          const isError = !(error instanceof AsyncOptionsInfo)
+          const message = Object(error).message ?? 'Something went wrong'
+
+          return [
+            {
+              value: '',
+              label: html`<span class="message message--${isError ? 'error' : 'info'}">${message}</span>`,
+              selectable: false
+            } as const,
+          ]
+        },
+      })
+
+      return options ?? []
+    }
+
+    return this.getOptionsFromDOM().filter((option) =>
+      String(option.label).toLowerCase().includes(this.filter)
     )
   }
 
-  private getOptions (): ComboboxOptionData[] {
+  private getOptionsFromDOM (): ComboboxOptionData[] {
     const options = this.querySelectorAll<ComboboxOption>(
       'solid-ui-combobox-option'
     )
@@ -167,6 +224,7 @@ export default class Combobox extends WebComponent {
     return Array.from(options).map((option) => ({
       value: option.value,
       label: option.textContent ?? '',
+      selectable: true,
     }))
   }
 
@@ -198,6 +256,43 @@ export default class Combobox extends WebComponent {
 
   private setActiveIndex (index: number) {
     this.activeIndex = index
+  }
+
+  private updateAsyncOptionsTask () {
+    if (!this.asyncOptionsUrl) {
+      this.asyncOptionsTask = undefined
+
+      return
+    }
+
+    this.asyncOptionsTask ??= new Task(
+      this,
+      async ([filter]) => {
+        const response = await fetch(
+          this.asyncOptionsUrl.replace('%search%', encodeURIComponent(filter))
+        )
+        const data = await response.json()
+        const results = Array.from(
+          this.asyncOptionsResultsField
+            ? data[this.asyncOptionsResultsField]
+            : data
+        )
+
+        if (results.length === 0) {
+          throw new AsyncOptionsInfo('No results found')
+        }
+
+        const labelField = this.asyncOptionsLabelField || 'label'
+        const valueField = this.asyncOptionsValueField || 'value'
+
+        return results.map((result) => ({
+          label: String(Object(result)[labelField]),
+          value: String(Object(result)[valueField]),
+          selectable: true,
+        }))
+      },
+      () => [this.filter]
+    )
   }
 
   private show (options?: { focusLast?: boolean }) {

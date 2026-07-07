@@ -9,16 +9,30 @@ const meta = {
   title: 'Combobox',
   args: {
     label: 'What is the best food?',
-    options: 'Pizza, Ramen, Tacos'
+    options: 'Pizza, Ramen, Tacos',
+    asyncOptions: false
   },
   argTypes: {
     label: { control: 'text' },
     options: { control: 'text' },
+    asyncOptions: { control: 'boolean' },
   },
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ label, options }) => {
+const render = defineStoryRender<typeof meta.argTypes>(({ label, options, asyncOptions }) => {
   const parsedOptions = options.split(',').map(option => option.trim())
+
+  if (asyncOptions) {
+    return html`
+      <solid-ui-combobox
+        label="${label}"
+        async-options-url="https://api.disneyapi.dev/character?name=%search%"
+        async-options-results-field="data"
+        async-options-label-field="name"
+        async-options-value-field="_id"
+      ></solid-ui-combobox>
+    `
+  }
 
   return html`
     <solid-ui-combobox label="${label}">
@@ -30,3 +44,11 @@ const render = defineStoryRender<typeof meta.argTypes>(({ label, options }) => {
 export default meta
 
 export const Primary = { render }
+
+export const Async = {
+  args: {
+    label: 'Who is the best Disney character?',
+    asyncOptions: true
+  },
+  render
+}
