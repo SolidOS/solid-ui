@@ -2,6 +2,7 @@ import { customElement, WebComponent } from '@/lib/components'
 import { Task } from '@lit/task'
 import { html, nothing, TemplateResult } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
+import { debounce } from '@/lib/timing'
 import InputTrait from '@/lib/components/traits/InputTrait'
 import type ComboboxOption from '@/components/combobox-option/ComboboxOption'
 
@@ -58,6 +59,9 @@ export default class Combobox extends WebComponent {
   private accessor filter = ''
 
   @state()
+  private accessor debouncedFilter = ''
+
+  @state()
   private accessor displayValue = ''
 
   @state()
@@ -68,6 +72,7 @@ export default class Combobox extends WebComponent {
 
   private inputTrait: InputTrait
   private openListenersAttached = false
+  private updateDebouncedFilter = debounce(300, (value) => (this.filter = value))
   private asyncOptionsTask?: Task<readonly [string], ComboboxOptionData[]>
   private readonly listboxId: string
 
@@ -81,6 +86,7 @@ export default class Combobox extends WebComponent {
         onValueChanged: (value) => {
           this.filter = value.toLowerCase()
           this.displayValue = value
+          this.updateDebouncedFilter(this.filter)
 
           const options = this.getFilteredOptions()
 
@@ -299,7 +305,7 @@ export default class Combobox extends WebComponent {
           selectable: true,
         }))
       },
-      () => [this.filter]
+      () => [this.debouncedFilter]
     )
   }
 
@@ -329,6 +335,7 @@ export default class Combobox extends WebComponent {
     }
 
     this.filter = ''
+    this.debouncedFilter = ''
     this.open = false
     this.activeIndex = -1
     this.removeOpenListeners()
