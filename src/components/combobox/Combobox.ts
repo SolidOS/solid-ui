@@ -46,6 +46,9 @@ export default class Combobox extends WebComponent {
   @property({ type: Boolean, reflect: true })
   accessor required = false
 
+  @property({ type: Boolean, reflect: true, attribute: 'select-only' })
+  accessor selectOnly = false
+
   @property({ type: String, attribute: 'async-options-url' })
   accessor asyncOptionsUrl = ''
 
@@ -95,7 +98,8 @@ export default class Combobox extends WebComponent {
         onValueChanged: (value) => {
           this.filter = value.toLowerCase()
           this.displayValue = value
-          this.updateDebouncedFilter(this.filter)
+
+          this.updateFilter(value.toLowerCase())
 
           const options = this.getFilteredOptions()
 
@@ -172,7 +176,7 @@ export default class Combobox extends WebComponent {
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
-            @input=${() => this.inputTrait.onInput()}
+            @input=${() => this.selectOnly ? this.updateFilter(this.inputElement?.value ?? '') : this.inputTrait.onInput()}
           />
           <icon-lucide-chevron-down></icon-lucide-chevron-down>
         </div>
@@ -280,6 +284,16 @@ export default class Combobox extends WebComponent {
     this.activeIndex = index
   }
 
+  private updateFilter (value: string, options: { debounce?: boolean } = {}) {
+    this.filter = value.toLowerCase()
+
+    if (options.debounce ?? true) {
+      this.updateDebouncedFilter(this.filter)
+    } else {
+      this.debouncedFilter = this.filter
+    }
+  }
+
   private updateAsyncOptionsTask () {
     if (!this.asyncOptionsUrl && !this.asyncOptionsProvider) {
       this.asyncOptionsTask = undefined
@@ -351,11 +365,10 @@ export default class Combobox extends WebComponent {
       return
     }
 
-    this.filter = ''
-    this.debouncedFilter = ''
     this.open = false
     this.activeIndex = -1
     this.removeOpenListeners()
+    this.updateFilter('', { debounce: false })
   }
 
   private selectOption (option: ComboboxOptionData) {
@@ -365,6 +378,7 @@ export default class Combobox extends WebComponent {
       typeof option.label === 'string' ? option.label : option.value
     this.hide()
     this.inputElement?.focus({ preventScroll: true })
+    this.dispatchEvent(new Event('change', { bubbles: true, composed: true }))
   }
 
   private scrollActiveOptionIntoView () {
