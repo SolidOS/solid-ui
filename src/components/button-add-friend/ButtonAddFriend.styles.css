@@ -13,7 +13,3 @@
 .button-add-friend__status span {
     line-height: 1.2;
 }
-
-.button-add-friend__status solid-ui-button {
-    flex: 0 0 auto;
-}

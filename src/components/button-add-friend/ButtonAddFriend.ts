@@ -1,7 +1,7 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { consume } from '@lit/context'
 import { html, nothing } from 'lit'
-import { property } from 'lit/decorators.js'
+import { property, state } from 'lit/decorators.js'
 import '@/components/button'
 import '~icons/lucide/x'
 import '~icons/lucide/user-round-plus'
@@ -29,17 +29,17 @@ export default class ButtonAddFriend extends WebComponent {
   @property({ type: Boolean })
   accessor disabled: boolean | undefined = undefined
 
-  @property({ attribute: false })
-  accessor subject: NamedNode | undefined = undefined
+  @property({ type: String, reflect: true })
+  accessor subject = ''
 
   @property({ attribute: false })
   accessor context: DataBrowserContext | undefined = undefined
 
-  @property({ attribute: false })
-  accessor buttonLabel = addMeToYourFriendsButtonText
+  @state()
+  private accessor buttonLabel = addMeToYourFriendsButtonText
 
-  @property({ attribute: false })
-  accessor statusMessage = ''
+  @state()
+  private accessor statusMessage = ''
 
   private checkIfAnyUserLoggedIn(me: NamedNode | null): me is NamedNode {
     return Boolean(me)
@@ -62,7 +62,9 @@ export default class ButtonAddFriend extends WebComponent {
   }
 
   private async refreshButton() {
-    if (!this.subject || !this.context) {
+    const subject = this.getSubjectNode()
+
+    if (!subject || !this.context) {
       this.buttonLabel = logInAddMeToYourFriendsButtonText
       this.disabled = true
       this.statusMessage = ''
@@ -79,7 +81,7 @@ export default class ButtonAddFriend extends WebComponent {
       return
     }
 
-    const friendExists = await this.checkIfThingExists(store, me, this.subject, ns.foaf('knows'))
+    const friendExists = await this.checkIfThingExists(store, me, subject, ns.foaf('knows'))
     if (friendExists) {
       this.buttonLabel = friendExistsMessage
       this.disabled = true
@@ -161,13 +163,15 @@ export default class ButtonAddFriend extends WebComponent {
   private async onClick (event: Event) {
     event.preventDefault()
 
-    if (!this.subject || !this.context) {
+    const subject = this.getSubjectNode()
+
+    if (!subject || !this.context) {
       this.disabled = true
       return
     }
 
     try {
-      await this.saveNewThing(this.subject, this.context, ns.foaf('knows'))
+      await this.saveNewThing(subject, this.context, ns.foaf('knows'))
       await this.refreshButton()
     } catch (error) {
       this.disabled = true
@@ -178,5 +182,9 @@ export default class ButtonAddFriend extends WebComponent {
 
   private clearStatusMessage () {
     this.statusMessage = ''
+  }
+
+  private getSubjectNode (): NamedNode | undefined {
+    return this.subject ? sym(this.subject) : undefined
   }
 }
