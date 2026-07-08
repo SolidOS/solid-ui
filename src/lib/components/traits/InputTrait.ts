@@ -9,13 +9,12 @@ export type InputTraitTarget = WebComponent & {
   name: string;
   label: string;
   required: boolean;
-  value: string;
+  value: unknown;
 }
 
 export interface InputTraitConfig {
   getInputElement(): HTMLInputElement | HTMLSelectElement | null
   getInternals(): ElementInternals
-  onValueChanged?: (value: string) => void
 }
 
 export default class InputTrait implements WebComponentTrait {
@@ -32,7 +31,7 @@ export default class InputTrait implements WebComponentTrait {
   }
 
   firstUpdated () {
-    this.config.getInternals().setFormValue(this.target.value)
+    this.config.getInternals().setFormValue(String(this.target.value ?? ''))
     this.updateValidity()
   }
 
@@ -46,7 +45,6 @@ export default class InputTrait implements WebComponentTrait {
     this.target.value = ''
     this.config.getInternals().setFormValue('')
     this.updateValidity()
-    this.config.onValueChanged?.('')
   }
 
   renderLabel () {
@@ -56,25 +54,24 @@ export default class InputTrait implements WebComponentTrait {
   }
 
   onInput () {
-    this.setValue(this.config.getInputElement()?.value ?? '')
+    this.setValue(this.config.getInputElement()?.value)
   }
 
   onSubmit () {
     this.config.getInternals().form?.requestSubmit()
   }
 
-  setValue (value: string) {
+  setValue (value: unknown) {
     this.target.value = value
 
-    this.config.getInternals().setFormValue(this.target.value)
+    this.config.getInternals().setFormValue(String(this.target.value ?? ''))
     this.target.dispatchEvent(new InputEvent('input', { bubbles: true, composed: true }))
-    this.config.onValueChanged?.(this.target.value)
   }
 
   private updateValidity () {
     const internals = this.config.getInternals()
 
-    if (this.target.required && this.target.value === '') {
+    if (this.target.required && (this.target.value ?? '') === '') {
       internals.setValidity(
         { valueMissing: true },
         'Please fill out this field.',
