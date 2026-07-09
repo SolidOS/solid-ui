@@ -1,6 +1,6 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { Task } from '@lit/task'
-import { html, nothing, TemplateResult } from 'lit'
+import { html, nothing, TemplateResult, type PropertyValues } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { debounce } from '@/lib/timing'
 import InputTrait from '@/lib/components/traits/InputTrait'
@@ -115,7 +115,7 @@ export default class Combobox extends WebComponent {
     this.removeOpenListeners()
   }
 
-  protected willUpdate (changedProperties: Map<string, unknown>) {
+  protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('asyncOptionsUrl') || changedProperties.has('asyncOptionsProvider')) {

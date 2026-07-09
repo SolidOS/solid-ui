@@ -1,6 +1,6 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { provide } from '@lit/context'
-import { html } from 'lit'
+import { html, type PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import { authContext } from '@/lib/auth'
 import { SolidAuth, DEFAULT_SIGNUP_URL } from '@/lib/auth'
@@ -15,7 +15,7 @@ export default class Provider extends WebComponent {
   @provide({ context: authContext })
   private accessor auth = new SolidAuth()
 
-  protected willUpdate (changedProperties: Map<string, any>) {
+  protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('signupUrl')) {
