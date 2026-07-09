@@ -15,12 +15,8 @@ const meta = {
 
 const render = defineAuthStoryRender(() => html`<solid-ui-account></solid-ui-account>`)
 
-export default meta
-
 export const Primary = { render }
-export const Guest = {
-  render,
-  args: {
-    user: 'Guest',
-  }
-}
+export const Guest = { render, args: { user: 'Guest' } }
+export const Initializing = { render, args: { user: 'Initializing' } }
+
+export default meta

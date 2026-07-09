@@ -16,6 +16,7 @@ const meta = {
 
 const render = defineAuthStoryRender<typeof meta.argTypes>(() => html`
     <solid-guard>
+        <span slot="initializing">Initializing content</span>
         <span slot="guest">Guest content</span>
         <span>Logged in content</span>
     </solid-guard>
@@ -23,5 +24,6 @@ const render = defineAuthStoryRender<typeof meta.argTypes>(() => html`
 
 export const Primary = { render }
 export const Guest = { render, args: { user: 'Guest' } }
+export const Initializing = { render, args: { user: 'Initializing' } }
 
 export default meta

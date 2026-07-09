@@ -15,6 +15,12 @@ export default class Provider extends WebComponent {
   @provide({ context: authContext })
   private accessor auth = new SolidAuth()
 
+  async connectedCallback () {
+    super.connectedCallback()
+
+    await this.auth.initialize()
+  }
+
   protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 

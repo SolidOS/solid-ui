@@ -8,7 +8,27 @@ export default class Guard extends WebComponent {
   @consume({ context: authContext, subscribe: true })
   private accessor auth: AuthContext = DEFAULT_AUTH_CONTEXT
 
+  private unsubscribeSessionUpdated?: () => void
+
+  connectedCallback () {
+    super.connectedCallback()
+
+    this.unsubscribeSessionUpdated = this.auth.onSessionUpdated(() => this.requestUpdate())
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+
+    this.unsubscribeSessionUpdated?.()
+  }
+
   protected render () {
+    if (!this.auth.initialized) {
+      return html`
+        <slot name="initializing"></slot>
+      `
+    }
+
     if (!this.auth.account) {
       return html`
         <slot name="guest"></slot>
