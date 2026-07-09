@@ -3,7 +3,7 @@ import { Task } from '@lit/task'
 import { html, nothing, TemplateResult, type PropertyValues } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { debounce } from '@/lib/timing'
-import InputTrait from '@/lib/components/traits/InputTrait'
+import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 import type ComboboxOption from '@/components/combobox-option/ComboboxOption'
 
 import '~icons/lucide/chevron-down'
@@ -85,7 +85,7 @@ export default class Combobox extends WebComponent {
   @state()
   private accessor activeIndex = -1
 
-  private inputTrait: InputTrait
+  private controlTrait: FormControlTrait
   private openListenersAttached = false
   private updateDebouncedFilter = debounce(300, (value) => (this.filter = value))
   private asyncOptionsTask?: Task<readonly [string], ComboboxOptionData[]>
@@ -95,14 +95,14 @@ export default class Combobox extends WebComponent {
   constructor () {
     super()
 
-    this.inputTrait = this.addTrait(
-      new InputTrait(this, {
-        getInputElement: () => this.inputElement,
+    this.controlTrait = this.addTrait(
+      new FormControlTrait(this, {
+        getControlElement: () => this.inputElement,
         getInternals: () => this.getInternals(),
       })
     )
 
-    this.listboxId = `listbox-${this.inputTrait.inputId}`
+    this.listboxId = `listbox-${this.controlTrait.controlId}`
   }
 
   get selectedOption (): ComboboxOptionData | undefined {
@@ -149,7 +149,7 @@ export default class Combobox extends WebComponent {
     const accessibleName = this.placeholder || 'Combobox'
 
     return html`
-      ${this.inputTrait.renderLabel()}
+      ${this.controlTrait.renderLabel()}
       <wa-popup
         placement="bottom"
         flip
@@ -161,7 +161,7 @@ export default class Combobox extends WebComponent {
       >
         <div class="input-wrapper" slot="anchor" @mousedown=${this.onAnchorMouseDown}>
           <input
-            id="${this.inputTrait.inputId}"
+            id="${this.controlTrait.controlId}"
             type="text"
             name=${this.name}
             placeholder=${this.placeholder}
@@ -171,7 +171,7 @@ export default class Combobox extends WebComponent {
             aria-expanded=${this.open ? 'true' : 'false'}
             aria-controls=${this.listboxId}
             aria-activedescendant=${activeDescendant ?? nothing}
-            aria-labelledby=${this.label ? this.inputTrait.labelId : nothing}
+            aria-labelledby=${this.label ? this.controlTrait.labelId : nothing}
             aria-label=${this.label ? nothing : accessibleName}
             aria-required=${this.required ? 'true' : nothing}
             autocomplete="off"
@@ -180,7 +180,7 @@ export default class Combobox extends WebComponent {
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
-            @input=${() => this.selectOnly ? this.updateDisplayValue(this.inputElement?.value ?? '') : this.inputTrait.onInput()}
+            @input=${() => this.selectOnly ? this.updateDisplayValue(this.inputElement?.value ?? '') : this.controlTrait.onInput()}
           />
           <icon-lucide-chevron-down></icon-lucide-chevron-down>
         </div>
@@ -189,7 +189,7 @@ export default class Combobox extends WebComponent {
           class="listbox"
           role="listbox"
           aria-orientation="vertical"
-          aria-labelledby=${this.label ? this.inputTrait.labelId : nothing}
+          aria-labelledby=${this.label ? this.controlTrait.labelId : nothing}
           aria-label=${this.label ? nothing : accessibleName}
           ?hidden=${!this.open}
           @mousedown=${this.onListboxMouseDown}
@@ -387,7 +387,7 @@ export default class Combobox extends WebComponent {
     this._selectedOption = option
 
     this.hide()
-    this.inputTrait.setValue(option.value)
+    this.controlTrait.setValue(option.value)
     this.inputElement?.focus({ preventScroll: true })
     this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true, detail: { option } }))
 
@@ -505,7 +505,7 @@ export default class Combobox extends WebComponent {
           this.selectOption(options[this.activeIndex])
         } else if (!this.open) {
           event.preventDefault()
-          this.inputTrait.onSubmit()
+          this.controlTrait.onSubmit()
         }
         break
       case 'Escape':

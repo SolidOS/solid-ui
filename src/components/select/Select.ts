@@ -2,7 +2,7 @@ import { customElement, WebComponent } from '@/lib/components'
 import { html, nothing } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { isEmptyValue } from '@/lib/values'
-import InputTrait from '@/lib/components/traits/InputTrait'
+import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 import type SelectOption from '@/components/select-option/SelectOption'
 
 import '~icons/lucide/chevron-down'
@@ -59,13 +59,13 @@ export default class Select extends WebComponent {
   @state()
   private accessor _options: SelectOptionData[] | null = null
 
-  private inputTrait: InputTrait
+  private controlTrait: FormControlTrait
 
   constructor () {
     super()
 
-    this.inputTrait = this.addTrait(new InputTrait(this, {
-      getInputElement: () => this.inputElement,
+    this.controlTrait = this.addTrait(new FormControlTrait(this, {
+      getControlElement: () => this.inputElement,
       getInternals: () => this.getInternals(),
     }))
   }
@@ -76,11 +76,11 @@ export default class Select extends WebComponent {
       : html`<option disabled value="" ?selected=${!this.value}>Select an option</option>`
 
     return html`
-      ${this.inputTrait.renderLabel()}
+      ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
         <select
-          id="${this.inputTrait.inputId}"
+          id="${this.controlTrait.controlId}"
           name=${this.name}
           ?required=${this.required}
           @change=${this.onChange}
@@ -105,7 +105,7 @@ export default class Select extends WebComponent {
     const value = this.inputElement?.value
     const option = this.options.find((option) => option.value === value)
 
-    this.inputTrait.setValue(value)
+    this.controlTrait.setValue(value)
     this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true, detail: { option } }))
   }
 }

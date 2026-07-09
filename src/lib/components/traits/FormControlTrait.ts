@@ -5,28 +5,28 @@ import { generateId } from '@/lib/components'
 
 import type { WebComponentTrait } from './WebComponentTrait'
 
-export type InputTraitTarget = WebComponent & {
+export type FormControlTraitTarget = WebComponent & {
   name: string;
   label: string;
   required: boolean;
   value: unknown;
 }
 
-export interface InputTraitConfig {
-  getInputElement(): HTMLInputElement | HTMLSelectElement | null
+export interface FormControlTraitConfig {
+  getControlElement(): HTMLInputElement | HTMLSelectElement | null
   getInternals(): ElementInternals
 }
 
-export default class InputTrait implements WebComponentTrait {
-  public inputId: string
+export default class FormControlTrait implements WebComponentTrait {
+  public controlId: string
   public labelId: string
-  public target: InputTraitTarget
-  private config: InputTraitConfig
+  public target: FormControlTraitTarget
+  private config: FormControlTraitConfig
 
-  constructor (target: InputTraitTarget, config: InputTraitConfig) {
+  constructor (target: FormControlTraitTarget, config: FormControlTraitConfig) {
     this.config = config
-    this.inputId = `input-${generateId()}`
-    this.labelId = `label-${this.inputId}`
+    this.controlId = `control-${generateId()}`
+    this.labelId = `label-${this.controlId}`
     this.target = target
   }
 
@@ -49,12 +49,12 @@ export default class InputTrait implements WebComponentTrait {
 
   renderLabel () {
     return this.target.label
-      ? html`<label id="${this.labelId}" for="${this.inputId}">${this.target.label}</label>`
+      ? html`<label id="${this.labelId}" for="${this.controlId}">${this.target.label}</label>`
       : nothing
   }
 
   onInput () {
-    this.setValue(this.config.getInputElement()?.value)
+    this.setValue(this.config.getControlElement()?.value)
   }
 
   onSubmit () {
@@ -75,7 +75,7 @@ export default class InputTrait implements WebComponentTrait {
       internals.setValidity(
         { valueMissing: true },
         'Please fill out this field.',
-        this.config.getInputElement() ?? undefined
+        this.config.getControlElement() ?? undefined
       )
     } else {
       internals.setValidity({})

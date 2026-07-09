@@ -14,7 +14,7 @@ describe('Index', () => {
       'DEFAULT_SIGNUP_URL',
       'Dialog',
       'DialogTrait',
-      'InputTrait',
+      'FormControlTrait',
       'NoopAuth',
       'ShowDialogEvent',
       'SolidAuth',
