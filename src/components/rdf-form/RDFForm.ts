@@ -36,11 +36,9 @@ export default class RDFForm extends WebComponent {
     accessor passedInStore: LiveStore | null = null
 
     private get currentStoreContext (): StoreContext {
-      if (this.passedInStore) {
-        this.storeContext.store = this.passedInStore
-      }
-
-      return this.storeContext
+      return this.passedInStore
+        ? ({ store: this.passedInStore } as StoreContext)
+        : this.storeContext
     }
 
     @state()
