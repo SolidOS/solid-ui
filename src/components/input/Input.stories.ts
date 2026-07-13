@@ -1,16 +1,17 @@
 import { html } from 'lit'
 
 import './Input'
-import { defineStoryRender } from '@/storybook'
+
+const args = {
+  label: 'Name',
+  value: '',
+  placeholder: 'Enter your name',
+  type: 'text',
+}
 
 const meta = {
   title: 'Input',
-  args: {
-    label: 'Name',
-    value: '',
-    placeholder: 'Enter your name',
-    type: 'text',
-  },
+  args,
   argTypes: {
     label: { control: 'text' },
     value: { control: 'text' },
@@ -20,17 +21,18 @@ const meta = {
       options: ['text', 'email', 'password', 'search', 'url'],
     },
   },
+  render ({ label, value, placeholder, type }: typeof args) {
+    return html`
+        <solid-ui-input
+            label="${label}"
+            .value=${value}
+            placeholder="${placeholder}"
+            type="${type}"
+        ></solid-ui-input>
+    `
+  }
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ label, value, placeholder, type }) => html`
-  <solid-ui-input
-    label="${label}"
-    .value=${value}
-    placeholder="${placeholder}"
-    type="${type}"
-  ></solid-ui-input>
-`)
+export const Primary = {}
 
 export default meta
-
-export const Primary = { render }

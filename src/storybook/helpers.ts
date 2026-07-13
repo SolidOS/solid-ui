@@ -1,7 +1,12 @@
-import { html, render, TemplateResult } from 'lit'
+import { html } from 'lit'
 import { USER_OPTIONS, users } from './stubs'
+import type { Decorator } from '@storybook/web-components-vite'
 
 import './components/StorybookProvider'
+
+function defineDecorator<T extends Decorator> (decorator: T) {
+  return decorator
+}
 
 export type ControlOptions<TLabel extends string = string, TValue = unknown> = [TLabel, TValue][]
 
@@ -9,38 +14,22 @@ export type GetStoryArgs<T extends object> = {
   [K in keyof T]: T[K] extends { options: ArrayLike<infer TValue> } ? TValue : T[K] extends { control: 'text' } ? string : never
 }
 
-function renderStorybook (content: TemplateResult, user?: ReturnType<typeof USER_OPTIONS.resolve>) {
-  user ??= USER_OPTIONS.resolve('Guest')
-
-  const container = document.createElement('div')
+export const withProvider = defineDecorator((story, context) => {
+  const user = USER_OPTIONS.resolve((context.args.user ?? context.parameters.user ?? 'Guest') as keyof typeof users)
   const attributes = 'initialized' in user
     ? { initialized: user.initialized }
     : { webId: user.webId, avatarUrl: user.avatarUrl, initialized: true }
 
-  render(html`
-        <storybook-provider
-            webId=${attributes.webId}
-            avatarUrl=${attributes.avatarUrl}
-            .initialized=${attributes.initialized}
-        >
-            ${content}
-        </storybook-provider>
-    `, container)
-
-  return container
-}
-
-export function defineStoryRender<T extends object> (renderStory: (args: GetStoryArgs<T>) => TemplateResult) {
-  return (args: GetStoryArgs<T>) => renderStorybook(renderStory(args))
-}
-
-export function defineAuthStoryRender<T extends { user: typeof USER_OPTIONS.control }> (renderStory: (args: GetStoryArgs<T>) => TemplateResult) {
-  return (args: GetStoryArgs<T>) => {
-    const resolvedUser = USER_OPTIONS.resolve(args.user as keyof typeof users)
-
-    return renderStorybook(renderStory(args), resolvedUser)
-  }
-}
+  return html`
+    <storybook-provider
+        webId=${attributes.webId}
+        avatarUrl=${attributes.avatarUrl}
+        .initialized=${attributes.initialized}
+    >
+      ${story()}
+    </storybook-provider>
+  `
+})
 
 export function defineControlOptions<const T extends ControlOptions> (options: T) {
   return {
