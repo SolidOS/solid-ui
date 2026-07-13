@@ -25,14 +25,14 @@ const meta = {
 
 export const Primary = {
   render: () => html`
-    <solid-ui-button @click=${() => showDialog(html`<solid-ui-login-modal></solid-ui-login-modal>`)}>Open</solid-ui-button>
+    <solid-ui-button @click=${() => showDialog(LoginModal)}>Open</solid-ui-button>
   `
 }
 
 export const Loading = {
   render: () => html`
     <solid-ui-button @click=${async () => {
-        const dialog = await showDialog<LoginModal>(html`<solid-ui-login-modal></solid-ui-login-modal>`)
+        const dialog = showDialog(LoginModal)
         const dialogInternals = internals(dialog, ['submitting'])
 
         dialogInternals.submitting = true
@@ -43,7 +43,7 @@ export const Loading = {
 export const Failed = {
   render: () => html`
     <solid-ui-button @click=${async () => {
-        const dialog = await showDialog<LoginModal>(html`<solid-ui-login-modal></solid-ui-login-modal>`)
+        const dialog = showDialog(LoginModal)
         const dialogInternals = internals(dialog, ['failed'])
 
         dialogInternals.failed = true

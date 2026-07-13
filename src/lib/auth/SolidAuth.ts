@@ -3,9 +3,8 @@ import ns from '@/lib/ns'
 import { authn, authSession, solidLogicSingleton } from 'solid-logic'
 import { AuthContext } from '@/lib/auth'
 import { showDialog } from '@/lib/dialogs'
-import { html } from 'lit'
 
-import '@/components/login-modal'
+import LoginModal from '@/components/login-modal'
 
 export const DEFAULT_SIGNUP_URL = 'https://solidproject.org/get_a_pod'
 
@@ -68,7 +67,7 @@ export default class SolidAuth implements AuthContext {
 
   async login (loginUrl?: string) {
     if (!loginUrl) {
-      showDialog(html`<solid-ui-login-modal></solid-ui-login-modal>`)
+      showDialog(LoginModal)
 
       return
     }

@@ -3,7 +3,12 @@ import type { WebComponentTrait, WebComponentTraitMethodKey } from '@/lib/compon
 
 import styles from './WebComponent.styles.css'
 
-export default abstract class WebComponent extends LitElement {
+const metadataMarker = Symbol('WebComponentMetadata')
+
+export type GetWebComponentMetadata<T> = T extends { [metadataMarker]?: infer TMetadata } ? TMetadata : { nope: keyof T }
+export type WebComponentConstructor<T extends WebComponent = WebComponent> = { new (): T }
+
+export default abstract class WebComponent<T extends Record<string, unknown> = Record<string, unknown>> extends LitElement {
   static states?: Record<string, Function>
 
   protected static finalizeStyles (componentStyles?: CSSResultGroup) {
@@ -11,6 +16,8 @@ export default abstract class WebComponent extends LitElement {
 
     return [styles, ...elementStyles]
   }
+
+  [metadataMarker]?: T
 
   protected internals?: ElementInternals
   protected globalListeners: [type: string, listener: EventListener][] = []

@@ -13,6 +13,7 @@ describe('Index', () => {
       'DEFAULT_DIALOG_CONTEXT',
       'DEFAULT_SIGNUP_URL',
       'Dialog',
+      'DialogComponent',
       'DialogTrait',
       'FormControlTrait',
       'NoopAuth',
