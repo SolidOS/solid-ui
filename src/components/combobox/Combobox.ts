@@ -136,7 +136,7 @@ export default class Combobox extends WebComponent {
           aria-labelledby=${this.label ? this.inputTrait.labelId : nothing}
           aria-label=${this.label ? nothing : accessibleName}
           ?hidden=${!this.open}
-          @mouseup=${this.onListboxMouseUp}
+          @mousedown=${this.onListboxMouseDown}
         >
           ${options.map(
             (option, index) =>
@@ -229,6 +229,7 @@ export default class Combobox extends WebComponent {
       return
     }
 
+    this.filter = ''
     this.open = false
     this.activeIndex = -1
     this.removeOpenListeners()
@@ -362,7 +363,9 @@ export default class Combobox extends WebComponent {
     }
   }
 
-  private onListboxMouseUp (event: MouseEvent) {
+  private onListboxMouseDown (event: MouseEvent) {
+    event.preventDefault()
+
     if (!(event.target instanceof HTMLElement)) {
       return
     }

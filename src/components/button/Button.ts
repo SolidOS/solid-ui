@@ -33,11 +33,17 @@ export default class Button extends WebComponent {
         <button type=${this.type} ?disabled=${disabled} @click=${this.onClick}>
             ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
-            <slot name="icon"></slot>
+            <slot @slotchange=${this.onIconSlotChange} name="icon"></slot>
             <slot></slot>
             <slot name="right-icon"></slot>
         </button>
     `
+  }
+
+  private onIconSlotChange (e: Event) {
+    const slot = e.target as HTMLSlotElement
+
+    this.toggleAttribute('data-has-icon-slot', slot.assignedElements().length > 0)
   }
 
   private onClick () {
