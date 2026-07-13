@@ -8,6 +8,44 @@ function defineDecorator<T extends Decorator> (decorator: T) {
   return decorator
 }
 
+const COLORS = {
+  black: {
+    primary: '#131722',
+    hover: '#dcdcde',
+    selected: '#b8b9bd',
+  },
+  purple: {
+    primary: '#8e54ff',
+    hover: '#eee5ff',
+    selected: '#ddccff',
+  },
+  blue: {
+    primary: '#1e6bff',
+    hover: '#dde9ff',
+    selected: '#bcd3ff',
+  },
+  pink: {
+    primary: '#e9127c',
+    hover: '#fcdbeb',
+    selected: '#f8b8d8',
+  },
+  indigo: {
+    primary: '#6236ff',
+    hover: '#e7e1ff',
+    selected: '#d0c3ff',
+  },
+  orange: {
+    primary: '#ff4e00',
+    hover: '#ffe4d9',
+    selected: '#ffcab3',
+  },
+  mint: {
+    primary: '#00c0b0',
+    hover: '#d9f6f3',
+    selected: '#b3ece7',
+  },
+}
+
 export type ControlOptions<TLabel extends string = string, TValue = unknown> = [TLabel, TValue][]
 
 export type GetStoryArgs<T extends object> = {
@@ -15,6 +53,8 @@ export type GetStoryArgs<T extends object> = {
 }
 
 export const withProvider = defineDecorator((story, context) => {
+  const { primaryColor } = context.globals
+  const colors = COLORS[primaryColor] ?? COLORS.purple
   const user = USER_OPTIONS.resolve((context.args.user ?? context.parameters.user ?? 'Guest') as keyof typeof users)
   const attributes = 'initialized' in user
     ? { initialized: user.initialized }
@@ -25,11 +65,20 @@ export const withProvider = defineDecorator((story, context) => {
         webId=${attributes.webId}
         avatarUrl=${attributes.avatarUrl}
         .initialized=${attributes.initialized}
+        style="
+          --solid-ui-color-primary: ${colors.primary};
+          --solid-ui-color-primary-hover: ${colors.hover};
+          --solid-ui-color-primary-selected: ${colors.selected};
+        "
     >
       ${story()}
     </storybook-provider>
   `
 })
+
+export function getThemeColors (): string[] {
+  return Object.keys(COLORS)
+}
 
 export function defineControlOptions<const T extends ControlOptions> (options: T) {
   return {

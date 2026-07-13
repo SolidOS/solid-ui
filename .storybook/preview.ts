@@ -1,4 +1,4 @@
-import { withProvider } from '@/storybook'
+import { withProvider, getThemeColors } from '@/storybook'
 
 import '@/styles/theme.css'
 
@@ -33,3 +33,15 @@ export const parameters = {
         }
     }
 }
+export const globalTypes = {
+  primaryColor: {
+    description: 'Primary Color',
+    defaultValue: 'purple',
+    toolbar: {
+      title: 'Primary',
+      icon: 'paintbrush',
+      items: getThemeColors().map((color) => ({ label: color.slice(0, 1).toUpperCase() + color.slice(1), value: color })),
+      dynamicTitle: true,
+    },
+  },
+};
