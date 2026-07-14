@@ -15,11 +15,16 @@ export class StorybookProvider extends WebComponent {
   @property({ type: String, reflect: true })
   accessor avatarUrl: string | undefined
 
+  @property({ type: Boolean, reflect: true })
+  accessor initialized = true
+
   @provide({ context: authContext })
   private accessor auth = new StorybookAuth()
 
   willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
+
+    this.auth.initialized = this.initialized
 
     if (!this.webId) {
       this.auth.account = null

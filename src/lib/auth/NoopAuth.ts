@@ -1,10 +1,8 @@
 import { AuthContext } from './context'
-import Account from './Account'
 
 export default class NoopAuth implements AuthContext {
-  get account (): Account | null {
-    return null
-  }
+  public readonly initialized = false
+  public readonly account = null
 
   async login () {
     throw new Error('Can\'t use auth, missing context provider')

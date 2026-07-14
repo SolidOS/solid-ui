@@ -9,11 +9,20 @@ export type GetStoryArgs<T extends object> = {
   [K in keyof T]: T[K] extends { options: ArrayLike<infer TValue> } ? TValue : T[K] extends { control: 'text' } ? string : never
 }
 
-function renderStorybook (content: TemplateResult, user: ReturnType<typeof USER_OPTIONS.resolve> = null) {
+function renderStorybook (content: TemplateResult, user?: ReturnType<typeof USER_OPTIONS.resolve>) {
+  user ??= USER_OPTIONS.resolve('Guest')
+
   const container = document.createElement('div')
+  const attributes = 'initialized' in user
+    ? { initialized: user.initialized }
+    : { webId: user.webId, avatarUrl: user.avatarUrl, initialized: true }
 
   render(html`
-        <storybook-provider webId="${user?.webId}" avatarUrl="${user?.avatarUrl}">
+        <storybook-provider
+            webId=${attributes.webId}
+            avatarUrl=${attributes.avatarUrl}
+            .initialized=${attributes.initialized}
+        >
             ${content}
         </storybook-provider>
     `, container)
