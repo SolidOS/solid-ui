@@ -14,10 +14,6 @@
         font-size: var(--solid-ui-font-size-md);
     }
 
-    &:hover {
-        background-color: var(--solid-ui-color-slate-200);
-    }
-
     ::slotted([slot="left-icon"]), ::slotted([slot="right-icon"]) {
         width: var(--solid-ui-font-size-xl);
         height: var(--solid-ui-font-size-xl);
