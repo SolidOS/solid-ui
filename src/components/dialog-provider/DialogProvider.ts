@@ -2,6 +2,7 @@ import { customElement, WebComponent } from '@/lib/components'
 import { provide } from '@lit/context'
 import { property } from 'lit/decorators.js'
 import { DialogContext, dialogContext } from '@/lib/dialogs/context'
+import type { PropertyValues } from 'lit'
 
 @customElement('solid-ui-dialog-provider')
 export default class DialogProvider extends WebComponent {
@@ -11,7 +12,7 @@ export default class DialogProvider extends WebComponent {
   @provide({ context: dialogContext })
   private accessor dialog: DialogContext = { id: '' }
 
-  protected willUpdate (changedProperties: Map<string, any>) {
+  protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('dialogId') && this.dialogId) {

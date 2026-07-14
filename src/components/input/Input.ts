@@ -1,7 +1,7 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { html } from 'lit'
 import { property, query } from 'lit/decorators.js'
-import InputTrait from '@/lib/components/traits/InputTrait'
+import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 
 import styles from './Input.styles.css'
 
@@ -31,30 +31,30 @@ export default class Input extends WebComponent {
   @query('input')
   private accessor inputElement: HTMLInputElement | null = null;
 
-  private inputTrait: InputTrait
+  private controlTrait: FormControlTrait
 
   constructor () {
     super()
 
-    this.inputTrait = this.addTrait(new InputTrait(this, {
-      getInputElement: () => this.inputElement,
+    this.controlTrait = this.addTrait(new FormControlTrait(this, {
+      getControlElement: () => this.inputElement,
       getInternals: () => this.getInternals(),
     }))
   }
 
   protected render () {
     return html`
-      ${this.inputTrait.renderLabel()}
+      ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
         <input
-          id=${this.inputTrait.inputId}
+          id=${this.controlTrait.controlId}
           type=${this.type}
           name=${this.name}
           placeholder=${this.placeholder}
           ?required=${this.required}
           .value=${this.value}
-          @input=${() => this.inputTrait.onInput()}
+          @input=${() => this.controlTrait.onInput()}
           @keydown=${this.onKeyDown}
         />
       </div>
@@ -65,7 +65,7 @@ export default class Input extends WebComponent {
     if (e.key === 'Enter') {
       e.preventDefault()
 
-      this.inputTrait.onSubmit()
+      this.controlTrait.onSubmit()
     }
   }
 }

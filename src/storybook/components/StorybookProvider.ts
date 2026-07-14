@@ -1,6 +1,6 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { provide } from '@lit/context'
-import { html } from 'lit'
+import { html, type PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
 import StorybookAuth from '../auth/StorybookAuth'
 import { Account, authContext } from '@/lib/auth'
@@ -18,7 +18,7 @@ export class StorybookProvider extends WebComponent {
   @provide({ context: authContext })
   private accessor auth = new StorybookAuth()
 
-  willUpdate (changedProperties: Map<string, any>) {
+  willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     if (!this.webId) {
