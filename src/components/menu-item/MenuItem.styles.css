@@ -12,6 +12,10 @@
         color: var(--solid-ui-color-gray-600);
         font-weight: 500;
         font-size: var(--solid-ui-font-size-md);
+
+        &[data-selected] {
+            background: var(--solid-ui-color-primary-selected);
+        }
     }
 
     ::slotted([slot="left-icon"]), ::slotted([slot="right-icon"]) {

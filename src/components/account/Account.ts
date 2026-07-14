@@ -22,6 +22,7 @@ import styles from './Account.styles.css'
 export interface AccountMenuItem {
   label: string | TemplateResult
   href?: string
+  selected?: boolean
   onSelected?(): void
 }
 
@@ -85,7 +86,7 @@ export default class Account extends WebComponent {
             </button>
 
             ${this.menuItems.map(menuItem => html`
-                <solid-ui-menu-item .href=${menuItem.href ?? nothing} @solid-ui-select=${() => menuItem.onSelected?.()}>
+                <solid-ui-menu-item .href=${menuItem.href ?? nothing} ?selected=${menuItem.selected} @solid-ui-select=${() => menuItem.onSelected?.()}>
                     ${menuItem.label}
                 </solid-ui-menu-item>
             `)}
