@@ -130,6 +130,8 @@ You can also use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML
 </html>
 ```
 
+PS: If you're using the `<solid-ui-provider>` component to wrap your application, make sure to register it first. Otherwise, you may face errors or unexpected behaviour regarding global state.
+
 ## Development
 
 When developing a component in solid-ui you can test it in isolation using Storybook:
