@@ -11,7 +11,7 @@ import SampleModal from './docs/sample-modal'
  * you're using `<solid-ui-provider>`, it comes configured out of the box.
  */
 const meta = {
-  title: 'Dialog',
+  title: 'Advanced/Dialogs',
   parameters: {
     docs: {
       source: {

@@ -10,7 +10,7 @@ const args = {
 }
 
 const meta = {
-  title: 'Input',
+  title: 'Basic UI/Input',
   args,
   argTypes: {
     label: { control: 'text' },

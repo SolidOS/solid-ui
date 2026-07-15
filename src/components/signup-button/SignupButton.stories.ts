@@ -5,7 +5,7 @@ import '~icons/lucide/user-plus'
 import './SignupButton'
 
 const meta = {
-  title: 'SignupButton',
+  title: 'Solid/SignupButton',
 } as const
 
 export const Primary = {

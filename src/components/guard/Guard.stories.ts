@@ -4,7 +4,7 @@ import { USER_OPTIONS } from '@/storybook/stubs'
 import './Guard'
 
 const meta = {
-  title: 'Guard',
+  title: 'Solid/Guard',
   args: {
     user: 'Alice',
   },

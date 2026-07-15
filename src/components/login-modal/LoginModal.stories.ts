@@ -7,7 +7,7 @@ import '@/components/button'
 import LoginModal from './LoginModal'
 
 const meta = {
-  title: 'Login Modal',
+  title: 'Solid/Login Modal',
   parameters: {
     docs: {
       source: {

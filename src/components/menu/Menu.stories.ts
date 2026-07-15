@@ -22,7 +22,7 @@ function select (event: Event, message: string) {
 }
 
 const meta = {
-  title: 'Menu',
+  title: 'Basic UI/Menu',
   render: () => html`
         <solid-ui-menu>
             <solid-ui-button slot="trigger">

@@ -10,7 +10,7 @@ const args = {
 }
 
 const meta = {
-  title: 'Select',
+  title: 'Basic UI/Select',
   args,
   argTypes: {
     label: { control: 'text' },

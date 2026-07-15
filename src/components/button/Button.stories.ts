@@ -29,7 +29,7 @@ const args = {
 } as const
 
 const meta = {
-  title: 'Button',
+  title: 'Basic UI/Button',
   args,
   argTypes: {
     variant: {

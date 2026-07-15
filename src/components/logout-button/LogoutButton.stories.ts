@@ -5,7 +5,7 @@ import '~icons/lucide/log-out'
 import './LogoutButton'
 
 const meta = {
-  title: 'LogoutButton',
+  title: 'Solid/LogoutButton',
 } as const
 
 export const Primary = {

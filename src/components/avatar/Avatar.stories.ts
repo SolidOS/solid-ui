@@ -4,7 +4,7 @@ import { USER_OPTIONS } from '@/storybook'
 import './Avatar'
 
 const meta = {
-  title: 'Avatar',
+  title: 'Solid/Avatar',
   args: {
     user: 'Alice',
   },

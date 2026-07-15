@@ -31,7 +31,7 @@ const pokemonProvider = defineAsyncComboboxOptionsProvider(async (query) => {
 })
 
 const meta = {
-  title: 'Combobox',
+  title: 'Basic UI/Combobox',
   args: {
     label: 'What is the best food?',
     options: 'Pizza, Ramen, Tacos',
