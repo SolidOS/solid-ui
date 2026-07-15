@@ -79,7 +79,7 @@ export default class Account extends WebComponent {
     }
 
     return html`
-        <solid-ui-menu placement="bottom-end" distance="5">
+        <solid-ui-menu placement="bottom-end">
             <button type="button" slot="trigger">
                 <solid-ui-avatar></solid-ui-avatar>
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>

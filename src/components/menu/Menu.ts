@@ -18,7 +18,7 @@ export default class Menu extends WebComponent {
   accessor placement: WaDropdown['placement'] = 'bottom-start';
 
   @property({ type: Number, reflect: true })
-  accessor distance: number = 0;
+  accessor distance: number = 5;
 
   @query('wa-dropdown')
   private accessor dropdown: WaDropdown | null = null;
