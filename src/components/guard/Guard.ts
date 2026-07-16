@@ -5,6 +5,11 @@ import { authContext, AuthContext, DEFAULT_AUTH_CONTEXT } from '@/lib/auth'
 
 @customElement('solid-ui-guard')
 export default class Guard extends WebComponent {
+  static states = {
+    initializing: (component: Guard) => !component.auth.initialized,
+    loggedIn: (component: Guard) => !!component.auth.account,
+  }
+
   @consume({ context: authContext, subscribe: true })
   private accessor auth: AuthContext = DEFAULT_AUTH_CONTEXT
 
