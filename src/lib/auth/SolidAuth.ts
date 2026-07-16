@@ -25,6 +25,7 @@ function findAccountImage (webId: string): string | undefined {
 
 export default class SolidAuth implements AuthContext {
   private _initialized = false
+  private profileLoaded = false
   private listeners: (() => unknown)[] = []
 
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
@@ -33,6 +34,18 @@ export default class SolidAuth implements AuthContext {
     await authn.checkUser()
 
     this._initialized = true
+    this.listeners.forEach(listener => listener())
+  }
+
+  async loadProfile () {
+    if (this.profileLoaded || !this.account) {
+      return
+    }
+
+    this.profileLoaded = true
+
+    await solidLogicSingleton.profile.loadMe()
+
     this.listeners.forEach(listener => listener())
   }
 

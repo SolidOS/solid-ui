@@ -17,6 +17,25 @@ export default class Avatar extends WebComponent {
   @consume({ context: authContext, subscribe: true })
   private accessor auth: AuthContext = DEFAULT_AUTH_CONTEXT
 
+  private unsubscribeSessionUpdated?: () => void
+
+  connectedCallback () {
+    super.connectedCallback()
+
+    this.auth.loadProfile?.()
+
+    this.unsubscribeSessionUpdated = this.auth.onSessionUpdated(() => {
+      this.auth.loadProfile?.()
+      this.requestUpdate()
+    })
+  }
+
+  disconnectedCallback () {
+    super.disconnectedCallback()
+
+    this.unsubscribeSessionUpdated?.()
+  }
+
   protected render () {
     if (!this.auth.account?.avatarUrl) {
       return html`
