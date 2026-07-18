@@ -199,9 +199,7 @@ export default class Combobox extends WebComponent {
               ? html`<div
                   id=${this.getOptionId(index)}
                   role="option"
-                  aria-selected=${this.open && index === this.activeIndex
-                    ? 'true'
-                    : 'false'}
+                  aria-selected=${option.value === this.value ? 'true' : 'false'}
                   data-active=${index === this.activeIndex || nothing}
                   @mousemove=${() => this.setActiveIndex(index)}
                 >

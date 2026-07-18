@@ -21,6 +21,7 @@
         border-radius: 5px;
         box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
         overflow: hidden;
+        padding: 4px;
     }
 
     .input-wrapper {
@@ -50,21 +51,26 @@
     .listbox {
         display: flex;
         flex-direction: column;
+        gap: 2px;
         max-height: inherit;
         overflow: auto;
 
         [role="option"], .non-selectable-option {
             color: var(--solid-ui-color-gray-700);
             padding: 12px 8px;
+            border-radius: 5px;
         }
 
         [role="option"] {
-            border-bottom: 1px solid var(--solid-ui-color-gray-100);
             cursor: pointer;
 
             &:hover,
             &[data-active] {
-                background: rgba(0, 0, 0, 0.05);
+                background: var(--solid-ui-color-primary-hover);
+            }
+
+            &[aria-selected="true"] {
+                background: var(--solid-ui-color-primary-selected);
             }
         }
 

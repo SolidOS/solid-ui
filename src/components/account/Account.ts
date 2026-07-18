@@ -22,6 +22,7 @@ import styles from './Account.styles.css'
 export interface AccountMenuItem {
   label: string | TemplateResult
   href?: string
+  selected?: boolean
   onSelected?(): void
 }
 
@@ -78,14 +79,14 @@ export default class Account extends WebComponent {
     }
 
     return html`
-        <solid-ui-menu placement="bottom-end" distance="5">
+        <solid-ui-menu placement="bottom-end">
             <button type="button" slot="trigger">
                 <solid-ui-avatar></solid-ui-avatar>
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>
             </button>
 
             ${this.menuItems.map(menuItem => html`
-                <solid-ui-menu-item .href=${menuItem.href ?? nothing} @solid-ui-select=${() => menuItem.onSelected?.()}>
+                <solid-ui-menu-item .href=${menuItem.href ?? nothing} ?selected=${menuItem.selected} @solid-ui-select=${() => menuItem.onSelected?.()}>
                     ${menuItem.label}
                 </solid-ui-menu-item>
             `)}

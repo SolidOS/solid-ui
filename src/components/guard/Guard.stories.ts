@@ -15,11 +15,11 @@ const meta = {
 } as const
 
 const render = defineAuthStoryRender<typeof meta.argTypes>(() => html`
-    <solid-guard>
+    <solid-ui-guard>
         <span slot="initializing">Initializing content</span>
         <span slot="guest">Guest content</span>
         <span>Logged in content</span>
-    </solid-guard>
+    </solid-ui-guard>
 `)
 
 export const Primary = { render }
