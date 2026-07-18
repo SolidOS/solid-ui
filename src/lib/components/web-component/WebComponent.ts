@@ -1,4 +1,4 @@
-import { html, LitElement, type CSSResultGroup } from 'lit'
+import { html, LitElement, type CSSResultGroup, type PropertyValues } from 'lit'
 import type { WebComponentTrait, WebComponentTraitMethodKey } from '@/lib/components/traits/WebComponentTrait'
 
 import styles from './WebComponent.styles.css'
@@ -44,7 +44,7 @@ export default abstract class WebComponent extends LitElement {
     this.forwardMethodCall('formResetCallback')
   }
 
-  protected willUpdate (changedProperties: Map<string, any>) {
+  protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     const states = this.static().states

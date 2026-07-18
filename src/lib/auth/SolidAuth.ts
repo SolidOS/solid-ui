@@ -1,9 +1,9 @@
-import { authSession, solidLogicSingleton } from 'solid-logic'
 import Account from '@/lib/auth/Account'
+import ns from '@/lib/ns'
+import { authn, authSession, solidLogicSingleton } from 'solid-logic'
 import { AuthContext } from '@/lib/auth'
 import { showDialog } from '@/lib/dialogs'
 import { html } from 'lit'
-import ns from '@/lib/ns'
 
 import '@/components/login-modal'
 
@@ -24,11 +24,26 @@ function findAccountImage (webId: string): string | undefined {
 }
 
 export default class SolidAuth implements AuthContext {
+  private _initialized = false
+  private listeners: (() => unknown)[] = []
+
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
+
+  async initialize () {
+    await authn.checkUser()
+
+    this._initialized = true
+    this.listeners.forEach(listener => listener())
+  }
+
+  get initialized (): boolean {
+    return this._initialized
+  }
 
   get account (): Account | null {
     const webId: string | undefined = authSession.webId ?? authSession.info?.webId
     const isActive: boolean = authSession.isActive ?? authSession.info?.isLoggedIn ?? Boolean(webId)
+
     if (!isActive || !webId) {
       return null
     }
@@ -74,21 +89,26 @@ export default class SolidAuth implements AuthContext {
     const listener = () => {
       callback()
     }
+
+    this.listeners.push(listener)
+
     if (typeof sessionEventTarget.addEventListener === 'function') {
       sessionEventTarget.addEventListener('sessionStateChange', listener)
     } else {
-      authSession.events.on('login', callback)
-      authSession.events.on('logout', callback)
-      authSession.events.on('sessionRestore', callback)
+      authSession.events.on('login', listener)
+      authSession.events.on('logout', listener)
+      authSession.events.on('sessionRestore', listener)
     }
 
     return () => {
+      this.listeners = this.listeners.filter(_listener => _listener !== listener)
+
       if (typeof sessionEventTarget.removeEventListener === 'function') {
         sessionEventTarget.removeEventListener('sessionStateChange', listener)
       } else {
-        authSession.events.off('login', callback)
-        authSession.events.off('logout', callback)
-        authSession.events.off('sessionRestore', callback)
+        authSession.events.off('login', listener)
+        authSession.events.off('logout', listener)
+        authSession.events.off('sessionRestore', listener)
       }
     }
   }

@@ -15,6 +15,7 @@ import '~icons/lucide/chevron-down'
 import '~icons/lucide/log-in'
 import '~icons/lucide/log-out'
 import '~icons/lucide/user'
+import '~icons/svg-spinners/180-ring'
 
 import styles from './Account.styles.css'
 
@@ -28,6 +29,7 @@ export interface AccountMenuItem {
 export default class Account extends WebComponent {
   static styles = styles
   static states = {
+    initializing: (component: Account) => !component.auth.initialized,
     loggedIn: (component: Account) => !!component.auth.account,
   }
 
@@ -52,6 +54,12 @@ export default class Account extends WebComponent {
   }
 
   protected render () {
+    if (!this.auth.initialized) {
+      return html`
+        <icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>
+      `
+    }
+
     if (!this.auth.account) {
       return html`
         <solid-ui-login-button>

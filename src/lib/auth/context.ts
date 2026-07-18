@@ -3,6 +3,7 @@ import NoopAuth from './NoopAuth'
 import Account from './Account'
 
 export interface AuthContext {
+  initialized: boolean;
   account: Account | null;
   login(loginUrl?: string): Promise<void>;
   signup(): Promise<void>;

@@ -53,15 +53,32 @@
         max-height: inherit;
         overflow: auto;
 
-        [role="option"] {
-            padding: 12px 8px;
+        [role="option"], .non-selectable-option {
             color: var(--solid-ui-color-gray-700);
+            padding: 12px 8px;
+        }
+
+        [role="option"] {
             border-bottom: 1px solid var(--solid-ui-color-gray-100);
             cursor: pointer;
 
             &:hover,
             &[data-active] {
                 background: rgba(0, 0, 0, 0.05);
+            }
+        }
+
+        .non-selectable-option {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            icon-svg-spinners-3-dots-fade {
+                width: 2rem;
+            }
+
+            .message--error {
+                color: var(--solid-ui-color-error);
             }
         }
     }

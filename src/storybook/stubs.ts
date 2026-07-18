@@ -13,6 +13,7 @@ export const users = {
 } as const
 
 export const USER_OPTIONS = defineControlOptions([
-  ...objectEntries(users).map(([label, value]) => [label, value]) as [keyof typeof users | 'Guest', typeof users[keyof typeof users] | null][],
-  ['Guest', null],
+  ...objectEntries(users).map(([label, value]) => [label, value]) as [keyof typeof users | 'Guest', typeof users[keyof typeof users]][],
+  ['Guest', { initialized: true }],
+  ['Initializing', { initialized: false }],
 ])
