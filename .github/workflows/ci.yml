@@ -45,7 +45,7 @@ jobs:
   gh-pages:
     needs: build
     runs-on: ubuntu-latest
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/staging'
     steps:
       - uses: actions/download-artifact@v8
         with:
