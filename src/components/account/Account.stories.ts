@@ -1,22 +1,21 @@
 import { html } from 'lit'
-import { USER_OPTIONS, defineAuthStoryRender } from '@/storybook'
+import { USER_OPTIONS } from '@/storybook'
 
 import './Account'
 
 const meta = {
-  title: 'Account',
+  title: 'Solid/Account',
   args: {
     user: 'Alice',
   },
   argTypes: {
     user: USER_OPTIONS.control,
-  }
+  },
+  render: () => html`<solid-ui-account></solid-ui-account>`
 } as const
 
-const render = defineAuthStoryRender(() => html`<solid-ui-account></solid-ui-account>`)
-
-export const Primary = { render }
-export const Guest = { render, args: { user: 'Guest' } }
-export const Initializing = { render, args: { user: 'Initializing' } }
+export const Primary = {}
+export const Guest = { args: { user: 'Guest' } }
+export const Initializing = { args: { user: 'Initializing' } }
 
 export default meta

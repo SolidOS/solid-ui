@@ -1,6 +1,7 @@
 import { WebComponent } from '@/lib/components'
 import { CloseDialogEvent } from '@/lib/dialogs/events/close-dialog'
 import type { DialogContext } from '@/lib/dialogs/context'
+import type { GetDialogResult } from '@/lib/dialogs/helpers'
 
 import { WebComponentTrait } from './WebComponentTrait'
 
@@ -17,7 +18,7 @@ export default class DialogTrait<T> implements WebComponentTrait {
     this.config = config
   }
 
-  close (data?: T) {
+  close (data?: GetDialogResult<T, T>) {
     window.dispatchEvent(new CloseDialogEvent(this.config.getContext().id, data))
   }
 }

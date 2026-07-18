@@ -1,26 +1,9 @@
 import { html } from 'lit'
-import { defineStoryRender } from '@/storybook'
 import { defineAsyncComboboxOptionsProvider } from './Combobox'
 
 import '@/components/combobox-option'
 
 import './Combobox'
-
-const meta = {
-  title: 'Combobox',
-  args: {
-    label: 'What is the best food?',
-    options: 'Pizza, Ramen, Tacos',
-    asyncJSOptions: false,
-    asyncHtmlOptions: false,
-  },
-  argTypes: {
-    label: { control: 'text' },
-    options: { control: 'text' },
-    asyncJSOptions: { control: 'boolean' },
-    asyncHtmlOptions: { control: 'boolean' },
-  },
-} as const
 
 const pokemonProvider = defineAsyncComboboxOptionsProvider(async (query) => {
   const response = await fetch('https://beta.pokeapi.co/graphql/v1beta', {
@@ -47,8 +30,21 @@ const pokemonProvider = defineAsyncComboboxOptionsProvider(async (query) => {
   }))
 })
 
-const render = defineStoryRender<typeof meta.argTypes>(
-  ({ label, options, asyncJSOptions, asyncHtmlOptions }) => {
+const meta = {
+  title: 'Basic UI/Combobox',
+  args: {
+    label: 'What is the best food?',
+    options: 'Pizza, Ramen, Tacos',
+    asyncJSOptions: false,
+    asyncHtmlOptions: false,
+  },
+  argTypes: {
+    label: { control: 'text' },
+    options: { control: 'text' },
+    asyncJSOptions: { control: 'boolean' },
+    asyncHtmlOptions: { control: 'boolean' },
+  },
+  render ({ label, options, asyncJSOptions, asyncHtmlOptions }) {
     if (asyncJSOptions) {
       return html`<solid-ui-combobox label="${label}" .asyncOptionsProvider=${pokemonProvider}></solid-ui-combobox>`
     }
@@ -56,7 +52,7 @@ const render = defineStoryRender<typeof meta.argTypes>(
     if (asyncHtmlOptions) {
       return html`
         <solid-ui-combobox
-          label="${label}"
+          label=${label}
           async-options-url="https://api.disneyapi.dev/character?name=%search%"
           async-options-results-field="data"
           async-options-label-field="name"
@@ -69,22 +65,23 @@ const render = defineStoryRender<typeof meta.argTypes>(
 
     return html`
       <solid-ui-combobox label="${label}">
-        ${parsedOptions.map((option) => html`<solid-ui-combobox-option value="${option}">${option}</solid-ui-combobox-option>`)}
+        ${parsedOptions.map((option, index) => {
+            const indent = index === 0 ? '' : '        '
+
+            return html`${indent}<solid-ui-combobox-option value="${option}">${option}</solid-ui-combobox-option>\n`
+        })}
       </solid-ui-combobox>
     `
   }
-)
+} as const
 
-export default meta
-
-export const Primary = { render }
+export const Primary = {}
 
 export const AsyncWithJS = {
   args: {
     label: 'Who is the best Pokemon?',
     asyncJSOptions: true,
   },
-  render,
 }
 
 export const AsyncWithHtml = {
@@ -92,5 +89,6 @@ export const AsyncWithHtml = {
     label: 'Who is the best Disney character?',
     asyncHtmlOptions: true,
   },
-  render,
 }
+
+export default meta

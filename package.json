@@ -120,7 +120,6 @@
 		"@iconify/json": "2.2.481",
 		"@rolldown/plugin-babel": "^0.2.3",
 		"@storybook/addon-docs": "10.4.2",
-		"@storybook/addon-links": "10.4.2",
 		"@storybook/web-components-vite": "10.4.2",
 		"@tailwindcss/vite": "^4.3.0",
 		"@testing-library/dom": "^10.4.1",
