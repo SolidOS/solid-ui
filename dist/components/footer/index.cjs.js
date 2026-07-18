@@ -1,0 +1,1 @@
+Object.defineProperty(exports,Symbol.toStringTag,{value:`Module`});const e=require("../../v2/components/layout/footer/Footer.cjs.js");require("../../v2/components/layout/footer/index.cjs.js"),exports.Footer=e.Footer;

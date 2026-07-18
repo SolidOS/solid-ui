@@ -1,4 +1,4 @@
-import { LitElement, type PropertyValues } from 'lit';
+import { LitElement, PropertyValues } from 'lit';
 export interface PhotoCapturedDetail {
     file: File;
     blob: Blob;
@@ -125,7 +125,7 @@ export declare class PhotoCapture extends LitElement {
             state: boolean;
         };
     };
-    static styles: import("lit").CSSResult;
+    static styles: import('lit').CSSResult;
     label: string;
     heading: string;
     captureLabel: string;
@@ -194,7 +194,7 @@ export declare class PhotoCapture extends LitElement {
     private _renderStatus;
     private _renderActions;
     private _renderPanel;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import('lit-html').TemplateResult<1>;
 }
 export {};
 //# sourceMappingURL=PhotoCapture.d.ts.map

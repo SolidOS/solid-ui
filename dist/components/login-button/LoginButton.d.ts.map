@@ -1,0 +1,1 @@
+{"version":3,"file":"LoginButton.d.ts","sourceRoot":"","sources":["../../../src/components/login-button/LoginButton.ts"],"names":[],"mappings":"AAAA,OAAO,EAAiB,YAAY,EAAE,MAAM,kBAAkB,CAAA;AAK9D,OAAO,qBAAqB,CAAA;AAG5B,MAAM,CAAC,OAAO,OAAO,WAAY,SAAQ,YAAY;IAEnD,OAAO,CAAC,QAAQ,CAAC,IAAI,CAAoC;IAEzD,SAAS,CAAC,MAAM;IAYhB,KAAK;IAIL,OAAO,CAAC,OAAO;CAKhB"}

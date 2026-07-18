@@ -1,3 +1,4 @@
+import { afterEach, describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../../helpers/debugger'
 
 // console.log('@@ solidLogicSingleton', solidLogicSingleton)

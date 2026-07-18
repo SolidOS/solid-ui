@@ -1,6 +1,7 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
-import * as Preferences from '../../src/preferences'
+import * as Preferences from '../../src/lib/preferences'
 import { sym } from 'rdflib'
 
 silenceDebugMessages()

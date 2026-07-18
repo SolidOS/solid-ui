@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["DialogHeader"],"sources":["../../../src/components/dialog-header/index.ts"],"sourcesContent":["import DialogHeader from './DialogHeader'\n\nexport { DialogHeader }\nexport default DialogHeader\n"],"mappings":"wIAGA,IAAA,EAAeA,EAAAA"}

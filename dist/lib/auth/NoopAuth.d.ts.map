@@ -1,0 +1,1 @@
+{"version":3,"file":"NoopAuth.d.ts","sourceRoot":"","sources":["../../../src/lib/auth/NoopAuth.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,WAAW,EAAE,MAAM,WAAW,CAAA;AAEvC,MAAM,CAAC,OAAO,OAAO,QAAS,YAAW,WAAW;IAClD,SAAgB,WAAW,SAAQ;IACnC,SAAgB,OAAO,OAAO;IAExB,KAAK;IAIL,MAAM;IAIN,MAAM;IAIZ,gBAAgB;CAGjB"}

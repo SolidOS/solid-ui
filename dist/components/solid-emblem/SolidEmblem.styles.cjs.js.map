@@ -1,0 +1,1 @@
+{"version":3,"file":"SolidEmblem.styles.cjs.js","names":[],"sources":["../../../src/components/solid-emblem/SolidEmblem.styles.css"],"sourcesContent":[":host {\n    display: inline-flex;\n}\n"],"mappings":""}

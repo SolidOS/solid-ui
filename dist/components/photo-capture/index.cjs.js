@@ -1,0 +1,1 @@
+Object.defineProperty(exports,Symbol.toStringTag,{value:`Module`});const e=require("../../v2/components/media/photoCapture/PhotoCapture.cjs.js");require("../../v2/components/media/photoCapture/index.cjs.js"),exports.PhotoCapture=e.PhotoCapture;

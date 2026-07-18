@@ -1,0 +1,67 @@
+import { WebComponent } from '../../lib/components';
+import { TemplateResult, PropertyValues } from 'lit';
+export type ComboboxOptionData = {
+    value: unknown;
+    label: string;
+    template?: TemplateResult;
+    selectable?: boolean;
+};
+export type ComboboxChangeEvent = CustomEvent<{
+    option: ComboboxOptionData;
+}>;
+export type AsyncComboboxOptionsProvider = (query: string) => Promise<ComboboxOptionData[]>;
+export declare function defineAsyncComboboxOptionsProvider<T extends AsyncComboboxOptionsProvider>(provider: T): T;
+export default class Combobox extends WebComponent {
+    static styles: import('lit').CSSResult;
+    static formAssociated: boolean;
+    accessor label: string;
+    accessor name: string;
+    accessor value: string;
+    accessor placeholder: string;
+    accessor required: boolean;
+    accessor selectOnly: boolean;
+    accessor asyncOptionsUrl: string;
+    accessor asyncOptionsResultsField: string;
+    accessor asyncOptionsLabelField: string;
+    accessor asyncOptionsValueField: string;
+    accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null;
+    accessor optionsFallback: ComboboxOptionData[] | null;
+    private accessor inputElement;
+    private accessor filter;
+    private accessor displayValue;
+    private accessor open;
+    private accessor activeIndex;
+    private controlTrait;
+    private openListenersAttached;
+    private updateDebouncedFilter;
+    private asyncOptionsTask?;
+    private _selectedOption;
+    private readonly listboxId;
+    constructor();
+    get selectedOption(): ComboboxOptionData | undefined;
+    disconnectedCallback(): void;
+    protected willUpdate(changedProperties: PropertyValues<this>): void;
+    protected render(): TemplateResult<1>;
+    private getFilteredOptions;
+    private getOptionsFromDOM;
+    private getOptionId;
+    private getInitialActiveIndex;
+    private getNextIndex;
+    private setActiveIndex;
+    private updateDisplayValue;
+    private updateAsyncOptionsTask;
+    private show;
+    private hide;
+    private selectOption;
+    private scrollActiveOptionIntoView;
+    private addOpenListeners;
+    private removeOpenListeners;
+    private handleDocumentFocusIn;
+    private handleDocumentMouseDown;
+    private onAnchorMouseDown;
+    private onInputFocus;
+    private openPopupFromKey;
+    private onInputKeyDown;
+    private onListboxMouseDown;
+}
+//# sourceMappingURL=Combobox.d.ts.map

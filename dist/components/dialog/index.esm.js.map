@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":["Dialog"],"sources":["../../../src/components/dialog/index.ts"],"sourcesContent":["import Dialog from './Dialog'\n\nexport { Dialog }\nexport default Dialog\n"],"mappings":";;AAGA,IAAA,IAAeA"}

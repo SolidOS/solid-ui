@@ -1,0 +1,1 @@
+{"version":3,"file":"DialogsRoot.d.ts","sourceRoot":"","sources":["../../../src/components/dialogs-root/DialogsRoot.ts"],"names":[],"mappings":"AAAA,OAAO,EAAiB,YAAY,EAAE,MAAM,kBAAkB,CAAA;AAO9D,OAAO,6CAA6C,CAAA;AAGpD,MAAM,CAAC,OAAO,OAAO,WAAY,SAAQ,YAAY;IAEnD,OAAO,CAAC,QAAQ,CAAC,OAAO,CAAe;IAEvC,iBAAiB,IAAK,IAAI;IAmB1B,SAAS,CAAC,MAAM;CAOjB"}

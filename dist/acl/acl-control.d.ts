@@ -1,9 +1,3 @@
-/**
- * Functions for rendering the ACL User Interface.
- * See https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md#view
- * for a screenshot.
- * @packageDocumentation
- */
 import { Store, NamedNode } from 'rdflib';
 import { DataBrowserContext } from 'pane-registry';
 /**

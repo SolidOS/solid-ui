@@ -1,0 +1,2 @@
+const e=require("../components/ids.cjs.js");let t=require("@lit/context");var n={id:`noop-${e.generateId()}`},r=(0,t.createContext)(Symbol(`dialog`));exports.DEFAULT_DIALOG_CONTEXT=n,exports.dialogContext=r;
+//# sourceMappingURL=context.cjs.js.map

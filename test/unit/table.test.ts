@@ -1,8 +1,9 @@
+import { describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
-import { NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
+import { Fetcher, IndexedFormula, NamedNode, Namespace, parse, Query, sym, variable } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
 // @ts-ignore
-import { renderTableViewPane } from '../../src/table'
+import { renderTableViewPane } from '../../src/lib/table'
 
 const kb = solidLogicSingleton.store
 
@@ -18,7 +19,7 @@ const doc = sym('https://example.com/tests')
 parse(tableData, kb, doc.uri) // should be able  to omit tcontent type and callback
 // const query = $rdf.SPARQLToQuery(tableQuery) // TypeError: $rdf.SPARQLToQuery is not a function
 
-const query = new Query('List people')
+const query = new Query('List people', 'list-people')
 const vars = ['person', 'name', 'age', 'hobby']
 
 export interface Person {
@@ -39,7 +40,7 @@ query.pat.add(v.person, EX('hobby'), v.hobby, doc)
 
 const tableOptions = { query }
 
-kb.fetcher = null // @@@@@ kludge turn off link following
+kb.fetcher = new Fetcher(new IndexedFormula(), {}) // turn off link following
 
 describe('renderTableViewPane', () => {
   it('exists', () => {
@@ -53,7 +54,7 @@ describe('renderTableViewPane', () => {
     expect(renderTableViewPane(document, tableOptions).innerHTML).toMatch(/.*<table.*person.*name.*age.*hobby.*/)
   })
   it('calls onDone', async () => {
-    const onDone = jest.fn() // mock function
+    const onDone = vi.fn() // mock function
     renderTableViewPane(document, { query, onDone })
     await new Promise(resolve => setTimeout(resolve, 1000))
     expect(onDone).toHaveBeenCalled()

@@ -4,7 +4,7 @@
  */
 import { LiveStore, NamedNode } from 'rdflib'
 import { authn, authSession } from 'solid-logic'
-import { style } from '../style'
+import { style } from '../lib/style'
 import { getName, getPod, getPodOwner } from '../utils/headerFooterHelpers'
 
 const DEFAULT_SOLID_PROJECT_URL = 'https://solidproject.org'
@@ -28,21 +28,24 @@ export async function initFooter (store: LiveStore, options?: FooterOptions) {
   if (!footer) {
     return
   }
+
   const pod = getPod()
   const podOwner = await getPodOwner(pod, store)
-  rebuildFooter(footer, store, pod, podOwner, options)()
-  authSession.events.on('login', rebuildFooter(footer, store, pod, podOwner, options))
-  authSession.events.on('logout', rebuildFooter(footer, store, pod, podOwner, options))
+  rebuildFooter(footer, store, pod, podOwner, options)
+  authSession.events.on('login', () => rebuildFooter(footer, store, pod, podOwner, options))
+  authSession.events.on('logout', () => rebuildFooter(footer, store, pod, podOwner, options))
+
+  return footer
 }
 /**
  * @ignore exporting this only for the unit test
  */
-export function rebuildFooter (footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
-  return async () => {
-    const user = authn.currentUser()
-    footer.innerHTML = ''
-    footer.appendChild(await createControllerInfoBlock(store, user, pod, podOwner, options))
-  }
+export async function rebuildFooter (footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions) {
+  const user = authn.currentUser()
+  footer.innerHTML = ''
+  footer.appendChild(await createControllerInfoBlock(store, user, pod, podOwner, options))
+
+  return footer
 }
 /**
  * @ignore exporting this only for the unit test

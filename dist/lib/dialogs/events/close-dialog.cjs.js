@@ -1,0 +1,2 @@
+var e=`solid-ui:close-dialog`,t=class t extends Event{id;data;static eventName=e;constructor(e,n){super(t.eventName,{bubbles:!0,composed:!0}),this.id=e,this.data=n}};exports.CloseDialogEvent=t;
+//# sourceMappingURL=close-dialog.cjs.js.map

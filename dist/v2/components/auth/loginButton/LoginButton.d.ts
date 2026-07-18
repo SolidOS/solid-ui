@@ -32,7 +32,7 @@ export declare class LoginButton extends LitElement {
             state: boolean;
         };
     };
-    static styles: import("lit").CSSResult;
+    static styles: import('lit').CSSResult;
     label: string;
     theme: 'light' | 'dark';
     issuerUrl: string;
@@ -57,6 +57,6 @@ export declare class LoginButton extends LitElement {
     private _handleInputChange;
     private _handleInputKeydown;
     private _renderPopup;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import('lit-html').TemplateResult<1>;
 }
 //# sourceMappingURL=LoginButton.d.ts.map

@@ -9,7 +9,7 @@
  * @version IconicMultiSelect v0.7.0
  * @licence  MIT
  */
-import { style } from '../style_multiSelect'
+import { style } from '../lib/style_multiSelect'
 
 export class IconicMultiSelect {
   _data

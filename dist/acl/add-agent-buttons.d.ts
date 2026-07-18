@@ -1,7 +1,3 @@
-/**
- * Contains the [[AddAgentButtons]] class
- * @packageDocumentation
- */
 import { AccessGroups } from './access-groups';
 /**
  * Renders the Sharing pane's "+" button and the menus behind it,

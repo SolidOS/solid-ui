@@ -1,0 +1,2 @@
+var e=require("lit").css`:host{border-top:1px solid var(--solid-ui-color-slate-200);justify-content:space-between;align-items:center;gap:15px;padding:15px;display:flex}`;exports.default=e;
+//# sourceMappingURL=DialogFooter.styles.cjs.js.map

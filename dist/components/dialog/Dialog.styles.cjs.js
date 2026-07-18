@@ -1,0 +1,2 @@
+var e=require("lit").css`dialog{border-radius:5px;min-width:343px;margin:auto;box-shadow:0 4px 16px #00000059}dialog solid-ui-dialog-header solid-ui-button{color:var(--solid-ui-color-gray-600)}dialog:not([open]){display:none}`;exports.default=e;
+//# sourceMappingURL=Dialog.styles.cjs.js.map

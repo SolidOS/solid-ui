@@ -1,0 +1,1 @@
+{"version":3,"file":"values.esm.js","names":[],"sources":["../../src/lib/values.ts"],"sourcesContent":["export function isEmptyValue (value: unknown): boolean {\n  return value === null || value === undefined || value === ''\n}\n"],"mappings":";AAAA,SAAgB,EAAc,GAAyB;CACrD,OAAO,KAAU,QAA+B,MAAU;AAC5D"}

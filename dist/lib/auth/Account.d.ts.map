@@ -1,0 +1,1 @@
+{"version":3,"file":"Account.d.ts","sourceRoot":"","sources":["../../../src/lib/auth/Account.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC,OAAO,OAAO,OAAO;IAC1B,SAAgB,KAAK,EAAE,MAAM,CAAA;IAC7B,SAAgB,SAAS,CAAC,EAAE,MAAM,CAAA;gBAErB,KAAK,EAAE,MAAM,EAAE,SAAS,CAAC,EAAE,MAAM;CAI/C"}

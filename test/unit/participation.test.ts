@@ -1,6 +1,7 @@
+import { describe, expect, it, vi } from 'vitest'
 import * as widgets from '../../src/widgets'
 import { JSDOM } from 'jsdom'
-import * as participation from '../../src/pad'
+import * as participation from '../../src/lib/participation'
 
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
 const dom = window.document
@@ -50,7 +51,7 @@ describe('participationObject', () => {
   })
   it.skip('runs 2', () => {
     // TODO: check on arguments
-    const spy = jest.spyOn(widgets, 'newThing')
+    const spy = vi.spyOn(widgets, 'newThing')
     const subject = null
     const padDoc = document
     const me = 'https://sharonstrats.inrupt.net/profile/card#me'

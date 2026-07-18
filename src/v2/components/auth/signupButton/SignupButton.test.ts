@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { SignupButton } from './SignupButton'
 import './index'
 
@@ -7,7 +8,7 @@ describe('SolidUISignupButton', () => {
     Object.defineProperty(window, 'open', {
       configurable: true,
       writable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
   })
 

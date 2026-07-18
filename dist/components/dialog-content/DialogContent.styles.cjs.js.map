@@ -1,0 +1,1 @@
+{"version":3,"file":"DialogContent.styles.cjs.js","names":[],"sources":["../../../src/components/dialog-content/DialogContent.styles.css"],"sourcesContent":[":host {\n  display: flex;\n  flex-direction: column;\n  gap: 15px;\n  padding: 15px;\n}\n"],"mappings":""}

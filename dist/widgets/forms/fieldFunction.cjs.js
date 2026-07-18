@@ -1,0 +1,2 @@
+const e=require("../../lib/log.cjs.js"),t=require("../error.cjs.js");var n=require("solid-logic").solidLogicSingleton.store,r={};function i(e){let t=n,r=t.findTypeURIs(e),i=t.bottomTypeURIs(r),a=[];for(let e in i)a.push(e);return a[0]}function a(n,a){let o=i(a),s=r[o];return e.debug(`paneUtils: Going to implement field `+a+` of type `+o),s||function(e,n){let r=t.errorMessageBlock(e,`No handler for field `+a+` of type `+o);return n&&n.appendChild(r),r}}exports.field=r,exports.fieldFunction=a,exports.mostSpecificClassURI=i;
+//# sourceMappingURL=fieldFunction.cjs.js.map

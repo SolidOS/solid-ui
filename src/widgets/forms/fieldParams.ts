@@ -1,5 +1,5 @@
-import ns from '../../ns'
-import { style } from '../../style'
+import ns from '../../lib/ns'
+import { style } from '../../lib/style'
 
 export type FieldParamsObject = {
   size?: number, // input element size attribute

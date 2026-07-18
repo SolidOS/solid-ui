@@ -1,0 +1,2 @@
+var e={authEndpoint:``,fallbackAuthEndpoint:`https://databox.me/`,signupEndpoint:`https://solidproject.org/get_a_pod`,signupWindowHeight:600,signupWindowWidth:1024,key:``,cert:``};exports.default=e;
+//# sourceMappingURL=config-default.cjs.js.map

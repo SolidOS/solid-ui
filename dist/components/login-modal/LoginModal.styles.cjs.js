@@ -1,0 +1,2 @@
+var e=require("lit").css`.error-message{color:var(--solid-ui-color-error);font-size:var(--solid-ui-font-size-sm);text-align:center;width:100%;font-weight:500}solid-ui-combobox{width:100%}solid-ui-button{flex:1}`;exports.default=e;
+//# sourceMappingURL=LoginModal.styles.cjs.js.map

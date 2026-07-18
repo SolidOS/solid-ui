@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import {
   sentimentStrip,

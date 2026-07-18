@@ -1,5 +1,5 @@
 import { sym } from 'rdflib'
-import ns from '../../../src/ns'
+import ns from '../../../src/lib/ns'
 import { getFileContent } from '../helpers/getFileContent'
 import { resolve } from 'path'
 

@@ -8,11 +8,11 @@ export type FooterOptions = {
  * @param store the data store
  * @returns the footer
  */
-export declare function initFooter(store: LiveStore, options?: FooterOptions): Promise<void>;
+export declare function initFooter(store: LiveStore, options?: FooterOptions): Promise<HTMLElement | undefined>;
 /**
  * @ignore exporting this only for the unit test
  */
-export declare function rebuildFooter(footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): () => Promise<void>;
+export declare function rebuildFooter(footer: HTMLElement, store: LiveStore, pod: NamedNode | null, podOwner: NamedNode | null, options?: FooterOptions): Promise<HTMLElement>;
 /**
  * @ignore exporting this only for the unit test
  */

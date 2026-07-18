@@ -1,0 +1,2 @@
+const e=require("./PhotoCapture.cjs.js");var t=`solid-ui-photo-capture`;customElements.get(t)||customElements.define(t,e.PhotoCapture),exports.PhotoCapture=e.PhotoCapture;
+//# sourceMappingURL=index.cjs.js.map

@@ -1,0 +1,2 @@
+const e=require("../../lib/iconBase.cjs.js");function t(t,n,r){let i=t.createElement(`a`);i.setAttribute(`href`,n.uri),n.uri.startsWith(`http`)&&i.setAttribute(`target`,`_blank`);let a=i.appendChild(t.createElement(`img`));return a.setAttribute(`src`,r||e.originalIconBase+`go-to-this.png`),a.setAttribute(`style`,`margin: 0.3em;`),i}var n=(e,n,r)=>{let i=t(e,r);n.appendChild(i).classList.add(`HoverControlHide`),n.appendChild(e.createElement(`br`))};exports.createLinkForURI=n,exports.linkIcon=t;
+//# sourceMappingURL=iconLinks.cjs.js.map

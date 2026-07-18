@@ -1,7 +1,3 @@
-/**
- * Contains the [[AccessController]] class
- * @packageDocumentation
- */
 import { NamedNode } from 'rdflib';
 import { AccessGroups } from './access-groups';
 import { DataBrowserContext } from 'pane-registry';

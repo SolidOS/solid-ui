@@ -1,0 +1,1 @@
+{"version":3,"file":"StorybookAuth.d.ts","sourceRoot":"","sources":["../../../src/storybook/auth/StorybookAuth.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAE,WAAW,EAAE,MAAM,YAAY,CAAA;AAEjD,MAAM,CAAC,OAAO,OAAO,aAAc,YAAW,WAAW;IAChD,WAAW,UAAO;IAClB,OAAO,EAAE,OAAO,GAAG,IAAI,CAAO;IAE/B,KAAK,CAAE,QAAQ,CAAC,EAAE,MAAM;IAIxB,MAAM;IAIN,MAAM;IAIZ,gBAAgB;CAGjB"}

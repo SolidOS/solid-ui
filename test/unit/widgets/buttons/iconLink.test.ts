@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../../helpers/debugger'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { NamedNode } from 'rdflib'

@@ -1,0 +1,7 @@
+import { css as e } from "lit";
+//#region src/components/account/Account.styles.css
+var t = e`:host{--image-size:1.875rem;flex-direction:row;gap:10px;display:inline-flex}:host([data-state-initializing]) icon-svg-spinners-180-ring{width:var(--image-size);height:var(--image-size)}:host([data-state-loggedIn]){--padding:4px;--border-width:1px}:host([data-state-loggedIn]) button{background-color:var(--solid-ui-color-body-grey);padding:var(--padding);border-radius:calc((var(--image-size) + 2 * var(--padding) + 2 * var(--border-width)) / 2);color:var(--solid-ui-color-white);justify-content:center;align-items:center;gap:5px;display:inline-flex}:host([data-state-loggedIn]) button solid-ui-avatar{width:var(--image-size);height:var(--image-size);border:var(--border-width) solid var(--solid-ui-color-white);border-radius:50%}:host([data-state-loggedIn]) button icon-lucide-chevron-down{width:16px;height:16px}`;
+//#endregion
+export { t as default };
+
+//# sourceMappingURL=Account.styles.esm.js.map

@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Comment runs 1`] = `
+exports[`Comment > runs 1`] = `
 <div>
   <undefined>
     &lt;http://example.com/#bla&gt;
@@ -8,13 +8,13 @@ exports[`Comment runs 1`] = `
 </div>
 `;
 
-exports[`Form field runs 1`] = `
+exports[`Form field > runs 1`] = `
 <div
-  style="padding-left: 2em; border: 0.05em solid rgb(136, 136, 136); border-radius: 0.2em; display: flex; flex-direction: column;"
+  style="padding-left: 2em; border-radius: 0.2em; border: 0.05em solid rgb(136, 136, 136); display: flex; flex-direction: column;"
 />
 `;
 
-exports[`Heading runs 1`] = `
+exports[`Heading > runs 1`] = `
 <div>
   <undefined>
     &lt;http://example.com/#bla&gt;
@@ -22,9 +22,9 @@ exports[`Heading runs 1`] = `
 </div>
 `;
 
-exports[`Options field runs 1`] = `<div />`;
+exports[`Options field > runs 1`] = `<div />`;
 
-exports[`TristateField runs 1`] = `
+exports[`TristateField > runs 1`] = `
 <div
   style="display: flex; flex-direction: row;"
 >

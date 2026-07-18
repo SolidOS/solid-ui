@@ -1,0 +1,2 @@
+const e=require("../lib/style.cjs.js");var t=(e,t,n)=>{let r=e.createElement(`tr`);return r.appendChild(e.createElement(`td`)).appendChild(t),r.subject=n,r},n=(e,t)=>{e.addEventListener(`click`,t)},r=(t,n,r)=>{let i=n.appendChild(t.createElement(`div`));i.setAttribute(`style`,e.style.imageDivStyle),i.appendChild(r),r.setAttribute(`draggable`,`false`)};exports.addClickListenerToElement=n,exports.createImageDiv=r,exports.wrapDivInATR=t;
+//# sourceMappingURL=widgetHelpers.cjs.js.map

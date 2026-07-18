@@ -1,0 +1,1 @@
+{"version":3,"file":"ids.cjs.js","names":["generateId","Math","random","toString","substring"],"sources":["../../../src/lib/components/ids.ts"],"sourcesContent":["export function generateId () {\n  return Math.random().toString(36).substring(2, 15)\n}\n"],"mappings":"AAAA,SAAgBA,GAAc,CAC5B,OAAOC,KAAKC,OAAO,CAAC,CAACC,SAAS,EAAE,CAAC,CAACC,UAAU,EAAG,EAAE,CACnD"}

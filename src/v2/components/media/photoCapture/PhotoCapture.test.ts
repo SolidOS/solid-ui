@@ -1,10 +1,10 @@
-import { beforeEach, describe, expect, it, jest } from '@jest/globals'
+import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { PhotoCapture } from './PhotoCapture'
 import './index'
 
 describe('SolidUIPhotoCapture', () => {
-  const stopTrack = jest.fn()
-  const getUserMedia: any = jest.fn()
+  const stopTrack = vi.fn()
+  const getUserMedia: any = vi.fn()
 
   beforeEach(() => {
     document.body.innerHTML = ''
@@ -32,39 +32,39 @@ describe('SolidUIPhotoCapture', () => {
 
     Object.defineProperty(HTMLMediaElement.prototype, 'play', {
       configurable: true,
-      value: jest.fn(() => Promise.resolve(undefined))
+      value: vi.fn(() => Promise.resolve(undefined))
     })
 
     Object.defineProperty(HTMLDialogElement.prototype, 'showModal', {
       configurable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
 
     Object.defineProperty(HTMLDialogElement.prototype, 'close', {
       configurable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
 
     Object.defineProperty(HTMLCanvasElement.prototype, 'getContext', {
       configurable: true,
-      value: jest.fn(() => ({ drawImage: jest.fn() }))
+      value: vi.fn(() => ({ drawImage: vi.fn() }))
     })
 
     Object.defineProperty(HTMLCanvasElement.prototype, 'toBlob', {
       configurable: true,
-      value: jest.fn((callback: BlobCallback, type?: string) => {
+      value: vi.fn((callback: BlobCallback, type?: string) => {
         callback(new Blob(['photo'], { type: type || 'image/png' }))
       })
     })
 
     Object.defineProperty(URL, 'createObjectURL', {
       configurable: true,
-      value: jest.fn(() => 'blob:test-photo')
+      value: vi.fn(() => 'blob:test-photo')
     })
 
     Object.defineProperty(URL, 'revokeObjectURL', {
       configurable: true,
-      value: jest.fn()
+      value: vi.fn()
     })
   })
 
@@ -117,8 +117,8 @@ describe('SolidUIPhotoCapture', () => {
 
   it('dispatches a photo-captured event with the confirmed blob', async () => {
     const photoCapture = new PhotoCapture()
-    const captured = jest.fn()
-    const changed = jest.fn()
+    const captured = vi.fn()
+    const changed = vi.fn()
     photoCapture.open = true
 
     photoCapture.addEventListener('photo-captured', (event: Event) => {

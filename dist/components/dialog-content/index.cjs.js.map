@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["DialogContent"],"sources":["../../../src/components/dialog-content/index.ts"],"sourcesContent":["import DialogContent from './DialogContent'\n\nexport { DialogContent }\nexport default DialogContent\n"],"mappings":"yIAGA,IAAA,EAAeA,EAAAA"}

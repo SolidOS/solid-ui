@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["SolidEmblem"],"sources":["../../../src/components/solid-emblem/index.ts"],"sourcesContent":["import SolidEmblem from './SolidEmblem'\n\nexport { SolidEmblem }\nexport default SolidEmblem\n"],"mappings":"uIAGA,IAAA,EAAeA,EAAAA"}

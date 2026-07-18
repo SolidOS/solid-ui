@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":["DialogsRoot"],"sources":["../../../src/components/dialogs-root/index.ts"],"sourcesContent":["import DialogsRoot from './DialogsRoot'\n\nexport { DialogsRoot }\nexport default DialogsRoot\n"],"mappings":";;AAGA,IAAA,IAAeA"}

@@ -1,8 +1,3 @@
-/**
- * Contains the [[AccessGroups]]
- * and [[AccessGroupsOptions]] classes
- * @packageDocumentation
- */
 import { NamedNode, Store } from 'rdflib';
 import { AccessController } from './access-controller';
 import { AgentMapMap, ComboList } from './types';

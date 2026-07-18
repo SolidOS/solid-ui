@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["Guard"],"sources":["../../../src/components/guard/index.ts"],"sourcesContent":["import Guard from './Guard'\n\nexport { Guard }\nexport default Guard\n"],"mappings":"iIAGA,IAAA,EAAeA,EAAAA"}

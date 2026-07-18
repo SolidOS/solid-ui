@@ -42,10 +42,10 @@ import {
   UnauthorizedError,
   WebOperationError
 } from 'solid-logic'
-import * as debug from '../debug'
-import { style } from '../style'
-import { alert } from '../log'
-import ns from '../ns'
+import * as debug from '../lib/debug'
+import { style } from '../lib/style'
+import { alert } from '../lib/log'
+import ns from '../lib/ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
@@ -515,10 +515,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       // Login
       const locationUrl = new URL(window.location.href)
       locationUrl.hash = '' // remove hash part
-      await authSession.login({
-        redirectUrl: locationUrl.href,
-        oidcIssuer: issuerUri
-      })
+      await authSession.login(issuerUri, locationUrl.href)
     } catch (err) {
       alert(err.message)
     }
@@ -671,9 +668,9 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = solidLogicSingleton.store.sym(sessionInfo.webId)
+    const webId = authSession.webId
+    if (webId) {
+      me = solidLogicSingleton.store.sym(webId)
     } else {
       me = null
     }
@@ -717,6 +714,12 @@ authSession.events.on('logout', async () => {
         if (openidConfiguration && openidConfiguration.end_session_endpoint) {
           await fetch(openidConfiguration.end_session_endpoint, { credentials: 'include' })
         }
+      }
+
+      try {
+        await fetch('/.well-known/solid/logout', { credentials: 'include' })
+      } catch (_err) {
+        // Not all deployments expose NSS-compatible well-known logout endpoint.
       }
     } catch (_err) {
       // Do nothing

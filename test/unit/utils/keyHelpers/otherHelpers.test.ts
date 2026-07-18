@@ -1,8 +1,9 @@
+import { describe, expect, it, vi } from 'vitest'
 import { store } from 'solid-logic'
 import { getRootIfPreferencesExist } from '../../../../src/utils/keyHelpers/otherHelpers'
 import { NamedNode } from 'rdflib'
 
-store.any = jest.fn()
+store.any = vi.fn()
 
 describe('accessData', () => {
   const webId = new NamedNode('https://alice.solid.example.net/profile/card#me')

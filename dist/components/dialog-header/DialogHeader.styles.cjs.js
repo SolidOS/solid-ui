@@ -1,0 +1,2 @@
+var e=require("lit").css`:host{background:var(--solid-ui-color-slate-50);border-bottom:1px solid var(--solid-ui-color-slate-200);font-size:var(--solid-ui-font-size-lg);justify-content:space-between;align-items:center;gap:15px;padding:15px;font-weight:500;display:flex}`;exports.default=e;
+//# sourceMappingURL=DialogHeader.styles.cjs.js.map

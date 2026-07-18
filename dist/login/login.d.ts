@@ -1,27 +1,3 @@
-/**
- * Signing in, signing up, profile and preferences reloading
- * Type index management
- *
- * Many functions in this module take a context object which
- * holds various RDF symbols, add to it, and return a promise of it.
- *
- * * `me`                RDF symbol for the user's WebID
- * * `publicProfile`     The user's public profile, iff loaded
- * * `preferencesFile`   The user's personal preference file, iff loaded
- * * `index.public`      The user's public type index file
- * * `index.private`     The user's private type index file
- *
- * Not RDF symbols:
- * * `noun`            A string in english for the type of thing -- like "address book"
- * * `instance`        An array of nodes which are existing instances
- * * `containers`      An array of nodes of containers of instances
- * * `div`             A DOM element where UI can be displayed
- * * `statusArea`      A DOM element (opt) progress stuff can be displayed, or error messages
- * *
- * * Vocabulary:  "load" loads a file if it exists;
- * *  'Ensure" CREATES the file if it does not exist (if it can) and then loads it.
- * @packageDocumentation
- */
 import { PaneDefinition } from 'pane-registry';
 import { NamedNode } from 'rdflib';
 import { AppDetails, AuthenticationContext } from 'solid-logic';

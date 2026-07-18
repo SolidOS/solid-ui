@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":[],"sources":["../../src/create/index.ts"],"sourcesContent":["import {\n  newThingUI\n} from './create'\n\nexport const create = {\n  newThingUI\n}\n"],"mappings":";;AAIA,IAAa,IAAS,EACpB,cACF"}

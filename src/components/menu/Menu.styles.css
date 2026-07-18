@@ -1,0 +1,14 @@
+wa-dropdown::part(menu) {
+    min-width: 300px;
+    box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+    gap: 2px;
+}
+
+wa-dropdown-item {
+    border-radius: 5px;
+    padding: 0px;
+
+    &:hover {
+        background-color: var(--solid-ui-color-primary-hover);
+    }
+}

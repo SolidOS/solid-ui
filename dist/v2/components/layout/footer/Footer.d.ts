@@ -1,5 +1,5 @@
 import { LitElement } from 'lit';
-import type { LiveStore, NamedNode } from 'rdflib';
+import { LiveStore, NamedNode } from 'rdflib';
 export declare class Footer extends LitElement {
     static properties: {
         theme: {
@@ -38,7 +38,7 @@ export declare class Footer extends LitElement {
             state: boolean;
         };
     };
-    static styles: import("lit").CSSResult;
+    static styles: import('lit').CSSResult;
     theme: 'light' | 'dark';
     layout: 'desktop' | 'mobile';
     position: 'static' | 'absolute' | 'relative' | 'fixed' | 'sticky';
@@ -54,7 +54,7 @@ export declare class Footer extends LitElement {
     updated(changedProperties: Map<string, unknown>): void;
     private _updatePositionStyles;
     private _updateFooter;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import('lit-html').TemplateResult<1>;
     private _renderFooterContent;
 }
 //# sourceMappingURL=Footer.d.ts.map

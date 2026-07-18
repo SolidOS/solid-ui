@@ -1,9 +1,3 @@
-/**
- * Non-UI functions for access control.
- * See https://github.com/solidos/web-access-control-spec
- * for the spec that defines how ACL documents work.
- * @packageDocumentation
- */
 import { AgentMapMap, AgentMapUnion, ComboList } from './types';
 import { Store, NamedNode, LiveStore } from 'rdflib';
 /**

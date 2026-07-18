@@ -1,6 +1,7 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
-import { messageArea } from '../../src/messageArea'
+import { messageArea } from '../../src/lib/messageArea'
 import { graph, sym } from 'rdflib'
 
 silenceDebugMessages()

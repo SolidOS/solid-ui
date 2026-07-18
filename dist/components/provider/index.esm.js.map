@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":["Provider"],"sources":["../../../src/components/provider/index.ts"],"sourcesContent":["import Provider from './Provider'\n\nexport { Provider }\nexport default Provider\n"],"mappings":";;AAGA,IAAA,IAAeA"}

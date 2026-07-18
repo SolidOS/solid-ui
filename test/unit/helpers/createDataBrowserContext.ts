@@ -1,5 +1,6 @@
 import { DataBrowserContext } from 'pane-registry'
 import { LiveStore } from 'rdflib'
+import { vi } from 'vitest'
 
 export function createDataBrowserContext (
   dom: HTMLDocument,
@@ -7,14 +8,15 @@ export function createDataBrowserContext (
 ): DataBrowserContext {
   return {
     dom,
-    getOutliner: jest.fn(),
+    getOutliner: vi.fn(),
     session: {
+      logic: {} as any,
       paneRegistry: {
         list: [],
         paneForIcon: [],
         paneForPredicate: [],
-        register: jest.fn(),
-        byName: jest.fn()
+        register: vi.fn(),
+        byName: vi.fn()
       },
       store
     }

@@ -1,0 +1,1 @@
+{"version":3,"file":"values.cjs.js","names":[],"sources":["../../src/lib/values.ts"],"sourcesContent":["export function isEmptyValue (value: unknown): boolean {\n  return value === null || value === undefined || value === ''\n}\n"],"mappings":"AAAA,SAAgB,EAAc,EAAyB,CACrD,OAAO,GAAU,MAA+B,IAAU,EAC5D"}

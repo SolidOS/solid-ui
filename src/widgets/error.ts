@@ -12,8 +12,8 @@
  */
 
 import { cancelButton } from '../widgets'
-import { style } from '../style'
-import styleConstants from '../styleConstants'
+import { style } from '../lib/style'
+import styleConstants from '../lib/styleConstants'
 
 export function errorMessageBlock (dom: HTMLDocument, err: string | Error, backgroundColor?: string, err2?: Error): HTMLDivElement {
   const div = dom.createElement('div')

@@ -1,0 +1,1 @@
+{"version":3,"file":"DialogFooter.styles.cjs.js","names":[],"sources":["../../../src/components/dialog-footer/DialogFooter.styles.css"],"sourcesContent":[":host {\n  display: flex;\n  justify-content: space-between;\n  align-items: center;\n  padding: 15px;\n  gap: 15px;\n  border-top: 1px solid var(--solid-ui-color-slate-200);\n}\n"],"mappings":""}

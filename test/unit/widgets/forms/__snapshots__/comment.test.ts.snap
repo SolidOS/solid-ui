@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Comment deals with custom style 1`] = `
+exports[`Comment > deals with custom style 1`] = `
 <div>
   <p
     style="custom: true;"
@@ -10,7 +10,7 @@ exports[`Comment deals with custom style 1`] = `
 </div>
 `;
 
-exports[`Comment deals with missing container 1`] = `
+exports[`Comment > deals with missing container 1`] = `
 <div>
   <p
     style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"
@@ -20,7 +20,7 @@ exports[`Comment deals with missing container 1`] = `
 </div>
 `;
 
-exports[`Comment deals with missing content 1`] = `
+exports[`Comment > deals with missing content 1`] = `
 <div>
   <p
     style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"
@@ -30,7 +30,7 @@ exports[`Comment deals with missing content 1`] = `
 </div>
 `;
 
-exports[`Comment deals with missing field params in non-bottom field type 1`] = `
+exports[`Comment > deals with missing field params in non-bottom field type 1`] = `
 <div>
   <undefined>
     &lt;http://example.com/#bla&gt;
@@ -38,7 +38,7 @@ exports[`Comment deals with missing field params in non-bottom field type 1`] = 
 </div>
 `;
 
-exports[`Comment runs 1`] = `
+exports[`Comment > runs 1`] = `
 <div>
   <p
     style="padding: 0.7em;  border: none; font-size: 100%; white-space: pre-wrap;"

@@ -1,1 +1,5 @@
-export * from '../../v2/components/forms/combobox/index';
+import { default as Combobox } from './Combobox';
+export * from './Combobox';
+export { Combobox };
+export default Combobox;
+//# sourceMappingURL=index.d.ts.map

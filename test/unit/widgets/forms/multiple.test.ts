@@ -1,9 +1,11 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../../helpers/debugger'
 import { Collection, literal, namedNode } from 'rdflib'
-import ns from '../../../../src/ns'
+import ns from '../../../../src/lib/ns'
 import { store } from 'solid-logic'
 import { field } from '../../../../src/widgets/forms'
 import { clearStore } from '../../helpers/clearStore'
+import { restoreUpdaterEditable, stubUpdaterEditable } from '../../../stubs/updater'
 
 silenceDebugMessages()
 afterEach(clearStore)
@@ -31,7 +33,7 @@ function setupOrderedMultipleForm () {
   store.add(form, ns.rdf('type'), ns.ui('Multiple'), doc)
   store.add(form, ns.ui('property'), property, doc)
   // ui:ordered true as a proper xsd:boolean literal
-  store.add(form, ns.ui('ordered'), literal('true', undefined, xsdBoolean), doc)
+  store.add(form, ns.ui('ordered'), literal('true', xsdBoolean), doc)
   store.add(form, ns.ui('part'), subform, doc)
   // Subform: an empty Group (no parts)
   store.add(subform, ns.rdf('type'), ns.ui('Group'), doc)
@@ -42,7 +44,7 @@ function setupOrderedMultipleForm () {
 function renderMultipleField () {
   const container = document.createElement('div')
   const box = field[ns.ui('Multiple').uri](
-    document, container, {}, subject, form, doc, jest.fn()
+    document, container, {}, subject, form, doc, vi.fn()
   ) as HTMLElement
   // body is the first child div of box, and has the refresh method attached
   const body = box.firstChild as HTMLElement & { refresh?: () => void }
@@ -128,6 +130,9 @@ describe('Multiple ordered field', () => {
   })
 
   describe('end-to-end: add button creates a single list head', () => {
+    beforeEach(() => stubUpdaterEditable(uri => uri === docUri))
+    afterEach(() => restoreUpdaterEditable())
+
     it('clicking add produces exactly one Collection list-head triple in the store', async () => {
       setupOrderedMultipleForm()
 

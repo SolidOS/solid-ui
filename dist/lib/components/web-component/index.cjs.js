@@ -1,0 +1,1 @@
+const e=require("./WebComponent.cjs.js");exports.WebComponent=e.default;

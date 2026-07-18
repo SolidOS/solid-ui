@@ -1,0 +1,2 @@
+const e=require("../components/ids.cjs.js");require("../components/index.cjs.js");var t=class{id;element;config;constructor(t,n={}){this.id=e.generateId(),this.config=n,this.element=t}closed(e){this.config.onClose?.(e)}};exports.default=t;
+//# sourceMappingURL=Dialog.cjs.js.map

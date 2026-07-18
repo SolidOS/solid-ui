@@ -1,0 +1,11 @@
+//#region ~icons/lucide/x
+var e = class extends HTMLElement {
+	constructor() {
+		super(), this.attachShadow({ mode: "open" }).innerHTML = "<style>:host { display: inline-flex; }</style><svg viewBox=\"0 0 24 24\" width=\"100%\" height=\"100%\" ><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M18 6L6 18M6 6l12 12\"/></svg>";
+	}
+};
+customElements.get("icon-lucide-x") || customElements.define("icon-lucide-x", e);
+//#endregion
+export { e as default };
+
+//# sourceMappingURL=x.esm.js.map

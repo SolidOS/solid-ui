@@ -1,0 +1,1 @@
+const e=require("./DialogComponent.cjs.js");exports.DialogComponent=e.default;

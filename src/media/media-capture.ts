@@ -11,12 +11,12 @@
 // or access camera roll (etc) OR to access solid cloud storage of favorite photo albums.
 // (Especially latest taken ones)
 //
-import * as debug from '../debug'
+import * as debug from '../lib/debug'
 
 /** @module mediaCapture */
 
-import { icons } from '../iconBase'
-import { style } from '../style'
+import { icons } from '../lib/iconBase'
+import { style } from '../lib/style'
 import * as widgets from '../widgets'
 import { IndexedFormula, NamedNode } from 'rdflib'
 

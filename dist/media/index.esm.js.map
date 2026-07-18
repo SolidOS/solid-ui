@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":[],"sources":["../../src/media/index.ts"],"sourcesContent":["import {\n  cameraCaptureControl,\n  cameraButton\n} from './media-capture'\n\nexport const media = {\n  cameraCaptureControl,\n  cameraButton\n}\n"],"mappings":";;AAKA,IAAa,IAAQ;CACnB;CACA;AACF"}

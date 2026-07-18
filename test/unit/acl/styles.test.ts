@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
-import { style } from '../../../src/style'
+import { style } from '../../../src/lib/style'
 
 silenceDebugMessages()
 

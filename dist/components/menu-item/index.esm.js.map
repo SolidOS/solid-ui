@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":["MenuItem"],"sources":["../../../src/components/menu-item/index.ts"],"sourcesContent":["import MenuItem from './MenuItem'\n\nexport { MenuItem }\nexport default MenuItem\n"],"mappings":";;AAGA,IAAA,IAAeA"}

@@ -23,7 +23,7 @@ export declare class SignupButton extends LitElement {
             reflect: boolean;
         };
     };
-    static styles: import("lit").CSSResult;
+    static styles: import('lit').CSSResult;
     label: string;
     theme: 'light' | 'dark';
     signupUrl: string;
@@ -31,6 +31,6 @@ export declare class SignupButton extends LitElement {
     layout: 'desktop' | 'mobile';
     constructor();
     private _handleClick;
-    render(): import("lit-html").TemplateResult<1>;
+    render(): import('lit-html').TemplateResult<1>;
 }
 //# sourceMappingURL=SignupButton.d.ts.map

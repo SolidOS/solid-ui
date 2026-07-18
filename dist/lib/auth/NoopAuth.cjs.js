@@ -1,0 +1,2 @@
+var e=class{initialized=!1;account=null;async login(){throw Error(`Can't use auth, missing context provider`)}async signup(){throw Error(`Can't use auth, missing context provider`)}async logout(){throw Error(`Can't use auth, missing context provider`)}onSessionUpdated(){return()=>void 0}};exports.default=e;
+//# sourceMappingURL=NoopAuth.cjs.js.map

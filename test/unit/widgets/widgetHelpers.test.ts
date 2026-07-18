@@ -1,3 +1,4 @@
+import { beforeEach, describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { namedNode } from 'rdflib'
@@ -7,7 +8,7 @@ import {
   createImageDiv
 } from '../../../src/widgets/widgetHelpers'
 
-import { style } from '../../../src/style'
+import { style } from '../../../src/lib/style'
 
 silenceDebugMessages()
 let window: DOMWindow

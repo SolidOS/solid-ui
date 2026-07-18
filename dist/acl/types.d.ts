@@ -1,7 +1,3 @@
-/**
- * Contains types for src/acl/
- * @packageDocumentation
- */
 import { NamedNode } from 'rdflib';
 export type AgentMap = {
     [agentUri: string]: {

@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { DataBrowserContext } from 'pane-registry'
 import { sym, graph, namedNode } from 'rdflib'
@@ -26,16 +27,16 @@ describe('preventBrowserDropEvents', () => {
   let event
 
   beforeAll(() => {
-    jest.spyOn(dom, 'addEventListener')
+    vi.spyOn(dom, 'addEventListener')
     preventBrowserDropEvents(dom)
   })
   beforeEach(() => {
     event = {
-      stopPropagation: jest.fn(),
-      preventDefault: jest.fn()
+      stopPropagation: vi.fn(),
+      preventDefault: vi.fn()
     }
   })
-  afterAll(() => jest.restoreAllMocks())
+  afterAll(() => vi.restoreAllMocks())
 
   it('adds event handlers for drop', () => expect(dom.addEventListener).toHaveBeenCalledWith('drop', handleDrop, false))
   it('adds event handlers for dragenter', () => expect(dom.addEventListener).toHaveBeenCalledWith('dragenter', preventDrag, false))
@@ -43,7 +44,7 @@ describe('preventBrowserDropEvents', () => {
 
   it('prevents adding event listeners twice', () => {
     preventBrowserDropEvents(dom)
-    expect((dom.addEventListener as jest.Mock).mock.calls.length).toBe(3)
+    expect((dom.addEventListener as ReturnType<typeof vi.fn>).mock.calls.length).toBe(3)
   })
 
   describe('preventDrag', () => {
@@ -57,7 +58,7 @@ describe('preventBrowserDropEvents', () => {
     beforeEach(() => {
       setGlobalWindow(window as unknown as Window)
       event.dataTransfer = { files: [{}] }
-      window.confirm = jest.fn(() => false)
+      window.confirm = vi.fn(() => false)
       handleDrop(event)
     })
 
@@ -65,7 +66,7 @@ describe('preventBrowserDropEvents', () => {
 
     describe('confirm return true', () => {
       beforeEach(() => {
-        window.confirm = jest.fn(() => true)
+        window.confirm = vi.fn(() => true)
         handleDrop(event)
       })
 

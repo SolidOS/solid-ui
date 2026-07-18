@@ -1,0 +1,1 @@
+{"version":3,"file":"index.esm.js","names":["DialogFooter"],"sources":["../../../src/components/dialog-footer/index.ts"],"sourcesContent":["import DialogFooter from './DialogFooter'\n\nexport { DialogFooter }\nexport default DialogFooter\n"],"mappings":";;AAGA,IAAA,IAAeA"}
