@@ -1,46 +1,18 @@
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, FormControlComponent } from '@/lib/components'
 import { html } from 'lit'
 import { property, query } from 'lit/decorators.js'
-import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 
 import styles from './Input.styles.css'
 
 @customElement('solid-ui-input')
-export default class Input extends WebComponent {
+export default class Input extends FormControlComponent {
   static styles = styles
-  static formAssociated = true
-
-  @property({ type: String, reflect: true })
-  accessor label = '';
-
-  @property({ type: String, reflect: true })
-  accessor name = '';
-
-  @property({ type: String })
-  accessor value = '';
 
   @property({ type: String, reflect: true })
   accessor type = 'text';
 
-  @property({ type: String, reflect: true })
-  accessor placeholder = '';
-
-  @property({ type: Boolean, reflect: true })
-  accessor required = false;
-
   @query('input')
-  private accessor inputElement: HTMLInputElement | null = null;
-
-  private controlTrait: FormControlTrait
-
-  constructor () {
-    super()
-
-    this.controlTrait = this.addTrait(new FormControlTrait(this, {
-      getControlElement: () => this.inputElement,
-      getInternals: () => this.getInternals(),
-    }))
-  }
+  protected accessor controlElement: HTMLInputElement | null = null;
 
   protected render () {
     return html`

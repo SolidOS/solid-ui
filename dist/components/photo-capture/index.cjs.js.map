@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["PhotoCapture"],"sources":["../../../src/components/photo-capture/index.ts"],"sourcesContent":["import PhotoCapture from './PhotoCapture'\n\nexport * from './PhotoCapture'\nexport { PhotoCapture }\nexport default PhotoCapture\n"],"mappings":"wIAIA,IAAA,EAAeA,EAAAA"}

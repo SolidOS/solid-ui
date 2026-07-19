@@ -1,0 +1,2 @@
+Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:`Module`}});const e=require("./PhotoCaptureModal.cjs.js");var t=e.default;Object.defineProperty(exports,"PhotoCaptureModal",{enumerable:!0,get:function(){return e.default}}),exports.default=t;
+//# sourceMappingURL=index.cjs.js.map

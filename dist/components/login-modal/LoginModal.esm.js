@@ -272,7 +272,7 @@ new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
     `;
 	}
 	onIssuerInputChange(e) {
-		this.issuerInputValue = e.target.value;
+		this.issuerInputValue = String(e.target.value);
 	}
 	async onSubmit(e) {
 		if (e.preventDefault(), this.failed = !1, this.issuerInputValue) {

@@ -1,37 +1,36 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
-import t from "../../lib/components/web-component/WebComponent.esm.js";
-import n from "../../lib/components/traits/FormControlTrait.esm.js";
+import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import r from "./Input.styles.esm.js";
-import { html as i } from "lit";
-import { property as a, query as o } from "lit/decorators.js";
+import n from "./Input.styles.esm.js";
+import { html as r } from "lit";
+import { property as i, query as a } from "lit/decorators.js";
 //#region src/components/input/Input.ts
-var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P;
-function F(e, t, n) {
-	I(e, t), t.set(e, n);
+var o, s, c, l, u, d, f, p, m, h, g, _, v;
+function y(e, t, n) {
+	b(e, t), t.set(e, n);
 }
-function I(e, t) {
+function b(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function L(e, t, n) {
-	return e.set(z(e, t), n), n;
+function x(e, t, n) {
+	return e.set(C(e, t), n), n;
 }
-function R(e, t) {
-	return e.get(z(e, t));
+function S(e, t) {
+	return e.get(C(e, t));
 }
-function z(e, t, n) {
+function C(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function B(e, t, n) {
-	return (t = H(t)) in e ? Object.defineProperty(e, t, {
+function w(e, t, n) {
+	return (t = E(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function V(e, t, n, r, i, a) {
+function T(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -54,16 +53,16 @@ function V(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: W(function() {
+				get: O(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || W(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || O(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
-			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
+			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, k = {
 				kind: [
 					"field",
 					"accessor",
@@ -80,23 +79,23 @@ function V(e, t, n, r, i, a) {
 				}.bind(null, D)
 			};
 			try {
-				if (y) (g = c(T.call(E, C, O), "class decorators", "return")) && (C = g);
+				if (y) (g = c(T.call(E, C, k), "class decorators", "return")) && (C = g);
 				else {
-					var k, A;
-					O.static = u, O.private = d, d ? i === 2 ? k = function(e) {
+					var A, j;
+					k.static = u, k.private = d, d ? i === 2 ? A = function(e) {
 						return h(e), b.value;
-					} : (i < 4 && (k = o(b, "get", h)), i !== 3 && (A = o(b, "set", h))) : (k = function(e) {
+					} : (i < 4 && (A = o(b, "get", h)), i !== 3 && (j = o(b, "set", h))) : (A = function(e) {
 						return e[r];
-					}, (i < 2 || i === 4) && (A = function(e, t) {
+					}, (i < 2 || i === 4) && (j = function(e, t) {
 						e[r] = t;
 					}));
-					var j = O.access = { has: d ? m.bind() : function(e) {
+					var M = k.access = { has: d ? m.bind() : function(e) {
 						return r in e;
 					} };
-					if (k && (j.get = k), A && (j.set = A), C = T.call(E, p ? {
+					if (A && (M.get = A), j && (M.set = j), C = T.call(E, p ? {
 						get: b.get,
 						set: b.set
-					} : b[S], O), p) {
+					} : b[S], k), p) {
 						if (typeof C == "object" && C) (g = c(C.get, "accessor.get")) && (b.get = g), (g = c(C.set, "accessor.set")) && (b.set = g), (g = c(C.init, "accessor.init")) && x.push(g);
 						else if (C !== void 0) throw TypeError("accessor decorators must return an object with get, set, or init properties or void 0");
 					} else c(C, (f ? "field" : "method") + " decorators", "return") && (f ? x.push(C) : b[S] = C);
@@ -120,7 +119,7 @@ function V(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return G(t) === e;
+			return k(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -134,7 +133,7 @@ function V(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : H(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : E(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -147,11 +146,11 @@ function V(e, t, n, r, i, a) {
 		}
 	};
 }
-function H(e) {
-	var t = U(e, "string");
+function E(e) {
+	var t = D(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function U(e, t) {
+function D(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n = e[Symbol.toPrimitive];
 	if (n !== void 0) {
@@ -161,7 +160,7 @@ function U(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function W(e, t, n) {
+function O(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -171,81 +170,36 @@ function W(e, t, n) {
 	} catch {}
 	return e;
 }
-function G(e) {
+function k(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function K(e) {
+function A(e) {
 	return e;
 }
-v = [e("solid-ui-input")];
-var q;
-new (N = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), P = (y = a({
+f = [e("solid-ui-input")];
+var j;
+new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = (p = i({
 	type: String,
 	reflect: !0
-}), x = a({
-	type: String,
-	reflect: !0
-}), C = a({ type: String }), T = a({
-	type: String,
-	reflect: !0
-}), D = a({
-	type: String,
-	reflect: !0
-}), k = a({
-	type: Boolean,
-	reflect: !0
-}), j = o("input"), "label"), c = class extends t {
-	get [P]() {
-		return R(l, this);
+}), h = a("input"), "type"), s = class extends t {
+	constructor(...e) {
+		super(...e), y(this, c, (u(this), m(this, "text"))), y(this, l, g(this, null));
 	}
-	set label(e) {
-		L(l, this, e);
-	}
-	get name() {
-		return R(u, this);
-	}
-	set name(e) {
-		L(u, this, e);
-	}
-	get value() {
-		return R(d, this);
-	}
-	set value(e) {
-		L(d, this, e);
-	}
-	get type() {
-		return R(f, this);
+	get [v]() {
+		return S(c, this);
 	}
 	set type(e) {
-		L(f, this, e);
+		x(c, this, e);
 	}
-	get placeholder() {
-		return R(p, this);
+	get controlElement() {
+		return S(l, this);
 	}
-	set placeholder(e) {
-		L(p, this, e);
-	}
-	get required() {
-		return R(m, this);
-	}
-	set required(e) {
-		L(m, this, e);
-	}
-	get inputElement() {
-		return R(h, this);
-	}
-	set inputElement(e) {
-		L(h, this, e);
-	}
-	constructor() {
-		super(), F(this, l, (g(this), b(this, ""))), F(this, u, S(this, "")), F(this, d, w(this, "")), F(this, f, E(this, "text")), F(this, p, O(this, "")), F(this, m, A(this, !1)), F(this, h, M(this, null)), B(this, "controlTrait", void 0), this.controlTrait = this.addTrait(new n(this, {
-			getControlElement: () => this.inputElement,
-			getInternals: () => this.getInternals()
-		}));
+	set controlElement(e) {
+		x(l, this, e);
 	}
 	render() {
-		return i`
+		return r`
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
@@ -265,48 +219,20 @@ new (N = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 	onKeyDown(e) {
 		e.key === "Enter" && (e.preventDefault(), this.controlTrait.onSubmit());
 	}
-}, {e: [b, S, w, E, O, A, M, g], c: [q, _]} = V(c, [
-	[
-		y,
-		1,
-		"label"
-	],
-	[
-		x,
-		1,
-		"name"
-	],
-	[
-		C,
-		1,
-		"value"
-	],
-	[
-		T,
-		1,
-		"type"
-	],
-	[
-		D,
-		1,
-		"placeholder"
-	],
-	[
-		k,
-		1,
-		"required"
-	],
-	[
-		j,
-		1,
-		"inputElement"
-	]
-], v, 0, void 0, t), c), s = class extends K {
+}, {e: [m, g, u], c: [j, d]} = T(s, [[
+	p,
+	1,
+	"type"
+], [
+	h,
+	1,
+	"controlElement"
+]], f, 0, void 0, t), s), o = class extends A {
 	constructor() {
-		super(q), B(this, "styles", r), B(this, "formAssociated", !0), _();
+		super(j), w(this, "styles", n), d();
 	}
-}, B(s, N, void 0), s)();
+}, w(o, _, void 0), o)();
 //#endregion
-export { q as default };
+export { j as default };
 
 //# sourceMappingURL=Input.esm.js.map

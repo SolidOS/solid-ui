@@ -1,8 +1,7 @@
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, FormControlComponent } from '@/lib/components'
 import { html, nothing } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { isEmptyValue } from '@/lib/values'
-import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 import type SelectOption from '@/components/select-option/SelectOption'
 
 import '~icons/lucide/chevron-down'
@@ -17,21 +16,8 @@ export type SelectOptionData = {
 export type SelectChangeEvent = CustomEvent<{ option: SelectOptionData }>
 
 @customElement('solid-ui-select')
-export default class Select extends WebComponent {
+export default class Select extends FormControlComponent {
   static styles = styles
-  static formAssociated = true
-
-  @property({ type: String, reflect: true })
-  accessor label = '';
-
-  @property({ type: String, reflect: true })
-  accessor name = '';
-
-  @property({ type: String })
-  accessor value = '';
-
-  @property({ type: Boolean, reflect: true })
-  accessor required = false;
 
   @property({ type: Array })
   set options (value: SelectOptionData[] | null) {
@@ -54,21 +40,10 @@ export default class Select extends WebComponent {
   }
 
   @query('select')
-  accessor inputElement: HTMLSelectElement | null = null;
+  protected accessor controlElement: HTMLSelectElement | null = null;
 
   @state()
   private accessor _options: SelectOptionData[] | null = null
-
-  private controlTrait: FormControlTrait
-
-  constructor () {
-    super()
-
-    this.controlTrait = this.addTrait(new FormControlTrait(this, {
-      getControlElement: () => this.inputElement,
-      getInternals: () => this.getInternals(),
-    }))
-  }
 
   protected render () {
     const defaultOption = this.options.some(option => isEmptyValue(option.value))
@@ -102,7 +77,7 @@ export default class Select extends WebComponent {
   }
 
   private onChange () {
-    const value = this.inputElement?.value
+    const value = this.controlElement?.value ?? null
     const option = this.options.find((option) => option.value === value)
 
     this.controlTrait.setValue(value)

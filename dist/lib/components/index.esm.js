@@ -6,5 +6,7 @@ import "./web-component/index.esm.js";
 import i from "./dialog-component/DialogComponent.esm.js";
 import "./dialog-component/index.esm.js";
 import a from "./traits/FormControlTrait.esm.js";
+import o from "./form-control-component/FormControlComponent.esm.js";
+import "./form-control-component/index.esm.js";
 import "./traits/index.esm.js";
-export { i as DialogComponent, n as DialogTrait, a as FormControlTrait, r as WebComponent, t as customElement, e as generateId };
+export { i as DialogComponent, n as DialogTrait, o as FormControlComponent, a as FormControlTrait, r as WebComponent, t as customElement, e as generateId };

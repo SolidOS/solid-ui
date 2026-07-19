@@ -1,0 +1,42 @@
+import { DialogComponent } from '../../lib/components';
+import { PropertyValues } from 'lit';
+export default class PhotoCaptureModal extends DialogComponent<File> {
+    static styles: import('lit').CSSResult;
+    accessor name: string;
+    accessor heading: string;
+    accessor captureLabel: string;
+    accessor confirmLabel: string;
+    accessor retakeLabel: string;
+    accessor cancelLabel: string;
+    accessor fileNamePrefix: string;
+    accessor mediaConstraints: MediaStreamConstraints | undefined;
+    accessor constraints: string;
+    accessor captureFormat: string;
+    accessor captureQuality: number | undefined;
+    accessor showCancelButton: boolean;
+    accessor facingMode: string;
+    accessor errorMessage: string;
+    accessor previewUrl: string;
+    accessor startingPreview: boolean;
+    accessor value: File | null;
+    private stream;
+    disconnectedCallback(): void;
+    protected willUpdate(changed: PropertyValues<this>): void;
+    protected updated(changed: PropertyValues<this>): void;
+    protected render(): import('lit-html').TemplateResult<1>;
+    private renderViewport;
+    private renderStatus;
+    private onRetake;
+    private onConfirm;
+    private onCapture;
+    private createFileFromBlob;
+    private fileExtensionForMimeType;
+    private queuePreviewStart;
+    private stopStream;
+    private syncPreviewFromValue;
+    private clearValue;
+    private revokePreviewUrl;
+    private startPreview;
+    private resolveMediaConstraints;
+}
+//# sourceMappingURL=PhotoCaptureModal.d.ts.map

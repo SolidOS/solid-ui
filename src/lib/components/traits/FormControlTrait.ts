@@ -5,11 +5,14 @@ import { generateId } from '@/lib/components'
 
 import type { WebComponentTrait } from './WebComponentTrait'
 
+export type FormControlValue = string | File | FormData | null
+
 export type FormControlTraitTarget = WebComponent & {
   name: string;
   label: string;
   required: boolean;
-  value: unknown;
+  disabled: boolean;
+  value: FormControlValue;
 }
 
 export interface FormControlTraitConfig {
@@ -31,7 +34,7 @@ export default class FormControlTrait implements WebComponentTrait {
   }
 
   firstUpdated () {
-    this.config.getInternals().setFormValue(String(this.target.value ?? ''))
+    this.config.getInternals().setFormValue(this.target.value ?? '')
     this.updateValidity()
   }
 
@@ -54,17 +57,17 @@ export default class FormControlTrait implements WebComponentTrait {
   }
 
   onInput () {
-    this.setValue(this.config.getControlElement()?.value)
+    this.setValue(this.config.getControlElement()?.value ?? null)
   }
 
   onSubmit () {
     this.config.getInternals().form?.requestSubmit()
   }
 
-  setValue (value: unknown) {
+  setValue (value: FormControlValue) {
     this.target.value = value
 
-    this.config.getInternals().setFormValue(String(this.target.value ?? ''))
+    this.config.getInternals().setFormValue(this.target.value ?? '')
     this.target.dispatchEvent(new InputEvent('input', { bubbles: true, composed: true }))
   }
 

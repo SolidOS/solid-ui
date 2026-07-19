@@ -1,9 +1,8 @@
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, FormControlComponent, FormControlValue } from '@/lib/components'
 import { Task } from '@lit/task'
 import { html, nothing, TemplateResult, type PropertyValues } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { debounce } from '@/lib/timing'
-import FormControlTrait from '@/lib/components/traits/FormControlTrait'
 import type ComboboxOption from '@/components/combobox-option/ComboboxOption'
 
 import '~icons/lucide/chevron-down'
@@ -15,7 +14,7 @@ import styles from './Combobox.styles.css'
 class AsyncOptionsInfo extends Error {}
 
 export type ComboboxOptionData = {
-  value: unknown;
+  value: FormControlValue;
   label: string;
   template?: TemplateResult;
   selectable?: boolean;
@@ -30,24 +29,8 @@ export function defineAsyncComboboxOptionsProvider<T extends AsyncComboboxOption
 }
 
 @customElement('solid-ui-combobox')
-export default class Combobox extends WebComponent {
+export default class Combobox extends FormControlComponent {
   static styles = styles
-  static formAssociated = true
-
-  @property({ type: String, reflect: true })
-  accessor label = ''
-
-  @property({ type: String, reflect: true })
-  accessor name = ''
-
-  @property()
-  accessor value = ''
-
-  @property({ type: String, reflect: true })
-  accessor placeholder = ''
-
-  @property({ type: Boolean, reflect: true })
-  accessor required = false
 
   @property({ type: Boolean, reflect: true, attribute: 'select-only' })
   accessor selectOnly = false
@@ -71,7 +54,7 @@ export default class Combobox extends WebComponent {
   accessor optionsFallback: ComboboxOptionData[] | null = null
 
   @query('input')
-  private accessor inputElement: HTMLInputElement | null = null
+  protected accessor controlElement: HTMLInputElement | null = null
 
   @state()
   private accessor filter = ''
@@ -85,7 +68,6 @@ export default class Combobox extends WebComponent {
   @state()
   private accessor activeIndex = -1
 
-  private controlTrait: FormControlTrait
   private openListenersAttached = false
   private updateDebouncedFilter = debounce(300, (value) => (this.filter = value))
   private asyncOptionsTask?: Task<readonly [string], ComboboxOptionData[]>
@@ -94,13 +76,6 @@ export default class Combobox extends WebComponent {
 
   constructor () {
     super()
-
-    this.controlTrait = this.addTrait(
-      new FormControlTrait(this, {
-        getControlElement: () => this.inputElement,
-        getInternals: () => this.getInternals(),
-      })
-    )
 
     this.listboxId = `listbox-${this.controlTrait.controlId}`
   }
@@ -180,7 +155,7 @@ export default class Combobox extends WebComponent {
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
-            @input=${() => this.selectOnly ? this.updateDisplayValue(this.inputElement?.value ?? '') : this.controlTrait.onInput()}
+            @input=${() => this.selectOnly ? this.updateDisplayValue(this.controlElement?.value ?? '') : this.controlTrait.onInput()}
           />
           <icon-lucide-chevron-down></icon-lucide-chevron-down>
         </div>
@@ -288,7 +263,7 @@ export default class Combobox extends WebComponent {
   }
 
   private updateDisplayValue (value: unknown) {
-    this.displayValue = String(value)
+    this.displayValue = value ? String(value) : ''
 
     if (this.open) {
       const filter = this.displayValue.toLowerCase()
@@ -386,7 +361,7 @@ export default class Combobox extends WebComponent {
 
     this.hide()
     this.controlTrait.setValue(option.value)
-    this.inputElement?.focus({ preventScroll: true })
+    this.controlElement?.focus({ preventScroll: true })
     this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true, detail: { option } }))
 
     if (previousValue === this.value) {
@@ -455,12 +430,12 @@ export default class Combobox extends WebComponent {
   }
 
   private onAnchorMouseDown (event: MouseEvent) {
-    if (event.target === this.inputElement) {
+    if (event.target === this.controlElement) {
       return
     }
 
     event.preventDefault()
-    this.inputElement?.focus({ preventScroll: true })
+    this.controlElement?.focus({ preventScroll: true })
   }
 
   private onInputFocus () {
@@ -511,7 +486,7 @@ export default class Combobox extends WebComponent {
           event.preventDefault()
           event.stopPropagation()
           this.hide()
-          this.inputElement?.focus({ preventScroll: true })
+          this.controlElement?.focus({ preventScroll: true })
         }
         break
       case 'Tab':

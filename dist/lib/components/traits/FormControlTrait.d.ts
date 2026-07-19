@@ -1,11 +1,13 @@
 import { WebComponent } from '..';
 import { nothing } from 'lit';
 import { WebComponentTrait } from './WebComponentTrait';
+export type FormControlValue = string | File | FormData | null;
 export type FormControlTraitTarget = WebComponent & {
     name: string;
     label: string;
     required: boolean;
-    value: unknown;
+    disabled: boolean;
+    value: FormControlValue;
 };
 export interface FormControlTraitConfig {
     getControlElement(): HTMLInputElement | HTMLSelectElement | null;
@@ -23,7 +25,7 @@ export default class FormControlTrait implements WebComponentTrait {
     renderLabel(): import('lit-html').TemplateResult<1> | typeof nothing;
     onInput(): void;
     onSubmit(): void;
-    setValue(value: unknown): void;
+    setValue(value: FormControlValue): void;
     private updateValidity;
 }
 //# sourceMappingURL=FormControlTrait.d.ts.map

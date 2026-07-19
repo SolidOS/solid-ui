@@ -29,7 +29,7 @@ var o = class {
 		r(this, "controlId", void 0), r(this, "labelId", void 0), r(this, "target", void 0), r(this, "config", void 0), this.config = n, this.controlId = `control-${e()}`, this.labelId = `label-${this.controlId}`, this.target = t;
 	}
 	firstUpdated() {
-		this.config.getInternals().setFormValue(String(this.target.value ?? "")), this.updateValidity();
+		this.config.getInternals().setFormValue(this.target.value ?? ""), this.updateValidity();
 	}
 	updated(e) {
 		(e.has("value") || e.has("required")) && this.updateValidity();
@@ -41,13 +41,13 @@ var o = class {
 		return this.target.label ? t`<label id="${this.labelId}" for="${this.controlId}">${this.target.label}</label>` : n;
 	}
 	onInput() {
-		this.setValue(this.config.getControlElement()?.value);
+		this.setValue(this.config.getControlElement()?.value ?? null);
 	}
 	onSubmit() {
 		this.config.getInternals().form?.requestSubmit();
 	}
 	setValue(e) {
-		this.target.value = e, this.config.getInternals().setFormValue(String(this.target.value ?? "")), this.target.dispatchEvent(new InputEvent("input", {
+		this.target.value = e, this.config.getInternals().setFormValue(this.target.value ?? ""), this.target.dispatchEvent(new InputEvent("input", {
 			bubbles: !0,
 			composed: !0
 		}));

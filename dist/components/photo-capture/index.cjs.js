@@ -1,1 +1,2 @@
-Object.defineProperty(exports,Symbol.toStringTag,{value:`Module`});const e=require("../../v2/components/media/photoCapture/PhotoCapture.cjs.js");require("../../v2/components/media/photoCapture/index.cjs.js"),exports.PhotoCapture=e.PhotoCapture;
+Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:`Module`}});const e=require("./PhotoCapture.cjs.js");var t=e.default;Object.defineProperty(exports,"PhotoCapture",{enumerable:!0,get:function(){return e.default}}),exports.default=t;
+//# sourceMappingURL=index.cjs.js.map

@@ -1,7 +1,7 @@
-import { WebComponent } from '../../lib/components';
+import { FormControlComponent, FormControlValue } from '../../lib/components';
 import { TemplateResult, PropertyValues } from 'lit';
 export type ComboboxOptionData = {
-    value: unknown;
+    value: FormControlValue;
     label: string;
     template?: TemplateResult;
     selectable?: boolean;
@@ -11,14 +11,8 @@ export type ComboboxChangeEvent = CustomEvent<{
 }>;
 export type AsyncComboboxOptionsProvider = (query: string) => Promise<ComboboxOptionData[]>;
 export declare function defineAsyncComboboxOptionsProvider<T extends AsyncComboboxOptionsProvider>(provider: T): T;
-export default class Combobox extends WebComponent {
+export default class Combobox extends FormControlComponent {
     static styles: import('lit').CSSResult;
-    static formAssociated: boolean;
-    accessor label: string;
-    accessor name: string;
-    accessor value: string;
-    accessor placeholder: string;
-    accessor required: boolean;
     accessor selectOnly: boolean;
     accessor asyncOptionsUrl: string;
     accessor asyncOptionsResultsField: string;
@@ -26,12 +20,11 @@ export default class Combobox extends WebComponent {
     accessor asyncOptionsValueField: string;
     accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null;
     accessor optionsFallback: ComboboxOptionData[] | null;
-    private accessor inputElement;
+    protected accessor controlElement: HTMLInputElement | null;
     private accessor filter;
     private accessor displayValue;
     private accessor open;
     private accessor activeIndex;
-    private controlTrait;
     private openListenersAttached;
     private updateDebouncedFilter;
     private asyncOptionsTask?;

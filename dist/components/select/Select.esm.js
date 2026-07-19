@@ -1,39 +1,38 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
-import t from "../../lib/components/web-component/WebComponent.esm.js";
-import n from "../../lib/components/traits/FormControlTrait.esm.js";
+import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import "../../_virtual/~icons/lucide/chevron-down.esm.js";
-import { isEmptyValue as r } from "../../lib/values.esm.js";
-import i from "./Select.styles.esm.js";
-import { html as a, nothing as o } from "lit";
-import { property as s, query as c, state as l } from "lit/decorators.js";
+import { isEmptyValue as n } from "../../lib/values.esm.js";
+import r from "./Select.styles.esm.js";
+import { html as i, nothing as a } from "lit";
+import { property as o, query as s, state as c } from "lit/decorators.js";
 //#region src/components/select/Select.ts
-var u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F;
-function I(e, t, n) {
-	L(e, t), t.set(e, n);
+var l, u, d, f, p, m, h, g, _, v, y, b, x, S;
+function C(e, t, n) {
+	w(e, t), t.set(e, n);
 }
-function L(e, t) {
+function w(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function R(e, t, n) {
-	return e.set(B(e, t), n), n;
+function T(e, t, n) {
+	return e.set(D(e, t), n), n;
 }
-function z(e, t) {
-	return e.get(B(e, t));
+function E(e, t) {
+	return e.get(D(e, t));
 }
-function B(e, t, n) {
+function D(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function V(e, t, n) {
-	return (t = U(t)) in e ? Object.defineProperty(e, t, {
+function O(e, t, n) {
+	return (t = A(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function H(e, t, n, r, i, a) {
+function k(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -56,13 +55,13 @@ function H(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: G(function() {
+				get: M(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || G(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || M(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -122,7 +121,7 @@ function H(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return K(t) === e;
+			return N(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -136,7 +135,7 @@ function H(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : U(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : A(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -149,11 +148,11 @@ function H(e, t, n, r, i, a) {
 		}
 	};
 }
-function U(e) {
-	var t = W(e, "string");
+function A(e) {
+	var t = j(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function W(e, t) {
+function j(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n = e[Symbol.toPrimitive];
 	if (n !== void 0) {
@@ -163,7 +162,7 @@ function W(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function G(e, t, n) {
+function M(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -173,50 +172,20 @@ function G(e, t, n) {
 	} catch {}
 	return e;
 }
-function K(e) {
+function N(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function q(e) {
+function P(e) {
 	return e;
 }
-b = [e("solid-ui-select")];
-var J;
-new (P = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), F = (x = s({
-	type: String,
-	reflect: !0
-}), C = s({
-	type: String,
-	reflect: !0
-}), T = s({ type: String }), D = s({
-	type: Boolean,
-	reflect: !0
-}), k = s({ type: Array }), A = c("select"), M = l(), "label"), d = class extends t {
-	get [F]() {
-		return z(f, this);
+h = [e("solid-ui-select")];
+var F;
+new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = (g = o({ type: Array }), _ = s("select"), y = c(), "options"), u = class extends t {
+	constructor(...e) {
+		super(...e), C(this, d, (p(this), v(this, null))), C(this, f, b(this, null));
 	}
-	set label(e) {
-		R(f, this, e);
-	}
-	get name() {
-		return z(p, this);
-	}
-	set name(e) {
-		R(p, this, e);
-	}
-	get value() {
-		return z(m, this);
-	}
-	set value(e) {
-		R(m, this, e);
-	}
-	get required() {
-		return z(h, this);
-	}
-	set required(e) {
-		R(h, this, e);
-	}
-	set options(e) {
+	set [S](e) {
 		this._options = e;
 	}
 	get options() {
@@ -227,27 +196,21 @@ new (P = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
 			label: e.textContent
 		}));
 	}
-	get inputElement() {
-		return z(g, this);
+	get controlElement() {
+		return E(d, this);
 	}
-	set inputElement(e) {
-		R(g, this, e);
+	set controlElement(e) {
+		T(d, this, e);
 	}
 	get _options() {
-		return z(_, this);
+		return E(f, this);
 	}
 	set _options(e) {
-		R(_, this, e);
-	}
-	constructor() {
-		super(), I(this, f, (v(this), S(this, ""))), I(this, p, w(this, "")), I(this, m, E(this, "")), I(this, h, O(this, !1)), I(this, g, j(this, null)), I(this, _, N(this, null)), V(this, "controlTrait", void 0), this.controlTrait = this.addTrait(new n(this, {
-			getControlElement: () => this.inputElement,
-			getInternals: () => this.getInternals()
-		}));
+		T(f, this, e);
 	}
 	render() {
-		let e = this.options.some((e) => r(e.value)) ? o : a`<option disabled value="" ?selected=${!this.value}>Select an option</option>`;
-		return a`
+		let e = this.options.some((e) => n(e.value)) ? a : i`<option disabled value="" ?selected=${!this.value}>Select an option</option>`;
+		return i`
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
@@ -258,7 +221,7 @@ new (P = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
           @change=${this.onChange}
         >
           ${e}
-          ${this.options.map((e) => a`<option
+          ${this.options.map((e) => i`<option
                 .value=${e.value}
                 ?selected=${e.value === this.value}
               >
@@ -270,55 +233,35 @@ new (P = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
     `;
 	}
 	onChange() {
-		let e = this.inputElement?.value, t = this.options.find((t) => t.value === e);
+		let e = this.controlElement?.value ?? null, t = this.options.find((t) => t.value === e);
 		this.controlTrait.setValue(e), this.dispatchEvent(new CustomEvent("change", {
 			bubbles: !0,
 			composed: !0,
 			detail: { option: t }
 		}));
 	}
-}, {e: [S, w, E, O, j, N, v], c: [J, y]} = H(d, [
+}, {e: [v, b, p], c: [F, m]} = k(u, [
 	[
-		x,
-		1,
-		"label"
-	],
-	[
-		C,
-		1,
-		"name"
-	],
-	[
-		T,
-		1,
-		"value"
-	],
-	[
-		D,
-		1,
-		"required"
-	],
-	[
-		k,
+		g,
 		4,
 		"options"
 	],
 	[
-		A,
+		_,
 		1,
-		"inputElement"
+		"controlElement"
 	],
 	[
-		M,
+		y,
 		1,
 		"_options"
 	]
-], b, 0, void 0, t), d), u = class extends q {
+], h, 0, void 0, t), u), l = class extends P {
 	constructor() {
-		super(J), V(this, "styles", i), V(this, "formAssociated", !0), y();
+		super(F), O(this, "styles", r), m();
 	}
-}, V(u, P, void 0), u)();
+}, O(l, x, void 0), l)();
 //#endregion
-export { J as default };
+export { F as default };
 
 //# sourceMappingURL=Select.esm.js.map

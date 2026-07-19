@@ -15,6 +15,7 @@ describe('Index', () => {
       'Dialog',
       'DialogComponent',
       'DialogTrait',
+      'FormControlComponent',
       'FormControlTrait',
       'NoopAuth',
       'ShowDialogEvent',
