@@ -69,6 +69,15 @@ import { log } from 'solid-ui'
 log.msg('Hello there!')
 ```
 
+Finally, if you're going to use a component that requires global state (like `<solid-ui-account>` which hooks into authentication), you'll need to wrap your app with `<solid-ui-provider>`:
+
+```html
+<solid-ui-provider>
+    <!-- This will display the logged in user and allow guests to log in -->
+    <solid-ui-account></solid-ui-account>
+</solid-ui-provider>
+```
+
 ## Use directly in a browser
 
 Solid-UI provides **ESM** bundles for direct browser usage. You'll also need to include the CSS styles:
@@ -129,6 +138,8 @@ You can also use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML
 </body>
 </html>
 ```
+
+PS: If you're using the `<solid-ui-provider>` component to wrap your application, make sure to register it first. Otherwise, you may face errors or unexpected behaviour regarding global state.
 
 ## Development
 
@@ -215,20 +226,6 @@ I want this all to be presented flexible in the component.
 * Claude Sonnet 4.6: create a LitElement also for the signupButton in the SignupButton.ts based on the signup.js code and wire it into the header like you did the loginButton.
 
 * Raptor mini: when we are on layout mobile we do not want to display the help menu at all.
-
-* Raptor mini: Create for me a footer Lit Component in tsy style of the components I have and under v2. Take the code from this index.ts to start with.
-
-* Raptor mini: Good. Now, I want the footer to be a rectangular with round corners, grey background and it should have an adjustable position.
-
-* Raptor mini: The content of the footer should be different upon loggedin or not.
-If not logged in, it should say:
-Title Public View
-You are viewving this profile as a guest,
-And if logged in:
-Title: Logged in View
-You are logged in as nameOfLoggedIn user.
-
-* Raptor mini: add a readme to the Footer component with example.
 
 * Claude Sonnet 4.6: Make the drop down as a list under the input field and enlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
 

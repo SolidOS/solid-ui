@@ -80,7 +80,7 @@ export default class LoginModal extends WebComponent {
   }
 
   private onIssuerInputChange (e: Event) {
-    this.issuerInputValue = (e.target as Combobox).value
+    this.issuerInputValue = String((e.target as Combobox).value)
   }
 
   private async onSubmit (e: Event) {

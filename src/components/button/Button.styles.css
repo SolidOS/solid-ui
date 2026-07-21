@@ -98,5 +98,5 @@
     --background-color: transparent;
     --hover-text-color: currentColor;
     --hover-border-color: transparent;
-    --hover-background-color: color-mix(in srgb, currentColor 25%, transparent);
+    --hover-background-color: var(--solid-ui-color-primary-hover);
 }

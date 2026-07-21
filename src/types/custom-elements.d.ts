@@ -14,7 +14,6 @@ import type DialogFooter from '../components/dialog-footer/DialogFooter'
 import type DialogHeader from '../components/dialog-header/DialogHeader'
 import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
-import type Footer from '../components/footer/Footer'
 import type Guard from '../components/guard/Guard'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
@@ -23,6 +22,7 @@ import type LogoutButton from '../components/logout-button/LogoutButton'
 import type Menu from '../components/menu/Menu'
 import type MenuItem from '../components/menu-item/MenuItem'
 import type PhotoCapture from '../components/photo-capture/PhotoCapture'
+import type PhotoCaptureModal from '../components/photo-capture-modal/PhotoCaptureModal'
 import type Provider from '../components/provider/Provider'
 import type RDFForm from '../components/rdf-form/RDFForm'
 import type RDFInput from '../components/rdf-input/RDFInput'
@@ -44,7 +44,6 @@ declare global {
     'solid-ui-dialog-header': DialogHeader
     'solid-ui-dialog-provider': DialogProvider
     'solid-ui-dialogs-root': DialogsRoot
-    'solid-ui-footer': Footer
     'solid-ui-guard': Guard
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
@@ -53,6 +52,7 @@ declare global {
     'solid-ui-menu': Menu
     'solid-ui-menu-item': MenuItem
     'solid-ui-photo-capture': PhotoCapture
+    'solid-ui-photo-capture-modal': PhotoCaptureModal
     'solid-ui-provider': Provider
     'solid-ui-rdf-form': RDFForm
     'solid-ui-rdf-input': RDFInput

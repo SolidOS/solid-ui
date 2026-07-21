@@ -7,6 +7,7 @@ const projectRoot = resolve(import.meta.dirname, '..')
 export const litDecoratorPaths = [
     'src/components',
     'src/storybook',
+    'src/lib/components',
 ]
 
 export const componentsSrcDir = join(projectRoot, 'src/components')

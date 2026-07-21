@@ -1,6 +1,7 @@
 import { Account, AuthContext } from '@/lib/auth'
 
 export default class StorybookAuth implements AuthContext {
+  public initialized = true
   public account: Account | null = null
 
   async login (loginUrl?: string) {

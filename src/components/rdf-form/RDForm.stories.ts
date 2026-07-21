@@ -1,5 +1,4 @@
 import { html } from 'lit'
-import { defineStoryRender } from '../../storybook'
 import './RDFForm'
 
 const meta = {
@@ -15,14 +14,14 @@ const meta = {
   },
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ formUrl, subjectUrl }) => {
+const render = ({ formUrl, subjectUrl }: typeof meta.args) => {
   return html`
       <solid-ui-rdf-form
         formUrl=${formUrl}
         .subjectUrl=${new URL(subjectUrl)}>
       </solid-ui-rdf-form>
     `
-})
+}
 
 export default meta
 
