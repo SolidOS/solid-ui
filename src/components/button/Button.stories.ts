@@ -1,6 +1,6 @@
 import { html, nothing } from 'lit'
 import { unsafeHTML } from 'lit/directives/unsafe-html.js'
-import { defineControlOptions, defineStoryRender } from '@/storybook'
+import { defineControlOptions } from '@/storybook'
 
 import '~icons/lucide/check'
 import '~icons/lucide/plus'
@@ -17,17 +17,20 @@ const ICON_OPTIONS = defineControlOptions([
   ['None', null]
 ])
 
+const args = {
+  text: 'Save Changes',
+  title: '',
+  variant: 'primary',
+  icon: 'None',
+  leftIcon: 'None',
+  rightIcon: 'None',
+  disabled: false,
+  loading: false,
+} as const
+
 const meta = {
-  title: 'Button',
-  args: {
-    text: 'Save Changes',
-    title: '',
-    variant: 'primary',
-    leftIcon: 'None',
-    rightIcon: 'None',
-    disabled: false,
-    loading: false,
-  },
+  title: 'Basic UI/Button',
+  args,
   argTypes: {
     variant: {
       control: 'select',
@@ -41,29 +44,25 @@ const meta = {
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
   },
-} as const
+  render ({ icon, leftIcon, rightIcon, variant, disabled, loading, title, text }: typeof args) {
+    const resolvedIcon = ICON_OPTIONS.resolve(icon)
+    const resolvedLeftIcon = ICON_OPTIONS.resolve(leftIcon)
+    const resolvedRightIcon = ICON_OPTIONS.resolve(rightIcon)
 
-const render = defineStoryRender<typeof meta.argTypes>(({ text, title, variant, icon, leftIcon, rightIcon, disabled, loading }) => {
-  const resolvedIcon = ICON_OPTIONS.resolve(icon)
-  const resolvedLeftIcon = ICON_OPTIONS.resolve(leftIcon)
-  const resolvedRightIcon = ICON_OPTIONS.resolve(rightIcon)
-
-  return html`
-        <solid-ui-button variant="${variant}" .disabled=${disabled} ?loading=${loading} title=${title}>
+    return html`
+        <solid-ui-button variant="${variant}" .disabled=${disabled} ?loading=${loading} title=${title || nothing}>
             ${resolvedLeftIcon ? unsafeHTML(`<icon-lucide-${resolvedLeftIcon} slot="left-icon"></icon-lucide-${resolvedLeftIcon}>`) : nothing}
             ${resolvedIcon ? unsafeHTML(`<icon-lucide-${resolvedIcon} slot="icon"></icon-lucide-${resolvedIcon}>`) : nothing}
             ${text}
             ${resolvedRightIcon ? unsafeHTML(`<icon-lucide-${resolvedRightIcon} slot="right-icon"></icon-lucide-${resolvedRightIcon}>`) : nothing}
         </solid-ui-button>
     `
-})
+  }
+} as const
 
-export default meta
-
-export const Primary = { render }
+export const Primary = {}
 
 export const Secondary = {
-  render,
   args: {
     text: 'Cancel',
     variant: 'secondary'
@@ -71,7 +70,6 @@ export const Secondary = {
 }
 
 export const Tertiary = {
-  render,
   args: {
     text: 'Add More',
     variant: 'tertiary',
@@ -80,7 +78,6 @@ export const Tertiary = {
 }
 
 export const Outline = {
-  render,
   args: {
     text: 'Sign Up',
     variant: 'outline',
@@ -89,7 +86,6 @@ export const Outline = {
 }
 
 export const Ghost = {
-  render,
   args: {
     text: '',
     variant: 'ghost',
@@ -97,3 +93,5 @@ export const Ghost = {
     title: 'Open help',
   },
 }
+
+export default meta

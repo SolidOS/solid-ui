@@ -1,56 +1,67 @@
-import { customElement, WebComponent } from '@/lib/components'
-import { html } from 'lit'
-import { property, query } from 'lit/decorators.js'
-import InputTrait from '@/lib/components/traits/InputTrait'
+import { customElement, FormControlComponent } from '@/lib/components'
+import { html, nothing } from 'lit'
+import { property, query, state } from 'lit/decorators.js'
+import { isEmptyValue } from '@/lib/values'
 import type SelectOption from '@/components/select-option/SelectOption'
 
 import '~icons/lucide/chevron-down'
 
 import styles from './Select.styles.css'
 
+export type SelectOptionData = {
+  value: unknown;
+  label: string;
+}
+
+export type SelectChangeEvent = CustomEvent<{ option: SelectOptionData }>
+
 @customElement('solid-ui-select')
-export default class Select extends WebComponent {
+export default class Select extends FormControlComponent {
   static styles = styles
-  static formAssociated = true
 
-  @property({ type: String, reflect: true })
-  accessor label = '';
+  @property({ type: Array })
+  set options (value: SelectOptionData[] | null) {
+    this._options = value
+  }
 
-  @property({ type: String, reflect: true })
-  accessor name = '';
+  get options (): SelectOptionData[] {
+    if (this._options) {
+      return this._options
+    }
 
-  @property({ type: String })
-  accessor value = '';
+    const options = this.querySelectorAll<SelectOption>(
+      'solid-ui-select-option'
+    )
 
-  @property({ type: Boolean, reflect: true })
-  accessor required = false;
-
-  @query('select')
-  accessor inputElement: HTMLSelectElement | null = null;
-
-  private inputTrait: InputTrait
-
-  constructor () {
-    super()
-
-    this.inputTrait = this.addTrait(new InputTrait(this, {
-      getInputElement: () => this.inputElement,
-      getInternals: () => this.getInternals(),
+    return Array.from(options).map((option) => ({
+      value: option.value,
+      label: option.textContent,
     }))
   }
 
+  @query('select')
+  protected accessor controlElement: HTMLSelectElement | null = null;
+
+  @state()
+  private accessor _options: SelectOptionData[] | null = null
+
   protected render () {
+    const defaultOption = this.options.some(option => isEmptyValue(option.value))
+      ? nothing
+      : html`<option disabled value="" ?selected=${!this.value}>Select an option</option>`
+
     return html`
-      ${this.inputTrait.renderLabel()}
+      ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
         <select
-          id="${this.inputTrait.inputId}"
+          id="${this.controlTrait.controlId}"
           name=${this.name}
           ?required=${this.required}
-          @change=${() => this.inputTrait.onInput()}
+          @change=${this.onChange}
         >
-          ${this.getOptions().map(
+          ${defaultOption}
+          ${this.options.map(
             (option) =>
               html`<option
                 .value=${option.value}
@@ -65,14 +76,11 @@ export default class Select extends WebComponent {
     `
   }
 
-  private getOptions (): { value: string; label: string }[] {
-    const options = this.querySelectorAll<SelectOption>(
-      'solid-ui-select-option'
-    )
+  private onChange () {
+    const value = this.controlElement?.value ?? null
+    const option = this.options.find((option) => option.value === value)
 
-    return Array.from(options).map((option) => ({
-      value: option.value,
-      label: option.textContent,
-    }))
+    this.controlTrait.setValue(value)
+    this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true, detail: { option } }))
   }
 }

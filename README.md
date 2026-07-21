@@ -69,6 +69,15 @@ import { log } from 'solid-ui'
 log.msg('Hello there!')
 ```
 
+Finally, if you're going to use a component that requires global state (like `<solid-ui-account>` which hooks into authentication), you'll need to wrap your app with `<solid-ui-provider>`:
+
+```html
+<solid-ui-provider>
+    <!-- This will display the logged in user and allow guests to log in -->
+    <solid-ui-account></solid-ui-account>
+</solid-ui-provider>
+```
+
 ## Use directly in a browser
 
 Solid-UI provides **ESM** bundles for direct browser usage. You'll also need to include the CSS styles:
@@ -129,6 +138,8 @@ You can also use [import maps](https://developer.mozilla.org/en-US/docs/Web/HTML
 </body>
 </html>
 ```
+
+PS: If you're using the `<solid-ui-provider>` component to wrap your application, make sure to register it first. Otherwise, you may face errors or unexpected behaviour regarding global state.
 
 ## Development
 

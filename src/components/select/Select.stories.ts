@@ -1,32 +1,36 @@
 import { html } from 'lit'
-import { defineStoryRender } from '@/storybook'
 
 import '@/components/select-option'
 
 import './Select'
 
+const args = {
+  label: 'What is the best food?',
+  options: 'Pizza, Ramen, Tacos',
+}
+
 const meta = {
-  title: 'Select',
-  args: {
-    label: 'What is the best food?',
-    options: 'Pizza, Ramen, Tacos'
-  },
+  title: 'Basic UI/Select',
+  args,
   argTypes: {
     label: { control: 'text' },
     options: { control: 'text' },
   },
+  render ({ label, options }: typeof args) {
+    const parsedOptions = options.split(',').map(option => option.trim())
+
+    return html`
+        <solid-ui-select label="${label}">
+            ${parsedOptions.map((option, index) => {
+                const indent = index === 0 ? '' : '            '
+
+                return html`${indent}<solid-ui-select-option value="${option}">${option}</solid-ui-select-option>\n`
+            })}
+        </solid-ui-select>
+    `
+  }
 } as const
 
-const render = defineStoryRender<typeof meta.argTypes>(({ label, options }) => {
-  const parsedOptions = options.split(',').map(option => option.trim())
-
-  return html`
-    <solid-ui-select label="${label}">
-      ${parsedOptions.map(option => html`<solid-ui-select-option value="${option}">${option}</solid-ui-select-option>`)}
-    </solid-ui-select>
-  `
-})
+export const Primary = {}
 
 export default meta
-
-export const Primary = { render }

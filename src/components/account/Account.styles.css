@@ -1,13 +1,21 @@
 :host {
+    --image-size: 1.875rem; /* 30px */
+
     display: inline-flex;
     flex-direction: row;
     gap: 10px;
 }
 
+:host([data-state-initializing]) {
+    icon-svg-spinners-180-ring {
+        width: var(--image-size);
+        height: var(--image-size);
+    }
+}
+
 :host([data-state-loggedIn]) {
     --padding: 4px;
     --border-width: 1px;
-    --image-size: 1.875rem; /* 30px */
 
     button {
         display: inline-flex;
