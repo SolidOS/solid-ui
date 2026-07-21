@@ -15,7 +15,6 @@ import "./menu/index.esm.js";
 import "./signup-button/index.esm.js";
 import "./account/index.esm.js";
 import "./dialog-provider/index.esm.js";
-import "./footer/index.esm.js";
 import "./guard/index.esm.js";
 import "./input/index.esm.js";
 import "./photo-capture-modal/index.esm.js";

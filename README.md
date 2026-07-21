@@ -227,20 +227,6 @@ I want this all to be presented flexible in the component.
 
 * Raptor mini: when we are on layout mobile we do not want to display the help menu at all.
 
-* Raptor mini: Create for me a footer Lit Component in tsy style of the components I have and under v2. Take the code from this index.ts to start with.
-
-* Raptor mini: Good. Now, I want the footer to be a rectangular with round corners, grey background and it should have an adjustable position.
-
-* Raptor mini: The content of the footer should be different upon loggedin or not.
-If not logged in, it should say:
-Title Public View
-You are viewving this profile as a guest,
-And if logged in:
-Title: Logged in View
-You are logged in as nameOfLoggedIn user.
-
-* Raptor mini: add a readme to the Footer component with example.
-
 * Claude Sonnet 4.6: Make the drop down as a list under the input field and enlarge the pop up, make it higher, adjustable to fit the drop down. And make the drop down arrow area larger
 
 * GPT-5.4 Model: can you wire up the keyboard interactions and aria attributes for Select?
