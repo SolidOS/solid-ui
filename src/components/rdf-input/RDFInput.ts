@@ -24,7 +24,7 @@ export default class RDFInput extends WebComponent {
   private accessor storeContext: StoreContext = DEFAULT_STORE
 
   @property({ attribute: false, type: Object })
-  accessor formSubject!: NamedNode
+  accessor formSubject: NamedNode | null = null
 
   @property({ attribute: false, type: Object })
   accessor dataSubject: NamedNode | null = null
