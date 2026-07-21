@@ -27,7 +27,7 @@ export default class RDFInput extends WebComponent {
   accessor formSubject!: NamedNode
 
   @property({ attribute: false, type: Object })
-  accessor dataSubject!: NamedNode
+  accessor dataSubject: NamedNode | null = null
 
   @property({ type: Number })
   accessor storeVersion = 0
@@ -37,6 +37,12 @@ export default class RDFInput extends WebComponent {
 
   @property({ type: Boolean, reflect: true })
   accessor readonly: boolean = true // to protect data, we default to not editable
+
+  constructor () {
+    super()
+
+    this.id = generateId()
+  }
 
   render () {
     const formDocument = this.getDocument(this.formSubject)
@@ -58,7 +64,7 @@ export default class RDFInput extends WebComponent {
     return html`
       <solid-ui-input
         label="${inputLabel}"
-        name="name-${generateId()}"
+        name="name-${this.id}"
         .value=${inputValue}
         .placeholder=${placeholder}
         type="${inputType}"
@@ -91,7 +97,7 @@ export default class RDFInput extends WebComponent {
   }
 
   private getSelectedTerm (
-    dataSubject?: NamedNode,
+    dataSubject?: NamedNode | null,
     uiPropertyTerm?: NamedNode,
     formFieldSubject?: NamedNode,
     params?: { defaultInputValue?: string }

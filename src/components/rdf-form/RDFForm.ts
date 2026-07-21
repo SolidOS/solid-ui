@@ -1,5 +1,6 @@
 import { property, state } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
+import type { PropertyValues } from 'lit'
 import { consume } from '@lit/context'
 import { customElement, WebComponent } from '@/lib/components'
 import ns from '../../lib/ns'
@@ -35,10 +36,8 @@ export default class RDFForm extends WebComponent {
     @property({ attribute: false })
     accessor passedInStore: LiveStore | null = null
 
-    private get currentStoreContext (): StoreContext {
-      return this.passedInStore
-        ? ({ store: this.passedInStore } as StoreContext)
-        : this.storeContext
+    private get currentStore (): LiveStore {
+      return this.passedInStore ?? this.storeContext.store
     }
 
     @state()
@@ -61,14 +60,14 @@ export default class RDFForm extends WebComponent {
         return html``
       }
 
-      const store = this.currentStoreContext.store
+      const store = this.currentStore
 
       const subjectUrl = hrefFromUrlValue(this.subjectUrl)
       if (subjectUrl && store.updater?.editable(subjectUrl) !== undefined && store.updater?.editable(subjectUrl) !== false) {
         this.entireDataIsReadonly = false
       }
 
-      const formRoot = findForm(this.currentStoreContext.store, hrefFromUrlValue(this.formUrl))                          // If there are more 'a ui:Form' elements in a form file
+      const formRoot = findForm(this.currentStore, hrefFromUrlValue(this.formUrl))                          // If there are more 'a ui:Form' elements in a form file
       if (!formRoot) throw new Error('No ui:Form found in ' + hrefFromUrlValue(this.formUrl))
 
       const formDocument = sym(hrefFromUrlValue(this.formUrl))                         // rdflib NamedNode for the document
@@ -143,8 +142,8 @@ export default class RDFForm extends WebComponent {
     `
     }
 
-    protected updated (changedProperties: Map<PropertyKey, unknown>) {
-      super.updated(changedProperties)
+    protected override willUpdate (changedProperties: PropertyValues<this>) {
+      super.willUpdate(changedProperties)
       if (changedProperties.has('formUrl') ||
         changedProperties.has('subjectUrl') ||
         changedProperties.has('passedInStore')
@@ -154,7 +153,7 @@ export default class RDFForm extends WebComponent {
     }
 
     private async loadDocumentsIfNeeded () {
-      const store = this.currentStoreContext.store
+      const store = this.currentStore
       const formUrl = hrefFromUrlValue(this.formUrl)
       const subjectUrl = hrefFromUrlValue(this.subjectUrl)
 
