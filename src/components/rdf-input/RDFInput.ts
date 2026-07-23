@@ -73,23 +73,23 @@ export default class RDFInput extends WebComponent {
       ></solid-ui-input>`
   }
 
-  private getDocument (subject: NamedNode) {
-    return subject.doc ? subject.doc() : undefined
+  private getDocument (subject: NamedNode | null | undefined) {
+    return subject?.doc ? subject.doc() : undefined
   }
 
-  private getFormProperty (subject: NamedNode | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
+  private getFormProperty (subject: NamedNode | null | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
     if (!subject) return undefined
     return this.storeContext.store.any(subject, property, null, graph) as NamedNode | undefined
   }
 
-  private getInputLabel (formFieldSubject: NamedNode | undefined, uiPropertyTerm?: NamedNode, graph?: any): string {
+  private getInputLabel (formFieldSubject: NamedNode | null | undefined, uiPropertyTerm?: NamedNode, graph?: any): string {
     if (!formFieldSubject) return ''
     const uiLabel = this.storeContext.store.any(formFieldSubject, ns.ui('label'), null, graph)
     const propertyLabel = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
     return uiLabel ? uiLabel.value : propertyLabel
   }
 
-  private getReadOnly (readonly: boolean, formFieldSubject?: NamedNode, graph?: any): boolean {
+  private getReadOnly (readonly: boolean, formFieldSubject?: NamedNode | null, graph?: any): boolean {
     if (formFieldSubject && readonly === false) { // if readonly is false, we can ovverride it if the field is marked as uneditable in the form
       return !!this.storeContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
     }
@@ -99,7 +99,7 @@ export default class RDFInput extends WebComponent {
   private getSelectedTerm (
     dataSubject?: NamedNode | null,
     uiPropertyTerm?: NamedNode,
-    formFieldSubject?: NamedNode,
+    formFieldSubject?: NamedNode | null,
     params?: { defaultInputValue?: string }
   ) {
     const defaultTerm = formFieldSubject
