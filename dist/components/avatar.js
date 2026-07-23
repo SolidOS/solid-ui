@@ -1,2 +1,2 @@
-import { n as e, t } from "../chunks/avatar-BV253V85.js";
+import { n as e, t } from "../chunks/avatar-DH_8_05W.js";
 export { e as Avatar, t as default };

@@ -5,6 +5,7 @@ export declare class StorybookProvider extends WebComponent {
     accessor avatarUrl: string | undefined;
     accessor initialized: boolean;
     private accessor auth;
+    private accessor store;
     willUpdate(changedProperties: PropertyValues<this>): void;
     protected render(): import('lit-html').TemplateResult<1>;
 }

@@ -56,6 +56,9 @@ export default class Combobox extends FormControlComponent {
   @query('input')
   protected accessor controlElement: HTMLInputElement | null = null
 
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = false
+
   @state()
   private accessor filter = ''
 

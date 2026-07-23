@@ -10,20 +10,20 @@ import { property as o, query as s, state as c } from "lit/decorators.js";
 import { Task as l } from "@lit/task";
 import "@awesome.me/webawesome/dist/components/popup/popup.js";
 //#region src/components/combobox/Combobox.ts
-var u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, ee, te, ne, re, ie, ae, N, P, F, I, L, R, z, B, V, H, U, W, G, K;
+var u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, M, N, P, F, I, L, R, z, B, V, H, U, W, G, K, se, ce;
 function q(e, t, n) {
-	oe(e, t), t.set(e, n);
+	le(e, t), t.set(e, n);
 }
-function oe(e, t) {
+function le(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
 function J(e, t, n) {
-	return e.set(se(e, t), n), n;
+	return e.set(ue(e, t), n), n;
 }
 function Y(e, t) {
-	return e.get(se(e, t));
+	return e.get(ue(e, t));
 }
-function se(e, t, n) {
+function ue(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
@@ -35,7 +35,7 @@ function X(e, t, n) {
 		writable: !0
 	}) : e[t] = n, e;
 }
-function ce(e, t, n, r, i, a) {
+function de(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -58,13 +58,13 @@ function ce(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: ue(function() {
+				get: pe(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || ue(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || pe(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -124,7 +124,7 @@ function ce(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return de(t) === e;
+			return me(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -152,10 +152,10 @@ function ce(e, t, n, r, i, a) {
 	};
 }
 function Z(e) {
-	var t = le(e, "string");
+	var t = fe(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function le(e, t) {
+function fe(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n = e[Symbol.toPrimitive];
 	if (n !== void 0) {
@@ -165,7 +165,7 @@ function le(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function ue(e, t, n) {
+function pe(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -175,37 +175,40 @@ function ue(e, t, n) {
 	} catch {}
 	return e;
 }
-function de(e) {
+function me(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function fe(e) {
+function he(e) {
 	return e;
 }
 var Q = class extends Error {};
-function pe(e) {
+function ge(e) {
 	return e;
 }
-E = [e("solid-ui-combobox")];
+D = [e("solid-ui-combobox")];
 var $;
-new (G = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), K = (D = o({
+new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), ce = (O = o({
 	type: Boolean,
 	reflect: !0,
 	attribute: "select-only"
-}), k = o({
+}), A = o({
 	type: String,
 	attribute: "async-options-url"
-}), j = o({
-	type: String,
-	attribute: "async-options-results-field"
 }), ee = o({
 	type: String,
-	attribute: "async-options-label-field"
+	attribute: "async-options-results-field"
 }), ne = o({
 	type: String,
+	attribute: "async-options-label-field"
+}), ie = o({
+	type: String,
 	attribute: "async-options-value-field"
-}), ie = o({ type: Function }), N = o({ type: Array }), F = s("input"), L = c(), z = c(), V = c(), U = c(), "selectOnly"), d = class extends t {
-	get [K]() {
+}), oe = o({ type: Function }), N = o({ type: Array }), F = s("input"), L = o({
+	type: Boolean,
+	reflect: !0
+}), z = c(), V = c(), U = c(), G = c(), "selectOnly"), d = class extends t {
+	get [ce]() {
 		return Y(f, this);
 	}
 	set selectOnly(e) {
@@ -253,32 +256,38 @@ new (G = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
 	set controlElement(e) {
 		J(y, this, e);
 	}
-	get filter() {
+	get readonly() {
 		return Y(b, this);
 	}
-	set filter(e) {
+	set readonly(e) {
 		J(b, this, e);
 	}
-	get displayValue() {
+	get filter() {
 		return Y(x, this);
 	}
-	set displayValue(e) {
+	set filter(e) {
 		J(x, this, e);
 	}
-	get open() {
+	get displayValue() {
 		return Y(S, this);
 	}
-	set open(e) {
+	set displayValue(e) {
 		J(S, this, e);
 	}
-	get activeIndex() {
+	get open() {
 		return Y(C, this);
 	}
-	set activeIndex(e) {
+	set open(e) {
 		J(C, this, e);
 	}
+	get activeIndex() {
+		return Y(w, this);
+	}
+	set activeIndex(e) {
+		J(w, this, e);
+	}
 	constructor() {
-		super(), q(this, f, (w(this), O(this, !1))), q(this, p, A(this, "")), q(this, m, M(this, "")), q(this, h, te(this, "")), q(this, g, re(this, "")), q(this, _, ae(this, null)), q(this, v, P(this, null)), q(this, y, I(this, null)), q(this, b, R(this, "")), q(this, x, B(this, "")), q(this, S, H(this, !1)), q(this, C, W(this, -1)), X(this, "openListenersAttached", !1), X(this, "updateDebouncedFilter", n(300, (e) => this.filter = e)), X(this, "asyncOptionsTask", void 0), X(this, "_selectedOption", void 0), X(this, "listboxId", void 0), X(this, "handleDocumentFocusIn", (e) => {
+		super(), q(this, f, (T(this), k(this, !1))), q(this, p, j(this, "")), q(this, m, te(this, "")), q(this, h, re(this, "")), q(this, g, ae(this, "")), q(this, _, M(this, null)), q(this, v, P(this, null)), q(this, y, I(this, null)), q(this, b, R(this, !1)), q(this, x, B(this, "")), q(this, S, H(this, "")), q(this, C, W(this, !1)), q(this, w, K(this, -1)), X(this, "openListenersAttached", !1), X(this, "updateDebouncedFilter", n(300, (e) => this.filter = e)), X(this, "asyncOptionsTask", void 0), X(this, "_selectedOption", void 0), X(this, "listboxId", void 0), X(this, "handleDocumentFocusIn", (e) => {
 			e.composedPath().includes(this) || this.hide();
 		}), X(this, "handleDocumentMouseDown", (e) => {
 			e.composedPath().includes(this) || this.hide();
@@ -492,34 +501,34 @@ new (G = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
 		let n = t.id, r = Number.parseInt(n.replace(`${this.listboxId}-option-`, ""), 10), i = this.getFilteredOptions()[r];
 		i && this.selectOption(i);
 	}
-}, {e: [O, A, M, te, re, ae, P, I, R, B, H, W, w], c: [$, T]} = ce(d, [
+}, {e: [k, j, te, re, ae, M, P, I, R, B, H, W, K, T], c: [$, E]} = de(d, [
 	[
-		D,
+		O,
 		1,
 		"selectOnly"
 	],
 	[
-		k,
+		A,
 		1,
 		"asyncOptionsUrl"
 	],
 	[
-		j,
+		ee,
 		1,
 		"asyncOptionsResultsField"
 	],
 	[
-		ee,
+		ne,
 		1,
 		"asyncOptionsLabelField"
 	],
 	[
-		ne,
+		ie,
 		1,
 		"asyncOptionsValueField"
 	],
 	[
-		ie,
+		oe,
 		1,
 		"asyncOptionsProvider"
 	],
@@ -536,29 +545,34 @@ new (G = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
 	[
 		L,
 		1,
-		"filter"
+		"readonly"
 	],
 	[
 		z,
 		1,
-		"displayValue"
+		"filter"
 	],
 	[
 		V,
 		1,
-		"open"
+		"displayValue"
 	],
 	[
 		U,
 		1,
+		"open"
+	],
+	[
+		G,
+		1,
 		"activeIndex"
 	]
-], E, 0, void 0, t), d), u = class extends fe {
+], D, 0, void 0, t), d), u = class extends he {
 	constructor() {
-		super($), X(this, "styles", r), T();
+		super($), X(this, "styles", r), E();
 	}
-}, X(u, G, void 0), u)();
+}, X(u, se, void 0), u)();
 //#endregion
-export { $ as default, pe as defineAsyncComboboxOptionsProvider };
+export { $ as default, ge as defineAsyncComboboxOptionsProvider };
 
 //# sourceMappingURL=Combobox.esm.js.map

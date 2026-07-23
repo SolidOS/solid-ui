@@ -1,0 +1,1 @@
+{"version":3,"file":"NoopStore.d.ts","sourceRoot":"","sources":["../../../../src/lib/forms/store/NoopStore.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,SAAS,EAAE,MAAM,QAAQ,CAAA;AAClC,OAAO,EAAE,YAAY,EAAE,MAAM,gBAAgB,CAAA;AAE7C,MAAM,CAAC,OAAO,OAAO,SAAU,YAAW,YAAY;IACpD,IAAI,KAAK,IAAK,SAAS,CAEtB;CACF"}

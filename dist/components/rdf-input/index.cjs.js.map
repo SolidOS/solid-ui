@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["RDFInput"],"sources":["../../../src/components/rdf-input/index.ts"],"sourcesContent":["import RDFInput from './RDFInput'\n\nexport { RDFInput }\nexport default RDFInput\n"],"mappings":"oIAGA,IAAA,EAAeA,EAAAA"}

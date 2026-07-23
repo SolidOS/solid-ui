@@ -19,6 +19,8 @@ import "./guard/index.esm.js";
 import "./input/index.esm.js";
 import "./photo-capture-modal/index.esm.js";
 import "./photo-capture/index.esm.js";
+import "./rdf-input/index.esm.js";
+import "./rdf-form/index.esm.js";
 import "./select/index.esm.js";
 import "./select-option/index.esm.js";
 import "./solid-emblem/index.esm.js";

@@ -21,6 +21,7 @@ export default class Combobox extends FormControlComponent {
     accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null;
     accessor optionsFallback: ComboboxOptionData[] | null;
     protected accessor controlElement: HTMLInputElement | null;
+    accessor readonly: boolean;
     private accessor filter;
     private accessor displayValue;
     private accessor open;

@@ -1,0 +1,1 @@
+{"version":3,"file":"index.cjs.js","names":["RDFForm"],"sources":["../../../src/components/rdf-form/index.ts"],"sourcesContent":["import RDFForm from './RDFForm'\n\nexport { RDFForm }\nexport default RDFForm\n"],"mappings":"mIAGA,IAAA,EAAeA,EAAAA"}

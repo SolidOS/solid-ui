@@ -23,5 +23,12 @@
             color: var(--solid-ui-color-gray-700);
             font-size: inherit;
         }
+
+        input:read-only {
+            border: none;
+            padding: 0;
+            cursor: not-allowed;
+        }
     }
+    
 }
