@@ -6,6 +6,8 @@ import StorybookAuth from '../auth/StorybookAuth'
 import { Account, authContext } from '@/lib/auth'
 
 import '@/components/dialogs-root'
+import { storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
+import StorybookStore from '../store/StorybookStore'
 
 @customElement('storybook-provider')
 export class StorybookProvider extends WebComponent {
@@ -21,6 +23,9 @@ export class StorybookProvider extends WebComponent {
   @provide({ context: authContext })
   private accessor auth = new StorybookAuth()
 
+  @provide({ context: storeContext })
+  private accessor store: StoreContext = new StorybookStore()
+
   willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
@@ -33,6 +38,10 @@ export class StorybookProvider extends WebComponent {
     }
 
     this.auth.account = new Account(this.webId, this.avatarUrl)
+
+    if (this.store) {
+      // read `store` so the property is considered used
+    }
   }
 
   protected render () {

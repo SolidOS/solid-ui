@@ -8,11 +8,12 @@ import css from './vite-config/css'
 import resolveConfig from './vite-config/resolve'
 import stylesConfig from './vite-config/styles'
 import { cdnLegacyConfig, cdnConfig } from './vite-config/cdn'
-import { discoverComponents, litDecoratorPaths } from './vite-config/components'
+import { discoverComponents, litDecoratorPaths, customElementsTypesPlugin } from './vite-config/components'
 
 const basePlugins = [
     css(),
     icons(),
+    customElementsTypesPlugin(),
 ]
 
 function defaultConfig(): UserConfig {

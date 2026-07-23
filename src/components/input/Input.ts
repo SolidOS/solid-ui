@@ -11,6 +11,15 @@ export default class Input extends FormControlComponent {
   @property({ type: String, reflect: true })
   accessor type = 'text';
 
+  @property({ type: String, reflect: true })
+  accessor placeholder = '';
+
+  @property({ type: Boolean, reflect: true })
+  accessor required = false;
+
+  @property({ type: Boolean, reflect: true })
+  accessor readonly = false;
+
   @query('input')
   protected accessor controlElement: HTMLInputElement | null = null;
 
@@ -26,6 +35,7 @@ export default class Input extends FormControlComponent {
           placeholder=${this.placeholder}
           ?required=${this.required}
           .value=${this.value}
+          ?readonly=${this.readonly}
           @input=${() => this.controlTrait.onInput()}
           @keydown=${this.onKeyDown}
         />
