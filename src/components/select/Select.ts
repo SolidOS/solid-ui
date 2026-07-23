@@ -19,9 +19,6 @@ export type SelectChangeEvent = CustomEvent<{ option: SelectOptionData }>
 export default class Select extends FormControlComponent {
   static styles = styles
 
-  @property({ type: Boolean, reflect: true })
-  accessor readonly = false;
-
   @property({ type: Array })
   set options (value: SelectOptionData[] | null) {
     this._options = value
@@ -61,7 +58,6 @@ export default class Select extends FormControlComponent {
           id="${this.controlTrait.controlId}"
           name=${this.name}
           ?required=${this.required}
-          ?readonly=${this.readonly}
           @change=${this.onChange}
         >
           ${defaultOption}
