@@ -1,4 +1,4 @@
-import { property } from 'lit/decorators.js'
+import { property, state } from 'lit/decorators.js'
 import { html } from 'lit/html.js'
 import ns from '../../lib/ns'
 import { customElement, generateId, WebComponent } from '@/lib/components'
@@ -32,6 +32,9 @@ export default class RDFInput extends WebComponent {
   @property({ type: Number })
   accessor storeVersion = 0
 
+  @state()
+  private accessor localInputValue: string | null = null
+
   private _updateInFlight = false
   private _pendingUpdateValue: string | null = null
 
@@ -59,7 +62,9 @@ export default class RDFInput extends WebComponent {
     // for populating the HTML input element
     const selectedTerm = this.getSelectedTerm(this.dataSubject, uiPropertyTerm, this.formSubject, params)
     const placeholder = readonly ? '' : this.defaultInputValue(params)
-    const inputValue = this.termToInputValue(selectedTerm)
+    const inputValue = this.localInputValue !== null || this._updateInFlight
+      ? this.localInputValue ?? ''
+      : this.termToInputValue(selectedTerm)
 
     return html`
       <solid-ui-input
@@ -131,6 +136,7 @@ export default class RDFInput extends WebComponent {
 
   private async updateData (e: CustomEvent) {
     const newValue = (e.target as HTMLInputElement).value
+    this.localInputValue = newValue
     this._pendingUpdateValue = newValue
 
     if (this._updateInFlight) {
@@ -152,6 +158,7 @@ export default class RDFInput extends WebComponent {
     const uiPropertyTerm = this.getFormProperty(this.formSubject, ns.ui('property'), this.getDocument(this.formSubject))
     if (!uiPropertyTerm || !this.dataSubject) {
       this._updateInFlight = false
+      this.localInputValue = ''
       return
     }
 
@@ -193,6 +200,7 @@ export default class RDFInput extends WebComponent {
     try {
       await this.storeContext.store.updater.updateMany(toDeleteSt, toInsertSt as any)
       this.storeVersion += 1
+      this.localInputValue = ''
     } catch (err) {
       console.error('RDFInput update failed', err)
     } finally {
