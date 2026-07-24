@@ -200,7 +200,6 @@ export default class RDFInput extends WebComponent {
     try {
       await this.storeContext.store.updater.updateMany(toDeleteSt, toInsertSt as any)
       this.storeVersion += 1
-      this.localInputValue = ''
     } catch (err) {
       console.error('RDFInput update failed', err)
     } finally {
