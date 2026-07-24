@@ -62,7 +62,7 @@ export default class RDFInput extends WebComponent {
     // for populating the HTML input element
     const selectedTerm = this.getSelectedTerm(this.dataSubject, uiPropertyTerm, this.formSubject, params)
     const placeholder = readonly ? '' : this.defaultInputValue(params)
-    const inputValue = this.localInputValue !== null || this._updateInFlight
+    const inputValue = this._updateInFlight || this._pendingUpdateValue !== null
       ? this.localInputValue ?? ''
       : this.termToInputValue(selectedTerm)
 
