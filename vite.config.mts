@@ -16,6 +16,12 @@ const basePlugins = [
     customElementsTypesPlugin(),
 ]
 
+// In watch mode we skip .d.ts generation: mashlib/pivot don't consume
+// .d.ts at runtime, and regenerating every declaration on each tick is a
+// major source of rebuild chatter (each write cascades into downstream
+// webpack rebuilds via the symlinked node_modules).
+const isWatch = process.argv.includes('--watch') || process.argv.includes('-w')
+
 function defaultConfig(): UserConfig {
     return {
         css: cssConfig(),
@@ -23,12 +29,14 @@ function defaultConfig(): UserConfig {
         plugins: [
             ...basePlugins,
             babel({ litDecoratorPaths }),
-            dts({
-                tsconfigPath: 'tsconfig.json',
-                entryRoot: 'src',
-                outDirs: ['dist'],
-                insertTypesEntry: true,
-            }),
+            ...(isWatch ? [] : [
+                dts({
+                    tsconfigPath: 'tsconfig.json',
+                    entryRoot: 'src',
+                    outDirs: ['dist'],
+                    insertTypesEntry: true,
+                }),
+            ]),
         ],
         build: {
             emptyOutDir: false,
