@@ -5,6 +5,7 @@ export default class RDFInput extends WebComponent {
     accessor formSubject: NamedNode | null;
     accessor dataSubject: NamedNode | null;
     accessor storeVersion: number;
+    private accessor localInputValue;
     private _updateInFlight;
     private _pendingUpdateValue;
     accessor readonly: boolean;

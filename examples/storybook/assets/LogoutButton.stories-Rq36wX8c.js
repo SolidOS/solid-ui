@@ -1,4 +1,4 @@
-import{i as e}from"./preload-helper-BdFrVu1K.js";import{sn as t,un as n}from"./iframe-CLe2QiHr.js";import{n as r,t as i}from"./log-out-LHNkqGJJ.js";var a,o,s,c,l;e((()=>{t(),i(),r(),a={title:`Solid/LogoutButton`},o={render:()=>n`<solid-ui-logout-button></solid-ui-logout-button>`},s={render:()=>n`
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{sn as t,un as n}from"./iframe-DKr4hIT3.js";import{n as r,t as i}from"./log-out-Dgv-Tci4.js";var a,o,s,c,l;e((()=>{t(),i(),r(),a={title:`Solid/LogoutButton`},o={render:()=>n`<solid-ui-logout-button></solid-ui-logout-button>`},s={render:()=>n`
     <solid-ui-logout-button>
         Sign Out
         <icon-lucide-log-out style="width: 16px; height: 16px;"></icon-lucide-log-out>

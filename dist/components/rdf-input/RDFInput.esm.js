@@ -11,35 +11,35 @@ import { fieldParams as o } from "../../lib/forms/fieldParams.esm.js";
 import { DEFAULT_STORE as s, storeContext as c } from "../../lib/forms/store/StoreContext.esm.js";
 import { Literal as l, st as u } from "rdflib";
 import { consume as d } from "@lit/context";
-import { property as f } from "lit/decorators.js";
-import { html as p } from "lit/html.js";
+import { property as f, state as p } from "lit/decorators.js";
+import { html as m } from "lit/html.js";
 //#region src/components/rdf-input/RDFInput.ts
-var m, h, g, _, v, y, b, x, S, C, w, T, E, D, O;
-function k(e, t, n) {
-	return (t = I(t)) in e ? Object.defineProperty(e, t, {
+var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
+function M(e, t, n) {
+	return (t = z(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function A(e, t, n) {
-	j(e, t), t.set(e, n);
+function N(e, t, n) {
+	P(e, t), t.set(e, n);
 }
-function j(e, t) {
+function P(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function M(e, t, n) {
-	return e.set(P(e, t), n), n;
+function F(e, t, n) {
+	return e.set(L(e, t), n), n;
 }
-function N(e, t) {
-	return e.get(P(e, t));
+function I(e, t) {
+	return e.get(L(e, t));
 }
-function P(e, t, n) {
+function L(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function F(e, t, n, r, i, a) {
+function R(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -62,13 +62,13 @@ function F(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: R(function() {
+				get: V(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || R(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || V(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -128,7 +128,7 @@ function F(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return z(t) === e;
+			return H(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -142,7 +142,7 @@ function F(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : I(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : z(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -155,11 +155,11 @@ function F(e, t, n, r, i, a) {
 		}
 	};
 }
-function I(e) {
-	var t = L(e, "string");
+function z(e) {
+	var t = B(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function L(e, t) {
+function B(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n = e[Symbol.toPrimitive];
 	if (n !== void 0) {
@@ -169,7 +169,7 @@ function L(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function R(e, t, n) {
+function V(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -179,61 +179,67 @@ function R(e, t, n) {
 	} catch {}
 	return e;
 }
-function z(e) {
+function H(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-_ = [r("solid-ui-rdf-input")];
-var B, V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap();
-O = (v = d({
+v = [r("solid-ui-rdf-input")];
+var U, W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap();
+j = (y = d({
 	context: c,
 	subscribe: !0
-}), b = f({
+}), x = f({
 	attribute: !1,
 	type: Object
-}), S = f({
+}), C = f({
 	attribute: !1,
 	type: Object
-}), w = f({ type: Number }), E = f({
+}), T = f({ type: Number }), D = p(), k = f({
 	type: Boolean,
 	reflect: !0
-}), "storeContext"), m = class extends i {
-	get [O]() {
-		return N(V, this);
+}), "storeContext"), h = class extends i {
+	get [j]() {
+		return I(W, this);
 	}
 	set storeContext(e) {
-		M(V, this, e);
+		F(W, this, e);
 	}
 	get formSubject() {
-		return N(H, this);
+		return I(G, this);
 	}
 	set formSubject(e) {
-		M(H, this, e);
+		F(G, this, e);
 	}
 	get dataSubject() {
-		return N(U, this);
+		return I(K, this);
 	}
 	set dataSubject(e) {
-		M(U, this, e);
+		F(K, this, e);
 	}
 	get storeVersion() {
-		return N(W, this);
+		return I(q, this);
 	}
 	set storeVersion(e) {
-		M(W, this, e);
+		F(q, this, e);
+	}
+	get localInputValue() {
+		return I(J, this);
+	}
+	set localInputValue(e) {
+		F(J, this, e);
 	}
 	get readonly() {
-		return N(G, this);
+		return I(Y, this);
 	}
 	set readonly(e) {
-		M(G, this, e);
+		F(Y, this, e);
 	}
 	constructor() {
-		super(), A(this, V, (h(this), y(this, s))), A(this, H, x(this, null)), A(this, U, C(this, null)), A(this, W, T(this, 0)), k(this, "_updateInFlight", !1), k(this, "_pendingUpdateValue", null), A(this, G, D(this, !0)), this.id = n();
+		super(), N(this, W, (g(this), b(this, s))), N(this, G, S(this, null)), N(this, K, w(this, null)), N(this, q, E(this, 0)), N(this, J, O(this, null)), M(this, "_updateInFlight", !1), M(this, "_pendingUpdateValue", null), N(this, Y, A(this, !0)), this.id = n();
 	}
 	render() {
-		let t = this.getDocument(this.formSubject), n = this.getFormProperty(this.formSubject, e.ui("property"), t), r = this.getInputLabel(this.formSubject, n, t), i = this.getReadOnly(this.readonly, this.formSubject, t), s = this.formSubject ? a(this.storeContext.store, this.formSubject) : void 0, c = s ? o[s] ?? {} : {}, l = c.type ?? "text", u = this.getSelectedTerm(this.dataSubject, n, this.formSubject, c), d = i ? "" : this.defaultInputValue(c), f = this.termToInputValue(u);
-		return p`
+		let t = this.getDocument(this.formSubject), n = this.getFormProperty(this.formSubject, e.ui("property"), t), r = this.getInputLabel(this.formSubject, n, t), i = this.getReadOnly(this.readonly, this.formSubject, t), s = this.formSubject ? a(this.storeContext.store, this.formSubject) : void 0, c = s ? o[s] ?? {} : {}, l = c.type ?? "text", u = this.getSelectedTerm(this.dataSubject, n, this.formSubject, c), d = i ? "" : this.defaultInputValue(c), f = this._updateInFlight || this._pendingUpdateValue !== null ? this.localInputValue ?? "" : this.termToInputValue(u);
+		return m`
       <solid-ui-input
         label="${r}"
         name="name-${this.id}"
@@ -275,7 +281,7 @@ O = (v = d({
 	}
 	async updateData(e) {
 		let t = e.target.value;
-		this._pendingUpdateValue = t, !this._updateInFlight && await this.runPendingUpdate();
+		this.localInputValue = t, this._pendingUpdateValue = t, !this._updateInFlight && await this.runPendingUpdate();
 	}
 	async runPendingUpdate() {
 		if (this._pendingUpdateValue === null) return;
@@ -283,7 +289,7 @@ O = (v = d({
 		this._pendingUpdateValue = null, this._updateInFlight = !0;
 		let n = this.getFormProperty(this.formSubject, e.ui("property"), this.getDocument(this.formSubject));
 		if (!n || !this.dataSubject) {
-			this._updateInFlight = !1;
+			this._updateInFlight = !1, this.localInputValue = "";
 			return;
 		}
 		let r = this.getDocument(this.dataSubject);
@@ -305,34 +311,39 @@ O = (v = d({
 		}
 		this._pendingUpdateValue !== null && await this.runPendingUpdate();
 	}
-}, {e: [y, x, C, T, D, h], c: [B, g]} = F(m, [
+}, {e: [b, S, w, E, O, A, g], c: [U, _]} = R(h, [
 	[
-		v,
+		y,
 		1,
 		"storeContext"
 	],
 	[
-		b,
+		x,
 		1,
 		"formSubject"
 	],
 	[
-		S,
+		C,
 		1,
 		"dataSubject"
 	],
 	[
-		w,
+		T,
 		1,
 		"storeVersion"
 	],
 	[
-		E,
+		D,
+		1,
+		"localInputValue"
+	],
+	[
+		k,
 		1,
 		"readonly"
 	]
-], _, 0, void 0, i), g();
+], v, 0, void 0, i), _();
 //#endregion
-export { B as default };
+export { U as default };
 
 //# sourceMappingURL=RDFInput.esm.js.map

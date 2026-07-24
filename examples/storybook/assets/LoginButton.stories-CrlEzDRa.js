@@ -1,4 +1,4 @@
-import{i as e}from"./preload-helper-BdFrVu1K.js";import{sn as t,un as n}from"./iframe-CLe2QiHr.js";import{t as r}from"./LoginButton-CHVGCMzr.js";import{t as i}from"./log-in-DhCXOv_t.js";var a,o,s,c,l;e((()=>{t(),i(),r(),a={title:`Solid/LoginButton`},o={render:()=>n`<solid-ui-login-button></solid-ui-login-button>`},s={render:()=>n`
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{sn as t,un as n}from"./iframe-DKr4hIT3.js";import{t as r}from"./LoginButton-45fS6KwY.js";import{t as i}from"./log-in-DhCXOv_t.js";var a,o,s,c,l;e((()=>{t(),i(),r(),a={title:`Solid/LoginButton`},o={render:()=>n`<solid-ui-login-button></solid-ui-login-button>`},s={render:()=>n`
     <solid-ui-login-button>
       Sign In
       <icon-lucide-log-in style="width: 16px; height: 16px;"></icon-lucide-log-in>

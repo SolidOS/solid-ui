@@ -1,6 +1,6 @@
 import { S as e, h as t } from "./solid-logic.esm-BrMdCG2_.js";
 import { b as n, g as r, i, o as a, r as o, u as s } from "./components-DrP7BOrs.js";
-import { a as c, i as l, o as u, r as d, s as f } from "./rdf-input-DFZw8gOT.js";
+import { a as c, i as l, o as u, r as d, s as f } from "./rdf-input-ko4bMTgo.js";
 //#region src/components/rdf-form/RDFForm.ts
 var p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
 function M(e, t, n) {
@@ -336,4 +336,4 @@ var Q = W;
 //#endregion
 export { W as n, Q as t };
 
-//# sourceMappingURL=rdf-form-BmTmaswE.js.map
+//# sourceMappingURL=rdf-form-Dw0tqpZJ.js.map

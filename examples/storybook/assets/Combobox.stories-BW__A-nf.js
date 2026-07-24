@@ -1,4 +1,4 @@
-import{i as e}from"./preload-helper-BdFrVu1K.js";import{G as t,K as n,W as r,sn as i,un as a}from"./iframe-CLe2QiHr.js";var o,s,c,l,u,d;e((()=>{i(),n(),r(),o=t(async e=>{let{data:t}=await(await fetch(`https://beta.pokeapi.co/graphql/v1beta`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({query:`
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{G as t,K as n,W as r,sn as i,un as a}from"./iframe-DKr4hIT3.js";var o,s,c,l,u,d;e((()=>{i(),n(),r(),o=t(async e=>{let{data:t}=await(await fetch(`https://beta.pokeapi.co/graphql/v1beta`,{method:`POST`,headers:{"Content-Type":`application/json`},body:JSON.stringify({query:`
         query searchPokemon($search: String!) {
           pokemon_v2_pokemon(where: {name: {_ilike: $search}}, limit: 20) {
             id

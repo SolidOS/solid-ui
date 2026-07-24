@@ -1,28 +1,28 @@
 import { C as e, L as t, S as n, h as r } from "./solid-logic.esm-BrMdCG2_.js";
 import { t as i, u as a } from "./style-DMYSNcEw.js";
-import { b as o, g as s, i as c, o as l, u, x as d, y as f } from "./components-DrP7BOrs.js";
+import { b as o, g as s, i as c, o as l, r as u, u as d, x as f, y as p } from "./components-DrP7BOrs.js";
 import "./input-CFDN76Y5.js";
 //#region src/lib/forms/rdfFormsHelper.ts
-async function p(e, t) {
+async function m(e, t) {
 	let r = n(t);
 	return e.holds(void 0, void 0, void 0, r) && e.removeStatements(e.statementsMatching(void 0, void 0, void 0, r)), await e.fetcher.load(t, {
 		force: !0,
 		clearPreviousData: !0
 	});
 }
-function m(e, t) {
+function h(e, t) {
 	let n = t.map((t) => {
 		let n = e.any(t, r.ui("sequence")), i = n ? Number(n.value) : 9999;
 		return [Number.isNaN(i) ? 9999 : i, t];
 	});
 	return n.sort((e, t) => e[0] - t[0]), n.map((e) => e[1]);
 }
-function h(e, t) {
+function g(e, t) {
 	let n = e.findTypeURIs(t), r = e.bottomTypeURIs(n), i = [];
 	for (let e in r) i.push(e);
 	return i[0];
 }
-function g(e, t) {
+function _(e, t) {
 	let i = t.split("#")[0], a = t.includes("#") ? t.split("#")[1] : null;
 	if (a) {
 		let t = n(i + "#" + a);
@@ -32,7 +32,7 @@ function g(e, t) {
 }
 //#endregion
 //#region src/lib/forms/fieldParams.ts
-var _ = {
+var v = {
 	[r.ui("ColorField").uri]: {
 		size: 9,
 		type: "color",
@@ -98,36 +98,36 @@ var _ = {
 		element: "h3",
 		style: i.formHeadingStyle
 	}
-}, v = new class {
+}, y = new class {
 	get store() {
 		throw Error("Cannot use RDF forms without a store");
 	}
-}(), y = d(Symbol("storeContext")), b, x, S, C, w, T, E, D, O, k, A, j, M, N, P;
-function F(e, t, n) {
-	return (t = H(t)) in e ? Object.defineProperty(e, t, {
+}(), b = f(Symbol("storeContext")), x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I, L;
+function R(e, t, n) {
+	return (t = G(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function I(e, t, n) {
-	L(e, t), t.set(e, n);
+function z(e, t, n) {
+	B(e, t), t.set(e, n);
 }
-function L(e, t) {
+function B(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function R(e, t, n) {
-	return e.set(B(e, t), n), n;
+function V(e, t, n) {
+	return e.set(U(e, t), n), n;
 }
-function z(e, t) {
-	return e.get(B(e, t));
+function H(e, t) {
+	return e.get(U(e, t));
 }
-function B(e, t, n) {
+function U(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function V(e, t, n, r, i, a) {
+function W(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -150,13 +150,13 @@ function V(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: W(function() {
+				get: K(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || W(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || K(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -216,7 +216,7 @@ function V(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return G(t) === e;
+			return te(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -230,7 +230,7 @@ function V(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : H(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : G(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -243,11 +243,11 @@ function V(e, t, n, r, i, a) {
 		}
 	};
 }
-function H(e) {
-	var t = U(e, "string");
+function G(e) {
+	var t = ee(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function U(e, t) {
+function ee(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n = e[Symbol.toPrimitive];
 	if (n !== void 0) {
@@ -257,7 +257,7 @@ function U(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function W(e, t, n) {
+function K(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -267,65 +267,71 @@ function W(e, t, n) {
 	} catch {}
 	return e;
 }
-function G(e) {
+function te(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-C = [s("solid-ui-rdf-input")];
-var K, q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), X = /*#__PURE__*/ new WeakMap(), Z = /*#__PURE__*/ new WeakMap();
-P = (w = o({
-	context: y,
+w = [s("solid-ui-rdf-input")];
+var q, J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), X = /*#__PURE__*/ new WeakMap(), Z = /*#__PURE__*/ new WeakMap(), Q = /*#__PURE__*/ new WeakMap(), $ = /*#__PURE__*/ new WeakMap();
+L = (T = o({
+	context: b,
 	subscribe: !0
-}), E = c({
+}), D = c({
 	attribute: !1,
 	type: Object
-}), O = c({
+}), k = c({
 	attribute: !1,
 	type: Object
-}), A = c({ type: Number }), M = c({
+}), j = c({ type: Number }), N = u(), F = c({
 	type: Boolean,
 	reflect: !0
-}), "storeContext"), b = class extends l {
-	get [P]() {
-		return z(q, this);
+}), "storeContext"), x = class extends l {
+	get [L]() {
+		return H(J, this);
 	}
 	set storeContext(e) {
-		R(q, this, e);
+		V(J, this, e);
 	}
 	get formSubject() {
-		return z(J, this);
+		return H(Y, this);
 	}
 	set formSubject(e) {
-		R(J, this, e);
+		V(Y, this, e);
 	}
 	get dataSubject() {
-		return z(Y, this);
+		return H(X, this);
 	}
 	set dataSubject(e) {
-		R(Y, this, e);
+		V(X, this, e);
 	}
 	get storeVersion() {
-		return z(X, this);
+		return H(Z, this);
 	}
 	set storeVersion(e) {
-		R(X, this, e);
+		V(Z, this, e);
+	}
+	get localInputValue() {
+		return H(Q, this);
+	}
+	set localInputValue(e) {
+		V(Q, this, e);
 	}
 	get readonly() {
-		return z(Z, this);
+		return H($, this);
 	}
 	set readonly(e) {
-		R(Z, this, e);
+		V($, this, e);
 	}
 	constructor() {
-		super(), I(this, q, (x(this), T(this, v))), I(this, J, D(this, null)), I(this, Y, k(this, null)), I(this, X, j(this, 0)), F(this, "_updateInFlight", !1), F(this, "_pendingUpdateValue", null), I(this, Z, N(this, !0)), this.id = f();
+		super(), z(this, J, (S(this), E(this, y))), z(this, Y, O(this, null)), z(this, X, A(this, null)), z(this, Z, M(this, 0)), z(this, Q, P(this, null)), R(this, "_updateInFlight", !1), R(this, "_pendingUpdateValue", null), z(this, $, I(this, !0)), this.id = p();
 	}
 	render() {
-		let e = this.getDocument(this.formSubject), t = this.getFormProperty(this.formSubject, r.ui("property"), e), n = this.getInputLabel(this.formSubject, t, e), i = this.getReadOnly(this.readonly, this.formSubject, e), a = this.formSubject ? h(this.storeContext.store, this.formSubject) : void 0, o = a ? _[a] ?? {} : {}, s = o.type ?? "text", c = this.getSelectedTerm(this.dataSubject, t, this.formSubject, o), l = i ? "" : this.defaultInputValue(o), d = this.termToInputValue(c);
-		return u`
+		let e = this.getDocument(this.formSubject), t = this.getFormProperty(this.formSubject, r.ui("property"), e), n = this.getInputLabel(this.formSubject, t, e), i = this.getReadOnly(this.readonly, this.formSubject, e), a = this.formSubject ? g(this.storeContext.store, this.formSubject) : void 0, o = a ? v[a] ?? {} : {}, s = o.type ?? "text", c = this.getSelectedTerm(this.dataSubject, t, this.formSubject, o), l = i ? "" : this.defaultInputValue(o), u = this._updateInFlight || this._pendingUpdateValue !== null ? this.localInputValue ?? "" : this.termToInputValue(c);
+		return d`
       <solid-ui-input
         label="${n}"
         name="name-${this.id}"
-        .value=${d}
+        .value=${u}
         .placeholder=${l}
         type="${s}"
         ?readonly=${i}
@@ -363,7 +369,7 @@ P = (w = o({
 	}
 	async updateData(e) {
 		let t = e.target.value;
-		this._pendingUpdateValue = t, !this._updateInFlight && await this.runPendingUpdate();
+		this.localInputValue = t, this._pendingUpdateValue = t, !this._updateInFlight && await this.runPendingUpdate();
 	}
 	async runPendingUpdate() {
 		if (this._pendingUpdateValue === null) return;
@@ -371,7 +377,7 @@ P = (w = o({
 		this._pendingUpdateValue = null, this._updateInFlight = !0;
 		let i = this.getFormProperty(this.formSubject, r.ui("property"), this.getDocument(this.formSubject));
 		if (!i || !this.dataSubject) {
-			this._updateInFlight = !1;
+			this._updateInFlight = !1, this.localInputValue = "";
 			return;
 		}
 		let a = this.getDocument(this.dataSubject);
@@ -381,7 +387,7 @@ P = (w = o({
 		}
 		let o = this.storeContext.store.statementsMatching(this.dataSubject, i), s = [];
 		if (n) {
-			let a, c = this.formSubject ? h(this.storeContext.store, this.formSubject) : void 0, l = c ? _[c] ?? {} : {};
+			let a, c = this.formSubject ? g(this.storeContext.store, this.formSubject) : void 0, l = c ? v[c] ?? {} : {};
 			l.namedNode ? a = this.storeContext.store.sym(n) : l.defaultInputValue ? (a = encodeURIComponent(n.replace(/ /g, "")), a = this.storeContext.store.sym(l.defaultInputValue + a)) : a = l.dt ? new t(n.trim(), void 0, r.xsd(l.dt)) : new t(n), s = o.map((t) => e(t.subject, t.predicate, a, t.why)), s.length === 0 && (s = [e(this.dataSubject, i, a, this.getDocument(this.dataSubject))]);
 		}
 		try {
@@ -393,37 +399,42 @@ P = (w = o({
 		}
 		this._pendingUpdateValue !== null && await this.runPendingUpdate();
 	}
-}, {e: [T, D, k, j, N, x], c: [K, S]} = V(b, [
+}, {e: [E, O, A, M, P, I, S], c: [q, C]} = W(x, [
 	[
-		w,
+		T,
 		1,
 		"storeContext"
 	],
 	[
-		E,
+		D,
 		1,
 		"formSubject"
 	],
 	[
-		O,
+		k,
 		1,
 		"dataSubject"
 	],
 	[
-		A,
+		j,
 		1,
 		"storeVersion"
 	],
 	[
-		M,
+		N,
+		1,
+		"localInputValue"
+	],
+	[
+		F,
 		1,
 		"readonly"
 	]
-], C, 0, void 0, l), S();
+], w, 0, void 0, l), C();
 //#endregion
 //#region src/components/rdf-input/index.ts
-var Q = K;
+var ne = q;
 //#endregion
-export { p as a, y as i, K as n, g as o, v as r, m as s, Q as t };
+export { m as a, b as i, q as n, _ as o, y as r, h as s, ne as t };
 
-//# sourceMappingURL=rdf-input-DFZw8gOT.js.map
+//# sourceMappingURL=rdf-input-ko4bMTgo.js.map

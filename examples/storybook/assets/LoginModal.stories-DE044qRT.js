@@ -1,4 +1,4 @@
-import{i as e}from"./preload-helper-BdFrVu1K.js";import{F as t,H as n,N as r,St as i,U as a,bt as o,ht as s,sn as c,un as l}from"./iframe-CLe2QiHr.js";var u,d,f,p,m;e((()=>{c(),r(),o(),s(),a(),u={title:`Solid/Login Modal`,parameters:{docs:{source:{language:`ts`,code:`
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{F as t,H as n,N as r,St as i,U as a,bt as o,ht as s,sn as c,un as l}from"./iframe-DKr4hIT3.js";var u,d,f,p,m;e((()=>{c(),r(),o(),s(),a(),u={title:`Solid/Login Modal`,parameters:{docs:{source:{language:`ts`,code:`
             import { showDialog } from 'solid-ui';
             import LoginModal from 'solid-ui/components/login-modal';
 

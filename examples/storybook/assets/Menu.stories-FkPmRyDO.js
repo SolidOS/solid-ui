@@ -1,4 +1,4 @@
-import{i as e}from"./preload-helper-BdFrVu1K.js";import{ht as t,sn as n,un as r}from"./iframe-CLe2QiHr.js";import{n as i,t as a}from"./Menu-CvJHvCAl.js";function o(e,t){let n=e.target,r=n.parentElement.querySelectorAll(`solid-ui-menu-item`);for(let e of r)e.selected=!1;n.selected=!0,alert(t)}var s,c,l;e((()=>{n(),t(),i(),a(),s={title:`Basic UI/Menu`,render:()=>r`
+import{i as e}from"./preload-helper-BdFrVu1K.js";import{ht as t,sn as n,un as r}from"./iframe-DKr4hIT3.js";import{n as i,t as a}from"./Menu-CECsb32_.js";function o(e,t){let n=e.target,r=n.parentElement.querySelectorAll(`solid-ui-menu-item`);for(let e of r)e.selected=!1;n.selected=!0,alert(t)}var s,c,l;e((()=>{n(),t(),i(),a(),s={title:`Basic UI/Menu`,render:()=>r`
         <solid-ui-menu>
             <solid-ui-button slot="trigger">
                 Open Menu
