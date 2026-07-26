@@ -4,6 +4,7 @@
  */
 
 /* global $rdf */
+import * as $rdf from 'rdflib'
 import { insertMessageIntoTable } from './infinite'
 import { messageToolbar, sentimentStripLinked } from './messageTools'
 import { findBookmarkDocument } from './bookmarks'

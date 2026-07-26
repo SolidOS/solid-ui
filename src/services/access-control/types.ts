@@ -1,14 +1,23 @@
-import { NamedNode } from "rdflib"
-import { Mode, PermissionType } from './constants'
-
-export type Mode =
-  (typeof Mode)[keyof typeof Mode]
-
-export type PermissionType =
-  (typeof PermissionType)[keyof typeof PermissionType]
+import { NamedNode } from 'rdflib'
+import { ACLMode, ACLPermissionType } from './constants'
 
 export interface Permission {
-  type: PermissionType
+  type: ACLPermissionType
   target: NamedNode
-  modes: Mode[]
+  modes: ACLMode[]
 }
+
+export type ACLResult =
+  | {
+      kind: 'found'
+      acl: NamedNode
+    }
+  | {
+      kind: 'missing'
+      message: string
+    }
+  | {
+      kind: 'error'
+      status?: number
+      message: string
+    }
