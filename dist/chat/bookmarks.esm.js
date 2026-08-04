@@ -56,7 +56,8 @@ async function C(t, n) {
 	try {
 		await x([], c);
 	} catch (e) {
-		return a("Making bookmark: " + e), null;
+		let t = "Making bookmark: " + e;
+		return a(t), null;
 	}
 	return s;
 }

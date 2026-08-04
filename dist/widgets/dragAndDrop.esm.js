@@ -10,7 +10,7 @@ function r(n, r, i) {
 	}, s = function(n) {
 		n.preventDefault(), n.stopPropagation(), e("dragenter event dropEffect: " + n.dataTransfer.dropEffect), this.localStyle && (this.savedStyle ||= t.dragEvent), n.dataTransfer.dropEffect = "link", e("dragenter event dropEffect 2: " + n.dataTransfer.dropEffect);
 	}, c = function(n) {
-		n.stopPropagation(), e("dragleave event dropEffect: " + n.dataTransfer.dropEffect), this.savedStyle ? this.localStyle = this.savedStyle : this.localStyle = t.dropEvent;
+		n.stopPropagation(), e("dragleave event dropEffect: " + n.dataTransfer.dropEffect), this.localStyle = this.savedStyle ? this.savedStyle : t.dropEvent;
 	}, l = function(n) {
 		n.preventDefault && n.preventDefault(), n.stopPropagation && n.stopPropagation(), e("Drop event. dropEffect: " + n.dataTransfer.dropEffect), e("Drop event. types: " + (n.dataTransfer.types ? n.dataTransfer.types.join(", ") : "NOPE"));
 		let o = null, s;

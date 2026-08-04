@@ -30,8 +30,8 @@ var d = class {
 		} else p.push(c.st(this.channel, e.wf("message"), y, v));
 		if (p.push(c.st(y, e.sioc("content"), u.literal(t), v)), x.content = t, p.push(c.st(y, e.dct("created"), _, v)), x.created = _.value, b) {
 			p.push(c.st(y, e.foaf("maker"), b, v)), x.maker = b.uri;
-			let t = o(x, await s(b));
-			p.push(c.st(y, c.sym(`${i}proofValue`), c.lit(t), v));
+			let t = await s(b), n = o(x, t);
+			p.push(c.st(y, c.sym(`${i}proofValue`), c.lit(n), v));
 		}
 		f && (p.push(c.st(f, e.sioc("has_member"), y, v)), f.doc().sameTerm(y.doc()) || p.push(c.st(f, e.sioc("has_member"), y, f.doc())));
 		try {

@@ -135,7 +135,8 @@ var t = class {
 				});
 			}
 			return n;
-		} else return null;
+		}
+		return null;
 	}
 	_handleArrows(t) {
 		if (t.keyCode === 40 || t.keyCode === 38) {

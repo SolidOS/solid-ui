@@ -1,4 +1,4 @@
-import { Literal, NamedNode } from 'rdflib';
+import { NamedNode } from 'rdflib';
 export declare const AUTOCOMPLETE_LIMIT = 200;
 interface Term {
     type: string;
@@ -55,7 +55,7 @@ export declare const wikidataOutgoingClassMap: {
 export declare const wikidataParameters: {
     label: string;
     limit: number;
-    logo: NamedNode;
+    logo: any;
     endpoint: string;
     searchByNameQuery: string;
     insitituteDetailsQuery: string;
@@ -82,7 +82,7 @@ export declare const variableNameToPredicateMap: {
     lat: any;
     long: any;
 };
-export declare function bindingToTerm(item: any): NamedNode | Literal;
+export declare function bindingToTerm(item: any): any;
 export declare function loadFromBindings(kb: any, solidSubject: NamedNode, bindings: any, doc: any, predMap?: {
     targetClass: any;
     sealImage: any;

@@ -220,9 +220,7 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		this.nativeDialog && (typeof this.nativeDialog.showModal == "function" ? this.nativeDialog.showModal() : typeof this.nativeDialog.show == "function" ? this.nativeDialog.show() : this.nativeDialog.setAttribute("open", ""), this.nativeDialog.addEventListener("close", () => this.close()));
 	}
 	render() {
-		return s`
-        <dialog>
-            <slot name="header">${this.title ? s`
+		let e = this.title ? s`
         <solid-ui-dialog-header>
             <h1>${this.title}</h1>
 
@@ -231,7 +229,10 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
                 <icon-lucide-x slot="icon"></icon-lucide-x>
             </solid-ui-button>
         </solid-ui-dialog-header>
-        ` : c}</slot>
+        ` : c;
+		return s`
+        <dialog>
+            <slot name="header">${e}</slot>
             <slot></slot>
             <slot name="footer"></slot>
         </dialog>

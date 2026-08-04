@@ -17,7 +17,8 @@ function s(e) {
 	return JSON.stringify(e);
 }
 function c(e) {
-	return t(r(i.encode(s(e))));
+	let n = r(i.encode(s(e)));
+	return t(n);
 }
 function l(t, r, i) {
 	return e.verify(n(t), n(c(r)), n(i));

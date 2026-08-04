@@ -47,13 +47,15 @@ function _(e, r) {
 				return;
 			}
 			let s = f.each(null, t.solid("forClass"), e, r.preferencesFile), c = [], u, d;
-			if (s.length) if (s.forEach((e) => {
-				u ||= f.any(e, t.solid("personalDefaults"));
-			}), u) {
-				r.personalDefaults = u, i(r);
-				return;
-			} else u = o(r.preferencesFile), d = s[0];
-			else d = o(r.preferencesFile), c = [l.st(d, t.rdf("type"), t.solid("TypeRegistration"), r.preferencesFile), l.st(d, t.solid("forClass"), e, r.preferencesFile)];
+			if (s.length) {
+				if (s.forEach((e) => {
+					u ||= f.any(e, t.solid("personalDefaults"));
+				}), u) {
+					r.personalDefaults = u, i(r);
+					return;
+				}
+				u = o(r.preferencesFile), d = s[0];
+			} else d = o(r.preferencesFile), c = [l.st(d, t.rdf("type"), t.solid("TypeRegistration"), r.preferencesFile), l.st(d, t.solid("forClass"), e, r.preferencesFile)];
 			u = o(r.preferencesFile), c.push(l.st(d, t.solid("personalDefaults"), u, r.preferencesFile)), f.updater.update([], c, function(t, n, o) {
 				n ? (r.personalDefaults = u, i(r)) : a(/* @__PURE__ */ Error("Setting preferences for " + e + ": " + o));
 			});

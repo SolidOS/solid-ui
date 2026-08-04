@@ -164,7 +164,8 @@ async function E(e, t, r, o) {
 	if (o.searchByNameQuery) {
 		let e = s(o.searchByNameQuery);
 		return n("Querying public data - sparql: " + e), D(e, o);
-	} else if (o.searchByNameURI) {
+	}
+	if (o.searchByNameURI) {
 		let e = s(o.searchByNameURI), t;
 		try {
 			t = await c.fetcher?.webOperation("GET", e, p);
@@ -177,7 +178,8 @@ async function E(e, t, r, o) {
 		let i = T(r), a = JSON.parse(i);
 		if (n("    API Query result JSON" + JSON.stringify(a, null, 4).slice(0, 500) + "..."), a._embedded) return n("      Looks like ESCO"), C(a);
 		throw alert("Code me: unrecognized API return format"), Error(`*** Need to add code to parse unrecognized API JSON return\n${JSON.stringify(a, null, 4)}`);
-	} else throw Error("Query source must have either rest API or SPARQL endpoint.");
+	}
+	throw Error("Query source must have either rest API or SPARQL endpoint.");
 }
 async function D(e, t) {
 	if (!t.endpoint) throw Error("Missing queryTarget.endpoint required for queryPublicDataSelect");
@@ -206,8 +208,8 @@ async function O(e, t, r) {
 	let l = {
 		credentials: "omit",
 		headers: o
-	}, u = (await c.fetcher?.webOperation("GET", a, l))?.responseText || "No response text?";
-	if (n("    queryPublicDataConstruct result text:" + (u.length > 500 ? u.slice(0, 200) + " ... " + u.slice(-200) : u)), u.length === 0) throw Error("queryPublicDataConstruct: No text back from construct query:" + a);
+	}, u = (await c.fetcher?.webOperation("GET", a, l))?.responseText || "No response text?", d = u.length > 500 ? u.slice(0, 200) + " ... " + u.slice(-200) : u;
+	if (n("    queryPublicDataConstruct result text:" + d), u.length === 0) throw Error("queryPublicDataConstruct: No text back from construct query:" + a);
 	s(u, c, t.uri, "text/turtle");
 }
 async function k(e, t, n) {

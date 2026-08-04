@@ -375,7 +375,8 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
     `;
 	}
 	renderViewport() {
-		return r`<div class="viewport">${this.previewUrl ? r`<img src="${this.previewUrl}" alt="Captured photo preview" />` : r`<video autoplay playsinline muted></video>`}</div>`;
+		let e = this.previewUrl ? r`<img src="${this.previewUrl}" alt="Captured photo preview" />` : r`<video autoplay playsinline muted></video>`;
+		return r`<div class="viewport">${e}</div>`;
 	}
 	renderStatus() {
 		return this.errorMessage ? r`<div class="status error">${this.errorMessage}</div>` : this.startingPreview ? r`<div class="status">Opening camera…</div>` : this.value ? r`<div class="status">Review the photo before confirming it.</div>` : r`<div class="status">Preview the camera and take a photo when ready.</div>`;

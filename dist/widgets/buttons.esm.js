@@ -165,7 +165,8 @@ function B(e, t) {
 	}(t) ? "noun_15177.svg" : "noun_681601.svg")), t.uri && t.uri.startsWith("https:") && t.uri.indexOf("#") < 0) {
 		let r = e.createElement("object");
 		return r.setAttribute("data", F(t) + "favicon.ico"), r.setAttribute("type", "image/x-icon"), r.appendChild(n), r;
-	} else return z(n, t), n;
+	}
+	return z(n, t), n;
 }
 function re(e, t, n, r) {
 	function i() {
@@ -274,7 +275,9 @@ function J(e, t, n, r) {
 }
 function ae(e, t, n) {
 	let r = e.createElement("div");
-	return r.setAttribute("style", s.renderAsDivStyle), n ||= {}, h(e, r, n.image || B(e, t)), q(e, r, n.title, t), J(e, r, t, n), n.clickable && n.onClickFunction && m(r, n.onClickFunction), n.wrapInATR ? g(e, r, t) : r;
+	r.setAttribute("style", s.renderAsDivStyle), n ||= {};
+	let i = n.image || B(e, t);
+	return h(e, r, i), q(e, r, n.title, t), J(e, r, t, n), n.clickable && n.onClickFunction && m(r, n.onClickFunction), n.wrapInATR ? g(e, r, t) : r;
 }
 function Y(e) {
 	if (e.refresh) {
@@ -493,11 +496,13 @@ function Q(e, t) {
 }
 function $(e, t) {
 	let n = e.createElement("div"), r = n.appendChild(e.createElement("input"));
-	return r.setAttribute("type", "file"), r.setAttribute("multiple", "true"), r.addEventListener("change", (e) => {
+	r.setAttribute("type", "file"), r.setAttribute("multiple", "true"), r.addEventListener("change", (e) => {
 		o("File drop event: ", e), e.files ? t(e.files) : e.target && e.target.files ? t(e.target.files) : alert("Sorry no files .. internal error?");
-	}, !1), r.style = "display:none", l(n.appendChild(H(e, w + "noun_Upload_76574_000000.svg", "Upload files", (e) => {
+	}, !1), r.style = "display:none";
+	let i = n.appendChild(H(e, w + "noun_Upload_76574_000000.svg", "Upload files", (e) => {
 		r.click();
-	})), null, t), n;
+	}));
+	return l(i, null, t), n;
 }
 Z = {
 	line: {},

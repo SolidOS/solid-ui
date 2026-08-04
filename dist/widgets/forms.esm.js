@@ -323,12 +323,12 @@ function z(e, t, n, r, i, a, o) {
 x[e.ui("Comment").uri] = x[e.ui("Heading").uri] = function(t, n, r, i, a, o, s) {
 	let c = e.ui, l = M, u = l.any(a, c("contents"));
 	u ||= "Error: No contents in comment field.";
-	let d = a.doc ? a.doc() : null, f = b[C(a)] || {}, p = t.createElement("div");
-	n && n.appendChild(p);
-	let m = p.appendChild(t.createElement(f.element));
-	m.textContent = u, w(m, a);
-	let h = l.anyJS(a, e.ui("suppressIfUneditable"), null, d), g = l.updater.editable(o.uri);
-	return h && !g && (p.style.display = "none"), p;
+	let d = a.doc ? a.doc() : null, f = C(a), p = b[f] || {}, m = t.createElement("div");
+	n && n.appendChild(m);
+	let h = m.appendChild(t.createElement(p.element));
+	h.textContent = u, w(h, a);
+	let g = l.anyJS(a, e.ui("suppressIfUneditable"), null, d), _ = l.updater.editable(o.uri);
+	return g && !_ && (m.style.display = "none"), m;
 };
 function B(t, n, i, a, o) {
 	let s = t.createElement("button");
@@ -428,7 +428,9 @@ function K(i, a, o, s, c, u, d, f) {
 	function b(e, t, n) {
 		return f(t, n);
 	}
-	return n("paneUtils Object is " + h), y(i, m(i, p, {}, h, u, d, v)).setAttribute("style", "float: right;"), p.AJAR_subject = h, p;
+	n("paneUtils Object is " + h);
+	let x = m(i, p, {}, h, u, d, v);
+	return y(i, x).setAttribute("style", "float: right;"), p.AJAR_subject = h, p;
 }
 function q(e, t, n, r, i, a) {
 	let o = e.createElement("div"), s = t.anyJS(n, r, null, i) || "", c = e.createElement("textarea");
@@ -633,7 +635,7 @@ function Z(t, n, r, i, a, o, c, l) {
 		if (b) return;
 		b = !0, h.disabled = !0;
 		let r = !1, o = function() {
-			return r ? !1 : (r = !0, b = !1, h.disabled = !1, !0);
+			return !r && (r = !0, b = !1, h.disabled = !1, !0);
 		}, c = function(e) {
 			g.style.color = "#000", g.style.backgroundColor = "#fee", f.appendChild(d(t, `Checkbox: Error updating dataDoc from ${h.state} to ${h.newState}:\n\n${e}`));
 		};

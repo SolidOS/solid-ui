@@ -23,7 +23,8 @@ async function i(r, i) {
 			return console.warn("Unable to load profile of pod owner " + a), null;
 		}
 		return i.holds(a, e.space("storage"), r, a.doc()) || console.warn(`Pod owner ${a} does NOT list pod ${r} as their storage`), a;
-	} else {
+	}
+	{
 		let t = n(`${r.uri}profile/card#me`);
 		try {
 			await i.fetcher.load(t);

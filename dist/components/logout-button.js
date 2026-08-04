@@ -1,2 +1,2 @@
-import { n as e, t } from "../chunks/logout-button-xre5aq9O.js";
+import { n as e, t } from "../chunks/logout-button-ClbKS9ss.js";
 export { e as LogoutButton, t as default };

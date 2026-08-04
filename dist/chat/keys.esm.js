@@ -32,7 +32,8 @@ async function _(o) {
 			let i = h(g);
 			r = [l.st(o, e.solid("publicKey"), l.literal(i), u.sym(d))], await y(d, n, r);
 		}
-		await c(f.substring(0, f.lastIndexOf("/") + 1), s(o.uri));
+		let i = f.substring(0, f.lastIndexOf("/") + 1);
+		await c(i, s(o.uri));
 	}
 	return g;
 }
@@ -48,7 +49,9 @@ var v = async (e) => {
 	}
 };
 async function y(e, t, n, r = "") {
-	await v(e), await u.updater.updateMany(t, n), await c(e, o(e, r));
+	await v(e), await u.updater.updateMany(t, n);
+	let i = o(e, r);
+	await c(e, i);
 }
 //#endregion
 export { m as generatePrivateKey, h as generatePublicKey, _ as getPrivateKey, g as getPublicKey };

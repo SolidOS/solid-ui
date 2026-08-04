@@ -326,7 +326,8 @@ function d(e, t) {
 			if (e) {
 				let t;
 				return t = e.termType === "Literal" ? e.value : e.termType === "NamedNode" ? n(e) : "", t.toLowerCase().indexOf(l) >= 0;
-			} else return !1;
+			}
+			return !1;
 		}, o.addEventListener("keyup", function() {
 			l = o.value === "" ? null : o.value.toLowerCase(), V(t, r);
 		}, !1), a;
@@ -418,7 +419,6 @@ function d(e, t) {
 		let r = q(n), i = r.cellFormat;
 		if (i) switch (i) {
 			case "shortDate": return e.createTextNode(u.widgets.shortDate(t.value));
-			default:
 		}
 		else if (t.termType === "Literal") {
 			if (t.datatype) {

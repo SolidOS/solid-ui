@@ -244,16 +244,16 @@ j = (_ = l({
 		n && t.updater?.editable(n) !== void 0 && t.updater?.editable(n) !== !1 && (this.entireDataIsReadonly = !1);
 		let r = i(this.currentStore, U(this.formUrl));
 		if (!r) throw Error("No ui:Form found in " + U(this.formUrl));
-		let o = c(U(this.formUrl));
-		return f`
-      <form>
-        ${(a(t, t.each(r, e.ui("parts"), null, o)) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((n) => {
+		let o = c(U(this.formUrl)), s = t.each(r, e.ui("parts"), null, o), l = (a(t, s) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((n) => {
 			let r = t.each(n, e.rdf("type"), null, o)[0], i = r ? r.value || String(r) : n.value || String(n), a = i.lastIndexOf("#");
 			return {
 				value: n,
 				fieldValue: a >= 0 ? i.slice(a + 1) : i
 			};
-		}).map((e) => {
+		});
+		return f`
+      <form>
+        ${l.map((e) => {
 			switch (e.fieldValue) {
 				case "PhoneField":
 				case "EmailField":

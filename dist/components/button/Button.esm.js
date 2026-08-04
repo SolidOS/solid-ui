@@ -242,9 +242,7 @@ new (C = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 			case "submit":
 				this.getInternals().form?.requestSubmit();
 				break;
-			case "reset":
-				this.getInternals().form?.reset();
-				break;
+			case "reset": this.getInternals().form?.reset();
 		}
 	}
 }, {e: [g, v, b, S, f], c: [R, p]} = j(s, [

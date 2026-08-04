@@ -29,7 +29,9 @@ var l = class {
 	}
 	get account() {
 		let e = i.webId ?? i.info?.webId;
-		return !(i.isActive ?? i.info?.isLoggedIn ?? !!e) || !e ? null : new t(e, c(e));
+		if (!(i.isActive ?? i.info?.isLoggedIn ?? !!e) || !e) return null;
+		let n = c(e);
+		return new t(e, n);
 	}
 	async login(e) {
 		if (!e) {

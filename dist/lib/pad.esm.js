@@ -64,7 +64,11 @@ function y(e, s, c, l, u) {
 			return;
 		}
 		let o = _.statementsMatching(t, void 0, void 0, s).concat(_.statementsMatching(void 0, void 0, t, s)), l = [p(i, b("next"), a, s)];
-		if (t instanceof d && r("Deleting line " + t.uri.slice(-4)), !y) throw Error("have no updater");
+		if (t instanceof d) {
+			let e = t.uri.slice(-4);
+			r("Deleting line " + e);
+		}
+		if (!y) throw Error("have no updater");
 		y.update(o, l, function(i, a, s, c) {
 			if (a) {
 				let t = e.parentNode;
@@ -130,10 +134,7 @@ function y(e, s, c, l, u) {
 				case 38:
 					e.parentNode.previousSibling && (e.parentNode.previousSibling.firstChild.focus(), t.preventDefault());
 					break;
-				case 40:
-					e.parentNode.nextSibling && (e.parentNode.nextSibling.firstChild.focus(), t.preventDefault());
-					break;
-				default:
+				case 40: e.parentNode.nextSibling && (e.parentNode.nextSibling.firstChild.focus(), t.preventDefault());
 			}
 		});
 		let o = function(e) {

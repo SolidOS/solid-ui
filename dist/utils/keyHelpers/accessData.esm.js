@@ -42,7 +42,8 @@ async function l(t, r, a) {
 			}
 			delete i.fetcher.requested[r];
 			return;
-		} else throw n("createIfNotExists doc FAILED: " + r + ": " + e), e;
+		}
+		throw n("createIfNotExists doc FAILED: " + r + ": " + e), e;
 	}
 }
 //#endregion

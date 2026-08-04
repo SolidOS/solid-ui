@@ -168,7 +168,8 @@ var u = e.acl, d = {
 				return t(n), Promise.reject(Error(n));
 			}
 			return this.handleDroppedUri(e, r, !0);
-		} else if (!a) {
+		}
+		if (!a) {
 			let n = Object.keys(this.store.findTypeURIs(o)), r = n.length > 0 ? `Detected RDF types: ${n.join(", ")}` : "No RDF type was detected for this URI.", i = `Error: Failed to add access target: ${e} is not a recognized ACL target type. Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes. Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.` + r;
 			return t(i), Promise.reject(Error(i));
 		}

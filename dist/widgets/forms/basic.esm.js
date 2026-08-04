@@ -32,28 +32,30 @@ function p(e, t, n) {
 function m(t, l, f, m, h, g, _) {
 	let v = u, y = h.doc ? h.doc() : null, b = t.createElement("div"), x = v.any(h, e.ui("property"));
 	if (l && l.appendChild(b), !x) return b.appendChild(i(t, "Error: No property given for text field: " + h));
-	let S = d(t, v, b, h), C = v.anyJS(h, e.ui("suppressEmptyUneditable"), null, y), w = a[o(h)];
-	w === void 0 && (w = { style: "" });
-	let T = w.style || "", E = r.textInputStyle + T, D = t.createElement("input");
-	D.style = E, S.appendChild(D), D.setAttribute("type", w.type ? w.type : "text");
-	let O = (D.getAttribute("type") || "").toLowerCase(), k = O === "date" || O === "datetime-local", A = v.anyJS(h, e.ui("size")) || n.textInputSize || 20;
-	D.setAttribute("size", A);
-	let j = v.any(h, e.ui("maxLength"));
-	D.setAttribute("maxLength", j ? "" + j : n.basicMaxLength), g ||= p(m, x, g);
-	let M = v.any(m, x, void 0, g);
-	if (M ||= v.any(h, e.ui("default")), M && M.value && w.uriPrefix ? D.value = decodeURIComponent(M.value.replace(w.uriPrefix, "")).replace(/ /g, "") : M && (D.value = M.value || M.value || ""), D.setAttribute("style", E), !v.updater) throw Error("kb has no updater");
-	return v.updater.editable(g.uri) ? (D.addEventListener("keyup", function(e) {
-		w.pattern && D.setAttribute("style", E + (D.value.match(w.pattern) ? "color: green;" : "color: red;"));
-	}, !0), D.addEventListener("change", function(n) {
-		if (k && t.activeElement === D) {
-			D.dataset && (D.dataset.deferredChange = "true");
+	let S = d(t, v, b, h), C = v.anyJS(h, e.ui("suppressEmptyUneditable"), null, y), w = o(h), T = a[w];
+	T === void 0 && (T = { style: "" });
+	let E = T.style || "", D = r.textInputStyle + E, O = t.createElement("input");
+	O.style = D, S.appendChild(O), O.setAttribute("type", T.type ? T.type : "text");
+	let k = (O.getAttribute("type") || "").toLowerCase(), A = k === "date" || k === "datetime-local", j = v.anyJS(h, e.ui("size")) || n.textInputSize || 20;
+	O.setAttribute("size", j);
+	let M = v.any(h, e.ui("maxLength"));
+	O.setAttribute("maxLength", M ? "" + M : n.basicMaxLength), g ||= p(m, x, g);
+	let N = v.any(m, x, void 0, g);
+	if (N ||= v.any(h, e.ui("default")), N && N.value && T.uriPrefix ? O.value = decodeURIComponent(N.value.replace(T.uriPrefix, "")).replace(/ /g, "") : N && 
+	/* istanbul ignore next */
+	(O.value = N.value || N.value || ""), O.setAttribute("style", D), !v.updater) throw Error("kb has no updater");
+	return v.updater.editable(g.uri) ? (O.addEventListener("keyup", function(e) {
+		T.pattern && O.setAttribute("style", D + (O.value.match(T.pattern) ? "color: green;" : "color: red;"));
+	}, !0), O.addEventListener("change", function(n) {
+		if (A && t.activeElement === O) {
+			O.dataset && (O.dataset.deferredChange = "true");
 			return;
 		}
-		if (w.pattern && !D.value.match(w.pattern)) return;
-		let r = !k;
-		r && (D.disabled = !0), D.setAttribute("style", E + "color: gray;");
+		if (T.pattern && !O.value.match(T.pattern)) return;
+		let r = !A;
+		r && (O.disabled = !0), O.setAttribute("style", D + "color: gray;");
 		let a = v.statementsMatching(m, x), o;
-		w.namedNode ? o = v.sym(D.value) : w.uriPrefix ? (o = encodeURIComponent(D.value.replace(/ /g, "")), o = v.sym(w.uriPrefix + D.value)) : o = w.dt ? new s(D.value.trim(), void 0, e.xsd(w.dt)) : new s(D.value);
+		T.namedNode ? o = v.sym(O.value) : T.uriPrefix ? (o = encodeURIComponent(O.value.replace(/ /g, "")), o = v.sym(T.uriPrefix + O.value)) : o = T.dt ? new s(O.value.trim(), void 0, e.xsd(T.dt)) : new s(O.value);
 		let l = a.map((e) => c(e.subject, e.predicate, o, e.why));
 		l.length === 0 && (l = [c(m, x, o, g)]);
 		function u(e, t, n) {
@@ -73,15 +75,15 @@ function m(t, l, f, m, h, g, _) {
 			});
 		}
 		u(a, l, function(e, n, a) {
-			n ? (r && (D.disabled = !1), D.setAttribute("style", E)) : b.appendChild(i(t, a)), _(n, a);
+			n ? (r && (O.disabled = !1), O.setAttribute("style", D)) : b.appendChild(i(t, a)), _(n, a);
 		});
-	}, !0), D.addEventListener("blur", function(e) {
-		if (k && D.dataset && D.dataset.deferredChange === "true") {
-			delete D.dataset.deferredChange;
+	}, !0), O.addEventListener("blur", function(e) {
+		if (A && O.dataset && O.dataset.deferredChange === "true") {
+			delete O.dataset.deferredChange;
 			let e = new Event("change", { bubbles: !0 });
-			D.dispatchEvent(e);
+			O.dispatchEvent(e);
 		}
-	}, !0), b) : (D.readOnly = !0, D.style = r.textInputStyleUneditable + T, C && D.value === "" && (b.style.display = "none"), b);
+	}, !0), b) : (O.readOnly = !0, O.style = r.textInputStyleUneditable + E, C && O.value === "" && (b.style.display = "none"), b);
 }
 //#endregion
 export { m as basicField, f as fieldLabel, p as fieldStore, d as renderNameValuePair };

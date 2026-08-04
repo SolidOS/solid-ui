@@ -28,7 +28,8 @@ var o = Symbol("WebComponentMetadata"), s = class extends t {
 		super(...e), r(this, o, void 0), r(this, "internals", void 0), r(this, "globalListeners", []), r(this, "traits", []);
 	}
 	static finalizeStyles(t) {
-		return [e, ...super.finalizeStyles(t)];
+		let n = super.finalizeStyles(t);
+		return [e, ...n];
 	}
 	disconnectedCallback() {
 		super.disconnectedCallback();

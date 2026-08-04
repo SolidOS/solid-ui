@@ -237,7 +237,7 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
     `;
 	}
 	syncItems() {
-		let e = Array.from(this.children).filter((e) => !e.hasAttribute("slot"));
+		let e = Array.from(this.children).filter((e) => e.getAttribute("slot") !== "trigger");
 		this.items = e.map((e, t) => {
 			let n = `menu-item-${t}`;
 			return e.getAttribute("slot") !== n && e.setAttribute("slot", n), { slot: n };

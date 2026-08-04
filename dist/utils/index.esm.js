@@ -211,7 +211,7 @@ function O(e) {
 	let n = [];
 	for (let e in this.prefixes) n[this.prefixes[e]] = e;
 	let r, i = function(e) {
-		return e === "ns" ? !1 : (r = e, !0);
+		return e !== "ns" && (r = e, !0);
 	}, a, o = t.lastIndexOf("#");
 	for (o >= 0 && (t = t.slice(o - 1));;) {
 		let e = t.lastIndexOf("/");

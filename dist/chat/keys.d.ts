@@ -8,6 +8,6 @@ export declare function generatePublicKey(privateKey: string): string;
  * @param webId
  * @returns string | undefined
  */
-export declare function getPublicKey(webId: NamedNode): Promise<string | undefined>;
+export declare function getPublicKey(webId: NamedNode): Promise<any>;
 export declare function getPrivateKey(webId: NamedNode): Promise<string>;
 //# sourceMappingURL=keys.d.ts.map

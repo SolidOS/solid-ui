@@ -31,9 +31,11 @@ function g(e, i, s, l, u, d) {
 		let e = h.each(l, t.wf("participation")).map(function(e) {
 			return r("in participants"), [h.anyValue(e, t.cal("dtstart")) || "9999-12-31", e];
 		});
-		e.sort(), n(i, e.map(function(e) {
+		e.sort();
+		let a = e.map(function(e) {
 			return e[1];
-		}), f);
+		});
+		n(i, a, f);
 	};
 	return i.refresh = p, p(), i;
 }

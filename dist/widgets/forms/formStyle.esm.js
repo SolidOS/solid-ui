@@ -5,12 +5,12 @@ import { store as r } from "solid-logic";
 //#region src/widgets/forms/formStyle.ts
 var i = "https://www.w3.org/ns/css#";
 function a(a, o) {
-	let s = t[n(o)] || {}, c = r.any(o, e.ui("style"));
-	if (!c) {
-		s.style && a.setAttribute("style", s.style);
+	let s = n(o), c = t[s] || {}, l = r.any(o, e.ui("style"));
+	if (!l) {
+		c.style && a.setAttribute("style", c.style);
 		return;
 	}
-	c.termType === "Literal" ? c && a.setAttribute("style", c.value) : r.statementsMatching(c, null, null, o.doc()).forEach((e) => {
+	l.termType === "Literal" ? l && a.setAttribute("style", l.value) : r.statementsMatching(l, null, null, o.doc()).forEach((e) => {
 		if (e.predicate.uri && e.predicate.uri.startsWith(i)) {
 			let t = e.predicate.uri.slice(26);
 			try {

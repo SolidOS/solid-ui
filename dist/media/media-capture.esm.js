@@ -34,7 +34,8 @@ function l(o, l, u, d) {
 	}
 	function E() {
 		g = o.createElement("canvas"), g.setAttribute("width", t.canvasWidth), g.setAttribute("height", t.canvasHeight), g.setAttribute("style", t.controlStyle), v.appendChild(g), g.getContext("2d").drawImage(h, 0, 0, g.width, g.height), h.parentNode.removeChild(h), g.toBlob((t) => {
-			e(`got blob type ${t.type} size ${t.size}`), p = u(), m = t, D();
+			let n = `got blob type ${t.type} size ${t.size}`;
+			e(n), p = u(), m = t, D();
 		}, c);
 	}
 	function D() {
