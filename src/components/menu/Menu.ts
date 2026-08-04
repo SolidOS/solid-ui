@@ -62,7 +62,7 @@ export default class Menu extends WebComponent {
 
   private syncItems (): void {
     const items = Array.from(this.children).filter(
-      (child) => !child.hasAttribute('slot')
+      (child) => child.getAttribute('slot') !== 'trigger'
     )
 
     this.items = items.map((item, index) => {
