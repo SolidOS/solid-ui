@@ -9,6 +9,7 @@ describe('Index', () => {
     expect(Object.keys(Index).sort()).toEqual([
       'Account',
       'CloseDialogEvent',
+      'CodeEditor',
       'DEFAULT_AUTH_CONTEXT',
       'DEFAULT_DIALOG_CONTEXT',
       'DEFAULT_SIGNUP_URL',
@@ -27,7 +28,7 @@ describe('Index', () => {
       'create',
       'createTypes',
       'customElement',
-      'dialogContext',  
+      'dialogContext',
       'dom',
       'fileExplorerContext',
       'generateId',
