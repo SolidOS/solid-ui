@@ -39,9 +39,10 @@ import { showDialog as z } from "./lib/dialogs/helpers.esm.js";
 import "./lib/dialogs/index.esm.js";
 import B, { DEFAULT_SIGNUP_URL as V } from "./lib/auth/SolidAuth.esm.js";
 import "./lib/auth/index.esm.js";
+import { fileExplorerContext as H } from "./lib/file-explorer/context.esm.js";
 //#region src/index.ts
-var H = typeof window < "u" ? window.document : null;
+var U = typeof window < "u" ? window.document : null;
 //#endregion
-export { C as Account, j as CloseDialogEvent, T as DEFAULT_AUTH_CONTEXT, O as DEFAULT_DIALOG_CONTEXT, V as DEFAULT_SIGNUP_URL, L as Dialog, P as DialogComponent, M as DialogTrait, I as FormControlComponent, F as FormControlTrait, w as NoopAuth, R as ShowDialogEvent, B as SolidAuth, N as WebComponent, c as acl, l as aclControl, E as authContext, u as create, S as createTypes, A as customElement, k as dialogContext, H as dom, D as generateId, i as icons, g as infiniteMessageArea, x as initFooter, b as initHeader, a as language, t as log, s as login, d as matrix, f as media, p as messageArea, e as ns, h as pad, m as participation, _ as preferences, z as showDialog, r as style, v as table, y as tabs, n as utils, o as widgets };
+export { C as Account, j as CloseDialogEvent, T as DEFAULT_AUTH_CONTEXT, O as DEFAULT_DIALOG_CONTEXT, V as DEFAULT_SIGNUP_URL, L as Dialog, P as DialogComponent, M as DialogTrait, I as FormControlComponent, F as FormControlTrait, w as NoopAuth, R as ShowDialogEvent, B as SolidAuth, N as WebComponent, c as acl, l as aclControl, E as authContext, u as create, S as createTypes, A as customElement, k as dialogContext, U as dom, H as fileExplorerContext, D as generateId, i as icons, g as infiniteMessageArea, x as initFooter, b as initHeader, a as language, t as log, s as login, d as matrix, f as media, p as messageArea, e as ns, h as pad, m as participation, _ as preferences, z as showDialog, r as style, v as table, y as tabs, n as utils, o as widgets };
 
 //# sourceMappingURL=index.esm.js.map
