@@ -142,7 +142,10 @@ describe('CodeEditor', () => {
     expect(editor.getValue()).toBe('hello world')
     expect(createdViews).toHaveLength(1)
     expect(createdViews[0].state.doc).toBe('hello world')
-    expect(createdViews[0].parent).toBe(container)
+    expect(container.firstElementChild?.classList.contains('code-editor-shell')).toBe(true)
+    expect(container.querySelector('.code-editor-toolbar')).not.toBeNull()
+    expect(container.querySelector('.code-editor-editor-host')).not.toBeNull()
+    expect(createdViews[0].parent).toBe(container.querySelector('.code-editor-editor-host'))
   })
 
   it('replaces content and toggles read only state', async () => {
@@ -186,5 +189,22 @@ describe('CodeEditor', () => {
 
     expect(onDirtyChange).toHaveBeenCalledTimes(1)
     expect(onDirtyChange).toHaveBeenCalledWith(true)
+  })
+
+  it('toggles the editor theme from the toolbar', async () => {
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    await editor.initialize(container, 'first', 'text/plain', 'dark')
+    const view = createdViews[0]
+    const lightButton = container.querySelector('button[title="Use light editor theme"]')
+
+    expect(lightButton).not.toBeNull()
+    lightButton?.dispatchEvent(new window.MouseEvent('click', { bubbles: true }))
+
+    expect(view.dispatch).toHaveBeenCalled()
+    const lastCall = view.dispatch.mock.calls.at(-1)?.[0]
+    expect(lastCall.effects.value[0].type).toBe('lightTheme')
   })
 })

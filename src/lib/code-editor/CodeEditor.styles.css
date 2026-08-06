@@ -1,0 +1,52 @@
+.code-editor-shell {
+	display: flex;
+	flex-direction: column;
+	gap: 0.5rem;
+	width: 100%;
+	min-width: 0;
+}
+
+.code-editor-toolbar {
+	display: flex;
+	align-items: center;
+	justify-content: flex-end;
+	gap: 0.5rem;
+	flex-wrap: wrap;
+	width: 100%;
+	min-width: 0;
+}
+
+.code-editor-toolbar-label {
+	font-size: 0.875rem;
+	font-weight: 600;
+	opacity: 0.8;
+}
+
+.code-editor-theme-button {
+	border: 1px solid currentColor;
+	border-radius: 999px;
+	padding: 0.25rem 0.75rem;
+	cursor: pointer;
+	font: inherit;
+	background: transparent;
+}
+
+.code-editor-theme-button[data-active='true'] {
+	background-color: #111827;
+	color: #ffffff;
+}
+
+.code-editor-editor-host {
+	width: 100%;
+	min-width: 0;
+}
+
+.code-editor-editor-host .cm-editor {
+	min-height: 6lh;
+	font-size: 16px;
+}
+
+.code-editor-editor-host .cm-content,
+.code-editor-editor-host .cm-gutters {
+	font-size: 16px;
+}
