@@ -27,7 +27,7 @@ describe('Index', () => {
       'create',
       'createTypes',
       'customElement',
-      'dialogContext',  
+      'dialogContext',
       'dom',
       'fileExplorerContext',
       'generateId',
