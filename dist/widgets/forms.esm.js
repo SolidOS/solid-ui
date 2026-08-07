@@ -301,17 +301,19 @@ x[e.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 			r.init(), r.subscribe(function(r) {
 				if (r.action === "REMOVE_OPTION" && (n = n.filter(function(e) {
 					return e !== r.value;
-				})), r.action === "CLEAR_ALL_OPTIONS" && (n = []), r.action === "ADD_OPTION") if ((r.value + "").includes("Create new")) {
-					let r = Q(o), a = [];
-					a.push(j.st(i, _, l.sym(r), o)), y && a.push(j.st(r, e.rdf("type"), l.sym(y), o)), b && z(t, g, {}, j.sym(r), b, o, function(e, i) {
-						e ? (l.updater.update([], a, function(e, n, r) {
-							n || g.appendChild(d(t, "Error updating select: " + r));
-						}), n.push(r), s && s(e, {
-							widget: "select",
-							event: "new"
-						})) : g.appendChild(d(t, "Error updating data in field of select: " + i));
-					});
-				} else n.push(r.value);
+				})), r.action === "CLEAR_ALL_OPTIONS" && (n = []), r.action === "ADD_OPTION") {
+					if ((r.value + "").includes("Create new")) {
+						let r = Q(o), a = [];
+						a.push(j.st(i, _, l.sym(r), o)), y && a.push(j.st(r, e.rdf("type"), l.sym(y), o)), b && z(t, g, {}, j.sym(r), b, o, function(e, i) {
+							e ? (l.updater.update([], a, function(e, n, r) {
+								n || g.appendChild(d(t, "Error updating select: " + r));
+							}), n.push(r), s && s(e, {
+								widget: "select",
+								event: "new"
+							})) : g.appendChild(d(t, "Error updating data in field of select: " + i));
+						});
+					} else n.push(r.value);
+				}
 				T.update(n);
 			});
 		}

@@ -1,2 +1,2 @@
-import { n as e, t } from "../chunks/dialog-CcMVH-Ut.js";
+import { n as e, t } from "../chunks/dialog-D9Ellvjx.js";
 export { e as Dialog, t as default };

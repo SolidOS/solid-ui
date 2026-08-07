@@ -72,14 +72,15 @@ async function B(t, i, a, o, s) {
 	let q = W.appendChild(M.createElement("td"));
 	o.authorDateOnLeft || z(q, f, K, i);
 	let J = k ? k.value.trim() : "??? no content?", Y = /^https?:\/[^ <>]*$/i.test(J), X = null;
-	if (Y) if (/\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(J) && o.expandImagesInline) {
-		let e = F(J, o);
-		q.appendChild(e);
-	} else {
-		let e = q.appendChild(M.createElement("a"));
-		X = e.appendChild(M.createElement("p")), e.href = J, X.textContent = J, q.appendChild(e);
-	}
-	else X = M.createElement("p"), q.appendChild(X), X.textContent = J;
+	if (Y) {
+		if (/\.(gif|jpg|jpeg|tiff|png|svg)$/i.test(J) && o.expandImagesInline) {
+			let e = F(J, o);
+			q.appendChild(e);
+		} else {
+			let e = q.appendChild(M.createElement("a"));
+			X = e.appendChild(M.createElement("p")), e.href = J, X.textContent = J, q.appendChild(e);
+		}
+	} else X = M.createElement("p"), q.appendChild(X), X.textContent = J;
 	if (X) {
 		let e = d ? T(f) : te(a);
 		X.setAttribute("style", N + "background-color: " + e + ";");

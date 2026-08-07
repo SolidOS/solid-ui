@@ -20,14 +20,16 @@ var t = /* @__PURE__ */ e({
 	return e[e.Error = n] = "Error", e[e.Warning = r] = "Warning", e[e.Message = i] = "Message", e[e.Success = a] = "Success", e[e.Info = o] = "Info", e[e.Debug = s] = "Debug", e[e.All = c] = "All", e;
 }({}), u = 7, d = !1, f = document, p = window;
 function m(e, t = i, n = "mesg") {
-	if (u & t) if (f !== void 0) {
-		let t = f.getElementById("status");
-		if (!t) return;
-		let r = f.createElement("span");
-		r.setAttribute("class", n);
-		let i = /* @__PURE__ */ new Date();
-		r.innerHTML = `${i.getHours()}:${i.getMinutes()}:${i.getSeconds()} [${n}] ${D(e)}<br/>`, d ? t.insertBefore(r, t.firstChild) : t.appendChild(r);
-	} else typeof console < "u" && console.log(e);
+	if (u & t) {
+		if (f !== void 0) {
+			let t = f.getElementById("status");
+			if (!t) return;
+			let r = f.createElement("span");
+			r.setAttribute("class", n);
+			let i = /* @__PURE__ */ new Date();
+			r.innerHTML = `${i.getHours()}:${i.getMinutes()}:${i.getSeconds()} [${n}] ${D(e)}<br/>`, d ? t.insertBefore(r, t.firstChild) : t.appendChild(r);
+		} else typeof console < "u" && console.log(e);
+	}
 }
 function h(e) {
 	m(e);

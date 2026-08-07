@@ -39,6 +39,12 @@ function I(e) {
 				C.saveUser(n, e), t(e);
 			});
 			e.div.appendChild(r);
+		}).catch((n) => {
+			if (i(`logIn: session check failed, showing login (${n})`), !e.div || !e.dom) return t(e);
+			let r = K(e.dom, (n) => {
+				C.saveUser(n, e), t(e);
+			});
+			e.div.appendChild(r);
 		});
 	});
 }
