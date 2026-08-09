@@ -16,6 +16,8 @@ export interface FileExplorerContext {
   soloPane?: boolean
 
   onBack?: () => void
+  refresh?: () => void
+  deleteTargetUri?: string
   openPane?: (subject: NamedNode, paneName: string) => void
   handleSharingClick?: () => void
 
