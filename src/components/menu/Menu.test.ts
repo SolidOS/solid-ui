@@ -81,4 +81,21 @@ describe('solid-ui-menu syncItems', () => {
 
     document.body.removeChild(menu)
   })
+
+  it('propagates disabled state to dropdown items', async () => {
+    const menu = createMenu()
+
+    const child = document.createElement('div')
+    child.textContent = 'Disabled Item'
+    child.setAttribute('disabled', '')
+    menu.appendChild(child)
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const dropdownItem = menu.shadowRoot?.querySelector('wa-dropdown-item') as HTMLElement & { disabled?: boolean }
+    expect(dropdownItem?.disabled).toBe(true)
+
+    document.body.removeChild(menu)
+  })
 })
