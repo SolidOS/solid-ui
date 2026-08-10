@@ -24,7 +24,7 @@ export default class Menu extends WebComponent {
   private accessor dropdown: WaDropdown | null = null;
 
   @state()
-  private accessor items: { slot: string; }[] = []
+  private accessor items: { slot: string; disabled: boolean }[] = []
 
   private observer: MutationObserver = new MutationObserver(() => this.syncItems())
 
@@ -32,7 +32,12 @@ export default class Menu extends WebComponent {
     super.connectedCallback()
 
     this.syncItems()
-    this.observer.observe(this, { childList: true })
+    this.observer.observe(this, {
+      childList: true,
+      attributes: true,
+      subtree: true,
+      attributeFilter: ['disabled', 'slot']
+    })
   }
 
   disconnectedCallback () {
@@ -52,7 +57,7 @@ export default class Menu extends WebComponent {
 
         ${this.items.map(
           (item) =>
-            html`<wa-dropdown-item @click=${this.onItemClick}>
+            html`<wa-dropdown-item ?disabled=${item.disabled} @click=${this.onItemClick}>
                 <slot name=${item.slot}></slot>
             </wa-dropdown-item>`
         )}
@@ -69,12 +74,13 @@ export default class Menu extends WebComponent {
 
     this.items = items.map((item, index) => {
       const slotName = `menu-item-${index}`
+      const disabled = item.hasAttribute('disabled')
 
       if (item.getAttribute('slot') !== slotName) {
         item.setAttribute('slot', slotName)
       }
 
-      return { slot: slotName }
+      return { slot: slotName, disabled }
     })
   }
 
