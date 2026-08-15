@@ -1,4 +1,6 @@
 export * from './decorators'
+export * from './dialog-component'
+export * from './form-control-component'
 export * from './ids'
-export * from './web-component'
 export * from './traits'
+export * from './web-component'

@@ -73,7 +73,7 @@ export const style = { // styleModule
   accessGroupListItem: 'display: grid; grid-template-columns: 100px auto 30%;',
   defaultsController: 'display: flex;',
   defaultsControllerNotice: 'color: #888; flexGrow: 1; fontSize: 80%;',
-  bigButton: 'background-color: white; border: 0.1em solid #888; border-radius: 0.3em; max-width: 50%; padding-bottom: 1em; padding-top: 1em;',
+  bigButton: 'background-color: white; color: black; text-wrap: pretty; border: 0.1em solid #888; border-radius: 0.3em; max-width: 50%; padding-bottom: 1em; padding-top: 1em;',
   group: 'color: #888;',
   group1: 'color: green;',
   group2: 'color: #cc0;',

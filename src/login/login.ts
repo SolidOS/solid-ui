@@ -93,6 +93,20 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
         resolve(context) // always pass growing context
       })
       context.div.appendChild(box)
+    }).catch((error) => {
+      // A failed/stalled session check (e.g. a missing worker-backed
+      // restore, stale redirect params) must never become an unhandled
+      // promise rejection — and must never leave the login UI spinning.
+      // Fall through to the login box so the user can sign in again.
+      debug.log(`logIn: session check failed, showing login (${error})`)
+      if (!context.div || !context.dom) {
+        return resolve(context)
+      }
+      const box = loginStatusBox(context.dom, (webIdUri) => {
+        authn.saveUser(webIdUri, context)
+        resolve(context) // always pass growing context
+      })
+      context.div.appendChild(box)
     })
   })
 }

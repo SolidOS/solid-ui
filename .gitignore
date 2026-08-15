@@ -1,6 +1,7 @@
 node_modules
 dist
 src/versionInfo.ts
+src/types/custom-elements.d.ts
 .idea
 .vscode
 coverage

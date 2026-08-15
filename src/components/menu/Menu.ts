@@ -18,7 +18,7 @@ export default class Menu extends WebComponent {
   accessor placement: WaDropdown['placement'] = 'bottom-start';
 
   @property({ type: Number, reflect: true })
-  accessor distance: number = 0;
+  accessor distance: number = 5;
 
   @query('wa-dropdown')
   private accessor dropdown: WaDropdown | null = null;
@@ -61,8 +61,10 @@ export default class Menu extends WebComponent {
   }
 
   private syncItems (): void {
+    // Exclude only the trigger element; include all other children
+    // regardless of whether they already have a slot assigned.
     const items = Array.from(this.children).filter(
-      (child) => !child.hasAttribute('slot')
+      (child) => child.getAttribute('slot') !== 'trigger'
     )
 
     this.items = items.map((item, index) => {
