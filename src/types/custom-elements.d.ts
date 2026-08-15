@@ -1,6 +1,7 @@
 import type Account from '../components/account/Account'
 import type Avatar from '../components/avatar/Avatar'
 import type Button from '../components/button/Button'
+import type ButtonAddFriend from '../components/button-add-friend/ButtonAddFriend'
 import type Combobox from '../components/combobox/Combobox'
 import type ComboboxOption from '../components/combobox-option/ComboboxOption'
 import type Dialog from '../components/dialog/Dialog'
@@ -31,6 +32,7 @@ declare global {
     'solid-ui-account': Account
     'solid-ui-avatar': Avatar
     'solid-ui-button': Button
+    'solid-ui-button-add-friend': ButtonAddFriend
     'solid-ui-combobox': Combobox
     'solid-ui-combobox-option': ComboboxOption
     'solid-ui-dialog': Dialog

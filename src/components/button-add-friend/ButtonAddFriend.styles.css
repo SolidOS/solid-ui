@@ -1,0 +1,15 @@
+.button-add-friend__status {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 12px;
+    padding: 8px 12px;
+    border: 1px solid var(--red-300, #f5c2c7);
+    border-radius: 8px;
+    background: #fee;
+    color: var(--red-700, #b42318);
+}
+
+.button-add-friend__status span {
+    line-height: 1.2;
+}
