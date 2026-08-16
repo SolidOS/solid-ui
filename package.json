@@ -159,15 +159,17 @@
 		"@noble/curves": "^2.2.0",
 		"@noble/hashes": "^2.2.0",
 		"escape-html": "^1.0.3",
+		"i": "^0.3.7",
 		"lit": "^3.3.3",
 		"mime-types": "^3.0.2",
-		"pane-registry": "^3.1.1",
+		"npm": "^11.19.0",
+		"pane-registry": "file:../pane-registry",
 		"solid-namespace": "^0.5.4",
 		"uuid": "^14.0.0"
 	},
 	"peerDependencies": {
-		"rdflib": "^2.3.8",
-		"solid-logic": "^4.0.7"
+		"rdflib": "^2.4.0",
+		"solid-logic": "file:../solid-logic"
 	},
 	"devDependencies": {
 		"@babel/cli": "^7.28.6",
