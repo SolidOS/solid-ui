@@ -21,10 +21,9 @@ describe('getUserRoles', () => {
   it('returns [] and does not load preferences when current user is missing', async () => {
     const solidLogic = require('solid-logic')
 
-    solidLogic.authSession.info = {
-      isLoggedIn: true,
-      webId: 'https://alice.example.com/profile/card#me'
-    }
+    // Note: `authSession.info` is a derived read-only property (from
+    // webId/isActive) and can no longer be assigned. The logged-out state is
+    // driven by mocking `currentUser` to return null below.
 
     const currentUserSpy = jest
       .spyOn(solidLogic.authn, 'currentUser')

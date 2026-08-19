@@ -107,9 +107,6 @@ export class Footer extends LitElement {
     if (typeof authSession.events.off === 'function') {
       authSession.events.off('login', this._updateFooter)
       authSession.events.off('logout', this._updateFooter)
-    } else if (typeof authSession.events.removeListener === 'function') {
-      authSession.events.removeListener('login', this._updateFooter)
-      authSession.events.removeListener('logout', this._updateFooter)
     }
     super.disconnectedCallback()
   }
