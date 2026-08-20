@@ -25,7 +25,7 @@ function l(s, l, u) {
 		}
 	}
 	function v(e) {
-		_("display: none;"), e.setAttribute("style", "padding: 0.7em; width: 2em; height: 2em;background-color: yellow;");
+		_("display: none;"), e.setAttribute("style", p + "background-color: yellow;");
 	}
 	function y(e) {
 		h = !h, m.setAttribute("style", p + (h ? "background-color: yellow;" : "")), _(h ? "" : "display: none;");
@@ -77,7 +77,7 @@ function l(s, l, u) {
 		let n = s.div.appendChild(d.createElement("img"));
 		n.setAttribute("src", e.icon);
 		let r = e.mintClass ? C[e.mintClass.uri] > 1 ? `${t(e.mintClass)} (using ${e.name} pane)` : t(e.mintClass) : e.name + " @@";
-		n.setAttribute("title", "Make new " + r), n.setAttribute("style", "padding: 0.7em; width: 2em; height: 2em;display: none;"), x.push(n), n.disabled || n.addEventListener("click", function(t) {
+		n.setAttribute("title", "Make new " + r), n.setAttribute("style", p + "display: none;"), x.push(n), n.disabled || n.addEventListener("click", function(t) {
 			v(n), b({
 				event: t,
 				folder: s.folder || null,

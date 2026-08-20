@@ -419,7 +419,7 @@ function X(e, t, n, r, i, a, o, s, c, l) {
 		g.setAttribute("href", o.uri), g.setAttribute("style", "float:right"), h.appendChild(g).textContent = ">", e.appendChild(h);
 		let _ = t.createElement("div");
 		return _.setAttribute("style", (a ? "float:left;" : "float:right;") + " width:30px;"), p = t.createElement("img"), m(), _.appendChild(p), e.appendChild(_), f.addEventListener("click", function(e) {
-			d === f ? (f.setAttribute("style", u), d = null) : (d && d.setAttribute("style", u), f.setAttribute("style", "border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;background-color: #ccc; color:black;"), d = f), c(o, e, d === f), m();
+			d === f ? (f.setAttribute("style", u), d = null) : (d && d.setAttribute("style", u), f.setAttribute("style", u + "background-color: #ccc; color:black;"), d = f), c(o, e, d === f), m();
 		}, !1), p.addEventListener("click", function(e) {
 			l(o, e, a, m);
 		}, !1), e.appendChild(f), e;
