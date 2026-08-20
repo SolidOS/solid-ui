@@ -1,6 +1,6 @@
 {
 	"name": "solid-ui",
-	"version": "3.1.3-17",
+	"version": "5.0.0-0",
 	"description": "UI library for Solid applications",
 	"main": "dist/index.cjs.js",
 	"types": "dist/index.d.ts",
@@ -112,9 +112,9 @@
 		"escape-html": "^1.0.3",
 		"lit": "^3.3.3",
 		"mime-types": "^3.0.2",
-		"pane-registry": "3.1.2-2",
+		"pane-registry": "5.0.0-0",
 		"rdflib": "2.4.0",
-		"solid-logic": "4.0.8-3",
+		"solid-logic": "6.0.0-0",
 		"solid-namespace": "^0.5.4",
 		"uuid": "^14.0.0"
 	},
