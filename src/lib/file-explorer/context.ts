@@ -17,7 +17,7 @@ export interface FileExplorerContext {
 
   onBack?: () => void
   openPane?: (subject: NamedNode, paneName: string) => void
-  handleSharingClick?: () => void
+  handleAccessClick?: () => void
 
   paneSupportsEditing?: boolean
   edit?: FileExplorerEdit
