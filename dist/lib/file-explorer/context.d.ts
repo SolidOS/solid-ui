@@ -12,7 +12,7 @@ export interface FileExplorerContext {
     soloPane?: boolean;
     onBack?: () => void;
     openPane?: (subject: NamedNode, paneName: string) => void;
-    handleSharingClick?: () => void;
+    handleAccessClick?: () => void;
     paneSupportsEditing?: boolean;
     edit?: FileExplorerEdit;
 }
