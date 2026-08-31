@@ -47,36 +47,40 @@ function i(t, n) {
 	}, !1);
 }
 function a(t, r, i, a, o) {
-	for (let s = 0; r[s]; s++) {
-		let c = r[s];
-		e(" dropped: Filename: " + c.name + ", type: " + (c.type || "n/a") + " size: " + c.size + " bytes, last modified: " + (c.lastModifiedDate ? c.lastModifiedDate.toLocaleDateString() : "n/a"));
-		let l = new FileReader();
-		l.onload = (function(r) {
-			return function(s) {
-				let c = s.target.result, l = "";
-				e(" File read byteLength : " + c.byteLength);
-				let u = r.type;
+	let s = function(e, t) {
+		let n = t?.response?.status ?? t?.status, r = t?.message || String(t), i = `Upload failed while putting ${e}`;
+		return n === 413 ? `${i}: storage quota was exceeded. ${r}` : n ? `${i} (HTTP ${n}). ${r}` : `${i}. ${r}`;
+	};
+	for (let c = 0; r[c]; c++) {
+		let l = r[c];
+		e(" dropped: Filename: " + l.name + ", type: " + (l.type || "n/a") + " size: " + l.size + " bytes, last modified: " + (l.lastModifiedDate ? l.lastModifiedDate.toLocaleDateString() : "n/a"));
+		let u = new FileReader();
+		u.onload = (function(r) {
+			return function(c) {
+				let l = c.target.result, u = "";
+				e(" File read byteLength : " + l.byteLength);
+				let d = r.type;
 				if (!r.type || r.type === "") {
-					if (u = n.lookup(r.name), !u) {
+					if (d = n.lookup(r.name), !d) {
 						let t = "Filename needs to have an extension which gives a type we know: " + r.name;
 						throw e(t), alert(t), Error(t);
 					}
 				} else {
 					let e = n.extension(r.type);
-					e && e !== "false" && !r.name.endsWith("." + e) && r.type !== n.lookup(r.name) && (l = "_." + e);
+					e && e !== "false" && !r.name.endsWith("." + e) && r.type !== n.lookup(r.name) && (u = "_." + e);
 				}
-				let d = r.type.startsWith("image/") && a || i, f = d + (d.endsWith("/") ? "" : "/") + encodeURIComponent(r.name) + l;
-				t.webOperation("PUT", f, {
-					data: c,
-					contentType: u
+				let f = r.type.startsWith("image/") && a || i, p = f + (f.endsWith("/") ? "" : "/") + encodeURIComponent(r.name) + u;
+				t.webOperation("PUT", p, {
+					data: l,
+					contentType: d
 				}).then((t) => {
-					e(" Upload: put OK: " + f), o(r, f);
+					e(" Upload: put OK: " + p), o(r, p);
 				}, (t) => {
-					let n = " Upload: FAIL " + f + ", Error: " + t;
+					let n = s(p, t);
 					throw e(n), alert(n), Error(n);
 				});
 			};
-		})(c), l.readAsArrayBuffer(c);
+		})(l), u.readAsArrayBuffer(l);
 	}
 }
 //#endregion
