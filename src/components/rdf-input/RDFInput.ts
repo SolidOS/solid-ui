@@ -6,9 +6,10 @@ import { Literal, NamedNode, st } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { FieldParamsObject, fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
-import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/store'
+import { DEFAULT_STORE, storeContext } from '@/lib/store'
 import { consume } from '@lit/context'
 import '@/components/input'
+import type { LiveStore } from 'rdflib'
 
 @customElement('solid-ui-rdf-input')
 export default class RDFInput extends WebComponent {
@@ -21,7 +22,7 @@ export default class RDFInput extends WebComponent {
   // dataSubject points to the data resource containing the value
 
   @consume({ context: storeContext, subscribe: true })
-  private accessor storeContext: StoreContext = DEFAULT_STORE
+  private accessor store: LiveStore = DEFAULT_STORE
 
   @property({ attribute: false, type: Object })
   accessor formSubject: NamedNode | null = null
@@ -55,7 +56,7 @@ export default class RDFInput extends WebComponent {
     const inputLabel = this.getInputLabel(this.formSubject, uiPropertyTerm, formDocument)
     const readonly = this.getReadOnly(this.readonly, this.formSubject, formDocument)
 
-    const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
+    const fieldType = this.formSubject ? mostSpecificClassURI(this.store, this.formSubject) : undefined
     const params = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
     const inputType: InputType = params.type ?? 'text'
 
@@ -84,19 +85,19 @@ export default class RDFInput extends WebComponent {
 
   private getFormProperty (subject: NamedNode | null | undefined, property: NamedNode, graph?: any): NamedNode | undefined {
     if (!subject) return undefined
-    return this.storeContext.store.any(subject, property, null, graph) as NamedNode | undefined
+    return this.store.any(subject, property, null, graph) as NamedNode | undefined
   }
 
   private getInputLabel (formFieldSubject: NamedNode | null | undefined, uiPropertyTerm?: NamedNode, graph?: any): string {
     if (!formFieldSubject) return ''
-    const uiLabel = this.storeContext.store.any(formFieldSubject, ns.ui('label'), null, graph)
+    const uiLabel = this.store.any(formFieldSubject, ns.ui('label'), null, graph)
     const propertyLabel = uiPropertyTerm ? label(uiPropertyTerm, true) : ''
     return uiLabel ? uiLabel.value : propertyLabel
   }
 
   private getReadOnly (readonly: boolean, formFieldSubject?: NamedNode | null, graph?: any): boolean {
     if (formFieldSubject && readonly === false) { // if readonly is false, we can ovverride it if the field is marked as uneditable in the form
-      return !!this.storeContext.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
+      return !!this.store.anyJS(formFieldSubject, ns.ui('suppressEmptyUneditable'), null, graph)
     }
     return readonly
   }
@@ -108,14 +109,14 @@ export default class RDFInput extends WebComponent {
     params?: { defaultInputValue?: string }
   ) {
     const defaultTerm = formFieldSubject
-      ? this.storeContext.store.any(formFieldSubject, ns.ui('default'))
+      ? this.store.any(formFieldSubject, ns.ui('default'))
       : undefined
 
     if (!uiPropertyTerm || !dataSubject) {
       return defaultTerm
     }
 
-    const inputTerm = this.storeContext.store.any(dataSubject, uiPropertyTerm)
+    const inputTerm = this.store.any(dataSubject, uiPropertyTerm)
     return inputTerm || defaultTerm
   }
 
@@ -163,23 +164,23 @@ export default class RDFInput extends WebComponent {
     }
 
     const dataDocument = this.getDocument(this.dataSubject)
-    if (dataDocument && this.storeContext.store.updater?.editable(dataDocument) === false) {
+    if (dataDocument && this.store.updater?.editable(dataDocument) === false) {
       this._updateInFlight = false
       return
     }
 
-    const toDeleteSt = this.storeContext.store.statementsMatching(this.dataSubject, uiPropertyTerm)
+    const toDeleteSt = this.store.statementsMatching(this.dataSubject, uiPropertyTerm)
     let toInsertSt: Array<ReturnType<typeof st>> = []
 
     if (newValue) {
       let objectFromNewValue
-      const fieldType = this.formSubject ? mostSpecificClassURI(this.storeContext.store, this.formSubject) : undefined
+      const fieldType = this.formSubject ? mostSpecificClassURI(this.store, this.formSubject) : undefined
       const params: FieldParamsObject = fieldType ? fieldTypeParams[fieldType] ?? {} : {}
       if (params.namedNode) {
-        objectFromNewValue = this.storeContext.store.sym(newValue)
+        objectFromNewValue = this.store.sym(newValue)
       } else if (params.defaultInputValue) {
         objectFromNewValue = encodeURIComponent(newValue.replace(/ /g, ''))
-        objectFromNewValue = this.storeContext.store.sym(params.defaultInputValue + objectFromNewValue)
+        objectFromNewValue = this.store.sym(params.defaultInputValue + objectFromNewValue)
       } else {
         if (params.dt) {
           objectFromNewValue = new Literal(
@@ -198,7 +199,7 @@ export default class RDFInput extends WebComponent {
     }
 
     try {
-      await this.storeContext.store.updater.updateMany(toDeleteSt, toInsertSt as any)
+      await this.store.updater.updateMany(toDeleteSt, toInsertSt as any)
       this.storeVersion += 1
     } catch (err) {
       console.error('RDFInput update failed', err)

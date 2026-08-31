@@ -2,9 +2,7 @@ import { createContext } from '@lit/context'
 import { LiveStore } from 'rdflib'
 import NoopStore from './NoopStore'
 
-export interface StoreContext {
-  store: LiveStore
-}
+export type StoreContext = LiveStore
 
-export const DEFAULT_STORE = new NoopStore()
-export const storeContext = createContext<StoreContext>(Symbol('storeContext'))
+export const DEFAULT_STORE: LiveStore = NoopStore
+export const storeContext = createContext<LiveStore>(Symbol('storeContext'))

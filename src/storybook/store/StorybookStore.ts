@@ -1,9 +1,8 @@
-import { StoreContext } from '@/lib/store'
 import * as rdf from 'rdflib'
 import { LiveStore } from 'rdflib'
 
-export default class StorybookStore implements StoreContext {
-  public store: LiveStore = createStore()
+export default function StorybookStore (): LiveStore {
+  return createStore()
 }
 
 function createStore (): rdf.LiveStore {

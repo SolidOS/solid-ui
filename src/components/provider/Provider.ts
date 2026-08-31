@@ -5,7 +5,8 @@ import { property } from 'lit/decorators.js'
 import { solidLogicSingleton } from 'solid-logic'
 import { authContext } from '@/lib/auth'
 import { SolidAuth, DEFAULT_SIGNUP_URL } from '@/lib/auth'
-import { storeContext, type StoreContext } from '@/lib/store'
+import { storeContext } from '@/lib/store'
+import type { LiveStore } from 'rdflib'
 
 import '@/components/dialogs-root'
 
@@ -18,7 +19,7 @@ export default class Provider extends WebComponent {
   private accessor auth = new SolidAuth()
 
   @provide({ context: storeContext })
-  private accessor store: StoreContext = { store: solidLogicSingleton.store }
+  private accessor store: LiveStore = solidLogicSingleton.store
 
   async connectedCallback () {
     super.connectedCallback()
@@ -34,8 +35,9 @@ export default class Provider extends WebComponent {
     }
 
     if (this.store) {
-      // read `store` so the property is considered used
+      void this.store
     }
+
   }
 
   protected render () {
