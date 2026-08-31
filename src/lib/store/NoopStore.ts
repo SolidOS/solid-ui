@@ -1,5 +1,5 @@
 import { LiveStore } from 'rdflib'
-import { StoreContext } from './StoreContext'
+import { StoreContext } from './context'
 
 export default class NoopStore implements StoreContext {
   get store (): LiveStore {

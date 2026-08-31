@@ -6,7 +6,7 @@ import StorybookAuth from '../auth/StorybookAuth'
 import { Account, authContext } from '@/lib/auth'
 
 import '@/components/dialogs-root'
-import { storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
+import { storeContext, StoreContext } from '@/lib/store'
 import StorybookStore from '../store/StorybookStore'
 
 @customElement('storybook-provider')

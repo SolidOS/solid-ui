@@ -6,7 +6,7 @@ import { Literal, NamedNode, st } from 'rdflib'
 import { label } from '../../utils'
 import { mostSpecificClassURI } from '../../lib/forms/rdfFormsHelper'
 import { FieldParamsObject, fieldParams as fieldTypeParams, InputType } from '../../lib/forms/fieldParams'
-import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
+import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/store'
 import { consume } from '@lit/context'
 import '@/components/input'
 

@@ -7,7 +7,7 @@ import ns from '../../lib/ns'
 import { fetchData, findForm, sortBySequence } from '../../lib/forms/rdfFormsHelper'
 import { sym, LiveStore } from 'rdflib'
 import '@/components/rdf-input'
-import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
+import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/store'
 
 const urlConverter = {
   fromAttribute (value: string | null): URL | null {

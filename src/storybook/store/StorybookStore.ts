@@ -1,4 +1,4 @@
-import { StoreContext } from '@/lib/forms/store/StoreContext'
+import { StoreContext } from '@/lib/store'
 import * as rdf from 'rdflib'
 import { LiveStore } from 'rdflib'
 
