@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-DkW27tQK.js";import{C as t}from"./components-EKUknJih.js";var n;function r(){return(r=e((()=>{n=class{get store(){throw Error(`Cannot use RDF forms without a store`)}}})))()}var i,a;function o(){return(o=e((()=>{r(),i=new n,a=t(Symbol(`storeContext`))})))()}export{o as n,a as r,i as t};

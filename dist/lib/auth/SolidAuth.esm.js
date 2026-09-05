@@ -22,7 +22,7 @@ var l = class {
 		await a.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
 	}
 	async loadProfile() {
-		this.profileLoaded || !this.account || (this.profileLoaded = !0, await o.profile.loadMe(), this.listeners.forEach((e) => e()));
+		!this.profileLoaded && this.account && (this.profileLoaded = !0, await o.profile.loadMe(), this.listeners.forEach((e) => e()));
 	}
 	get initialized() {
 		return this._initialized;

@@ -90,7 +90,7 @@ function c(e) {
 			break;
 		}
 		if (!s && e.length === b.children.length) return;
-		for (a = b.children.length - 1; a >= 0 && (t = b.children[a], r = a - b.children.length + e.length, !(t.subject && !t.subject.sameTerm(e[r]))); a--);
+		for (a = b.children.length - 1; a >= 0 && (t = b.children[a], r = a - b.children.length + e.length, !t.subject || t.subject.sameTerm(e[r])); a--);
 		let c = e.slice(i, a - b.children.length + e.length + 1);
 		for (; a >= i;) b.removeChild(b.children[i]), x.removeChild(x.children[i]), --a;
 		for (n = 0; n < c.length; n++) {

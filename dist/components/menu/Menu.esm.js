@@ -245,7 +245,7 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 	}
 	onItemClick(e) {
 		let t = e.currentTarget;
-		e.stopPropagation(), !t.disabled && (this.dispatchSelectEvent(t).defaultPrevented || !this.dropdown || (this.dropdown.open = !1));
+		e.stopPropagation(), !t.disabled && !this.dispatchSelectEvent(t).defaultPrevented && this.dropdown && (this.dropdown.open = !1);
 	}
 	onWaSelect(e) {
 		if (this.dispatchSelectEvent(e.detail.item).defaultPrevented) {

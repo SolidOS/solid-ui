@@ -71,8 +71,8 @@ function m() {
 	});
 }
 function h(e, t, n, r) {
-	let i, a, o;
-	for (o = 0; o < e.children.length; o++) a = e.children[o], a.trashMe = !0;
+	let i, a, o = 0;
+	for (; o < e.children.length; o++) a = e.children[o], a.trashMe = !0;
 	for (let s = 0; s < t.length; s++) {
 		let c = t[s];
 		for (i = !1, o = 0; o < e.children.length; o++) if (a = e.children[o], a.subject && a.subject.sameTerm(c)) {

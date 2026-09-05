@@ -460,8 +460,8 @@ function d(e, t) {
 		if (e.termType === "Literal") n = "value";
 		else if (e.termType === "NamedNode") n = "uri";
 		else return t.indexOf(e) >= 0;
-		let r;
-		for (r = 0; r < t.length; ++r) if (t[r].termType === e.termType && t[r][n] === e[n]) return !0;
+		let r = 0;
+		for (; r < t.length; ++r) if (t[r].termType === e.termType && t[r][n] === e[n]) return !0;
 		return !1;
 	}
 	function xe(e, t, n) {

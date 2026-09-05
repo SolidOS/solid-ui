@@ -111,8 +111,8 @@ x[e.ui("Form").uri] = x[e.ui("Group").uri] = function(t, n, r, i, a, o, s) {
 		}
 		async function i(t, n) {
 			s("pre move: " + _(L.elements));
-			let r;
-			for (r = 0; r < L.elements.length && !L.elements[r].sameTerm(e); r++);
+			let r = 0;
+			for (; r < L.elements.length && !L.elements[r].sameTerm(e); r++);
 			if (r === L.elements.length && alert("list move: not found element for " + e), n) {
 				if (r === 0) {
 					alert("@@ boop - already at top   -temp message");
@@ -743,8 +743,8 @@ function re(a, o, s, c, l, f, p, m, h, g, _) {
 	return y && C.addEventListener("change", S, !1), C;
 }
 function $(e, t) {
-	let n;
-	for (n = 0; n < t.length; n++) if (t[n] === e) return !0;
+	let n = 0;
+	for (; n < t.length; n++) if (t[n] === e) return !0;
 	return !1;
 }
 function ie(e, t, n) {

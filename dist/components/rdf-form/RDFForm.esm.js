@@ -295,7 +295,7 @@ j = (_ = l({
 	}
 	async loadDocumentsIfNeeded() {
 		let e = this.currentStore, t = U(this.formUrl), n = U(this.subjectUrl);
-		if (!(!t || !n)) try {
+		if (t && n) try {
 			await r(e, t), await r(e, n), this._loadVersion += 1, this._documentsLoaded = !0;
 		} catch (e) {
 			console.error("Failed to load RDF documents", e);
