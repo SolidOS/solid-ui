@@ -52,8 +52,15 @@
         display: flex;
         flex-direction: column;
         gap: 2px;
-        max-height: inherit;
-        overflow: auto;
+        max-height: min(28rem, calc(100dvh - 6rem), var(--auto-size-available-height, 28rem));
+        overflow-x: hidden;
+        overflow-y: auto;
+        overscroll-behavior: contain;
+        scrollbar-width: thin;
+
+        &::-webkit-scrollbar {
+            width: 4px;
+        }
 
         [role="option"], .non-selectable-option {
             color: var(--solid-ui-color-gray-700);
