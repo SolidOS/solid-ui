@@ -11,6 +11,23 @@ describe('ensureLoggedIn', () => {
   it('runs', () => {
     expect(testLogin.ensureLoggedIn({})).toBeInstanceOf(Object)
   })
+  it('saves the resolved webId into context when checkUser returns a webId', async () => {
+    const { authn } = await import('solid-logic')
+    const context: any = {}
+    const resolvedWebId = 'https://alice.example.com/profile/card#me'
+
+    const currentUserSpy = vi.spyOn(authn, 'currentUser').mockReturnValue(null)
+    const checkUserSpy = vi.spyOn(authn, 'checkUser').mockResolvedValue(resolvedWebId as any)
+    const saveUserSpy = vi.spyOn(authn, 'saveUser')
+
+    const resultPromise = testLogin.ensureLoggedIn(context)
+
+    await expect(resultPromise).resolves.toBe(context)
+    expect(currentUserSpy).toHaveBeenCalled()
+    expect(checkUserSpy).toHaveBeenCalled()
+    expect(saveUserSpy).toHaveBeenCalledWith(resolvedWebId, context)
+    expect(context.me?.uri).toBe(resolvedWebId)
+  })
 })
 
 describe('getUserRoles', () => {

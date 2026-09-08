@@ -83,6 +83,7 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
       // Already logged in?
       if (webId) {
         debug.log(`logIn: Already logged in as ${webId}`)
+        authn.saveUser(webId as any, context)
         return resolve(context)
       }
       if (!context.div || !context.dom) {
@@ -198,10 +199,14 @@ export async function ensureLoadedProfile (
   } // already done
   try {
     const logInContext = await ensureLoggedIn(context)
-    if (!logInContext.me) {
+    const resolvedMe = logInContext.me || authn.currentUser()
+    if (!resolvedMe) {
       throw new Error('Could not log in')
     }
-    context.publicProfile = await loadProfile(logInContext.me)
+    if (!logInContext.me) {
+      authn.saveUser(resolvedMe as any, context)
+    }
+    context.publicProfile = await loadProfile(resolvedMe)
   } catch (err) {
     if (context.div && context.dom) {
       context.div.appendChild(widgets.errorMessageBlock(context.dom, err.message))
