@@ -386,7 +386,11 @@ export class LoginButton extends LitElement {
       this._loginComplete(offline.uri)
       return
     }
-    this._issuerInputValue = (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) || this.issuerUrl || ''
+    this._issuerInputValue =
+      (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) ||
+      this.issuerUrl ||
+      getSuggestedIssuers()[0]?.uri ||
+      ''
     this._errorMsg = ''
     this._popupOpen = true
   }
