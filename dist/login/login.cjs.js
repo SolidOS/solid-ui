@@ -22,7 +22,7 @@ const e=require("../_virtual/_rolldown/runtime.cjs.js"),t=require("../lib/ns.cjs
     `);let l=e.createElement(`div`);l.setAttribute(`style`,`
       display: flex;
       flex-direction: row;
-    `);let u=e.createElement(`label`);u.innerText=`Enter the URL of your identity provider:`,u.setAttribute(`style`,`color: #888`);let f=e.createElement(`input`);f.setAttribute(`type`,`text`),f.setAttribute(`style`,`margin-left: 0 !important; flex: 1; margin-right: 5px !important`),f.setAttribute(`placeholder`,`https://example.com`),f.value=localStorage.getItem(`loginIssuer`)||``;let p=e.createElement(`button`);p.innerText=`Go`,p.setAttribute(`style`,`margin-top: 12px; margin-bottom: 12px;`),p.addEventListener(`click`,()=>{s(f.value)}),c.appendChild(u),l.appendChild(f),l.appendChild(p),c.appendChild(l),r.appendChild(c);let m=e.createElement(`div`);m.setAttribute(`style`,`
+    `);let u=e.createElement(`label`);u.innerText=`Enter the URL of your identity provider:`,u.setAttribute(`style`,`color: #888`);let f=e.createElement(`input`);f.setAttribute(`type`,`text`),f.setAttribute(`style`,`margin-left: 0 !important; flex: 1; margin-right: 5px !important`),f.setAttribute(`placeholder`,`https://example.com`),f.value=typeof localStorage<`u`&&localStorage.getItem(`loginIssuer`)||(0,d.getSuggestedIssuers)()[0]?.uri||``;let p=e.createElement(`button`);p.innerText=`Go`,p.setAttribute(`style`,`margin-top: 12px; margin-bottom: 12px;`),p.addEventListener(`click`,()=>{s(f.value)}),c.appendChild(u),l.appendChild(f),l.appendChild(p),c.appendChild(l),r.appendChild(c);let m=e.createElement(`div`);m.setAttribute(`style`,`
       display: flex;
       flex-direction: column;
       padding-top: 10px;

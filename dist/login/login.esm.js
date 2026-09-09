@@ -204,7 +204,7 @@ function G(e) {
 	let u = e.createElement("label");
 	u.innerText = "Enter the URL of your identity provider:", u.setAttribute("style", "color: #888");
 	let d = e.createElement("input");
-	d.setAttribute("type", "text"), d.setAttribute("style", "margin-left: 0 !important; flex: 1; margin-right: 5px !important"), d.setAttribute("placeholder", "https://example.com"), d.value = localStorage.getItem("loginIssuer") || "";
+	d.setAttribute("type", "text"), d.setAttribute("style", "margin-left: 0 !important; flex: 1; margin-right: 5px !important"), d.setAttribute("placeholder", "https://example.com"), d.value = typeof localStorage < "u" && localStorage.getItem("loginIssuer") || w()[0]?.uri || "";
 	let f = e.createElement("button");
 	f.innerText = "Go", f.setAttribute("style", "margin-top: 12px; margin-bottom: 12px;"), f.addEventListener("click", () => {
 		s(d.value);

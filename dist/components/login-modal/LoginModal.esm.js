@@ -237,7 +237,7 @@ new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		z(y, this, e);
 	}
 	connectedCallback() {
-		super.connectedCallback(), this.issuerInputValue = typeof localStorage < "u" && localStorage.getItem("loginIssuer") || this.issuerUrl || "";
+		super.connectedCallback(), this.issuerInputValue = typeof localStorage < "u" && localStorage.getItem("loginIssuer") || this.issuerUrl || a()[0]?.uri || "";
 	}
 	render() {
 		let e = a();
