@@ -566,7 +566,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
     'margin-left: 0 !important; flex: 1; margin-right: 5px !important'
   )
   issuerTextInput.setAttribute('placeholder', 'https://example.com')
-  issuerTextInput.value = localStorage.getItem('loginIssuer') || getSuggestedIssuers()[0]?.uri || ''
+issuerTextInput.value = (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) || getSuggestedIssuers()[0]?.uri || ''
   const issuerTextGoButton = dom.createElement('button')
   issuerTextGoButton.innerText = 'Go'
   issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
