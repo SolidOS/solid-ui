@@ -47,6 +47,7 @@ import { style } from '../lib/style'
 import { alert } from '../lib/log'
 import ns from '../lib/ns'
 import { Signup } from '../signup/signup.js'
+import { registerAuthorizationMetadataInvalidationOnSessionRestore } from '../lib/auth/sessionRestore'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 
@@ -741,6 +742,8 @@ authSession.events.on('logout', async () => {
   }
   window.location.reload()
 })
+
+registerAuthorizationMetadataInvalidationOnSessionRestore()
 
 /**
  * Workspace selection etc
