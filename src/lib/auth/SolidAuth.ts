@@ -1,4 +1,5 @@
 import Account from '@/lib/auth/Account'
+import { registerAuthorizationMetadataInvalidationOnSessionRestore } from '@/lib/auth/sessionRestore'
 import ns from '@/lib/ns'
 import { authn, authSession, solidLogicSingleton } from 'solid-logic'
 import { AuthContext } from '@/lib/auth'
@@ -31,6 +32,7 @@ export default class SolidAuth implements AuthContext {
 
   async initialize () {
     await authn.checkUser()
+    registerAuthorizationMetadataInvalidationOnSessionRestore()
 
     this._initialized = true
     this.listeners.forEach(listener => listener())
