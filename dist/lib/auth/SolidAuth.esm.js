@@ -19,7 +19,9 @@ var l = class {
 		this.signupUrl = e;
 	}
 	async initialize() {
-		await a.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
+		i.events.on("sessionRestore", () => {
+			o.store.updater.flagAuthorizationMetadata();
+		}), await a.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
 	}
 	async loadProfile() {
 		!this.profileLoaded && this.account && (this.profileLoaded = !0, await o.profile.loadMe(), this.listeners.forEach((e) => e()));
