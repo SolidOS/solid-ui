@@ -2,8 +2,11 @@ import { customElement, WebComponent } from '@/lib/components'
 import { provide } from '@lit/context'
 import { html, type PropertyValues } from 'lit'
 import { property } from 'lit/decorators.js'
+import { solidLogicSingleton } from 'solid-logic'
 import { authContext } from '@/lib/auth'
 import { SolidAuth, DEFAULT_SIGNUP_URL } from '@/lib/auth'
+import { storeContext } from '@/lib/store'
+import type { LiveStore } from 'rdflib'
 
 import '@/components/dialogs-root'
 
@@ -14,6 +17,9 @@ export default class Provider extends WebComponent {
 
   @provide({ context: authContext })
   private accessor auth = new SolidAuth()
+
+  @provide({ context: storeContext })
+  private accessor store: LiveStore = solidLogicSingleton.store
 
   async connectedCallback () {
     super.connectedCallback()
@@ -27,6 +33,11 @@ export default class Provider extends WebComponent {
     if (changedProperties.has('signupUrl')) {
       this.auth.signupUrl = this.signupUrl ?? DEFAULT_SIGNUP_URL
     }
+
+    if (this.store) {
+      void this.store
+    }
+
   }
 
   protected render () {
