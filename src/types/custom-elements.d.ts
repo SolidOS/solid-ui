@@ -9,6 +9,7 @@ import type DialogFooter from '../components/dialog-footer/DialogFooter'
 import type DialogHeader from '../components/dialog-header/DialogHeader'
 import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
+import type FileExplorerHeader from '../components/file-explorer-header/FileExplorerHeader'
 import type Guard from '../components/guard/Guard'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
@@ -21,6 +22,7 @@ import type PhotoCaptureModal from '../components/photo-capture-modal/PhotoCaptu
 import type Provider from '../components/provider/Provider'
 import type RDFForm from '../components/rdf-form/RDFForm'
 import type RDFInput from '../components/rdf-input/RDFInput'
+import type ResourceActionsMenu from '../components/resource-actions-menu/ResourceActionsMenu'
 import type Select from '../components/select/Select'
 import type SelectOption from '../components/select-option/SelectOption'
 import type SignupButton from '../components/signup-button/SignupButton'
@@ -39,6 +41,7 @@ declare global {
     'solid-ui-dialog-header': DialogHeader
     'solid-ui-dialog-provider': DialogProvider
     'solid-ui-dialogs-root': DialogsRoot
+    'solid-ui-file-explorer-header': FileExplorerHeader
     'solid-ui-guard': Guard
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
@@ -51,6 +54,7 @@ declare global {
     'solid-ui-provider': Provider
     'solid-ui-rdf-form': RDFForm
     'solid-ui-rdf-input': RDFInput
+    'solid-ui-resource-actions-menu': ResourceActionsMenu
     'solid-ui-select': Select
     'solid-ui-select-option': SelectOption
     'solid-ui-signup-button': SignupButton

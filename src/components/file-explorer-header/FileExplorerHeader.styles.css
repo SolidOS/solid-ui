@@ -1,0 +1,13 @@
+:host {
+  header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px;
+    flex-wrap: nowrap;
+    width: 100%;
+    text-align: right;
+    padding: 10px;
+    border-bottom: 1px solid var(--solid-ui-color-gray-200, #cbd5e1);
+  }
+}

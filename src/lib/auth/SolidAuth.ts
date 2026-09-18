@@ -30,6 +30,10 @@ export default class SolidAuth implements AuthContext {
   constructor (public signupUrl: string = DEFAULT_SIGNUP_URL) {}
 
   async initialize () {
+    authSession.events.on('sessionRestore', () => {
+      ;(solidLogicSingleton.store.updater as any).flagAuthorizationMetadata()
+    })
+    
     await authn.checkUser()
 
     this._initialized = true
