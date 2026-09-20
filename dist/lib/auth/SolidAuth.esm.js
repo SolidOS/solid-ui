@@ -3,28 +3,30 @@ import t from "./Account.esm.js";
 import { showDialog as n } from "../dialogs/helpers.esm.js";
 import "../dialogs/index.esm.js";
 import r from "../../components/login-modal/index.esm.js";
-import { authSession as i, authn as a, solidLogicSingleton as o } from "solid-logic";
+import { authSession as i, authn as a, reloadOnIdentityReplaced as o, solidLogicSingleton as s } from "solid-logic";
 //#region src/lib/auth/SolidAuth.ts
-var s = "https://solidproject.org/get_a_pod";
-function c(t) {
-	let n = o.store, r = n.sym(t), i = n.any(r, e.sioc("avatar")) || n.any(r, e.foaf("img")) || n.any(r, e.vcard("logo")) || n.any(r, e.vcard("hasPhoto")) || n.any(r, e.vcard("photo")) || n.any(r, e.foaf("depiction"));
+var c = "https://solidproject.org/get_a_pod";
+function l(t) {
+	let n = s.store, r = n.sym(t), i = n.any(r, e.sioc("avatar")) || n.any(r, e.foaf("img")) || n.any(r, e.vcard("logo")) || n.any(r, e.vcard("hasPhoto")) || n.any(r, e.vcard("photo")) || n.any(r, e.foaf("depiction"));
 	return i ? i.value : void 0;
 }
-var l = class {
+var u = class {
 	signupUrl;
 	_initialized = !1;
 	profileLoaded = !1;
 	listeners = [];
-	constructor(e = s) {
+	constructor(e = c) {
 		this.signupUrl = e;
 	}
 	async initialize() {
 		i.events.on("sessionRestore", () => {
-			o.store.updater.flagAuthorizationMetadata();
+			s.store.updater.flagAuthorizationMetadata();
+		}), o(i.events, () => {
+			i.info?.isLoggedIn && window.location.reload();
 		}), await a.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
 	}
 	async loadProfile() {
-		!this.profileLoaded && this.account && (this.profileLoaded = !0, await o.profile.loadMe(), this.listeners.forEach((e) => e()));
+		!this.profileLoaded && this.account && (this.profileLoaded = !0, await s.profile.loadMe(), this.listeners.forEach((e) => e()));
 	}
 	get initialized() {
 		return this._initialized;
@@ -32,7 +34,7 @@ var l = class {
 	get account() {
 		let e = i.webId ?? i.info?.webId;
 		if (!(i.isActive ?? i.info?.isLoggedIn ?? !!e) || !e) return null;
-		let n = c(e);
+		let n = l(e);
 		return new t(e, n);
 	}
 	async login(e) {
@@ -40,7 +42,7 @@ var l = class {
 			n(r);
 			return;
 		}
-		o.store.updater.flagAuthorizationMetadata();
+		s.store.updater.flagAuthorizationMetadata();
 		let t = new URL(window.location.href).hash;
 		t && window.localStorage.setItem("preLoginRedirectHash", t), window.localStorage.setItem("loginIssuer", e);
 		let a = new URL(window.location.href);
@@ -62,6 +64,6 @@ var l = class {
 	}
 };
 //#endregion
-export { s as DEFAULT_SIGNUP_URL, l as default };
+export { c as DEFAULT_SIGNUP_URL, u as default };
 
 //# sourceMappingURL=SolidAuth.esm.js.map

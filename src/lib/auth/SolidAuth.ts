@@ -1,6 +1,6 @@
 import Account from '@/lib/auth/Account'
 import ns from '@/lib/ns'
-import { authn, authSession, solidLogicSingleton } from 'solid-logic'
+import { authn, authSession, reloadOnIdentityReplaced, solidLogicSingleton } from 'solid-logic'
 import { AuthContext } from '@/lib/auth'
 import { showDialog } from '@/lib/dialogs'
 
@@ -33,7 +33,16 @@ export default class SolidAuth implements AuthContext {
     authSession.events.on('sessionRestore', () => {
       ;(solidLogicSingleton.store.updater as any).flagAuthorizationMetadata()
     })
-    
+
+    // An identity that was actively established was replaced while the session
+    // stayed active (A -> B, e.g. from another tab): everything fetched under
+    // the previous identity is stale, so the app reloads. A logout is not a
+    // reload case here — the derived info already reports logged out and the
+    // logout path runs its own cleanup and navigation.
+    reloadOnIdentityReplaced(authSession.events, () => {
+      if (authSession.info?.isLoggedIn) window.location.reload()
+    })
+
     await authn.checkUser()
 
     this._initialized = true
