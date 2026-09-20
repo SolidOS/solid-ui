@@ -19,6 +19,8 @@ function createFileExplorerContextValue (value: {
   onBack?: () => void
   openPane?: (subject: NamedNode, paneName: string) => void
   handleAccessClick?: () => void
+  deleteResource?: (subject: NamedNode) => Promise<void>
+  resourceRevision?: number
   paneSupportsEditing?: boolean
   edit?: {
     onEdit?: () => void
@@ -33,6 +35,8 @@ function createFileExplorerContextValue (value: {
     onBack: value.onBack,
     openPane: value.openPane,
     handleAccessClick: value.handleAccessClick,
+    deleteResource: value.deleteResource,
+    resourceRevision: value.resourceRevision,
     paneSupportsEditing: value.paneSupportsEditing,
     edit: value.edit
   }
@@ -62,6 +66,12 @@ export default class FileExplorerProvider extends WebComponent {
 
   @property({ attribute: false })
   accessor handleAccessClick: (() => void) | undefined = undefined
+
+  @property({ attribute: false })
+  accessor deleteResource: ((subject: NamedNode) => Promise<void>) | undefined = undefined
+
+  @property({ type: Number })
+  accessor resourceRevision: number | undefined = undefined
 
   @property({ attribute: false })
   accessor soloPane: boolean | undefined = undefined
@@ -119,6 +129,8 @@ export default class FileExplorerProvider extends WebComponent {
     onBack: this.onBack ?? this.parentFileExplorerContext?.onBack,
     openPane: this.openPane,
     handleAccessClick: this.handleAccessClick,
+    deleteResource: this.deleteResource ?? this.parentFileExplorerContext?.deleteResource,
+    resourceRevision: this.resourceRevision ?? this.parentFileExplorerContext?.resourceRevision,
     paneSupportsEditing: false,
     edit: this.edit
   })
@@ -179,6 +191,8 @@ export default class FileExplorerProvider extends WebComponent {
       onBack: this.onBack ?? this.parentFileExplorerContext?.onBack,
       openPane: this.openPane,
       handleAccessClick: this.handleAccessClick,
+      deleteResource: this.deleteResource ?? this.parentFileExplorerContext?.deleteResource,
+      resourceRevision: this.resourceRevision ?? this.parentFileExplorerContext?.resourceRevision,
       paneSupportsEditing: this.paneSupportsEditing,
       edit: this.edit
     })
@@ -223,6 +237,8 @@ export default class FileExplorerProvider extends WebComponent {
       changedProperties.has('parentFileExplorerContext') ||
       changedProperties.has('openPane') ||
       changedProperties.has('handleAccessClick') ||
+      changedProperties.has('deleteResource') ||
+      changedProperties.has('resourceRevision') ||
       changedProperties.has('paneSupportsEditing') ||
       changedProperties.has('isDirty')
     ) {

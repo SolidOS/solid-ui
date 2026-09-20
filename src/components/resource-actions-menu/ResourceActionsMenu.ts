@@ -7,6 +7,7 @@ import 'solid-ui/components/menu-item'
 import '~icons/lucide/ellipsis-vertical'
 import '~icons/lucide/share-2'
 import '~icons/lucide/pencil'
+import '~icons/lucide/trash-2'
 
 import styles from './ResourceActionsMenu.styles.css'
 import { getVisibleResourceActions, type ResourceActionMenuItem } from './helpers'
@@ -34,6 +35,12 @@ export default class ResourceActionsMenu extends WebComponent {
   accessor handleEditingClick: (() => void) | undefined = undefined
 
   @property({ attribute: false })
+  accessor handleDeleteClick: (() => void) | undefined = undefined
+
+  @property({ attribute: false })
+  accessor deleteLabel: string | undefined = undefined
+
+  @property({ attribute: false })
   accessor menuItems: ResourceActionMenuItem[] = []
 
   render () {
@@ -42,8 +49,10 @@ export default class ResourceActionsMenu extends WebComponent {
       isMobile: this.isMobile,
       paneSupportsEditing: this.paneSupportsEditing,
       canEdit: this.canEdit,
+      deleteLabel: this.deleteLabel,
       handleAccessClick: this.handleAccessClick,
       handleEditingClick: this.handleEditingClick,
+      handleDeleteClick: this.handleDeleteClick,
       menuItems: this.menuItems,
     })
 
@@ -58,6 +67,10 @@ export default class ResourceActionsMenu extends WebComponent {
 
       if (item.kind === 'access') {
         return html`<icon-lucide-share-2 slot="left-icon"></icon-lucide-share-2>`
+      }
+
+      if (item.kind === 'delete') {
+        return html`<icon-lucide-trash-2 slot="left-icon"></icon-lucide-trash-2>`
       }
 
       return nothing

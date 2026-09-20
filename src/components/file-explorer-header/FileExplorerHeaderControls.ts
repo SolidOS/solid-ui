@@ -32,6 +32,20 @@ export default class FileExplorerHeaderControls extends WebComponent {
     this.fileExplorerContext.handleAccessClick?.()
   }
 
+  private handleDeleteClick = async () => {
+    const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
+    if (!subject || !this.fileExplorerContext.deleteResource) return
+
+    try {
+      await this.fileExplorerContext.deleteResource(subject)
+    } catch (error) {
+      console.error('[file-explorer-header.deleteResource] failed', error)
+      globalThis.alert(this.deleteLabel === 'Permanently Delete'
+        ? 'Error deleting resource'
+        : 'Error moving resource to Trash')
+    }
+  }
+
   @consume({ context: fileExplorerContext, subscribe: true })
   accessor fileExplorerContext: FileExplorerContext = undefined as unknown as FileExplorerContext
 
@@ -43,6 +57,9 @@ export default class FileExplorerHeaderControls extends WebComponent {
 
   @property({ type: Boolean })
   accessor canEdit: boolean = false
+
+  @property({ type: Boolean })
+  accessor canDelete: boolean = false
 
   @state()
   accessor isMobile = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
@@ -71,6 +88,11 @@ export default class FileExplorerHeaderControls extends WebComponent {
     if (!this.fileExplorerContext.paneSupportsEditing) return 'Not Supported'
     if (!this.canEdit) return 'No Access'
     return 'Edit'
+  }
+
+  private get deleteLabel () {
+    const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
+    return subject?.dir()?.uri.endsWith('/Trash/') ? 'Permanently Delete' : 'Move to Trash'
   }
 
   private renderDirtyIndicator () {
@@ -106,6 +128,8 @@ export default class FileExplorerHeaderControls extends WebComponent {
           .isContainerResource=${isContainerResource}
           .handleAccessClick=${this.isMobile ? this.handleMobileAccessClick : undefined}
           .handleEditingClick=${this.fileExplorerContext.edit?.onEdit}
+          .handleDeleteClick=${this.canDelete && this.fileExplorerContext.deleteResource ? this.handleDeleteClick : undefined}
+          .deleteLabel=${this.deleteLabel}
           .paneSupportsEditing=${this.fileExplorerContext.paneSupportsEditing}
           .canEdit=${this.canEdit}
           .menuItems=${this.menuItems}

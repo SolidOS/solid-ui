@@ -13,14 +13,14 @@ import styles from './FileExplorerHeader.styles.css'
 import './FileExplorerHeaderSummary'
 import './FileExplorerHeaderControls'
 import { type PaneIcon } from './types'
-import { fetchResourceMetadata } from './metadata'
 import { type FileExplorerResourceMetadata } from './types'
+import { solidLogicSingleton } from 'solid-logic'
 
 @customElement('file-explorer-header')
 export default class FileExplorerHeader extends WebComponent {
   static styles = styles
 
-  private _loadedMetadataForUri: string | undefined
+  private _loadedMetadataKey: string | undefined
 
   @consume({ context: fileExplorerContext, subscribe: true })
   accessor fileExplorerContext: FileExplorerContext = undefined as unknown as FileExplorerContext
@@ -35,18 +35,20 @@ export default class FileExplorerHeader extends WebComponent {
   accessor paneIcon: PaneIcon = undefined as unknown as PaneIcon
 
   @state()
-  accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> = {
+  accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> & { canDelete: boolean } = {
     modified: undefined,
     isPublic: false,
     canEdit: false,
+    canDelete: false,
     aclUri: undefined
   }
 
-  private getDefaultResponseMetadata (): Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> {
+  private getDefaultResponseMetadata (): Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> & { canDelete: boolean } {
     return {
       modified: undefined,
       isPublic: false,
       canEdit: false,
+      canDelete: false,
       aclUri: undefined
     }
   }
@@ -56,8 +58,11 @@ export default class FileExplorerHeader extends WebComponent {
   }
 
   protected updated () {
-    if (this.store && this.fileExplorerContext.subjectUri && this._loadedMetadataForUri !== this.fileExplorerContext.subjectUri) {
-      this._loadedMetadataForUri = this.fileExplorerContext.subjectUri
+    const subjectUri = this.fileExplorerContext.subjectUri
+    const metadataKey = `${subjectUri}:${this.fileExplorerContext.resourceRevision ?? 0}`
+
+    if (this.store && subjectUri && this._loadedMetadataKey !== metadataKey) {
+      this._loadedMetadataKey = metadataKey
       this.loadResponseMetadata()
     }
   }
@@ -66,11 +71,12 @@ export default class FileExplorerHeader extends WebComponent {
     if (!this.store || !this.fileExplorerContext.subjectUri) return
 
     try {
-      const metadata = await fetchResourceMetadata(this.store, sym(this.fileExplorerContext.subjectUri))
+      const metadata = await solidLogicSingleton.resource.fetchMetadata(sym(this.fileExplorerContext.subjectUri))
       this.responseMetadata = {
         modified: metadata.modified,
-        isPublic: metadata.isPublic,
-        canEdit: metadata.canEdit,
+        isPublic: metadata.access.isPublic,
+        canEdit: metadata.access.canEdit,
+        canDelete: metadata.access.canDelete,
         aclUri: metadata.aclUri
       }
     } catch (error) {
@@ -94,6 +100,7 @@ export default class FileExplorerHeader extends WebComponent {
         <file-explorer-header-controls
           .menuItems=${this.menuItems}
           .canEdit=${this.responseMetadata.canEdit}
+          .canDelete=${this.responseMetadata.canDelete}
         ></file-explorer-header-controls>
       </header>
     `

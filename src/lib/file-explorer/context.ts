@@ -16,6 +16,8 @@ export interface FileExplorerContext {
   onBack?: () => void
   openPane?: (subject: NamedNode, paneName: string) => void
   handleAccessClick?: () => void
+  deleteResource?: (subject: NamedNode) => Promise<void>
+  resourceRevision?: number
 
   paneSupportsEditing?: boolean
   edit?: FileExplorerEdit
