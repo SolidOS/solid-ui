@@ -5,6 +5,7 @@ import { WebComponent } from '@/lib/components'
 import { AJARImage } from '@/utils'
 import { consume, provide } from '@lit/context'
 import { fileExplorerContext, type FileExplorerContext } from '@/lib/file-explorer/context'
+import { DEFAULT_DISCOVER_CLASS } from '@/lib/discovery'
 import { customElement, property, state } from 'lit/decorators.js'
 import './FileExplorerHeader'
 import styles from './FileExplorerProvider.styles.css'
@@ -21,6 +22,7 @@ function createFileExplorerContextValue (value: {
   handleAccessClick?: () => void
   deleteResource?: (subject: NamedNode) => Promise<void>
   resourceRevision?: number
+  discoverClass?: NamedNode
   paneSupportsEditing?: boolean
   edit?: {
     onEdit?: () => void
@@ -37,6 +39,7 @@ function createFileExplorerContextValue (value: {
     handleAccessClick: value.handleAccessClick,
     deleteResource: value.deleteResource,
     resourceRevision: value.resourceRevision,
+    discoverClass: value.discoverClass,
     paneSupportsEditing: value.paneSupportsEditing,
     edit: value.edit
   }
@@ -131,6 +134,7 @@ export default class FileExplorerProvider extends WebComponent {
     handleAccessClick: this.handleAccessClick,
     deleteResource: this.deleteResource ?? this.parentFileExplorerContext?.deleteResource,
     resourceRevision: this.resourceRevision ?? this.parentFileExplorerContext?.resourceRevision,
+    discoverClass: this.pane?.mintClass ?? this.relevantPanes.find((pane) => pane.mintClass)?.mintClass ?? this.parentFileExplorerContext?.discoverClass ?? DEFAULT_DISCOVER_CLASS,
     paneSupportsEditing: false,
     edit: this.edit
   })
@@ -193,6 +197,7 @@ export default class FileExplorerProvider extends WebComponent {
       handleAccessClick: this.handleAccessClick,
       deleteResource: this.deleteResource ?? this.parentFileExplorerContext?.deleteResource,
       resourceRevision: this.resourceRevision ?? this.parentFileExplorerContext?.resourceRevision,
+      discoverClass: this.pane?.mintClass ?? this.relevantPanes.find((pane) => pane.mintClass)?.mintClass ?? this.parentFileExplorerContext?.discoverClass ?? DEFAULT_DISCOVER_CLASS,
       paneSupportsEditing: this.paneSupportsEditing,
       edit: this.edit
     })
@@ -232,6 +237,7 @@ export default class FileExplorerProvider extends WebComponent {
       changedProperties.has('context') ||
       changedProperties.has('subjectUri') ||
       changedProperties.has('pane') ||
+      changedProperties.has('relevantPanes') ||
       changedProperties.has('soloPane') ||
       changedProperties.has('onBack') ||
       changedProperties.has('parentFileExplorerContext') ||

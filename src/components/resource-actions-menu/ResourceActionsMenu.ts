@@ -8,6 +8,8 @@ import '~icons/lucide/ellipsis-vertical'
 import '~icons/lucide/share-2'
 import '~icons/lucide/pencil'
 import '~icons/lucide/trash-2'
+import '~icons/lucide/globe'
+import '~icons/lucide/lock-keyhole'
 
 import styles from './ResourceActionsMenu.styles.css'
 import { getVisibleResourceActions, type ResourceActionMenuItem } from './helpers'
@@ -37,6 +39,18 @@ export default class ResourceActionsMenu extends WebComponent {
   @property({ attribute: false })
   accessor handleDeleteClick: (() => void) | undefined = undefined
 
+  @property({ type: Boolean })
+  accessor discoverPublicly = false
+
+  @property({ type: Boolean })
+  accessor discoverPrivately = false
+
+  @property({ attribute: false })
+  accessor handleDiscoverPublicClick: (() => void) | undefined = undefined
+
+  @property({ attribute: false })
+  accessor handleDiscoverPrivateClick: (() => void) | undefined = undefined
+
   @property({ attribute: false })
   accessor deleteLabel: string | undefined = undefined
 
@@ -53,6 +67,10 @@ export default class ResourceActionsMenu extends WebComponent {
       handleAccessClick: this.handleAccessClick,
       handleEditingClick: this.handleEditingClick,
       handleDeleteClick: this.handleDeleteClick,
+      discoverPublicly: this.discoverPublicly,
+      discoverPrivately: this.discoverPrivately,
+      handleDiscoverPublicClick: this.handleDiscoverPublicClick,
+      handleDiscoverPrivateClick: this.handleDiscoverPrivateClick,
       menuItems: this.menuItems,
     })
 

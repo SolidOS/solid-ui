@@ -1,4 +1,5 @@
 import { html, nothing } from 'lit'
+import type { PropertyValues } from 'lit'
 import { customElement, property, state } from 'lit/decorators.js'
 import { WebComponent } from '@/lib/components'
 import '@/components/button'
@@ -7,8 +8,10 @@ import { consume } from '@lit/context'
 import { fileExplorerContext, type FileExplorerContext } from '@/lib/file-explorer/context'
 import { storeContext, DEFAULT_STORE } from '@/lib/store/context'
 import type { LiveStore } from 'rdflib'
-import { solidLogicSingleton } from 'solid-logic'
 import { sym } from 'rdflib'
+import { solidLogicSingleton } from 'solid-logic'
+import { buildResourceActionsMenuBindings } from '@/lib/resource-actions-menu'
+import { loadDiscoveryState, toggleDiscoveryState } from '@/lib/discovery'
 import styles from './FileExplorerHeaderControls.styles.css'
 
 @customElement('file-explorer-header-controls')
@@ -46,6 +49,41 @@ export default class FileExplorerHeaderControls extends WebComponent {
     }
   }
 
+  private async refreshDiscoveryState () {
+    const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
+    const discoverClass = this.fileExplorerContext.discoverClass
+
+    if (!subject || !discoverClass) {
+      this.discoveryState = undefined
+      return
+    }
+
+    try {
+      this.discoveryState = await loadDiscoveryState(subject)
+    } catch (error) {
+      this.discoveryState = undefined
+      console.warn('Failed to load discovery state', error)
+    }
+  }
+
+  private handleDiscoverPublicClick = async () => {
+    const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
+    const discoverClass = this.fileExplorerContext.discoverClass
+
+    if (!subject || !discoverClass) return
+
+    this.discoveryState = await toggleDiscoveryState(subject, discoverClass, 'public', this.discoveryState)
+  }
+
+  private handleDiscoverPrivateClick = async () => {
+    const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
+    const discoverClass = this.fileExplorerContext.discoverClass
+
+    if (!subject || !discoverClass) return
+
+    this.discoveryState = await toggleDiscoveryState(subject, discoverClass, 'private', this.discoveryState)
+  }
+
   @consume({ context: fileExplorerContext, subscribe: true })
   accessor fileExplorerContext: FileExplorerContext = undefined as unknown as FileExplorerContext
 
@@ -66,6 +104,9 @@ export default class FileExplorerHeaderControls extends WebComponent {
     ? window.matchMedia('(max-width: 600px)').matches
     : false
 
+  @state()
+  accessor discoveryState: { public: boolean, private: boolean } | undefined = undefined
+
   connectedCallback () {
     super.connectedCallback()
 
@@ -82,6 +123,17 @@ export default class FileExplorerHeaderControls extends WebComponent {
     this.mobileMediaQuery?.removeEventListener('change', this.handleMobileMediaChange)
     this.mobileMediaQuery = undefined
     super.disconnectedCallback()
+  }
+
+  protected willUpdate (changedProperties: PropertyValues<this>) {
+    super.willUpdate(changedProperties)
+
+    if (
+      changedProperties.has('fileExplorerContext') ||
+      changedProperties.has('menuItems')
+    ) {
+      void this.refreshDiscoveryState()
+    }
   }
 
   private getEditTooltip () {
@@ -104,6 +156,15 @@ export default class FileExplorerHeaderControls extends WebComponent {
   render () {
     const subject = this.fileExplorerContext.subjectUri ? sym(this.fileExplorerContext.subjectUri) : undefined
     const isContainerResource = subject ? solidLogicSingleton.resource.isContainer(subject) : false
+    const resourceActions = buildResourceActionsMenuBindings({
+      subject,
+      discoveryState: this.discoveryState,
+      handleAccessClick: this.isMobile ? this.handleMobileAccessClick : undefined,
+      canDelete: this.canDelete && !!this.fileExplorerContext.deleteResource,
+      handleDeleteClick: this.handleDeleteClick,
+      handleDiscoverPublicClick: this.fileExplorerContext.discoverClass ? this.handleDiscoverPublicClick : undefined,
+      handleDiscoverPrivateClick: this.fileExplorerContext.discoverClass ? this.handleDiscoverPrivateClick : undefined,
+    })
 
     return html`
       <div>
@@ -126,13 +187,17 @@ export default class FileExplorerHeaderControls extends WebComponent {
           : nothing}
         <solid-ui-resource-actions-menu
           .isContainerResource=${isContainerResource}
-          .handleAccessClick=${this.isMobile ? this.handleMobileAccessClick : undefined}
+          .handleAccessClick=${resourceActions.handleAccessClick}
           .handleEditingClick=${this.fileExplorerContext.edit?.onEdit}
-          .handleDeleteClick=${this.canDelete && this.fileExplorerContext.deleteResource ? this.handleDeleteClick : undefined}
-          .deleteLabel=${this.deleteLabel}
+          .handleDeleteClick=${resourceActions.handleDeleteClick}
+          .deleteLabel=${resourceActions.deleteLabel}
           .paneSupportsEditing=${this.fileExplorerContext.paneSupportsEditing}
           .canEdit=${this.canEdit}
           .menuItems=${this.menuItems}
+          .discoverPublicly=${resourceActions.discoverPublicly}
+          .discoverPrivately=${resourceActions.discoverPrivately}
+          .handleDiscoverPublicClick=${resourceActions.handleDiscoverPublicClick}
+          .handleDiscoverPrivateClick=${resourceActions.handleDiscoverPrivateClick}
           .isMobile=${this.isMobile}
         ></solid-ui-resource-actions-menu>
       </div>

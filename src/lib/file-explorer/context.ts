@@ -18,6 +18,7 @@ export interface FileExplorerContext {
   handleAccessClick?: () => void
   deleteResource?: (subject: NamedNode) => Promise<void>
   resourceRevision?: number
+  discoverClass?: NamedNode
 
   paneSupportsEditing?: boolean
   edit?: FileExplorerEdit
