@@ -1,5 +1,5 @@
 wa-dropdown::part(menu) {
-    min-width: 300px;
+    min-width: var(--solid-ui-menu-min-width, 300px);
     box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
     gap: 2px;
 }

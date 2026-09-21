@@ -1,4 +1,13 @@
 :host {
+  solid-ui-menu-item {
+    --solid-ui-menu-item-font-size: var(--solid-ui-font-size-sm);
+    --solid-ui-menu-item-gap: 10px;
+  }
+
+  solid-ui-menu {
+    --solid-ui-menu-min-width: fit-content;
+  }
+
   .ellipsisIcon {
     width: 16px;
     height: 16px;
