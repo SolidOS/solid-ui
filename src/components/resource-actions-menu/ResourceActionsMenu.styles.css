@@ -13,3 +13,24 @@
     height: 16px;
   }
 }
+
+solid-ui-menu::part(menu) {
+  max-height: min(18rem, calc(100vh - 2rem));
+  overflow-y: auto;
+  overflow-x: hidden;
+  scrollbar-width: thin;
+  scrollbar-color: #c7cbd1 transparent;
+}
+
+solid-ui-menu::part(menu)::-webkit-scrollbar {
+  width: 6px;
+}
+
+solid-ui-menu::part(menu)::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+solid-ui-menu::part(menu)::-webkit-scrollbar-thumb {
+  background: #c7cbd1;
+  border-radius: 999px;
+}
