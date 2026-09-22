@@ -42,7 +42,11 @@ export default class LoginModal extends WebComponent {
   connectedCallback () {
     super.connectedCallback()
 
-    this.issuerInputValue = (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) || this.issuerUrl || ''
+    this.issuerInputValue =
+      (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) ||
+      this.issuerUrl ||
+      getSuggestedIssuers()[0]?.uri ||
+      ''
   }
 
   protected render () {

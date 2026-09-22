@@ -177,6 +177,20 @@ export function makeDraggable (tr, obj) {
 */
 
 export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+  const describeUploadFailure = function (destURI, error) {
+    const status = error?.response?.status ?? error?.status
+    const message = error?.message || String(error)
+    const prefix = `Upload failed while putting ${destURI}`
+
+    if (status === 413) {
+      return `${prefix}: storage quota was exceeded. ${message}`
+    }
+
+    return status
+      ? `${prefix} (HTTP ${status}). ${message}`
+      : `${prefix}. ${message}`
+  }
+
   for (let i = 0; files[i]; i++) {
     const f = files[i]
     debug.log(
@@ -238,7 +252,7 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
               successHandler(theFile, destURI)
             },
             error => {
-              const msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
+              const msg = describeUploadFailure(destURI, error)
               debug.log(msg)
               alert(msg)
               throw new Error(msg)
