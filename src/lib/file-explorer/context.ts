@@ -1,5 +1,4 @@
 import { createContext } from '@lit/context'
-import { LiveStore } from 'rdflib'
 import type { NamedNode } from 'rdflib'
 import type { PaneDefinition } from 'pane-registry'
 
@@ -10,7 +9,6 @@ export interface FileExplorerEdit {
 }
 
 export interface FileExplorerContext {
-  store: LiveStore | undefined
   subjectUri: string | undefined
   pane?: PaneDefinition
   soloPane?: boolean
@@ -18,6 +16,9 @@ export interface FileExplorerContext {
   onBack?: () => void
   openPane?: (subject: NamedNode, paneName: string) => void
   handleAccessClick?: () => void
+  deleteResource?: (subject: NamedNode) => Promise<void>
+  resourceRevision?: number
+  discoverClass?: NamedNode
 
   paneSupportsEditing?: boolean
   edit?: FileExplorerEdit

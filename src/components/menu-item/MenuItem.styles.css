@@ -1,4 +1,7 @@
 :host {
+    --solid-ui-menu-item-font-size: var(--solid-ui-font-size-md);
+    --solid-ui-menu-item-gap: 5px;
+
     & > a,
     & > div {
         width: 100%;
@@ -6,12 +9,12 @@
         position: relative;
         justify-content: flex-start;
         align-items: center;
-        gap: 5px;
+        gap: var(--solid-ui-menu-item-gap, 5px);
         padding: 10px;
         border-radius: 5px;
         color: var(--solid-ui-color-gray-600);
         font-weight: 500;
-        font-size: var(--solid-ui-font-size-md);
+        font-size: var(--solid-ui-menu-item-font-size, var(--solid-ui-font-size-md));
 
         &[data-selected] {
             background: var(--solid-ui-color-primary-selected);

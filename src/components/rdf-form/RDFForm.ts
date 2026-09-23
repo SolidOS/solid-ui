@@ -7,7 +7,7 @@ import ns from '../../lib/ns'
 import { fetchData, findForm, sortBySequence } from '../../lib/forms/rdfFormsHelper'
 import { sym, LiveStore } from 'rdflib'
 import '@/components/rdf-input'
-import { DEFAULT_STORE, storeContext, StoreContext } from '@/lib/forms/store/StoreContext'
+import { DEFAULT_STORE, storeContext } from '@/lib/store'
 
 const urlConverter = {
   fromAttribute (value: string | null): URL | null {
@@ -31,13 +31,13 @@ const hrefFromUrlValue = (value: URL | null): string =>
 @customElement('solid-ui-rdf-form')
 export default class RDFForm extends WebComponent {
     @consume({ context: storeContext, subscribe: true })
-    private accessor storeContext: StoreContext = DEFAULT_STORE
+  private accessor store: LiveStore = DEFAULT_STORE
 
     @property({ attribute: false })
     accessor passedInStore: LiveStore | null = null
 
     private get currentStore (): LiveStore {
-      return this.passedInStore ?? this.storeContext.store
+      return this.passedInStore ?? this.store
     }
 
     @state()
