@@ -1,3 +1,4 @@
+import type AccessControlModal from '../components/access-control-modal/AccessControlModal'
 import type Account from '../components/account/Account'
 import type Avatar from '../components/avatar/Avatar'
 import type Button from '../components/button/Button'
@@ -28,6 +29,7 @@ import type SolidEmblem from '../components/solid-emblem/SolidEmblem'
 
 declare global {
   interface HTMLElementTagNameMap {
+    'solid-ui-access-control-modal': AccessControlModal
     'solid-ui-account': Account
     'solid-ui-avatar': Avatar
     'solid-ui-button': Button
