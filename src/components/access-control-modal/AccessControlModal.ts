@@ -231,7 +231,10 @@ export default class AccessControlModal extends WebComponent {
       <div class="access-grants-header">
         <h2>Share with</h2>
         <solid-ui-input
+          id="access-grants-search"
           class="access-grants-search-input"
+          label="Search access grants"
+          .hideLabel=${true}
           .value=${this.searchValue}
           placeholder="Search"
           @input=${this.onSearchInput}
@@ -304,11 +307,16 @@ export default class AccessControlModal extends WebComponent {
       }
     })
   }
-  
-  protected render () {
+
+  private getDialogTitle (): string {
     const subject = this.subjectUri ? sym(this.subjectUri) : undefined
     const subjectLabel = subject ? label(subject) : ''
-    const dialogTitle = `Share ${subjectLabel || 'this resource'}` 
+
+    return `Share ${subjectLabel || 'this resource'}`
+  }
+  
+  protected render () {
+    const dialogTitle = this.getDialogTitle()
     
     return html`
         <solid-ui-dialog title=${dialogTitle}>

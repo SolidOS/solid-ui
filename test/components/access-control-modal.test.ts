@@ -50,4 +50,10 @@ describe('AccessControlModal submit', () => {
     expect(element.submitting).toBe(false)
     expect(element.principleInputValue).toBe('')
   })
+
+  it('uses the default share title when no subject uri is present', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+
+    expect(element.getDialogTitle()).toBe('Share this resource')
+  })
 })
