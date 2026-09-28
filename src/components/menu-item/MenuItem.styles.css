@@ -1,0 +1,34 @@
+:host {
+    & > a,
+    & > div {
+        width: 100%;
+        display: flex;
+        position: relative;
+        justify-content: flex-start;
+        align-items: center;
+        gap: 5px;
+        padding: 10px;
+        border-radius: 5px;
+        color: var(--solid-ui-color-gray-600);
+        font-weight: 500;
+        font-size: var(--solid-ui-font-size-md);
+
+        &[data-selected] {
+            background: var(--solid-ui-color-primary-selected);
+        }
+    }
+
+    ::slotted([slot="left-icon"]), ::slotted([slot="right-icon"]) {
+        width: var(--solid-ui-font-size-xl);
+        height: var(--solid-ui-font-size-xl);
+    }
+
+    a::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+    }
+}

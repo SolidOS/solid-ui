@@ -1,8 +1,9 @@
+import { afterAll, afterEach, describe, expect, it, vi } from 'vitest'
 import * as testLogin from '../../../src/login/login'
 
 describe('ensureLoggedIn', () => {
   afterAll(() => {
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
   it('exists', () => {
     expect(testLogin.ensureLoggedIn).toBeInstanceOf(Function)
@@ -14,30 +15,29 @@ describe('ensureLoggedIn', () => {
 
 describe('getUserRoles', () => {
   afterEach(() => {
-    jest.restoreAllMocks()
-    jest.resetModules()
+    vi.restoreAllMocks()
   })
 
   it('returns [] and does not load preferences when current user is missing', async () => {
-    const solidLogic = require('solid-logic')
+    vi.resetModules()
 
-    // Note: `authSession.info` is a derived read-only property (from
-    // webId/isActive) and can no longer be assigned. The logged-out state is
-    // driven by mocking `currentUser` to return null below.
+    const { authn, authSession, solidLogicSingleton } = await import('solid-logic')
 
-    const currentUserSpy = jest
-      .spyOn(solidLogic.authn, 'currentUser')
-      .mockReturnValue(null)
-    const loadPreferencesSpy = jest.spyOn(
-      solidLogic.solidLogicSingleton.profile,
-      'loadPreferences'
-    )
+    authSession.info = {
+      isLoggedIn: true,
+      webId: 'https://alice.example.com/profile/card#me'
+    }
 
-    const loginModule = require('../../../src/login/login')
-    const roles = await loginModule.getUserRoles()
+    vi.spyOn(authn, 'checkUser').mockResolvedValue(null)
 
-    expect(currentUserSpy).toHaveBeenCalled()
+    const currentUserSpy = vi.spyOn(authn, 'currentUser').mockReturnValue(null)
+    const loadPreferencesSpy = vi.spyOn(solidLogicSingleton.profile, 'loadPreferences')
+
+    const { getUserRoles } = await import('../../../src/login/login')
+    const roles = await getUserRoles()
+
     expect(roles).toEqual([])
+    expect(currentUserSpy).toHaveBeenCalled()
     expect(loadPreferencesSpy).not.toHaveBeenCalled()
   })
 })

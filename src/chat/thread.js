@@ -3,14 +3,14 @@
  * @packageDocumentation
  */
 
-import { icons } from '../iconBase'
+import { icons } from '../lib/iconBase'
 import { store } from 'solid-logic'
 import { media } from '../media/index'
-import ns from '../ns'
+import ns from '../lib/ns'
 import * as login from '../login/login'
-import * as pad from '../pad'
+import * as pad from '../lib/pad'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
-import { style } from '../style'
+import { style } from '../lib/style'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
 

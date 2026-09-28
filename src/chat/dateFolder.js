@@ -3,9 +3,9 @@
  * This tracks data stored in dated folders and sub-folders
  *
  */
-import * as debug from '../debug'
+import * as debug from '../lib/debug'
 import { store } from 'solid-logic'
-import ns from '../ns'
+import ns from '../lib/ns'
 import * as $rdf from 'rdflib' // pull in first avoid cross-refs
 
 export async function emptyLeaf (leafDocument) {

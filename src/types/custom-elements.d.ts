@@ -1,0 +1,59 @@
+import type Account from '../components/account/Account'
+import type Avatar from '../components/avatar/Avatar'
+import type Button from '../components/button/Button'
+import type Combobox from '../components/combobox/Combobox'
+import type ComboboxOption from '../components/combobox-option/ComboboxOption'
+import type Dialog from '../components/dialog/Dialog'
+import type DialogContent from '../components/dialog-content/DialogContent'
+import type DialogFooter from '../components/dialog-footer/DialogFooter'
+import type DialogHeader from '../components/dialog-header/DialogHeader'
+import type DialogProvider from '../components/dialog-provider/DialogProvider'
+import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
+import type Guard from '../components/guard/Guard'
+import type Input from '../components/input/Input'
+import type LoginButton from '../components/login-button/LoginButton'
+import type LoginModal from '../components/login-modal/LoginModal'
+import type LogoutButton from '../components/logout-button/LogoutButton'
+import type Menu from '../components/menu/Menu'
+import type MenuItem from '../components/menu-item/MenuItem'
+import type PhotoCapture from '../components/photo-capture/PhotoCapture'
+import type PhotoCaptureModal from '../components/photo-capture-modal/PhotoCaptureModal'
+import type Provider from '../components/provider/Provider'
+import type RDFForm from '../components/rdf-form/RDFForm'
+import type RDFInput from '../components/rdf-input/RDFInput'
+import type Select from '../components/select/Select'
+import type SelectOption from '../components/select-option/SelectOption'
+import type SignupButton from '../components/signup-button/SignupButton'
+import type SolidEmblem from '../components/solid-emblem/SolidEmblem'
+
+declare global {
+  interface HTMLElementTagNameMap {
+    'solid-ui-account': Account
+    'solid-ui-avatar': Avatar
+    'solid-ui-button': Button
+    'solid-ui-combobox': Combobox
+    'solid-ui-combobox-option': ComboboxOption
+    'solid-ui-dialog': Dialog
+    'solid-ui-dialog-content': DialogContent
+    'solid-ui-dialog-footer': DialogFooter
+    'solid-ui-dialog-header': DialogHeader
+    'solid-ui-dialog-provider': DialogProvider
+    'solid-ui-dialogs-root': DialogsRoot
+    'solid-ui-guard': Guard
+    'solid-ui-input': Input
+    'solid-ui-login-button': LoginButton
+    'solid-ui-login-modal': LoginModal
+    'solid-ui-logout-button': LogoutButton
+    'solid-ui-menu': Menu
+    'solid-ui-menu-item': MenuItem
+    'solid-ui-photo-capture': PhotoCapture
+    'solid-ui-photo-capture-modal': PhotoCaptureModal
+    'solid-ui-provider': Provider
+    'solid-ui-rdf-form': RDFForm
+    'solid-ui-rdf-input': RDFInput
+    'solid-ui-select': Select
+    'solid-ui-select-option': SelectOption
+    'solid-ui-signup-button': SignupButton
+    'solid-ui-solid-emblem': SolidEmblem
+  }
+}

@@ -1,9 +1,9 @@
 {
   "compilerOptions": {
     /* Basic Options */
-    "target": "ES2019" /* Specify ECMAScript target version - matches your browser support */,
+    "target": "ES2022" /* Needed for standard decorators emit */,
     "module": "ESNext" /* Let bundlers handle module transformation for better tree-shaking */,
-    "moduleResolution": "node", /* Use Node.js-style module resolution for Webpack compatibility. */
+    "moduleResolution": "bundler", /* Use bundler module resolution for Vite compatibility. */
     /* Crucial for library compatibility: */
     "skipLibCheck": true, // if true, Type errors in library .d.ts files will be ignored, so you might miss some issues.
     "allowSyntheticDefaultImports": true, // Often helps with ESM interop
@@ -21,7 +21,7 @@
     // "outFile": "./",                       /* Concatenate and emit output to single file. */
 
     "outDir": "dist" /* Redirect output structure to the directory. */,
-    "rootDir": "src/",
+    "rootDir": "./",
     "incremental": true,
     "tsBuildInfoFile": "./.tsbuildinfo",
 
@@ -53,17 +53,19 @@
 
     /* Module Resolution Options */
     // "moduleResolution": "node",            /* Specify module resolution strategy: 'node' (Node.js) or 'classic' (TypeScript pre-1.6). */
-    // "baseUrl": "./",                       /* Base directory to resolve non-absolute module names. */
-    // "paths": {},                           /* A series of entries which re-map imports to lookup locations relative to the 'baseUrl'. */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["src/*"]
+    },
     // "rootDirs": [],                        /* List of root folders whose combined content represents the structure of the project at runtime. */
     // "typeRoots": [],                       /* List of folders to include type definitions from. */
     "typeRoots": [
       "node_modules/@types",
       "node_modules/@testing-library",
-      "declarations.d.ts"
+      "src/types/"
     ] /* List of folders to include type definitions from. */,
     // "allowSyntheticDefaultImports": true,  /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
-    "esModuleInterop": true /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
+    "esModuleInterop": true, /* Enables emit interoperability between CommonJS and ES Modules via creation of namespace objects for all imports. Implies 'allowSyntheticDefaultImports'. */
     // "preserveSymlinks": true,              /* Do not resolve the real path of symlinks. */
 
     /* Source Map Options */
@@ -75,10 +77,11 @@
     /* Experimental Options */
     // "experimentalDecorators": true,        /* Enables experimental support for ES7 decorators. */
     // "emitDecoratorMetadata": true,         /* Enables experimental support for emitting type metadata for decorators. */
+    "useDefineForClassFields": true,
   },
   "include": [
     "src/**/*",
-    "declarations.d.ts"
+    ".storybook/**/*"
   ],
   "exclude": ["node_modules", "dist"]
 }

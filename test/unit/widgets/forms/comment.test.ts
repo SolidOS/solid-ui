@@ -1,6 +1,7 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../../helpers/debugger'
 import { namedNode } from 'rdflib'
-import ns from '../../../../src/ns'
+import ns from '../../../../src/lib/ns'
 import { solidLogicSingleton, store } from 'solid-logic'
 
 /*
@@ -33,7 +34,7 @@ describe('Comment', () => {
     const form = namedNode('http://example.com/#form')
     const dataDoc = namedNode('http://example.com/#store')
     store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Comment').uri](
         document,
@@ -55,7 +56,7 @@ describe('Comment', () => {
     const dataDoc = namedNode('http://example.com/#store')
     store.add(form, ns.ui('property'), ns.vcard('fn'), form.doc())
     store.add(form, ns.ui('contents'), 'Hello World!', form.doc())
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     expect(
       field[ns.ui('Comment').uri](
         document,
@@ -75,7 +76,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     solidLogicSingleton.store.add(form, ns.rdf('type'), ns.ui('Comment'), namedNode('http://example.com/'))
     solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
@@ -96,7 +97,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     solidLogicSingleton.store.add(form, ns.rdf('type'), ns.ui('Comment'), namedNode('http://example.com/'))
     expect(
       commentField(
@@ -116,7 +117,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     solidLogicSingleton.store.add(form, ns.rdf('type'), namedNode('http://example.com/#custom2'), namedNode('http://example.com/'))
     solidLogicSingleton.store.add(namedNode('http://example.com/#custom2'), ns.rdfs('subClassOf'), namedNode('http://example.com/#custom1'), namedNode('http://example.com/'))
     solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
@@ -138,7 +139,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     solidLogicSingleton.store.add(form, ns.rdf('type'), ns.ui('Comment'), namedNode('http://example.com/'))
     solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))
     expect(
@@ -158,7 +159,7 @@ describe('Comment', () => {
     const subject = namedNode('http://example.com/#this')
     const form = namedNode('http://example.com/#form')
     const store = namedNode('http://example.com/#store')
-    const callbackFunction = jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     solidLogicSingleton.store.add(form, ns.rdf('type'), ns.ui('Comment'), namedNode('http://example.com/'))
     solidLogicSingleton.store.add(form, ns.ui('style'), 'custom: true;', namedNode('http://example.com/'))
     solidLogicSingleton.store.add(form, ns.ui('contents'), namedNode('http://example.com/#bla'), namedNode('http://example.com/'))

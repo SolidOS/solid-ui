@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import {
   initFooter,
@@ -15,23 +16,23 @@ silenceDebugMessages()
 describe('footer', () => {
   it('is exposed on public API', async () => {
     const options = { solidProjectUrl: 'https://solid.com/', solidProjectName: 'Solid Project' }
-    expect(await initFooter(store, options)).toMatchSnapshot()
+    expect(await initFooter(store, options)).toBeUndefined()
   })
 })
 describe('rebuildFooter', () => {
-  it('creates a link', () => {
+  it('creates a link', async () => {
     const footer = document.createElement('div')
     const pod = new NamedNode('https://test.com')
     const podOwner = new NamedNode('https://test2.com')
     const options = { solidProjectUrl: 'https://solid.com/', solidProjectName: 'Solid Project' }
 
-    expect(rebuildFooter(footer, store, pod, podOwner, options)).toMatchSnapshot()
+    expect(await rebuildFooter(footer, store, pod, podOwner, options)).toMatchSnapshot()
   })
-  it('does NOT creates a link in the footer', () => {
+  it('does NOT creates a link in the footer', async () => {
     const footer = document.createElement('div')
     const pod = new NamedNode('https://test.com')
     const podOwner = new NamedNode('https://test.com')
-    expect(rebuildFooter(footer, store, pod, podOwner)).toMatchSnapshot()
+    expect(await rebuildFooter(footer, store, pod, podOwner)).toMatchSnapshot()
   })
 })
 describe('createControllerInfoBlock', () => {

@@ -1,0 +1,32 @@
+.viewport {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    min-height: 200px;
+    border-radius: 0.5rem;
+    overflow: hidden;
+    background: color-mix(in srgb, #ffffff 92%, #000 8%);
+}
+
+.viewport video,
+.viewport img {
+    display: block;
+    width: 100%;
+    max-width: 260px;
+    height: auto;
+    border-radius: 0.5rem;
+    margin: 0 auto;
+    object-fit: cover;
+}
+
+.status {
+    width: 100%;
+    text-align: center;
+    color: var(--photo-capture-muted-text);
+    font-size: 0.875rem;
+}
+
+.status.error {
+    color: var(--color-error, #b00020);
+}

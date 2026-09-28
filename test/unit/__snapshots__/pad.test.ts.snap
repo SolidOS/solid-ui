@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`notepad runs 1`] = `
+exports[`notepad > runs 1`] = `
 <table
   style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
 >
@@ -13,7 +13,7 @@ exports[`notepad runs 1`] = `
 </table>
 `;
 
-exports[`notepad status area ... 1`] = `
+exports[`notepad > status area ... 1`] = `
 <table
   style="padding: 1em; overflow: auto; resize: horizontal; min-width: 40em;"
 >

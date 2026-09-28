@@ -1,16 +1,17 @@
 /* Test the autocomplete field in the form system
 */
 
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { getFileContent } from '../../../helpers/getFileContent'
 // Note different helpers directory:
 // import { silenceDebugMessages } from '../../../../helpers/setup'
-import { parse } from 'rdflib'
+import { NamedNode, parse } from 'rdflib'
 import {
   autocompleteField
 } from '../../../../../src/widgets/forms/autocomplete/autocompleteField'
-import ns from '../../../../../src/ns'
+import ns from '../../../../../src/lib/ns'
 import { store } from 'solid-logic'
-// import { textInputStyle } from '../../../../../src/style'
+// import { textInputStyle } from '../../../../../src/lib/style'
 import {
 //  findByAltText,
   findByTestId,
@@ -19,9 +20,10 @@ import {
   waitFor
 } from '@testing-library/dom'
 import nock from 'nock'
+import { restoreFetcherLoad, stubFetcherLoad } from '../../../../stubs/fetcher'
 
-jest.unmock('rdflib') // we need Fetcher to work (mocked)
-jest.unmock('debug') // while debugging only @@
+vi.unmock('rdflib') // we need Fetcher to work (mocked)
+vi.unmock('debug') // while debugging only @@
 
 const turtleResponseHeaders = {
   Vary: 'Accept, Authorization, Origin',
@@ -108,11 +110,13 @@ async function setupWikidataMock () {
 describe('autocompleteField', () => {
   let result
   beforeEach(() => {
+    restoreFetcherLoad()
     nock.cleanAll()
     nock.disableNetConnect()
   })
 
   afterEach(() => {
+    stubFetcherLoad()
     nock.cleanAll()
     nock.enableNetConnect()
   })
@@ -123,7 +127,7 @@ describe('autocompleteField', () => {
   it('creates a autocomplete field', async () => {
     const container = undefined
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -143,7 +147,7 @@ describe('autocompleteField', () => {
   it('adds the autocomplete field to the container, if provided', () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -160,7 +164,7 @@ describe('autocompleteField', () => {
   it('has an accept button which is hidden', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -184,7 +188,7 @@ describe('autocompleteField', () => {
   it('has an input element which has the initial value', async () => {
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -196,7 +200,7 @@ describe('autocompleteField', () => {
       callbackFunction
     )
 
-    const inputElement = await findByTestId(result, 'autocomplete-input')
+    const inputElement = await findByTestId(result, 'autocomplete-input') as HTMLInputElement
     expect(inputElement.value).toEqual('test institution')
   })
 
@@ -204,7 +208,7 @@ describe('autocompleteField', () => {
     await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -231,7 +235,7 @@ describe('autocompleteField', () => {
     await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -264,7 +268,7 @@ describe('autocompleteField', () => {
     await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
 
     result = autocompleteField(
       document,
@@ -286,14 +290,14 @@ describe('autocompleteField', () => {
     await waitFor(() => expect(table.children.length).toEqual(4), { timeout: 5000 })
     expect(table.children.length).toBeGreaterThan(1)
     expect(table).toMatchSnapshot()
-    expect(table.children[1].style.color).toEqual('rgb(0, 136, 0)') // green as all loaded
+    expect((table.children[1] as HTMLElement).style.color).toEqual('rgb(0, 136, 0)') // green as all loaded
   })
 
   it('typing more search term till unique selects the whole name and sets the accecpt button active', async () => {
     await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     const CHOSEN_NAME = 'abbazia di San Massimino'
     result = autocompleteField(
       document,
@@ -336,7 +340,7 @@ describe('autocompleteField', () => {
     await setupWikidataMock()
     const container = document.createElement('div')
     const already = {}
-    const callbackFunction = () => {} // was jest.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
+    const callbackFunction = () => {} // was vi.fn() // TODO: https://github.com/solidos/solid-ui/issues/263
     const CHOSEN_NAME = 'abbazia di San Massimino'
     result = autocompleteField(
       document,
@@ -398,10 +402,10 @@ describe('autocompleteField', () => {
     // console.log('waiting .. after accept button click')
     await wait(500)
     // Check the data is right in local quadstore
-    const obj = kb.any(subject, predicate, null, subject.doc())
+    const obj = kb.any(subject, predicate, null, subject.doc()) as NamedNode
     expect(obj.termType).toEqual('NamedNode')
     const name = kb.any(obj, ns.schema('name'), null, subject.doc())
-    expect(name.termType).toEqual('Literal')
-    expect(name.value).toEqual(CHOSEN_NAME)
+    expect(name?.termType).toEqual('Literal')
+    expect(name?.value).toEqual(CHOSEN_NAME)
   })
 })

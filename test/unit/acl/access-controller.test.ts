@@ -1,6 +1,8 @@
+import { describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { instantiateAccessController } from '../helpers/instantiateAccessController'
 import { AccessController } from '../../../src/acl/access-controller'
+import { Fetcher } from 'rdflib'
 import { JSDOM } from 'jsdom'
 import { solidLogicSingleton } from 'solid-logic'
 
@@ -57,9 +59,14 @@ describe('AccessController#save', () => {
     expect(instantiateAccessController(dom, store).save).toBeInstanceOf(Function)
   })
   it('runs', async () => {
-    const jsdomAlert = window.alert // remember the jsdom alert
-    window.alert = () => {} // provide an empty implementation for window.alert
-    expect(instantiateAccessController(dom, store).save()).rejects.toThrow('ACL file save rejected : no acl:Write')
-    window.alert = jsdomAlert
+    const webOperationSpy = vi.spyOn(Fetcher.prototype, 'webOperation').mockResolvedValue({
+      ok: false,
+      error: 'ACL file save rejected : no acl:Write'
+    } as Awaited<ReturnType<Fetcher['webOperation']>>)
+    try {
+      await expect(instantiateAccessController(dom, store).save()).rejects.toThrow('ACL file save rejected : no acl:Write')
+    } finally {
+      webOperationSpy.mockRestore()
+    }
   })
 })

@@ -1,6 +1,7 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
-import { deleteRecursive, deleteFolder } from '../../src/folders'
+import { deleteRecursive, deleteFolder } from '../../src/lib/folders'
 import { store } from 'solid-logic'
 
 silenceDebugMessages()

@@ -8,9 +8,9 @@
  * The file upload function, uploadFiles, is provided as often as someone drags a file from the computer
  * desktop. You may want to upload it into the pod.
  */
-import * as debug from '../debug'
+import * as debug from '../lib/debug'
 import * as mime from 'mime-types'
-import { style } from '../style'
+import { style } from '../lib/style'
 
 /* global FileReader alert */
 
@@ -177,6 +177,20 @@ export function makeDraggable (tr, obj) {
 */
 
 export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+  const describeUploadFailure = function (destURI, error) {
+    const status = error?.response?.status ?? error?.status
+    const message = error?.message || String(error)
+    const prefix = `Upload failed while putting ${destURI}`
+
+    if (status === 413) {
+      return `${prefix}: storage quota was exceeded. ${message}`
+    }
+
+    return status
+      ? `${prefix} (HTTP ${status}). ${message}`
+      : `${prefix}. ${message}`
+  }
+
   for (let i = 0; files[i]; i++) {
     const f = files[i]
     debug.log(
@@ -238,7 +252,7 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
               successHandler(theFile, destURI)
             },
             error => {
-              const msg = ' Upload: FAIL ' + destURI + ', Error: ' + error
+              const msg = describeUploadFailure(destURI, error)
               debug.log(msg)
               alert(msg)
               throw new Error(msg)

@@ -4,12 +4,12 @@
     work in solid-ui by adjusting where imported functions are found.
  */
 import { IndexedFormula, NamedNode } from 'rdflib'
-import { icons } from '../index'
+import { icons } from '../lib/iconBase'
 import { authn, authSession } from 'solid-logic'
 import { loginStatusBox } from '../login/login'
 // import { loginStatusBox, authSession, currentUser } from '../authn/authn'
 import * as widgets from '../widgets'
-import { style } from '../style'
+import { style } from '../lib/style'
 import { emptyProfile } from './empty-profile'
 import { getPod, throttle } from '../utils/headerFooterHelpers'
 

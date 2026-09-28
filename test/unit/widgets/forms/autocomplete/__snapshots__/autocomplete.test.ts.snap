@@ -1,6 +1,6 @@
-// Jest Snapshot v1, https://jestjs.io/docs/snapshot-testing
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`autocompleteField adds the autocomplete field to the container, if provided 1`] = `
+exports[`autocompleteField > adds the autocomplete field to the container, if provided 1`] = `
 <div>
   <div>
     <div
@@ -21,7 +21,7 @@ exports[`autocompleteField adds the autocomplete field to the container, if prov
 </div>
 `;
 
-exports[`autocompleteField clicking on row of greenn table then accecpt button saves data 1`] = `
+exports[`autocompleteField > clicking on row of greenn table then accecpt button saves data 1`] = `
 <div>
   <div
     class="formFieldName"
@@ -64,7 +64,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white;"
           type="button"
         >
           <img
@@ -75,7 +75,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white;"
           type="button"
         >
           <img
@@ -86,7 +86,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white; display: none;"
           type="button"
         >
           <img
@@ -112,7 +112,7 @@ exports[`autocompleteField clicking on row of greenn table then accecpt button s
 </div>
 `;
 
-exports[`autocompleteField creates a autocomplete field 1`] = `
+exports[`autocompleteField > creates a autocomplete field 1`] = `
 <div>
   <div
     class="formFieldName"
@@ -155,7 +155,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white; display: none;"
           type="button"
         >
           <img
@@ -166,7 +166,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white; display: none;"
           type="button"
         >
           <img
@@ -177,7 +177,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white; display: none;"
           type="button"
         >
           <img
@@ -203,7 +203,7 @@ exports[`autocompleteField creates a autocomplete field 1`] = `
 </div>
 `;
 
-exports[`autocompleteField on inpt fetches data (fixing wikidata timeout issue) making green table 1`] = `
+exports[`autocompleteField > on inpt fetches data (fixing wikidata timeout issue) making green table 1`] = `
 <table
   data-testid="autocomplete-table"
   style="max-width: 30em; margin: 0.5em;"
@@ -238,7 +238,7 @@ exports[`autocompleteField on inpt fetches data (fixing wikidata timeout issue) 
 </table>
 `;
 
-exports[`autocompleteField typing more search term till unique selects the whole name and sets the accecpt button active 1`] = `
+exports[`autocompleteField > typing more search term till unique selects the whole name and sets the accecpt button active 1`] = `
 <div>
   <div
     class="formFieldName"
@@ -281,7 +281,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </div>
         <button
           data-testid="accept-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white;"
           type="button"
         >
           <img
@@ -292,7 +292,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </button>
         <button
           data-testid="cancel-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white;"
           type="button"
         >
           <img
@@ -303,7 +303,7 @@ exports[`autocompleteField typing more search term till unique selects the whole
         </button>
         <button
           data-testid="edit-button"
-          style="background-color: rgb(255, 255, 255); padding: 0.7em; border: 0.01em solid white; border-radius: 0.2em; font-size: 100%; margin: 0.3em; display: none;"
+          style="background-color: rgb(255, 255, 255); padding: 0.7em; border-radius: 0.2em; font-size: 100%; margin: 0.3em; border: 0.01em solid white; display: none;"
           type="button"
         >
           <img

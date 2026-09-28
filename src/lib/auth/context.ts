@@ -1,0 +1,16 @@
+import { createContext } from '@lit/context'
+import NoopAuth from './NoopAuth'
+import Account from './Account'
+
+export interface AuthContext {
+  initialized: boolean;
+  account: Account | null;
+  login(loginUrl?: string): Promise<void>;
+  loadProfile?(): Promise<void>;
+  signup(): Promise<void>;
+  logout(): Promise<void>;
+  onSessionUpdated(callback: () => unknown): () => void;
+}
+
+export const DEFAULT_AUTH_CONTEXT = new NoopAuth()
+export const authContext = createContext<AuthContext>(Symbol('auth'))

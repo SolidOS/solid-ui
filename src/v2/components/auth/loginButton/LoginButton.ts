@@ -386,7 +386,11 @@ export class LoginButton extends LitElement {
       this._loginComplete(offline.uri)
       return
     }
-    this._issuerInputValue = (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) || this.issuerUrl || ''
+    this._issuerInputValue =
+      (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) ||
+      this.issuerUrl ||
+      getSuggestedIssuers()[0]?.uri ||
+      ''
     this._errorMsg = ''
     this._popupOpen = true
   }
@@ -419,10 +423,7 @@ export class LoginButton extends LitElement {
 
       const locationUrl = new URL(window.location.href)
       locationUrl.hash = ''
-      await authSession.login({
-        redirectUrl: locationUrl.href,
-        oidcIssuer: issuerUri
-      })
+      await authSession.login(issuerUri, locationUrl.href)
     } catch (err: any) {
       this._errorMsg = err.message || String(err)
       this.requestUpdate()

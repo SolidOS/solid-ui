@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { AccessGroups } from '../../../src/acl/access-groups'
 import { IndexedFormula, graph } from 'rdflib'

@@ -1,6 +1,6 @@
-import * as log from '../log'
+import * as log from '../lib/log'
 import { store } from 'solid-logic'
-import ns from '../ns'
+import ns from '../lib/ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 
 const UI = { log, ns, rdf }

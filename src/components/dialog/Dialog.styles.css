@@ -1,0 +1,14 @@
+dialog {
+  margin: auto;
+  border-radius: 5px;
+  box-shadow: 0px 4px 16px 0px rgba(0, 0, 0, 0.35);
+  min-width: 343px;
+
+  solid-ui-dialog-header solid-ui-button {
+    color: var(--solid-ui-color-gray-600);
+  }
+}
+
+dialog:not([open]) {
+  display: none;
+}

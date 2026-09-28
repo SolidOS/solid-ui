@@ -1,5 +1,6 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
-import ns from '../../src/ns'
+import ns from '../../src/lib/ns'
 
 silenceDebugMessages()
 

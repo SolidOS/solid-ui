@@ -1,9 +1,9 @@
+import { afterEach, describe, expect, it, vi } from 'vitest'
 import { store } from 'solid-logic'
 import { setAcl, keyAclBody } from '../../../../src/utils/keyHelpers/acl'
 
-store.fetcher.load = jest.fn().mockImplementation(() => {})
-store.any = jest.fn()
-store.fetcher.webOperation = jest.fn()
+store.any = vi.fn()
+store.fetcher.webOperation = vi.fn()
 
 const keyDoc = 'https://alice.solidcommunity.net/profile/keys/publicKey.ttl'
 const keyAclDoc = 'https://alice.solidcommunity.net/profile/keys/publicKey.ttl'
@@ -14,7 +14,7 @@ const error404 = {
 }
 
 afterEach(() => {
-  jest.clearAllMocks()
+  vi.clearAllMocks()
 })
 
 describe('ACL Helpers', () => {

@@ -1,3 +1,4 @@
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { JSDOM, DOMWindow } from 'jsdom'
 import { getByRole } from '@testing-library/dom'
@@ -44,13 +45,13 @@ import {
 } from '../../../src/widgets/buttons'
 import { graph, namedNode, NamedNode, sym } from 'rdflib'
 // @ts-ignore
-import ns from '../../../src/ns'
+import ns from '../../../src/lib/ns'
 // @ts-ignore
-import { icons } from '../../../src/iconBase'
+import { icons } from '../../../src/lib/iconBase'
 import { clearStore } from '../helpers/clearStore'
 import { domWithHead } from '../../helpers/dom-with-head'
 import { solidLogicSingleton } from 'solid-logic'
-import { style } from '../../../src/style'
+import { style } from '../../../src/lib/style'
 const { iconBase } = icons
 const store = solidLogicSingleton.store
 
@@ -109,7 +110,7 @@ describe('askName', () => {
 describe('attachmentList', () => {
   afterEach(() => {
     clearStore()
-    jest.restoreAllMocks()
+    vi.restoreAllMocks()
   })
 
   it('exists', () => {
@@ -135,7 +136,7 @@ describe('attachmentList', () => {
       [target.doc().uri]: 'requested'
     }
 
-    const nowOrWhenFetched = jest
+    const nowOrWhenFetched = vi
       .spyOn(fetcher, 'nowOrWhenFetched')
       .mockImplementation(() => undefined as any)
 
@@ -164,7 +165,7 @@ describe('attachmentList', () => {
       [target.doc().uri]: 'requested'
     }
 
-    const nowOrWhenFetched = jest
+    const nowOrWhenFetched = vi
       .spyOn(fetcher, 'nowOrWhenFetched')
       .mockImplementation(() => undefined as any)
 
@@ -197,14 +198,16 @@ describe('button', () => {
     const handler = () => {}
     expect(button(domWithHead(), iconURI, text, handler)).toBeTruthy()
   })
-  it('calls the callback when you click it', (done) => {
+  it('calls the callback when you click it', () => {
+    let called = false
     const iconURI = ''
     const text = 'txt'
     const handler = () => {
-      done()
+      called = true
     }
     const buttonElt = button(domWithHead(), iconURI, text, handler)
     buttonElt.dispatchEvent(clickEvent)
+    expect(called).toBe(true)
   })
 
   it('text button with upper-cased caption', () => {
@@ -539,7 +542,7 @@ describe('renderAsDiv ', () => {
     expect(element.children[0].children[0].getAttribute('alt')).toEqual('test')
   })
   it('the div is clickable if given true for the clickable option', () => {
-    const mockClickFunction = jest.fn()
+    const mockClickFunction = vi.fn()
     const options = {
       clickable: true,
       onClickFunction: mockClickFunction

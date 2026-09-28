@@ -42,10 +42,10 @@ import {
   UnauthorizedError,
   WebOperationError
 } from 'solid-logic'
-import * as debug from '../debug'
-import { style } from '../style'
-import { alert } from '../log'
-import ns from '../ns'
+import * as debug from '../lib/debug'
+import { style } from '../lib/style'
+import { alert } from '../lib/log'
+import ns from '../lib/ns'
 import { Signup } from '../signup/signup.js'
 import * as utils from '../utils'
 import * as widgets from '../widgets'
@@ -85,6 +85,20 @@ export function ensureLoggedIn (context: AuthenticationContext): Promise<Authent
         debug.log(`logIn: Already logged in as ${webId}`)
         return resolve(context)
       }
+      if (!context.div || !context.dom) {
+        return resolve(context)
+      }
+      const box = loginStatusBox(context.dom, (webIdUri) => {
+        authn.saveUser(webIdUri, context)
+        resolve(context) // always pass growing context
+      })
+      context.div.appendChild(box)
+    }).catch((error) => {
+      // A failed/stalled session check (e.g. a missing worker-backed
+      // restore, stale redirect params) must never become an unhandled
+      // promise rejection — and must never leave the login UI spinning.
+      // Fall through to the login box so the user can sign in again.
+      debug.log(`logIn: session check failed, showing login (${error})`)
       if (!context.div || !context.dom) {
         return resolve(context)
       }
@@ -515,10 +529,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
       // Login
       const locationUrl = new URL(window.location.href)
       locationUrl.hash = '' // remove hash part
-      await authSession.login({
-        redirectUrl: locationUrl.href,
-        oidcIssuer: issuerUri
-      })
+      await authSession.login(issuerUri, locationUrl.href)
     } catch (err) {
       alert(err.message)
     }
@@ -555,7 +566,7 @@ export function renderSignInPopup (dom: HTMLDocument) {
     'margin-left: 0 !important; flex: 1; margin-right: 5px !important'
   )
   issuerTextInput.setAttribute('placeholder', 'https://example.com')
-  issuerTextInput.value = localStorage.getItem('loginIssuer') || ''
+  issuerTextInput.value = (typeof localStorage !== 'undefined' && localStorage.getItem('loginIssuer')) || getSuggestedIssuers()[0]?.uri || ''
   const issuerTextGoButton = dom.createElement('button')
   issuerTextGoButton.innerText = 'Go'
   issuerTextGoButton.setAttribute('style', 'margin-top: 12px; margin-bottom: 12px;')
@@ -671,9 +682,9 @@ export function loginStatusBox (
   }
 
   box.refresh = function () {
-    const sessionInfo = authSession.info
-    if (sessionInfo && sessionInfo.webId && sessionInfo.isLoggedIn) {
-      me = solidLogicSingleton.store.sym(sessionInfo.webId)
+    const webId = authSession.webId
+    if (webId) {
+      me = solidLogicSingleton.store.sym(webId)
     } else {
       me = null
     }

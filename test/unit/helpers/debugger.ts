@@ -1,10 +1,10 @@
 // We don't want to output debug messages to console as part of the tests
-import * as debug from '../../../src/debug'
-jest.mock('../../../src/debug')
+import { vi } from 'vitest'
+import * as debug from '../../../src/lib/debug'
 
 export function silenceDebugMessages () {
-  jest.spyOn(debug, 'log').mockImplementation(() => {})
-  jest.spyOn(debug, 'warn').mockImplementation(() => {})
-  jest.spyOn(debug, 'error').mockImplementation(() => {})
-  jest.spyOn(debug, 'trace').mockImplementation(() => {})
+  vi.spyOn(debug, 'log').mockImplementation(() => {})
+  vi.spyOn(debug, 'warn').mockImplementation(() => {})
+  vi.spyOn(debug, 'error').mockImplementation(() => {})
+  vi.spyOn(debug, 'trace').mockImplementation(() => {})
 }

@@ -3,9 +3,9 @@
 //
 // This must load AFTER the rdflib.js and log-ext.js (or log.js).
 //
-import * as log from '../log'
+import * as log from '../lib/log'
 import { store } from 'solid-logic'
-import ns from '../ns'
+import ns from '../lib/ns'
 import * as rdf from 'rdflib' // pull in first avoid cross-refs
 import { label } from './label'
 

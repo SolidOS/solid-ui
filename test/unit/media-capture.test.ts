@@ -1,7 +1,8 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import { JSDOM } from 'jsdom'
 import { cameraCaptureControl, cameraButton } from '../../src/media/media-capture'
-import { graph } from 'rdflib'
+import { graph, namedNode } from 'rdflib'
 
 silenceDebugMessages()
 const window = new JSDOM('<!DOCTYPE html><p>Hello world</p>').window
@@ -16,8 +17,8 @@ describe('cameraCaptureControl', () => {
       cameraCaptureControl(
         dom,
         graph(),
-        () => {},
-        () => {}
+        () => namedNode('https://example.com/image'),
+        () => Promise.resolve()
       )
     }).toThrow('navigator.mediaDevices not available')
   })
@@ -31,8 +32,8 @@ describe('cameraButton', () => {
     expect(cameraButton(
       dom,
       graph(),
-      () => {},
-      () => {}
+      () => namedNode('https://example.com/image'),
+      () => Promise.resolve()
     )).toBeTruthy()
   })
 })

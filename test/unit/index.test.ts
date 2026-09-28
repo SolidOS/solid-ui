@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest'
 import { silenceDebugMessages } from './helpers/debugger'
 import * as Index from '../../src/index'
 
@@ -6,11 +7,31 @@ silenceDebugMessages()
 describe('Index', () => {
   it('exists', () => {
     expect(Object.keys(Index).sort()).toEqual([
+      'Account',
+      'CloseDialogEvent',
+      'CodeEditor',
+      'DEFAULT_AUTH_CONTEXT',
+      'DEFAULT_DIALOG_CONTEXT',
+      'DEFAULT_SIGNUP_URL',
+      'Dialog',
+      'DialogComponent',
+      'DialogTrait',
+      'FormControlComponent',
+      'FormControlTrait',
+      'NoopAuth',
+      'ShowDialogEvent',
+      'SolidAuth',
+      'WebComponent',
       'acl',
       'aclControl',
+      'authContext',
       'create',
       'createTypes',
+      'customElement',
+      'dialogContext',
       'dom',
+      'fileExplorerContext',
+      'generateId',
       'icons',
       'infiniteMessageArea',
       'initFooter',
@@ -25,6 +46,7 @@ describe('Index', () => {
       'pad',
       'participation',
       'preferences',
+      'showDialog',
       'style',
       'table',
       'tabs',

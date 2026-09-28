@@ -1,3 +1,4 @@
+import { afterAll, afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 import { ACL_LINK, solidLogicSingleton } from 'solid-logic'
 import { silenceDebugMessages } from '../helpers/debugger'
 import {
@@ -144,7 +145,7 @@ describe('fixIndividualCardACL', () => {
 describe('getACL', () => {
   let callbackFunction
 
-  beforeEach(() => (callbackFunction = jest.fn()))
+  beforeEach(() => (callbackFunction = vi.fn()))
 
   afterEach(clearStore)
 

@@ -1,8 +1,19 @@
+import { vi, beforeEach, afterEach, describe, it, expect } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { DateFolder } from '../../../src/chat/dateFolder'
-import { sym } from 'rdflib'
+import * as rdflib from 'rdflib'
 
 silenceDebugMessages()
+
+beforeEach(() => {
+  vi.spyOn(rdflib.Fetcher.prototype, 'load').mockResolvedValue(new Response())
+})
+
+afterEach(() => {
+  vi.restoreAllMocks()
+})
+
+const { sym } = rdflib
 
 describe('DateFolder', () => {
   it('exists', () => {

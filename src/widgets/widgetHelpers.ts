@@ -1,4 +1,4 @@
-import { style } from '../style'
+import { style } from '../lib/style'
 
 /**
  * Wraps a Div in a TR/RD
