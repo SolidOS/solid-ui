@@ -1,1 +1,1 @@
-{"version":3,"file":"index.esm.js","names":["Select"],"sources":["../../../src/components/select/index.ts"],"sourcesContent":["import Select from './Select'\n\nexport * from './Select'\nexport { Select }\nexport default Select\n"],"mappings":";;AAIA,IAAA,IAAeA"}
+{"version":3,"file":"index.esm.js","names":["Select","Select","_Select","select_default"],"sources":["../../../src/components/select/index.ts"],"sourcesContent":["import Select from './Select'\n\nexport * from './Select'\nexport { Select }\nexport default Select\n"],"mappings":";;AAIA,IAAAG,IAAeH"}

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.cjs.js","names":["Provider"],"sources":["../../../src/components/provider/index.ts"],"sourcesContent":["import Provider from './Provider'\n\nexport { Provider }\nexport default Provider\n"],"mappings":"oIAGA,IAAA,EAAeA,EAAAA"}
+{"version":3,"file":"index.cjs.js","names":["Provider","Provider","require_Provider","provider_default"],"sources":["../../../src/components/provider/index.ts"],"sourcesContent":["import Provider from './Provider'\n\nexport { Provider }\nexport default Provider\n"],"mappings":"oIAGA,IAAAG,EAAeH,EAAAA"}

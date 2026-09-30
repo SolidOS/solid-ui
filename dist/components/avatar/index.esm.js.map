@@ -1,1 +1,1 @@
-{"version":3,"file":"index.esm.js","names":["Avatar"],"sources":["../../../src/components/avatar/index.ts"],"sourcesContent":["import Avatar from './Avatar'\n\nexport { Avatar }\nexport default Avatar\n"],"mappings":";;AAGA,IAAA,IAAeA"}
+{"version":3,"file":"index.esm.js","names":["Avatar","Avatar","_Avatar","avatar_default"],"sources":["../../../src/components/avatar/index.ts"],"sourcesContent":["import Avatar from './Avatar'\n\nexport { Avatar }\nexport default Avatar\n"],"mappings":";;AAGA,IAAAG,IAAeH"}

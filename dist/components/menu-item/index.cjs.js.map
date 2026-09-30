@@ -1,1 +1,1 @@
-{"version":3,"file":"index.cjs.js","names":["MenuItem"],"sources":["../../../src/components/menu-item/index.ts"],"sourcesContent":["import MenuItem from './MenuItem'\n\nexport { MenuItem }\nexport default MenuItem\n"],"mappings":"oIAGA,IAAA,EAAeA,EAAAA"}
+{"version":3,"file":"index.cjs.js","names":["MenuItem","MenuItem","require_MenuItem","menu_item_default"],"sources":["../../../src/components/menu-item/index.ts"],"sourcesContent":["import MenuItem from './MenuItem'\n\nexport { MenuItem }\nexport default MenuItem\n"],"mappings":"oIAGA,IAAAG,EAAeH,EAAAA"}

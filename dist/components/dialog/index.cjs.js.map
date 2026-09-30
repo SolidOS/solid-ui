@@ -1,1 +1,1 @@
-{"version":3,"file":"index.cjs.js","names":["Dialog"],"sources":["../../../src/components/dialog/index.ts"],"sourcesContent":["import Dialog from './Dialog'\n\nexport { Dialog }\nexport default Dialog\n"],"mappings":"kIAGA,IAAA,EAAeA,EAAAA"}
+{"version":3,"file":"index.cjs.js","names":["Dialog","Dialog","require_Dialog","dialog_default"],"sources":["../../../src/components/dialog/index.ts"],"sourcesContent":["import Dialog from './Dialog'\n\nexport { Dialog }\nexport default Dialog\n"],"mappings":"kIAGA,IAAAG,EAAeH,EAAAA"}

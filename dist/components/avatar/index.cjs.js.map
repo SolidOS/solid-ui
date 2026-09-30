@@ -1,1 +1,1 @@
-{"version":3,"file":"index.cjs.js","names":["Avatar"],"sources":["../../../src/components/avatar/index.ts"],"sourcesContent":["import Avatar from './Avatar'\n\nexport { Avatar }\nexport default Avatar\n"],"mappings":"kIAGA,IAAA,EAAeA,EAAAA"}
+{"version":3,"file":"index.cjs.js","names":["Avatar","Avatar","require_Avatar","avatar_default"],"sources":["../../../src/components/avatar/index.ts"],"sourcesContent":["import Avatar from './Avatar'\n\nexport { Avatar }\nexport default Avatar\n"],"mappings":"kIAGA,IAAAG,EAAeH,EAAAA"}
