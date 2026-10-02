@@ -7,6 +7,7 @@ import './Select'
 const args = {
   label: 'What is the best food?',
   options: 'Pizza, Ramen, Tacos',
+  srOnlyLabel: false,
 }
 
 const meta = {
@@ -15,12 +16,13 @@ const meta = {
   argTypes: {
     label: { control: 'text' },
     options: { control: 'text' },
+    srOnlyLabel: { control: 'boolean' },
   },
-  render ({ label, options }: typeof args) {
+  render ({ label, options, srOnlyLabel }: typeof args) {
     const parsedOptions = options.split(',').map(option => option.trim())
 
     return html`
-        <solid-ui-select label="${label}">
+        <solid-ui-select label="${label}" ?srOnlyLabel=${srOnlyLabel}>
             ${parsedOptions.map((option, index) => {
                 const indent = index === 0 ? '' : '            '
 

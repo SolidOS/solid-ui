@@ -10,7 +10,7 @@ export type FormControlValue = string | File | FormData | null
 export type FormControlTraitTarget = WebComponent & {
   name: string;
   label: string;
-  hideLabel: boolean;
+  srOnlyLabel: boolean;
   required: boolean;
   disabled: boolean;
   value: FormControlValue;
@@ -53,7 +53,7 @@ export default class FormControlTrait implements WebComponentTrait {
 
   renderLabel () {
     return this.target.label
-      ? html`<label id="${this.labelId}" for="${this.controlId}" class=${this.target.hideLabel ? 'sr-only' : ''}>${this.target.label}</label>`
+      ? html`<label id="${this.labelId}" for="${this.controlId}" class=${this.target.srOnlyLabel ? 'sr-only' : nothing}>${this.target.label}</label>`
       : nothing
   }
 
