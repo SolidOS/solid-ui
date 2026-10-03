@@ -3,6 +3,7 @@ declare const args: {
     value: string;
     placeholder: string;
     type: string;
+    srOnlyLabel: boolean;
 };
 declare const meta: {
     readonly title: "Basic UI/Input";
@@ -11,6 +12,7 @@ declare const meta: {
         value: string;
         placeholder: string;
         type: string;
+        srOnlyLabel: boolean;
     };
     readonly argTypes: {
         readonly label: {
@@ -22,12 +24,15 @@ declare const meta: {
         readonly placeholder: {
             readonly control: "text";
         };
+        readonly srOnlyLabel: {
+            readonly control: "boolean";
+        };
         readonly type: {
             readonly control: "select";
             readonly options: readonly ["text", "email", "password", "search", "url"];
         };
     };
-    readonly render: ({ label, value, placeholder, type }: typeof args) => import('lit-html').TemplateResult<1>;
+    readonly render: ({ label, value, placeholder, type, srOnlyLabel }: typeof args) => import('lit-html').TemplateResult<1>;
 };
 export declare const Primary: {};
 export default meta;

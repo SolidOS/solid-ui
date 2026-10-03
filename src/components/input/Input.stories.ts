@@ -7,6 +7,7 @@ const args = {
   value: '',
   placeholder: 'Enter your name',
   type: 'text',
+  srOnlyLabel: false,
 }
 
 const meta = {
@@ -16,15 +17,17 @@ const meta = {
     label: { control: 'text' },
     value: { control: 'text' },
     placeholder: { control: 'text' },
+    srOnlyLabel: { control: 'boolean' },
     type: {
       control: 'select',
       options: ['text', 'email', 'password', 'search', 'url'],
     },
   },
-  render ({ label, value, placeholder, type }: typeof args) {
+  render ({ label, value, placeholder, type, srOnlyLabel }: typeof args) {
     return html`
         <solid-ui-input
             label="${label}"
+            ?srOnlyLabel=${srOnlyLabel}
             .value=${value}
             placeholder="${placeholder}"
             type="${type}"

@@ -38,7 +38,7 @@ var o = class {
 		this.target.value = "", this.config.getInternals().setFormValue(""), this.updateValidity();
 	}
 	renderLabel() {
-		return this.target.label ? t`<label id="${this.labelId}" for="${this.controlId}">${this.target.label}</label>` : n;
+		return this.target.label ? t`<label id="${this.labelId}" for="${this.controlId}" class=${this.target.srOnlyLabel ? "sr-only" : n}>${this.target.label}</label>` : n;
 	}
 	onInput() {
 		this.setValue(this.config.getControlElement()?.value ?? null);

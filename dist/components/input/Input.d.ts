@@ -7,6 +7,7 @@ export default class Input extends FormControlComponent {
     accessor readonly: boolean;
     protected accessor controlElement: HTMLInputElement | null;
     protected render(): import('lit-html').TemplateResult<1>;
+    private onLeftIconSlotChange;
     private onKeyDown;
 }
 //# sourceMappingURL=Input.d.ts.map

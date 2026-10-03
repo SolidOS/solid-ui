@@ -230,6 +230,7 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
+        <slot @slotchange=${this.onLeftIconSlotChange} name="left-icon"></slot>
         <input
           id=${this.controlTrait.controlId}
           type=${this.type}
@@ -243,6 +244,10 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
         />
       </div>
     `;
+	}
+	onLeftIconSlotChange(e) {
+		let t = e.target;
+		this.toggleAttribute("data-has-left-icon", t.assignedElements().length > 0);
 	}
 	onKeyDown(e) {
 		e.key === "Enter" && (e.preventDefault(), this.controlTrait.onSubmit());

@@ -5,6 +5,7 @@ declare const meta: {
         readonly options: "Pizza, Ramen, Tacos";
         readonly asyncJSOptions: false;
         readonly asyncHtmlOptions: false;
+        readonly srOnlyLabel: false;
     };
     readonly argTypes: {
         readonly label: {
@@ -19,12 +20,16 @@ declare const meta: {
         readonly asyncHtmlOptions: {
             readonly control: "boolean";
         };
+        readonly srOnlyLabel: {
+            readonly control: "boolean";
+        };
     };
-    readonly render: ({ label, options, asyncJSOptions, asyncHtmlOptions }: {
+    readonly render: ({ label, options, asyncJSOptions, asyncHtmlOptions, srOnlyLabel }: {
         label: any;
         options: any;
         asyncJSOptions: any;
         asyncHtmlOptions: any;
+        srOnlyLabel: any;
     }) => import('lit-html').TemplateResult<1>;
 };
 export declare const Primary: {};

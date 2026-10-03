@@ -1,0 +1,41 @@
+import { WebComponent } from '../../lib/components';
+import { PropertyValues } from 'lit';
+import { Authorization } from 'solid-logic';
+export default class AccessControlModal extends WebComponent {
+    static styles: import('lit').CSSResult;
+    accessor subjectUri: string | undefined;
+    accessor accessGrants: Authorization[] | undefined;
+    private accessor principleInputValue;
+    private accessor roleValue;
+    private accessor searchValue;
+    private accessor failed;
+    private accessor submitting;
+    private accessor accessGrantRoles;
+    private accessor dialog;
+    connectedCallback(): void;
+    protected willUpdate(changedProperties: PropertyValues<this>): void;
+    private renderAccessGrants;
+    private renderAccessGrant;
+    private getAuthorizationBadge;
+    private renderAuthorizationBadge;
+    private getInitials;
+    private renderAuthorizationSubjects;
+    private getAuthorizationRole;
+    private renderAuthorizationRole;
+    private renderModeSelector;
+    private renderAddAccessForm;
+    private renderAccessGrantsSection;
+    private renderGeneralAccessSection;
+    private renderGeneralAccessIcon;
+    private getRoleModes;
+    private parsePrincipleInput;
+    private getDialogTitle;
+    protected render(): import('lit-html').TemplateResult<1>;
+    private onSubmit;
+    private onPrincipleInput;
+    private onSearchInput;
+    private onRoleInput;
+    private onAccessGrantRoleInput;
+    private onCopyLinkClick;
+}
+//# sourceMappingURL=AccessControlModal.d.ts.map

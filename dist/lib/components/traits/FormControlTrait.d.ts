@@ -5,6 +5,7 @@ export type FormControlValue = string | File | FormData | null;
 export type FormControlTraitTarget = WebComponent & {
     name: string;
     label: string;
+    srOnlyLabel: boolean;
     required: boolean;
     disabled: boolean;
     value: FormControlValue;

@@ -1,4 +1,6 @@
 :host {
+    --solid-ui-input-border-color: var(--solid-ui-color-gray-400);
+
     display: inline-flex;
     flex-direction: column;
     align-items: flex-start;
@@ -29,7 +31,7 @@
         width: 100%;
 
         input {
-            border: 1px solid var(--solid-ui-color-gray-400);
+            border: 1px solid var(--solid-ui-input-border-color);
             border-radius: 5px;
             padding: 10px;
             padding-right: 40px;

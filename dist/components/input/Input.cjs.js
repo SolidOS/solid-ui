@@ -2,6 +2,7 @@ const e=require("../../lib/components/decorators.cjs.js"),t=require("../../lib/c
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
+        <slot @slotchange=${this.onLeftIconSlotChange} name="left-icon"></slot>
         <input
           id=${this.controlTrait.controlId}
           type=${this.type}
@@ -14,5 +15,5 @@ const e=require("../../lib/components/decorators.cjs.js"),t=require("../../lib/c
           @keydown=${this.onKeyDown}
         />
       </div>
-    `}onKeyDown(e){e.key===`Enter`&&(e.preventDefault(),this.controlTrait.onSubmit())}},{e:[g,v,b,S,w,f],c:[z,p]}=N(o,[[h,1,`type`],[_,1,`placeholder`],[y,1,`required`],[x,1,`readonly`],[C,1,`controlElement`]],m,0,void 0,t.default),o),a=class extends R{constructor(){super(z),M(this,`styles`,n.default),p()}},M(a,T,void 0),a),Object.defineProperty(exports,"default",{enumerable:!0,get:function(){return z}});
+    `}onLeftIconSlotChange(e){let t=e.target;this.toggleAttribute(`data-has-left-icon`,t.assignedElements().length>0)}onKeyDown(e){e.key===`Enter`&&(e.preventDefault(),this.controlTrait.onSubmit())}},{e:[g,v,b,S,w,f],c:[z,p]}=N(o,[[h,1,`type`],[_,1,`placeholder`],[y,1,`required`],[x,1,`readonly`],[C,1,`controlElement`]],m,0,void 0,t.default),o),a=class extends R{constructor(){super(z),M(this,`styles`,n.default),p()}},M(a,T,void 0),a),Object.defineProperty(exports,"default",{enumerable:!0,get:function(){return z}});
 //# sourceMappingURL=Input.cjs.js.map

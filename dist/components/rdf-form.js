@@ -1,2 +1,2 @@
-import { n as e, t } from "../chunks/rdf-form-B2zTR8Qv.js";
+import { n as e, t } from "../chunks/rdf-form-DNlcoFok.js";
 export { e as RDFForm, t as default };

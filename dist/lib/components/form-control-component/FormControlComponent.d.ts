@@ -3,6 +3,7 @@ import { default as FormControlTrait, FormControlValue } from '../traits/FormCon
 export default abstract class FormControlComponent<T extends FormControlValue = FormControlValue> extends WebComponent {
     static formAssociated: boolean;
     accessor label: string;
+    accessor srOnlyLabel: boolean;
     accessor name: string;
     accessor value: T | null;
     accessor placeholder: string;

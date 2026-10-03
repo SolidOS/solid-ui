@@ -8,6 +8,9 @@ export default abstract class FormControlComponent<T extends FormControlValue = 
   @property({ type: String, reflect: true })
   accessor label = ''
 
+  @property({ type: Boolean, reflect: true, attribute: 'sr-only-label' })
+  accessor srOnlyLabel = false
+
   @property({ type: String, reflect: true })
   accessor name = ''
 
