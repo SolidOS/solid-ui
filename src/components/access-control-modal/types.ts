@@ -1,15 +1,11 @@
-import type { SubjectType } from 'solid-logic'
-
-export const ACCESS_ROLES = ['Owner', 'Editor', 'Viewer', 'Poster', 'Submitter', 'Remove'] as const
-
-export type AccessRole = typeof ACCESS_ROLES[number]
+import type { AccessRole, SubjectType } from 'solid-logic'
 
 export type AccessControlBadgeKind = 'agent' | 'group' | 'agentClass' | 'origin' | 'unknown'
 
-export type DraftGrant = {
+export type PendingAccessGrant = {
   id?: string
   subjectType: SubjectType
   subjectValue: string
   role: AccessRole
-  removed?: boolean
+  label: string
 }
