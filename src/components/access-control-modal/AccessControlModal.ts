@@ -503,6 +503,9 @@ export default class AccessControlModal extends WebComponent {
 
     try {
       for (const draftGrant of this.pendingAccessGrants) {
+        if (draftGrant.subjectType === 'origin') {
+          throw new Error('Origin restrictions need a target subject; this modal does not yet collect that choice.')
+        }
         const subject = { type: draftGrant.subjectType, iri: draftGrant.subjectValue }
 
         const plan = draftGrant.role === 'No Access'

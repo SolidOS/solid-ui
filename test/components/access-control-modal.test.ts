@@ -136,6 +136,80 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
+  it.each([
+    { role: 'Owner', modes: ['Read', 'Write', 'Control'] },
+    { role: 'Editor', modes: ['Read', 'Write'] },
+    { role: 'Viewer', modes: ['Read'] },
+    { role: 'Poster', modes: ['Append', 'Read'] },
+    { role: 'Submitter', modes: ['Append'] }
+  ])('saves $role using the modes supplied by solid-logic', async ({ role, modes }) => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://alice.example.com/profile/card.ttl#me'
+    element.addAccessRoleValue = role
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' },
+      modes
+    )
+    expect(applyPlan).toHaveBeenCalledTimes(1)
+    expect(element.failed).toBe(false)
+  })
+
+  it('revokes a queued no-access grant instead of granting empty modes', async () => {
+    planRevoke.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+      role: 'No Access',
+      label: 'Alice'
+    }]
+
+    await element.onSaveClick()
+
+    expect(planGrant).not.toHaveBeenCalled()
+    expect(planRevoke).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' }
+    )
+    expect(applyPlan).toHaveBeenCalledTimes(1)
+    expect(element.pendingAccessGrants).toEqual([])
+  })
+
+  it('retains an unsupported origin grant without passing it to the subject planner', async () => {
+    const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {})
+    try {
+      const element = document.createElement('solid-ui-access-control-modal') as any
+      element.subjectUri = 'https://example.com/resource.ttl'
+      const grants = [{
+        subjectType: 'origin',
+        subjectValue: 'https://app.example.com',
+        role: 'Viewer',
+        label: 'App'
+      }]
+      element.pendingAccessGrants = grants
+
+      await element.onSaveClick()
+
+      expect(planGrant).not.toHaveBeenCalled()
+      expect(planRevoke).not.toHaveBeenCalled()
+      expect(applyPlan).not.toHaveBeenCalled()
+      expect(element.pendingAccessGrants).toEqual(grants)
+      expect(element.failed).toBe(true)
+      expect(element.submitting).toBe(false)
+      expect(errorLog).toHaveBeenCalledWith('Failed to save access changes', expect.objectContaining({
+        message: expect.stringContaining('need a target subject')
+      }))
+    } finally {
+      errorLog.mockRestore()
+    }
+  })
+
   it('reads the selected role from the rendered combobox change event', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     document.body.appendChild(element)
