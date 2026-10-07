@@ -181,33 +181,44 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
-  it('retains an unsupported origin grant without passing it to the subject planner', async () => {
-    const errorLog = vi.spyOn(console, 'error').mockImplementation(() => {})
-    try {
-      const element = document.createElement('solid-ui-access-control-modal') as any
-      element.subjectUri = 'https://example.com/resource.ttl'
-      const grants = [{
-        subjectType: 'origin',
-        subjectValue: 'https://app.example.com',
-        role: 'Viewer',
-        label: 'App'
-      }]
-      element.pendingAccessGrants = grants
+  it('normalizes a bare origin domain and saves it as an origin grant', async () => {
+    classifyAccessControlSubject.mockResolvedValueOnce({
+      kind: 'origin' as const,
+      subjectValue: 'https://app.example.com'
+    })
 
-      await element.onSaveClick()
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'app.example.com'
+    element.addAccessRoleValue = 'Viewer'
 
-      expect(planGrant).not.toHaveBeenCalled()
-      expect(planRevoke).not.toHaveBeenCalled()
-      expect(applyPlan).not.toHaveBeenCalled()
-      expect(element.pendingAccessGrants).toEqual(grants)
-      expect(element.failed).toBe(true)
-      expect(element.submitting).toBe(false)
-      expect(errorLog).toHaveBeenCalledWith('Failed to save access changes', expect.objectContaining({
-        message: expect.stringContaining('need a target subject')
-      }))
-    } finally {
-      errorLog.mockRestore()
-    }
+    await element.onSaveClick()
+
+    expect(classifyAccessControlSubject).toHaveBeenCalledWith('https://app.example.com')
+    expect(planGrant).toHaveBeenCalledWith(
+      element.subjectUri,
+      {
+        type: 'origin',
+        iri: 'https://app.example.com'
+      },
+      ['Read']
+    )
+    expect(planRevoke).not.toHaveBeenCalled()
+    expect(applyPlan).toHaveBeenCalledTimes(1)
+    expect(element.failed).toBe(false)
+    expect(element.pendingAccessGrants).toEqual([])
+  })
+
+  it('offers a normalized origin option for a bare domain input', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const options = await element.accessPrincipleOptionsProvider('app.example.com')
+
+    expect(options.map((option: { value: string }) => option.value)).toContain('https://app.example.com')
+
+    document.body.removeChild(element)
   })
 
   it('reads the selected role from the rendered combobox change event', async () => {
