@@ -114,7 +114,7 @@
 		"mime-types": "^3.0.2",
 		"pane-registry": "5.0.1",
 		"rdflib": "2.4.1",
-		"solid-logic": "6.0.0",
+		"solid-logic": "6.0.1-0",
 		"solid-namespace": "^0.5.4",
 		"uuid": "^14.0.0"
 	},
