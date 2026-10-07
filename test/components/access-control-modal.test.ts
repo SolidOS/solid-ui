@@ -181,46 +181,6 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
-  it('normalizes a bare origin domain and saves it as an origin grant', async () => {
-    classifyAccessControlSubject.mockResolvedValueOnce({
-      kind: 'origin' as const,
-      subjectValue: 'https://app.example.com'
-    })
-
-    const element = document.createElement('solid-ui-access-control-modal') as any
-    element.subjectUri = 'https://example.com/resource.ttl'
-    element.principalInputValue = 'app.example.com'
-    element.addAccessRoleValue = 'Viewer'
-
-    await element.onSaveClick()
-
-    expect(classifyAccessControlSubject).toHaveBeenCalledWith('https://app.example.com')
-    expect(planGrant).toHaveBeenCalledWith(
-      element.subjectUri,
-      {
-        type: 'origin',
-        iri: 'https://app.example.com'
-      },
-      ['Read']
-    )
-    expect(planRevoke).not.toHaveBeenCalled()
-    expect(applyPlan).toHaveBeenCalledTimes(1)
-    expect(element.failed).toBe(false)
-    expect(element.pendingAccessGrants).toEqual([])
-  })
-
-  it('offers a normalized origin option for a bare domain input', async () => {
-    const element = document.createElement('solid-ui-access-control-modal') as any
-    document.body.appendChild(element)
-    await element.updateComplete
-
-    const options = await element.accessPrincipleOptionsProvider('app.example.com')
-
-    expect(options.map((option: { value: string }) => option.value)).toContain('https://app.example.com')
-
-    document.body.removeChild(element)
-  })
-
   it('reads the selected role from the rendered combobox change event', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     document.body.appendChild(element)

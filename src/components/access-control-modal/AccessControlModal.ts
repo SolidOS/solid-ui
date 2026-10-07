@@ -180,14 +180,6 @@ export default class AccessControlModal extends WebComponent {
       }
     }
 
-    const origin = authorization.origin[0]
-    if (origin) {
-      return {
-        kind: 'origin' as const,
-        text: 'O'
-      }
-    }
-
     return {
       kind: 'unknown' as const,
       text: '?'
@@ -213,7 +205,6 @@ export default class AccessControlModal extends WebComponent {
       ...authorization.agent,
       ...authorization.agentGroup,
       ...authorization.agentClass,
-      ...authorization.origin
     ]
   }
 
@@ -631,6 +622,11 @@ export default class AccessControlModal extends WebComponent {
       return undefined
     }
 
+    if (subjectType === 'origin') {
+      console.error(`Origin access grants are not supported yet: ${principle}`)
+      return undefined
+    }
+
     const label = preferredLabel ?? await this.resolvePendingAccessGrantLabel(subjectValue, principle)
 
     return {
@@ -668,10 +664,8 @@ export default class AccessControlModal extends WebComponent {
 
   private readonly accessPrincipleOptionsProvider = defineAsyncComboboxOptionsProvider(async (filter: string) => {
     const query = this.getPrincipleSearchTerm(filter)
-    const originCandidate = this.normalizeOriginInput(query)
-    const originOption = originCandidate ? await this.createOriginOption(originCandidate) : undefined
     const urlOption = this.isHttpUri(query) ? await this.createUrlOption(query) : undefined
-    const preferredOptions = this.dedupeComboboxOptions([originOption, urlOption].filter((option): option is ComboboxOptionData => Boolean(option)))
+    const preferredOptions = this.dedupeComboboxOptions([urlOption].filter((option): option is ComboboxOptionData => Boolean(option)))
 
     if (query.length < 2) {
       return preferredOptions.length ? preferredOptions : [{
@@ -713,19 +707,14 @@ export default class AccessControlModal extends WebComponent {
     }
   }
 
-  private async createOriginOption (uri: string): Promise<ComboboxOptionData> {
-    const labelText = await this.resolvePendingAccessGrantLabel(uri, uri)
-
-    return {
-      label: labelText === uri ? `Use ${uri}` : labelText,
-      value: uri
-    }
-  }
-
   private dedupeComboboxOptions (options: ComboboxOptionData[]): ComboboxOptionData[] {
     const seen = new Set<string>()
 
     return options.filter(option => {
+      if (typeof option.value !== 'string' || !option.value) {
+        return false
+      }
+
       if (seen.has(option.value)) {
         return false
       }
@@ -788,38 +777,8 @@ export default class AccessControlModal extends WebComponent {
     return value.startsWith('http://') || value.startsWith('https://')
   }
 
-  private isBareOriginDomain (value: string): boolean {
-    return /^([a-z0-9]+(-[a-z0-9]+)*\.)+[a-z]{2,}$/i.test(value.trim())
-  }
-
-  private normalizeOriginInput (value: string): string | undefined {
-    const trimmed = value.trim()
-    if (!trimmed) {
-      return undefined
-    }
-
-    if (this.isHttpUri(trimmed)) {
-      try {
-        const parsed = new URL(trimmed)
-        if ((parsed.protocol === 'http:' || parsed.protocol === 'https:') && parsed.pathname === '/' && !parsed.search && !parsed.hash) {
-          return `${parsed.protocol}//${parsed.host}`
-        }
-      } catch {
-        return undefined
-      }
-
-      return undefined
-    }
-
-    if (!this.isBareOriginDomain(trimmed)) {
-      return undefined
-    }
-
-    return `https://${trimmed}`
-  }
-
   private normalizeAccessPrincipleInput (value: string): string {
-    return this.normalizeOriginInput(value) ?? value.trim()
+    return value.trim()
   }
 
   private async onCopyLinkClick (event: Event) {
