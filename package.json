@@ -171,9 +171,6 @@
 	"optionalDependencies": {
 		"fsevents": "*"
 	},
-	"overrides": {
-		"solid-logic": "$solid-logic"
-	},
 	"solidosDependencies": [
 		"rdflib",
 		"solid-logic",
