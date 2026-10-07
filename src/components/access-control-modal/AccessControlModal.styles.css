@@ -115,6 +115,9 @@
       width: 12ch;
       min-width: 12ch;
       --solid-ui-input-border-color: transparent;
+      color: var(--solid-ui-color-zinc-500, #71717B);
+      font-size: var(--solid-ui-font-size-sm, .875rem);
+      font-weight: 500;
     }
   }
 

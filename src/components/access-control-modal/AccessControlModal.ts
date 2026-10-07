@@ -5,8 +5,8 @@ import { property, query, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import { findImage } from '@/widgets'
 import type Dialog from '@/components/dialog'
-import { ACCESS_ROLES, DEFAULT_DIRECTORY_SOURCES, solidLogicSingleton, type AccessMode, type AccessRole, type Authorization, type DirectoryEntry } from 'solid-logic'
-import { defineAsyncComboboxOptionsProvider, type ComboboxChangeEvent, type ComboboxOptionData } from '@/components/combobox'
+import { ACCESS_ROLES, DEFAULT_DIRECTORY_SOURCES, solidLogicSingleton, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
+import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
 import { sym } from 'rdflib'
 
 import '~icons/lucide/chevron-down'
@@ -24,7 +24,12 @@ import '@/components/combobox'
 import '@/components/combobox-option'
 
 import styles from './AccessControlModal.styles.css'
-import type { AccessControlBadgeKind, PendingAccessGrant } from './types'
+import type { ComboboxChangeEvent } from '@/components/combobox'
+import type { AccessChange, AccessControlBadge, AccessGrantEntry, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
+
+function isDefined<T> (value: T | undefined | null): value is T {
+  return value !== undefined && value !== null
+}
 
 @customElement('solid-ui-access-control-modal')
 export default class AccessControlModal extends WebComponent {
@@ -102,12 +107,17 @@ export default class AccessControlModal extends WebComponent {
 
   private getAccessGrantEntries () {
     return (this.accessGrants ?? [])
-      .map((authorization, index) => ({
-        authorization,
-        index,
-        role: this.accessGrantRoles[index] ?? this.getAuthorizationRole(authorization),
-        subjectLabel: this.accessGrantLabels[index] ?? this.getAuthorizationSubjectLabel(authorization)
-      }))
+      .map((authorization, index) => {
+        const subjectLabel = this.getAccessGrantSubjectLabel(authorization, index)
+
+        return {
+          authorization,
+          index,
+          role: this.accessGrantRoles[index] ?? this.getAuthorizationRole(authorization),
+          subjectLabel,
+          badge: this.getAuthorizationBadge(authorization, subjectLabel)
+        }
+      })
       .sort((left, right) => {
         const leftIsOwner = left.role === 'Owner'
         const rightIsOwner = right.role === 'Owner'
@@ -131,34 +141,32 @@ export default class AccessControlModal extends WebComponent {
     return html`
       <ul>
         ${accessGrants.length > 0
-          ? accessGrants.map(({ authorization, index }) => this.renderAccessGrant(authorization, index))
+          ? accessGrants.map(entry => this.renderAccessGrant(entry))
           : html`<li>No access grants</li>`}
       </ul>
     `
   }
 
-  private renderAccessGrant (authorization: Authorization, index: number) {
-    const badge = this.getAuthorizationBadge(authorization)
-    const role = this.accessGrantRoles[index] ?? this.getAuthorizationRole(authorization)
-    const subjectLabel = this.accessGrantLabels[index] ?? this.getAuthorizationSubjectLabel(authorization)
-
+  private renderAccessGrant (entry: AccessGrantEntry) {
     return html`
       <li>
-        ${this.renderAuthorizationBadge(badge)}
-        <h3>${subjectLabel}</h3>
-        ${this.renderAuthorizationRole(role, index)}  
+        ${this.renderAuthorizationBadge(entry.badge)}
+        <h3>${entry.subjectLabel}</h3>
+        ${this.renderAuthorizationRole(entry.role, entry.index)}  
       </li>
     `
   }
 
-  private getAuthorizationBadge (authorization: Authorization) {
+  private getAuthorizationBadge (authorization: Authorization, subjectLabel?: string) {
+    const resolvedSubjectLabel = subjectLabel ?? this.getAuthorizationSubjectLabel(authorization)
+
     const agent = authorization.agent[0]
     if (agent) {
       const image = findImage(sym(agent))
       return {
         kind: 'agent' as const,
         image,
-        text: image ? '' : this.getInitials(this.getAuthorizationSubjectLabel(authorization), 2)
+        text: image ? '' : this.getInitials(resolvedSubjectLabel, 2)
       }
     }
 
@@ -166,7 +174,7 @@ export default class AccessControlModal extends WebComponent {
     if (agentGroup) {
       return {
         kind: 'group' as const,
-        text: this.getInitials(this.getAuthorizationSubjectLabel(authorization), 1)
+        text: this.getInitials(resolvedSubjectLabel, 1)
       }
     }
 
@@ -176,7 +184,7 @@ export default class AccessControlModal extends WebComponent {
       return {
         kind: 'agentClass' as const,
         image,
-        text: image ? '' : this.getInitials(this.getAuthorizationSubjectLabel(authorization), 2)
+        text: image ? '' : this.getInitials(resolvedSubjectLabel, 2)
       }
     }
 
@@ -186,7 +194,7 @@ export default class AccessControlModal extends WebComponent {
     }
   }
 
-  private renderAuthorizationBadge (badge: { kind: AccessControlBadgeKind, image?: string, text: string }) {
+  private renderAuthorizationBadge (badge: AccessControlBadge) {
     return html`
       <div class="access-grants-image access-grants-image--${badge.kind}">
         ${badge.image ? html`<img src=${badge.image} alt="" aria-hidden="true" />` : html`<span aria-hidden="true">${badge.text}</span>`}
@@ -200,7 +208,7 @@ export default class AccessControlModal extends WebComponent {
     return (initials || label.slice(0, maxWords)).toUpperCase()
   }
 
-  private getAuthorizationSubjects (authorization: Authorization) {
+  private getAuthorizationSubjectIris (authorization: Authorization) {
     return [
       ...authorization.agent,
       ...authorization.agentGroup,
@@ -209,7 +217,7 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private getAuthorizationSubjectLabel (authorization: Authorization): string {
-    const subjects = this.getAuthorizationSubjects(authorization)
+    const subjects = this.getAuthorizationSubjectIris(authorization)
     return subjects.length ? subjects.map(subject => label(sym(subject))).join(', ') : 'Unknown access holder'
   }
 
@@ -218,8 +226,7 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private getRoleValueFromEvent (event: Event, fallback: AccessRole = 'Viewer'): AccessRole {
-    const customEvent = event as ComboboxChangeEvent
-    const selectedValue = customEvent.detail?.option?.value
+    const selectedValue = this.getSelectedComboboxOptionValue(event)
 
     if (typeof selectedValue === 'string') {
       return selectedValue as AccessRole
@@ -348,7 +355,8 @@ export default class AccessControlModal extends WebComponent {
           @change=${this.onSearchSelect}
         >
           ${accessGrantOptions.map(option => html`
-            <solid-ui-combobox-option .value=${option.value}>
+            <solid-ui-combobox-option 
+              .value=${option.value}>
               ${option.label}
             </solid-ui-combobox-option>
           `)}
@@ -434,7 +442,7 @@ export default class AccessControlModal extends WebComponent {
                     Cancel
                   </solid-ui-button>
                   <solid-ui-button
-                    ?disabled=${(!this.pendingAccessGrants.length && !this.principalInputValue.trim()) || this.submitting}
+                    ?disabled=${!this.hasUnsavedChanges() || this.submitting}
                     ?loading=${this.submitting}
                     type="button"
                     @click=${this.onSaveClick}
@@ -467,19 +475,21 @@ export default class AccessControlModal extends WebComponent {
       await this.commitPrinciplesFromInput()
     }
 
-    await this.savePendingAccessGrants()
+    await this.saveAccessChanges()
   }
 
   private onCancelClick () {
     this.dialog?.close()
   }
 
-  private async savePendingAccessGrants () {
+  private async saveAccessChanges () {
     if (this.submitting) {
       return
     }
 
-    if (!this.pendingAccessGrants.length) {
+    const changedAccessGrants = this.getChangedAccessGrants()
+
+    if (!this.pendingAccessGrants.length && !changedAccessGrants.length) {
       this.failed = true
       return
     }
@@ -493,12 +503,20 @@ export default class AccessControlModal extends WebComponent {
     this.failed = false
 
     try {
-      for (const draftGrant of this.pendingAccessGrants) {
-        const subject = { type: draftGrant.subjectType, iri: draftGrant.subjectValue }
+      const accessChanges: AccessChange[] = [
+        ...this.pendingAccessGrants.map(grant => ({
+          subject: this.createAccessSubject(grant.subjectType, grant.subjectValue),
+          role: grant.role
+        })),
+        ...changedAccessGrants.flatMap(({ subjects, role }) =>
+          subjects.map(subject => ({ subject, role }))
+        )
+      ]
 
-        const plan = draftGrant.role === 'No Access'
+      for (const { subject, role } of accessChanges) {
+        const plan = role === 'No Access'
           ? await solidLogicSingleton.acl.planRevoke(this.subjectUri, subject)
-          : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, this.getRoleModes(draftGrant.role))
+          : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, this.getRoleModes(role))
 
         await solidLogicSingleton.acl.applyPlan(plan)
       }
@@ -515,13 +533,11 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private onPrincipalInput (event: Event) {
-    const target = event.currentTarget as { value?: string } | null
-    this.principalInputValue = target?.value ?? ''
+    this.principalInputValue = this.getEventValue(event)
   }
 
   private onPrincipalSelect (event: Event) {
-    const customEvent = event as ComboboxChangeEvent
-    const option = customEvent.detail?.option
+    const option = this.getSelectedComboboxOption(event)
 
     if (!option) {
       return
@@ -535,13 +551,11 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private onSearchInput (event: Event) {
-    const target = event.currentTarget as { value?: string } | null
-    this.searchValue = target?.value ?? ''
+    this.searchValue = this.getEventValue(event)
   }
 
   private onSearchSelect (event: Event) {
-    const customEvent = event as ComboboxChangeEvent
-    const option = customEvent.detail?.option
+    const option = this.getSelectedComboboxOption(event)
 
     if (option && typeof option.label === 'string') {
       this.searchValue = option.label
@@ -574,6 +588,72 @@ export default class AccessControlModal extends WebComponent {
     this.pendingAccessGrants = this.pendingAccessGrants.filter((_, pendingIndex) => pendingIndex !== index)
   }
 
+  private hasUnsavedChanges (): boolean {
+    return Boolean(
+      this.pendingAccessGrants.length ||
+      this.principalInputValue.trim() ||
+      this.getChangedAccessGrants().length
+    )
+  }
+
+  private getAccessGrantSubjectLabel (authorization: Authorization, index: number): string {
+    return this.accessGrantLabels[index] ?? this.getAuthorizationSubjectLabel(authorization)
+  }
+
+  private getChangedAccessGrants (): ChangedAccessGrant[] {
+    const initialAccessGrantRoles = this.getInitialAccessGrantRoles()
+
+    return (this.accessGrants ?? [])
+      .map((authorization, index) => {
+        const currentRole = this.accessGrantRoles[index] ?? this.getAuthorizationRole(authorization)
+        const initialRole = initialAccessGrantRoles[index] ?? this.getAuthorizationRole(authorization)
+
+        if (currentRole === initialRole) {
+          return undefined
+        }
+
+        const subjects = this.getAuthorizationSubjectEntries(authorization)
+        if (!subjects.length) {
+          return undefined
+        }
+
+        return { authorization, subjects, role: currentRole }
+      })
+      .filter(isDefined)
+  }
+
+  private getInitialAccessGrantRoles (): AccessRole[] {
+    return this.accessGrants?.map(item => this.getAuthorizationRole(item)) ?? []
+  }
+
+  private getAuthorizationSubjectEntries (authorization: Authorization): AccessSubject[] {
+    const subjectSets: AuthorizationSubjectSet[] = [
+      { type: 'agent', iris: authorization.agent },
+      { type: 'agentGroup', iris: authorization.agentGroup },
+      { type: 'agentClass', iris: authorization.agentClass },
+      { type: 'origin', iris: authorization.origin }
+    ]
+
+    return subjectSets.flatMap(({ type, iris }) => iris.map(iri => ({ type, iri })))
+  }
+
+  private createAccessSubject (type: AccessSubject['type'], iri: string): AccessSubject {
+    return { type, iri }
+  }
+
+  private getEventValue (event: Event, fallback = ''): string {
+    const target = event.currentTarget as { value?: string | null } | null
+    return typeof target?.value === 'string' ? target.value : fallback
+  }
+
+  private getSelectedComboboxOption (event: Event): ComboboxChangeEvent['detail']['option'] | undefined {
+    return (event as ComboboxChangeEvent).detail?.option
+  }
+
+  private getSelectedComboboxOptionValue (event: Event): unknown {
+    return this.getSelectedComboboxOption(event)?.value
+  }
+
   private async commitPrinciplesFromInput (): Promise<boolean> {
     const rawValue = this.principalInputValue.trim()
     if (!rawValue) {
@@ -592,7 +672,7 @@ export default class AccessControlModal extends WebComponent {
   ) {
     const snapshot = inputSnapshot ?? this.principalInputValue.trim()
     const pendingGrants = await Promise.all(principles.map(async principle => this.createPendingAccessGrant(principle, role, preferredLabel)))
-    const newGrants = pendingGrants.filter((grant): grant is PendingAccessGrant => Boolean(grant))
+    const newGrants = pendingGrants.filter(isDefined)
 
     if (!newGrants.length) {
       return
