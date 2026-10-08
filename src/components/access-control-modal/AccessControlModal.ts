@@ -630,8 +630,7 @@ export default class AccessControlModal extends WebComponent {
     const subjectSets: AuthorizationSubjectSet[] = [
       { type: 'agent', iris: authorization.agent },
       { type: 'agentGroup', iris: authorization.agentGroup },
-      { type: 'agentClass', iris: authorization.agentClass },
-      { type: 'origin', iris: authorization.origin }
+      { type: 'agentClass', iris: authorization.agentClass }
     ]
 
     return subjectSets.flatMap(({ type, iris }) => iris.map(iri => ({ type, iri })))

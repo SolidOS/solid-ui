@@ -191,10 +191,6 @@
         background: var(--solid-ui-color-lavender-300, #e6dcff);
       }
 
-      .access-grants-image--origin {
-        background: var(--solid-ui-color-gray-200, #E5E7EB);
-      }
-
       .access-grants-image--unknown {
         background: var(--solid-ui-color-gray-300, #D1D5DB);
       }

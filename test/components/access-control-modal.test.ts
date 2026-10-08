@@ -181,30 +181,6 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
-  it('saves a queued origin grant through the unified planner', async () => {
-    const element = document.createElement('solid-ui-access-control-modal') as any
-    element.subjectUri = 'https://example.com/resource.ttl'
-    element.pendingAccessGrants = [{
-      subjectType: 'origin',
-      subjectValue: 'https://app.example.com',
-      role: 'Viewer',
-      label: 'App'
-    }]
-
-    await element.onSaveClick()
-
-    expect(planGrant).toHaveBeenCalledWith(
-      element.subjectUri,
-      { type: 'origin', iri: 'https://app.example.com' },
-      ['Read']
-    )
-    expect(planRevoke).not.toHaveBeenCalled()
-    expect(applyPlan).toHaveBeenCalledTimes(1)
-    expect(element.pendingAccessGrants).toEqual([])
-    expect(element.failed).toBe(false)
-    expect(element.submitting).toBe(false)
-  })
-
   it('reads the selected role from the rendered combobox change event', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     document.body.appendChild(element)
@@ -269,7 +245,6 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
-      origin: [],
       mode: ['Read']
     }]
 
@@ -323,7 +298,6 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
-      origin: [],
       mode: ['Read']
     }]
 
@@ -346,7 +320,6 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
-      origin: [],
       mode: ['Read']
     }]
 
@@ -376,9 +349,8 @@ describe('AccessControlModal submit', () => {
     element.subjectUri = 'https://example.com/resource.ttl'
     element.accessGrants = [{
       agent: ['https://alice.example.com/profile/card.ttl#me'],
-      agentGroup: [],
+      agentGroup: ['https://example.com/group'],
       agentClass: [],
-      origin: ['https://app.example.com'],
       mode: ['Read']
     }]
 
@@ -403,7 +375,7 @@ describe('AccessControlModal submit', () => {
     expect(planGrant).toHaveBeenNthCalledWith(
       2,
       element.subjectUri,
-      { type: 'origin', iri: 'https://app.example.com' },
+      { type: 'agentGroup', iri: 'https://example.com/group' },
       ['Read', 'Write']
     )
     expect(planRevoke).not.toHaveBeenCalled()

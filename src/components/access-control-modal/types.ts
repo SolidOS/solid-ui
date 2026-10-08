@@ -32,7 +32,7 @@ export type ChangedAccessGrant = {
 }
 
 export type AuthorizationSubjectSet = {
-  type: AccessSubject['type']
+  type: PendingAccessSubjectKind
   iris: string[]
 }
 
