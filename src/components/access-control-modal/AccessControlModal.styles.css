@@ -216,7 +216,6 @@
       }
 
       .access-grants-role--owner {
-        color: var(--solid-ui-color-gray-400, #99A1AF);
         font-size: var(--solid-ui-font-size-xs, .75rem);
       }
 

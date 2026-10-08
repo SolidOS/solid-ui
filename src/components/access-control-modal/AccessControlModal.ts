@@ -238,13 +238,9 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private renderAuthorizationRole (role: AccessRole, index: number) {
-    if (role === 'Owner') {
-      return html`<span class="access-grants-role access-grants-role--owner">${role}</span>`
-    }
-
     return html`
       <solid-ui-combobox
-        class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable"
+        class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${role === 'Owner' ? 'access-grants-role--owner' : ''}"
         .value=${role}
         @change=${(event: Event) => this.onAccessGrantRoleInput(index, event)}
       >
