@@ -24,32 +24,32 @@ import { ACCESS_ROLES as s, DEFAULT_DIRECTORY_SOURCES as c, solidLogicSingleton 
 import { html as u, nothing as d } from "lit";
 import { property as f, query as p, state as m } from "lit/decorators.js";
 //#region src/components/access-control-modal/AccessControlModal.ts
-var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, M, ie, ae, N, P, F, I, L, R, z, B, V, H, U, W, G, K, q, J, oe, se, ce;
-function Y(e, t, n) {
-	le(e, t), t.set(e, n);
+var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, M, N, P, F, I, L, R, z, B, V, H, U, W, G, K, q, se, ce, le;
+function J(e, t, n) {
+	ue(e, t), t.set(e, n);
 }
-function le(e, t) {
+function ue(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function X(e, t, n) {
-	return e.set(ue(e, t), n), n;
+function Y(e, t, n) {
+	return e.set(de(e, t), n), n;
 }
-function Z(e, t) {
-	return e.get(ue(e, t));
+function X(e, t) {
+	return e.get(de(e, t));
 }
-function ue(e, t, n) {
+function de(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function Q(e, t, n) {
-	return (t = fe(t)) in e ? Object.defineProperty(e, t, {
+function Z(e, t, n) {
+	return (t = pe(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function de(e, t, n, r, i, a) {
+function fe(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -72,13 +72,13 @@ function de(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: me(function() {
+				get: he(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || me(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || he(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -138,7 +138,7 @@ function de(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return he(t) === e;
+			return ge(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -152,7 +152,7 @@ function de(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : fe(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : pe(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -165,11 +165,11 @@ function de(e, t, n, r, i, a) {
 		}
 	};
 }
-function fe(e) {
-	var t = pe(e, "string");
+function pe(e) {
+	var t = me(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function pe(e, t) {
+function me(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -179,7 +179,7 @@ function pe(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function me(e, t, n) {
+function he(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -189,18 +189,21 @@ function me(e, t, n) {
 	} catch {}
 	return e;
 }
-function he(e) {
+function ge(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function ge(e) {
+function _e(e) {
 	return e;
+}
+function Q(e) {
+	return e != null;
 }
 j = [n("solid-ui-access-control-modal")];
 var $;
-new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O = /*#__PURE__*/ new WeakMap(), ce = (ee = f({ attribute: !1 }), ne = f({ attribute: !1 }), M = m(), ae = m(), P = m(), I = m(), R = m(), B = m(), H = m(), W = m(), K = m(), J = p("solid-ui-dialog"), "subjectUri"), g = class extends r {
+new (ce = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O = /*#__PURE__*/ new WeakMap(), le = (ee = f({ attribute: !1 }), ne = f({ attribute: !1 }), ie = m(), oe = m(), N = m(), F = m(), L = m(), z = m(), V = m(), U = m(), G = m(), q = p("solid-ui-dialog"), "subjectUri"), g = class extends r {
 	constructor(...e) {
-		super(...e), Y(this, _, (k(this), te(this, void 0))), Y(this, v, re(this, void 0)), Y(this, y, ie(this, "")), Y(this, b, N(this, "Viewer")), Y(this, x, F(this, "No Access")), Y(this, S, L(this, "")), Y(this, C, z(this, !1)), Y(this, w, V(this, !1)), Y(this, T, U(this, [])), Y(this, E, G(this, [])), Y(this, D, q(this, [])), Y(this, O, oe(this, null)), Q(this, "accessPrincipleOptionsProvider", i(async (e) => {
+		super(...e), J(this, _, (k(this), te(this, void 0))), J(this, v, re(this, void 0)), J(this, y, ae(this, "")), J(this, b, M(this, "Viewer")), J(this, x, P(this, "No Access")), J(this, S, I(this, "")), J(this, C, R(this, !1)), J(this, w, B(this, !1)), J(this, T, H(this, [])), J(this, E, W(this, [])), J(this, D, K(this, [])), J(this, O, se(this, null)), Z(this, "accessPrincipleOptionsProvider", i(async (e) => {
 			let t = this.getPrincipleSearchTerm(e), n = this.isHttpUri(t) ? await this.createUrlOption(t) : void 0, r = this.dedupeComboboxOptions([n].filter((e) => !!e));
 			if (t.length < 2) return r.length ? r : [{
 				label: "Type at least 2 characters to search",
@@ -220,77 +223,77 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 			return [...r, ...a];
 		}));
 	}
-	get [ce]() {
-		return Z(_, this);
+	get [le]() {
+		return X(_, this);
 	}
 	set subjectUri(e) {
-		X(_, this, e);
+		Y(_, this, e);
 	}
 	get accessGrants() {
-		return Z(v, this);
+		return X(v, this);
 	}
 	set accessGrants(e) {
-		X(v, this, e);
+		Y(v, this, e);
 	}
 	get principalInputValue() {
-		return Z(y, this);
+		return X(y, this);
 	}
 	set principalInputValue(e) {
-		X(y, this, e);
+		Y(y, this, e);
 	}
 	get addAccessRoleValue() {
-		return Z(b, this);
+		return X(b, this);
 	}
 	set addAccessRoleValue(e) {
-		X(b, this, e);
+		Y(b, this, e);
 	}
 	get sharedAccessRoleValue() {
-		return Z(x, this);
+		return X(x, this);
 	}
 	set sharedAccessRoleValue(e) {
-		X(x, this, e);
+		Y(x, this, e);
 	}
 	get searchValue() {
-		return Z(S, this);
+		return X(S, this);
 	}
 	set searchValue(e) {
-		X(S, this, e);
+		Y(S, this, e);
 	}
 	get failed() {
-		return Z(C, this);
+		return X(C, this);
 	}
 	set failed(e) {
-		X(C, this, e);
+		Y(C, this, e);
 	}
 	get submitting() {
-		return Z(w, this);
+		return X(w, this);
 	}
 	set submitting(e) {
-		X(w, this, e);
+		Y(w, this, e);
 	}
 	get pendingAccessGrants() {
-		return Z(T, this);
+		return X(T, this);
 	}
 	set pendingAccessGrants(e) {
-		X(T, this, e);
+		Y(T, this, e);
 	}
 	get accessGrantRoles() {
-		return Z(E, this);
+		return X(E, this);
 	}
 	set accessGrantRoles(e) {
-		X(E, this, e);
+		Y(E, this, e);
 	}
 	get accessGrantLabels() {
-		return Z(D, this);
+		return X(D, this);
 	}
 	set accessGrantLabels(e) {
-		X(D, this, e);
+		Y(D, this, e);
 	}
 	get dialog() {
-		return Z(O, this);
+		return X(O, this);
 	}
 	set dialog(e) {
-		X(O, this, e);
+		Y(O, this, e);
 	}
 	willUpdate(e) {
 		super.willUpdate(e), e.has("accessGrants") && (this.accessGrantRoles = this.accessGrants?.map((e) => this.getAuthorizationRole(e)) ?? [], this.refreshAccessGrantLabels());
@@ -311,12 +314,16 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 		this.accessGrants === e && (this.accessGrantLabels = t);
 	}
 	getAccessGrantEntries() {
-		return (this.accessGrants ?? []).map((e, t) => ({
-			authorization: e,
-			index: t,
-			role: this.accessGrantRoles[t] ?? this.getAuthorizationRole(e),
-			subjectLabel: this.accessGrantLabels[t] ?? this.getAuthorizationSubjectLabel(e)
-		})).sort((e, t) => {
+		return (this.accessGrants ?? []).map((e, t) => {
+			let n = this.getAccessGrantSubjectLabel(e, t);
+			return {
+				authorization: e,
+				index: t,
+				role: this.accessGrantRoles[t] ?? this.getAuthorizationRole(e),
+				subjectLabel: n,
+				badge: this.getAuthorizationBadge(e, n)
+			};
+		}).sort((e, t) => {
 			let n = e.role === "Owner", r = t.role === "Owner";
 			return n && !r ? -1 : !n && r ? 1 : e.index - t.index;
 		});
@@ -325,41 +332,40 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 		let e = this.searchValue.trim().toLowerCase(), t = this.getAccessGrantEntries().filter(({ subjectLabel: t }) => !e || t.toLowerCase().includes(e));
 		return u`
       <ul>
-        ${t.length > 0 ? t.map(({ authorization: e, index: t }) => this.renderAccessGrant(e, t)) : u`<li>No access grants</li>`}
+        ${t.length > 0 ? t.map((e) => this.renderAccessGrant(e)) : u`<li>No access grants</li>`}
       </ul>
     `;
 	}
-	renderAccessGrant(e, t) {
-		let n = this.getAuthorizationBadge(e), r = this.accessGrantRoles[t] ?? this.getAuthorizationRole(e), i = this.accessGrantLabels[t] ?? this.getAuthorizationSubjectLabel(e);
+	renderAccessGrant(e) {
 		return u`
       <li>
-        ${this.renderAuthorizationBadge(n)}
-        <h3>${i}</h3>
-        ${this.renderAuthorizationRole(r, t)}  
+        ${this.renderAuthorizationBadge(e.badge)}
+        <h3>${e.subjectLabel}</h3>
+        ${this.renderAuthorizationRole(e.role, e.index)}  
       </li>
     `;
 	}
-	getAuthorizationBadge(e) {
-		let n = e.agent[0];
-		if (n) {
-			let r = t(o(n));
+	getAuthorizationBadge(e, n) {
+		let r = n ?? this.getAuthorizationSubjectLabel(e), i = e.agent[0];
+		if (i) {
+			let e = t(o(i));
 			return {
 				kind: "agent",
-				image: r,
-				text: r ? "" : this.getInitials(this.getAuthorizationSubjectLabel(e), 2)
+				image: e,
+				text: e ? "" : this.getInitials(r, 2)
 			};
 		}
 		if (e.agentGroup[0]) return {
 			kind: "group",
-			text: this.getInitials(this.getAuthorizationSubjectLabel(e), 1)
+			text: this.getInitials(r, 1)
 		};
-		let r = e.agentClass[0];
-		if (r) {
-			let n = t(o(r));
+		let a = e.agentClass[0];
+		if (a) {
+			let e = t(o(a));
 			return {
 				kind: "agentClass",
-				image: n,
-				text: n ? "" : this.getInitials(this.getAuthorizationSubjectLabel(e), 2)
+				image: e,
+				text: e ? "" : this.getInitials(r, 2)
 			};
 		}
 		return {
@@ -377,7 +383,7 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 	getInitials(e, t = 2) {
 		return (e.split(/\s+/).filter(Boolean).slice(0, t).map((e) => e[0]).join("") || e.slice(0, t)).toUpperCase();
 	}
-	getAuthorizationSubjects(e) {
+	getAuthorizationSubjectIris(e) {
 		return [
 			...e.agent,
 			...e.agentGroup,
@@ -385,22 +391,22 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 		];
 	}
 	getAuthorizationSubjectLabel(t) {
-		let n = this.getAuthorizationSubjects(t);
+		let n = this.getAuthorizationSubjectIris(t);
 		return n.length ? n.map((t) => e(o(t))).join(", ") : "Unknown access holder";
 	}
 	getAuthorizationRole(e) {
 		return l.acl.roleFromModes(e.mode);
 	}
 	getRoleValueFromEvent(e, t = "Viewer") {
-		let n = e.detail?.option?.value;
+		let n = this.getSelectedComboboxOptionValue(e);
 		if (typeof n == "string") return n;
 		let r = e.currentTarget;
 		return typeof r?.value == "string" ? r.value : t;
 	}
 	renderAuthorizationRole(e, t) {
-		return e === "Owner" ? u`<span class="access-grants-role access-grants-role--owner">${e}</span>` : u`
+		return u`
       <solid-ui-combobox
-        class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable"
+        class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${e === "Owner" ? "access-grants-role--owner" : ""}"
         .value=${e}
         @change=${(e) => this.onAccessGrantRoleInput(t, e)}
       >
@@ -493,7 +499,8 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
           @change=${this.onSearchSelect}
         >
           ${e.map((e) => u`
-            <solid-ui-combobox-option .value=${e.value}>
+            <solid-ui-combobox-option 
+              .value=${e.value}>
               ${e.label}
             </solid-ui-combobox-option>
           `)}
@@ -567,7 +574,7 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
                     Cancel
                   </solid-ui-button>
                   <solid-ui-button
-                    ?disabled=${!this.pendingAccessGrants.length && !this.principalInputValue.trim() || this.submitting}
+                    ?disabled=${!this.hasUnsavedChanges() || this.submitting}
                     ?loading=${this.submitting}
                     type="button"
                     @click=${this.onSaveClick}
@@ -584,48 +591,50 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 		e.preventDefault(), !this.submitting && await this.commitPrinciplesFromInput();
 	}
 	async onSaveClick() {
-		this.submitting || (this.principalInputValue.trim() && await this.commitPrinciplesFromInput(), await this.savePendingAccessGrants());
+		this.submitting || (this.principalInputValue.trim() && await this.commitPrinciplesFromInput(), await this.saveAccessChanges());
 	}
 	onCancelClick() {
 		this.dialog?.close();
 	}
-	async savePendingAccessGrants() {
-		if (!this.submitting) {
-			if (!this.pendingAccessGrants.length) this.failed = !0;
-			else if (!this.subjectUri) this.failed = !0;
-			else {
-				this.submitting = !0, this.failed = !1;
-				try {
-					for (let e of this.pendingAccessGrants) {
-						let t = {
-							type: e.subjectType,
-							iri: e.subjectValue
-						}, n = e.role === "No Access" ? await l.acl.planRevoke(this.subjectUri, t) : await l.acl.planGrant(this.subjectUri, t, this.getRoleModes(e.role));
-						await l.acl.applyPlan(n);
-					}
-					this.principalInputValue = "", this.pendingAccessGrants = [], this.dialog?.close();
-				} catch (e) {
-					this.failed = !0, console.error("Failed to save access changes", e);
-				} finally {
-					this.submitting = !1;
+	async saveAccessChanges() {
+		if (this.submitting) return;
+		let e = this.getChangedAccessGrants();
+		if (!this.pendingAccessGrants.length && !e.length) this.failed = !0;
+		else if (!this.subjectUri) this.failed = !0;
+		else {
+			this.submitting = !0, this.failed = !1;
+			try {
+				let t = [...this.pendingAccessGrants.map((e) => ({
+					subject: this.createAccessSubject(e.subjectType, e.subjectValue),
+					role: e.role
+				})), ...e.flatMap(({ subjects: e, role: t }) => e.map((e) => ({
+					subject: e,
+					role: t
+				})))];
+				for (let { subject: e, role: n } of t) {
+					let t = n === "No Access" ? await l.acl.planRevoke(this.subjectUri, e) : await l.acl.planGrant(this.subjectUri, e, this.getRoleModes(n));
+					await l.acl.applyPlan(t);
 				}
+				this.principalInputValue = "", this.pendingAccessGrants = [], this.dialog?.close();
+			} catch (e) {
+				this.failed = !0, console.error("Failed to save access changes", e);
+			} finally {
+				this.submitting = !1;
 			}
 		}
 	}
 	onPrincipalInput(e) {
-		let t = e.currentTarget;
-		this.principalInputValue = t?.value ?? "";
+		this.principalInputValue = this.getEventValue(e);
 	}
 	onPrincipalSelect(e) {
-		let t = e.detail?.option;
+		let t = this.getSelectedComboboxOption(e);
 		t && typeof t.value == "string" && t.value && this.queuePendingPrinciples([t.value], this.addAccessRoleValue, t.label);
 	}
 	onSearchInput(e) {
-		let t = e.currentTarget;
-		this.searchValue = t?.value ?? "";
+		this.searchValue = this.getEventValue(e);
 	}
 	onSearchSelect(e) {
-		let t = e.detail?.option;
+		let t = this.getSelectedComboboxOption(e);
 		t && typeof t.label == "string" && (this.searchValue = t.label);
 	}
 	onAddAccessRoleInput(e) {
@@ -646,12 +655,69 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 	removePendingAccessGrant(e) {
 		this.pendingAccessGrants = this.pendingAccessGrants.filter((t, n) => n !== e);
 	}
+	hasUnsavedChanges() {
+		return !!(this.pendingAccessGrants.length || this.principalInputValue.trim() || this.getChangedAccessGrants().length);
+	}
+	getAccessGrantSubjectLabel(e, t) {
+		return this.accessGrantLabels[t] ?? this.getAuthorizationSubjectLabel(e);
+	}
+	getChangedAccessGrants() {
+		let e = this.getInitialAccessGrantRoles();
+		return (this.accessGrants ?? []).map((t, n) => {
+			let r = this.accessGrantRoles[n] ?? this.getAuthorizationRole(t);
+			if (r === (e[n] ?? this.getAuthorizationRole(t))) return;
+			let i = this.getAuthorizationSubjectEntries(t);
+			if (i.length) return {
+				authorization: t,
+				subjects: i,
+				role: r
+			};
+		}).filter(Q);
+	}
+	getInitialAccessGrantRoles() {
+		return this.accessGrants?.map((e) => this.getAuthorizationRole(e)) ?? [];
+	}
+	getAuthorizationSubjectEntries(e) {
+		return [
+			{
+				type: "agent",
+				iris: e.agent
+			},
+			{
+				type: "agentGroup",
+				iris: e.agentGroup
+			},
+			{
+				type: "agentClass",
+				iris: e.agentClass
+			}
+		].flatMap(({ type: e, iris: t }) => t.map((t) => ({
+			type: e,
+			iri: t
+		})));
+	}
+	createAccessSubject(e, t) {
+		return {
+			type: e,
+			iri: t
+		};
+	}
+	getEventValue(e, t = "") {
+		let n = e.currentTarget;
+		return typeof n?.value == "string" ? n.value : t;
+	}
+	getSelectedComboboxOption(e) {
+		return e.detail?.option;
+	}
+	getSelectedComboboxOptionValue(e) {
+		return this.getSelectedComboboxOption(e)?.value;
+	}
 	async commitPrinciplesFromInput() {
 		let e = this.principalInputValue.trim();
 		return e ? (await this.queuePendingPrinciples([e], this.addAccessRoleValue, void 0, e), !0) : !1;
 	}
 	async queuePendingPrinciples(e, t = this.addAccessRoleValue, n, r) {
-		let i = r ?? this.principalInputValue.trim(), a = (await Promise.all(e.map(async (e) => this.createPendingAccessGrant(e, t, n)))).filter((e) => !!e);
+		let i = r ?? this.principalInputValue.trim(), a = (await Promise.all(e.map(async (e) => this.createPendingAccessGrant(e, t, n)))).filter(Q);
 		if (!a.length) return;
 		let o = [...this.pendingAccessGrants, ...a];
 		this.pendingAccessGrants = this.dedupePendingAccessGrants(o), this.principalInputValue.trim() === i && (this.principalInputValue = "");
@@ -739,7 +805,7 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 			console.error("Failed to copy resource link", e);
 		}
 	}
-}, {e: [te, re, ie, N, F, L, z, V, U, G, q, oe, k], c: [$, A]} = de(g, [
+}, {e: [te, re, ae, M, P, I, R, B, H, W, K, se, k], c: [$, A]} = fe(g, [
 	[
 		ee,
 		1,
@@ -751,60 +817,60 @@ new (se = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y =
 		"accessGrants"
 	],
 	[
-		M,
+		ie,
 		1,
 		"principalInputValue"
 	],
 	[
-		ae,
+		oe,
 		1,
 		"addAccessRoleValue"
 	],
 	[
-		P,
+		N,
 		1,
 		"sharedAccessRoleValue"
 	],
 	[
-		I,
+		F,
 		1,
 		"searchValue"
 	],
 	[
-		R,
+		L,
 		1,
 		"failed"
 	],
 	[
-		B,
+		z,
 		1,
 		"submitting"
 	],
 	[
-		H,
+		V,
 		1,
 		"pendingAccessGrants"
 	],
 	[
-		W,
+		U,
 		1,
 		"accessGrantRoles"
 	],
 	[
-		K,
+		G,
 		1,
 		"accessGrantLabels"
 	],
 	[
-		J,
+		q,
 		1,
 		"dialog"
 	]
-], j, 0, void 0, r), g), h = class extends ge {
+], j, 0, void 0, r), g), h = class extends _e {
 	constructor() {
-		super($), Q(this, "styles", a), A();
+		super($), Z(this, "styles", a), A();
 	}
-}, Q(h, se, void 0), h)();
+}, Z(h, ce, void 0), h)();
 //#endregion
 export { $ as default };
 

@@ -239,6 +239,35 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
+  it('enables save when a shared access grant is changed', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.accessGrants = [{
+      agent: ['https://alice.example.com/profile/card.ttl#me'],
+      agentGroup: [],
+      agentClass: [],
+      mode: ['Read']
+    }]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    grantRoleSelect.dispatchEvent(new CustomEvent('change', {
+      bubbles: true,
+      composed: true,
+      detail: { option: { value: 'Editor', label: 'Editor' } }
+    }))
+
+    await element.updateComplete
+    expect(saveButton.hasAttribute('disabled')).toBe(false)
+
+    document.body.removeChild(element)
+  })
+
   it('uses the default share title when no subject uri is present', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
 
@@ -269,7 +298,6 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
-      origin: [],
       mode: ['Read']
     }]
 
@@ -281,6 +309,77 @@ describe('AccessControlModal submit', () => {
 
     expect(grantOptions).toContain('Remove')
     expect(grantOptions).not.toContain('No Access')
+
+    document.body.removeChild(element)
+  })
+
+  it('persists a changed shared access grant on save', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.accessGrants = [{
+      agent: ['https://alice.example.com/profile/card.ttl#me'],
+      agentGroup: [],
+      agentClass: [],
+      mode: ['Read']
+    }]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    grantRoleSelect.dispatchEvent(new CustomEvent('change', {
+      bubbles: true,
+      composed: true,
+      detail: { option: { value: 'Editor', label: 'Editor' } }
+    }))
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' },
+      ['Read', 'Write']
+    )
+
+    document.body.removeChild(element)
+  })
+
+  it('applies a shared row change to every subject represented by the authorization', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.accessGrants = [{
+      agent: ['https://alice.example.com/profile/card.ttl#me'],
+      agentGroup: ['https://example.com/group'],
+      agentClass: [],
+      mode: ['Read']
+    }]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    grantRoleSelect.dispatchEvent(new CustomEvent('change', {
+      bubbles: true,
+      composed: true,
+      detail: { option: { value: 'Editor', label: 'Editor' } }
+    }))
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenNthCalledWith(
+      1,
+      element.subjectUri,
+      { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' },
+      ['Read', 'Write']
+    )
+    expect(planGrant).toHaveBeenNthCalledWith(
+      2,
+      element.subjectUri,
+      { type: 'agentGroup', iri: 'https://example.com/group' },
+      ['Read', 'Write']
+    )
+    expect(planRevoke).not.toHaveBeenCalled()
+    expect(applyPlan).toHaveBeenCalledTimes(2)
 
     document.body.removeChild(element)
   })

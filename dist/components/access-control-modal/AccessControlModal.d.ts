@@ -23,7 +23,7 @@ export default class AccessControlModal extends WebComponent {
     private getAuthorizationBadge;
     private renderAuthorizationBadge;
     private getInitials;
-    private getAuthorizationSubjects;
+    private getAuthorizationSubjectIris;
     private getAuthorizationSubjectLabel;
     private getAuthorizationRole;
     private getRoleValueFromEvent;
@@ -43,7 +43,7 @@ export default class AccessControlModal extends WebComponent {
     private onSubmit;
     private onSaveClick;
     private onCancelClick;
-    private savePendingAccessGrants;
+    private saveAccessChanges;
     private onPrincipalInput;
     private onPrincipalSelect;
     private onSearchInput;
@@ -52,6 +52,15 @@ export default class AccessControlModal extends WebComponent {
     private onSharedAccessRoleInput;
     private onAccessGrantRoleInput;
     private removePendingAccessGrant;
+    private hasUnsavedChanges;
+    private getAccessGrantSubjectLabel;
+    private getChangedAccessGrants;
+    private getInitialAccessGrantRoles;
+    private getAuthorizationSubjectEntries;
+    private createAccessSubject;
+    private getEventValue;
+    private getSelectedComboboxOption;
+    private getSelectedComboboxOptionValue;
     private commitPrinciplesFromInput;
     private queuePendingPrinciples;
     private createPendingAccessGrant;

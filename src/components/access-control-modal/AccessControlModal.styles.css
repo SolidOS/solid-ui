@@ -115,6 +115,9 @@
       width: 12ch;
       min-width: 12ch;
       --solid-ui-input-border-color: transparent;
+      color: var(--solid-ui-color-zinc-500, #71717B);
+      font-size: var(--solid-ui-font-size-sm, .875rem);
+      font-weight: 500;
     }
   }
 
@@ -188,10 +191,6 @@
         background: var(--solid-ui-color-lavender-300, #e6dcff);
       }
 
-      .access-grants-image--origin {
-        background: var(--solid-ui-color-gray-200, #E5E7EB);
-      }
-
       .access-grants-image--unknown {
         background: var(--solid-ui-color-gray-300, #D1D5DB);
       }
@@ -217,7 +216,6 @@
       }
 
       .access-grants-role--owner {
-        color: var(--solid-ui-color-gray-400, #99A1AF);
         font-size: var(--solid-ui-font-size-xs, .75rem);
       }
 
