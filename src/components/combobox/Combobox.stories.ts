@@ -48,14 +48,14 @@ const meta = {
   },
   render ({ label, options, asyncJSOptions, asyncHtmlOptions, srOnlyLabel }) {
     if (asyncJSOptions) {
-      return html`<solid-ui-combobox label="${label}" ?srOnlyLabel=${srOnlyLabel} .asyncOptionsProvider=${pokemonProvider}></solid-ui-combobox>`
+      return html`<solid-ui-combobox label="${label}" .srOnlyLabel=${srOnlyLabel} .asyncOptionsProvider=${pokemonProvider}></solid-ui-combobox>`
     }
 
     if (asyncHtmlOptions) {
       return html`
         <solid-ui-combobox
           label=${label}
-          ?srOnlyLabel=${srOnlyLabel}
+          .srOnlyLabel=${srOnlyLabel}
           async-options-url="https://api.disneyapi.dev/character?name=%search%"
           async-options-results-field="data"
           async-options-label-field="name"
@@ -67,7 +67,7 @@ const meta = {
     const parsedOptions = options.split(',').map((option) => option.trim())
 
     return html`
-      <solid-ui-combobox label="${label}" ?srOnlyLabel=${srOnlyLabel}>
+      <solid-ui-combobox label="${label}" .srOnlyLabel=${srOnlyLabel}>
         ${parsedOptions.map((option, index) => {
             const indent = index === 0 ? '' : '        '
 

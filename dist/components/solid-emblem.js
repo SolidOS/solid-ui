@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/solid-emblem-CrLa7kZz.js";
-export { e as SolidEmblem, t as default };
+export { n as SolidEmblem, t as default } from "../chunks/solid-emblem-DNjQSX1z.js";

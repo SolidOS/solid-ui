@@ -27,7 +27,7 @@ const meta = {
     return html`
         <solid-ui-input
             label="${label}"
-            ?srOnlyLabel=${srOnlyLabel}
+            .srOnlyLabel=${srOnlyLabel}
             .value=${value}
             placeholder="${placeholder}"
             type="${type}"

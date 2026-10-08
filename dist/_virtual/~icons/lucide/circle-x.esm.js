@@ -1,0 +1,11 @@
+//#region ~icons/lucide/circle-x
+var e = class extends HTMLElement {
+	constructor() {
+		super(), this.attachShadow({ mode: "open" }).innerHTML = "<style>:host { display: inline-flex; }</style><svg viewBox=\"0 0 24 24\" width=\"100%\" height=\"100%\" ><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\"><circle cx=\"12\" cy=\"12\" r=\"10\"/><path d=\"m15 9l-6 6m0-6l6 6\"/></g></svg>";
+	}
+};
+customElements.get("icon-lucide-circle-x") || customElements.define("icon-lucide-circle-x", e);
+//#endregion
+export { e as default };
+
+//# sourceMappingURL=circle-x.esm.js.map

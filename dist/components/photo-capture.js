@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/photo-capture-3gL7TsQW.js";
-export { e as PhotoCapture, t as default };
+export { n as PhotoCapture, t as default } from "../chunks/photo-capture-x41hG51k.js";

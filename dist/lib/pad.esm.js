@@ -235,11 +235,8 @@ function y(e, s, c, l, u) {
 			} else k(e, r, !0);
 		}
 	}, N = function(e) {
-		if (e.refresh) {
-			e.refresh();
-			return;
-		}
-		for (let t = 0; t < e.children.length; t++) N(e.children[t]);
+		if (e.refresh) e.refresh();
+		else for (let t = 0; t < e.children.length; t++) N(e.children[t]);
 	}, P = !1, F = function() {
 		r("    reloaded OK"), w(), j() ? N(h) : C("CONSISTENCY CHECK FAILED");
 	}, I = function() {

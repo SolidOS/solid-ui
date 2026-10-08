@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/menu-item-CzkWuaiU.js";
-export { e as MenuItem, t as default };
+export { n as MenuItem, t as default } from "../chunks/menu-item-C2e0qj-v.js";

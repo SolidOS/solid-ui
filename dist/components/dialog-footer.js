@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/dialog-footer-BtXheU8B.js";
-export { e as DialogFooter, t as default };
+export { n as DialogFooter, t as default } from "../chunks/dialog-footer-Bhl8k1PX.js";

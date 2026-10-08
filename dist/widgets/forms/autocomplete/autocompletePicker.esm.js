@@ -22,11 +22,7 @@ async function m(m, h, g, _) {
 		e("Auto complete: finish! " + t), t.termType === "Literal" && h.queryParams.objectURIBase && (t = l.sym(h.queryParams.objectURIBase.value + t.value)), w(), _(t, n);
 	}
 	async function b(t, n) {
-		if (g.acceptButton) {
-			g.acceptButton.disbaled = !1, p(g.acceptButton, !0), H.value = n.value, R = n, z = t, e("Auto complete: name: " + n), e("Auto complete: waiting for accept " + t), w();
-			return;
-		}
-		p(g.cancelButton, !0), y(t, n);
+		g.acceptButton ? (g.acceptButton.disbaled = !1, p(g.acceptButton, !0), H.value = n.value, R = n, z = t, e("Auto complete: name: " + n), e("Auto complete: waiting for accept " + t), w()) : (p(g.cancelButton, !0), y(t, n));
 	}
 	async function x(e) {
 		R && H.value === R.value && y(z, R);
@@ -56,10 +52,10 @@ async function m(m, h, g, _) {
 			v("Error querying db of organizations: " + e), N = !1;
 			return;
 		}
-		return M = n.length < 200, F = M ? e : void 0, w(), a(n, t);
+		return M = n.length < 200, F = M ? e : void 0, w(), a(n, t) || [];
 	}
 	function D(e, t) {
-		return t.filter((t) => C(e, t.name.value));
+		return (t || []).filter((t) => C(e, t.name.value));
 	}
 	async function O() {
 		function t(t) {
@@ -81,7 +77,7 @@ async function m(m, h, g, _) {
 		let i = await o(), a = H.value.trim().toLowerCase();
 		if (a.length < u) w(), I = d;
 		else {
-			(!P || !F || !a.startsWith(F)) && (e(`   Querying database at "${a}" cf last "${F}".`), j = await E(a, i));
+			(!P || !F || !a.startsWith(F)) && (e(`   Querying database at "${a}" cf last "${F}".`), j = await E(a, i) || []);
 			let n = D(a, j);
 			M && n.length <= f && (I = n.length), P = M && n.length <= I, e(` Filter:"${a}" lastBindings: ${j.length}, slimmed to ${n.length}; rows: ${I}, Enough? ${M}, All displayed? ${P}`);
 			let o = n.slice(0, I);

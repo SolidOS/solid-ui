@@ -4,11 +4,7 @@ function e(e, t) {
 }
 function t(t) {
 	return (n, r) => {
-		if (r) {
-			r.addInitializer(() => e(t, n));
-			return;
-		}
-		e(t, n);
+		r ? r.addInitializer(() => e(t, n)) : e(t, n);
 	};
 }
 //#endregion

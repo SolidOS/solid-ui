@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/dialog-header-CacIKcoT.js";
-export { e as DialogHeader, t as default };
+export { n as DialogHeader, t as default } from "../chunks/dialog-header-Dn6PQzFB.js";

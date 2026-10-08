@@ -1,12 +1,11 @@
-import { SubjectType } from 'solid-logic';
-export declare const ACCESS_ROLES: readonly ["Owner", "Editor", "Viewer", "Poster", "Submitter", "Remove"];
-export type AccessRole = typeof ACCESS_ROLES[number];
-export type AccessControlBadgeKind = 'agent' | 'group' | 'agentClass' | 'origin' | 'unknown';
-export type DraftGrant = {
+import { AccessControlSubjectKind, AccessRole } from 'solid-logic';
+export type AccessControlBadgeKind = 'agent' | 'group' | 'agentClass' | 'unknown';
+export type PendingAccessSubjectKind = Exclude<AccessControlSubjectKind, 'origin'>;
+export type PendingAccessGrant = {
     id?: string;
-    subjectType: SubjectType;
+    subjectType: PendingAccessSubjectKind;
     subjectValue: string;
     role: AccessRole;
-    removed?: boolean;
+    label: string;
 };
 //# sourceMappingURL=types.d.ts.map

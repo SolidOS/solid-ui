@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/dialogs-root-9dqxlMGN.js";
-export { e as DialogsRoot, t as default };
+export { n as DialogsRoot, t as default } from "../chunks/dialogs-root-Qiucjj9u.js";

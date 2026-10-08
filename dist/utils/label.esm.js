@@ -15,13 +15,7 @@ function a(e, t = !1) {
 	function r(e) {
 		let t = "";
 		e.slice(-1) === "/" && (e = e.slice(0, -1));
-		for (let n = 0; n < e.length; n++) {
-			if (e[n] === "_" || e[n] === "-") {
-				t += " ";
-				continue;
-			}
-			t += e[n], n + 1 < e.length && e[n].toUpperCase() !== e[n] && e[n + 1].toLowerCase() !== e[n + 1] && (t += " ");
-		}
+		for (let n = 0; n < e.length; n++) e[n] === "_" || e[n] === "-" ? t += " " : (t += e[n], n + 1 < e.length && e[n].toUpperCase() !== e[n] && e[n + 1].toLowerCase() !== e[n + 1] && (t += " "));
 		return t.slice(0, 4) === "has " && (t = t.slice(4)), n(t);
 	}
 	let i = s(e);

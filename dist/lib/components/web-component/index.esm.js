@@ -1,2 +1,1 @@
-import e from "./WebComponent.esm.js";
-export { e as WebComponent };
+export { default as WebComponent } from "./WebComponent.esm.js";

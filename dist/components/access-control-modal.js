@@ -1,2 +1,1 @@
-import { n as e, t } from "../chunks/access-control-modal-D1isrLqr.js";
-export { e as AccessControlModal, t as default };
+export { n as AccessControlModal, t as default } from "../chunks/access-control-modal-BgaFd5lL.js";

@@ -14,8 +14,8 @@ function n(e) {
 }
 function r(e, t) {
 	if (typeof e != "object" || !e) return e;
-	var n = e[Symbol.toPrimitive];
-	if (n !== void 0) {
+	var n;
+	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
 		var r = n.call(e, t || "default");
 		if (typeof r != "object") return r;
 		throw TypeError("@@toPrimitive must return a primitive value.");

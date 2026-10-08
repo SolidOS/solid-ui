@@ -1,2 +1,1 @@
-import e from "./DialogComponent.esm.js";
-export { e as DialogComponent };
+export { default as DialogComponent } from "./DialogComponent.esm.js";

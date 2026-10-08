@@ -280,11 +280,8 @@ function ae(e, t, n) {
 	return h(e, r, i), q(e, r, n.title, t), J(e, r, t, n), n.clickable && n.onClickFunction && m(r, n.onClickFunction), n.wrapInATR ? g(e, r, t) : r;
 }
 function Y(e) {
-	if (e.refresh) {
-		e.refresh();
-		return;
-	}
-	for (let t = 0; t < e.children.length; t++) Y(e.children[t]);
+	if (e.refresh) e.refresh();
+	else for (let t = 0; t < e.children.length; t++) Y(e.children[t]);
 }
 function oe(t, n, r, i = {}) {
 	let s = /* @__PURE__ */ new Set(), c = !!(i.renderSupportingInfo || i.renderNameSuffix), d = i.refreshOnDocumentLoad ?? !0, f = function(e) {

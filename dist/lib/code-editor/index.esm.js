@@ -1,2 +1,1 @@
-import { CodeEditor as e } from "./CodeEditor.esm.js";
-export { e as CodeEditor };
+export { CodeEditor } from "./CodeEditor.esm.js";

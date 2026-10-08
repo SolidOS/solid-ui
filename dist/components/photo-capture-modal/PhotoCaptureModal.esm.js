@@ -156,8 +156,8 @@ function ye(e) {
 }
 function be(e, t) {
 	if (typeof e != "object" || !e) return e;
-	var n = e[Symbol.toPrimitive];
-	if (n !== void 0) {
+	var n;
+	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
 		var r = n.call(e, t || "default");
 		if (typeof r != "object") return r;
 		throw TypeError("@@toPrimitive must return a primitive value.");
@@ -401,11 +401,7 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 		let a = await new Promise((e) => {
 			r.toBlob(e, this.captureFormat, this.captureQuality);
 		});
-		if (!a) {
-			this.errorMessage = "Unable to create an image from the current camera frame";
-			return;
-		}
-		this.value = this.createFileFromBlob(a), this.errorMessage = "";
+		a ? (this.value = this.createFileFromBlob(a), this.errorMessage = "") : this.errorMessage = "Unable to create an image from the current camera frame";
 	}
 	createFileFromBlob(e) {
 		let t = e.type || this.captureFormat, n = this.fileExtensionForMimeType(t), r = (this.fileNamePrefix || this.name || "photo").trim() || "photo";
@@ -439,20 +435,19 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 	}
 	async startPreview() {
 		if (!(this.value || this.startingPreview)) {
-			if (!navigator.mediaDevices?.getUserMedia) {
-				this.errorMessage = "Camera access is not available in this browser";
-				return;
-			}
-			this.startingPreview = !0, this.errorMessage = "";
-			try {
-				let e = await navigator.mediaDevices.getUserMedia(this.resolveMediaConstraints());
-				this.stream = e, this.requestUpdate(), await this.updateComplete;
-				let t = this.shadowRoot?.querySelector("video");
-				t && (t.srcObject = e, await t.play?.().catch(() => void 0));
-			} catch (e) {
-				this.errorMessage = e?.message || "Unable to start the camera preview";
-			} finally {
-				this.startingPreview = !1;
+			if (!navigator.mediaDevices?.getUserMedia) this.errorMessage = "Camera access is not available in this browser";
+			else {
+				this.startingPreview = !0, this.errorMessage = "";
+				try {
+					let e = await navigator.mediaDevices.getUserMedia(this.resolveMediaConstraints());
+					this.stream = e, this.requestUpdate(), await this.updateComplete;
+					let t = this.shadowRoot?.querySelector("video");
+					t && (t.srcObject = e, await t.play?.().catch(() => void 0));
+				} catch (e) {
+					this.errorMessage = e?.message || "Unable to start the camera preview";
+				} finally {
+					this.startingPreview = !1;
+				}
 			}
 		}
 	}

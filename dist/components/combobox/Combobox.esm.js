@@ -157,8 +157,8 @@ function Z(e) {
 }
 function fe(e, t) {
 	if (typeof e != "object" || !e) return e;
-	var n = e[Symbol.toPrimitive];
-	if (n !== void 0) {
+	var n;
+	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
 		var r = n.call(e, t || "default");
 		if (typeof r != "object") return r;
 		throw TypeError("@@toPrimitive must return a primitive value.");
@@ -414,11 +414,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		}
 	}
 	updateAsyncOptionsTask() {
-		if (!this.asyncOptionsUrl && !this.asyncOptionsProvider) {
-			this.asyncOptionsTask = void 0;
-			return;
-		}
-		this.asyncOptionsTask ??= new l(this, async ([e]) => {
+		!this.asyncOptionsUrl && !this.asyncOptionsProvider ? this.asyncOptionsTask = void 0 : this.asyncOptionsTask ??= new l(this, async ([e]) => {
 			if (this.asyncOptionsProvider) {
 				let t = await this.asyncOptionsProvider(e);
 				if (t.length === 0) throw new Q("No results found");

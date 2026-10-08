@@ -1,2 +1,1 @@
-import e from "./FormControlComponent.esm.js";
-export { e as FormControlComponent };
+export { default as FormControlComponent } from "./FormControlComponent.esm.js";
