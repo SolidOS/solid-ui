@@ -22,7 +22,7 @@ const meta = {
     const parsedOptions = options.split(',').map(option => option.trim())
 
     return html`
-        <solid-ui-select label="${label}" ?srOnlyLabel=${srOnlyLabel}>
+        <solid-ui-select label="${label}" .srOnlyLabel=${srOnlyLabel}>
             ${parsedOptions.map((option, index) => {
                 const indent = index === 0 ? '' : '            '
 
