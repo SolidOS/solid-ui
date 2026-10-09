@@ -238,8 +238,6 @@
     align-items: flex-start;
     gap: 10px;
 
-    --access-role-select-width: 120px;
-
     solid-ui-combobox,
     solid-ui-input {
       --solid-ui-input-border-color: var(--solid-ui-color-slate-200, #E2E8F0);
@@ -268,7 +266,7 @@
     .access-grants-general-share {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       align-self: stretch;
 
       .access-grants-general-share-content {
@@ -350,6 +348,9 @@
   }
 
   .access-role-select--general {
+    width: 120px;
+    min-width: 120px;
+    flex: 0 0 120px;
     font-size: var(--solid-ui-font-size-xs, .75rem);
     font-weight: 500;
   }
