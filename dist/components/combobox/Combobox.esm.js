@@ -339,6 +339,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
+            @click=${this.onInputClick}
             @input=${() => this.selectOnly ? this.updateDisplayValue(this.controlElement?.value ?? "") : this.controlTrait.onInput()}
           />
           <icon-lucide-chevron-down></icon-lucide-chevron-down>
@@ -464,6 +465,9 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		e.target !== this.controlElement && (e.preventDefault(), this.controlElement?.focus({ preventScroll: !0 }));
 	}
 	onInputFocus() {
+		this.show();
+	}
+	onInputClick() {
 		this.show();
 	}
 	openPopupFromKey(e) {

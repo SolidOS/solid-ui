@@ -54,6 +54,7 @@ export default class Combobox extends FormControlComponent {
     private handleDocumentMouseDown;
     private onAnchorMouseDown;
     private onInputFocus;
+    private onInputClick;
     private openPopupFromKey;
     private onInputKeyDown;
     private onListboxMouseDown;

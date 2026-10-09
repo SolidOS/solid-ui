@@ -104,6 +104,13 @@
     align-self: stretch;
   }
 
+  .access-grants-directory-entry {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+  }
+
   .access-grants-header {
     display: flex;
     align-items: center;
@@ -231,8 +238,6 @@
     align-items: flex-start;
     gap: 10px;
 
-    --access-role-select-width: 110px;
-
     solid-ui-combobox,
     solid-ui-input {
       --solid-ui-input-border-color: var(--solid-ui-color-slate-200, #E2E8F0);
@@ -245,12 +250,23 @@
       align-items: center;
       gap: 15px;
       align-self: stretch;
+
+      .access-grants-copy-link-button-label {
+        font-size: var(--solid-ui-font-size-xs, .75rem);
+        font-weight: 500;
+      }
+
+      .access-grants-copy-link-button icon-lucide-link {
+        width: 12px;
+        height: 12px;
+        aspect-ratio: 1/1;
+      }
     }
 
     .access-grants-general-share {
       display: flex;
       align-items: center;
-      gap: 15px;
+      gap: 10px;
       align-self: stretch;
 
       .access-grants-general-share-content {
@@ -329,6 +345,14 @@
     max-width: 100%;
     --solid-ui-input-border-color: transparent;
     margin-top: 0;
+  }
+
+  .access-role-select--general {
+    width: 120px;
+    min-width: 120px;
+    flex: 0 0 120px;
+    font-size: var(--solid-ui-font-size-xs, .75rem);
+    font-weight: 500;
   }
 
   .access-grants-list li .access-role-select--compact {
