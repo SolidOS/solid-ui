@@ -5,7 +5,7 @@ import { property, query, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import { findImage } from '@/widgets'
 import type Dialog from '@/components/dialog'
-import { ACCESS_ROLES, DEFAULT_DIRECTORY_SOURCES, solidLogicSingleton, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
+import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
 import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
 import { sym } from 'rdflib'
 
@@ -53,7 +53,10 @@ export default class AccessControlModal extends WebComponent {
   private accessor addAccessRoleValue: AccessRole = 'Viewer'
 
   @state()
-  private accessor sharedAccessRoleValue: AccessRole = 'No Access'
+  private accessor authenticatedAccessRoleValue: AccessRole = 'No Access'
+
+  @state()
+  private accessor publicAccessRoleValue: AccessRole = 'No Access'
 
   @state()
   private accessor searchValue: string = ''
@@ -81,6 +84,8 @@ export default class AccessControlModal extends WebComponent {
 
     if (changedProperties.has('accessGrants')) {
       this.accessGrantRoles = this.accessGrants?.map(item => this.getAuthorizationRole(item)) ?? []
+      this.authenticatedAccessRoleValue = this.getAuthenticatedAccessRole()
+      this.publicAccessRoleValue = this.getPublicAccessRole()
       void this.refreshAccessGrantLabels()
     }
   }
@@ -133,9 +138,13 @@ export default class AccessControlModal extends WebComponent {
       })
   }
 
+  private getSharedAccessGrantEntries () {
+    return this.getAccessGrantEntries().filter(({ authorization }) => !this.isGeneralAccessAuthorization(authorization))
+  }
+
   private renderAccessGrants() {
     const query = this.searchValue.trim().toLowerCase()
-    const accessGrants = this.getAccessGrantEntries().filter(({ subjectLabel }) => {
+    const accessGrants = this.getSharedAccessGrantEntries().filter(({ subjectLabel }) => {
       if (!query) {
         return true
       }
@@ -230,6 +239,30 @@ export default class AccessControlModal extends WebComponent {
     return solidLogicSingleton.acl.roleFromModes(authorization.mode)
   }
 
+  private isGeneralAccessAuthorization (authorization: Authorization): boolean {
+    return authorization.agentClass.includes(Authenticated.iri) || authorization.agentClass.includes(Public.iri)
+  }
+
+  private getAuthenticatedAccessRole (): AccessRole {
+    const authorization = (this.accessGrants ?? []).find(item =>
+      item.agentClass.includes(Authenticated.iri)
+    )
+
+    return authorization ? this.getAuthorizationRole(authorization) : 'No Access'
+  }
+
+  private getPublicAccessRole (): AccessRole {
+    const authorization = (this.accessGrants ?? []).find(item =>
+      item.agentClass.includes(Public.iri)
+    )
+
+    if (!authorization) {
+      return 'No Access'
+    }
+
+    return solidLogicSingleton.acl.publicRoleFromModes(authorization.mode)
+  }
+
   private getRoleValueFromEvent (event: Event, fallback: AccessRole = 'Viewer'): AccessRole {
     const selectedValue = this.getSelectedComboboxOptionValue(event)
 
@@ -254,19 +287,34 @@ export default class AccessControlModal extends WebComponent {
     `
   }
 
-  private renderModeSelector (variant: 'add' | 'general' = 'add') {
+  private renderModeSelector (variant: 'add' | 'authenticated' | 'public' = 'add') {
     const className = variant === 'add'
       ? 'access-role-select access-role-select--top'
-      : 'access-role-select access-role-select--compact'
-    const value = variant === 'add' ? this.addAccessRoleValue : this.sharedAccessRoleValue
+      : variant === 'authenticated'
+        ? 'access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated'
+        : 'access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public'
+    const value = variant === 'add'
+      ? this.addAccessRoleValue
+      : variant === 'authenticated'
+        ? this.authenticatedAccessRoleValue
+        : this.publicAccessRoleValue
+    const onChange = variant === 'add'
+      ? this.onAddAccessRoleInput
+      : variant === 'authenticated'
+        ? this.onAuthenticatedAccessRoleInput
+        : this.onPublicAccessRoleInput
 
     return html`
       <solid-ui-combobox
         class=${className}
         .value=${value}
-        @change=${variant === 'add' ? this.onAddAccessRoleInput : this.onSharedAccessRoleInput}
+        @change=${onChange}
       >
-        ${variant === 'add' ? this.renderAddRoleOptions() : this.renderGeneralRoleOptions()}
+        ${variant === 'add'
+          ? this.renderAddRoleOptions()
+          : variant === 'authenticated'
+            ? this.renderAuthenticatedRoleOptions()
+            : this.renderPublicRoleOptions()}
       </solid-ui-combobox>
     `
   }
@@ -279,8 +327,14 @@ export default class AccessControlModal extends WebComponent {
       `)
   }
 
-  private renderGeneralRoleOptions () {
+  private renderAuthenticatedRoleOptions () {
     return ACCESS_ROLES.map(role => html`
+      <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
+    `)
+  }
+
+  private renderPublicRoleOptions () {
+    return PUBLIC_ACCESS_ROLES.map(role => html`
       <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
     `)
   }
@@ -354,7 +408,7 @@ export default class AccessControlModal extends WebComponent {
           @input=${this.onSearchInput}
           @change=${this.onSearchSelect}
         >
-          ${this.getAccessGrantEntries().map(({ subjectLabel }) => html`
+          ${this.getSharedAccessGrantEntries().map(({ subjectLabel }) => html`
             <solid-ui-combobox-option 
               .value=${subjectLabel}>
               ${subjectLabel}
@@ -379,19 +433,38 @@ export default class AccessControlModal extends WebComponent {
             @click=${this.onCopyLinkClick}
           >
             <icon-lucide-link slot="left-icon"></icon-lucide-link>
-            Copy Link
+            <span class="access-grants-copy-link-button-label">Copy Link</span>
           </solid-ui-button>
         </div>
-        <div class="access-grants-general-share">
-          <div class="access-grants-general-share-content">
-            ${this.renderGeneralAccessIcon()}
-            <div class="access-grants-general-share-text">
-              <p class="access-grants-general-share-text-title">Share with Anyone Signed In</p>
-              <p class="access-grants-general-share-text-description">Users must sign in to SolidOS to access this shared item using the link.</p>
-            </div>
+        ${this.renderGeneralShareRow({
+          title: 'Share with Anyone Signed In',
+          description: 'Users must sign in to SolidOS to access this shared item using the link.',
+          variant: 'authenticated'
+        })}
+        ${this.renderGeneralShareRow({
+          title: 'Anyone with the Link',
+          description: 'Anyone on the internet with the link can view.',
+          variant: 'public'
+        })}
+      </div>
+    `
+  }
+
+  private renderGeneralShareRow (options: {
+    title: string
+    description: string
+    variant: 'authenticated' | 'public'
+  }) {
+    return html`
+      <div class="access-grants-general-share">
+        <div class="access-grants-general-share-content">
+          ${this.renderGeneralAccessIcon()}
+          <div class="access-grants-general-share-text">
+            <p class="access-grants-general-share-text-title">${options.title}</p>
+            <p class="access-grants-general-share-text-description">${options.description}</p>
           </div>
-          ${this.renderModeSelector('general')}
         </div>
+        ${this.renderModeSelector(options.variant)}
       </div>
     `
   }
@@ -463,12 +536,7 @@ export default class AccessControlModal extends WebComponent {
       return
     }
 
-    try {
-      await this.commitPrinciplesFromInput()
-    } catch (error) {
-      this.failed = true
-      console.error('Failed to commit pending access grants', error)
-    }
+    await this.commitPrinciplesFromInputSafely()
   }
 
   private async onSaveClick () {
@@ -477,12 +545,7 @@ export default class AccessControlModal extends WebComponent {
     }
 
     if (this.principalInputValue.trim()) {
-      try {
-        await this.commitPrinciplesFromInput()
-      } catch (error) {
-        this.failed = true
-        console.error('Failed to commit pending access grants', error)
-      }
+      await this.commitPrinciplesFromInputSafely()
     }
 
     await this.saveAccessChanges()
@@ -498,8 +561,9 @@ export default class AccessControlModal extends WebComponent {
     }
 
     const changedAccessGrants = this.getChangedAccessGrants()
+    const generalAccessChanges = this.getGeneralAccessChanges()
 
-    if (!this.pendingAccessGrants.length && !changedAccessGrants.length) {
+    if (!this.pendingAccessGrants.length && !changedAccessGrants.length && !generalAccessChanges.length) {
       this.failed = true
       return
     }
@@ -518,6 +582,7 @@ export default class AccessControlModal extends WebComponent {
           subject: this.createAccessSubject(grant.subjectType, grant.subjectValue),
           role: grant.role
         })),
+        ...generalAccessChanges,
         ...changedAccessGrants.flatMap(({ subjects, role }) =>
           subjects.map(subject => ({ subject, role }))
         )
@@ -526,7 +591,9 @@ export default class AccessControlModal extends WebComponent {
       for (const { subject, role } of accessChanges) {
         const plan = role === 'No Access'
           ? await solidLogicSingleton.acl.planRevoke(this.subjectUri, subject)
-          : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, this.getRoleModes(role))
+          : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, subject.type === 'agentClass' && subject.iri === Public.iri
+            ? solidLogicSingleton.acl.modesFromPublicRole(role as (typeof PUBLIC_ACCESS_ROLES)[number])
+            : this.getRoleModes(role))
 
         await solidLogicSingleton.acl.applyPlan(plan)
       }
@@ -547,13 +614,9 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private onPrincipalSelect (event: Event) {
-    const option = this.getSelectedComboboxOption(event)
+    const option = this.getSelectedStringComboboxOption(event)
 
     if (!option) {
-      return
-    }
-
-    if (typeof option.value !== 'string' || !option.value) {
       return
     }
 
@@ -567,9 +630,34 @@ export default class AccessControlModal extends WebComponent {
   private onSearchSelect (event: Event) {
     const option = this.getSelectedComboboxOption(event)
 
-    if (option && typeof option.label === 'string') {
+    if (option) {
       this.searchValue = option.label
     }
+  }
+
+  private getGeneralAccessChanges (): AccessChange[] {
+    if (!this.subjectUri) {
+      return []
+    }
+
+    const currentAuthenticatedRole = this.getAuthenticatedAccessRole()
+    const currentPublicRole = this.getPublicAccessRole()
+
+    const authenticatedChange = this.authenticatedAccessRoleValue === currentAuthenticatedRole
+      ? undefined
+      : {
+          subject: Authenticated,
+          role: this.authenticatedAccessRoleValue
+        }
+
+    const publicChange = this.publicAccessRoleValue === currentPublicRole
+      ? undefined
+      : {
+          subject: Public,
+          role: this.publicAccessRoleValue
+        }
+
+    return [authenticatedChange, publicChange].filter(isDefined)
   }
 
   private onAddAccessRoleInput (event: Event) {
@@ -581,9 +669,14 @@ export default class AccessControlModal extends WebComponent {
     }))
   }
 
-  private onSharedAccessRoleInput (event: Event) {
+  private onAuthenticatedAccessRoleInput (event: Event) {
     const nextRole = this.getRoleValueFromEvent(event)
-    this.sharedAccessRoleValue = nextRole
+    this.authenticatedAccessRoleValue = nextRole
+  }
+
+  private onPublicAccessRoleInput (event: Event) {
+    const nextRole = this.getRoleValueFromEvent(event, 'No Access')
+    this.publicAccessRoleValue = nextRole
   }
 
   private onAccessGrantRoleInput (index: number, event: Event) {
@@ -613,7 +706,8 @@ export default class AccessControlModal extends WebComponent {
     return Boolean(
       this.pendingAccessGrants.length ||
       this.principalInputValue.trim() ||
-      this.getChangedAccessGrants().length
+      this.getChangedAccessGrants().length ||
+      this.getGeneralAccessChanges().length
     )
   }
 
@@ -670,8 +764,17 @@ export default class AccessControlModal extends WebComponent {
     return (event as ComboboxChangeEvent).detail?.option
   }
 
+  private getSelectedStringComboboxOption (event: Event): StringComboboxOptionData | undefined {
+    const option = this.getSelectedComboboxOption(event)
+    return this.isStringComboboxOptionData(option) ? option : undefined
+  }
+
   private getSelectedComboboxOptionValue (event: Event): unknown {
     return this.getSelectedComboboxOption(event)?.value
+  }
+
+  private isStringComboboxOptionData (option: ComboboxOptionData | undefined): option is StringComboboxOptionData {
+    return typeof option?.value === 'string'
   }
 
   private async commitPrinciplesFromInput (): Promise<boolean> {
@@ -682,6 +785,16 @@ export default class AccessControlModal extends WebComponent {
 
     await this.queuePendingPrinciples([rawValue], this.addAccessRoleValue, undefined, rawValue)
     return true
+  }
+
+  private async commitPrinciplesFromInputSafely (): Promise<boolean> {
+    try {
+      return await this.commitPrinciplesFromInput()
+    } catch (error) {
+      this.failed = true
+      console.error('Failed to commit pending access grants', error)
+      return false
+    }
   }
 
   private async queuePendingPrinciples (

@@ -4,6 +4,7 @@ import { beforeEach, describe, expect, it, vi } from 'vitest'
 
 const planGrant = vi.fn()
 const planRevoke = vi.fn()
+const planPublicRead = vi.fn()
 const applyPlan = vi.fn()
 const classifyAccessControlSubject = vi.fn()
 
@@ -24,6 +25,7 @@ vi.mock('solid-logic', async (importOriginal) => {
         ...actual.solidLogicSingleton.acl,
         classifyAccessControlSubject,
         planGrant,
+        planPublicRead,
         planRevoke,
         applyPlan
       },
@@ -46,6 +48,7 @@ describe('AccessControlModal submit', () => {
   beforeEach(async () => {
     planGrant.mockReset()
     planRevoke.mockReset()
+    planPublicRead.mockReset()
     applyPlan.mockReset()
     classifyAccessControlSubject.mockReset()
     classifyAccessControlSubject.mockImplementation(async (principle: string) => ({
@@ -53,6 +56,7 @@ describe('AccessControlModal submit', () => {
       subjectValue: principle
     }))
     planGrant.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
+    planPublicRead.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     applyPlan.mockResolvedValue(new Response('ok', { status: 200 }))
     await import('../../src/components/access-control-modal/AccessControlModal')
   })
@@ -181,6 +185,30 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
+  it('persists authenticated and public access changes on save', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.accessGrants = []
+    element.authenticatedAccessRoleValue = 'Editor'
+    element.publicAccessRoleValue = 'Viewer'
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenNthCalledWith(
+      1,
+      'https://example.com/resource.ttl',
+      { type: 'agentClass', iri: 'http://www.w3.org/ns/auth/acl#AuthenticatedAgent' },
+      ['Read', 'Write']
+    )
+    expect(planGrant).toHaveBeenNthCalledWith(
+      2,
+      'https://example.com/resource.ttl',
+      { type: 'agentClass', iri: 'http://xmlns.com/foaf/0.1/Agent' },
+      ['Read']
+    )
+    expect(applyPlan).toHaveBeenCalledTimes(2)
+  })
+
   it('reads the selected role from the rendered combobox change event', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     document.body.appendChild(element)
@@ -199,7 +227,8 @@ describe('AccessControlModal submit', () => {
     }))
 
     expect(element.addAccessRoleValue).toBe('Editor')
-    expect(element.sharedAccessRoleValue).toBe('No Access')
+    expect(element.authenticatedAccessRoleValue).toBe('No Access')
+    expect(element.publicAccessRoleValue).toBe('No Access')
 
     document.body.removeChild(element)
   })
@@ -209,14 +238,15 @@ describe('AccessControlModal submit', () => {
     element.subjectUri = 'https://example.com/resource.ttl'
     element.principalInputValue = 'https://alice.example.com/profile/card.ttl#me'
     element.addAccessRoleValue = 'Viewer'
-    element.sharedAccessRoleValue = 'No Access'
+    element.authenticatedAccessRoleValue = 'No Access'
+    element.publicAccessRoleValue = 'No Access'
 
     await element.onSubmit(new Event('submit'))
 
     document.body.appendChild(element)
     await element.updateComplete
 
-    const sharedRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--compact')
+    const sharedRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
     sharedRoleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -229,7 +259,8 @@ describe('AccessControlModal submit', () => {
     }))
 
     expect(element.addAccessRoleValue).toBe('Viewer')
-    expect(element.sharedAccessRoleValue).toBe('Editor')
+    expect(element.authenticatedAccessRoleValue).toBe('Editor')
+    expect(element.publicAccessRoleValue).toBe('No Access')
     expect(element.pendingAccessGrants).toEqual([
       expect.objectContaining({
         role: 'Viewer'
@@ -274,20 +305,24 @@ describe('AccessControlModal submit', () => {
     expect(element.getDialogTitle()).toBe('Share this resource')
   })
 
-  it('hides no access in the add selector and keeps no access in the general selector', async () => {
+  it('hides no access in the add selector, keeps it in the authenticated selector, and exposes dokieli public roles', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     document.body.appendChild(element)
     await element.updateComplete
 
     const addRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--top')
-    const generalRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--compact')
+    const authenticatedRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
+    const publicRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--public')
 
     const addOptions = [...addRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
-    const generalOptions = [...generalRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
+    const authenticatedOptions = [...authenticatedRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
+    const publicOptions = [...publicRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
 
     expect(addOptions).not.toContain('No Access')
     expect(addOptions).toContain('Viewer')
-    expect(generalOptions).toContain('No Access')
+    expect(authenticatedOptions).toContain('No Access')
+    expect(authenticatedOptions).toContain('Editor')
+    expect(publicOptions).toEqual(['No Access', 'Viewer'])
 
     document.body.removeChild(element)
   })
@@ -309,6 +344,42 @@ describe('AccessControlModal submit', () => {
 
     expect(grantOptions).toContain('Remove')
     expect(grantOptions).not.toContain('No Access')
+
+    document.body.removeChild(element)
+  })
+
+  it('keeps authenticated and public grants out of the shared-with list', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.accessGrants = [
+      {
+        agent: ['https://alice.example.com/profile/card.ttl#me'],
+        agentGroup: [],
+        agentClass: [],
+        mode: ['Read']
+      },
+      {
+        agent: [],
+        agentGroup: [],
+        agentClass: ['http://www.w3.org/ns/auth/acl#AuthenticatedAgent'],
+        mode: ['Read', 'Write']
+      },
+      {
+        agent: [],
+        agentGroup: [],
+        agentClass: ['http://xmlns.com/foaf/0.1/Agent'],
+        mode: ['Read']
+      }
+    ]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const sharedWithLabels = [...element.shadowRoot.querySelectorAll('.access-grants-list h3')].map((label: Element) => label.textContent?.trim())
+    expect(sharedWithLabels).toEqual(['card.ttl'])
+
+    const searchOptions = [...element.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
+      .map((option: Element) => option.textContent?.trim())
+    expect(searchOptions).toEqual(['card.ttl'])
 
     document.body.removeChild(element)
   })

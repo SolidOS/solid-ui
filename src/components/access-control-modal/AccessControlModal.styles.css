@@ -238,7 +238,7 @@
     align-items: flex-start;
     gap: 10px;
 
-    --access-role-select-width: 110px;
+    --access-role-select-width: 120px;
 
     solid-ui-combobox,
     solid-ui-input {
@@ -252,6 +252,17 @@
       align-items: center;
       gap: 15px;
       align-self: stretch;
+
+      .access-grants-copy-link-button-label {
+        font-size: var(--solid-ui-font-size-xs, .75rem);
+        font-weight: 500;
+      }
+
+      .access-grants-copy-link-button icon-lucide-link {
+        width: 12px;
+        height: 12px;
+        aspect-ratio: 1/1;
+      }
     }
 
     .access-grants-general-share {
@@ -336,6 +347,11 @@
     max-width: 100%;
     --solid-ui-input-border-color: transparent;
     margin-top: 0;
+  }
+
+  .access-role-select--general {
+    font-size: var(--solid-ui-font-size-xs, .75rem);
+    font-weight: 500;
   }
 
   .access-grants-list li .access-role-select--compact {
