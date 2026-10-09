@@ -104,6 +104,13 @@
     align-self: stretch;
   }
 
+  .access-grants-directory-entry {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    line-height: 1;
+  }
+
   .access-grants-header {
     display: flex;
     align-items: center;

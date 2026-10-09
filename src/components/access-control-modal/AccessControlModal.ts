@@ -26,10 +26,15 @@ import '@/components/combobox-option'
 import styles from './AccessControlModal.styles.css'
 import type { ComboboxChangeEvent } from '@/components/combobox'
 import type { AccessChange, AccessControlBadge, AccessGrantEntry, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
+import { dedupeByKey, dedupeComboboxOptions, isHttpUri, type StringComboboxOptionData } from './helpers'
 
 function isDefined<T> (value: T | undefined | null): value is T {
   return value !== undefined && value !== null
 }
+
+type PendingAccessGrantCreationResult =
+  | { grant: PendingAccessGrant; principle: string }
+  | { error: string; principle: string }
 
 @customElement('solid-ui-access-control-modal')
 export default class AccessControlModal extends WebComponent {
@@ -324,7 +329,8 @@ export default class AccessControlModal extends WebComponent {
               type="button"
               variant="ghost"
               class="access-grants-pending-item-remove"
-              @click=${() => this.removePendingAccessGrant(index)}
+              data-pending-grant-index=${index}
+              @click=${this.onRemovePendingAccessGrantClick}
             >
               <span class="sr-only">Remove ${grant.label}</span>
               <icon-lucide-circle-x slot="icon"></icon-lucide-circle-x>
@@ -336,8 +342,6 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private renderAccessGrantsSection () {
-    const accessGrantOptions = this.getAccessGrantSearchOptions()
-
     return html`
       <div class="access-grants-header">
         <h2>Share with</h2>
@@ -350,10 +354,10 @@ export default class AccessControlModal extends WebComponent {
           @input=${this.onSearchInput}
           @change=${this.onSearchSelect}
         >
-          ${accessGrantOptions.map(option => html`
+          ${this.getAccessGrantEntries().map(({ subjectLabel }) => html`
             <solid-ui-combobox-option 
-              .value=${option.value}>
-              ${option.label}
+              .value=${subjectLabel}>
+              ${subjectLabel}
             </solid-ui-combobox-option>
           `)}
         </solid-ui-combobox>
@@ -459,7 +463,12 @@ export default class AccessControlModal extends WebComponent {
       return
     }
 
-    await this.commitPrinciplesFromInput()
+    try {
+      await this.commitPrinciplesFromInput()
+    } catch (error) {
+      this.failed = true
+      console.error('Failed to commit pending access grants', error)
+    }
   }
 
   private async onSaveClick () {
@@ -468,7 +477,12 @@ export default class AccessControlModal extends WebComponent {
     }
 
     if (this.principalInputValue.trim()) {
-      await this.commitPrinciplesFromInput()
+      try {
+        await this.commitPrinciplesFromInput()
+      } catch (error) {
+        this.failed = true
+        console.error('Failed to commit pending access grants', error)
+      }
     }
 
     await this.saveAccessChanges()
@@ -584,6 +598,17 @@ export default class AccessControlModal extends WebComponent {
     this.pendingAccessGrants = this.pendingAccessGrants.filter((_, pendingIndex) => pendingIndex !== index)
   }
 
+  private onRemovePendingAccessGrantClick (event: Event) {
+    const target = event.currentTarget as HTMLElement | null
+    const index = target?.dataset.pendingGrantIndex
+
+    if (index === undefined) {
+      return
+    }
+
+    this.removePendingAccessGrant(Number.parseInt(index, 10))
+  }
+
   private hasUnsavedChanges (): boolean {
     return Boolean(
       this.pendingAccessGrants.length ||
@@ -666,15 +691,20 @@ export default class AccessControlModal extends WebComponent {
     inputSnapshot?: string
   ) {
     const snapshot = inputSnapshot ?? this.principalInputValue.trim()
-    const pendingGrants = await Promise.all(principles.map(async principle => this.createPendingAccessGrant(principle, role, preferredLabel)))
-    const newGrants = pendingGrants.filter(isDefined)
+    const pendingGrantResults = await Promise.all(principles.map(async principle => this.createPendingAccessGrant(principle, role, preferredLabel)))
+    const newGrants = pendingGrantResults.flatMap(result => ('grant' in result ? [result.grant] : []))
+    const failedGrants = pendingGrantResults
+      .filter((result): result is { error: string; principle: string } => 'error' in result)
+      .map(result => `${result.principle} (${result.error})`)
 
     if (!newGrants.length) {
+      this.logPendingGrantFailures(failedGrants, false)
       return
     }
 
     const merged = [...this.pendingAccessGrants, ...newGrants]
     this.pendingAccessGrants = this.dedupePendingAccessGrants(merged)
+    this.logPendingGrantFailures(failedGrants, true)
 
     if (this.principalInputValue.trim() === snapshot) {
       this.principalInputValue = ''
@@ -685,34 +715,56 @@ export default class AccessControlModal extends WebComponent {
     principle: string,
     role: AccessRole = this.addAccessRoleValue,
     preferredLabel?: string
-  ): Promise<PendingAccessGrant | undefined> {
-    const normalizedPrinciple = this.normalizeAccessPrincipleInput(principle)
-    const resolvedPrinciple = await solidLogicSingleton.acl.classifyAccessControlSubject(normalizedPrinciple)
-    const fallbackKind = this.isHttpUri(principle) ? 'agent' : undefined
-    const subjectType = resolvedPrinciple?.kind ?? fallbackKind
-    const subjectValue = resolvedPrinciple?.subjectValue ?? normalizedPrinciple
+  ): Promise<PendingAccessGrantCreationResult> {
+    try {
+      const normalizedPrinciple = principle.trim()
+      const resolvedPrinciple = await solidLogicSingleton.acl.classifyAccessControlSubject(normalizedPrinciple)
+      const fallbackKind = this.isHttpUri(principle) ? 'agent' : undefined
+      const subjectType = resolvedPrinciple?.kind ?? fallbackKind
+      const subjectValue = resolvedPrinciple?.subjectValue ?? normalizedPrinciple
 
-    if (!subjectType) {
-      console.error(`Could not classify access target: ${principle}`)
-      return undefined
-    }
+      if (!subjectType) {
+        return {
+          principle,
+          error: 'Could not classify access target'
+        }
+      }
 
-    if (subjectType === 'origin') {
-      console.error(`Origin access grants are not supported yet: ${principle}`)
-      return undefined
-    }
+      if (subjectType === 'origin') {
+        return {
+          principle,
+          error: 'Origin access grants are not supported yet'
+        }
+      }
 
-    const label = preferredLabel ?? await this.resolvePendingAccessGrantLabel(subjectValue, principle)
+      const label = preferredLabel ?? await this.resolvePendingAccessGrantLabel(subjectValue, principle)
 
-    return {
-      subjectType,
-      subjectValue,
-      role,
-      label
+      return {
+        principle,
+        grant: {
+          subjectType,
+          subjectValue,
+          role,
+          label
+        }
+      }
+    } catch (error) {
+      return {
+        principle,
+        error: String(error)
+      }
     }
   }
 
-  private async resolvePendingAccessGrantLabel (subjectValue: string, fallbackLabel: string): Promise<string> {
+  private logPendingGrantFailures (failedGrants: string[], partial: boolean) {
+    if (!failedGrants.length) {
+      return
+    }
+
+    console.error(partial ? 'Failed to add some access grants:' : 'Failed to add access grants:', failedGrants)
+  }
+
+  private async resolvePendingAccessGrantLabel (subjectValue: string, fallbackLabel: string = subjectValue): Promise<string> {
     try {
       const subject = sym(subjectValue)
       await solidLogicSingleton.store.fetcher.load(subject.doc())
@@ -724,30 +776,15 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private dedupePendingAccessGrants (draftGrants: PendingAccessGrant[]): PendingAccessGrant[] {
-    const seen = new Set<string>()
-
-    return draftGrants.filter(draftGrant => {
-      const key = `${draftGrant.subjectType}:${draftGrant.subjectValue}`
-      if (seen.has(key)) {
-        return false
-      }
-
-      seen.add(key)
-      return true
-    })
+    return dedupeByKey(draftGrants, draftGrant => `${draftGrant.subjectType}:${draftGrant.subjectValue}`)
   }
 
   private readonly accessPrincipleOptionsProvider = defineAsyncComboboxOptionsProvider(async (filter: string) => {
-    const query = this.getPrincipleSearchTerm(filter)
-    const urlOption = this.isHttpUri(query) ? await this.createUrlOption(query) : undefined
-    const preferredOptions = this.dedupeComboboxOptions([urlOption].filter((option): option is ComboboxOptionData => Boolean(option)))
+    const query = filter.trim()
+    const preferredOptions = await this.getPreferredAccessPrincipleOptions(query)
 
     if (query.length < 2) {
-      return preferredOptions.length ? preferredOptions : [{
-        label: 'Type at least 2 characters to search',
-        value: '',
-        selectable: false
-      }]
+      return this.getShortQueryOptions(preferredOptions)
     }
 
     let entries: DirectoryEntry[] = []
@@ -758,7 +795,7 @@ export default class AccessControlModal extends WebComponent {
         sources: DEFAULT_DIRECTORY_SOURCES
       })
     } catch (error) {
-      if (!urlOption) {
+      if (!preferredOptions.length) {
         throw error
       }
     }
@@ -767,36 +804,40 @@ export default class AccessControlModal extends WebComponent {
     return [...preferredOptions, ...options]
   })
 
-  private async createUrlOption (uri: string): Promise<ComboboxOptionData | undefined> {
+  private getShortQueryOptions (preferredOptions: ComboboxOptionData[]): ComboboxOptionData[] {
+    if (preferredOptions.length) {
+      return preferredOptions
+    }
+
+    return [{
+      label: 'Type at least 2 characters to search',
+      value: '',
+      selectable: false
+    }]
+  }
+
+  private async getPreferredAccessPrincipleOptions (query: string): Promise<ComboboxOptionData[]> {
+    if (!isHttpUri(query)) {
+      return []
+    }
+
+    const urlOption = await this.createUrlOption(query)
+    return dedupeComboboxOptions(urlOption ? [urlOption] : [])
+  }
+
+  private async createUrlOption (uri: string): Promise<StringComboboxOptionData | undefined> {
     try {
       await solidLogicSingleton.store.fetcher.load(sym(uri).doc())
     } catch {
       return undefined
     }
 
-    const labelText = await this.resolvePendingAccessGrantLabel(uri, uri)
+    const labelText = await this.resolvePendingAccessGrantLabel(uri)
 
     return {
       label: labelText === uri ? `Use ${uri}` : labelText,
       value: uri
     }
-  }
-
-  private dedupeComboboxOptions (options: ComboboxOptionData[]): ComboboxOptionData[] {
-    const seen = new Set<string>()
-
-    return options.filter(option => {
-      if (typeof option.value !== 'string' || !option.value) {
-        return false
-      }
-
-      if (seen.has(option.value)) {
-        return false
-      }
-
-      seen.add(option.value)
-      return true
-    })
   }
 
   private directoryEntryToOption (entry: DirectoryEntry): ComboboxOptionData {
@@ -809,7 +850,9 @@ export default class AccessControlModal extends WebComponent {
 
   private directoryEntryToOptionTemplate (entry: DirectoryEntry) {
     return html`
-      <span style="display: inline-flex; align-items: center; gap: 8px; line-height: 1;">
+      <span class="access-grants-directory-entry">
+        <!-- This renders inside the combobox shadow DOM, so the modal stylesheet cannot reach these icons.
+             If combobox supports a dedicated option icon hook, we can move this sizing there instead. -->
         ${this.renderDirectoryEntryIcon(entry)}
         <span>${entry.label}</span>
       </span>
@@ -832,28 +875,8 @@ export default class AccessControlModal extends WebComponent {
     return nothing
   }
 
-  private getAccessGrantSearchOptions (): ComboboxOptionData[] {
-    return this.getAccessGrantEntries().map(({ subjectLabel }) => ({
-      label: subjectLabel,
-      value: subjectLabel
-    }))
-  }
-
-  private getPrincipleSearchTerm (value: string): string {
-    const lastCommaIndex = value.lastIndexOf(',')
-    if (lastCommaIndex < 0) {
-      return value.trim()
-    }
-
-    return value.slice(lastCommaIndex + 1).trim()
-  }
-
   private isHttpUri (value: string): boolean {
     return value.startsWith('http://') || value.startsWith('https://')
-  }
-
-  private normalizeAccessPrincipleInput (value: string): string {
-    return value.trim()
   }
 
   private async onCopyLinkClick (event: Event) {
