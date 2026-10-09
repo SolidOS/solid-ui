@@ -384,6 +384,64 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
+  it.each([
+    'http://www.w3.org/ns/auth/acl#AuthenticatedAgent',
+    'http://xmlns.com/foaf/0.1/Agent'
+  ])('retains non-general subjects from an authorization containing %s', async (generalClass) => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    const agent = 'https://alice.example.com/profile/card.ttl#me'
+    const group = 'https://example.com/group'
+    const agentClass = 'https://example.com/team'
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.accessGrants = [{
+      agent: [agent],
+      agentGroup: [group],
+      agentClass: [generalClass, agentClass],
+      mode: ['Read']
+    }]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+    await element.refreshAccessGrantLabels()
+    await element.updateComplete
+
+    const expectedLabel = element.getAuthorizationSubjectLabel({
+      agent: [agent],
+      agentGroup: [group],
+      agentClass: [agentClass],
+      mode: ['Read']
+    })
+    const entries = element.getSharedAccessGrantEntries()
+    expect(entries).toHaveLength(1)
+    expect(entries[0].authorization.agentClass).toEqual([agentClass])
+    expect(entries[0].subjectLabel).toBe(expectedLabel)
+    expect(element.accessGrants[0].agentClass).toEqual([generalClass, agentClass])
+    expect(element.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
+    const searchOptions = [...element.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
+      .map((option: Element) => option.textContent?.trim())
+    expect(searchOptions).toEqual([expectedLabel])
+
+    element.searchValue = 'card.ttl'
+    await element.updateComplete
+    expect(element.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
+
+    const roleSelect = element.shadowRoot.querySelector('.access-grants-list solid-ui-combobox')
+    roleSelect.dispatchEvent(new CustomEvent('change', {
+      bubbles: true,
+      composed: true,
+      detail: { option: { value: 'Editor', label: 'Editor' } }
+    }))
+    await element.updateComplete
+    await element.onSaveClick()
+
+    expect(planGrant.mock.calls.map(([, subject]) => subject)).toEqual([
+      { type: 'agent', iri: agent },
+      { type: 'agentGroup', iri: group },
+      { type: 'agentClass', iri: agentClass }
+    ])
+    document.body.removeChild(element)
+  })
+
   it('persists a changed shared access grant on save', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
@@ -411,6 +469,26 @@ describe('AccessControlModal submit', () => {
       { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' },
       ['Read', 'Write']
     )
+
+    document.body.removeChild(element)
+  })
+
+  it('aborts saving when principal lookup fails', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'not-a-principal'
+    element.publicAccessRoleValue = 'Viewer'
+
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    await element.onSaveClick()
+
+    expect(planGrant).not.toHaveBeenCalled()
+    expect(planRevoke).not.toHaveBeenCalled()
+    expect(applyPlan).not.toHaveBeenCalled()
+    expect(element.principalInputValue).toBe('not-a-principal')
+    expect(element.failed).toBe(true)
 
     document.body.removeChild(element)
   })
