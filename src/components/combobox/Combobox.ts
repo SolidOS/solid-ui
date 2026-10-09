@@ -158,15 +158,8 @@ export default class Combobox extends FormControlComponent {
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
             @focus=${this.onInputFocus}
-            @input=${() => {
-              if (this.selectOnly) {
-                this.updateDisplayValue(this.controlElement?.value ?? '')
-              } else {
-                this.controlTrait.onInput()
-              }
-
-              this.show()
-            }}
+            @click=${this.onInputClick}
+            @input=${() => this.selectOnly ? this.updateDisplayValue(this.controlElement?.value ?? '') : this.controlTrait.onInput()}
           />
           <icon-lucide-chevron-down></icon-lucide-chevron-down>
         </div>
@@ -450,6 +443,10 @@ export default class Combobox extends FormControlComponent {
   }
 
   private onInputFocus () {
+    this.show()
+  }
+
+  private onInputClick () {
     this.show()
   }
 
