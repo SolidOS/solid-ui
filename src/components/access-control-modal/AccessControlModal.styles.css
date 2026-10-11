@@ -189,13 +189,17 @@
         }
       }
 
-      .access-grants-image--group {
+      .access-grants-image--agentGroup {
         background: var(--solid-ui-color-blue-900, #083575);
       }
 
       .access-grants-image--agent,
       .access-grants-image--agentClass {
         background: var(--solid-ui-color-lavender-300, #e6dcff);
+      }
+
+      .access-grants-image--origin {
+        background: var(--solid-ui-color-green-700, #15803D);
       }
 
       .access-grants-image--unknown {
