@@ -8,7 +8,7 @@ import "./chunks/combobox-a0vVnPo8.js";
 import "./chunks/combobox-option-B-Hksiq2.js";
 import "./chunks/dialogs-root-Qiucjj9u.js";
 import "./chunks/provider-Cz7nfOje.js";
-import "./chunks/access-control-modal-pSVgvvU2.js";
+import "./chunks/access-control-modal-CItWg9rR.js";
 import "./chunks/avatar-Ck1Pz9LL.js";
 import "./chunks/login-button-CVZheLE-.js";
 import "./chunks/logout-button-MXZ7Xm9h.js";

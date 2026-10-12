@@ -59,13 +59,23 @@ var C = class extends HTMLElement {
 customElements.get("icon-lucide-circle-x") || customElements.define("icon-lucide-circle-x", C);
 //#endregion
 //#region src/components/access-control-modal/AccessControlModal.styles.css
-var w = p`:host{& h2{color:var(--solid-ui-color-gray-900,#101828);font-size:var(--solid-ui-font-size-md,1rem);font-weight:600}& .access-grants-form{font-size:var(--solid-ui-font-size-sm,.875rem);--access-role-select-width:129px;flex-direction:column;align-self:stretch;align-items:flex-start;gap:10px;padding:10px;display:flex;& p{color:var(--solid-ui-color-gray-600,#4a5565);line-height:1.5}& .access-grants-form-main{align-self:stretch;align-items:flex-start;gap:10px;display:flex;& .access-grants-input{border:1px solid var(--solid-ui-color-slate-200,#e2e8f0);background:var(--solid-ui-color-white,#fff);border-radius:5px;flex-direction:column;flex:auto;align-items:flex-start;gap:12px;min-width:0;padding:10px 15px;display:flex;& solid-ui-combobox{--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0);width:100%}}}& .access-grants-pending{flex-wrap:wrap;align-items:center;gap:8px;min-height:42px;display:flex}& .access-grants-pending-item{border:1px solid var(--solid-ui-color-gray-300,#d1d5dc);background:var(--solid-ui-color-gray-50,#f9fafb);max-width:100%;color:var(--solid-ui-color-gray-700,#374151);border-radius:5px;align-items:center;gap:6px;padding:5px 10px;display:flex}& .access-grants-pending-item-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;color:var(--solid-ui-color-gray-500,#6a7282);font-size:var(--solid-ui-font-size-xs,.75rem);line-height:1;overflow:hidden}& .access-grants-pending-item-remove{color:var(--solid-ui-color-gray-300,#d1d5dc);cursor:pointer;background:0 0;border:none;border-radius:999px;justify-content:center;align-items:center;padding:0;display:inline-flex}& .access-grants-pending-item-remove icon-lucide-circle-x{width:14px;height:14px}}& .access-grants-header,& .access-grants-list,& .access-grants-general{align-self:stretch;padding:0 10px}& .access-grants-directory-entry{align-items:center;gap:8px;line-height:1;display:inline-flex}& .access-grants-header{justify-content:space-between;align-items:center;gap:15px;display:flex;& .access-grants-search-input{--solid-ui-input-border-color:transparent;width:12ch;min-width:12ch;color:var(--solid-ui-color-zinc-500,#71717b);font-size:var(--solid-ui-font-size-sm,.875rem);flex:none;font-weight:500}}& .access-grants-list{align-items:flex-start;gap:20px;display:flex;& ul{box-sizing:border-box;border:1px solid var(--solid-ui-color-gray-200,#e5e7eb);border-radius:10px;flex-direction:column;flex:1 0 0;align-items:flex-start;gap:15px;height:195px;min-height:0;padding:15px;display:flex;overflow:hidden auto}& li{flex:none;align-items:center;gap:10px;width:100%;display:flex;& .access-grants-image{aspect-ratio:1;width:30px;height:30px;color:var(--solid-ui-color-white,#fff);text-align:center;font-size:var(--solid-ui-font-size-xs,.75rem);border-radius:999px;flex:0 0 30px;justify-content:center;align-items:center;font-weight:500;display:flex;overflow:hidden;& img{object-fit:cover;border-radius:999px;width:100%;height:100%;display:flex}& span{justify-content:center;align-items:center;width:100%;height:100%;line-height:1;display:flex}}& .access-grants-image--group{background:var(--solid-ui-color-blue-900,#083575)}& .access-grants-image--agent,& .access-grants-image--agentClass{background:var(--solid-ui-color-lavender-300,#e6dcff)}& .access-grants-image--unknown{background:var(--solid-ui-color-gray-300,#d1d5db)}& h3{min-width:0;color:var(--solid-ui-color-gray-800,#1e2939);font-size:var(--solid-ui-font-size-xs,.75rem);flex:auto;font-weight:600}& span{text-align:right;flex:none;margin-left:auto}& .access-grants-role{font-size:var(--solid-ui-font-size-xs,.75rem);flex:none;margin-left:auto}& .access-grants-role--owner{font-size:var(--solid-ui-font-size-xs,.75rem)}& .access-grants-role--editable{max-width:100%}}}& .access-grants-general{flex-direction:column;align-items:flex-start;gap:10px;display:flex;& solid-ui-combobox,& solid-ui-input{--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0)}& .access-grants-general-header{flex-direction:row;justify-content:space-between;align-self:stretch;align-items:center;gap:15px;display:flex;& .access-grants-copy-link-button-label{font-size:var(--solid-ui-font-size-xs,.75rem);font-weight:500}& .access-grants-copy-link-button icon-lucide-link{aspect-ratio:1;width:12px;height:12px}}& .access-grants-general-share{align-self:stretch;align-items:center;gap:10px;display:flex;& .access-grants-general-share-content{flex-direction:row;flex:1 0 0;align-items:flex-start;gap:10px;display:flex;& .access-grants-general-share-icon{aspect-ratio:1;background:var(--solid-ui-color-violet-50,#f5f3ff);border-radius:50px;justify-content:center;align-items:center;width:30px;height:30px;padding:5px;display:flex}& .access-grants-general-share-icon-inner{aspect-ratio:1;flex-shrink:0;justify-content:center;align-items:center;width:20px;height:20px;padding:1.25px;display:flex;& icon-lucide-globe{aspect-ratio:1;flex-shrink:0;width:17.5px;height:17.5px}}& .access-grants-general-share-text{flex:auto;min-width:0;& .access-grants-general-share-text-title{color:var(--solid-ui-color-gray-900,#101828);font-size:var(--solid-ui-font-size-sm,.875rem);font-weight:600}& .access-grants-general-share-text-description{color:var(--solid-ui-color-gray-700,#364153);font-size:var(--solid-ui-font-size-sm,.875rem)}}}}}& .access-role-select{max-width:100%;width:var(--access-role-select-width);--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0);flex:none;margin-top:25px;display:block}& .access-role-select--top{margin-top:0}& .access-role-select--compact{--solid-ui-input-border-color:transparent;flex:0 0 110px;width:110px;min-width:110px;max-width:100%;margin-top:0}& .access-role-select--general{width:120px;min-width:120px;font-size:var(--solid-ui-font-size-xs,.75rem);flex:0 0 120px;font-weight:500}& .access-grants-list li .access-role-select--compact{flex:0 0 110px;width:110px;min-width:110px}& .access-control-footer-actions{justify-content:flex-end;align-items:center;gap:15px;width:100%;display:flex;&>solid-ui-button{min-width:132px}}}`;
+var w = p`:host{& h2{color:var(--solid-ui-color-gray-900,#101828);font-size:var(--solid-ui-font-size-md,1rem);font-weight:600}& .access-grants-form{font-size:var(--solid-ui-font-size-sm,.875rem);--access-role-select-width:129px;flex-direction:column;align-self:stretch;align-items:flex-start;gap:10px;padding:10px;display:flex;& p{color:var(--solid-ui-color-gray-600,#4a5565);line-height:1.5}& .access-grants-form-main{align-self:stretch;align-items:flex-start;gap:10px;display:flex;& .access-grants-input{border:1px solid var(--solid-ui-color-slate-200,#e2e8f0);background:var(--solid-ui-color-white,#fff);border-radius:5px;flex-direction:column;flex:auto;align-items:flex-start;gap:12px;min-width:0;padding:10px 15px;display:flex;& solid-ui-combobox{--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0);width:100%}}}& .access-grants-pending{flex-wrap:wrap;align-items:center;gap:8px;min-height:42px;display:flex}& .access-grants-pending-item{border:1px solid var(--solid-ui-color-gray-300,#d1d5dc);background:var(--solid-ui-color-gray-50,#f9fafb);max-width:100%;color:var(--solid-ui-color-gray-700,#374151);border-radius:5px;align-items:center;gap:6px;padding:5px 10px;display:flex}& .access-grants-pending-item-label{text-overflow:ellipsis;white-space:nowrap;min-width:0;color:var(--solid-ui-color-gray-500,#6a7282);font-size:var(--solid-ui-font-size-xs,.75rem);line-height:1;overflow:hidden}& .access-grants-pending-item-remove{color:var(--solid-ui-color-gray-300,#d1d5dc);cursor:pointer;background:0 0;border:none;border-radius:999px;justify-content:center;align-items:center;padding:0;display:inline-flex}& .access-grants-pending-item-remove icon-lucide-circle-x{width:14px;height:14px}}& .access-grants-header,& .access-grants-list,& .access-grants-general{align-self:stretch;padding:0 10px}& .access-grants-directory-entry{align-items:center;gap:8px;line-height:1;display:inline-flex}& .access-grants-header{justify-content:space-between;align-items:center;gap:15px;display:flex;& .access-grants-search-input{--solid-ui-input-border-color:transparent;width:12ch;min-width:12ch;color:var(--solid-ui-color-zinc-500,#71717b);font-size:var(--solid-ui-font-size-sm,.875rem);flex:none;font-weight:500}}& .access-grants-list{align-items:flex-start;gap:20px;display:flex;& ul{box-sizing:border-box;border:1px solid var(--solid-ui-color-gray-200,#e5e7eb);border-radius:10px;flex-direction:column;flex:1 0 0;align-items:flex-start;gap:15px;height:195px;min-height:0;padding:15px;display:flex;overflow:hidden auto}& li{flex:none;align-items:center;gap:10px;width:100%;display:flex;& .access-grants-image{aspect-ratio:1;width:30px;height:30px;color:var(--solid-ui-color-white,#fff);text-align:center;font-size:var(--solid-ui-font-size-xs,.75rem);border-radius:999px;flex:0 0 30px;justify-content:center;align-items:center;font-weight:500;display:flex;overflow:hidden;& img{object-fit:cover;border-radius:999px;width:100%;height:100%;display:flex}& span{justify-content:center;align-items:center;width:100%;height:100%;line-height:1;display:flex}}& .access-grants-image--agentGroup{background:var(--solid-ui-color-blue-900,#083575)}& .access-grants-image--agent,& .access-grants-image--agentClass{background:var(--solid-ui-color-lavender-300,#e6dcff)}& .access-grants-image--origin{background:var(--solid-ui-color-green-700,#15803d)}& .access-grants-image--unknown{background:var(--solid-ui-color-gray-300,#d1d5db)}& h3{min-width:0;color:var(--solid-ui-color-gray-800,#1e2939);font-size:var(--solid-ui-font-size-xs,.75rem);flex:auto;font-weight:600}& span{text-align:right;flex:none;margin-left:auto}& .access-grants-role{font-size:var(--solid-ui-font-size-xs,.75rem);flex:none;margin-left:auto}& .access-grants-role--owner{font-size:var(--solid-ui-font-size-xs,.75rem)}& .access-grants-role--editable{max-width:100%}}}& .access-grants-general{flex-direction:column;align-items:flex-start;gap:10px;display:flex;& solid-ui-combobox,& solid-ui-input{--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0)}& .access-grants-general-header{flex-direction:row;justify-content:space-between;align-self:stretch;align-items:center;gap:15px;display:flex;& .access-grants-copy-link-button-label{font-size:var(--solid-ui-font-size-xs,.75rem);font-weight:500}& .access-grants-copy-link-button icon-lucide-link{aspect-ratio:1;width:12px;height:12px}}& .access-grants-general-share{align-self:stretch;align-items:center;gap:10px;display:flex;& .access-grants-general-share-content{flex-direction:row;flex:1 0 0;align-items:flex-start;gap:10px;display:flex;& .access-grants-general-share-icon{aspect-ratio:1;background:var(--solid-ui-color-violet-50,#f5f3ff);border-radius:50px;justify-content:center;align-items:center;width:30px;height:30px;padding:5px;display:flex}& .access-grants-general-share-icon-inner{aspect-ratio:1;flex-shrink:0;justify-content:center;align-items:center;width:20px;height:20px;padding:1.25px;display:flex;& icon-lucide-globe{aspect-ratio:1;flex-shrink:0;width:17.5px;height:17.5px}}& .access-grants-general-share-text{flex:auto;min-width:0;& .access-grants-general-share-text-title{color:var(--solid-ui-color-gray-900,#101828);font-size:var(--solid-ui-font-size-sm,.875rem);font-weight:600}& .access-grants-general-share-text-description{color:var(--solid-ui-color-gray-700,#364153);font-size:var(--solid-ui-font-size-sm,.875rem)}}}}}& .access-role-select{max-width:100%;width:var(--access-role-select-width);--solid-ui-input-border-color:var(--solid-ui-color-slate-200,#e2e8f0);flex:none;margin-top:25px;display:block}& .access-role-select--top{margin-top:0}& .access-role-select--compact{--solid-ui-input-border-color:transparent;flex:0 0 110px;width:110px;min-width:110px;max-width:100%;margin-top:0}& .access-role-select--general{width:120px;min-width:120px;font-size:var(--solid-ui-font-size-xs,.75rem);flex:0 0 120px;font-weight:500}& .access-grants-list li .access-role-select--compact{flex:0 0 110px;width:110px;min-width:110px}& .access-control-footer-actions{justify-content:flex-end;align-items:center;gap:15px;width:100%;display:flex;&>solid-ui-button{min-width:132px}}}`;
 //#endregion
 //#region src/components/access-control-modal/helpers.ts
 function T(e) {
-	return e.startsWith("http://") || e.startsWith("https://");
+	try {
+		let t = new URL(e);
+		return (t.protocol === "http:" || t.protocol === "https:") && !!t.hostname;
+	} catch {
+		return !1;
+	}
 }
-function E(e, t) {
+function E(e) {
+	if (!T(e)) return !1;
+	let t = new URL(e);
+	return t.pathname === "/" && !t.search && !t.hash && !t.username && !t.password;
+}
+function D(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of e) {
 		let e = t(r);
@@ -73,37 +83,37 @@ function E(e, t) {
 	}
 	return [...n.values()];
 }
-function D(e) {
-	return E(e, (e) => e.value);
+function O(e) {
+	return D(e, (e) => e.value);
 }
 //#endregion
 //#region src/components/access-control-modal/AccessControlModal.ts
-var O, k, A, j, M, N, P, F, I, L, R, z, B, V, H, ee, te, ne, re, ie, ae, oe, U, W, G, K, q, se, ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, Te;
+var k, A, j, M, N, P, F, I, L, R, z, B, V, H, U, ee, te, ne, re, ie, ae, oe, W, G, K, q, se, ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, Te, Ee;
 function J(e, t, n) {
-	Ee(e, t), t.set(e, n);
+	De(e, t), t.set(e, n);
 }
-function Ee(e, t) {
+function De(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
 function Y(e, t, n) {
-	return e.set(De(e, t), n), n;
+	return e.set(Oe(e, t), n), n;
 }
 function X(e, t) {
-	return e.get(De(e, t));
+	return e.get(Oe(e, t));
 }
-function De(e, t, n) {
+function Oe(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
 function Z(e, t, n) {
-	return (t = Q(t)) in e ? Object.defineProperty(e, t, {
+	return (t = Ae(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function Oe(e, t, n, r, i, a) {
+function ke(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -126,13 +136,13 @@ function Oe(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: Ae(function() {
+				get: Q(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || Ae(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || Q(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -192,7 +202,7 @@ function Oe(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return je(t) === e;
+			return Me(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -206,7 +216,7 @@ function Oe(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : Q(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : Ae(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -219,11 +229,11 @@ function Oe(e, t, n, r, i, a) {
 		}
 	};
 }
-function Q(e) {
-	var t = ke(e, "string");
+function Ae(e) {
+	var t = je(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function ke(e, t) {
+function je(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -233,7 +243,7 @@ function ke(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function Ae(e, t, n) {
+function Q(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -243,21 +253,21 @@ function Ae(e, t, n) {
 	} catch {}
 	return e;
 }
-function je(e) {
+function Me(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function Me(e) {
+function Ne(e) {
 	return e;
 }
-function Ne(e) {
+function Pe(e) {
 	return e != null;
 }
 ne = [u("solid-ui-access-control-modal")];
 var $;
-new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), Te = (re = d({ attribute: !1 }), ae = d({ attribute: !1 }), U = m(), G = m(), q = m(), ce = m(), ue = m(), fe = m(), me = m(), ge = m(), ve = m(), be = m(), Se = g("solid-ui-dialog"), "subjectUri"), k = class extends f {
+new (Te = (j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), Ee = (re = d({ attribute: !1 }), ae = d({ attribute: !1 }), W = m(), K = m(), se = m(), le = m(), de = m(), pe = m(), he = m(), _e = m(), ye = m(), xe = m(), Ce = g("solid-ui-dialog"), "subjectUri"), A = class extends f {
 	constructor(...e) {
-		super(...e), J(this, A, (ee(this), ie(this, void 0))), J(this, j, oe(this, void 0)), J(this, M, W(this, "")), J(this, N, K(this, "Viewer")), J(this, P, se(this, "No Access")), J(this, F, le(this, "No Access")), J(this, I, de(this, "")), J(this, L, pe(this, !1)), J(this, R, he(this, !1)), J(this, z, _e(this, [])), J(this, B, ye(this, [])), J(this, V, xe(this, [])), J(this, H, Ce(this, null)), Z(this, "accessPrincipleOptionsProvider", _(async (e) => {
+		super(...e), J(this, j, (ee(this), ie(this, void 0))), J(this, M, oe(this, void 0)), J(this, N, G(this, "")), J(this, P, q(this, "Viewer")), J(this, F, ce(this, "No Access")), J(this, I, ue(this, "No Access")), J(this, L, fe(this, "")), J(this, R, me(this, !1)), J(this, z, ge(this, !1)), J(this, B, ve(this, [])), J(this, V, be(this, [])), J(this, H, Se(this, [])), J(this, U, we(this, null)), Z(this, "accessPrincipleOptionsProvider", _(async (e) => {
 			let t = e.trim(), r = await this.getPreferredAccessPrincipleOptions(t);
 			if (t.length < 2) return this.getShortQueryOptions(r);
 			let i = [];
@@ -273,83 +283,83 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 			return [...r, ...o];
 		}));
 	}
-	get [Te]() {
-		return X(A, this);
-	}
-	set subjectUri(e) {
-		Y(A, this, e);
-	}
-	get accessGrants() {
+	get [Ee]() {
 		return X(j, this);
 	}
-	set accessGrants(e) {
+	set subjectUri(e) {
 		Y(j, this, e);
 	}
-	get principalInputValue() {
+	get accessGrants() {
 		return X(M, this);
 	}
-	set principalInputValue(e) {
+	set accessGrants(e) {
 		Y(M, this, e);
 	}
-	get addAccessRoleValue() {
+	get principalInputValue() {
 		return X(N, this);
 	}
-	set addAccessRoleValue(e) {
+	set principalInputValue(e) {
 		Y(N, this, e);
 	}
-	get authenticatedAccessRoleValue() {
+	get addAccessRoleValue() {
 		return X(P, this);
 	}
-	set authenticatedAccessRoleValue(e) {
+	set addAccessRoleValue(e) {
 		Y(P, this, e);
 	}
-	get publicAccessRoleValue() {
+	get authenticatedAccessRoleValue() {
 		return X(F, this);
 	}
-	set publicAccessRoleValue(e) {
+	set authenticatedAccessRoleValue(e) {
 		Y(F, this, e);
 	}
-	get searchValue() {
+	get publicAccessRoleValue() {
 		return X(I, this);
 	}
-	set searchValue(e) {
+	set publicAccessRoleValue(e) {
 		Y(I, this, e);
 	}
-	get failed() {
+	get searchValue() {
 		return X(L, this);
 	}
-	set failed(e) {
+	set searchValue(e) {
 		Y(L, this, e);
 	}
-	get submitting() {
+	get failed() {
 		return X(R, this);
 	}
-	set submitting(e) {
+	set failed(e) {
 		Y(R, this, e);
 	}
-	get pendingAccessGrants() {
+	get submitting() {
 		return X(z, this);
 	}
-	set pendingAccessGrants(e) {
+	set submitting(e) {
 		Y(z, this, e);
 	}
-	get accessGrantRoles() {
+	get pendingAccessGrants() {
 		return X(B, this);
 	}
-	set accessGrantRoles(e) {
+	set pendingAccessGrants(e) {
 		Y(B, this, e);
 	}
-	get accessGrantLabels() {
+	get accessGrantRoles() {
 		return X(V, this);
 	}
-	set accessGrantLabels(e) {
+	set accessGrantRoles(e) {
 		Y(V, this, e);
 	}
-	get dialog() {
+	get accessGrantLabels() {
 		return X(H, this);
 	}
-	set dialog(e) {
+	set accessGrantLabels(e) {
 		Y(H, this, e);
+	}
+	get dialog() {
+		return X(U, this);
+	}
+	set dialog(e) {
+		Y(U, this, e);
 	}
 	willUpdate(e) {
 		super.willUpdate(e), e.has("accessGrants") && (this.accessGrantRoles = this.accessGrants?.map((e) => this.getAuthorizationRole(e)) ?? [], this.authenticatedAccessRoleValue = this.getAuthenticatedAccessRole(), this.publicAccessRoleValue = this.getPublicAccessRole(), this.refreshAccessGrantLabels());
@@ -416,7 +426,7 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 			};
 		}
 		if (t.agentGroup[0]) return {
-			kind: "group",
+			kind: "agentGroup",
 			text: this.getInitials(r, 1)
 		};
 		let a = t.agentClass[0];
@@ -428,7 +438,10 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 				text: t ? "" : this.getInitials(r, 2)
 			};
 		}
-		return {
+		return t.origin[0] ? {
+			kind: "origin",
+			text: "O"
+		} : {
 			kind: "unknown",
 			text: "?"
 		};
@@ -447,7 +460,8 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 		return [
 			...e.agent,
 			...e.agentGroup,
-			...e.agentClass
+			...e.agentClass,
+			...e.origin
 		];
 	}
 	getAuthorizationSubjectLabel(t) {
@@ -743,7 +757,7 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 		}, this.publicAccessRoleValue === n ? void 0 : {
 			subject: o,
 			role: this.publicAccessRoleValue
-		}].filter(Ne);
+		}].filter(Pe);
 	}
 	onAddAccessRoleInput(e) {
 		let t = this.getRoleValueFromEvent(e);
@@ -788,7 +802,7 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 				subjects: i,
 				role: r
 			};
-		}).filter(Ne);
+		}).filter(Pe);
 	}
 	getInitialAccessGrantRoles() {
 		return this.accessGrants?.map((e) => this.getAuthorizationRole(e)) ?? [];
@@ -806,6 +820,10 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 			{
 				type: "agentClass",
 				iris: e.agentClass
+			},
+			{
+				type: "origin",
+				iris: e.origin
 			}
 		].flatMap(({ type: e, iris: t }) => t.map((t) => ({
 			type: e,
@@ -854,17 +872,17 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 	}
 	async createPendingAccessGrant(e, t = this.addAccessRoleValue, n) {
 		try {
-			let r = e.trim(), i = await a.acl.classifyAccessControlSubject(r), o = this.isHttpUri(e) ? "agent" : void 0, s = i?.kind ?? o, c = i?.subjectValue ?? r;
-			return s ? s === "origin" ? {
-				principle: e,
-				error: "Origin access grants are not supported yet"
-			} : {
+			let r = e.trim(), i = this.normalizeOriginInput(r), o = i ? {
+				kind: "origin",
+				subjectValue: i
+			} : await a.acl.classifyAccessControlSubject(r), s = T(e) ? "agent" : void 0, c = o?.kind ?? s, l = o?.subjectValue ?? r;
+			return c ? {
 				principle: e,
 				grant: {
-					subjectType: s,
-					subjectValue: c,
+					subjectType: c,
+					subjectValue: l,
 					role: t,
-					label: n ?? await this.resolvePendingAccessGrantLabel(c, e)
+					label: n ?? await this.resolvePendingAccessGrantLabel(l, e)
 				}
 			} : {
 				principle: e,
@@ -889,7 +907,7 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 		}
 	}
 	dedupePendingAccessGrants(e) {
-		return E(e, (e) => `${e.subjectType}:${e.subjectValue}`);
+		return D(e, (e) => `${e.subjectType}:${e.subjectValue}`);
 	}
 	getShortQueryOptions(e) {
 		return e.length ? e : [{
@@ -899,9 +917,27 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 		}];
 	}
 	async getPreferredAccessPrincipleOptions(e) {
+		let t = this.normalizeOriginInput(e);
+		if (t) return [{
+			label: `Use origin ${t}`,
+			value: t
+		}];
 		if (!T(e)) return [];
-		let t = await this.createUrlOption(e);
-		return D(t ? [t] : []);
+		if (E(e)) return [{
+			label: `Use origin ${new URL(e).origin}`,
+			value: new URL(e).origin
+		}];
+		let n = await this.createUrlOption(e);
+		return O(n ? [n] : []);
+	}
+	normalizeOriginInput(e) {
+		let t = e.trim();
+		if (t && !T(t)) try {
+			let e = new URL(`https://${t}`), n = e.protocol === "http:" || e.protocol === "https:", r = e.pathname === "/" && !e.search && !e.hash, i = e.hostname.includes(".") || e.hostname.includes(":");
+			return n && r && i && !e.username && !e.password ? e.origin : void 0;
+		} catch {
+			return;
+		}
 	}
 	async createUrlOption(t) {
 		try {
@@ -935,9 +971,6 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 	renderDirectoryEntryIcon(e) {
 		return e.sources.includes("contacts") || e.sources.includes("groups") ? h`<icon-lucide-book-user style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-book-user>` : e.sources.includes("friends") ? h`<icon-lucide-users style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-users>` : e.sources.includes("catalog") ? h`<icon-lucide-user-round style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-user-round>` : l;
 	}
-	isHttpUri(e) {
-		return e.startsWith("http://") || e.startsWith("https://");
-	}
 	async onCopyLinkClick(e) {
 		if (e.preventDefault(), this.subjectUri) try {
 			await navigator.clipboard.writeText(this.subjectUri);
@@ -945,7 +978,7 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 			console.error("Failed to copy resource link", e);
 		}
 	}
-}, {e: [ie, oe, W, K, se, le, de, pe, he, _e, ye, xe, Ce, ee], c: [$, te]} = Oe(k, [
+}, {e: [ie, oe, G, q, ce, ue, fe, me, ge, ve, be, Se, we, ee], c: [$, te]} = ke(A, [
 	[
 		re,
 		1,
@@ -957,69 +990,69 @@ new (we = (A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M =
 		"accessGrants"
 	],
 	[
-		U,
+		W,
 		1,
 		"principalInputValue"
 	],
 	[
-		G,
+		K,
 		1,
 		"addAccessRoleValue"
 	],
 	[
-		q,
+		se,
 		1,
 		"authenticatedAccessRoleValue"
 	],
 	[
-		ce,
+		le,
 		1,
 		"publicAccessRoleValue"
 	],
 	[
-		ue,
+		de,
 		1,
 		"searchValue"
 	],
 	[
-		fe,
+		pe,
 		1,
 		"failed"
 	],
 	[
-		me,
+		he,
 		1,
 		"submitting"
 	],
 	[
-		ge,
+		_e,
 		1,
 		"pendingAccessGrants"
 	],
 	[
-		ve,
+		ye,
 		1,
 		"accessGrantRoles"
 	],
 	[
-		be,
+		xe,
 		1,
 		"accessGrantLabels"
 	],
 	[
-		Se,
+		Ce,
 		1,
 		"dialog"
 	]
-], ne, 0, void 0, f), k), O = class extends Me {
+], ne, 0, void 0, f), A), k = class extends Ne {
 	constructor() {
 		super($), Z(this, "styles", w), te();
 	}
-}, Z(O, we, void 0), O)();
+}, Z(k, Te, void 0), k)();
 //#endregion
 //#region src/components/access-control-modal/index.ts
-var Pe = $;
+var Fe = $;
 //#endregion
-export { $ as n, Pe as t };
+export { $ as n, Fe as t };
 
-//# sourceMappingURL=access-control-modal-pSVgvvU2.js.map
+//# sourceMappingURL=access-control-modal-CItWg9rR.js.map

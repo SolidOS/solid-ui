@@ -1,6 +1,5 @@
 import { AccessControlSubjectKind, AccessRole, AccessSubject, Authorization } from 'solid-logic';
-export type AccessControlBadgeKind = 'agent' | 'group' | 'agentClass' | 'unknown';
-export type PendingAccessSubjectKind = Exclude<AccessControlSubjectKind, 'origin'>;
+export type AccessControlBadgeKind = AccessControlSubjectKind | 'unknown';
 export type AccessControlBadge = {
     kind: AccessControlBadgeKind;
     image?: string;
@@ -8,7 +7,7 @@ export type AccessControlBadge = {
 };
 export type PendingAccessGrant = {
     id?: string;
-    subjectType: PendingAccessSubjectKind;
+    subjectType: AccessControlSubjectKind;
     subjectValue: string;
     role: AccessRole;
     label: string;
@@ -26,7 +25,7 @@ export type ChangedAccessGrant = {
     role: AccessRole;
 };
 export type AuthorizationSubjectSet = {
-    type: PendingAccessSubjectKind;
+    type: AccessControlSubjectKind;
     iris: string[];
 };
 export type AccessChange = {

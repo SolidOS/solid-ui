@@ -1,8 +1,18 @@
 //#region src/components/access-control-modal/helpers.ts
 function e(e) {
-	return e.startsWith("http://") || e.startsWith("https://");
+	try {
+		let t = new URL(e);
+		return (t.protocol === "http:" || t.protocol === "https:") && !!t.hostname;
+	} catch {
+		return !1;
+	}
 }
-function t(e, t) {
+function t(t) {
+	if (!e(t)) return !1;
+	let n = new URL(t);
+	return n.pathname === "/" && !n.search && !n.hash && !n.username && !n.password;
+}
+function n(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of e) {
 		let e = t(r);
@@ -10,10 +20,10 @@ function t(e, t) {
 	}
 	return [...n.values()];
 }
-function n(e) {
-	return t(e, (e) => e.value);
+function r(e) {
+	return n(e, (e) => e.value);
 }
 //#endregion
-export { t as dedupeByKey, n as dedupeComboboxOptions, e as isHttpUri };
+export { n as dedupeByKey, r as dedupeComboboxOptions, e as isAbsoluteHttpUri, t as isOriginUrl };
 
 //# sourceMappingURL=helpers.esm.js.map

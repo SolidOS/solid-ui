@@ -83,11 +83,11 @@ export default class AccessControlModal extends WebComponent {
     private readonly accessPrincipleOptionsProvider;
     private getShortQueryOptions;
     private getPreferredAccessPrincipleOptions;
+    private normalizeOriginInput;
     private createUrlOption;
     private directoryEntryToOption;
     private directoryEntryToOptionTemplate;
     private renderDirectoryEntryIcon;
-    private isHttpUri;
     private onCopyLinkClick;
 }
 //# sourceMappingURL=AccessControlModal.d.ts.map
