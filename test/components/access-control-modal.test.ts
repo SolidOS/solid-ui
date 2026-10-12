@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { isAbsoluteHttpUri, isOriginUrl } from '../../src/components/access-control-modal/helpers'
 
 const planGrant = vi.fn()
 const planRevoke = vi.fn()
@@ -61,6 +62,41 @@ describe('AccessControlModal submit', () => {
     await import('../../src/components/access-control-modal/AccessControlModal')
   })
 
+  describe('access-control URL predicates', () => {
+    it.each([
+      'http://example.com',
+      'https://example.com/path',
+      'https://example.com:8443/resource'
+    ])('accepts an absolute HTTP URI: %s', value => {
+      expect(isAbsoluteHttpUri(value)).toBe(true)
+    })
+
+    it.each([
+      'example.com',
+      '/relative/path',
+      'mailto:alice@example.com',
+      'not a URL'
+    ])('rejects a non-absolute HTTP URI: %s', value => {
+      expect(isAbsoluteHttpUri(value)).toBe(false)
+    })
+
+    it.each([
+      'http://example.com',
+      'https://example.com/',
+      'https://example.com:8443'
+    ])('recognizes an origin URL: %s', value => {
+      expect(isOriginUrl(value)).toBe(true)
+    })
+
+    it.each([
+      'https://example.com/path',
+      'https://example.com?query=value',
+      'https://user:password@example.com'
+    ])('rejects a URL with non-origin components: %s', value => {
+      expect(isOriginUrl(value)).toBe(false)
+    })
+  })
+
   it('queues a grant on submit without saving it', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
@@ -73,6 +109,25 @@ describe('AccessControlModal submit', () => {
     expect(applyPlan).not.toHaveBeenCalled()
     expect(element.pendingAccessGrants).toHaveLength(1)
     expect(element.principalInputValue).toBe('')
+  })
+
+  it.each([
+    ['app.example', 'https://app.example'],
+    ['www.sharonstratsianis.com', 'https://www.sharonstratsianis.com']
+  ])('queues a bare origin as %s', async (input, origin) => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = input
+
+    await element.onSubmit(new Event('submit'))
+
+    expect(classifyAccessControlSubject).not.toHaveBeenCalled()
+    expect(element.pendingAccessGrants).toEqual([
+      expect.objectContaining({
+        subjectType: 'origin',
+        subjectValue: origin
+      })
+    ])
   })
 
   it('keeps newer input when an async lookup resolves later', async () => {
@@ -137,6 +192,26 @@ describe('AccessControlModal submit', () => {
     )
     expect(applyPlan).toHaveBeenCalledTimes(1)
     expect(element.submitting).toBe(false)
+    expect(element.pendingAccessGrants).toEqual([])
+  })
+
+  it('passes a queued origin grant to planGrant on save', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'www.sharonstratsianis.com'
+    element.addAccessRoleValue = 'Editor'
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenCalledWith(
+      'https://example.com/resource.ttl',
+      {
+        type: 'origin',
+        iri: 'https://www.sharonstratsianis.com'
+      },
+      ['Read', 'Write']
+    )
+    expect(applyPlan).toHaveBeenCalledTimes(1)
     expect(element.pendingAccessGrants).toEqual([])
   })
 
@@ -276,6 +351,7 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
+      origin: [],
       mode: ['Read']
     }]
 
@@ -333,6 +409,7 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
+      origin: [],
       mode: ['Read']
     }]
 
@@ -355,18 +432,21 @@ describe('AccessControlModal submit', () => {
         agent: ['https://alice.example.com/profile/card.ttl#me'],
         agentGroup: [],
         agentClass: [],
+        origin: [],
         mode: ['Read']
       },
       {
         agent: [],
         agentGroup: [],
         agentClass: ['http://www.w3.org/ns/auth/acl#AuthenticatedAgent'],
+        origin: [],
         mode: ['Read', 'Write']
       },
       {
         agent: [],
         agentGroup: [],
         agentClass: ['http://xmlns.com/foaf/0.1/Agent'],
+        origin: [],
         mode: ['Read']
       }
     ]
@@ -397,6 +477,7 @@ describe('AccessControlModal submit', () => {
       agent: [agent],
       agentGroup: [group],
       agentClass: [generalClass, agentClass],
+      origin: [],
       mode: ['Read']
     }]
 
@@ -409,6 +490,7 @@ describe('AccessControlModal submit', () => {
       agent: [agent],
       agentGroup: [group],
       agentClass: [agentClass],
+      origin: [],
       mode: ['Read']
     })
     const entries = element.getSharedAccessGrantEntries()
@@ -449,6 +531,7 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: [],
       agentClass: [],
+      origin: [],
       mode: ['Read']
     }]
 
@@ -474,6 +557,7 @@ describe('AccessControlModal submit', () => {
   })
 
   it('aborts saving when principal lookup fails', async () => {
+    classifyAccessControlSubject.mockResolvedValueOnce(undefined)
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
     element.principalInputValue = 'not-a-principal'
@@ -500,6 +584,7 @@ describe('AccessControlModal submit', () => {
       agent: ['https://alice.example.com/profile/card.ttl#me'],
       agentGroup: ['https://example.com/group'],
       agentClass: [],
+      origin: [],
       mode: ['Read']
     }]
 

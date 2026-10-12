@@ -26,7 +26,7 @@ import '@/components/combobox-option'
 import styles from './AccessControlModal.styles.css'
 import type { ComboboxChangeEvent } from '@/components/combobox'
 import type { AccessChange, AccessControlBadge, AccessGrantEntry, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
-import { dedupeByKey, dedupeComboboxOptions, isHttpUri, type StringComboboxOptionData } from './helpers'
+import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, type StringComboboxOptionData } from './helpers'
 
 function isDefined<T> (value: T | undefined | null): value is T {
   return value !== undefined && value !== null
@@ -188,7 +188,7 @@ export default class AccessControlModal extends WebComponent {
     const agentGroup = authorization.agentGroup[0]
     if (agentGroup) {
       return {
-        kind: 'group' as const,
+        kind: 'agentGroup' as const,
         text: this.getInitials(resolvedSubjectLabel, 1)
       }
     }
@@ -200,6 +200,14 @@ export default class AccessControlModal extends WebComponent {
         kind: 'agentClass' as const,
         image,
         text: image ? '' : this.getInitials(resolvedSubjectLabel, 2)
+      }
+    }
+
+    const origin = authorization.origin[0]
+    if (origin) {
+      return {
+        kind: 'origin' as const,
+        text: 'O'
       }
     }
 
@@ -228,6 +236,7 @@ export default class AccessControlModal extends WebComponent {
       ...authorization.agent,
       ...authorization.agentGroup,
       ...authorization.agentClass,
+      ...authorization.origin,
     ]
   }
 
@@ -753,7 +762,8 @@ export default class AccessControlModal extends WebComponent {
     const subjectSets: AuthorizationSubjectSet[] = [
       { type: 'agent', iris: authorization.agent },
       { type: 'agentGroup', iris: authorization.agentGroup },
-      { type: 'agentClass', iris: authorization.agentClass }
+      { type: 'agentClass', iris: authorization.agentClass },
+      { type: 'origin', iris: authorization.origin }
     ]
 
     return subjectSets.flatMap(({ type, iris }) => iris.map(iri => ({ type, iri })))
@@ -846,8 +856,11 @@ export default class AccessControlModal extends WebComponent {
   ): Promise<PendingAccessGrantCreationResult> {
     try {
       const normalizedPrinciple = principle.trim()
-      const resolvedPrinciple = await solidLogicSingleton.acl.classifyAccessControlSubject(normalizedPrinciple)
-      const fallbackKind = this.isHttpUri(principle) ? 'agent' : undefined
+      const normalizedOrigin = this.normalizeOriginInput(normalizedPrinciple)
+      const resolvedPrinciple = normalizedOrigin
+        ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
+        : await solidLogicSingleton.acl.classifyAccessControlSubject(normalizedPrinciple)
+      const fallbackKind = isAbsoluteHttpUri(principle) ? 'agent' : undefined
       const subjectType = resolvedPrinciple?.kind ?? fallbackKind
       const subjectValue = resolvedPrinciple?.subjectValue ?? normalizedPrinciple
 
@@ -855,13 +868,6 @@ export default class AccessControlModal extends WebComponent {
         return {
           principle,
           error: 'Could not classify access target'
-        }
-      }
-
-      if (subjectType === 'origin') {
-        return {
-          principle,
-          error: 'Origin access grants are not supported yet'
         }
       }
 
@@ -945,12 +951,48 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private async getPreferredAccessPrincipleOptions (query: string): Promise<ComboboxOptionData[]> {
-    if (!isHttpUri(query)) {
+    const normalizedOrigin = this.normalizeOriginInput(query)
+    if (normalizedOrigin) {
+      return [{
+        label: `Use origin ${normalizedOrigin}`,
+        value: normalizedOrigin
+      }]
+    }
+
+    if (!isAbsoluteHttpUri(query)) {
       return []
+    }
+
+    if (isOriginUrl(query)) {
+      return [{
+        label: `Use origin ${new URL(query).origin}`,
+        value: new URL(query).origin
+      }]
     }
 
     const urlOption = await this.createUrlOption(query)
     return dedupeComboboxOptions(urlOption ? [urlOption] : [])
+  }
+
+  private normalizeOriginInput (value: string): string | undefined {
+    const trimmedValue = value.trim()
+    if (!trimmedValue || isAbsoluteHttpUri(trimmedValue)) {
+      return undefined
+    }
+
+    try {
+      const parsed = new URL(`https://${trimmedValue}`)
+      const isHttpOrigin = parsed.protocol === 'http:' || parsed.protocol === 'https:'
+      const hasOnlyOriginParts = parsed.pathname === '/' && !parsed.search && !parsed.hash
+      const isRecognizedHost = parsed.hostname.includes('.') ||
+        parsed.hostname.includes(':')
+
+      return isHttpOrigin && hasOnlyOriginParts && isRecognizedHost && !parsed.username && !parsed.password
+        ? parsed.origin
+        : undefined
+    } catch {
+      return undefined
+    }
   }
 
   private async createUrlOption (uri: string): Promise<StringComboboxOptionData | undefined> {
@@ -1001,10 +1043,6 @@ export default class AccessControlModal extends WebComponent {
     }
 
     return nothing
-  }
-
-  private isHttpUri (value: string): boolean {
-    return value.startsWith('http://') || value.startsWith('https://')
   }
 
   private async onCopyLinkClick (event: Event) {
