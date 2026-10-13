@@ -38,4 +38,13 @@ export type AuthorizationSubjectSet = {
 export type AccessChange = {
   subject: AccessSubject
   role: AccessRole
+  label: string
+}
+
+export type AccessSaveError = {
+  action: 'grant' | 'revoke' | 'save'
+  targetUri: string
+  label: string
+  role?: AccessRole
+  message: string
 }

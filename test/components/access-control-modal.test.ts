@@ -260,6 +260,193 @@ describe('AccessControlModal submit', () => {
     expect(element.pendingAccessGrants).toEqual([])
   })
 
+  it('attempts every queued change and reports only the failed changes', async () => {
+    const failedDuringPlanning = new Set([2, 7])
+    const failedDuringApply = new Set([4, 10])
+    const grants = Array.from({ length: 12 }, (_, index) => ({
+      subjectType: 'agent',
+      subjectValue: `https://example.com/agent-${index}`,
+      role: 'Editor',
+      label: `Agent ${index}`
+    }))
+
+    planGrant.mockImplementation(async (subjectUri: string, subject: { iri: string }) => {
+      const index = Number(subject.iri.match(/agent-(\d+)$/)?.[1])
+      if (failedDuringPlanning.has(index)) {
+        throw new Error(`planning failed for ${index}`)
+      }
+
+      return { target: `${subject.iri}.acl`, deletes: [], inserts: [] }
+    })
+    applyPlan.mockImplementation(async (plan: { target: string }) => {
+      const index = Number(plan.target.match(/agent-(\d+)\.acl$/)?.[1])
+      if (failedDuringApply.has(index)) {
+        throw new Error(`apply failed for ${index}`)
+      }
+
+      return new Response('ok', { status: 200 })
+    })
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = grants
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    expect(planGrant).toHaveBeenCalledTimes(grants.length)
+    expect(applyPlan).toHaveBeenCalledTimes(grants.length - failedDuringPlanning.size)
+
+    const saveErrorState = element.shadowRoot.querySelector('solid-ui-error-state')
+    expect(saveErrorState).not.toBeNull()
+    const errorItems = [...saveErrorState.querySelectorAll('li')].map((item: Element) => item.textContent)
+    const errorLabels = [...saveErrorState.querySelectorAll('li .access-control-save-error-label')].map((label: Element) => label.textContent)
+    const errorText = errorItems.join(' ')
+    expect(errorLabels).toEqual(['Agent 2', 'Agent 4', 'Agent 7', 'Agent 10'])
+    expect(errorText.match(/Could not grant Editor/g)).toHaveLength(4)
+
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    document.body.removeChild(element)
+  })
+
+  it('keeps the dialog open with partial failures and shows the successful ACL change', async () => {
+    const successfulGrant = {
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/successful-agent',
+      role: 'Editor',
+      label: 'Successful agent'
+    }
+    const failedGrant = {
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/failed-agent',
+      role: 'Editor',
+      label: 'Failed agent'
+    }
+    planGrant.mockImplementation(async (_subjectUri: string, subject: { iri: string }) => {
+      if (subject.iri === failedGrant.subjectValue) {
+        throw new Error('grant failed')
+      }
+      return { target: `${subject.iri}.acl`, deletes: [], inserts: [] }
+    })
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [successfulGrant, failedGrant]
+    document.body.appendChild(element)
+    await element.updateComplete
+    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
+    const close = vi.spyOn(dialog, 'close')
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    // Partial saves do not reconcile accessGrants; the successful applyPlan call
+    // is the strongest observable ACL success while the dialog remains open.
+    expect(planGrant).toHaveBeenCalledTimes(2)
+    expect(applyPlan).toHaveBeenCalledTimes(1)
+    expect(applyPlan).toHaveBeenCalledWith(expect.objectContaining({
+      target: `${successfulGrant.subjectValue}.acl`
+    }))
+    expect(close).not.toHaveBeenCalled()
+    expect(element.shadowRoot.querySelector('solid-ui-error-state')).not.toBeNull()
+    expect([...element.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
+      .toEqual(['Failed agent'])
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    document.body.removeChild(element)
+  })
+
+  it('keeps the dialog open and reports every failure when all changes fail', async () => {
+    const grants = [0, 1, 2].map(index => ({
+      subjectType: 'agent',
+      subjectValue: `https://example.com/failed-agent-${index}`,
+      role: 'Editor',
+      label: `Failed agent ${index}`
+    }))
+    planGrant.mockRejectedValue(new Error('all changes failed'))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = grants
+    document.body.appendChild(element)
+    await element.updateComplete
+    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
+    const close = vi.spyOn(dialog, 'close')
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    expect(planGrant).toHaveBeenCalledTimes(grants.length)
+    expect(applyPlan).not.toHaveBeenCalled()
+    expect(close).not.toHaveBeenCalled()
+    expect([...element.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
+      .toEqual(['Failed agent 0', 'Failed agent 1', 'Failed agent 2'])
+
+    document.body.removeChild(element)
+  })
+
+  it('closes the dialog when all changes succeed', async () => {
+    const grants = [0, 1].map(index => ({
+      subjectType: 'agent',
+      subjectValue: `https://example.com/successful-agent-${index}`,
+      role: 'Editor',
+      label: `Successful agent ${index}`
+    }))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = grants
+    document.body.appendChild(element)
+    await element.updateComplete
+    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
+    const close = vi.spyOn(dialog, 'close')
+
+    await element.onSaveClick()
+
+    expect(applyPlan).toHaveBeenCalledTimes(grants.length)
+    expect(close).toHaveBeenCalledTimes(1)
+    expect(element.pendingAccessGrants).toEqual([])
+
+    document.body.removeChild(element)
+  })
+
+  it('reports an unexpected outer save failure as a general error', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/agent',
+      role: 'Editor',
+      label: 'Agent'
+    }]
+    document.body.appendChild(element)
+    await element.updateComplete
+    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
+    const close = vi.spyOn(dialog, 'close')
+    element.createAccessSubject = () => {
+      throw new Error('unexpected save failure')
+    }
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    expect(close).not.toHaveBeenCalled()
+    const errorState = element.shadowRoot.querySelector('solid-ui-error-state')
+    expect(errorState).not.toBeNull()
+    expect(errorState.textContent).toContain('Could not save access changes')
+    expect([...errorState.querySelectorAll('li .access-control-save-error-label')].map((label: Element) => label.textContent))
+      .toEqual(['Access changes'])
+
+    document.body.removeChild(element)
+  })
+
   it('persists authenticated and public access changes on save', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'

@@ -3,6 +3,7 @@ import { html, nothing } from 'lit'
 import type { PropertyValues } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
+import { error } from '@/lib/debug'
 import { findImage } from '@/widgets'
 import type Dialog from '@/components/dialog'
 import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
@@ -22,10 +23,11 @@ import '@/components/dialog-footer'
 import '@/components/button'
 import '@/components/combobox'
 import '@/components/combobox-option'
+import '@/components/error-state'
 
 import styles from './AccessControlModal.styles.css'
 import type { ComboboxChangeEvent } from '@/components/combobox'
-import type { AccessChange, AccessControlBadge, AccessGrantEntry, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
+import type { AccessChange, AccessControlBadge, AccessGrantEntry, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
 import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, type StringComboboxOptionData } from './helpers'
 
 function isDefined<T> (value: T | undefined | null): value is T {
@@ -76,8 +78,17 @@ export default class AccessControlModal extends WebComponent {
   @state()
   private accessor accessGrantLabels: string[] = []
 
+  @state()
+  private accessor saveErrors: AccessSaveError[] = []
+
   @query('solid-ui-dialog')
   private accessor dialog: Dialog | null = null
+
+  disconnectedCallback (): void {
+    this.saveErrors = []
+    this.failed = false
+    super.disconnectedCallback()
+  }
 
   protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
@@ -141,6 +152,29 @@ export default class AccessControlModal extends WebComponent {
 
   private getSharedAccessGrantEntries () {
     return this.getAccessGrantEntries().filter(({ authorization }) => this.getAuthorizationSubjectIris(authorization).length > 0)
+  }
+
+  private renderSaveErrorsList () {
+    if (!this.saveErrors.length) {
+      return nothing
+    }
+
+    return html`
+        <ul class="access-control-save-errors">
+          ${this.saveErrors.map(error => html`
+            <li>
+              <span class="access-control-save-error-label">${error.label}</span>
+              <span>
+                ${error.action === 'grant'
+                  ? `Could not grant ${error.role ?? 'access'}`
+                  : error.action === 'revoke'
+                    ? `Could not revoke ${error.role ?? 'access'}`
+                    : 'Could not save access changes'}
+              </span>
+            </li>
+          `)}
+        </ul>
+    `
   }
 
   private renderAccessGrants () {
@@ -517,6 +551,17 @@ export default class AccessControlModal extends WebComponent {
             ${this.renderAddAccessForm()}
             ${this.renderAccessGrantsSection()}
             ${this.renderGeneralAccessSection()}
+            ${this.saveErrors.length
+              ? html`
+                  <solid-ui-error-state
+                    title="Some access changes could not be saved"
+                    message="The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again."
+                    @close=${this.onCancelClick}
+                  >
+                    ${this.renderSaveErrorsList()}
+                  </solid-ui-error-state>
+                `
+              : nothing}
           </solid-ui-dialog-content>
 
           <solid-ui-dialog-footer>
@@ -528,7 +573,7 @@ export default class AccessControlModal extends WebComponent {
                 Cancel
               </solid-ui-button>
               <solid-ui-button
-                ?disabled=${!this.hasUnsavedChanges() || this.submitting}
+                ?disabled=${!this.hasUnsavedChanges() || this.submitting || this.saveErrors.length > 0}
                 ?loading=${this.submitting}
                 type="button"
                 @click=${this.onSaveClick}
@@ -591,28 +636,58 @@ export default class AccessControlModal extends WebComponent {
     }
 
     this.submitting = true
+    this.saveErrors = []
     this.failed = false
 
     try {
       const accessChanges: AccessChange[] = [
         ...this.pendingAccessGrants.map(grant => ({
           subject: this.createAccessSubject(grant.subjectType, grant.subjectValue),
-          role: grant.role
+          role: grant.role,
+          label: grant.label
         })),
         ...generalAccessChanges,
         ...changedAccessGrants.flatMap(({ subjects, role }) =>
-          subjects.map(subject => ({ subject, role }))
+          subjects.map(subject => ({
+            subject,
+            role,
+            label: this.getAccessSubjectLabel(subject)
+          }))
         )
       ]
 
-      for (const { subject, role } of accessChanges) {
-        const plan = role === 'No Access'
-          ? await solidLogicSingleton.acl.planRevoke(this.subjectUri, subject)
-          : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, subject.type === 'agentClass' && subject.iri === Public.iri
-            ? solidLogicSingleton.acl.modesFromPublicRole(role as (typeof PUBLIC_ACCESS_ROLES)[number])
-            : this.getRoleModes(role))
+      const appliedChanges: AccessChange[] = []
 
-        await solidLogicSingleton.acl.applyPlan(plan)
+      for (const { subject, label, role } of accessChanges) {
+        try {
+          const plan = role === 'No Access'
+            ? await solidLogicSingleton.acl.planRevoke(this.subjectUri, subject)
+            : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, subject.type === 'agentClass' && subject.iri === Public.iri
+              ? solidLogicSingleton.acl.modesFromPublicRole(role as (typeof PUBLIC_ACCESS_ROLES)[number])
+              : this.getRoleModes(role))
+
+          await solidLogicSingleton.acl.applyPlan(plan)
+          appliedChanges.push({ subject, role, label })
+        } catch (error) {
+          this.saveErrors = [
+            ...this.saveErrors,
+            {
+              action: role === 'No Access' ? 'revoke' : 'grant',
+              targetUri: subject.iri,
+              label,
+              role,
+              message: error instanceof Error
+                ? error.message
+                : 'Unable to apply access change.'
+            }
+          ]
+        }
+      }
+
+      if (this.saveErrors.length) {
+        this.failed = true
+        error('Failed to save some access changes', this.saveErrors)
+        return
       }
 
       this.principalInputValue = ''
@@ -620,7 +695,17 @@ export default class AccessControlModal extends WebComponent {
       this.dialog?.close()
     } catch (error) {
       this.failed = true
-      console.error('Failed to save access changes', error)
+      this.saveErrors = [
+        ...this.saveErrors,
+        {
+          action: 'save',
+          targetUri: this.subjectUri ?? '',
+          label: 'Access changes',
+          message: error instanceof Error
+            ? error.message
+            : 'Unexpected error while saving access changes.'
+        }
+      ]
     } finally {
       this.submitting = false
     }
@@ -664,14 +749,16 @@ export default class AccessControlModal extends WebComponent {
       ? undefined
       : {
           subject: Authenticated,
-          role: this.authenticatedAccessRoleValue
+          role: this.authenticatedAccessRoleValue,
+          label: 'Authenticated users'
         }
 
     const publicChange = this.publicAccessRoleValue === currentPublicRole
       ? undefined
       : {
           subject: Public,
-          role: this.publicAccessRoleValue
+          role: this.publicAccessRoleValue,
+          label: 'Public'
         }
 
     return [authenticatedChange, publicChange].filter(isDefined)
@@ -773,6 +860,18 @@ export default class AccessControlModal extends WebComponent {
     return { type, iri }
   }
 
+  private getAccessSubjectLabel (subject: AccessSubject): string {
+    if (subject.iri === Authenticated.iri) {
+      return 'Authenticated users'
+    }
+
+    if (subject.iri === Public.iri) {
+      return 'Public'
+    }
+
+    return label(sym(subject.iri)).trim() || subject.iri
+  }
+
   private getEventValue (event: Event, fallback = ''): string {
     const target = event.currentTarget as { value?: string | null } | null
     return typeof target?.value === 'string' ? target.value : fallback
@@ -809,7 +908,7 @@ export default class AccessControlModal extends WebComponent {
       return await this.commitPrinciplesFromInput()
     } catch (error) {
       this.failed = true
-      console.error('Failed to commit pending access grants', error)
+      error('Failed to commit pending access grants', error)
       return false
     }
   }
@@ -895,7 +994,7 @@ export default class AccessControlModal extends WebComponent {
       return
     }
 
-    console.error(partial ? 'Failed to add some access grants:' : 'Failed to add access grants:', failedGrants)
+    error(partial ? 'Failed to add some access grants:' : 'Failed to add access grants:', failedGrants)
   }
 
   private async resolvePendingAccessGrantLabel (subjectValue: string, fallbackLabel: string = subjectValue): Promise<string> {
@@ -1055,7 +1154,7 @@ export default class AccessControlModal extends WebComponent {
     try {
       await navigator.clipboard.writeText(this.subjectUri)
     } catch (error) {
-      console.error('Failed to copy resource link', error)
+      error('Failed to copy resource link', error)
     }
   }
 }
