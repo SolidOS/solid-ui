@@ -112,8 +112,8 @@ function getShortQueryOptions (preferredOptions: ComboboxOptionData[]): Combobox
   }]
 }
 
-export function createAccessPrincipalOptionsProvider (): AsyncComboboxOptionsProvider {
-  return defineAsyncComboboxOptionsProvider(async (filter: string) => {
+export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
+  defineAsyncComboboxOptionsProvider(async (filter: string) => {
     const query = filter.trim()
     const preferredOptions = await getPreferredAccessPrincipalOptions(query)
 
@@ -146,4 +146,3 @@ export function createAccessPrincipalOptionsProvider (): AsyncComboboxOptionsPro
       option => typeof option.value === 'string' ? option.value : undefined
     )
   })
-}

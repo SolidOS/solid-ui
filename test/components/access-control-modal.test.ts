@@ -1,6 +1,7 @@
 // @vitest-environment jsdom
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
+import { sym } from 'rdflib'
 import { isAbsoluteHttpUri, isOriginUrl } from '../../src/components/access-control-modal/helpers'
 
 const planGrant = vi.fn()
@@ -8,6 +9,8 @@ const planRevoke = vi.fn()
 const planPublicRead = vi.fn()
 const applyPlan = vi.fn()
 const classifyAccessControlSubject = vi.fn()
+const findAccessGrants = vi.fn()
+const load = vi.fn()
 
 vi.mock('@/components/combobox', () => ({
   defineAsyncComboboxOptionsProvider: <T>(provider: T) => provider
@@ -28,13 +31,14 @@ vi.mock('solid-logic', async (importOriginal) => {
         planGrant,
         planPublicRead,
         planRevoke,
-        applyPlan
+        applyPlan,
+        findAccessGrants
       },
       store: {
         ...actual.solidLogicSingleton.store,
         fetcher: {
           ...actual.solidLogicSingleton.store.fetcher,
-          load: vi.fn().mockResolvedValue(undefined)
+          load
         }
       },
       resource: {
@@ -52,6 +56,8 @@ describe('AccessControlModal submit', () => {
     planPublicRead.mockReset()
     applyPlan.mockReset()
     classifyAccessControlSubject.mockReset()
+    findAccessGrants.mockReset()
+    load.mockReset()
     classifyAccessControlSubject.mockImplementation(async (principal: string) => ({
       kind: 'agent' as const,
       subjectValue: principal
@@ -59,6 +65,8 @@ describe('AccessControlModal submit', () => {
     planGrant.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     planPublicRead.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     applyPlan.mockResolvedValue(new Response('ok', { status: 200 }))
+    findAccessGrants.mockResolvedValue([])
+    load.mockResolvedValue(undefined)
     await import('../../src/components/access-control-modal/AccessControlModal')
   })
 
@@ -348,6 +356,13 @@ describe('AccessControlModal submit', () => {
       }
       return { target: `${subject.iri}.acl`, deletes: [], inserts: [] }
     })
+    findAccessGrants.mockResolvedValue([{
+      agent: [successfulGrant.subjectValue],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read', 'Write']
+    }])
 
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
@@ -360,19 +375,30 @@ describe('AccessControlModal submit', () => {
     await element.onSaveClick()
     await element.updateComplete
 
-    // Partial saves do not reconcile accessGrants; the successful applyPlan call
-    // is the strongest observable ACL success while the dialog remains open.
+    // The refreshed authorizations replace pending drafts, so successful
+    // changes are visible while failed changes cannot be retried in-place.
     expect(planGrant).toHaveBeenCalledTimes(2)
     expect(applyPlan).toHaveBeenCalledTimes(1)
     expect(applyPlan).toHaveBeenCalledWith(expect.objectContaining({
       target: `${successfulGrant.subjectValue}.acl`
     }))
+    expect(findAccessGrants).toHaveBeenCalledWith(element.subjectUri)
+    expect(element.pendingAccessGrants).toEqual([])
+    expect(element.accessGrants).toEqual([{
+      agent: [successfulGrant.subjectValue],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read', 'Write']
+    }])
     expect(close).not.toHaveBeenCalled()
     const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
     await errors.updateComplete
     expect(errors.shadowRoot.querySelector('solid-ui-error-state')).not.toBeNull()
     expect([...errors.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
       .toEqual(['Failed agent'])
+    expect(errors.shadowRoot.querySelector('solid-ui-error-state').getAttribute('message'))
+      .toContain('Close this dialog and reopen it if you want to try again.')
     const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
       .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
     expect(saveButton.hasAttribute('disabled')).toBe(true)
@@ -411,6 +437,50 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
+  it('clears staged changes and explains when partial-save reconciliation fails', async () => {
+    const successfulGrant = {
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/successful-agent',
+      role: 'Editor',
+      label: 'Successful agent'
+    }
+    const failedGrant = {
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/failed-agent',
+      role: 'Editor',
+      label: 'Failed agent'
+    }
+    planGrant.mockImplementation(async (_subjectUri: string, subject: { iri: string }) => {
+      if (subject.iri === failedGrant.subjectValue) {
+        throw new Error('grant failed')
+      }
+      return { target: `${subject.iri}.acl`, deletes: [], inserts: [] }
+    })
+    findAccessGrants.mockRejectedValue(new Error('ACL refresh failed'))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [successfulGrant, failedGrant]
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    expect(findAccessGrants).toHaveBeenCalledWith(element.subjectUri)
+    expect(element.pendingAccessGrants).toEqual([])
+    expect(element.successfulChangesRefreshed).toBe(false)
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    expect(errors.shadowRoot.querySelector('solid-ui-error-state').getAttribute('message'))
+      .toContain('Some changes may have been saved, but we could not refresh the Shared with list.')
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    document.body.removeChild(element)
+  })
+
   it('closes the dialog when all changes succeed', async () => {
     const grants = [0, 1].map(index => ({
       subjectType: 'agent',
@@ -440,7 +510,9 @@ describe('AccessControlModal submit', () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
     element.pendingAccessGrants = [{
-      subjectType: 'agent',
+      get subjectType () {
+        throw new Error('unexpected save failure')
+      },
       subjectValue: 'https://example.com/agent',
       role: 'Editor',
       label: 'Agent'
@@ -449,10 +521,6 @@ describe('AccessControlModal submit', () => {
     await element.updateComplete
     const close = vi.fn()
     window.addEventListener('solid-ui:close-dialog', close)
-    element.createAccessSubject = () => {
-      throw new Error('unexpected save failure')
-    }
-
     await element.onSaveClick()
     await element.updateComplete
 
@@ -742,6 +810,31 @@ describe('AccessControlModal submit', () => {
       { type: 'agentGroup', iri: group },
       { type: 'agentClass', iri: agentClass }
     ])
+    document.body.removeChild(element)
+  })
+
+  it('loads every group document before refreshing grant labels', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.accessGrants = [{
+      agent: [],
+      agentGroup: [
+        'https://example.com/groups/first',
+        'https://example.com/groups/second#members'
+      ],
+      agentClass: [],
+      origin: [],
+      mode: ['Read']
+    }]
+
+    document.body.appendChild(element)
+    await element.updateComplete
+    load.mockClear()
+
+    await element.refreshAccessGrantLabels()
+
+    expect(load).toHaveBeenCalledWith(sym('https://example.com/groups/first').doc())
+    expect(load).toHaveBeenCalledWith(sym('https://example.com/groups/second#members').doc())
+
     document.body.removeChild(element)
   })
 

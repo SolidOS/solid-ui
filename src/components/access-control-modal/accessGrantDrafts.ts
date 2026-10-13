@@ -54,10 +54,6 @@ export function createAccessGrantDraft (authorization: Authorization): AccessGra
   }
 }
 
-export function createAccessGrantDrafts (accessGrants: Authorization[]): AccessGrantDraft[] {
-  return accessGrants.map(createAccessGrantDraft)
-}
-
 export function getAccessGrantViewModels (drafts: AccessGrantDraft[]): AccessGrantViewModel[] {
   return [...drafts]
     .sort((left, right) => {

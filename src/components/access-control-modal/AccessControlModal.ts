@@ -4,7 +4,7 @@ import type { PropertyValues } from 'lit'
 import { property, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import * as debug from '@/lib/debug'
-import { Authenticated, Public, solidLogicSingleton, type AccessRole, type AccessSubject, type Authorization } from 'solid-logic'
+import { Authenticated, Public, solidLogicSingleton, type AccessRole, type Authorization } from 'solid-logic'
 import { sym } from 'rdflib'
 
 import '~icons/lucide/circle-x'
@@ -19,11 +19,12 @@ import './AccessControlGeneralAccess'
 import './AccessControlErrors'
 
 import styles from './AccessControlModal.styles.css'
-import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessSaveError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
+import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessSaveError, InputAccessControlError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
 import { dedupeByKey } from './helpers'
-import { createAccessGrantDraft, getAccessGrantId, getAccessGrantViewModels, getAccessSubjectLabel, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
-import { createAccessPrincipalOptionsProvider, resolveAccessTarget } from './accessTargetResolver'
+import { createAccessGrantDraft, getAccessGrantId, getAccessGrantViewModels, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
+import { accessPrincipalOptionsProvider, resolveAccessTarget } from './accessTargetResolver'
 import { applyAccessChanges } from './applyAccessChanges'
+import { buildAccessChanges } from './buildAccessChanges'
 
 function isDefined<T> (value: T | undefined | null): value is T {
   return value !== undefined && value !== null
@@ -32,8 +33,6 @@ function isDefined<T> (value: T | undefined | null): value is T {
 type PendingAccessGrantCreationResult =
   | { grant: PendingAccessGrant }
   | { error: InputAccessControlError }
-
-type InputAccessControlError = Omit<AccessControlError, 'action'> & { action: 'input' }
 
 @customElement('solid-ui-access-control-modal')
 export default class AccessControlModal extends DialogComponent<void> {
@@ -68,6 +67,9 @@ export default class AccessControlModal extends DialogComponent<void> {
 
   @state()
   private accessor errors: AccessControlError[] = []
+
+  @state()
+  private accessor successfulChangesRefreshed = true
 
   private accessGrantLabelRequestVersion = 0
 
@@ -126,14 +128,13 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
 
     const labels = await Promise.all(grants.map(async authorization => {
-      const groupUri = authorization.agentGroup[0]
-      if (groupUri) {
+      await Promise.all(authorization.agentGroup.map(async groupUri => {
         try {
           await solidLogicSingleton.store.fetcher.load(sym(groupUri).doc())
         } catch {
           // Keep the fallback label if the group document cannot be loaded.
         }
-      }
+      }))
 
       return getAuthorizationSubjectLabel(getSharedAuthorization(authorization))
     }))
@@ -175,7 +176,7 @@ export default class AccessControlModal extends DialogComponent<void> {
               .addAccessRoleValue=${this.addAccessRoleValue}
               .pendingAccessGrants=${this.pendingAccessGrants}
               .inputError=${this.inputError}
-              .asyncOptionsProvider=${createAccessPrincipalOptionsProvider()}
+              .asyncOptionsProvider=${accessPrincipalOptionsProvider}
               @target-input=${this.onPrincipalInput}
               @target-selected=${this.onPrincipalSelect}
               @role-changed=${this.onAddAccessRoleInput}
@@ -194,6 +195,7 @@ export default class AccessControlModal extends DialogComponent<void> {
             ></solid-ui-access-control-general-access>
             <solid-ui-access-control-errors
               .errors=${this.saveErrors}
+              .successfulChangesRefreshed=${this.successfulChangesRefreshed}
               @close=${this.onCancelClick}
             ></solid-ui-access-control-errors>
           </solid-ui-dialog-content>
@@ -269,27 +271,41 @@ export default class AccessControlModal extends DialogComponent<void> {
 
     this.submitting = true
     this.errors = this.errors.filter(error => error.action === 'input')
+    this.successfulChangesRefreshed = true
 
     try {
-      const accessChanges: AccessChange[] = [
-        ...this.pendingAccessGrants.map(grant => ({
-          subject: this.createAccessSubject(grant.subjectType, grant.subjectValue),
-          role: grant.role,
-          label: grant.label
-        })),
-        ...generalAccessChanges,
-        ...changedAccessGrants.flatMap(({ subjects, role }) =>
-          subjects.map(subject => ({
-            subject,
-            role,
-            label: getAccessSubjectLabel(subject)
-          }))
-        )
-      ]
+      const accessChanges = buildAccessChanges({
+        pendingAccessGrants: this.pendingAccessGrants,
+        generalAccessChanges,
+        changedAccessGrants
+      })
 
       const saveErrors = await applyAccessChanges(this.subjectUri, accessChanges)
       if (saveErrors.length) {
         this.errors = [...this.errors, ...saveErrors]
+        this.principalInputValue = ''
+        this.pendingAccessGrants = []
+
+        if (saveErrors.length < accessChanges.length) {
+          try {
+            this.accessGrants = await solidLogicSingleton.acl.findAccessGrants(this.subjectUri)
+          } catch (error) {
+            this.successfulChangesRefreshed = false
+            this.errors = [
+              ...this.errors,
+              {
+                action: 'save',
+                targetUri: this.subjectUri,
+                label: 'Shared with list',
+                message: error instanceof Error
+                  ? error.message
+                  : 'Unable to refresh the access list.'
+              }
+            ]
+            debug.error('Failed to refresh access grants after a partial save', error)
+          }
+        }
+
         debug.error('Failed to save some access changes', saveErrors)
         return
       }
@@ -386,10 +402,6 @@ export default class AccessControlModal extends DialogComponent<void> {
       getChangedAccessGrants(this.accessGrantDrafts).length ||
       this.getGeneralAccessChanges().length
     )
-  }
-
-  private createAccessSubject (type: AccessSubject['type'], iri: string): AccessSubject {
-    return { type, iri }
   }
 
   private async commitPrincipalFromInput (): Promise<boolean> {

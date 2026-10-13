@@ -29,16 +29,7 @@ export type AccessGrantRoleChangedDetail = {
 
 export type AccessGrantRoleChangedEvent = CustomEvent<AccessGrantRoleChangedDetail>
 
-export type AccessControlBadgeKind = AccessControlSubjectKind | 'unknown'
-
-export type AccessControlBadge = {
-  kind: AccessControlBadgeKind
-  image?: string
-  text: string
-}
-
 export type PendingAccessGrant = {
-  id?: string
   subjectType: AccessControlSubjectKind
   subjectValue: string
   role: AccessRole
@@ -76,12 +67,24 @@ export type AccessChange = {
   label: string
 }
 
-export type AccessControlError = {
-  action: 'input' | 'grant' | 'revoke' | 'save'
-  targetUri?: string
+export type InputAccessControlError = {
+  action: 'input'
+  targetUri: string
   label: string
-  role?: AccessRole
   message: string
 }
 
-export type AccessSaveError = Exclude<AccessControlError, { action: 'input' }>
+export type AccessSaveError = {
+  action: 'grant' | 'revoke'
+  targetUri: string
+  label: string
+  role: AccessRole
+  message: string
+} | {
+  action: 'save'
+  targetUri: string
+  label: string
+  message: string
+}
+
+export type AccessControlError = InputAccessControlError | AccessSaveError

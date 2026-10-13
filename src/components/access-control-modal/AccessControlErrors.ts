@@ -14,6 +14,9 @@ export default class AccessControlErrors extends WebComponent {
   @property({ attribute: false })
   accessor errors: AccessSaveError[] = []
 
+  @property({ attribute: false })
+  accessor successfulChangesRefreshed = true
+
   private onClose () {
     this.dispatchEvent(new CustomEvent('close', {
       bubbles: true,
@@ -29,7 +32,9 @@ export default class AccessControlErrors extends WebComponent {
     return html`
       <solid-ui-error-state
         title="Some access changes could not be saved"
-        message="The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again."
+        message=${this.successfulChangesRefreshed
+          ? 'Any successful changes are shown above. The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again.'
+          : 'Some changes may have been saved, but we could not refresh the Shared with list. The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again.'}
         @close=${this.onClose}
       >
         <ul class="access-control-save-errors">

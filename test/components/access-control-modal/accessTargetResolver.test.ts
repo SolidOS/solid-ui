@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import {
-  createAccessPrincipalOptionsProvider,
+  accessPrincipalOptionsProvider,
   resolveAccessTarget
 } from '../../../src/components/access-control-modal/accessTargetResolver'
 
@@ -14,9 +14,7 @@ describe('access-control target resolver', () => {
   })
 
   it('returns a non-selectable prompt for a short query', async () => {
-    const provider = createAccessPrincipalOptionsProvider()
-
-    await expect(provider('x')).resolves.toEqual([{
+    await expect(accessPrincipalOptionsProvider('x')).resolves.toEqual([{
       label: 'Type at least 2 characters to search',
       value: '',
       selectable: false
