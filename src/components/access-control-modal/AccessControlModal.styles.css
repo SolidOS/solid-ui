@@ -45,6 +45,13 @@
 
           --solid-ui-input-border-color: var(--solid-ui-color-slate-200, #E2E8F0);
         }
+
+        .access-principal-error {
+          margin: 0;
+          color: var(--solid-ui-color-red-700, #B42318);
+          font-size: var(--solid-ui-font-size-xs, .75rem);
+          line-height: 1.4;
+        }
       }
     }
 

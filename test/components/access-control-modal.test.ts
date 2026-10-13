@@ -111,6 +111,19 @@ describe('AccessControlModal submit', () => {
     expect(element.principalInputValue).toBe('')
   })
 
+  it('rejects an HTTP URL that cannot be classified', async () => {
+    classifyAccessControlSubject.mockResolvedValueOnce(undefined)
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://unknown.example/resource'
+
+    await element.onSubmit(new Event('submit'))
+
+    expect(element.pendingAccessGrants).toEqual([])
+    expect(element.inputError).toContain('Could not verify this access target')
+  })
+
   it.each([
     ['app.example', 'https://app.example'],
     ['www.sharonstratsianis.com', 'https://www.sharonstratsianis.com']

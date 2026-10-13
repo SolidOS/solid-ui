@@ -3,10 +3,10 @@ import { html, nothing } from 'lit'
 import type { PropertyValues } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
-import { error } from '@/lib/debug'
+import * as debug from '@/lib/debug'
 import { findImage } from '@/widgets'
 import type Dialog from '@/components/dialog'
-import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
+import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessControlSubjectKind, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
 import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
 import { sym } from 'rdflib'
 
@@ -35,8 +35,14 @@ function isDefined<T> (value: T | undefined | null): value is T {
 }
 
 type PendingAccessGrantCreationResult =
-  | { grant: PendingAccessGrant; principle: string }
-  | { error: string; principle: string }
+  | { grant: PendingAccessGrant }
+  | { error: string }
+
+type ResolvedAccessTarget = {
+  subjectType: AccessControlSubjectKind
+  subjectValue: string
+  label: string
+}
 
 @customElement('solid-ui-access-control-modal')
 export default class AccessControlModal extends WebComponent {
@@ -62,6 +68,9 @@ export default class AccessControlModal extends WebComponent {
 
   @state()
   private accessor searchValue: string = ''
+
+  @state()
+  private accessor inputError: string = ''
 
   @state()
   private accessor failed: boolean = false
@@ -408,6 +417,9 @@ export default class AccessControlModal extends WebComponent {
               @input=${this.onPrincipalInput}
               @change=${this.onPrincipalSelect}
             ></solid-ui-combobox>
+            ${this.inputError
+              ? html`<p class="access-principal-error" role="alert">${this.inputError}</p>`
+              : nothing}
             ${this.renderPendingAccessGrants()}
           </div>
           ${this.renderModeSelector('add')}
@@ -686,7 +698,7 @@ export default class AccessControlModal extends WebComponent {
 
       if (this.saveErrors.length) {
         this.failed = true
-        error('Failed to save some access changes', this.saveErrors)
+        debug.error('Failed to save some access changes', this.saveErrors)
         return
       }
 
@@ -713,6 +725,7 @@ export default class AccessControlModal extends WebComponent {
 
   private onPrincipalInput (event: Event) {
     this.principalInputValue = this.getEventValue(event)
+    this.inputError = ''
   }
 
   private onPrincipalSelect (event: Event) {
@@ -722,7 +735,7 @@ export default class AccessControlModal extends WebComponent {
       return
     }
 
-    this.queuePendingPrinciples([option.value], this.addAccessRoleValue, option.label)
+    this.queuePendingPrinciple(option.value, this.addAccessRoleValue, option.label)
   }
 
   private onSearchInput (event: Event) {
@@ -900,7 +913,7 @@ export default class AccessControlModal extends WebComponent {
       return false
     }
 
-    return this.queuePendingPrinciples([rawValue], this.addAccessRoleValue, undefined, rawValue)
+    return this.queuePendingPrinciple(rawValue, this.addAccessRoleValue, undefined, rawValue)
   }
 
   private async commitPrinciplesFromInputSafely (): Promise<boolean> {
@@ -908,44 +921,37 @@ export default class AccessControlModal extends WebComponent {
       return await this.commitPrinciplesFromInput()
     } catch (error) {
       this.failed = true
-      error('Failed to commit pending access grants', error)
+      this.inputError = 'We could not verify this access target. Check the value and try again.'
+      debug.error('Failed to commit pending access grants', error)
       return false
     }
   }
 
-  private async queuePendingPrinciples (
-    principles: string[],
+  private async queuePendingPrinciple (
+    principle: string,
     role: AccessRole = this.addAccessRoleValue,
     preferredLabel?: string,
     inputSnapshot?: string
   ): Promise<boolean> {
     const snapshot = inputSnapshot ?? this.principalInputValue.trim()
-    const pendingGrantResults = await Promise.all(principles.map(async principle => this.createPendingAccessGrant(principle, role, preferredLabel)))
-    const newGrants = pendingGrantResults.flatMap(result => ('grant' in result ? [result.grant] : []))
-    const failedGrants = pendingGrantResults
-      .filter((result): result is { error: string; principle: string } => 'error' in result)
-      .map(result => `${result.principle} (${result.error})`)
+    const result = await this.createPendingAccessGrant(principle, role, preferredLabel)
 
-    if (!newGrants.length) {
-      if (failedGrants.length) {
-        this.failed = true
-      }
-      this.logPendingGrantFailures(failedGrants, false)
+    if ('error' in result) {
+      this.failed = true
+      this.inputError = result.error
+      debug.error('Failed to add access grant:', result.error)
       return false
     }
 
-    const merged = [...this.pendingAccessGrants, ...newGrants]
+    const merged = [...this.pendingAccessGrants, result.grant]
     this.pendingAccessGrants = this.dedupePendingAccessGrants(merged)
-    if (failedGrants.length) {
-      this.failed = true
-    }
-    this.logPendingGrantFailures(failedGrants, true)
+    this.inputError = ''
 
-    if (!failedGrants.length && this.principalInputValue.trim() === snapshot) {
+    if (this.principalInputValue.trim() === snapshot) {
       this.principalInputValue = ''
     }
 
-    return failedGrants.length === 0
+    return true
   }
 
   private async createPendingAccessGrant (
@@ -955,56 +961,61 @@ export default class AccessControlModal extends WebComponent {
   ): Promise<PendingAccessGrantCreationResult> {
     try {
       const normalizedPrinciple = principle.trim()
-      const normalizedOrigin = this.normalizeOriginInput(normalizedPrinciple)
-      const resolvedPrinciple = normalizedOrigin
-        ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
-        : await solidLogicSingleton.acl.classifyAccessControlSubject(normalizedPrinciple)
-      const fallbackKind = isAbsoluteHttpUri(principle) ? 'agent' : undefined
-      const subjectType = resolvedPrinciple?.kind ?? fallbackKind
-      const subjectValue = resolvedPrinciple?.subjectValue ?? normalizedPrinciple
-
-      if (!subjectType) {
+      const resolvedTarget = await this.resolveAccessTarget(normalizedPrinciple, preferredLabel)
+      if (!resolvedTarget) {
         return {
-          principle,
-          error: 'Could not classify access target'
+          error: 'Could not verify this access target'
         }
       }
 
-      const label = preferredLabel ?? await this.resolvePendingAccessGrantLabel(subjectValue, principle)
-
       return {
-        principle,
         grant: {
-          subjectType,
-          subjectValue,
+          subjectType: resolvedTarget.subjectType,
+          subjectValue: resolvedTarget.subjectValue,
           role,
-          label
+          label: resolvedTarget.label
         }
       }
     } catch (error) {
       return {
-        principle,
         error: String(error)
       }
     }
   }
 
-  private logPendingGrantFailures (failedGrants: string[], partial: boolean) {
-    if (!failedGrants.length) {
-      return
+  private async resolveAccessTarget (principle: string, preferredLabel?: string): Promise<ResolvedAccessTarget | undefined> {
+    const normalizedOrigin = this.normalizeOriginInput(principle)
+    const resolvedPrinciple = normalizedOrigin
+      ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
+      : await solidLogicSingleton.acl.classifyAccessControlSubject(principle)
+
+    if (!resolvedPrinciple) {
+      return undefined
     }
 
-    error(partial ? 'Failed to add some access grants:' : 'Failed to add access grants:', failedGrants)
-  }
+    if (resolvedPrinciple.kind === 'origin') {
+      return {
+        subjectType: resolvedPrinciple.kind,
+        subjectValue: resolvedPrinciple.subjectValue,
+        label: resolvedPrinciple.subjectValue
+      }
+    }
 
-  private async resolvePendingAccessGrantLabel (subjectValue: string, fallbackLabel: string = subjectValue): Promise<string> {
     try {
-      const subject = sym(subjectValue)
+      const subject = sym(resolvedPrinciple.subjectValue)
       await solidLogicSingleton.store.fetcher.load(subject.doc())
-      const resolved = label(subject).trim()
-      return resolved || fallbackLabel
+      const resolvedLabel = preferredLabel?.trim() || label(subject).trim()
+      if (!resolvedLabel || resolvedLabel === resolvedPrinciple.subjectValue) {
+        return undefined
+      }
+
+      return {
+        subjectType: resolvedPrinciple.kind,
+        subjectValue: resolvedPrinciple.subjectValue,
+        label: resolvedLabel
+      }
     } catch {
-      return label(sym(subjectValue)) || fallbackLabel
+      return undefined
     }
   }
 
@@ -1033,7 +1044,13 @@ export default class AccessControlModal extends WebComponent {
       }
     }
 
-    const options = entries.map((entry: DirectoryEntry) => this.directoryEntryToOption(entry))
+    const verifiedEntries = await Promise.all(entries.map(async entry => {
+      const resolved = await this.resolveAccessTarget(entry.uri, entry.label)
+      return resolved ? { entry, label: resolved.label } : undefined
+    }))
+    const options = verifiedEntries
+      .filter(isDefined)
+      .map(({ entry, label: entryLabel }) => this.directoryEntryToOption({ ...entry, label: entryLabel }))
     return [...preferredOptions, ...options]
   })
 
@@ -1095,16 +1112,13 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private async createUrlOption (uri: string): Promise<StringComboboxOptionData | undefined> {
-    try {
-      await solidLogicSingleton.store.fetcher.load(sym(uri).doc())
-    } catch {
+    const resolved = await this.resolveAccessTarget(uri)
+    if (!resolved) {
       return undefined
     }
 
-    const labelText = await this.resolvePendingAccessGrantLabel(uri)
-
     return {
-      label: labelText === uri ? `Use ${uri}` : labelText,
+      label: resolved.label,
       value: uri
     }
   }
@@ -1154,7 +1168,7 @@ export default class AccessControlModal extends WebComponent {
     try {
       await navigator.clipboard.writeText(this.subjectUri)
     } catch (error) {
-      error('Failed to copy resource link', error)
+      debug.error('Failed to copy resource link', error)
     }
   }
 }
