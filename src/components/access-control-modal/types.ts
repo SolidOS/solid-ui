@@ -1,5 +1,34 @@
 import type { AccessControlSubjectKind, AccessRole, AccessSubject, Authorization } from 'solid-logic'
 
+export type TargetInputDetail = {
+  value: string
+}
+
+export type TargetSelectedDetail = {
+  value: string
+  label: string
+}
+
+export type RoleChangedDetail = {
+  role: AccessRole
+}
+
+export type PendingGrantRemovedDetail = {
+  index: number
+}
+
+export type TargetInputEvent = CustomEvent<TargetInputDetail>
+export type TargetSelectedEvent = CustomEvent<TargetSelectedDetail>
+export type RoleChangedEvent = CustomEvent<RoleChangedDetail>
+export type PendingGrantRemovedEvent = CustomEvent<PendingGrantRemovedDetail>
+
+export type AccessGrantRoleChangedDetail = {
+  index: number
+  role: AccessRole
+}
+
+export type AccessGrantRoleChangedEvent = CustomEvent<AccessGrantRoleChangedDetail>
+
 export type AccessControlBadgeKind = AccessControlSubjectKind | 'unknown'
 
 export type AccessControlBadge = {
@@ -21,7 +50,6 @@ export type AccessGrantEntry = {
   index: number
   role: AccessRole
   subjectLabel: string
-  badge: AccessControlBadge
 }
 
 export type AccessGrantViewModel = AccessGrantEntry & {

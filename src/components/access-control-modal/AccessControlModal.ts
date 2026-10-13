@@ -1,20 +1,13 @@
 import { customElement, DialogComponent } from '@/lib/components'
-import { html, nothing } from 'lit'
+import { html } from 'lit'
 import type { PropertyValues } from 'lit'
 import { property, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import * as debug from '@/lib/debug'
-import { findImage } from '@/widgets'
-import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessControlSubjectKind, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
+import { Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessControlSubjectKind, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
 import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
 import { sym } from 'rdflib'
 
-import '~icons/lucide/chevron-down'
-import '~icons/lucide/link'
-import '~icons/lucide/globe'
-import '~icons/lucide/book-user'
-import '~icons/lucide/user-round'
-import '~icons/lucide/users'
 import '~icons/lucide/circle-x'
 import '@/components/dialog'
 import '@/components/dialog-content'
@@ -22,12 +15,14 @@ import '@/components/dialog-footer'
 import '@/components/button'
 import '@/components/combobox'
 import '@/components/combobox-option'
-import '@/components/error-state'
+import { directoryEntryOptionTemplate } from './AccessControlAddAccess'
+import './AccessControlSharedAccess'
+import './AccessControlGeneralAccess'
+import './AccessControlErrors'
 
 import styles from './AccessControlModal.styles.css'
-import type { ComboboxChangeEvent } from '@/components/combobox'
-import type { AccessChange, AccessControlBadge, AccessControlError, AccessGrantViewModel, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
-import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, type StringComboboxOptionData } from './helpers'
+import type { AccessChange, AccessControlError, AccessGrantRoleChangedEvent, AccessGrantViewModel, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
+import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, normalizeOriginInput, type StringComboboxOptionData } from './helpers'
 
 function isDefined<T> (value: T | undefined | null): value is T {
   return value !== undefined && value !== null
@@ -64,9 +59,6 @@ export default class AccessControlModal extends DialogComponent<void> {
 
   @state()
   private accessor publicAccessRoleValue: AccessRole = 'No Access'
-
-  @state()
-  private accessor searchValue: string = ''
 
   @state()
   private accessor submitting: boolean = false
@@ -152,7 +144,6 @@ export default class AccessControlModal extends DialogComponent<void> {
           role,
           initialRole: this.getAuthorizationRole(authorization),
           subjectLabel,
-          badge: this.getAuthorizationBadge(sharedAuthorization, subjectLabel),
           subjects: this.getAuthorizationSubjectEntries(sharedAuthorization)
         }
       })
@@ -164,121 +155,6 @@ export default class AccessControlModal extends DialogComponent<void> {
         if (!leftIsOwner && rightIsOwner) return 1
         return left.index - right.index
       })
-  }
-
-  private getSharedAccessGrantEntries () {
-    return this.getAccessGrantViewModels().filter(({ subjects }) => subjects.length > 0)
-  }
-
-  private renderSaveErrorsList () {
-    if (!this.saveErrors.length) {
-      return nothing
-    }
-
-    return html`
-        <ul class="access-control-save-errors">
-          ${this.saveErrors.map(error => html`
-            <li>
-              <span class="access-control-save-error-label">${error.label}</span>
-              <span>
-                ${error.action === 'grant'
-                  ? `Could not grant ${error.role ?? 'access'}`
-                  : error.action === 'revoke'
-                    ? `Could not revoke ${error.role ?? 'access'}`
-                    : 'Could not save access changes'}
-              </span>
-            </li>
-          `)}
-        </ul>
-    `
-  }
-
-  private renderAccessGrants () {
-    const query = this.searchValue.trim().toLowerCase()
-    const accessGrants = this.getSharedAccessGrantEntries().filter(({ subjectLabel }) => {
-      if (!query) {
-        return true
-      }
-
-      return subjectLabel.toLowerCase().includes(query)
-    })
-
-    return html`
-      <ul>
-        ${accessGrants.length > 0
-          ? accessGrants.map(entry => this.renderAccessGrant(entry))
-          : html`<li>No access grants</li>`}
-      </ul>
-    `
-  }
-
-  private renderAccessGrant (entry: AccessGrantViewModel) {
-    return html`
-      <li>
-        ${this.renderAuthorizationBadge(entry.badge)}
-        <h3>${entry.subjectLabel}</h3>
-        ${this.renderAuthorizationRole(entry.role, entry.index)}  
-      </li>
-    `
-  }
-
-  private getAuthorizationBadge (authorization: Authorization, subjectLabel?: string) {
-    const resolvedSubjectLabel = subjectLabel ?? this.getAuthorizationSubjectLabel(authorization)
-
-    const agent = authorization.agent[0]
-    if (agent) {
-      const image = findImage(sym(agent))
-      return {
-        kind: 'agent' as const,
-        image,
-        text: image ? '' : this.getInitials(resolvedSubjectLabel, 2)
-      }
-    }
-
-    const agentGroup = authorization.agentGroup[0]
-    if (agentGroup) {
-      return {
-        kind: 'agentGroup' as const,
-        text: this.getInitials(resolvedSubjectLabel, 1)
-      }
-    }
-
-    const agentClass = authorization.agentClass[0]
-    if (agentClass) {
-      const image = findImage(sym(agentClass))
-      return {
-        kind: 'agentClass' as const,
-        image,
-        text: image ? '' : this.getInitials(resolvedSubjectLabel, 2)
-      }
-    }
-
-    const origin = authorization.origin[0]
-    if (origin) {
-      return {
-        kind: 'origin' as const,
-        text: 'O'
-      }
-    }
-
-    return {
-      kind: 'unknown' as const,
-      text: '?'
-    }
-  }
-
-  private renderAuthorizationBadge (badge: AccessControlBadge) {
-    return html`
-      <div class="access-grants-image access-grants-image--${badge.kind}">
-        ${badge.image ? html`<img src=${badge.image} alt="" aria-hidden="true" />` : html`<span aria-hidden="true">${badge.text}</span>`}
-      </div>
-    `
-  }
-
-  private getInitials (label: string, maxWords = 2): string {
-    const parts = label.split(/\s+/).filter(Boolean).slice(0, maxWords)
-    const initials = parts.map(part => part[0]).join('')
-    return (initials || label.slice(0, maxWords)).toUpperCase()
   }
 
   private getAuthorizationSubjectIris (authorization: Authorization) {
@@ -326,233 +202,6 @@ export default class AccessControlModal extends DialogComponent<void> {
     return solidLogicSingleton.acl.publicRoleFromModes(authorization.mode)
   }
 
-  private getRoleValueFromEvent (event: Event, fallback: AccessRole = 'Viewer'): AccessRole {
-    const selectedValue = this.getSelectedComboboxOptionValue(event)
-
-    if (typeof selectedValue === 'string') {
-      return selectedValue as AccessRole
-    }
-
-    const target = event.currentTarget as { value?: string | null } | null
-
-    return typeof target?.value === 'string' ? target.value as AccessRole : fallback
-  }
-
-  private renderAuthorizationRole (role: AccessRole, index: number) {
-    return html`
-      <solid-ui-combobox
-        class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${role === 'Owner' ? 'access-grants-role--owner' : ''}"
-        .value=${role}
-        @change=${(event: Event) => this.onAccessGrantRoleInput(index, event)}
-      >
-        ${this.renderGrantRoleOptions()}
-      </solid-ui-combobox>
-    `
-  }
-
-  private renderAddModeSelector () {
-    return html`
-      <solid-ui-combobox
-        class="access-role-select access-role-select--top"
-        .value=${this.addAccessRoleValue}
-        @change=${this.onAddAccessRoleInput}
-      >
-        ${this.renderAddRoleOptions()}
-      </solid-ui-combobox>
-    `
-  }
-
-  private renderAuthenticatedModeSelector () {
-    return html`
-      <solid-ui-combobox
-        class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated"
-        .value=${this.authenticatedAccessRoleValue}
-        @change=${this.onAuthenticatedAccessRoleInput}
-      >
-        ${this.renderAuthenticatedRoleOptions()}
-      </solid-ui-combobox>
-    `
-  }
-
-  private renderPublicModeSelector () {
-    return html`
-      <solid-ui-combobox
-        class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public"
-        .value=${this.publicAccessRoleValue}
-        @change=${this.onPublicAccessRoleInput}
-      >
-        ${this.renderPublicRoleOptions()}
-      </solid-ui-combobox>
-    `
-  }
-
-  private renderAddRoleOptions () {
-    return ACCESS_ROLES
-      .filter(role => role !== 'No Access')
-      .map(role => html`
-        <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
-      `)
-  }
-
-  private renderAuthenticatedRoleOptions () {
-    return ACCESS_ROLES.map(role => html`
-      <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
-    `)
-  }
-
-  private renderPublicRoleOptions () {
-    return PUBLIC_ACCESS_ROLES.map(role => html`
-      <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
-    `)
-  }
-
-  private renderGrantRoleOptions () {
-    return ACCESS_ROLES.map(role => html`
-      <solid-ui-combobox-option value=${role}>${role === 'No Access' ? 'Remove' : role}</solid-ui-combobox-option>
-    `)
-  }
-
-  private renderAddAccessForm () {
-    return html`
-      <section class="access-grants-form" aria-label="Add access">
-        <p>Add person, group or software agent URL.</p>
-        <div class="access-grants-form-main">
-          <div class="access-grants-input">
-            <solid-ui-combobox
-              class="access-principal-combobox"
-              label="Add person, group or software agent URL."
-              .srOnlyLabel=${true}
-              .value=${this.principalInputValue}
-              placeholder="Paste a link or enter a name"
-              .asyncOptionsProvider=${this.accessPrincipleOptionsProvider}
-              @input=${this.onPrincipalInput}
-              @change=${this.onPrincipalSelect}
-            ></solid-ui-combobox>
-            ${this.inputError
-              ? html`<p class="access-principal-error" role="alert">${this.inputError}</p>`
-              : nothing}
-            ${this.renderPendingAccessGrants()}
-          </div>
-          ${this.renderAddModeSelector()}
-        </div> 
-      </section>
-    `
-  }
-
-  private renderPendingAccessGrants () {
-    if (!this.pendingAccessGrants.length) {
-      return nothing
-    }
-
-    return html`
-      <div class="access-grants-pending">
-        ${this.pendingAccessGrants.map((grant, index) => html`
-          <div class="access-grants-pending-item">
-            <span class="access-grants-pending-item-label">${grant.label}</span>
-            <solid-ui-button
-              type="button"
-              variant="ghost"
-              class="access-grants-pending-item-remove"
-              data-pending-grant-index=${index}
-              @click=${this.onRemovePendingAccessGrantClick}
-            >
-              <span class="sr-only">Remove ${grant.label}</span>
-              <icon-lucide-circle-x slot="icon"></icon-lucide-circle-x>
-            </solid-ui-button>
-          </div>
-        `)}
-      </div>
-    `
-  }
-
-  private renderAccessGrantsSection () {
-    return html`
-      <section aria-labelledby="access-grants-heading">
-        <div class="access-grants-header">
-          <h2 id="access-grants-heading">Share with</h2>
-          <solid-ui-combobox
-            class="access-grants-search-input"
-            label="Search access grants"
-            .srOnlyLabel=${true}
-            .value=${this.searchValue}
-            placeholder="Search"
-            @input=${this.onSearchInput}
-            @change=${this.onSearchSelect}
-          >
-            ${this.getSharedAccessGrantEntries().map(({ subjectLabel }) => html`
-              <solid-ui-combobox-option 
-                .value=${subjectLabel}>
-                ${subjectLabel}
-              </solid-ui-combobox-option>
-            `)}
-          </solid-ui-combobox>
-        </div>
-        <div class="access-grants-list">
-          ${this.renderAccessGrants()}
-        </div>
-      </section>
-    `
-  }
-
-  private renderGeneralAccessSection () {
-    return html`
-      <section class="access-grants-general" aria-labelledby="general-access-heading">
-        <div class="access-grants-general-header">
-          <h2 id="general-access-heading">General Access</h2>
-          <solid-ui-button
-            class="access-grants-copy-link-button"
-            variant="tertiary"
-            @click=${this.onCopyLinkClick}
-          >
-            <icon-lucide-link slot="left-icon"></icon-lucide-link>
-            <span class="access-grants-copy-link-button-label">Copy Link</span>
-          </solid-ui-button>
-        </section>
-        ${this.renderGeneralShareRow({
-          title: 'Share with Anyone Signed In',
-          description: 'Users must sign in to SolidOS to access this shared item using the link.',
-          variant: 'authenticated'
-        })}
-        ${this.renderGeneralShareRow({
-          title: 'Anyone with the Link',
-          description: 'Anyone on the internet with the link can view.',
-          variant: 'public'
-        })}
-      </div>
-    `
-  }
-
-  private renderGeneralShareRow (options: {
-    title: string
-    description: string
-    variant: 'authenticated' | 'public'
-  }) {
-    return html`
-      <div class="access-grants-general-share">
-        <div class="access-grants-general-share-content">
-          ${this.renderGeneralAccessIcon()}
-          <div class="access-grants-general-share-text">
-            <p class="access-grants-general-share-text-title">${options.title}</p>
-            <p class="access-grants-general-share-text-description">${options.description}</p>
-          </div>
-        </div>
-        ${options.variant === 'authenticated'
-          ? this.renderAuthenticatedModeSelector()
-          : this.renderPublicModeSelector()}
-      </div>
-    `
-  }
-
-  private renderGeneralAccessIcon () {
-    return html`
-      <div class="access-grants-general-share-icon">
-        <div class="access-grants-general-share-icon-inner">
-          <icon-lucide-globe class="access-grants-general-share-icon-image"></icon-lucide-globe>
-        </div>
-      </div>
-    `
-  }
-
   private getRoleModes (role: AccessRole): AccessMode[] {
     return solidLogicSingleton.acl.modesFromRole(role)
   }
@@ -575,20 +224,32 @@ export default class AccessControlModal extends DialogComponent<void> {
       <solid-ui-dialog title=${dialogTitle}>
         <form @submit=${this.onSubmit}>
           <solid-ui-dialog-content>
-            ${this.renderAddAccessForm()}
-            ${this.renderAccessGrantsSection()}
-            ${this.renderGeneralAccessSection()}
-            ${this.saveErrors.length
-              ? html`
-                  <solid-ui-error-state
-                    title="Some access changes could not be saved"
-                    message="The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again."
-                    @close=${this.onCancelClick}
-                  >
-                    ${this.renderSaveErrorsList()}
-                  </solid-ui-error-state>
-                `
-              : nothing}
+            <solid-ui-access-control-add-access
+              .principalInputValue=${this.principalInputValue}
+              .addAccessRoleValue=${this.addAccessRoleValue}
+              .pendingAccessGrants=${this.pendingAccessGrants}
+              .inputError=${this.inputError}
+              .asyncOptionsProvider=${this.accessPrincipleOptionsProvider}
+              @target-input=${this.onPrincipalInput}
+              @target-selected=${this.onPrincipalSelect}
+              @role-changed=${this.onAddAccessRoleInput}
+              @pending-grant-removed=${this.onPendingGrantRemoved}
+            ></solid-ui-access-control-add-access>
+            <solid-ui-access-control-shared-access
+              .accessGrantViewModels=${this.getAccessGrantViewModels()}
+              @access-grant-role-changed=${this.onAccessGrantRoleInput}
+            ></solid-ui-access-control-shared-access>
+            <solid-ui-access-control-general-access
+              .subjectUri=${this.subjectUri}
+              .authenticatedAccessRoleValue=${this.authenticatedAccessRoleValue}
+              .publicAccessRoleValue=${this.publicAccessRoleValue}
+              @authenticated-role-changed=${this.onAuthenticatedAccessRoleInput}
+              @public-role-changed=${this.onPublicAccessRoleInput}
+            ></solid-ui-access-control-general-access>
+            <solid-ui-access-control-errors
+              .errors=${this.saveErrors}
+              @close=${this.onCancelClick}
+            ></solid-ui-access-control-errors>
           </solid-ui-dialog-content>
 
           <solid-ui-dialog-footer>
@@ -733,31 +394,13 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
   }
 
-  private onPrincipalInput (event: Event) {
-    this.principalInputValue = this.getEventValue(event)
+  private onPrincipalInput (event: TargetInputEvent) {
+    this.principalInputValue = event.detail.value
     this.errors = this.errors.filter(error => error.action !== 'input')
   }
 
-  private onPrincipalSelect (event: Event) {
-    const option = this.getSelectedStringComboboxOption(event)
-
-    if (!option) {
-      return
-    }
-
-    this.queuePendingPrinciple(option.value, this.addAccessRoleValue, option.label)
-  }
-
-  private onSearchInput (event: Event) {
-    this.searchValue = this.getEventValue(event)
-  }
-
-  private onSearchSelect (event: Event) {
-    const option = this.getSelectedComboboxOption(event)
-
-    if (option) {
-      this.searchValue = option.label
-    }
+  private onPrincipalSelect (event: TargetSelectedEvent) {
+    this.queuePendingPrinciple(event.detail.value, this.addAccessRoleValue, event.detail.label)
   }
 
   private getGeneralAccessChanges (): AccessChange[] {
@@ -787,46 +430,30 @@ export default class AccessControlModal extends DialogComponent<void> {
     return [authenticatedChange, publicChange].filter(isDefined)
   }
 
-  private onAddAccessRoleInput (event: Event) {
-    const nextRole = this.getRoleValueFromEvent(event)
-    this.addAccessRoleValue = nextRole
+  private onAddAccessRoleInput (event: RoleChangedEvent) {
+    this.addAccessRoleValue = event.detail.role
     this.pendingAccessGrants = this.pendingAccessGrants.map(grant => ({
       ...grant,
-      role: nextRole
+      role: event.detail.role
     }))
   }
 
-  private onAuthenticatedAccessRoleInput (event: Event) {
-    const nextRole = this.getRoleValueFromEvent(event)
-    this.authenticatedAccessRoleValue = nextRole
+  private onAuthenticatedAccessRoleInput (event: RoleChangedEvent) {
+    this.authenticatedAccessRoleValue = event.detail.role
   }
 
-  private onPublicAccessRoleInput (event: Event) {
-    const nextRole = this.getRoleValueFromEvent(event, 'No Access')
-    this.publicAccessRoleValue = nextRole
+  private onPublicAccessRoleInput (event: RoleChangedEvent) {
+    this.publicAccessRoleValue = event.detail.role
   }
 
-  private onAccessGrantRoleInput (index: number, event: Event) {
-    const value = this.getRoleValueFromEvent(event)
-
+  private onAccessGrantRoleInput (event: AccessGrantRoleChangedEvent) {
     this.accessGrantRoles = this.accessGrantRoles.map((role, roleIndex) => {
-      return roleIndex === index ? value : role
+      return roleIndex === event.detail.index ? event.detail.role : role
     })
   }
 
-  private removePendingAccessGrant (index: number) {
-    this.pendingAccessGrants = this.pendingAccessGrants.filter((_, pendingIndex) => pendingIndex !== index)
-  }
-
-  private onRemovePendingAccessGrantClick (event: Event) {
-    const target = event.currentTarget as HTMLElement | null
-    const index = target?.dataset.pendingGrantIndex
-
-    if (index === undefined) {
-      return
-    }
-
-    this.removePendingAccessGrant(Number.parseInt(index, 10))
+  private onPendingGrantRemoved (event: PendingGrantRemovedEvent) {
+    this.pendingAccessGrants = this.pendingAccessGrants.filter((_, pendingIndex) => pendingIndex !== event.detail.index)
   }
 
   private hasUnsavedChanges (): boolean {
@@ -875,28 +502,6 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
 
     return label(sym(subject.iri)).trim() || subject.iri
-  }
-
-  private getEventValue (event: Event, fallback = ''): string {
-    const target = event.currentTarget as { value?: string | null } | null
-    return typeof target?.value === 'string' ? target.value : fallback
-  }
-
-  private getSelectedComboboxOption (event: Event): ComboboxChangeEvent['detail']['option'] | undefined {
-    return (event as ComboboxChangeEvent).detail?.option
-  }
-
-  private getSelectedStringComboboxOption (event: Event): StringComboboxOptionData | undefined {
-    const option = this.getSelectedComboboxOption(event)
-    return this.isStringComboboxOptionData(option) ? option : undefined
-  }
-
-  private getSelectedComboboxOptionValue (event: Event): unknown {
-    return this.getSelectedComboboxOption(event)?.value
-  }
-
-  private isStringComboboxOptionData (option: ComboboxOptionData | undefined): option is StringComboboxOptionData {
-    return typeof option?.value === 'string'
   }
 
   private async commitPrinciplesFromInput (): Promise<boolean> {
@@ -995,7 +600,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async classifyAccessTarget (principle: string) {
-    const normalizedOrigin = this.normalizeOriginInput(principle)
+    const normalizedOrigin = normalizeOriginInput(principle)
     return normalizedOrigin
       ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
       : await solidLogicSingleton.acl.classifyAccessControlSubject(principle)
@@ -1089,7 +694,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async getPreferredAccessPrincipleOptions (query: string): Promise<ComboboxOptionData[]> {
-    const normalizedOrigin = this.normalizeOriginInput(query)
+    const normalizedOrigin = normalizeOriginInput(query)
     if (normalizedOrigin) {
       return [{
         label: `Use origin ${normalizedOrigin}`,
@@ -1112,27 +717,6 @@ export default class AccessControlModal extends DialogComponent<void> {
     return dedupeComboboxOptions(urlOption ? [urlOption] : [])
   }
 
-  private normalizeOriginInput (value: string): string | undefined {
-    const trimmedValue = value.trim()
-    if (!trimmedValue || isAbsoluteHttpUri(trimmedValue)) {
-      return undefined
-    }
-
-    try {
-      const parsed = new URL(`https://${trimmedValue}`)
-      const isHttpOrigin = parsed.protocol === 'http:' || parsed.protocol === 'https:'
-      const hasOnlyOriginParts = parsed.pathname === '/' && !parsed.search && !parsed.hash
-      const isRecognizedHost = parsed.hostname.includes('.') ||
-        parsed.hostname.includes(':')
-
-      return isHttpOrigin && hasOnlyOriginParts && isRecognizedHost && !parsed.username && !parsed.password
-        ? parsed.origin
-        : undefined
-    } catch {
-      return undefined
-    }
-  }
-
   private async createUrlOption (uri: string): Promise<StringComboboxOptionData | undefined> {
     const resolved = await this.resolveAccessTarget(uri)
     if (!resolved) {
@@ -1149,48 +733,8 @@ export default class AccessControlModal extends DialogComponent<void> {
     return {
       label: entry.label,
       value: entry.uri,
-      template: this.directoryEntryToOptionTemplate(entry)
+      template: directoryEntryOptionTemplate(entry)
     }
   }
 
-  private directoryEntryToOptionTemplate (entry: DirectoryEntry) {
-    return html`
-      <span class="access-grants-directory-entry">
-        <!-- This renders inside the combobox shadow DOM, so the modal stylesheet cannot reach these icons.
-             If combobox supports a dedicated option icon hook, we can move this sizing there instead. -->
-        ${this.renderDirectoryEntryIcon(entry)}
-        <span>${entry.label}</span>
-      </span>
-    `
-  }
-
-  private renderDirectoryEntryIcon (entry: DirectoryEntry) {
-    if (entry.sources.includes('contacts') || entry.sources.includes('groups')) {
-      return html`<icon-lucide-book-user style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-book-user>`
-    }
-
-    if (entry.sources.includes('friends')) {
-      return html`<icon-lucide-users style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-users>`
-    }
-
-    if (entry.sources.includes('catalog')) {
-      return html`<icon-lucide-user-round style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-user-round>`
-    }
-
-    return nothing
-  }
-
-  private async onCopyLinkClick (event: Event) {
-    event.preventDefault()
-
-    if (!this.subjectUri) {
-      return
-    }
-
-    try {
-      await navigator.clipboard.writeText(this.subjectUri)
-    } catch (error) {
-      debug.error('Failed to copy resource link', error)
-    }
-  }
 }

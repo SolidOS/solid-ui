@@ -312,7 +312,9 @@ describe('AccessControlModal submit', () => {
     expect(planGrant).toHaveBeenCalledTimes(grants.length)
     expect(applyPlan).toHaveBeenCalledTimes(grants.length - failedDuringPlanning.size)
 
-    const saveErrorState = element.shadowRoot.querySelector('solid-ui-error-state')
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    const saveErrorState = errors.shadowRoot.querySelector('solid-ui-error-state')
     expect(saveErrorState).not.toBeNull()
     const errorItems = [...saveErrorState.querySelectorAll('li')].map((item: Element) => item.textContent)
     const errorLabels = [...saveErrorState.querySelectorAll('li .access-control-save-error-label')].map((label: Element) => label.textContent)
@@ -366,8 +368,10 @@ describe('AccessControlModal submit', () => {
       target: `${successfulGrant.subjectValue}.acl`
     }))
     expect(close).not.toHaveBeenCalled()
-    expect(element.shadowRoot.querySelector('solid-ui-error-state')).not.toBeNull()
-    expect([...element.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    expect(errors.shadowRoot.querySelector('solid-ui-error-state')).not.toBeNull()
+    expect([...errors.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
       .toEqual(['Failed agent'])
     const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
       .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
@@ -399,7 +403,9 @@ describe('AccessControlModal submit', () => {
     expect(planGrant).toHaveBeenCalledTimes(grants.length)
     expect(applyPlan).not.toHaveBeenCalled()
     expect(close).not.toHaveBeenCalled()
-    expect([...element.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    expect([...errors.shadowRoot.querySelectorAll('solid-ui-error-state li .access-control-save-error-label')].map((label: Element) => label.textContent))
       .toEqual(['Failed agent 0', 'Failed agent 1', 'Failed agent 2'])
 
     document.body.removeChild(element)
@@ -451,7 +457,9 @@ describe('AccessControlModal submit', () => {
     await element.updateComplete
 
     expect(close).not.toHaveBeenCalled()
-    const errorState = element.shadowRoot.querySelector('solid-ui-error-state')
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    const errorState = errors.shadowRoot.querySelector('solid-ui-error-state')
     expect(errorState).not.toBeNull()
     expect(errorState.textContent).toContain('Could not save access changes')
     expect([...errorState.querySelectorAll('li .access-control-save-error-label')].map((label: Element) => label.textContent))
@@ -489,15 +497,13 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const roleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--top')
-    roleSelect.dispatchEvent(new CustomEvent('change', {
+    const addAccess = element.shadowRoot.querySelector('solid-ui-access-control-add-access')
+    await addAccess.updateComplete
+    addAccess.dispatchEvent(new CustomEvent('role-changed', {
       bubbles: true,
       composed: true,
       detail: {
-        option: {
-          value: 'Editor',
-          label: 'Editor'
-        }
+        role: 'Editor'
       }
     }))
 
@@ -521,7 +527,9 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const sharedRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
+    const generalAccess = element.shadowRoot.querySelector('solid-ui-access-control-general-access')
+    await generalAccess.updateComplete
+    const sharedRoleSelect = generalAccess.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
     sharedRoleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -562,7 +570,9 @@ describe('AccessControlModal submit', () => {
       .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
     expect(saveButton.hasAttribute('disabled')).toBe(true)
 
-    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    const grantRoleSelect = sharedAccess.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
     grantRoleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -586,9 +596,13 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const addRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--top')
-    const authenticatedRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
-    const publicRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-role-select--public')
+    const addAccess = element.shadowRoot.querySelector('solid-ui-access-control-add-access')
+    const generalAccess = element.shadowRoot.querySelector('solid-ui-access-control-general-access')
+    await generalAccess.updateComplete
+    const authenticatedRoleSelect = generalAccess.shadowRoot.querySelector('solid-ui-combobox.access-role-select--authenticated')
+    const publicRoleSelect = generalAccess.shadowRoot.querySelector('solid-ui-combobox.access-role-select--public')
+    await addAccess.updateComplete
+    const addRoleSelect = addAccess.shadowRoot.querySelector('solid-ui-combobox.access-role-select--top')
 
     const addOptions = [...addRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
     const authenticatedOptions = [...authenticatedRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
@@ -616,7 +630,9 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    const grantRoleSelect = sharedAccess.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
     const grantOptions = [...grantRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
 
     expect(grantOptions).toContain('Remove')
@@ -625,7 +641,7 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
-  it('keeps authenticated and public grants out of the shared-with list', async () => {
+  it('keeps authenticated and public grants out of the shared-access list', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.accessGrants = [
       {
@@ -654,10 +670,12 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const sharedWithLabels = [...element.shadowRoot.querySelectorAll('.access-grants-list h3')].map((label: Element) => label.textContent?.trim())
-    expect(sharedWithLabels).toEqual(['card.ttl'])
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    const sharedAccessLabels = [...sharedAccess.shadowRoot.querySelectorAll('.access-grants-list h3')].map((label: Element) => label.textContent?.trim())
+    expect(sharedAccessLabels).toEqual(['card.ttl'])
 
-    const searchOptions = [...element.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
+    const searchOptions = [...sharedAccess.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
       .map((option: Element) => option.textContent?.trim())
     expect(searchOptions).toEqual(['card.ttl'])
 
@@ -693,21 +711,23 @@ describe('AccessControlModal submit', () => {
       origin: [],
       mode: ['Read']
     })
-    const entries = element.getSharedAccessGrantEntries()
+    const entries = element.getAccessGrantViewModels().filter(({ subjects }) => subjects.length > 0)
     expect(entries).toHaveLength(1)
     expect(entries[0].authorization.agentClass).toEqual([agentClass])
     expect(entries[0].subjectLabel).toBe(expectedLabel)
     expect(element.accessGrants[0].agentClass).toEqual([generalClass, agentClass])
-    expect(element.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
-    const searchOptions = [...element.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    expect(sharedAccess.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
+    const searchOptions = [...sharedAccess.shadowRoot.querySelectorAll('solid-ui-combobox.access-grants-search-input solid-ui-combobox-option')]
       .map((option: Element) => option.textContent?.trim())
     expect(searchOptions).toEqual([expectedLabel])
 
-    element.searchValue = 'card.ttl'
-    await element.updateComplete
-    expect(element.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
+    sharedAccess.searchValue = 'card.ttl'
+    await sharedAccess.updateComplete
+    expect(sharedAccess.shadowRoot.querySelector('.access-grants-list h3').textContent.trim()).toBe(expectedLabel)
 
-    const roleSelect = element.shadowRoot.querySelector('.access-grants-list solid-ui-combobox')
+    const roleSelect = sharedAccess.shadowRoot.querySelector('.access-grants-list solid-ui-combobox')
     roleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -738,7 +758,9 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    const grantRoleSelect = sharedAccess.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
     grantRoleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,
@@ -791,7 +813,9 @@ describe('AccessControlModal submit', () => {
     document.body.appendChild(element)
     await element.updateComplete
 
-    const grantRoleSelect = element.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    const grantRoleSelect = sharedAccess.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
     grantRoleSelect.dispatchEvent(new CustomEvent('change', {
       bubbles: true,
       composed: true,

@@ -1,0 +1,23 @@
+:host {
+  .access-control-save-errors {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0;
+    padding-left: 20px;
+
+    li {
+      display: flex;
+      align-items: baseline;
+      gap: 6px;
+      color: var(--solid-ui-color-gray-700, #374151);
+      font-size: var(--solid-ui-font-size-sm, .875rem);
+      line-height: 1.4;
+    }
+
+    .access-control-save-error-label {
+      flex: 0 0 auto;
+      font-weight: 500;
+    }
+  }
+}
