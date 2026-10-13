@@ -376,4 +376,15 @@
       min-width: 132px;
     }
   }
+
+  @media (max-width: 380px) {
+    .access-control-footer-actions {
+      gap: 8px;
+
+      > solid-ui-button {
+        min-width: 0;
+        flex: 1 1 0;
+      }
+    }
+  }
 }
