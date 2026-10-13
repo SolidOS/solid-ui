@@ -36,14 +36,14 @@ export default class AccessControlSharedAccess extends WebComponent {
     this.searchValue = option.label
   }
 
-  private onAccessGrantRoleChange (index: number, event: ComboboxChangeEvent) {
+  private onAccessGrantRoleChange (id: string, event: ComboboxChangeEvent) {
     const value = event.detail.option.value
     if (typeof value !== 'string' || !ACCESS_ROLES.includes(value as AccessRole)) {
       return
     }
 
     const detail: AccessGrantRoleChangedDetail = {
-      index,
+      id,
       role: value as AccessRole
     }
 
@@ -71,7 +71,7 @@ export default class AccessControlSharedAccess extends WebComponent {
       <li>
         ${this.renderAuthorizationBadge(entry.authorization, entry.subjectLabel)}
         <h3>${entry.subjectLabel}</h3>
-        ${this.renderAuthorizationRole(entry.role, entry.index)}
+        ${this.renderAuthorizationRole(entry.role, entry.id)}
       </li>
     `
   }
@@ -139,12 +139,12 @@ export default class AccessControlSharedAccess extends WebComponent {
     return (initials || value.slice(0, maxWords)).toUpperCase()
   }
 
-  private renderAuthorizationRole (role: AccessRole, index: number) {
+  private renderAuthorizationRole (role: AccessRole, id: string) {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${role === 'Owner' ? 'access-grants-role--owner' : ''}"
         .value=${role}
-        @change=${(event: ComboboxChangeEvent) => this.onAccessGrantRoleChange(index, event)}
+        @change=${(event: ComboboxChangeEvent) => this.onAccessGrantRoleChange(id, event)}
       >
         ${this.renderGrantRoleOptions()}
       </solid-ui-combobox>

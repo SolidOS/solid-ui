@@ -52,9 +52,9 @@ describe('AccessControlModal submit', () => {
     planPublicRead.mockReset()
     applyPlan.mockReset()
     classifyAccessControlSubject.mockReset()
-    classifyAccessControlSubject.mockImplementation(async (principle: string) => ({
+    classifyAccessControlSubject.mockImplementation(async (principal: string) => ({
       kind: 'agent' as const,
-      subjectValue: principle
+      subjectValue: principal
     }))
     planGrant.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     planPublicRead.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
@@ -686,6 +686,7 @@ describe('AccessControlModal submit', () => {
     'http://www.w3.org/ns/auth/acl#AuthenticatedAgent',
     'http://xmlns.com/foaf/0.1/Agent'
   ])('retains non-general subjects from an authorization containing %s', async (generalClass) => {
+    const { getAccessGrantViewModels, getAuthorizationSubjectLabel } = await import('../../src/components/access-control-modal/accessGrantDrafts')
     const element = document.createElement('solid-ui-access-control-modal') as any
     const agent = 'https://alice.example.com/profile/card.ttl#me'
     const group = 'https://example.com/group'
@@ -704,14 +705,14 @@ describe('AccessControlModal submit', () => {
     await element.refreshAccessGrantLabels()
     await element.updateComplete
 
-    const expectedLabel = element.getAuthorizationSubjectLabel({
+    const expectedLabel = getAuthorizationSubjectLabel({
       agent: [agent],
       agentGroup: [group],
       agentClass: [agentClass],
       origin: [],
       mode: ['Read']
     })
-    const entries = element.getAccessGrantViewModels().filter(({ subjects }) => subjects.length > 0)
+    const entries = getAccessGrantViewModels(element.accessGrantDrafts).filter(({ subjects }) => subjects.length > 0)
     expect(entries).toHaveLength(1)
     expect(entries[0].authorization.agentClass).toEqual([agentClass])
     expect(entries[0].subjectLabel).toBe(expectedLabel)

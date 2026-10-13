@@ -23,7 +23,7 @@ export type RoleChangedEvent = CustomEvent<RoleChangedDetail>
 export type PendingGrantRemovedEvent = CustomEvent<PendingGrantRemovedDetail>
 
 export type AccessGrantRoleChangedDetail = {
-  index: number
+  id: string
   role: AccessRole
 }
 
@@ -46,8 +46,8 @@ export type PendingAccessGrant = {
 }
 
 export type AccessGrantEntry = {
+  id: string
   authorization: Authorization
-  index: number
   role: AccessRole
   subjectLabel: string
 }
@@ -56,6 +56,8 @@ export type AccessGrantViewModel = AccessGrantEntry & {
   initialRole: AccessRole
   subjects: AccessSubject[]
 }
+
+export type AccessGrantDraft = AccessGrantViewModel
 
 export type ChangedAccessGrant = {
   authorization: Authorization

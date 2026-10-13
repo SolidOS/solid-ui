@@ -4,8 +4,7 @@ import type { PropertyValues } from 'lit'
 import { property, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import * as debug from '@/lib/debug'
-import { Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessControlSubjectKind, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
-import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
+import { Authenticated, Public, solidLogicSingleton, type AccessRole, type AccessSubject, type Authorization } from 'solid-logic'
 import { sym } from 'rdflib'
 
 import '~icons/lucide/circle-x'
@@ -15,14 +14,16 @@ import '@/components/dialog-footer'
 import '@/components/button'
 import '@/components/combobox'
 import '@/components/combobox-option'
-import { directoryEntryOptionTemplate } from './AccessControlAddAccess'
 import './AccessControlSharedAccess'
 import './AccessControlGeneralAccess'
 import './AccessControlErrors'
 
 import styles from './AccessControlModal.styles.css'
-import type { AccessChange, AccessControlError, AccessGrantRoleChangedEvent, AccessGrantViewModel, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
-import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, normalizeOriginInput, type StringComboboxOptionData } from './helpers'
+import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessSaveError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
+import { dedupeByKey } from './helpers'
+import { createAccessGrantDraft, getAccessGrantId, getAccessGrantViewModels, getAccessSubjectLabel, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
+import { createAccessPrincipalOptionsProvider, resolveAccessTarget } from './accessTargetResolver'
+import { applyAccessChanges } from './applyAccessChanges'
 
 function isDefined<T> (value: T | undefined | null): value is T {
   return value !== undefined && value !== null
@@ -30,13 +31,9 @@ function isDefined<T> (value: T | undefined | null): value is T {
 
 type PendingAccessGrantCreationResult =
   | { grant: PendingAccessGrant }
-  | { error: AccessControlError }
+  | { error: InputAccessControlError }
 
-type ResolvedAccessTarget = {
-  subjectType: AccessControlSubjectKind
-  subjectValue: string
-  label: string
-}
+type InputAccessControlError = Omit<AccessControlError, 'action'> & { action: 'input' }
 
 @customElement('solid-ui-access-control-modal')
 export default class AccessControlModal extends DialogComponent<void> {
@@ -67,15 +64,15 @@ export default class AccessControlModal extends DialogComponent<void> {
   private accessor pendingAccessGrants: PendingAccessGrant[] = []
 
   @state()
-  private accessor accessGrantRoles: AccessRole[] = []
-
-  @state()
-  private accessor accessGrantLabels: string[] = []
+  private accessor accessGrantDrafts: AccessGrantDraft[] = []
 
   @state()
   private accessor errors: AccessControlError[] = []
 
+  private accessGrantLabelRequestVersion = 0
+
   disconnectedCallback (): void {
+    this.accessGrantLabelRequestVersion++
     this.errors = []
     super.disconnectedCallback()
   }
@@ -88,13 +85,25 @@ export default class AccessControlModal extends DialogComponent<void> {
     return this.errors.filter((error): error is AccessSaveError => error.action !== 'input')
   }
 
+  private setInputError (error: InputAccessControlError) {
+    this.errors = [
+      ...this.errors.filter(item => item.action !== 'input'),
+      error
+    ]
+  }
+
+  private clearInputError () {
+    this.errors = this.errors.filter(error => error.action !== 'input')
+  }
+
   protected willUpdate (changedProperties: PropertyValues<this>) {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('accessGrants')) {
-      this.accessGrantRoles = this.accessGrants?.map(item => this.getAuthorizationRole(item)) ?? []
-      this.authenticatedAccessRoleValue = this.getAuthenticatedAccessRole()
-      this.publicAccessRoleValue = this.getPublicAccessRole()
+      const accessGrants = this.accessGrants ?? []
+      this.accessGrantDrafts = accessGrants.map(createAccessGrantDraft)
+      this.authenticatedAccessRoleValue = getAuthenticatedAccessRole(accessGrants)
+      this.publicAccessRoleValue = getPublicAccessRole(accessGrants)
     }
   }
 
@@ -102,14 +111,17 @@ export default class AccessControlModal extends DialogComponent<void> {
     super.updated(changedProperties)
 
     if (changedProperties.has('accessGrants')) {
-      void this.refreshAccessGrantLabels()
+      this.refreshAccessGrantLabels().catch((error: unknown) => {
+        debug.error('Failed to refresh access grant labels', error)
+      })
     }
   }
 
   private async refreshAccessGrantLabels () {
+    const requestVersion = ++this.accessGrantLabelRequestVersion
     const grants = this.accessGrants ?? []
     if (!grants.length) {
-      this.accessGrantLabels = []
+      this.accessGrantDrafts = []
       return
     }
 
@@ -123,87 +135,21 @@ export default class AccessControlModal extends DialogComponent<void> {
         }
       }
 
-      return this.getAuthorizationSubjectLabel(this.getSharedAuthorization(authorization))
+      return getAuthorizationSubjectLabel(getSharedAuthorization(authorization))
     }))
 
-    if (this.accessGrants === grants) {
-      this.accessGrantLabels = labels
+    if (requestVersion === this.accessGrantLabelRequestVersion && this.accessGrants === grants) {
+      const labelsById = new Map(
+        grants.map((authorization, index) => [
+          getAccessGrantId(getSharedAuthorization(authorization)),
+          labels[index]
+        ])
+      )
+      this.accessGrantDrafts = this.accessGrantDrafts.map(draft => ({
+        ...draft,
+        subjectLabel: labelsById.get(draft.id) ?? draft.subjectLabel
+      }))
     }
-  }
-
-  private getAccessGrantViewModels (): AccessGrantViewModel[] {
-    return (this.accessGrants ?? [])
-      .map((authorization, index) => {
-        const sharedAuthorization = this.getSharedAuthorization(authorization)
-        const role = this.accessGrantRoles[index] ?? this.getAuthorizationRole(sharedAuthorization)
-        const subjectLabel = this.accessGrantLabels[index] ?? this.getAuthorizationSubjectLabel(sharedAuthorization)
-
-        return {
-          authorization: sharedAuthorization,
-          index,
-          role,
-          initialRole: this.getAuthorizationRole(authorization),
-          subjectLabel,
-          subjects: this.getAuthorizationSubjectEntries(sharedAuthorization)
-        }
-      })
-      .sort((left, right) => {
-        const leftIsOwner = left.role === 'Owner'
-        const rightIsOwner = right.role === 'Owner'
-
-        if (leftIsOwner && !rightIsOwner) return -1
-        if (!leftIsOwner && rightIsOwner) return 1
-        return left.index - right.index
-      })
-  }
-
-  private getAuthorizationSubjectIris (authorization: Authorization) {
-    return [
-      ...authorization.agent,
-      ...authorization.agentGroup,
-      ...authorization.agentClass,
-      ...authorization.origin,
-    ]
-  }
-
-  private getAuthorizationSubjectLabel (authorization: Authorization): string {
-    const subjects = this.getAuthorizationSubjectIris(authorization)
-    return subjects.length ? subjects.map(subject => label(sym(subject))).join(', ') : 'Unknown access holder'
-  }
-
-  private getAuthorizationRole (authorization: Authorization): AccessRole {
-    return solidLogicSingleton.acl.roleFromModes(authorization.mode)
-  }
-
-  private getSharedAuthorization (authorization: Authorization): Authorization {
-    return {
-      ...authorization,
-      agentClass: authorization.agentClass.filter(iri => iri !== Authenticated.iri && iri !== Public.iri)
-    }
-  }
-
-  private getAuthenticatedAccessRole (): AccessRole {
-    const authorization = (this.accessGrants ?? []).find(item =>
-      item.agentClass.includes(Authenticated.iri)
-    )
-
-    return authorization ? this.getAuthorizationRole(authorization) : 'No Access'
-  }
-
-  private getPublicAccessRole (): AccessRole {
-    const authorization = (this.accessGrants ?? []).find(item =>
-      item.agentClass.includes(Public.iri)
-    )
-
-    if (!authorization) {
-      return 'No Access'
-    }
-
-    return solidLogicSingleton.acl.publicRoleFromModes(authorization.mode)
-  }
-
-  private getRoleModes (role: AccessRole): AccessMode[] {
-    return solidLogicSingleton.acl.modesFromRole(role)
   }
 
   private getDialogTitle (): string {
@@ -229,14 +175,14 @@ export default class AccessControlModal extends DialogComponent<void> {
               .addAccessRoleValue=${this.addAccessRoleValue}
               .pendingAccessGrants=${this.pendingAccessGrants}
               .inputError=${this.inputError}
-              .asyncOptionsProvider=${this.accessPrincipleOptionsProvider}
+              .asyncOptionsProvider=${createAccessPrincipalOptionsProvider()}
               @target-input=${this.onPrincipalInput}
               @target-selected=${this.onPrincipalSelect}
               @role-changed=${this.onAddAccessRoleInput}
               @pending-grant-removed=${this.onPendingGrantRemoved}
             ></solid-ui-access-control-add-access>
             <solid-ui-access-control-shared-access
-              .accessGrantViewModels=${this.getAccessGrantViewModels()}
+              .accessGrantViewModels=${getAccessGrantViewModels(this.accessGrantDrafts)}
               @access-grant-role-changed=${this.onAccessGrantRoleInput}
             ></solid-ui-access-control-shared-access>
             <solid-ui-access-control-general-access
@@ -282,7 +228,7 @@ export default class AccessControlModal extends DialogComponent<void> {
       return
     }
 
-    await this.commitPrinciplesFromInputSafely()
+    await this.commitPrincipalFromInputSafely()
   }
 
   private async onSaveClick () {
@@ -291,7 +237,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
 
     if (this.principalInputValue.trim()) {
-      const committed = await this.commitPrinciplesFromInputSafely()
+      const committed = await this.commitPrincipalFromInputSafely()
 
       if (!committed) {
         return
@@ -310,7 +256,7 @@ export default class AccessControlModal extends DialogComponent<void> {
       return
     }
 
-    const changedAccessGrants = this.getChangedAccessGrants()
+    const changedAccessGrants = getChangedAccessGrants(this.accessGrantDrafts)
     const generalAccessChanges = this.getGeneralAccessChanges()
 
     if (!this.pendingAccessGrants.length && !changedAccessGrants.length && !generalAccessChanges.length) {
@@ -336,41 +282,15 @@ export default class AccessControlModal extends DialogComponent<void> {
           subjects.map(subject => ({
             subject,
             role,
-            label: this.getAccessSubjectLabel(subject)
+            label: getAccessSubjectLabel(subject)
           }))
         )
       ]
 
-      const appliedChanges: AccessChange[] = []
-
-      for (const { subject, label, role } of accessChanges) {
-        try {
-          const plan = role === 'No Access'
-            ? await solidLogicSingleton.acl.planRevoke(this.subjectUri, subject)
-            : await solidLogicSingleton.acl.planGrant(this.subjectUri, subject, subject.type === 'agentClass' && subject.iri === Public.iri
-              ? solidLogicSingleton.acl.modesFromPublicRole(role as (typeof PUBLIC_ACCESS_ROLES)[number])
-              : this.getRoleModes(role))
-
-          await solidLogicSingleton.acl.applyPlan(plan)
-          appliedChanges.push({ subject, role, label })
-        } catch (error) {
-          this.errors = [
-            ...this.errors,
-            {
-              action: role === 'No Access' ? 'revoke' : 'grant',
-              targetUri: subject.iri,
-              label,
-              role,
-              message: error instanceof Error
-                ? error.message
-                : 'Unable to apply access change.'
-            }
-          ]
-        }
-      }
-
-      if (this.saveErrors.length) {
-        debug.error('Failed to save some access changes', this.saveErrors)
+      const saveErrors = await applyAccessChanges(this.subjectUri, accessChanges)
+      if (saveErrors.length) {
+        this.errors = [...this.errors, ...saveErrors]
+        debug.error('Failed to save some access changes', saveErrors)
         return
       }
 
@@ -396,11 +316,11 @@ export default class AccessControlModal extends DialogComponent<void> {
 
   private onPrincipalInput (event: TargetInputEvent) {
     this.principalInputValue = event.detail.value
-    this.errors = this.errors.filter(error => error.action !== 'input')
+    this.clearInputError()
   }
 
   private onPrincipalSelect (event: TargetSelectedEvent) {
-    this.queuePendingPrinciple(event.detail.value, this.addAccessRoleValue, event.detail.label)
+    this.queuePendingPrincipal(event.detail.value, this.addAccessRoleValue, event.detail.label)
   }
 
   private getGeneralAccessChanges (): AccessChange[] {
@@ -408,8 +328,9 @@ export default class AccessControlModal extends DialogComponent<void> {
       return []
     }
 
-    const currentAuthenticatedRole = this.getAuthenticatedAccessRole()
-    const currentPublicRole = this.getPublicAccessRole()
+    const accessGrants = this.accessGrants ?? []
+    const currentAuthenticatedRole = getAuthenticatedAccessRole(accessGrants)
+    const currentPublicRole = getPublicAccessRole(accessGrants)
 
     const authenticatedChange = this.authenticatedAccessRoleValue === currentAuthenticatedRole
       ? undefined
@@ -447,9 +368,11 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private onAccessGrantRoleInput (event: AccessGrantRoleChangedEvent) {
-    this.accessGrantRoles = this.accessGrantRoles.map((role, roleIndex) => {
-      return roleIndex === event.detail.index ? event.detail.role : role
-    })
+    this.accessGrantDrafts = this.accessGrantDrafts.map(draft =>
+      draft.id === event.detail.id
+        ? { ...draft, role: event.detail.role }
+        : draft
+    )
   }
 
   private onPendingGrantRemoved (event: PendingGrantRemovedEvent) {
@@ -460,98 +383,57 @@ export default class AccessControlModal extends DialogComponent<void> {
     return Boolean(
       this.pendingAccessGrants.length ||
       this.principalInputValue.trim() ||
-      this.getChangedAccessGrants().length ||
+      getChangedAccessGrants(this.accessGrantDrafts).length ||
       this.getGeneralAccessChanges().length
     )
-  }
-
-  private getChangedAccessGrants (): ChangedAccessGrant[] {
-    return this.getAccessGrantViewModels()
-      .filter(({ role, initialRole, subjects }) => {
-        if (role === initialRole) {
-          return false
-        }
-
-        return subjects.length > 0
-      })
-      .map(({ authorization, subjects, role }) => ({ authorization, subjects, role }))
-  }
-
-  private getAuthorizationSubjectEntries (authorization: Authorization): AccessSubject[] {
-    const subjectSets: AuthorizationSubjectSet[] = [
-      { type: 'agent', iris: authorization.agent },
-      { type: 'agentGroup', iris: authorization.agentGroup },
-      { type: 'agentClass', iris: authorization.agentClass },
-      { type: 'origin', iris: authorization.origin }
-    ]
-
-    return subjectSets.flatMap(({ type, iris }) => iris.map(iri => ({ type, iri })))
   }
 
   private createAccessSubject (type: AccessSubject['type'], iri: string): AccessSubject {
     return { type, iri }
   }
 
-  private getAccessSubjectLabel (subject: AccessSubject): string {
-    if (subject.iri === Authenticated.iri) {
-      return 'Authenticated users'
-    }
-
-    if (subject.iri === Public.iri) {
-      return 'Public'
-    }
-
-    return label(sym(subject.iri)).trim() || subject.iri
-  }
-
-  private async commitPrinciplesFromInput (): Promise<boolean> {
+  private async commitPrincipalFromInput (): Promise<boolean> {
     const rawValue = this.principalInputValue.trim()
     if (!rawValue) {
       return false
     }
 
-    return this.queuePendingPrinciple(rawValue, this.addAccessRoleValue, undefined, rawValue)
+    return this.queuePendingPrincipal(rawValue, this.addAccessRoleValue, undefined, rawValue)
   }
 
-  private async commitPrinciplesFromInputSafely (): Promise<boolean> {
+  private async commitPrincipalFromInputSafely (): Promise<boolean> {
     try {
-      return await this.commitPrinciplesFromInput()
+      return await this.commitPrincipalFromInput()
     } catch (error) {
-      this.errors = [
-        ...this.errors.filter(item => item.action !== 'input'),
-        {
-          action: 'input',
-          label: 'Access target',
-          targetUri: this.principalInputValue.trim(),
-          message: 'We could not verify this access target. Check the value and try again.'
-        }
-      ]
+      this.setInputError({
+        action: 'input',
+        label: 'Access target',
+        targetUri: this.principalInputValue.trim(),
+        message: 'We could not verify this access target. Check the value and try again.'
+      })
       debug.error('Failed to commit pending access grants', error)
       return false
     }
   }
 
-  private async queuePendingPrinciple (
-    principle: string,
+  private async queuePendingPrincipal (
+    principal: string,
     role: AccessRole = this.addAccessRoleValue,
     preferredLabel?: string,
     inputSnapshot?: string
   ): Promise<boolean> {
     const snapshot = inputSnapshot ?? this.principalInputValue.trim()
-    const result = await this.createPendingAccessGrant(principle, role, preferredLabel)
+    const result = await this.createPendingAccessGrant(principal, role, preferredLabel)
 
     if ('error' in result) {
-      this.errors = [
-        ...this.errors.filter(item => item.action !== 'input'),
-        result.error
-      ]
+      this.setInputError(result.error)
       debug.error('Failed to add access grant:', result.error.message)
       return false
     }
 
     const merged = [...this.pendingAccessGrants, result.grant]
     this.pendingAccessGrants = this.dedupePendingAccessGrants(merged)
-    this.errors = this.errors.filter(error => error.action !== 'input')
+    this.clearInputError()
 
     if (this.principalInputValue.trim() === snapshot) {
       this.principalInputValue = ''
@@ -561,19 +443,19 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async createPendingAccessGrant (
-    principle: string,
+    principal: string,
     role: AccessRole = this.addAccessRoleValue,
     preferredLabel?: string
   ): Promise<PendingAccessGrantCreationResult> {
     try {
-      const normalizedPrinciple = principle.trim()
-      const resolvedTarget = await this.resolveAccessTarget(normalizedPrinciple, preferredLabel)
+      const normalizedPrincipal = principal.trim()
+      const resolvedTarget = await resolveAccessTarget(normalizedPrincipal, preferredLabel)
       if (!resolvedTarget) {
         return {
           error: {
             action: 'input',
             label: 'Access target',
-            targetUri: normalizedPrinciple,
+            targetUri: normalizedPrincipal,
             message: 'Could not verify this access target'
           }
         }
@@ -592,149 +474,14 @@ export default class AccessControlModal extends DialogComponent<void> {
         error: {
           action: 'input',
           label: 'Access target',
-          targetUri: principle,
+          targetUri: principal,
           message: error instanceof Error ? error.message : 'Could not verify this access target'
         }
       }
     }
   }
 
-  private async classifyAccessTarget (principle: string) {
-    const normalizedOrigin = normalizeOriginInput(principle)
-    return normalizedOrigin
-      ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
-      : await solidLogicSingleton.acl.classifyAccessControlSubject(principle)
-  }
-
-  private async resolveAccessTargetLabel (
-    resolvedPrinciple: Awaited<ReturnType<typeof this.classifyAccessTarget>>,
-    preferredLabel?: string
-  ): Promise<string | undefined> {
-    if (!resolvedPrinciple || resolvedPrinciple.kind === 'origin') {
-      return resolvedPrinciple?.subjectValue
-    }
-
-    try {
-      const subject = sym(resolvedPrinciple.subjectValue)
-      await solidLogicSingleton.store.fetcher.load(subject.doc())
-      const resolvedLabel = preferredLabel?.trim() || label(subject).trim()
-      if (!resolvedLabel || resolvedLabel === resolvedPrinciple.subjectValue) {
-        return undefined
-      }
-
-      return resolvedLabel
-    } catch {
-      return undefined
-    }
-  }
-
-  private async resolveAccessTarget (principle: string, preferredLabel?: string): Promise<ResolvedAccessTarget | undefined> {
-    const resolvedPrinciple = await this.classifyAccessTarget(principle)
-    if (!resolvedPrinciple) {
-      return undefined
-    }
-
-    const resolvedLabel = await this.resolveAccessTargetLabel(resolvedPrinciple, preferredLabel)
-    if (!resolvedLabel) {
-      return undefined
-    }
-
-    return {
-      subjectType: resolvedPrinciple.kind,
-      subjectValue: resolvedPrinciple.subjectValue,
-      label: resolvedLabel
-    }
-  }
-
   private dedupePendingAccessGrants (draftGrants: PendingAccessGrant[]): PendingAccessGrant[] {
     return dedupeByKey(draftGrants, draftGrant => `${draftGrant.subjectType}:${draftGrant.subjectValue}`)
   }
-
-  private readonly accessPrincipleOptionsProvider = defineAsyncComboboxOptionsProvider(async (filter: string) => {
-    const query = filter.trim()
-    const preferredOptions = await this.getPreferredAccessPrincipleOptions(query)
-
-    if (query.length < 2) {
-      return this.getShortQueryOptions(preferredOptions)
-    }
-
-    let entries: DirectoryEntry[] = []
-
-    try {
-      entries = await solidLogicSingleton.directory.search({
-        query,
-        sources: DEFAULT_DIRECTORY_SOURCES
-      })
-    } catch (error) {
-      if (!preferredOptions.length) {
-        throw error
-      }
-    }
-
-    const verifiedEntries = await Promise.all(entries.map(async entry => {
-      const resolved = await this.resolveAccessTarget(entry.uri, entry.label)
-      return resolved ? { entry, label: resolved.label } : undefined
-    }))
-    const options = verifiedEntries
-      .filter(isDefined)
-      .map(({ entry, label: entryLabel }) => this.directoryEntryToOption({ ...entry, label: entryLabel }))
-    return [...preferredOptions, ...options]
-  })
-
-  private getShortQueryOptions (preferredOptions: ComboboxOptionData[]): ComboboxOptionData[] {
-    if (preferredOptions.length) {
-      return preferredOptions
-    }
-
-    return [{
-      label: 'Type at least 2 characters to search',
-      value: '',
-      selectable: false
-    }]
-  }
-
-  private async getPreferredAccessPrincipleOptions (query: string): Promise<ComboboxOptionData[]> {
-    const normalizedOrigin = normalizeOriginInput(query)
-    if (normalizedOrigin) {
-      return [{
-        label: `Use origin ${normalizedOrigin}`,
-        value: normalizedOrigin
-      }]
-    }
-
-    if (!isAbsoluteHttpUri(query)) {
-      return []
-    }
-
-    if (isOriginUrl(query)) {
-      return [{
-        label: `Use origin ${new URL(query).origin}`,
-        value: new URL(query).origin
-      }]
-    }
-
-    const urlOption = await this.createUrlOption(query)
-    return dedupeComboboxOptions(urlOption ? [urlOption] : [])
-  }
-
-  private async createUrlOption (uri: string): Promise<StringComboboxOptionData | undefined> {
-    const resolved = await this.resolveAccessTarget(uri)
-    if (!resolved) {
-      return undefined
-    }
-
-    return {
-      label: resolved.label,
-      value: uri
-    }
-  }
-
-  private directoryEntryToOption (entry: DirectoryEntry): ComboboxOptionData {
-    return {
-      label: entry.label,
-      value: entry.uri,
-      template: directoryEntryOptionTemplate(entry)
-    }
-  }
-
 }
