@@ -21,8 +21,9 @@ export default class ErrorState extends WebComponent {
   render () {
     return html`
       <section role="alert">
-        <solid-ui-button class="close-button" variant="ghost" aria-label="Close">
+        <solid-ui-button class="close-button" variant="ghost" @click=${this.onClose}>
           <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
+          <span class="sr-only">Close</span>
         </solid-ui-button>
         <div class="icon">
           <icon-lucide-triangle-alert aria-hidden="true"></icon-lucide-triangle-alert>
@@ -34,5 +35,12 @@ export default class ErrorState extends WebComponent {
         </div>
       </section>
     `
+  }
+
+  private onClose () {
+    this.dispatchEvent(new CustomEvent('close', {
+      bubbles: true,
+      composed: true
+    }))
   }
 }

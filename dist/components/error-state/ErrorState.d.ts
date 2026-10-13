@@ -4,5 +4,6 @@ export default class ErrorState extends WebComponent {
     accessor title: string;
     accessor message: string;
     render(): import('lit-html').TemplateResult<1>;
+    private onClose;
 }
 //# sourceMappingURL=ErrorState.d.ts.map

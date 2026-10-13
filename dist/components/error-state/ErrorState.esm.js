@@ -201,8 +201,9 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
 	render() {
 		return r`
       <section role="alert">
-        <solid-ui-button class="close-button" variant="ghost" aria-label="Close">
+        <solid-ui-button class="close-button" variant="ghost" @click=${this.onClose}>
           <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
+          <span class="sr-only">Close</span>
         </solid-ui-button>
         <div class="icon">
           <icon-lucide-triangle-alert aria-hidden="true"></icon-lucide-triangle-alert>
@@ -214,6 +215,12 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
         </div>
       </section>
     `;
+	}
+	onClose() {
+		this.dispatchEvent(new CustomEvent("close", {
+			bubbles: !0,
+			composed: !0
+		}));
 	}
 }, {e: [m, g, u], c: [j, d]} = T(s, [[
 	p,

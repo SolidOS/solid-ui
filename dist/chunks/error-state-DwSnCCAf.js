@@ -203,8 +203,9 @@ new (y = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), b = 
 	render() {
 		return a`
       <section role="alert">
-        <solid-ui-button class="close-button" variant="ghost" aria-label="Close">
+        <solid-ui-button class="close-button" variant="ghost" @click=${this.onClose}>
           <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
+          <span class="sr-only">Close</span>
         </solid-ui-button>
         <div class="icon">
           <icon-lucide-triangle-alert aria-hidden="true"></icon-lucide-triangle-alert>
@@ -216,6 +217,12 @@ new (y = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), b = 
         </div>
       </section>
     `;
+	}
+	onClose() {
+		this.dispatchEvent(new CustomEvent("close", {
+			bubbles: !0,
+			composed: !0
+		}));
 	}
 }, {e: [g, v, f], c: [N, p]} = D(l, [[
 	h,
@@ -233,4 +240,4 @@ new (y = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), b = 
 //#endregion
 export { N as t };
 
-//# sourceMappingURL=error-state-COOc5o3-.js.map
+//# sourceMappingURL=error-state-DwSnCCAf.js.map
