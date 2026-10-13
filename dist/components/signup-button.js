@@ -1,1 +1,1 @@
-export { n as SignupButton, t as default } from "../chunks/signup-button-CgKmBalg.js";
+export { n as SignupButton, t as default } from "../chunks/signup-button-BtqQgUfr.js";

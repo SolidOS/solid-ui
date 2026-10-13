@@ -10,6 +10,7 @@ import type DialogFooter from '../components/dialog-footer/DialogFooter'
 import type DialogHeader from '../components/dialog-header/DialogHeader'
 import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
+import type ErrorState from '../components/error-state/ErrorState'
 import type Guard from '../components/guard/Guard'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
@@ -41,6 +42,7 @@ declare global {
     'solid-ui-dialog-header': DialogHeader
     'solid-ui-dialog-provider': DialogProvider
     'solid-ui-dialogs-root': DialogsRoot
+    'solid-ui-error-state': ErrorState
     'solid-ui-guard': Guard
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
