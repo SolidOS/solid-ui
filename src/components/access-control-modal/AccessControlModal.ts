@@ -1,11 +1,10 @@
-import { customElement, WebComponent } from '@/lib/components'
+import { customElement, DialogComponent } from '@/lib/components'
 import { html, nothing } from 'lit'
 import type { PropertyValues } from 'lit'
-import { property, query, state } from 'lit/decorators.js'
+import { property, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import * as debug from '@/lib/debug'
 import { findImage } from '@/widgets'
-import type Dialog from '@/components/dialog'
 import { ACCESS_ROLES, Authenticated, DEFAULT_DIRECTORY_SOURCES, PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type AccessControlSubjectKind, type AccessMode, type AccessRole, type AccessSubject, type Authorization, type DirectoryEntry } from 'solid-logic'
 import { defineAsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
 import { sym } from 'rdflib'
@@ -27,7 +26,7 @@ import '@/components/error-state'
 
 import styles from './AccessControlModal.styles.css'
 import type { ComboboxChangeEvent } from '@/components/combobox'
-import type { AccessChange, AccessControlBadge, AccessGrantViewModel, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
+import type { AccessChange, AccessControlBadge, AccessControlError, AccessGrantViewModel, AccessSaveError, AuthorizationSubjectSet, ChangedAccessGrant, PendingAccessGrant } from './types'
 import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, type StringComboboxOptionData } from './helpers'
 
 function isDefined<T> (value: T | undefined | null): value is T {
@@ -36,7 +35,7 @@ function isDefined<T> (value: T | undefined | null): value is T {
 
 type PendingAccessGrantCreationResult =
   | { grant: PendingAccessGrant }
-  | { error: string }
+  | { error: AccessControlError }
 
 type ResolvedAccessTarget = {
   subjectType: AccessControlSubjectKind
@@ -45,7 +44,7 @@ type ResolvedAccessTarget = {
 }
 
 @customElement('solid-ui-access-control-modal')
-export default class AccessControlModal extends WebComponent {
+export default class AccessControlModal extends DialogComponent<void> {
   static styles = styles
 
   @property({ attribute: false })
@@ -70,9 +69,6 @@ export default class AccessControlModal extends WebComponent {
   private accessor searchValue: string = ''
 
   @state()
-  private accessor inputError: string = ''
-
-  @state()
   private accessor submitting: boolean = false
 
   @state()
@@ -85,14 +81,19 @@ export default class AccessControlModal extends WebComponent {
   private accessor accessGrantLabels: string[] = []
 
   @state()
-  private accessor saveErrors: AccessSaveError[] = []
-
-  @query('solid-ui-dialog')
-  private accessor dialog: Dialog | null = null
+  private accessor errors: AccessControlError[] = []
 
   disconnectedCallback (): void {
-    this.saveErrors = []
+    this.errors = []
     super.disconnectedCallback()
+  }
+
+  private get inputError (): string {
+    return this.errors.find(error => error.action === 'input')?.message ?? ''
+  }
+
+  private get saveErrors (): AccessSaveError[] {
+    return this.errors.filter((error): error is AccessSaveError => error.action !== 'input')
   }
 
   protected willUpdate (changedProperties: PropertyValues<this>) {
@@ -640,7 +641,7 @@ export default class AccessControlModal extends WebComponent {
   }
 
   private onCancelClick () {
-    this.dialog?.close()
+    this.close()
   }
 
   private async saveAccessChanges () {
@@ -660,7 +661,7 @@ export default class AccessControlModal extends WebComponent {
     }
 
     this.submitting = true
-    this.saveErrors = []
+    this.errors = this.errors.filter(error => error.action === 'input')
 
     try {
       const accessChanges: AccessChange[] = [
@@ -692,8 +693,8 @@ export default class AccessControlModal extends WebComponent {
           await solidLogicSingleton.acl.applyPlan(plan)
           appliedChanges.push({ subject, role, label })
         } catch (error) {
-          this.saveErrors = [
-            ...this.saveErrors,
+          this.errors = [
+            ...this.errors,
             {
               action: role === 'No Access' ? 'revoke' : 'grant',
               targetUri: subject.iri,
@@ -714,10 +715,10 @@ export default class AccessControlModal extends WebComponent {
 
       this.principalInputValue = ''
       this.pendingAccessGrants = []
-      this.dialog?.close()
+      this.close()
     } catch (error) {
-      this.saveErrors = [
-        ...this.saveErrors,
+      this.errors = [
+        ...this.errors,
         {
           action: 'save',
           targetUri: this.subjectUri ?? '',
@@ -734,7 +735,7 @@ export default class AccessControlModal extends WebComponent {
 
   private onPrincipalInput (event: Event) {
     this.principalInputValue = this.getEventValue(event)
-    this.inputError = ''
+    this.errors = this.errors.filter(error => error.action !== 'input')
   }
 
   private onPrincipalSelect (event: Event) {
@@ -911,7 +912,15 @@ export default class AccessControlModal extends WebComponent {
     try {
       return await this.commitPrinciplesFromInput()
     } catch (error) {
-      this.inputError = 'We could not verify this access target. Check the value and try again.'
+      this.errors = [
+        ...this.errors.filter(item => item.action !== 'input'),
+        {
+          action: 'input',
+          label: 'Access target',
+          targetUri: this.principalInputValue.trim(),
+          message: 'We could not verify this access target. Check the value and try again.'
+        }
+      ]
       debug.error('Failed to commit pending access grants', error)
       return false
     }
@@ -927,14 +936,17 @@ export default class AccessControlModal extends WebComponent {
     const result = await this.createPendingAccessGrant(principle, role, preferredLabel)
 
     if ('error' in result) {
-      this.inputError = result.error
-      debug.error('Failed to add access grant:', result.error)
+      this.errors = [
+        ...this.errors.filter(item => item.action !== 'input'),
+        result.error
+      ]
+      debug.error('Failed to add access grant:', result.error.message)
       return false
     }
 
     const merged = [...this.pendingAccessGrants, result.grant]
     this.pendingAccessGrants = this.dedupePendingAccessGrants(merged)
-    this.inputError = ''
+    this.errors = this.errors.filter(error => error.action !== 'input')
 
     if (this.principalInputValue.trim() === snapshot) {
       this.principalInputValue = ''
@@ -953,7 +965,12 @@ export default class AccessControlModal extends WebComponent {
       const resolvedTarget = await this.resolveAccessTarget(normalizedPrinciple, preferredLabel)
       if (!resolvedTarget) {
         return {
-          error: 'Could not verify this access target'
+          error: {
+            action: 'input',
+            label: 'Access target',
+            targetUri: normalizedPrinciple,
+            message: 'Could not verify this access target'
+          }
         }
       }
 
@@ -967,7 +984,12 @@ export default class AccessControlModal extends WebComponent {
       }
     } catch (error) {
       return {
-        error: String(error)
+        error: {
+          action: 'input',
+          label: 'Access target',
+          targetUri: principle,
+          message: error instanceof Error ? error.message : 'Could not verify this access target'
+        }
       }
     }
   }

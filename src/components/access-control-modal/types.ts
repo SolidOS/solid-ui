@@ -46,10 +46,12 @@ export type AccessChange = {
   label: string
 }
 
-export type AccessSaveError = {
-  action: 'grant' | 'revoke' | 'save'
-  targetUri: string
+export type AccessControlError = {
+  action: 'input' | 'grant' | 'revoke' | 'save'
+  targetUri?: string
   label: string
   role?: AccessRole
   message: string
 }
+
+export type AccessSaveError = Exclude<AccessControlError, { action: 'input' }>

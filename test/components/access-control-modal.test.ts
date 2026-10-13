@@ -352,8 +352,8 @@ describe('AccessControlModal submit', () => {
     element.pendingAccessGrants = [successfulGrant, failedGrant]
     document.body.appendChild(element)
     await element.updateComplete
-    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
-    const close = vi.spyOn(dialog, 'close')
+    const close = vi.fn()
+    window.addEventListener('solid-ui:close-dialog', close)
 
     await element.onSaveClick()
     await element.updateComplete
@@ -390,8 +390,8 @@ describe('AccessControlModal submit', () => {
     element.pendingAccessGrants = grants
     document.body.appendChild(element)
     await element.updateComplete
-    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
-    const close = vi.spyOn(dialog, 'close')
+    const close = vi.fn()
+    window.addEventListener('solid-ui:close-dialog', close)
 
     await element.onSaveClick()
     await element.updateComplete
@@ -418,8 +418,8 @@ describe('AccessControlModal submit', () => {
     element.pendingAccessGrants = grants
     document.body.appendChild(element)
     await element.updateComplete
-    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
-    const close = vi.spyOn(dialog, 'close')
+    const close = vi.fn()
+    window.addEventListener('solid-ui:close-dialog', close)
 
     await element.onSaveClick()
 
@@ -441,8 +441,8 @@ describe('AccessControlModal submit', () => {
     }]
     document.body.appendChild(element)
     await element.updateComplete
-    const dialog = element.shadowRoot.querySelector('solid-ui-dialog')
-    const close = vi.spyOn(dialog, 'close')
+    const close = vi.fn()
+    window.addEventListener('solid-ui:close-dialog', close)
     element.createAccessSubject = () => {
       throw new Error('unexpected save failure')
     }
