@@ -24,6 +24,11 @@ export type AccessGrantEntry = {
   badge: AccessControlBadge
 }
 
+export type AccessGrantViewModel = AccessGrantEntry & {
+  initialRole: AccessRole
+  subjects: AccessSubject[]
+}
+
 export type ChangedAccessGrant = {
   authorization: Authorization
   subjects: AccessSubject[]

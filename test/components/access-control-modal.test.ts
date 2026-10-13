@@ -248,7 +248,7 @@ describe('AccessControlModal submit', () => {
       modes
     )
     expect(applyPlan).toHaveBeenCalledTimes(1)
-    expect(element.failed).toBe(false)
+    expect(element.saveErrors).toEqual([])
   })
 
   it('revokes a queued no-access grant instead of granting empty modes', async () => {
@@ -772,7 +772,7 @@ describe('AccessControlModal submit', () => {
     expect(planRevoke).not.toHaveBeenCalled()
     expect(applyPlan).not.toHaveBeenCalled()
     expect(element.principalInputValue).toBe('not-a-principal')
-    expect(element.failed).toBe(true)
+    expect(element.inputError).toBe('Could not verify this access target')
 
     document.body.removeChild(element)
   })
