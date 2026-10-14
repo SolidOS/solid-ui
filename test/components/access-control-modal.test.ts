@@ -68,6 +68,7 @@ describe('AccessControlModal submit', () => {
     findAccessGrants.mockResolvedValue([])
     load.mockResolvedValue(undefined)
     await import('../../src/components/access-control-modal/AccessControlModal')
+    await import('../../src/components/access-control-modal/AccessControlErrors')
   })
 
   describe('access-control URL predicates', () => {
@@ -103,6 +104,30 @@ describe('AccessControlModal submit', () => {
     ])('rejects a URL with non-origin components: %s', value => {
       expect(isOriginUrl(value)).toBe(false)
     })
+  })
+
+  it('forwards the error-state close event only once', async () => {
+    const element = document.createElement('solid-ui-access-control-errors') as any
+    element.errors = [{
+      action: 'grant',
+      targetUri: 'https://example.com/alice#me',
+      label: 'Alice',
+      role: 'Editor',
+      message: 'Grant failed'
+    }]
+    const close = vi.fn()
+    element.addEventListener('close', close)
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const errorState = element.shadowRoot.querySelector('solid-ui-error-state')
+    await errorState.updateComplete
+    const closeButton = errorState.shadowRoot.querySelector('solid-ui-button.close-button')
+    const innerButton = closeButton.shadowRoot.querySelector('button')
+    innerButton.click()
+
+    expect(close).toHaveBeenCalledTimes(1)
+    document.body.removeChild(element)
   })
 
   it('queues a grant on submit without saving it', async () => {
@@ -169,6 +194,25 @@ describe('AccessControlModal submit', () => {
 
     expect(element.principalInputValue).toBe('https://bob.example.com/profile/card.ttl#me')
     expect(element.pendingAccessGrants).toHaveLength(1)
+  })
+
+  it('does not show a stale validation error after newer input', async () => {
+    let resolveClassification!: (value: undefined) => void
+    classifyAccessControlSubject.mockImplementationOnce(() => new Promise(resolve => {
+      resolveClassification = resolve
+    }))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://old.example.com/profile/card#me'
+
+    const submitPromise = element.onSubmit(new Event('submit'))
+    element.principalInputValue = 'https://new.example.com/profile/card#me'
+    resolveClassification(undefined)
+    await submitPromise
+
+    expect(element.principalInputValue).toBe('https://new.example.com/profile/card#me')
+    expect(element.inputError).toBe('')
   })
 
   it('keeps the selected role for a queued grant even if the mode changes later', async () => {
@@ -279,6 +323,27 @@ describe('AccessControlModal submit', () => {
     )
     expect(applyPlan).toHaveBeenCalledTimes(1)
     expect(element.pendingAccessGrants).toEqual([])
+  })
+
+  it('describes revoke failures as removing access', async () => {
+    planRevoke.mockRejectedValue(new Error('revoke failed'))
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+      role: 'No Access',
+      label: 'Alice'
+    }]
+    document.body.appendChild(element)
+
+    await element.onSaveClick()
+    await element.updateComplete
+
+    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
+    await errors.updateComplete
+    expect(errors.shadowRoot.querySelector('li').textContent).toContain('Could not remove access')
+    document.body.removeChild(element)
   })
 
   it('attempts every queued change and reports only the failed changes', async () => {
@@ -414,6 +479,13 @@ describe('AccessControlModal submit', () => {
       label: `Failed agent ${index}`
     }))
     planGrant.mockRejectedValue(new Error('all changes failed'))
+    findAccessGrants.mockResolvedValue([{
+      agent: ['https://example.com/current-agent'],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read']
+    }])
 
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
@@ -428,6 +500,14 @@ describe('AccessControlModal submit', () => {
 
     expect(planGrant).toHaveBeenCalledTimes(grants.length)
     expect(applyPlan).not.toHaveBeenCalled()
+    expect(findAccessGrants).toHaveBeenCalledWith(element.subjectUri)
+    expect(element.accessGrants).toEqual([{
+      agent: ['https://example.com/current-agent'],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read']
+    }])
     expect(close).not.toHaveBeenCalled()
     const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
     await errors.updateComplete

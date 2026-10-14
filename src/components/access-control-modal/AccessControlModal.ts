@@ -286,24 +286,22 @@ export default class AccessControlModal extends DialogComponent<void> {
         this.principalInputValue = ''
         this.pendingAccessGrants = []
 
-        if (saveErrors.length < accessChanges.length) {
-          try {
-            this.accessGrants = await solidLogicSingleton.acl.findAccessGrants(this.subjectUri)
-          } catch (error) {
-            this.successfulChangesRefreshed = false
-            this.errors = [
-              ...this.errors,
-              {
-                action: 'save',
-                targetUri: this.subjectUri,
-                label: 'Shared with list',
-                message: error instanceof Error
-                  ? error.message
-                  : 'Unable to refresh the access list.'
-              }
-            ]
-            debug.error('Failed to refresh access grants after a partial save', error)
-          }
+        try {
+          this.accessGrants = await solidLogicSingleton.acl.findAccessGrants(this.subjectUri)
+        } catch (error) {
+          this.successfulChangesRefreshed = false
+          this.errors = [
+            ...this.errors,
+            {
+              action: 'save',
+              targetUri: this.subjectUri,
+              label: 'Shared with list',
+              message: error instanceof Error
+                ? error.message
+                : 'Unable to refresh the access list.'
+            }
+          ]
+          debug.error('Failed to refresh access grants after save errors', error)
         }
 
         debug.error('Failed to save some access changes', saveErrors)
@@ -414,9 +412,16 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async commitPrincipalFromInputSafely (): Promise<boolean> {
+    const inputSnapshot = this.principalInputValue.trim()
+
     try {
       return await this.commitPrincipalFromInput()
     } catch (error) {
+      if (this.principalInputValue.trim() !== inputSnapshot) {
+        debug.error('Ignored stale access-target validation error', error)
+        return false
+      }
+
       this.setInputError({
         action: 'input',
         label: 'Access target',
@@ -438,7 +443,9 @@ export default class AccessControlModal extends DialogComponent<void> {
     const result = await this.createPendingAccessGrant(principal, role, preferredLabel)
 
     if ('error' in result) {
-      this.setInputError(result.error)
+      if (this.principalInputValue.trim() === snapshot) {
+        this.setInputError(result.error)
+      }
       debug.error('Failed to add access grant:', result.error.message)
       return false
     }

@@ -17,7 +17,8 @@ export default class AccessControlErrors extends WebComponent {
   @property({ attribute: false })
   accessor successfulChangesRefreshed = true
 
-  private onClose () {
+  private onClose (event: Event) {
+    event.stopPropagation()
     this.dispatchEvent(new CustomEvent('close', {
       bubbles: true,
       composed: true
@@ -45,7 +46,7 @@ export default class AccessControlErrors extends WebComponent {
                 ${error.action === 'grant'
                   ? `Could not grant ${error.role ?? 'access'}`
                   : error.action === 'revoke'
-                    ? `Could not revoke ${error.role ?? 'access'}`
+                    ? 'Could not remove access'
                     : 'Could not save access changes'}
               </span>
             </li>
