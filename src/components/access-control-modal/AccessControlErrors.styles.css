@@ -1,23 +1,48 @@
 :host {
+  display: block;
+  width: 100%;
+  contain: inline-size;
+
+  solid-ui-error-state {
+    width: 100%;
+    max-width: 100%;
+    contain: inline-size;
+  }
+
   .access-control-save-errors {
-    display: flex;
-    flex-direction: column;
+    display: grid;
     gap: 8px;
+    width: 100%;
     margin: 0;
-    padding-left: 20px;
+    padding-left: 0;
+    box-sizing: border-box;
+    list-style: none;
 
     li {
-      display: flex;
+      display: grid;
+      grid-template-columns: minmax(0, 18rem) minmax(0, 1fr);
       align-items: baseline;
       gap: 6px;
-      color: var(--solid-ui-color-gray-700, #374151);
+      min-width: 0;
+      color: var(--solid-ui-color-red-600, #be2e48);
       font-size: var(--solid-ui-font-size-sm, .875rem);
       line-height: 1.4;
     }
 
     .access-control-save-error-label {
-      flex: 0 0 auto;
       font-weight: 500;
+      overflow-wrap: anywhere;
+    }
+
+    .access-control-save-error-detail {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+  }
+
+  @media (max-width: 600px) {
+    .access-control-save-errors li {
+      grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
     }
   }
 }

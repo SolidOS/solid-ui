@@ -41,7 +41,7 @@ export default class AccessControlErrors extends WebComponent {
           ${this.errors.map(error => html`
             <li>
               <span class="access-control-save-error-label">${error.label}</span>
-              <span>
+              <span class="access-control-save-error-detail">
                 ${error.action === 'grant'
                   ? `Could not grant ${error.role ?? 'access'}`
                   : error.action === 'revoke'
