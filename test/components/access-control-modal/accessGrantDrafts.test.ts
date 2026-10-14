@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
-import { Authenticated, Public } from 'solid-logic'
+import { Authenticated, Public, type AccessMode } from 'solid-logic'
+import type { AccessAuthorization } from '../../../src/components/access-control-modal/types'
 import {
   getAccessGrantId,
   getChangedAccessGrants,
@@ -8,7 +9,7 @@ import {
 
 describe('access-control grant drafts', () => {
   it('removes general access classes without mutating the authorization', () => {
-    const authorization = {
+    const authorization: AccessAuthorization = {
       agent: ['https://alice.example/profile#me'],
       agentGroup: [],
       agentClass: [Authenticated.iri, 'https://example/team', Public.iri],
@@ -24,12 +25,12 @@ describe('access-control grant drafts', () => {
   })
 
   it('creates the same stable grant id regardless of subject ordering', () => {
-    const first = {
+    const first: AccessAuthorization = {
       agent: ['https://alice.example/profile#me'],
       agentGroup: ['https://example/group'],
       agentClass: [],
       origin: ['https://example.test'],
-      mode: ['Read']
+      mode: ['Read'] as AccessMode[]
     }
     const second = {
       ...first,
@@ -49,7 +50,7 @@ describe('access-control grant drafts', () => {
         agentGroup: [],
         agentClass: [],
         origin: [],
-        mode: ['Read']
+        mode: ['Read'] as AccessMode[]
       },
       role: 'Editor' as const,
       initialRole: 'Viewer' as const,

@@ -1,16 +1,16 @@
 import { label } from '@/utils/label'
-import { Authenticated, Public, solidLogicSingleton, type AccessRole, type AccessSubject, type Authorization } from 'solid-logic'
+import { Authenticated, Public, solidLogicSingleton, type AccessRole, type AccessSubject } from 'solid-logic'
 import { sym } from 'rdflib'
-import type { AccessGrantDraft, AccessGrantViewModel, AuthorizationSubjectSet, ChangedAccessGrant } from './types'
+import type { AccessAuthorization, AccessGrantDraft, AccessGrantViewModel, AuthorizationSubjectSet, ChangedAccessGrant } from './types'
 
-export function getSharedAuthorization (authorization: Authorization): Authorization {
+export function getSharedAuthorization (authorization: AccessAuthorization): AccessAuthorization {
   return {
     ...authorization,
     agentClass: authorization.agentClass.filter(iri => iri !== Authenticated.iri && iri !== Public.iri)
   }
 }
 
-export function getAuthorizationSubjectEntries (authorization: Authorization): AccessSubject[] {
+export function getAuthorizationSubjectEntries (authorization: AccessAuthorization): AccessSubject[] {
   const subjectSets: AuthorizationSubjectSet[] = [
     { type: 'agent', iris: authorization.agent },
     { type: 'agentGroup', iris: authorization.agentGroup },
@@ -21,14 +21,14 @@ export function getAuthorizationSubjectEntries (authorization: Authorization): A
   return subjectSets.flatMap(({ type, iris }) => iris.map(iri => ({ type, iri })))
 }
 
-export function getAccessGrantId (authorization: Authorization): string {
+export function getAccessGrantId (authorization: AccessAuthorization): string {
   return getAuthorizationSubjectEntries(authorization)
     .map(subject => `${subject.type}:${subject.iri}`)
     .sort()
     .join('|')
 }
 
-export function getAuthorizationSubjectLabel (authorization: Authorization): string {
+export function getAuthorizationSubjectLabel (authorization: AccessAuthorization): string {
   const subjects = [
     ...authorization.agent,
     ...authorization.agentGroup,
@@ -38,11 +38,11 @@ export function getAuthorizationSubjectLabel (authorization: Authorization): str
   return subjects.length ? subjects.map(subject => label(sym(subject))).join(', ') : 'Unknown access holder'
 }
 
-export function getAuthorizationRole (authorization: Authorization): AccessRole {
+export function getAuthorizationRole (authorization: AccessAuthorization): AccessRole {
   return solidLogicSingleton.acl.roleFromModes(authorization.mode)
 }
 
-export function createAccessGrantDraft (authorization: Authorization): AccessGrantDraft {
+export function createAccessGrantDraft (authorization: AccessAuthorization): AccessGrantDraft {
   const sharedAuthorization = getSharedAuthorization(authorization)
   return {
     id: getAccessGrantId(sharedAuthorization),
@@ -72,12 +72,12 @@ export function getChangedAccessGrants (drafts: AccessGrantDraft[]): ChangedAcce
     .map(({ authorization, subjects, role }) => ({ authorization, subjects, role }))
 }
 
-export function getAuthenticatedAccessRole (accessGrants: Authorization[]): AccessRole {
+export function getAuthenticatedAccessRole (accessGrants: AccessAuthorization[]): AccessRole {
   const authorization = accessGrants.find(item => item.agentClass.includes(Authenticated.iri))
   return authorization ? getAuthorizationRole(authorization) : 'No Access'
 }
 
-export function getPublicAccessRole (accessGrants: Authorization[]): AccessRole {
+export function getPublicAccessRole (accessGrants: AccessAuthorization[]): AccessRole {
   const authorization = accessGrants.find(item => item.agentClass.includes(Public.iri))
   return authorization ? solidLogicSingleton.acl.publicRoleFromModes(authorization.mode) : 'No Access'
 }

@@ -1,4 +1,11 @@
-import type { AccessControlSubjectKind, AccessRole, AccessSubject, Authorization } from 'solid-logic'
+import type { AccessControlSubjectKind, AccessMode, AccessRole, AccessSubject, Authorization } from 'solid-logic'
+
+export type AccessAuthorization = Omit<
+  Pick<Authorization, 'agent' | 'agentGroup' | 'agentClass' | 'origin' | 'mode'>,
+  'mode'
+> & {
+  mode: readonly AccessMode[]
+}
 
 export type TargetInputDetail = {
   value: string
@@ -38,7 +45,7 @@ export type PendingAccessGrant = {
 
 export type AccessGrantEntry = {
   id: string
-  authorization: Authorization
+  authorization: AccessAuthorization
   role: AccessRole
   subjectLabel: string
 }
@@ -51,7 +58,7 @@ export type AccessGrantViewModel = AccessGrantEntry & {
 export type AccessGrantDraft = AccessGrantViewModel
 
 export type ChangedAccessGrant = {
-  authorization: Authorization
+  authorization: AccessAuthorization
   subjects: AccessSubject[]
   role: AccessRole
 }

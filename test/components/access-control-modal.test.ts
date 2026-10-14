@@ -2,6 +2,7 @@
 
 import { beforeEach, describe, expect, it, vi } from 'vitest'
 import { sym } from 'rdflib'
+import type { AccessMode } from 'solid-logic'
 import { isAbsoluteHttpUri, isOriginUrl } from '../../src/components/access-control-modal/helpers'
 
 const planGrant = vi.fn()
@@ -484,7 +485,7 @@ describe('AccessControlModal submit', () => {
       agentGroup: [],
       agentClass: [],
       origin: [],
-      mode: ['Read']
+      mode: ['Read'] as AccessMode[]
     }])
 
     const element = document.createElement('solid-ui-access-control-modal') as any
@@ -506,7 +507,7 @@ describe('AccessControlModal submit', () => {
       agentGroup: [],
       agentClass: [],
       origin: [],
-      mode: ['Read']
+      mode: ['Read'] as AccessMode[]
     }])
     expect(close).not.toHaveBeenCalled()
     const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')

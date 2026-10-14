@@ -1,4 +1,5 @@
 import { describe, expect, it } from 'vitest'
+import type { AccessMode } from 'solid-logic'
 import { buildAccessChanges } from '../../../src/components/access-control-modal/buildAccessChanges'
 
 describe('buildAccessChanges', () => {
@@ -20,7 +21,7 @@ describe('buildAccessChanges', () => {
         agentGroup: [],
         agentClass: [],
         origin: ['https://example.test'],
-        mode: ['Read']
+        mode: ['Read'] as AccessMode[]
       },
       subjects: [{ type: 'origin' as const, iri: 'https://example.test' }],
       role: 'No Access' as const
