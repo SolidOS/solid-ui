@@ -1,8 +1,9 @@
-import { describe, expect, it } from 'vitest'
+import { describe, expect, it, vi } from 'vitest'
 import {
   accessPrincipalOptionsProvider,
   resolveAccessTarget
 } from '../../../src/components/access-control-modal/accessTargetResolver'
+import { solidLogicSingleton } from 'solid-logic'
 
 describe('access-control target resolver', () => {
   it('normalizes a bare origin without requiring directory lookup', async () => {
@@ -19,5 +20,21 @@ describe('access-control target resolver', () => {
       value: '',
       selectable: false
     }])
+  })
+
+  it('preserves related document lookup failures for direct resolution', async () => {
+    const classifySpy = vi.spyOn(solidLogicSingleton.acl, 'classifyAccessControlSubject')
+      .mockResolvedValueOnce({
+        kind: 'agent',
+        subjectValue: 'https://example.test/profile#me'
+      })
+    const loadSpy = vi.spyOn(solidLogicSingleton.store.fetcher, 'load')
+      .mockRejectedValueOnce(new Error('related document failed'))
+
+    await expect(resolveAccessTarget('https://example.test/profile#me'))
+      .rejects.toThrow('related document failed')
+
+    classifySpy.mockRestore()
+    loadSpy.mockRestore()
   })
 })

@@ -21,7 +21,7 @@ import './AccessControlErrors'
 import styles from './AccessControlModal.styles.css'
 import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessSaveError, InputAccessControlError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
 import { dedupeByKey } from './helpers'
-import { createAccessGrantDraft, getAccessGrantId, getAccessGrantViewModels, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
+import { createAccessGrantDrafts, getAccessGrantIds, getAccessGrantViewModels, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
 import { accessPrincipalOptionsProvider, resolveAccessTarget } from './accessTargetResolver'
 import { applyAccessChanges } from './applyAccessChanges'
 import { buildAccessChanges } from './buildAccessChanges'
@@ -103,7 +103,7 @@ export default class AccessControlModal extends DialogComponent<void> {
 
     if (changedProperties.has('accessGrants')) {
       const accessGrants = this.accessGrants ?? []
-      this.accessGrantDrafts = accessGrants.map(createAccessGrantDraft)
+      this.accessGrantDrafts = createAccessGrantDrafts(accessGrants)
       this.authenticatedAccessRoleValue = getAuthenticatedAccessRole(accessGrants)
       this.publicAccessRoleValue = getPublicAccessRole(accessGrants)
     }
@@ -140,12 +140,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     }))
 
     if (requestVersion === this.accessGrantLabelRequestVersion && this.accessGrants === grants) {
-      const labelsById = new Map(
-        grants.map((authorization, index) => [
-          getAccessGrantId(getSharedAuthorization(authorization)),
-          labels[index]
-        ])
-      )
+      const labelsById = new Map(getAccessGrantIds(grants).map((id, index) => [id, labels[index]]))
       this.accessGrantDrafts = this.accessGrantDrafts.map(draft => ({
         ...draft,
         subjectLabel: labelsById.get(draft.id) ?? draft.subjectLabel
@@ -452,9 +447,9 @@ export default class AccessControlModal extends DialogComponent<void> {
 
     const merged = [...this.pendingAccessGrants, result.grant]
     this.pendingAccessGrants = this.dedupePendingAccessGrants(merged)
-    this.clearInputError()
 
     if (this.principalInputValue.trim() === snapshot) {
+      this.clearInputError()
       this.principalInputValue = ''
     }
 
@@ -494,7 +489,9 @@ export default class AccessControlModal extends DialogComponent<void> {
           action: 'input',
           label: 'Access target',
           targetUri: principal,
-          message: error instanceof Error ? error.message : 'Could not verify this access target'
+          message: error instanceof Error && error.message.trim()
+            ? error.message
+            : 'Could not verify this access target'
         }
       }
     }

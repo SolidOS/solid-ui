@@ -3,6 +3,7 @@ import { Authenticated, Public, type AccessMode } from 'solid-logic'
 import type { AccessAuthorization } from '../../../src/components/access-control-modal/types'
 import {
   getAccessGrantId,
+  getAccessGrantIds,
   getChangedAccessGrants,
   getSharedAuthorization
 } from '../../../src/components/access-control-modal/accessGrantDrafts'
@@ -26,10 +27,10 @@ describe('access-control grant drafts', () => {
 
   it('creates the same stable grant id regardless of subject ordering', () => {
     const first: AccessAuthorization = {
-      agent: ['https://alice.example/profile#me'],
-      agentGroup: ['https://example/group'],
+      agent: ['https://alice.example/profile#me', 'https://bob.example/profile#me'],
+      agentGroup: ['https://example/group', 'https://example/other-group'],
       agentClass: [],
-      origin: ['https://example.test'],
+      origin: ['https://example.test', 'https://other.example.test'],
       mode: ['Read'] as AccessMode[]
     }
     const second = {
@@ -40,6 +41,21 @@ describe('access-control grant drafts', () => {
     }
 
     expect(getAccessGrantId(first)).toBe(getAccessGrantId(second))
+  })
+
+  it('gives duplicate shared authorizations distinct ids', () => {
+    const authorization: AccessAuthorization = {
+      agent: ['https://alice.example/profile#me'],
+      agentGroup: [],
+      agentClass: [Authenticated.iri, Public.iri],
+      origin: [],
+      mode: ['Read'] as AccessMode[]
+    }
+
+    expect(getAccessGrantIds([authorization, { ...authorization, mode: ['Write'] }])).toEqual([
+      'agent:https://alice.example/profile#me',
+      'agent:https://alice.example/profile#me#1'
+    ])
   })
 
   it('returns only changed drafts with real shared subjects', () => {

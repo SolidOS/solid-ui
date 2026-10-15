@@ -216,6 +216,56 @@ describe('AccessControlModal submit', () => {
     expect(element.inputError).toBe('')
   })
 
+  it('does not clear a current validation error when an older lookup succeeds', async () => {
+    let resolveOldLookup!: (value: { kind: 'agent', subjectValue: string }) => void
+    classifyAccessControlSubject
+      .mockImplementationOnce(() => new Promise(resolve => {
+        resolveOldLookup = resolve
+      }))
+      .mockResolvedValueOnce(undefined)
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://old.example.com/profile/card#me'
+    const oldSubmitPromise = element.onSubmit(new Event('submit'))
+
+    element.principalInputValue = 'not-a-principal'
+    await element.onSubmit(new Event('submit'))
+    expect(element.inputError).toContain('Could not verify this access target')
+
+    resolveOldLookup({
+      kind: 'agent',
+      subjectValue: 'https://old.example.com/profile/card#me'
+    })
+    await oldSubmitPromise
+
+    expect(element.inputError).toContain('Could not verify this access target')
+  })
+
+  it('uses the fallback message when a related lookup throws without a message', async () => {
+    load.mockRejectedValueOnce(new Error(''))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://alice.example.com/profile/card.ttl#me'
+
+    await element.onSubmit(new Event('submit'))
+
+    expect(element.inputError).toBe('Could not verify this access target')
+  })
+
+  it('shows a related lookup failure when adding an access target directly', async () => {
+    load.mockRejectedValueOnce(new Error('related document failed'))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.principalInputValue = 'https://alice.example.com/profile/card.ttl#me'
+
+    await element.onSubmit(new Event('submit'))
+
+    expect(element.inputError).toBe('related document failed')
+  })
+
   it('keeps the selected role for a queued grant even if the mode changes later', async () => {
     let resolveClassification!: (value: { kind: 'agent', subjectValue: string }) => void
     classifyAccessControlSubject.mockImplementationOnce(() => new Promise(resolve => {

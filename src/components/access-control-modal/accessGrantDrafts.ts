@@ -28,6 +28,18 @@ export function getAccessGrantId (authorization: AccessAuthorization): string {
     .join('|')
 }
 
+export function getAccessGrantIds (authorizations: AccessAuthorization[]): string[] {
+  const occurrences = new Map<string, number>()
+
+  return authorizations.map(authorization => {
+    const sharedAuthorization = getSharedAuthorization(authorization)
+    const baseId = getAccessGrantId(sharedAuthorization)
+    const occurrence = occurrences.get(baseId) ?? 0
+    occurrences.set(baseId, occurrence + 1)
+    return occurrence === 0 ? baseId : `${baseId}#${occurrence}`
+  })
+}
+
 export function getAuthorizationSubjectLabel (authorization: AccessAuthorization): string {
   const subjects = [
     ...authorization.agent,
@@ -52,6 +64,14 @@ export function createAccessGrantDraft (authorization: AccessAuthorization): Acc
     subjectLabel: getAuthorizationSubjectLabel(sharedAuthorization),
     subjects: getAuthorizationSubjectEntries(sharedAuthorization)
   }
+}
+
+export function createAccessGrantDrafts (authorizations: AccessAuthorization[]): AccessGrantDraft[] {
+  const ids = getAccessGrantIds(authorizations)
+  return authorizations.map((authorization, index) => ({
+    ...createAccessGrantDraft(authorization),
+    id: ids[index]
+  }))
 }
 
 export function getAccessGrantViewModels (drafts: AccessGrantDraft[]): AccessGrantViewModel[] {

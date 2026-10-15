@@ -26,18 +26,14 @@ async function resolveAccessTargetLabel (
     return resolvedPrincipal?.subjectValue
   }
 
-  try {
-    const subject = sym(resolvedPrincipal.subjectValue)
-    await solidLogicSingleton.store.fetcher.load(subject.doc())
-    const resolvedLabel = preferredLabel?.trim() || label(subject).trim()
-    if (!resolvedLabel || resolvedLabel === resolvedPrincipal.subjectValue) {
-      return undefined
-    }
-
-    return resolvedLabel
-  } catch {
+  const subject = sym(resolvedPrincipal.subjectValue)
+  await solidLogicSingleton.store.fetcher.load(subject.doc())
+  const resolvedLabel = preferredLabel?.trim() || label(subject).trim()
+  if (!resolvedLabel || resolvedLabel === resolvedPrincipal.subjectValue) {
     return undefined
   }
+
+  return resolvedLabel
 }
 
 export async function resolveAccessTarget (
@@ -135,8 +131,12 @@ export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
     }
 
     const verifiedEntries = await Promise.all(entries.map(async entry => {
-      const resolved = await resolveAccessTarget(entry.uri, entry.label)
-      return resolved ? { entry, label: resolved.label } : undefined
+      try {
+        const resolved = await resolveAccessTarget(entry.uri, entry.label)
+        return resolved ? { entry, label: resolved.label } : undefined
+      } catch {
+        return undefined
+      }
     }))
     const options = verifiedEntries
       .filter((entry): entry is { entry: DirectoryEntry, label: string } => entry !== undefined)
