@@ -12,7 +12,16 @@ function t(t) {
 	let n = new URL(t);
 	return n.pathname === "/" && !n.search && !n.hash && !n.username && !n.password;
 }
-function n(e, t) {
+function n(t) {
+	let n = t.trim();
+	if (n && !e(n)) try {
+		let e = new URL(`https://${n}`), t = e.protocol === "http:" || e.protocol === "https:", r = e.pathname === "/" && !e.search && !e.hash, i = e.hostname.includes(".") || e.hostname.includes(":");
+		return t && r && i && !e.username && !e.password ? e.origin : void 0;
+	} catch {
+		return;
+	}
+}
+function r(e, t) {
 	let n = /* @__PURE__ */ new Map();
 	for (let r of e) {
 		let e = t(r);
@@ -20,10 +29,10 @@ function n(e, t) {
 	}
 	return [...n.values()];
 }
-function r(e) {
-	return n(e, (e) => e.value);
+function i(e) {
+	return r(e, (e) => e.value);
 }
 //#endregion
-export { n as dedupeByKey, r as dedupeComboboxOptions, e as isAbsoluteHttpUri, t as isOriginUrl };
+export { r as dedupeByKey, i as dedupeComboboxOptions, e as isAbsoluteHttpUri, t as isOriginUrl, n as normalizeOriginInput };
 
 //# sourceMappingURL=helpers.esm.js.map

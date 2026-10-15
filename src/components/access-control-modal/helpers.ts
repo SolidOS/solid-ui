@@ -24,6 +24,27 @@ export function isOriginUrl (value: string): boolean {
     !url.password
 }
 
+export function normalizeOriginInput (value: string): string | undefined {
+  const trimmedValue = value.trim()
+  if (!trimmedValue || isAbsoluteHttpUri(trimmedValue)) {
+    return undefined
+  }
+
+  try {
+    const parsed = new URL(`https://${trimmedValue}`)
+    const isHttpOrigin = parsed.protocol === 'http:' || parsed.protocol === 'https:'
+    const hasOnlyOriginParts = parsed.pathname === '/' && !parsed.search && !parsed.hash
+    const isRecognizedHost = parsed.hostname.includes('.') ||
+      parsed.hostname.includes(':')
+
+    return isHttpOrigin && hasOnlyOriginParts && isRecognizedHost && !parsed.username && !parsed.password
+      ? parsed.origin
+      : undefined
+  } catch {
+    return undefined
+  }
+}
+
 export function dedupeByKey<T> (items: T[], getKey: (item: T) => string | undefined): T[] {
   const uniqueItems = new Map<string, T>()
 

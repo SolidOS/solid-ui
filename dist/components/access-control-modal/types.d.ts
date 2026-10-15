@@ -1,26 +1,48 @@
-import { AccessControlSubjectKind, AccessRole, AccessSubject, Authorization } from 'solid-logic';
-export type AccessControlBadgeKind = AccessControlSubjectKind | 'unknown';
-export type AccessControlBadge = {
-    kind: AccessControlBadgeKind;
-    image?: string;
-    text: string;
+import { AccessControlSubjectKind, AccessMode, AccessRole, AccessSubject, Authorization } from 'solid-logic';
+export type AccessAuthorization = Omit<Pick<Authorization, 'agent' | 'agentGroup' | 'agentClass' | 'origin' | 'mode'>, 'mode'> & {
+    mode: readonly AccessMode[];
 };
+export type TargetInputDetail = {
+    value: string;
+};
+export type TargetSelectedDetail = {
+    value: string;
+    label: string;
+};
+export type RoleChangedDetail = {
+    role: AccessRole;
+};
+export type PendingGrantRemovedDetail = {
+    index: number;
+};
+export type TargetInputEvent = CustomEvent<TargetInputDetail>;
+export type TargetSelectedEvent = CustomEvent<TargetSelectedDetail>;
+export type RoleChangedEvent = CustomEvent<RoleChangedDetail>;
+export type PendingGrantRemovedEvent = CustomEvent<PendingGrantRemovedDetail>;
+export type AccessGrantRoleChangedDetail = {
+    id: string;
+    role: AccessRole;
+};
+export type AccessGrantRoleChangedEvent = CustomEvent<AccessGrantRoleChangedDetail>;
 export type PendingAccessGrant = {
-    id?: string;
     subjectType: AccessControlSubjectKind;
     subjectValue: string;
     role: AccessRole;
     label: string;
 };
 export type AccessGrantEntry = {
-    authorization: Authorization;
-    index: number;
+    id: string;
+    authorization: AccessAuthorization;
     role: AccessRole;
     subjectLabel: string;
-    badge: AccessControlBadge;
 };
+export type AccessGrantViewModel = AccessGrantEntry & {
+    initialRole: AccessRole;
+    subjects: AccessSubject[];
+};
+export type AccessGrantDraft = AccessGrantViewModel;
 export type ChangedAccessGrant = {
-    authorization: Authorization;
+    authorization: AccessAuthorization;
     subjects: AccessSubject[];
     role: AccessRole;
 };
@@ -31,5 +53,25 @@ export type AuthorizationSubjectSet = {
 export type AccessChange = {
     subject: AccessSubject;
     role: AccessRole;
+    label: string;
 };
+export type InputAccessControlError = {
+    action: 'input';
+    targetUri: string;
+    label: string;
+    message: string;
+};
+export type AccessSaveError = {
+    action: 'grant' | 'revoke';
+    targetUri: string;
+    label: string;
+    role: AccessRole;
+    message: string;
+} | {
+    action: 'save';
+    targetUri: string;
+    label: string;
+    message: string;
+};
+export type AccessControlError = InputAccessControlError | AccessSaveError;
 //# sourceMappingURL=types.d.ts.map
