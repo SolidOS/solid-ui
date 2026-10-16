@@ -5,6 +5,7 @@ import * as widgets from '@/widgets/index'
 import { DEFAULT_FILE_EXPLORER_CONTEXT, fileExplorerContext } from '@/lib/file-explorer/context'
 import '@/components/button'
 import { customElement, property, query, state } from 'lit/decorators.js'
+import type { PropertyValues } from 'lit'
 import { html } from 'lit'
 import { consume } from '@lit/context'
 import { PaneIcon } from './types'
@@ -21,7 +22,7 @@ export default class FileExplorerHeaderSummary extends WebComponent {
   static styles = styles
 
   private _draggableSubjectUri: string | undefined
-  private _resolvedPaneIconFor: PaneIcon | undefined
+  private _paneIconGeneration = 0
 
   @consume({ context: fileExplorerContext, subscribe: true })
   accessor fileExplorerContext = DEFAULT_FILE_EXPLORER_CONTEXT
@@ -70,10 +71,11 @@ export default class FileExplorerHeaderSummary extends WebComponent {
     return `${day} ${month}, ${year} at ${hour}:${minute} ${dayPeriod}`
   }
 
-  protected updated () {
-    if (this.paneIcon !== undefined && this._resolvedPaneIconFor !== this.paneIcon) {
-      this._resolvedPaneIconFor = this.paneIcon
-      this.resolvePaneIcon()
+  protected updated (changedProperties: PropertyValues<this>) {
+    if (changedProperties.has('paneIcon')) {
+      const generation = ++this._paneIconGeneration
+      this.resolvedPaneIcon = undefined
+      this.resolvePaneIcon(this.paneIcon, generation)
     }
 
     if (!this.titleHeading || !this.fileExplorerContext?.subjectUri || this._draggableSubjectUri === this.fileExplorerContext.subjectUri) return
@@ -83,18 +85,19 @@ export default class FileExplorerHeaderSummary extends WebComponent {
   }
 
   // Needed because humanReadable pane can return a promise for an icon.
-  private async resolvePaneIcon () {
+  private async resolvePaneIcon (paneIcon: PaneIcon | undefined, generation: number) {
     try {
-      if (this.paneIcon == null) {
-        this.resolvedPaneIcon = undefined
-        return
-      }
+      if (paneIcon == null) return
 
-      const icon = await this.paneIcon
-      this.resolvedPaneIcon = icon ?? undefined
+      const icon = await paneIcon
+      if (generation === this._paneIconGeneration) {
+        this.resolvedPaneIcon = icon ?? undefined
+      }
     } catch (error) {
-      this.resolvedPaneIcon = undefined
-      console.warn('file-explorer-header-summary: failed to resolve pane icon', error)
+      if (generation === this._paneIconGeneration) {
+        this.resolvedPaneIcon = undefined
+        console.warn('file-explorer-header-summary: failed to resolve pane icon', error)
+      }
     }
   }
 

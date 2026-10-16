@@ -20,6 +20,7 @@ export default class FileExplorerHeader extends WebComponent {
   static styles = styles
 
   private _loadedMetadataForUri: string | undefined
+  private _metadataGeneration = 0
 
   @consume({ context: fileExplorerContext, subscribe: true })
   accessor fileExplorerContext = DEFAULT_FILE_EXPLORER_CONTEXT
@@ -58,26 +59,31 @@ export default class FileExplorerHeader extends WebComponent {
   }
 
   protected updated () {
-    if (this.fileExplorerContext?.store && this.fileExplorerContext.subjectUri && this._loadedMetadataForUri !== this.fileExplorerContext.subjectUri) {
-      this._loadedMetadataForUri = this.fileExplorerContext.subjectUri
-      this.loadResponseMetadata()
+    const subjectUri = this.fileExplorerContext?.subjectUri
+    if (this.fileExplorerContext?.store && subjectUri && this._loadedMetadataForUri !== subjectUri) {
+      this._loadedMetadataForUri = subjectUri
+      const generation = ++this._metadataGeneration
+      this.responseMetadata = this.getDefaultResponseMetadata()
+      this.loadResponseMetadata(subjectUri, generation)
     }
   }
 
-  private async loadResponseMetadata () {
-    if (!this.fileExplorerContext?.store || !this.fileExplorerContext.subjectUri) return
-
+  private async loadResponseMetadata (subjectUri: string, generation: number) {
     try {
-      const metadata = await solidLogicSingleton.resource.fetchMetadata(sym(this.fileExplorerContext.subjectUri))
-      this.responseMetadata = {
-        modified: metadata.modified,
-        isPublic: metadata.access.isPublic,
-        canEdit: metadata.access.canEdit,
-        aclUri: metadata.aclUri
+      const metadata = await solidLogicSingleton.resource.fetchMetadata(sym(subjectUri))
+      if (generation === this._metadataGeneration && this.fileExplorerContext.subjectUri === subjectUri) {
+        this.responseMetadata = {
+          modified: metadata.modified,
+          isPublic: metadata.access.isPublic,
+          canEdit: metadata.access.canEdit,
+          aclUri: metadata.aclUri
+        }
       }
     } catch (error) {
-      this.responseMetadata = this.getDefaultResponseMetadata()
-      console.warn('Failed to load response metadata', error)
+      if (generation === this._metadataGeneration && this.fileExplorerContext.subjectUri === subjectUri) {
+        this.responseMetadata = this.getDefaultResponseMetadata()
+        console.warn('Failed to load response metadata', error)
+      }
     }
   }
 
