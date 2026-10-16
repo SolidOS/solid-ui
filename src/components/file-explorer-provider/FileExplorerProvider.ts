@@ -2,7 +2,6 @@ import { html } from 'lit-html'
 import { provide } from '@lit/context'
 import { customElement, property, state } from 'lit/decorators.js'
 import { DataBrowserContext, PaneDefinition } from 'pane-registry'
-import type { NamedNode } from 'rdflib'
 import { WebComponent } from '@/lib/components'
 import { FileExplorerContext, FileExplorerEditor, fileExplorerContext } from '@/lib/file-explorer/context'
 
@@ -22,15 +21,6 @@ export default class FileExplorerProvider extends WebComponent {
 
   @property({ attribute: false })
   accessor soloPane: boolean | undefined
-
-  @property({ attribute: false })
-  accessor onBack: (() => void) | undefined
-
-  @property({ attribute: false })
-  accessor openPane: ((s: NamedNode, name: string) => void) | undefined
-
-  @property({ attribute: false })
-  accessor handleAccessClick: (() => void) | undefined
 
   @state() private accessor editor: FileExplorerEditor | undefined
   @state() private accessor isDirty = false

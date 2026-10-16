@@ -19,6 +19,7 @@ describe('Index', () => {
       'DialogTrait',
       'FILE_EXPLORER_BACK_EVENT',
       'FILE_EXPLORER_MANAGE_ACCESS_EVENT',
+      'FILE_EXPLORER_OPEN_PANE_EVENT',
       'FormControlComponent',
       'FormControlTrait',
       'NoopAuth',

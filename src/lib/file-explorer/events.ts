@@ -9,3 +9,10 @@ export const FILE_EXPLORER_MANAGE_ACCESS_EVENT = 'solid-ui-file-explorer-manage-
 export interface FileExplorerManageAccessDetail {
   subjectUri: string
 }
+
+export const FILE_EXPLORER_OPEN_PANE_EVENT = 'solid-ui-file-explorer-open-pane'
+
+export interface FileExplorerOpenPaneDetail {
+  subjectUri: string
+  paneName: string
+}
