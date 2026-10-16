@@ -58,7 +58,7 @@ export default class FileExplorerHeader extends WebComponent {
     }
   }
 
-  protected updated () {
+  protected willUpdate () {
     const subjectUri = this.fileExplorerContext?.subjectUri
     if (this.fileExplorerContext?.store && subjectUri && this._loadedMetadataForUri !== subjectUri) {
       this._loadedMetadataForUri = subjectUri

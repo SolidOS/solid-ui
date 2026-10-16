@@ -71,13 +71,15 @@ export default class FileExplorerHeaderSummary extends WebComponent {
     return `${day} ${month}, ${year} at ${hour}:${minute} ${dayPeriod}`
   }
 
-  protected updated (changedProperties: PropertyValues<this>) {
+  protected willUpdate (changedProperties: PropertyValues<this>) {
     if (changedProperties.has('paneIcon')) {
       const generation = ++this._paneIconGeneration
       this.resolvedPaneIcon = undefined
       this.resolvePaneIcon(this.paneIcon, generation)
     }
+  }
 
+  protected updated () {
     if (!this.titleHeading || !this.fileExplorerContext?.subjectUri || this._draggableSubjectUri === this.fileExplorerContext.subjectUri) return
 
     widgets.makeDraggable(this.titleHeading, sym(this.fileExplorerContext.subjectUri)) // doing it this way for now, just to keep the same functionality
