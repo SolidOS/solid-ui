@@ -25,6 +25,7 @@ import type PhotoCaptureModal from '../components/photo-capture-modal/PhotoCaptu
 import type Provider from '../components/provider/Provider'
 import type RDFForm from '../components/rdf-form/RDFForm'
 import type RDFInput from '../components/rdf-input/RDFInput'
+import type ResourceActionsMenu from '../components/resource-actions-menu/ResourceActionsMenu'
 import type Select from '../components/select/Select'
 import type SelectOption from '../components/select-option/SelectOption'
 import type SignupButton from '../components/signup-button/SignupButton'
@@ -59,6 +60,7 @@ declare global {
     'solid-ui-provider': Provider
     'solid-ui-rdf-form': RDFForm
     'solid-ui-rdf-input': RDFInput
+    'solid-ui-resource-actions-menu': ResourceActionsMenu
     'solid-ui-select': Select
     'solid-ui-select-option': SelectOption
     'solid-ui-signup-button': SignupButton
