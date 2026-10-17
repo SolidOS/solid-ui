@@ -8,10 +8,11 @@ export type RelevantPaneOptions = {
 }
 
 /**
- * Returns panes that can represent a subject and are available to the current user.
+ * Returns panes that can represent a subject, preserving legacy outliner ordering.
  *
- * Availability filtering is authoritative: a pane removed by the audience check is
- * not reintroduced as a fallback.
+ * Audience filtering narrows the list, but the first relevant pane is retained
+ * even when its audience does not match. The legacy outliner deliberately kept
+ * this most relevant view available, including when no panes match the audience.
  */
 export async function getRelevantPanes (
   subject: NamedNode,
@@ -33,5 +34,12 @@ export async function getRelevantPanes (
     return fallbackPane ? [fallbackPane] : []
   }
 
-  return filterAvailablePanes(relevantPanes)
+  const filteredPanes = await filterAvailablePanes(relevantPanes)
+  if (filteredPanes.length === 0) return [relevantPanes[0]]
+
+  const firstRelevantPaneIndex = paneRegistry.list.indexOf(relevantPanes[0])
+  const firstFilteredPaneIndex = paneRegistry.list.indexOf(filteredPanes[0])
+  return firstRelevantPaneIndex < firstFilteredPaneIndex
+    ? [relevantPanes[0]].concat(filteredPanes)
+    : filteredPanes
 }

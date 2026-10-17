@@ -7,13 +7,14 @@ import '@/components/menu-item'
 import '~icons/lucide/ellipsis-vertical'
 import '~icons/lucide/user-round-cog'
 import '~icons/lucide/pencil'
+import '~icons/lucide/file'
 import { LiveStore } from 'rdflib'
 import styles from './ResourceActionsMenu.styles.css'
 import { isContainerSubject } from '@/utils/podUtils'
 
 type ResourceActionMenuItem = {
   label: string
-  icon?: unknown
+  icon?: HTMLElement | string
   action?: (event: Event) => void
 }
 
@@ -62,7 +63,9 @@ export default class ResourceActionsMenu extends WebComponent {
         </solid-ui-button>
         ${actionableMenuItems.map(item => html`
           <solid-ui-menu-item @solid-ui-select=${(event: Event) => item.action(event)}>
-            ${item.icon}
+            ${typeof item.icon === 'string'
+              ? html`<img slot="left-icon" src=${item.icon} alt="">`
+              : item.icon ?? html`<icon-lucide-file slot="left-icon" aria-hidden="true"></icon-lucide-file>`}
             ${item.label}
           </solid-ui-menu-item>
         `)}
