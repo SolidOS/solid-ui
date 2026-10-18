@@ -113,8 +113,8 @@ export default class FileExplorerHeaderSummary extends WebComponent {
         <p>
         ${itemCount} items
           ${isPublic
-            ? html`<span class="public"><icon-lucide-globe></icon-lucide-globe></span>`
-            : html`<span class="private"><icon-lucide-lock-keyhole></icon-lucide-lock-keyhole></span>`}
+            ? html`<span class="public"><icon-lucide-globe aria-hidden="true"></icon-lucide-globe><span class="sr-only">Public</span></span>`
+            : html`<span class="private"><icon-lucide-lock-keyhole aria-hidden="true"></icon-lucide-lock-keyhole><span class="sr-only">Private</span></span>`}
         </p>
       </div>
     `

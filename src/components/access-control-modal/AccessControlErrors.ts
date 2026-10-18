@@ -25,6 +25,16 @@ export default class AccessControlErrors extends WebComponent {
     }))
   }
 
+  private getScopeLabel (scope: NonNullable<Extract<AccessSaveError, { action: 'grant' | 'revoke' }>['scope']>) {
+    return scope === 'folder+contents'
+      ? 'folder and contents'
+      : scope === 'container'
+        ? 'folder'
+        : scope === 'contents'
+          ? 'contents'
+          : 'resource'
+  }
+
   protected render () {
     if (!this.errors.length) {
       return html``
@@ -44,11 +54,14 @@ export default class AccessControlErrors extends WebComponent {
               <span class="access-control-save-error-label">${error.label}</span>
               <span class="access-control-save-error-detail">
                 ${error.action === 'grant'
-                  ? `Could not grant ${error.role ?? 'access'}`
+                ? `Could not grant ${error.role ?? 'access'} for ${error.scope ? this.getScopeLabel(error.scope) : 'resource'}`
                   : error.action === 'revoke'
-                    ? 'Could not remove access'
+                  ? `Could not remove access for ${error.scope ? this.getScopeLabel(error.scope) : 'resource'}`
+                    : error.action === 'reset'
+                      ? 'Could not reset sharing'
                     : 'Could not save access changes'}
               </span>
+              <span class="access-control-save-error-message">${error.message}</span>
             </li>
           `)}
         </ul>

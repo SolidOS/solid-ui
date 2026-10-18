@@ -5,7 +5,9 @@ import {
   getAccessGrantId,
   getAccessGrantIds,
   getChangedAccessGrants,
-  getSharedAuthorization
+  getSharedAuthorization,
+  getAuthenticatedAccessRole,
+  getPublicAccessRole
 } from '../../../src/components/access-control-modal/accessGrantDrafts'
 
 describe('access-control grant drafts', () => {
@@ -56,6 +58,52 @@ describe('access-control grant drafts', () => {
       'agent:https://alice.example/profile#me',
       'agent:https://alice.example/profile#me#1'
     ])
+  })
+
+  it('uses authorization ids instead of subject order for draft identity', () => {
+    const first: AccessAuthorization = {
+      id: 'https://example.com/.acl#authorization-1',
+      agent: ['https://alice.example/profile#me'],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read'] as AccessMode[]
+    }
+    const second = { ...first, id: 'https://example.com/.acl#authorization-2', mode: ['Write'] as AccessMode[] }
+
+    expect(getAccessGrantIds([second, first])).toEqual([second.id, first.id])
+  })
+
+  it('aggregates modes from all matching general-access authorizations', () => {
+    const authorizations: AccessAuthorization[] = [
+      {
+        id: 'auth-read',
+        agent: [],
+        agentGroup: [],
+        agentClass: [Authenticated.iri],
+        origin: [],
+        mode: ['Read'] as AccessMode[]
+      },
+      {
+        id: 'auth-write',
+        agent: [],
+        agentGroup: [],
+        agentClass: [Authenticated.iri],
+        origin: [],
+        mode: ['Write'] as AccessMode[]
+      },
+      {
+        id: 'public-read',
+        agent: [],
+        agentGroup: [],
+        agentClass: [Public.iri],
+        origin: [],
+        mode: ['Read'] as AccessMode[]
+      }
+    ]
+
+    expect(getAuthenticatedAccessRole(authorizations)).toBe('Editor')
+    expect(getPublicAccessRole(authorizations)).toBe('Viewer')
   })
 
   it('returns only changed drafts with real shared subjects', () => {

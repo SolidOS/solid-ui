@@ -2,12 +2,13 @@ import { customElement, WebComponent } from '@/lib/components'
 import { html, nothing } from 'lit'
 import { property } from 'lit/decorators.js'
 import { ACCESS_ROLES, type AccessRole, type DirectoryEntry } from 'solid-logic'
-import type { AsyncComboboxOptionsProvider, ComboboxChangeEvent } from '@/components/combobox'
+import type { AsyncComboboxOptionsProvider, ComboboxChangeEvent, ComboboxOptionData } from '@/components/combobox'
 
 import '~icons/lucide/book-user'
 import '~icons/lucide/user-round'
 import '~icons/lucide/users'
 import '~icons/lucide/circle-x'
+import '~icons/lucide/globe'
 import '@/components/button'
 import '@/components/combobox'
 import '@/components/combobox-option'
@@ -56,6 +57,9 @@ export default class AccessControlAddAccess extends WebComponent {
   @property({ attribute: false })
   accessor inputError = ''
 
+  @property({ type: Boolean })
+  accessor disabled = false
+
   @property({ attribute: false })
   accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null = null
 
@@ -69,7 +73,7 @@ export default class AccessControlAddAccess extends WebComponent {
   }
 
   private onPrincipalSelect (event: ComboboxChangeEvent) {
-    const option = event.detail.option
+    const option = event.detail.option as ComboboxOptionData & { targetKind?: 'origin' | 'trustedApp' }
     if (typeof option.value !== 'string') {
       return
     }
@@ -77,7 +81,8 @@ export default class AccessControlAddAccess extends WebComponent {
     this.dispatchEvent(new CustomEvent<TargetSelectedDetail>('target-selected', {
       detail: {
         value: option.value,
-        label: option.label
+        label: option.label,
+        targetKind: option.targetKind
       },
       bubbles: true,
       composed: true
@@ -86,12 +91,15 @@ export default class AccessControlAddAccess extends WebComponent {
 
   private onRoleChange (event: ComboboxChangeEvent) {
     const role = event.detail.option.value
-    if (typeof role !== 'string' || !ACCESS_ROLES.includes(role as AccessRole)) {
+    const accessRole = typeof role === 'string'
+      ? ACCESS_ROLES.find(candidate => candidate === role)
+      : undefined
+    if (!accessRole) {
       return
     }
 
     this.dispatchEvent(new CustomEvent<RoleChangedDetail>('role-changed', {
-      detail: { role: role as AccessRole },
+      detail: { role: accessRole },
       bubbles: true,
       composed: true
     }))
@@ -118,6 +126,7 @@ export default class AccessControlAddAccess extends WebComponent {
           <div class="access-grants-input">
             <solid-ui-combobox
               class="access-principal-combobox"
+              .disabled=${this.disabled}
               label="Add person, group or software agent URL."
               .srOnlyLabel=${true}
               .value=${this.principalInputValue}
@@ -133,6 +142,7 @@ export default class AccessControlAddAccess extends WebComponent {
           </div>
           <solid-ui-combobox
             class="access-role-select access-role-select--top"
+            .disabled=${this.disabled}
             .value=${this.addAccessRoleValue}
             @change=${this.onRoleChange}
           >
@@ -156,11 +166,17 @@ export default class AccessControlAddAccess extends WebComponent {
       <div class="access-grants-pending">
         ${this.pendingAccessGrants.map((grant, index) => html`
           <div class="access-grants-pending-item">
-            <span class="access-grants-pending-item-label">${grant.label}</span>
+            <span class="access-grants-pending-item-label">
+              ${grant.targetKind === 'trustedApp'
+                ? html`<icon-lucide-globe style="width: 13px; height: 13px; vertical-align: -2px;"></icon-lucide-globe>`
+                : nothing}
+              ${grant.label}
+            </span>
             <solid-ui-button
               type="button"
               variant="ghost"
               class="access-grants-pending-item-remove"
+              ?disabled=${this.disabled}
               @click=${() => this.onPendingGrantRemove(index)}
             >
               <span class="sr-only">Remove ${grant.label}</span>

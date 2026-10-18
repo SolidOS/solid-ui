@@ -8,6 +8,7 @@ import { sym } from 'rdflib'
 
 import '@/components/combobox'
 import '@/components/combobox-option'
+import '~icons/lucide/globe'
 
 import styles from './AccessControlSharedAccess.styles.css'
 import type { AccessGrantRoleChangedDetail, AccessGrantViewModel } from './types'
@@ -18,6 +19,9 @@ export default class AccessControlSharedAccess extends WebComponent {
 
   @property({ attribute: false })
   accessor accessGrantViewModels: AccessGrantViewModel[] = []
+
+  @property({ type: Boolean })
+  accessor disabled = false
 
   @state()
   private accessor searchValue = ''
@@ -38,13 +42,16 @@ export default class AccessControlSharedAccess extends WebComponent {
 
   private onAccessGrantRoleChange (id: string, event: ComboboxChangeEvent) {
     const value = event.detail.option.value
-    if (typeof value !== 'string' || !ACCESS_ROLES.includes(value as AccessRole)) {
+    const accessRole = typeof value === 'string'
+      ? ACCESS_ROLES.find(candidate => candidate === value)
+      : undefined
+    if (!accessRole) {
       return
     }
 
     const detail: AccessGrantRoleChangedDetail = {
       id,
-      role: value as AccessRole
+      role: accessRole
     }
 
     this.dispatchEvent(new CustomEvent<AccessGrantRoleChangedDetail>('access-grant-role-changed', {
@@ -83,6 +90,8 @@ export default class AccessControlSharedAccess extends WebComponent {
       <div class="access-grants-image access-grants-image--${badge.kind}">
         ${badge.image
           ? html`<img src=${badge.image} alt="" aria-hidden="true" />`
+          : badge.kind === 'origin'
+            ? html`<icon-lucide-globe aria-hidden="true"></icon-lucide-globe>`
           : html`<span aria-hidden="true">${badge.text}</span>`}
       </div>
     `
@@ -123,7 +132,8 @@ export default class AccessControlSharedAccess extends WebComponent {
     if (authorization.origin[0]) {
       return {
         kind: 'origin' as const,
-        text: 'O'
+        text: 'O',
+        image: ''
       }
     }
 
@@ -143,6 +153,7 @@ export default class AccessControlSharedAccess extends WebComponent {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${role === 'Owner' ? 'access-grants-role--owner' : ''}"
+        .disabled=${this.disabled}
         .value=${role}
         @change=${(event: ComboboxChangeEvent) => this.onAccessGrantRoleChange(id, event)}
       >
@@ -163,7 +174,7 @@ export default class AccessControlSharedAccess extends WebComponent {
     return html`
       <section aria-labelledby="access-grants-heading">
         <div class="access-grants-header">
-          <h2 id="access-grants-heading">Share with</h2>
+          <h2 id="access-grants-heading">Shared with</h2>
           <solid-ui-combobox
             class="access-grants-search-input"
             label="Search access grants"
