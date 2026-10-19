@@ -123,6 +123,56 @@ describe('attachmentList', () => {
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
   })
 
+  it('keeps delete confirmations inside the row by default', () => {
+    const subject = sym('https://subject.example/profile/card#me')
+    const target = sym('https://friend.example/profile/card#me')
+    store.add(subject, ns.foaf('knows'), target, subject.doc())
+    const list = attachmentList(dom, subject, element, { predicate: ns.foaf('knows') })
+    const remove = list.querySelector<HTMLImageElement>('[title="Remove this attachment"]')!
+    remove.click()
+
+    const reference = remove.previousElementSibling as HTMLElement
+    expect(reference.parentElement).toBe(remove.parentElement)
+    expect(reference.style.position).toBe('relative')
+    expect((reference.firstElementChild as HTMLElement).style.position).toBe('absolute')
+    expect(getByRole(reference, 'button', { name: 'Remove this attachment' })).toBeTruthy()
+  })
+
+  it('places confirmations in the optional container, including after a refresh', () => {
+    const subject = sym('https://subject.example/profile/card#me')
+    const target = sym('https://friend.example/profile/card#me')
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const sentinel = host.appendChild(dom.createElement('p'))
+    store.add(subject, ns.foaf('knows'), target, subject.doc())
+    const list = attachmentList(dom, subject, element, {
+      predicate: ns.foaf('knows'),
+      noun: 'friend',
+      confirmationContainer: host,
+      renderSupportingInfo: () => null,
+      refreshOnDocumentLoad: false
+    })
+    const open = () => list.querySelector<HTMLImageElement>('[title="Remove this friend"]')!.click()
+    open()
+    open()
+
+    expect(host.querySelectorAll('[role="dialog"]')).toHaveLength(1)
+    const dialog = host.querySelector<HTMLElement>('[role="dialog"]')!
+    expect(dialog.parentElement).toBe(host)
+    expect(host.contains(sentinel)).toBe(true)
+    expect(list.contains(dialog)).toBe(false)
+    expect((dialog.firstElementChild as HTMLElement).style.position).toBe('static')
+    const cancel = Array.from(dialog.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    expect(dom.activeElement).toBe(cancel)
+    cancel.click()
+    expect(host.querySelector('[role="dialog"]')).toBeNull()
+    expect(store.holds(subject, ns.foaf('knows'), target)).toBe(true)
+
+    refreshTree(list)
+    open()
+    expect(host.querySelectorAll('[role="dialog"]')).toHaveLength(1)
+  })
+
   it('refreshes rows after pending profile fetches by default', () => {
     const subject = sym('https://subject.example/profile/card#me')
     const predicate = ns.foaf('knows')
@@ -323,6 +373,24 @@ describe('deleteButtonWithCheck', () => {
     const noun = ''
     const deleteFunction = () => {}
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
+  })
+
+  it.each([false, true])('preserves cancel and confirm handlers with an external container: %s', external => {
+    const host = external ? dom.createElement('div') : undefined
+    const deleteFunction = vi.fn()
+    const remove = deleteButtonWithCheck(dom, element, 'friend', deleteFunction, host)
+    const popupContainer = host || element
+    remove.click()
+    const cancel = Array.from(popupContainer.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    cancel.click()
+    expect(popupContainer.querySelector('button')).toBeNull()
+    expect(deleteFunction).not.toHaveBeenCalled()
+
+    remove.click()
+    getByRole(popupContainer, 'button', { name: 'Remove this friend' }).click()
+    expect(deleteFunction).toHaveBeenCalledTimes(1)
+    expect(popupContainer.querySelector('button')).toBeNull()
   })
 })
 

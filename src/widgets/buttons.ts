@@ -42,6 +42,7 @@ export type RenderAsDivOptions = {
   image?: HTMLImageElement,
   title?: string,
   deleteFunction?: () => void,
+  confirmationContainer?: HTMLElement,
   link?: boolean,
   noun?: string,
   draggable?: boolean,
@@ -464,16 +465,16 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
 /* Two-option dialog pop-up
 */
 
-function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFunction) {
+function renderDeleteConfirmPopup (dom: HTMLDocument, refererenceElement: HTMLElement, prompt: string, deleteFunction: () => any) {
   function removePopup () {
-    refererenceElement.parentElement.removeChild(refererenceElement)
+    refererenceElement.remove()
   }
   function removePopupAndDoDeletion () {
     removePopup()
     deleteFunction()
   }
   const popup = dom.createElement('div')
-  popup.style = style.confirmPopupStyle
+  popup.style.cssText = style.confirmPopupStyle
   popup.style.position = 'absolute'
   popup.style.top = '-1em' // try leaving original button clear
 
@@ -492,7 +493,7 @@ function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFuncti
   xButton.style.gridRow = '2'
 
   const cancelPrompt = popup.appendChild(dom.createElement('button'))
-  cancelPrompt.style = style.buttonStyle
+  cancelPrompt.style.cssText = style.buttonStyle
   cancelPrompt.style.gridRow = '2'
   cancelPrompt.style.gridColumn = '2'
   cancelPrompt.textContent = 'Cancel' // @@ I18n
@@ -503,7 +504,7 @@ function renderDeleteConfirmPopup (dom, refererenceElement, prompt, deleteFuncti
   affirmIcon.style.gridColumn = '1'
 
   const sureButtonElt = popup.appendChild(dom.createElement('button'))
-  sureButtonElt.style = style.buttonStyle
+  sureButtonElt.style.cssText = style.buttonStyle
   sureButtonElt.style.gridRow = '1'
   sureButtonElt.style.gridColumn = '2'
   sureButtonElt.textContent = prompt
@@ -525,13 +526,29 @@ export function deleteButtonWithCheck (
   dom: HTMLDocument,
   container: HTMLElement,
   noun: string,
-  deleteFunction: () => any
+  deleteFunction: () => any,
+  confirmationContainer?: HTMLElement
 ) {
   function createPopup () {
     const refererenceElement = dom.createElement('div')
-    container.insertBefore(refererenceElement, deleteButton)
-    refererenceElement.style.position = 'relative' // Needed as reference for popup
-    refererenceElement.appendChild(renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction))
+    if (confirmationContainer) {
+      confirmationContainer.querySelector(':scope > [data-delete-confirmation]')?.remove()
+      refererenceElement.setAttribute('data-delete-confirmation', '')
+      refererenceElement.setAttribute('role', 'dialog')
+      refererenceElement.setAttribute('aria-label', prompt)
+      confirmationContainer.appendChild(refererenceElement)
+    } else {
+      container.insertBefore(refererenceElement, deleteButton)
+      refererenceElement.style.position = 'relative' // Needed as reference for popup
+    }
+    const popup = renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction)
+    refererenceElement.appendChild(popup)
+    if (confirmationContainer) {
+      popup.style.position = 'static'
+      popup.style.top = ''
+      Array.from(popup.querySelectorAll<HTMLButtonElement>('button'))
+        .find(button => button.textContent === 'Cancel')?.focus()
+    }
   }
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
   const deleteButton = dom.createElement('img')
@@ -769,7 +786,7 @@ export function renderAsRow (dom: HTMLDocument, pred: NamedNode, obj: NamedNode,
   }
 
   if (options.deleteFunction) {
-    deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction)
+    deleteButtonWithCheck(dom, td3, options.noun || 'one', options.deleteFunction, options.confirmationContainer)
   }
   if (obj.uri) {
     // blank nodes need not apply
@@ -813,7 +830,7 @@ export function createLinkDiv (dom: HTMLDocument, div: HTMLDivElement, obj: Name
   linkDiv.setAttribute('style', style.linkDivStyle)
 
   if (options.deleteFunction) {
-    deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction)
+    deleteButtonWithCheck(dom, linkDiv, options.noun || 'one', options.deleteFunction, options.confirmationContainer)
   }
 
   if (obj.uri) {
@@ -878,6 +895,8 @@ export type attachmentListOptions = {
   predicate?: NamedNode
   uploadFolder?: NamedNode
   noun?: string
+  /** Render delete confirmations in this container, in normal flow, instead of beside the row icon. */
+  confirmationContainer?: HTMLElement
   renderSupportingInfo?: RenderSupportingInfo
   renderNameSuffix?: RenderNameSuffix
   refreshOnDocumentLoad?: boolean
@@ -923,6 +942,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
     const opt: any = { noun }
     opt.renderSupportingInfo = options.renderSupportingInfo
     opt.renderNameSuffix = options.renderNameSuffix
+    opt.confirmationContainer = options.confirmationContainer
 
     if (hasAsyncEnrichedRowOptions && refreshOnDocumentLoad && target?.uri && kb.fetcher) {
       const targetDoc = target.doc()
