@@ -465,13 +465,18 @@ export function faviconOrDefault (dom: HTMLDocument, x: NamedNode) {
 /* Two-option dialog pop-up
 */
 
-function renderDeleteConfirmPopup (dom: HTMLDocument, refererenceElement: HTMLElement, prompt: string, deleteFunction: () => any) {
+function renderDeleteConfirmPopup (dom: HTMLDocument, refererenceElement: HTMLElement, prompt: string, deleteFunction: () => any, restoreFocus: () => void) {
   function removePopup () {
     refererenceElement.remove()
+    restoreFocus()
   }
   function removePopupAndDoDeletion () {
     removePopup()
-    deleteFunction()
+    const result = deleteFunction()
+    if (result && typeof result.then === 'function') {
+      return result.then(restoreFocus)
+    }
+    restoreFocus()
   }
   const popup = dom.createElement('div')
   popup.style.cssText = style.confirmPopupStyle
@@ -520,6 +525,7 @@ function renderDeleteConfirmPopup (dom: HTMLDocument, refererenceElement: HTMLEl
 }
 /**
  * Delete button with a check you really mean it
+ * Return a promise from deleteFunction for focus restoration after asynchronous deletion.
  * @@ Supress check if command key held down?
  */
 export function deleteButtonWithCheck (
@@ -530,6 +536,34 @@ export function deleteButtonWithCheck (
   confirmationContainer?: HTMLElement
 ) {
   function createPopup () {
+    const focusableSelector = 'button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
+    const focusScopes: { element: HTMLElement, index: number }[] = []
+    if (confirmationContainer) {
+      for (let ancestor: HTMLElement | null = container; ancestor; ancestor = ancestor.parentElement) {
+        const controls = Array.from(ancestor.querySelectorAll<HTMLElement>(focusableSelector))
+        focusScopes.push({ element: ancestor, index: controls.indexOf(deleteButton) })
+      }
+    }
+    function restoreFocus () {
+      if (!confirmationContainer) return
+      if (deleteButton.isConnected) {
+        deleteButton.focus()
+        return
+      }
+      for (const scope of focusScopes) {
+        if (!scope.element.isConnected) continue
+        const controls = scope.element.querySelectorAll<HTMLElement>(focusableSelector)
+        if (controls.length) {
+          controls[Math.min(Math.max(scope.index, 0), controls.length - 1)].focus()
+          return
+        }
+      }
+      const survivingScope = focusScopes.find(scope => scope.element.isConnected)
+      if (survivingScope) {
+        survivingScope.element.tabIndex = -1
+        survivingScope.element.focus()
+      }
+    }
     const refererenceElement = dom.createElement('div')
     if (confirmationContainer) {
       confirmationContainer.querySelector(':scope > [data-delete-confirmation]')?.remove()
@@ -541,7 +575,7 @@ export function deleteButtonWithCheck (
       container.insertBefore(refererenceElement, deleteButton)
       refererenceElement.style.position = 'relative' // Needed as reference for popup
     }
-    const popup = renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction)
+    const popup = renderDeleteConfirmPopup(dom, refererenceElement, prompt, deleteFunction, restoreFocus)
     refererenceElement.appendChild(popup)
     if (confirmationContainer) {
       popup.style.position = 'static'
@@ -553,16 +587,25 @@ export function deleteButtonWithCheck (
   const minusIconURI = iconBase + 'noun_2188_red.svg' // white minus in red #cc0000 circle
   const deleteButton = dom.createElement('img')
   deleteButton.setAttribute('src', minusIconURI)
+  deleteButton.tabIndex = 0
+  deleteButton.setAttribute('role', 'button')
 
   deleteButton.setAttribute('style', style.smallButtonStyle) // @@tsc - would set deleteButton.style
   deleteButton.style.float = 'right' // Historically this has alwaus floated right
 
   const prompt = 'Remove this ' + noun
   deleteButton.title = prompt
+  deleteButton.setAttribute('aria-label', prompt)
   // @@ In an ideal world, make use of hover an accessibility option
   deleteButton.classList.add('hoverControlHide')
 
   deleteButton.addEventListener('click', createPopup)
+  deleteButton.addEventListener('keydown', event => {
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault()
+      deleteButton.click()
+    }
+  })
 
   container.classList.add('hoverControl')
   container.appendChild(deleteButton)
@@ -895,7 +938,7 @@ export type attachmentListOptions = {
   predicate?: NamedNode
   uploadFolder?: NamedNode
   noun?: string
-  /** Render delete confirmations in this container, in normal flow, instead of beside the row icon. */
+  /** Render delete confirmations here in normal flow, restoring focus to the list when closed. */
   confirmationContainer?: HTMLElement
   renderSupportingInfo?: RenderSupportingInfo
   renderNameSuffix?: RenderNameSuffix
@@ -919,11 +962,12 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
   const refreshOnDocumentLoad = options.refreshOnDocumentLoad ?? true
 
   const deleteAttachment = function (target) {
-    if (!kb.updater) {
+    const updater = kb.updater
+    if (!updater) {
       throw new Error('kb has no updater')
     }
 
-    kb.updater.update(st(subject, predicate, target, doc) as any, [], function (
+    return new Promise<void>(resolve => updater.update(st(subject, predicate, target, doc) as any, [], function (
       uri,
       ok,
       errorBody,
@@ -934,7 +978,8 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
       } else {
         complain(undefined, 'Error deleting one: ' + errorBody)
       }
-    })
+      resolve()
+    }))
   }
 
   function createNewRow (target) {
@@ -963,7 +1008,7 @@ export function attachmentList (dom: HTMLDocument, subject: NamedNode, div: HTML
 
     if (modify) {
       opt.deleteFunction = function () {
-        deleteAttachment(theTarget)
+        return deleteAttachment(theTarget)
       }
     }
     return personTR(dom, predicate, target, opt)
