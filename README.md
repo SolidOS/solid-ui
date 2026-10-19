@@ -78,6 +78,13 @@ Finally, if you're going to use a component that requires global state (like `<s
 </solid-ui-provider>
 ```
 
+### Widget navigation icons
+
+Resource navigation links in widget rows and cards use the imported Lucide
+`square-arrow-out-up-right` component in neutral gray, sized to match remove
+icons. The `linkIcon` helper still accepts a custom image URL as its third
+argument; explicit custom icons retain their existing image rendering.
+
 ### Attachment-list delete confirmations
 
 `widgets.attachmentList(dom, subject, container, options)` accepts an optional
