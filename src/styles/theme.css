@@ -8,19 +8,27 @@
     --solid-ui-color-primary: #7c4dff;
     --solid-ui-color-primary-hover: var(--solid-ui-color-lavender-300);
     --solid-ui-color-primary-selected: var(--solid-ui-color-lavender-400);
+    --solid-ui-color-blue-900: #083575;
     --solid-ui-color-tertiary: #083575;
     --solid-ui-color-white: #ffffff;
     --solid-ui-color-error: #b00020;
+    --solid-ui-color-pink-50: #fff7f8;
+    --solid-ui-color-pink-100: #ffe7eb;
+    --solid-ui-color-pink-200: #f0d8dc;
 
     --solid-ui-color-gray-100: #f3f4f6;
     --solid-ui-color-gray-200: #cbd5e1;
+    --solid-ui-color-gray-300: #d1d5dc;
     --solid-ui-color-gray-400: #99a1af;
     --solid-ui-color-gray-500: #6a7282;
+    --solid-ui-color-zinc-500: #71717b;
     --solid-ui-color-gray-600: #4a5565;
     --solid-ui-color-gray-700: #364153;
     --solid-ui-color-gray-800: #101828;
+    --solid-ui-color-gray-900: #101828;
 
     --solid-ui-color-slate-50: #f8fafc;
+    --solid-ui-color-gray-50: #f9fafb;
     --solid-ui-color-slate-200: #e2e8f0;
     --solid-ui-color-slate-400: #90a1b9;
     --solid-ui-color-slate-800: #1d293d;
@@ -28,7 +36,11 @@
     --solid-ui-color-lavender-300: #e6dcff;
     --solid-ui-color-lavender-400: #cbb9ff;
 
+    --solid-ui-color-violet-50: #F5F3FF;
+
     --solid-ui-color-red-500: #fb2c36;
+    --solid-ui-color-red-600: #be2e48;
+    --solid-ui-color-red-700: #b00020;
 
     --solid-ui-color-body-grey: #666;
 

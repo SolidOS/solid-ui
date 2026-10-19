@@ -1,3 +1,4 @@
+import type AccessControlModal from '../components/access-control-modal/AccessControlModal'
 import type Account from '../components/account/Account'
 import type Avatar from '../components/avatar/Avatar'
 import type Button from '../components/button/Button'
@@ -9,6 +10,7 @@ import type DialogFooter from '../components/dialog-footer/DialogFooter'
 import type DialogHeader from '../components/dialog-header/DialogHeader'
 import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
+import type ErrorState from '../components/error-state/ErrorState'
 import type Guard from '../components/guard/Guard'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
@@ -28,6 +30,7 @@ import type SolidEmblem from '../components/solid-emblem/SolidEmblem'
 
 declare global {
   interface HTMLElementTagNameMap {
+    'solid-ui-access-control-modal': AccessControlModal
     'solid-ui-account': Account
     'solid-ui-avatar': Avatar
     'solid-ui-button': Button
@@ -39,6 +42,7 @@ declare global {
     'solid-ui-dialog-header': DialogHeader
     'solid-ui-dialog-provider': DialogProvider
     'solid-ui-dialogs-root': DialogsRoot
+    'solid-ui-error-state': ErrorState
     'solid-ui-guard': Guard
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
