@@ -174,9 +174,10 @@ export function makeDraggable (tr, obj) {
 **  @param {String } imageBase  URI of folder in which to put images
 **  @param successHandler function(file, uploadedURI)    Called after EACH success upload
 **                              With file object an final URI as params
+**  @param failureHandler function(file, message)        Called for validation or upload failures
 */
 
-export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler) {
+export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler, failureHandler) {
   const describeUploadFailure = function (destURI, error) {
     const status = error?.response?.status ?? error?.status
     const message = error?.message || String(error)
@@ -220,6 +221,10 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
               'Filename needs to have an extension which gives a type we know: ' +
               theFile.name
             debug.log(msg)
+            if (failureHandler) {
+              failureHandler(theFile, msg)
+              return
+            }
             alert(msg)
             throw new Error(msg)
           }
@@ -254,6 +259,10 @@ export function uploadFiles (fetcher, files, fileBase, imageBase, successHandler
             error => {
               const msg = describeUploadFailure(destURI, error)
               debug.log(msg)
+              if (failureHandler) {
+                failureHandler(theFile, msg)
+                return
+              }
               alert(msg)
               throw new Error(msg)
             }
