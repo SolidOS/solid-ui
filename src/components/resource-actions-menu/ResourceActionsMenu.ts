@@ -46,13 +46,17 @@ export default class ResourceActionsMenu extends WebComponent {
   @property({ type: Boolean })
   accessor isMobile = false
 
+  @property({ type: Boolean, attribute: 'show-access-in-menu' })
+  accessor showAccessInMenu = false
+
   @property({ attribute: false })
   accessor menuItems: ResourceActionMenuItem[] = []
 
   render () {
     const isContainerResource = isContainerSubject(this.store, this.subjectUri)
     const canEdit = !isContainerResource && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick
-    const canManageAccess = !!this.handleAccessClick
+    const canManageAccess = !!this.handleAccessClick &&
+      (this.showAccessInMenu || this.isMobile || isContainerResource)
     const actionableMenuItems = this.menuItems.filter((item): item is ActionableResourceActionMenuItem => typeof item.action === 'function')
     return html`
       <solid-ui-menu>
@@ -74,15 +78,7 @@ export default class ResourceActionsMenu extends WebComponent {
               </solid-ui-menu-item>
             `
           : nothing}
-        ${!isContainerResource && this.isMobile && canManageAccess
-          ? html`
-              <solid-ui-menu-item @solid-ui-select=${this.handleAccessClick}>
-                <icon-lucide-user-round-cog slot="left-icon"></icon-lucide-user-round-cog>
-                Manage Access
-              </solid-ui-menu-item>
-            `
-          : nothing}
-        ${isContainerResource && canManageAccess
+        ${canManageAccess
           ? html`
               <solid-ui-menu-item @solid-ui-select=${this.handleAccessClick}>
                 <icon-lucide-user-round-cog slot="left-icon"></icon-lucide-user-round-cog>
