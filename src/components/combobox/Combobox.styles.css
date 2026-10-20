@@ -36,6 +36,14 @@
             padding: 10px;
             padding-right: 40px;
             width: 100%;
+
+            /* Global focus styles don't reach into the shadow DOM, so mirror them here. */
+            &:focus-visible {
+                outline: var(--focus-indicator-width, 2px) solid var(--color-primary, var(--solid-ui-color-primary, #7C4DFF));
+                outline-offset: 2px;
+                box-shadow: 0 0 0 1px var(--color-background, #F8F9FB), 0 0 0 4px rgba(124, 77, 255, 0.2);
+                transition: none;
+            }
         }
 
         icon-lucide-chevron-down {
