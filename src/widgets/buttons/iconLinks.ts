@@ -1,5 +1,5 @@
 import { NamedNode } from 'rdflib'
-import { originalIconBase } from '../../lib/iconBase'
+import '~icons/lucide/square-arrow-out-up-right'
 
 /**
  * Creates an anchor tag for a NamedNode
@@ -21,12 +21,16 @@ export function linkIcon (dom: HTMLDocument, subject: NamedNode, iconURI?: strin
     // If diff web page
     anchor.setAttribute('target', '_blank') // open in a new tab or window
   } // as mailboxes and mail messages do not need new browser window
-  const img = anchor.appendChild(dom.createElement('img'))
-  img.setAttribute(
-    'src',
-    iconURI || originalIconBase + 'go-to-this.png'
-  )
-  img.setAttribute('style', 'margin: 0.3em;')
+  if (iconURI) {
+    const img = anchor.appendChild(dom.createElement('img'))
+    img.setAttribute('src', iconURI)
+    img.setAttribute('style', 'margin: 0.3em;')
+  } else {
+    anchor.setAttribute('aria-label', 'Open resource')
+    const icon = anchor.appendChild(dom.createElement('icon-lucide-square-arrow-out-up-right'))
+    icon.setAttribute('aria-hidden', 'true')
+    icon.setAttribute('style', 'display: inline-block; width: 1em; height: 1em; margin: 0.2em; color: var(--color-text-secondary, #4A5565);')
+  }
   return anchor
 }
 /**

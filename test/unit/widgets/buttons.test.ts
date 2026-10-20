@@ -123,6 +123,94 @@ describe('attachmentList', () => {
     expect(attachmentList(dom, subject, div, options)).toBeTruthy()
   })
 
+  it('keeps delete confirmations inside the row by default', () => {
+    const subject = sym('https://subject.example/profile/card#me')
+    const target = sym('https://friend.example/profile/card#me')
+    store.add(subject, ns.foaf('knows'), target, subject.doc())
+    const list = attachmentList(dom, subject, element, { predicate: ns.foaf('knows') })
+    const remove = list.querySelector<HTMLImageElement>('[title="Remove this attachment"]')!
+    remove.click()
+
+    const reference = remove.previousElementSibling as HTMLElement
+    expect(reference.parentElement).toBe(remove.parentElement)
+    expect(reference.style.position).toBe('relative')
+    expect((reference.firstElementChild as HTMLElement).style.position).toBe('absolute')
+    expect(getByRole(reference, 'button', { name: 'Remove this attachment' })).toBeTruthy()
+  })
+
+  it('places confirmations in the optional container, including after a refresh', () => {
+    dom.body.appendChild(element)
+    const subject = sym('https://subject.example/profile/card#me')
+    const target = sym('https://friend.example/profile/card#me')
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const sentinel = host.appendChild(dom.createElement('p'))
+    store.add(subject, ns.foaf('knows'), target, subject.doc())
+    const list = attachmentList(dom, subject, element, {
+      predicate: ns.foaf('knows'),
+      noun: 'friend',
+      confirmationContainer: host,
+      renderSupportingInfo: () => null,
+      refreshOnDocumentLoad: false
+    })
+    const open = () => list.querySelector<HTMLImageElement>('[title="Remove this friend"]')!.click()
+    open()
+    open()
+
+    expect(host.querySelectorAll('[role="dialog"]')).toHaveLength(1)
+    const dialog = host.querySelector<HTMLElement>('[role="dialog"]')!
+    expect(dialog.parentElement).toBe(host)
+    expect(host.contains(sentinel)).toBe(true)
+    expect(list.contains(dialog)).toBe(false)
+    expect((dialog.firstElementChild as HTMLElement).style.position).toBe('static')
+    const cancel = Array.from(dialog.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    expect(dom.activeElement).toBe(cancel)
+    cancel.click()
+    expect(host.querySelector('[role="dialog"]')).toBeNull()
+    expect(store.holds(subject, ns.foaf('knows'), target)).toBe(true)
+    expect(dom.activeElement).toBe(list.querySelector('[title="Remove this friend"]'))
+
+    refreshTree(list)
+    open()
+    expect(host.querySelectorAll('[role="dialog"]')).toHaveLength(1)
+  })
+
+  it('restores focus after asynchronous deletion and when the list becomes empty', async () => {
+    dom.body.appendChild(element)
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const subject = sym('https://subject.example/profile/card#me')
+    const targets = [
+      sym('https://first.example/profile/card#me'),
+      sym('https://second.example/profile/card#me')
+    ]
+    const predicate = ns.foaf('knows')
+    targets.forEach(target => store.add(subject, predicate, target, subject.doc()))
+    const update = vi.spyOn(store.updater!, 'update').mockImplementation(() => Promise.resolve())
+    const list = attachmentList(dom, subject, element, {
+      predicate,
+      confirmationContainer: host,
+      renderSupportingInfo: () => null,
+      refreshOnDocumentLoad: false
+    })
+
+    for (const target of targets) {
+      const remove = list.querySelector<HTMLElement>('[data-testid="deleteButtonWithCheck"]')!
+      remove.click()
+      getByRole(host, 'button', { name: 'Remove this attachment' }).click()
+      expect(host.querySelector('[role="dialog"]')).toBeNull()
+      expect(dom.activeElement).toBe(remove)
+
+      const callback = update.mock.calls[update.mock.calls.length - 1][2]!
+      store.removeMatches(subject, predicate, target)
+      callback(subject.doc().uri, true, '')
+      await Promise.resolve()
+
+      const remainingRemove = list.querySelector('[data-testid="deleteButtonWithCheck"]')
+      expect(dom.activeElement).toBe(remainingRemove || list.querySelector('button'))
+      expect(dom.activeElement?.isConnected).toBe(true)
+    }
+  })
+
   it('refreshes rows after pending profile fetches by default', () => {
     const subject = sym('https://subject.example/profile/card#me')
     const predicate = ns.foaf('knows')
@@ -323,6 +411,83 @@ describe('deleteButtonWithCheck', () => {
     const noun = ''
     const deleteFunction = () => {}
     expect(deleteButtonWithCheck(dom, container, noun, deleteFunction)).toBeTruthy()
+  })
+
+  it.each([false, true])('preserves cancel and confirm handlers with an external container: %s', external => {
+    const host = external ? dom.createElement('div') : undefined
+    const deleteFunction = vi.fn()
+    const remove = deleteButtonWithCheck(dom, element, 'friend', deleteFunction, host)
+    const popupContainer = host || element
+    remove.click()
+    const cancel = Array.from(popupContainer.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    cancel.click()
+    expect(popupContainer.querySelector('button')).toBeNull()
+    expect(deleteFunction).not.toHaveBeenCalled()
+
+    remove.click()
+    const popup = external ? host! : remove.previousElementSibling as HTMLElement
+    getByRole(popup, 'button', { name: 'Remove this friend' }).click()
+    expect(deleteFunction).toHaveBeenCalledTimes(1)
+    expect(popupContainer.querySelector('button')).toBeNull()
+  })
+
+  it.each(['text', 'icon'])('restores focus to the originating control after %s cancellation', control => {
+    dom.body.appendChild(element)
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const deleteFunction = vi.fn()
+    const remove = deleteButtonWithCheck(dom, element, 'friend', deleteFunction, host)
+    remove.focus()
+    expect(dom.activeElement).toBe(remove)
+    expect(getByRole(element, 'button', { name: 'Remove this friend' })).toBe(remove)
+
+    remove.click()
+    const cancel = Array.from(host.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    expect(dom.activeElement).toBe(cancel)
+    if (control === 'text') {
+      cancel.click()
+    } else {
+      host.querySelector('button')!.click()
+    }
+
+    expect(host.querySelector('[role="dialog"]')).toBeNull()
+    expect(dom.activeElement).toBe(remove)
+    expect(deleteFunction).not.toHaveBeenCalled()
+  })
+
+  it.each(['Enter', ' '])('opens confirmation with the %s key', key => {
+    dom.body.appendChild(element)
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const remove = deleteButtonWithCheck(dom, element, 'friend', vi.fn(), host)
+    remove.focus()
+    remove.dispatchEvent(new window.KeyboardEvent('keydown', { key, bubbles: true }))
+
+    const cancel = Array.from(host.querySelectorAll('button'))
+      .find(button => button.textContent === 'Cancel')!
+    expect(dom.activeElement).toBe(cancel)
+  })
+
+  it.each(['first', 'last'])('focuses a surviving control after deleting the %s row', position => {
+    dom.body.appendChild(element)
+    const host = dom.body.appendChild(dom.createElement('div'))
+    const firstRow = element.appendChild(dom.createElement('div'))
+    const lastRow = element.appendChild(dom.createElement('div'))
+    const firstRemove = deleteButtonWithCheck(dom, firstRow, 'friend', () => firstRow.remove(), host)
+    const lastRemove = deleteButtonWithCheck(dom, lastRow, 'friend', () => lastRow.remove(), host)
+    const remove = position === 'first' ? firstRemove : lastRemove
+    const survivor = position === 'first' ? lastRemove : firstRemove
+
+    remove.click()
+    if (position === 'first') {
+      getByRole(host, 'button', { name: 'Remove this friend' }).click()
+    } else {
+      host.querySelector<HTMLElement>('img[title="Delete it"]')!.parentElement!.click()
+    }
+
+    expect(host.querySelector('[role="dialog"]')).toBeNull()
+    expect(remove.isConnected).toBe(false)
+    expect(dom.activeElement).toBe(survivor)
   })
 })
 
