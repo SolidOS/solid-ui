@@ -168,37 +168,69 @@ function B(e, t) {
 	}
 	return z(n, t), n;
 }
-function re(e, t, n, r) {
-	function i() {
-		t.parentElement.removeChild(t);
-	}
+function re(e, t, n, r, i) {
 	function a() {
-		i(), r();
+		t.remove(), i();
 	}
-	let o = e.createElement("div");
-	o.style = s.confirmPopupStyle, o.style.position = "absolute", o.style.top = "-1em", o.style.display = "grid", o.style.gridTemplateColumns = "auto auto";
+	function o() {
+		a();
+		let e = r();
+		if (e && typeof e.then == "function") return e.then(i);
+		i();
+	}
 	let c = e.createElement("div");
-	c.style.gridColumn = "1/2", c.style.gridRow = "1";
+	c.style.cssText = s.confirmPopupStyle, c.style.position = "absolute", c.style.top = "-1em", c.style.display = "grid", c.style.gridTemplateColumns = "auto auto";
 	let l = e.createElement("div");
-	l.style.gridColumn = "1/2", l.style.gridRow = "2";
-	let u = U(e, i);
-	o.appendChild(u), u.style.gridColumn = "1", u.style.gridRow = "2";
-	let d = o.appendChild(e.createElement("button"));
-	d.style = s.buttonStyle, d.style.gridRow = "2", d.style.gridColumn = "2", d.textContent = "Cancel";
-	let p = H(e, f.iconBase + "noun_925021.svg", "Delete it");
-	o.appendChild(p), p.style.gridRow = "1", p.style.gridColumn = "1";
-	let m = o.appendChild(e.createElement("button"));
-	return m.style = s.buttonStyle, m.style.gridRow = "1", m.style.gridColumn = "2", m.textContent = n, o.appendChild(m), p.addEventListener("click", a), m.addEventListener("click", a), d.addEventListener("click", i), o;
+	l.style.gridColumn = "1/2", l.style.gridRow = "1";
+	let u = e.createElement("div");
+	u.style.gridColumn = "1/2", u.style.gridRow = "2";
+	let d = U(e, a);
+	c.appendChild(d), d.style.gridColumn = "1", d.style.gridRow = "2";
+	let p = c.appendChild(e.createElement("button"));
+	p.style.cssText = s.buttonStyle, p.style.gridRow = "2", p.style.gridColumn = "2", p.textContent = "Cancel";
+	let m = H(e, f.iconBase + "noun_925021.svg", "Delete it");
+	c.appendChild(m), m.style.gridRow = "1", m.style.gridColumn = "1";
+	let h = c.appendChild(e.createElement("button"));
+	return h.style.cssText = s.buttonStyle, h.style.gridRow = "1", h.style.gridColumn = "2", h.textContent = n, c.appendChild(h), m.addEventListener("click", o), h.addEventListener("click", o), p.addEventListener("click", a), c;
 }
-function V(e, t, n, r) {
-	function i() {
-		let n = e.createElement("div");
-		t.insertBefore(n, o), n.style.position = "relative", n.appendChild(re(e, n, c, r));
+function V(e, t, n, r, i) {
+	function a() {
+		let n = "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", a = [];
+		if (i) for (let e = t; e; e = e.parentElement) {
+			let t = Array.from(e.querySelectorAll(n));
+			a.push({
+				element: e,
+				index: t.indexOf(c)
+			});
+		}
+		function o() {
+			if (!i) return;
+			if (c.isConnected) {
+				c.focus();
+				return;
+			}
+			for (let e of a) {
+				if (!e.element.isConnected) continue;
+				let t = e.element.querySelectorAll(n);
+				if (t.length) {
+					t[Math.min(Math.max(e.index, 0), t.length - 1)].focus();
+					return;
+				}
+			}
+			let e = a.find((e) => e.element.isConnected);
+			e && (e.element.tabIndex = -1, e.element.focus());
+		}
+		let s = e.createElement("div");
+		i ? (i.querySelector(":scope > [data-delete-confirmation]")?.remove(), s.setAttribute("data-delete-confirmation", ""), s.setAttribute("role", "dialog"), s.setAttribute("aria-label", l), i.appendChild(s)) : (t.insertBefore(s, c), s.style.position = "relative");
+		let u = re(e, s, l, r, o);
+		s.appendChild(u), i && (u.style.position = "static", u.style.top = "", Array.from(u.querySelectorAll("button")).find((e) => e.textContent === "Cancel")?.focus());
 	}
-	let a = w + "noun_2188_red.svg", o = e.createElement("img");
-	o.setAttribute("src", a), o.setAttribute("style", s.smallButtonStyle), o.style.float = "right";
-	let c = "Remove this " + n;
-	return o.title = c, o.classList.add("hoverControlHide"), o.addEventListener("click", i), t.classList.add("hoverControl"), t.appendChild(o), o.setAttribute("data-testid", "deleteButtonWithCheck"), o;
+	let o = w + "noun_2188_red.svg", c = e.createElement("img");
+	c.setAttribute("src", o), c.tabIndex = 0, c.setAttribute("role", "button"), c.setAttribute("style", s.smallButtonStyle), c.style.float = "right";
+	let l = "Remove this " + n;
+	return c.title = l, c.setAttribute("aria-label", l), c.classList.add("hoverControlHide"), c.addEventListener("click", a), c.addEventListener("keydown", (e) => {
+		(e.key === "Enter" || e.key === " ") && (e.preventDefault(), c.click());
+	}), t.classList.add("hoverControl"), t.appendChild(c), c.setAttribute("data-testid", "deleteButtonWithCheck"), c;
 }
 function H(e, t, n, r, i = {
 	buttonColor: "Primary",
@@ -263,7 +295,7 @@ function K(e, t, n, r) {
 			n.setAttribute("style", "font-size: 90%; opacity: 0.8;"), typeof t == "string" ? n.textContent = t : n.appendChild(t);
 		}
 	}
-	return r.deleteFunction && V(e, s, r.noun || "one", r.deleteFunction), n.uri && (r.link !== !1 && (s.appendChild(v(e, n)).classList.add("HoverControlHide"), s.appendChild(e.createElement("br"))), r.draggable !== !1 && (l.setAttribute("draggable", "false"), c(i, n))), i.subject = n, i;
+	return r.deleteFunction && V(e, s, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && (s.appendChild(v(e, n)).classList.add("HoverControlHide"), s.appendChild(e.createElement("br"))), r.draggable !== !1 && (l.setAttribute("draggable", "false"), c(i, n))), i.subject = n, i;
 }
 function q(e, t, n, r) {
 	let i = t.appendChild(e.createElement("div"));
@@ -271,7 +303,7 @@ function q(e, t, n, r) {
 }
 function J(e, t, n, r) {
 	let i = t.appendChild(e.createElement("div"));
-	i.setAttribute("style", s.linkDivStyle), r.deleteFunction && V(e, i, r.noun || "one", r.deleteFunction), n.uri && (r.link !== !1 && _(e, i, n), c(t, n));
+	i.setAttribute("style", s.linkDivStyle), r.deleteFunction && V(e, i, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && _(e, i, n), c(t, n));
 }
 function ae(e, t, n) {
 	let r = e.createElement("div");
@@ -285,21 +317,22 @@ function Y(e) {
 }
 function oe(t, n, r, i = {}) {
 	let s = /* @__PURE__ */ new Set(), c = !!(i.renderSupportingInfo || i.renderNameSuffix), d = i.refreshOnDocumentLoad ?? !0, f = function(e) {
-		if (!E.updater) throw Error("kb has no updater");
-		E.updater.update(b(n, S, e, _), [], function(e, t, n, r) {
-			t ? m() : O(void 0, "Error deleting one: " + n);
-		});
+		let t = E.updater;
+		if (!t) throw Error("kb has no updater");
+		return new Promise((r) => t.update(b(n, S, e, _), [], function(e, t, n, i) {
+			t ? m() : O(void 0, "Error deleting one: " + n), r();
+		}));
 	};
 	function p(e) {
 		let n = e, r = { noun: T };
-		if (r.renderSupportingInfo = i.renderSupportingInfo, r.renderNameSuffix = i.renderNameSuffix, c && d && e?.uri && E.fetcher) {
+		if (r.renderSupportingInfo = i.renderSupportingInfo, r.renderNameSuffix = i.renderNameSuffix, r.confirmationContainer = i.confirmationContainer, c && d && e?.uri && E.fetcher) {
 			let t = e.doc(), n = t?.uri ? E.fetcher.requested?.[t.uri] : void 0, r = n !== "done" && n !== "failed";
 			t?.uri && r && !s.has(t.uri) && (s.add(t.uri), E.fetcher.nowOrWhenFetched(t, void 0, () => {
 				s.delete(t.uri), m();
 			}));
 		}
 		return v && (r.deleteFunction = function() {
-			f(n);
+			return f(n);
 		}), G(t, S, e, r);
 	}
 	let m = function() {

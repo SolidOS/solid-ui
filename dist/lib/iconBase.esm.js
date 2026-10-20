@@ -11,8 +11,9 @@ var t = "https://solidos.github.io/solid-ui/src", n = typeof module < "u" && mod
 	originalIconBase: t + "/originalIcons/"
 };
 e("   icons.iconBase is set to : " + n.iconBase);
-var r = n.iconBase, i = n.originalIconBase;
+var r = n.iconBase;
+n.originalIconBase;
 //#endregion
-export { r as iconBase, n as icons, i as originalIconBase };
+export { r as iconBase, n as icons };
 
 //# sourceMappingURL=iconBase.esm.js.map

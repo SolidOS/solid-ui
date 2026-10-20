@@ -1,16 +1,22 @@
-import { originalIconBase as e } from "../../lib/iconBase.esm.js";
+import "../../_virtual/~icons/lucide/square-arrow-out-up-right.esm.js";
 //#region src/widgets/buttons/iconLinks.ts
-function t(t, n, r) {
-	let i = t.createElement("a");
-	i.setAttribute("href", n.uri), n.uri.startsWith("http") && i.setAttribute("target", "_blank");
-	let a = i.appendChild(t.createElement("img"));
-	return a.setAttribute("src", r || e + "go-to-this.png"), a.setAttribute("style", "margin: 0.3em;"), i;
+function e(e, t, n) {
+	let r = e.createElement("a");
+	if (r.setAttribute("href", t.uri), t.uri.startsWith("http") && r.setAttribute("target", "_blank"), n) {
+		let t = r.appendChild(e.createElement("img"));
+		t.setAttribute("src", n), t.setAttribute("style", "margin: 0.3em;");
+	} else {
+		r.setAttribute("aria-label", "Open resource");
+		let t = r.appendChild(e.createElement("icon-lucide-square-arrow-out-up-right"));
+		t.setAttribute("aria-hidden", "true"), t.setAttribute("style", "display: inline-block; width: 1em; height: 1em; margin: 0.2em; color: var(--color-text-secondary, #4A5565);");
+	}
+	return r;
 }
-var n = (e, n, r) => {
-	let i = t(e, r);
-	n.appendChild(i).classList.add("HoverControlHide"), n.appendChild(e.createElement("br"));
+var t = (t, n, r) => {
+	let i = e(t, r);
+	n.appendChild(i).classList.add("HoverControlHide"), n.appendChild(t.createElement("br"));
 };
 //#endregion
-export { n as createLinkForURI, t as linkIcon };
+export { t as createLinkForURI, e as linkIcon };
 
 //# sourceMappingURL=iconLinks.esm.js.map

@@ -13,6 +13,7 @@ export type RenderAsDivOptions = {
     image?: HTMLImageElement;
     title?: string;
     deleteFunction?: () => void;
+    confirmationContainer?: HTMLElement;
     link?: boolean;
     noun?: string;
     draggable?: boolean;
@@ -140,9 +141,10 @@ export declare function setImage(element: HTMLElement, thing: NamedNode): void;
 export declare function faviconOrDefault(dom: HTMLDocument, x: NamedNode): HTMLObjectElement | HTMLImageElement;
 /**
  * Delete button with a check you really mean it
+ * Return a promise from deleteFunction for focus restoration after asynchronous deletion.
  * @@ Supress check if command key held down?
  */
-export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any): HTMLImageElement;
+export declare function deleteButtonWithCheck(dom: HTMLDocument, container: HTMLElement, noun: string, deleteFunction: () => any, confirmationContainer?: HTMLElement): HTMLImageElement;
 export declare function button(dom: HTMLDocument, iconURI: string | undefined, text: string, handler?: (_event: any) => void, options?: ButtonWidgetOptions): HTMLButtonElement;
 export declare function cancelButton(dom: HTMLDocument, handler: (_event?: any) => void): HTMLButtonElement;
 export declare function continueButton(dom: HTMLDocument, handler: (_event: any) => void): HTMLButtonElement;
@@ -175,6 +177,8 @@ export type attachmentListOptions = {
     predicate?: NamedNode;
     uploadFolder?: NamedNode;
     noun?: string;
+    /** Render delete confirmations here in normal flow, restoring focus to the list when closed. */
+    confirmationContainer?: HTMLElement;
     renderSupportingInfo?: RenderSupportingInfo;
     renderNameSuffix?: RenderNameSuffix;
     refreshOnDocumentLoad?: boolean;

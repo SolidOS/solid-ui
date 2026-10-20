@@ -1,1 +1,1 @@
-export { n as Avatar, t as default } from "../chunks/avatar-DiGyEwvL.js";
+export { n as Avatar, t as default } from "../chunks/avatar-D5rcw6gN.js";
