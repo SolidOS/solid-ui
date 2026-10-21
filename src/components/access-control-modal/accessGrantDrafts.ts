@@ -22,6 +22,10 @@ export function getAuthorizationSubjectEntries (authorization: AccessAuthorizati
 }
 
 export function getAccessGrantId (authorization: AccessAuthorization): string {
+  if (authorization.id) {
+    return authorization.id
+  }
+
   return getAuthorizationSubjectEntries(authorization)
     .map(subject => `${subject.type}:${subject.iri}`)
     .sort()
@@ -93,13 +97,17 @@ export function getChangedAccessGrants (drafts: AccessGrantDraft[]): ChangedAcce
 }
 
 export function getAuthenticatedAccessRole (accessGrants: AccessAuthorization[]): AccessRole {
-  const authorization = accessGrants.find(item => item.agentClass.includes(Authenticated.iri))
-  return authorization ? getAuthorizationRole(authorization) : 'No Access'
+  const modes = accessGrants
+    .filter(item => item.agentClass.includes(Authenticated.iri))
+    .flatMap(item => item.mode)
+  return modes.length ? solidLogicSingleton.acl.roleFromModes(modes) : 'No Access'
 }
 
 export function getPublicAccessRole (accessGrants: AccessAuthorization[]): AccessRole {
-  const authorization = accessGrants.find(item => item.agentClass.includes(Public.iri))
-  return authorization ? solidLogicSingleton.acl.publicRoleFromModes(authorization.mode) : 'No Access'
+  const modes = accessGrants
+    .filter(item => item.agentClass.includes(Public.iri))
+    .flatMap(item => item.mode)
+  return modes.length ? solidLogicSingleton.acl.publicRoleFromModes(modes) : 'No Access'
 }
 
 export function getAccessSubjectLabel (subject: AccessSubject): string {
