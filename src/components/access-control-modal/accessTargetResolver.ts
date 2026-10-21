@@ -3,19 +3,33 @@ import { directoryEntryOptionTemplate } from './AccessControlAddAccess'
 import { label } from '@/utils/label'
 import { DEFAULT_DIRECTORY_SOURCES, solidLogicSingleton, type AccessControlSubjectKind, type DirectoryEntry } from 'solid-logic'
 import { sym } from 'rdflib'
+import { html } from 'lit'
+import ns from '@/lib/ns'
+import '~icons/lucide/globe'
 import { dedupeByKey, dedupeComboboxOptions, isAbsoluteHttpUri, isOriginUrl, normalizeOriginInput, type StringComboboxOptionData } from './helpers'
 
 export type ResolvedAccessTarget = {
   subjectType: AccessControlSubjectKind
   subjectValue: string
   label: string
+  targetKind?: 'origin' | 'trustedApp'
+}
+
+type AccessTargetOption = ComboboxOptionData & {
+  targetKind?: 'origin' | 'trustedApp'
 }
 
 async function classifyAccessTarget (principal: string) {
   const normalizedOrigin = normalizeOriginInput(principal)
-  return normalizedOrigin
-    ? { kind: 'origin' as const, subjectValue: normalizedOrigin }
-    : await solidLogicSingleton.acl.classifyAccessControlSubject(principal)
+  if (normalizedOrigin) {
+    return { kind: 'origin' as const, subjectValue: normalizedOrigin }
+  }
+
+  if (isOriginUrl(principal)) {
+    return { kind: 'origin' as const, subjectValue: new URL(principal).origin }
+  }
+
+  return await solidLogicSingleton.acl.classifyAccessControlSubject(principal)
 }
 
 async function resolveAccessTargetLabel (
@@ -30,7 +44,7 @@ async function resolveAccessTargetLabel (
   await solidLogicSingleton.store.fetcher.load(subject.doc())
   const resolvedLabel = preferredLabel?.trim() || label(subject).trim()
   if (!resolvedLabel || resolvedLabel === resolvedPrincipal.subjectValue) {
-    return undefined
+    throw new Error('The access target has no usable display label.')
   }
 
   return resolvedLabel
@@ -53,7 +67,8 @@ export async function resolveAccessTarget (
   return {
     subjectType: resolvedPrincipal.kind,
     subjectValue: resolvedPrincipal.subjectValue,
-    label: resolvedLabel
+    label: resolvedLabel,
+    targetKind: resolvedPrincipal.kind === 'origin' ? 'origin' : undefined
   }
 }
 
@@ -72,12 +87,14 @@ function directoryEntryToOption (entry: DirectoryEntry, labelValue: string): Com
   }
 }
 
-async function getPreferredAccessPrincipalOptions (query: string): Promise<ComboboxOptionData[]> {
+async function getPreferredAccessPrincipalOptions (query: string): Promise<AccessTargetOption[]> {
   const normalizedOrigin = normalizeOriginInput(query)
   if (normalizedOrigin) {
     return [{
       label: `Use origin ${normalizedOrigin}`,
-      value: normalizedOrigin
+      value: normalizedOrigin,
+      targetKind: 'origin',
+      template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${normalizedOrigin}</span></span>`
     }]
   }
 
@@ -88,12 +105,38 @@ async function getPreferredAccessPrincipalOptions (query: string): Promise<Combo
   if (isOriginUrl(query)) {
     return [{
       label: `Use origin ${new URL(query).origin}`,
-      value: new URL(query).origin
+      value: new URL(query).origin,
+      targetKind: 'origin',
+      template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${new URL(query).origin}</span></span>`
     }]
   }
 
   const urlOption = await createUrlOption(query)
   return dedupeComboboxOptions(urlOption ? [urlOption] : [])
+}
+
+async function getTrustedAppOptions (query: string): Promise<AccessTargetOption[]> {
+  try {
+    const me = solidLogicSingleton.authn.currentUser()
+    if (!me) return []
+    await solidLogicSingleton.profile.loadProfile(me)
+    const store = solidLogicSingleton.store
+    const apps = store.each(me, ns.acl('trustedApp')) as Array<ReturnType<typeof sym>>
+    return apps.flatMap(app => {
+      const origin = store.any(app, ns.acl('origin'))
+      if (!origin || !isOriginUrl(origin.value)) return []
+      const normalizedOrigin = new URL(origin.value).origin
+      if (query && !`${normalizedOrigin} trusted app`.toLowerCase().includes(query.toLowerCase())) return []
+      return [{
+        label: `Trusted app: ${normalizedOrigin}`,
+        value: normalizedOrigin,
+        targetKind: 'trustedApp' as const,
+        template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Trusted app: ${normalizedOrigin}</span></span>`
+      }]
+    })
+  } catch {
+    return []
+  }
 }
 
 function getShortQueryOptions (preferredOptions: ComboboxOptionData[]): ComboboxOptionData[] {
@@ -112,9 +155,18 @@ export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
   defineAsyncComboboxOptionsProvider(async (filter: string) => {
     const query = filter.trim()
     const preferredOptions = await getPreferredAccessPrincipalOptions(query)
+    const trustedAppOptions = await getTrustedAppOptions(query)
 
     if (query.length < 2) {
-      return getShortQueryOptions(preferredOptions)
+      return dedupeByKey(
+        [...preferredOptions, ...trustedAppOptions, ...getShortQueryOptions(preferredOptions)],
+        option => {
+          const targetOption = option as AccessTargetOption
+          return typeof targetOption.value === 'string'
+            ? `${targetOption.value}:${targetOption.targetKind ?? 'default'}`
+            : undefined
+        }
+      )
     }
 
     let entries: DirectoryEntry[] = []
@@ -125,7 +177,7 @@ export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
         sources: DEFAULT_DIRECTORY_SOURCES
       })
     } catch (error) {
-      if (!preferredOptions.length) {
+      if (!preferredOptions.length && !trustedAppOptions.length) {
         throw error
       }
     }
@@ -142,7 +194,12 @@ export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
       .filter((entry): entry is { entry: DirectoryEntry, label: string } => entry !== undefined)
       .map(({ entry, label: entryLabel }) => directoryEntryToOption(entry, entryLabel))
     return dedupeByKey(
-      [...preferredOptions, ...options],
-      option => typeof option.value === 'string' ? option.value : undefined
+      [...preferredOptions, ...trustedAppOptions, ...options],
+      option => {
+        const targetOption = option as AccessTargetOption
+        return typeof targetOption.value === 'string'
+          ? `${targetOption.value}:${targetOption.targetKind ?? 'default'}`
+          : undefined
+      }
     )
   })
