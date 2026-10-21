@@ -7,7 +7,7 @@ import { personTR as s } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 import { AddAgentButtons as c } from "./add-agent-buttons.esm.js";
 import { sym as l } from "rdflib";
-//#region src/acl/access-groups.ts
+// src/acl/access-groups.ts
 var u = e.acl, d = {
 	13: "Owners",
 	9: "Owners (write locked)",
@@ -246,7 +246,6 @@ function _(t, r) {
 		obj: i
 	} : (n("    Triage fails for " + t), null);
 }
-//#endregion
 export { m as AccessGroups };
 
 //# sourceMappingURL=access-groups.esm.js.map

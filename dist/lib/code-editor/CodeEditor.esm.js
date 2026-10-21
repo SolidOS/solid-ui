@@ -12,7 +12,7 @@ import { vscodeDark as v, vscodeLight as y } from "@uiw/codemirror-theme-vscode"
 import { turtle as b } from "@codemirror/legacy-modes/mode/turtle";
 import { sparql as x } from "@codemirror/legacy-modes/mode/sparql";
 import { ntriples as S } from "@codemirror/legacy-modes/mode/ntriples";
-//#region src/lib/code-editor/CodeEditor.ts
+// src/lib/code-editor/CodeEditor.ts
 var C = class {
 	_view = null;
 	_languageCompartment = null;
@@ -101,7 +101,6 @@ var C = class {
 		}
 	}
 };
-//#endregion
 export { C as CodeEditor };
 
 //# sourceMappingURL=CodeEditor.esm.js.map

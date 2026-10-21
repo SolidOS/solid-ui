@@ -6,7 +6,7 @@ import { html as r } from "lit";
 import { property as i, query as a, state as o } from "lit/decorators.js";
 import "@awesome.me/webawesome/dist/components/dropdown/dropdown.js";
 import "@awesome.me/webawesome/dist/components/dropdown-item/dropdown-item.js";
-//#region src/components/menu/Menu.ts
+// src/components/menu/Menu.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T;
 function E(e, t, n) {
 	D(e, t), t.set(e, n);
@@ -289,7 +289,6 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		super(R), j(this, "styles", n), m();
 	}
 }, j(s, w, void 0), s)();
-//#endregion
 export { R as default };
 
 //# sourceMappingURL=Menu.esm.js.map

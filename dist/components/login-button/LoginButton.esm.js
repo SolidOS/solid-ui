@@ -6,7 +6,7 @@ import "../button/index.esm.js";
 import "../../lib/auth/index.esm.js";
 import { consume as i } from "@lit/context";
 import { html as a } from "lit";
-//#region src/components/login-button/LoginButton.ts
+// src/components/login-button/LoginButton.ts
 var o, s, c, l, u, d, f;
 function p(e, t, n) {
 	m(e, t), t.set(e, n);
@@ -205,7 +205,6 @@ f = (u = i({
 	1,
 	"auth"
 ]], l, 0, void 0, r), c();
-//#endregion
 export { C as default };
 
 //# sourceMappingURL=LoginButton.esm.js.map

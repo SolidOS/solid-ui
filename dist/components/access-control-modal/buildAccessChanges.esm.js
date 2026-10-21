@@ -1,5 +1,5 @@
 import { getAccessSubjectLabel as e } from "./accessGrantDrafts.esm.js";
-//#region src/components/access-control-modal/buildAccessChanges.ts
+// src/components/access-control-modal/buildAccessChanges.ts
 function t({ pendingAccessGrants: t, generalAccessChanges: n, changedAccessGrants: r }) {
 	return [
 		...t.map((e) => ({
@@ -18,7 +18,6 @@ function t({ pendingAccessGrants: t, generalAccessChanges: n, changedAccessGrant
 		})))
 	];
 }
-//#endregion
 export { t as buildAccessChanges };
 
 //# sourceMappingURL=buildAccessChanges.esm.js.map

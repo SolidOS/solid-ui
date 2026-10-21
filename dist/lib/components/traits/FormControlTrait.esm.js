@@ -1,7 +1,7 @@
 import { generateId as e } from "../ids.esm.js";
 import "../index.esm.js";
 import { html as t, nothing as n } from "lit";
-//#region src/lib/components/traits/FormControlTrait.ts
+// src/lib/components/traits/FormControlTrait.ts
 function r(e, t, n) {
 	return (t = i(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
@@ -57,7 +57,6 @@ var o = class {
 		this.target.required && (this.target.value ?? "") === "" ? e.setValidity({ valueMissing: !0 }, "Please fill out this field.", this.config.getControlElement() ?? void 0) : e.setValidity({});
 	}
 };
-//#endregion
 export { o as default };
 
 //# sourceMappingURL=FormControlTrait.esm.js.map

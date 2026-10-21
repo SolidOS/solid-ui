@@ -2,7 +2,7 @@ import e from "../lib/ns.esm.js";
 import { log_exports as t } from "../lib/log.esm.js";
 import * as n from "rdflib";
 import { store as r } from "solid-logic";
-//#region src/utils/label.ts
+// src/utils/label.ts
 var i = {
 	log: t,
 	ns: e,
@@ -45,7 +45,6 @@ function o(e, t) {
 function s(e) {
 	return r.any(e, i.ns.ui("label")) || r.any(e, i.ns.link("message")) || r.any(e, i.ns.vcard("fn")) || r.any(e, i.ns.foaf("name")) || r.any(e, i.ns.dct("title")) || r.any(e, i.ns.dc("title")) || r.any(e, i.ns.rss("title")) || r.any(e, i.ns.contact("fullName")) || r.any(e, r.sym("http://www.w3.org/2001/04/roadmap/org#name")) || r.any(e, i.ns.cal("summary")) || r.any(e, i.ns.foaf("nick")) || r.any(e, i.ns.as("name")) || r.any(e, i.ns.schema("name")) || r.any(e, i.ns.rdfs("label")) || r.any(e, r.sym("http://www.w3.org/2004/02/skos/core#prefLabel"));
 }
-//#endregion
 export { a as label };
 
 //# sourceMappingURL=label.esm.js.map

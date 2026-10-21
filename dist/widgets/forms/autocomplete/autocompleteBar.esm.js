@@ -7,7 +7,7 @@ import { askName as i, button as a, cancelButton as o, continueButton as s, dele
 import { renderAutoComplete as l, setVisible as u } from "./autocompletePicker.esm.js";
 import "../../index.esm.js";
 import { store as d } from "solid-logic";
-//#region src/widgets/forms/autocomplete/autocompleteBar.ts
+// src/widgets/forms/autocomplete/autocompleteBar.ts
 var f = "Solid ID", p = r.iconBase + "noun_34653_green.svg", m = r.iconBase + "noun_Search_875351.svg", h = r.iconBase + "noun_253504.svg";
 async function g(r, g, _, v, y, b) {
 	async function x(e, t) {
@@ -58,7 +58,6 @@ async function g(r, g, _, v, y, b) {
 	}
 	return P(), L;
 }
-//#endregion
 export { g as renderAutocompleteControl };
 
 //# sourceMappingURL=autocompleteBar.esm.js.map

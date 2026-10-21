@@ -2,7 +2,7 @@ import { __exportAll as e } from "../../../_virtual/_rolldown/runtime.esm.js";
 import t from "../../../lib/ns.esm.js";
 import { log as n } from "../../../lib/debug.esm.js";
 import { authn as r, store as i } from "solid-logic";
-//#region src/widgets/forms/autocomplete/language.ts
+// src/widgets/forms/autocomplete/language.ts
 var a = /* @__PURE__ */ e({
 	addDefaults: () => c,
 	defaultPreferredLanguages: () => s,
@@ -70,7 +70,6 @@ function d(e, t) {
 	}
 	return n(` Filter by language: ${e.length} -> ${a.length}`), a;
 }
-//#endregion
 export { c as addDefaults, s as defaultPreferredLanguages, d as filterByLanguage, u as getPreferredLanguages, l as getPreferredLanguagesFor, o as languageCodeURIBase, a as language_exports };
 
 //# sourceMappingURL=language.esm.js.map

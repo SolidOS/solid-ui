@@ -4,7 +4,7 @@ import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import { provide as r } from "@lit/context";
 import { property as i } from "lit/decorators.js";
-//#region src/components/dialog-provider/DialogProvider.ts
+// src/components/dialog-provider/DialogProvider.ts
 var a, o, s, c, l, u, d, f, p;
 function m(e, t, n) {
 	h(e, t), t.set(e, n);
@@ -207,7 +207,6 @@ p = (l = i({
 	1,
 	"dialog"
 ]], c, 0, void 0, n), s();
-//#endregion
 export { w as default };
 
 //# sourceMappingURL=DialogProvider.esm.js.map

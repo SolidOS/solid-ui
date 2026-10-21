@@ -5,39 +5,39 @@ import "../../lib/components/index.esm.js";
 import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
-import "../../_virtual/~icons/lucide/link.esm.js";
 import "../../_virtual/~icons/lucide/globe.esm.js";
+import "../../_virtual/~icons/lucide/link.esm.js";
 import r from "./AccessControlGeneralAccess.styles.esm.js";
 import { ACCESS_ROLES as i, PUBLIC_ACCESS_ROLES as a } from "solid-logic";
 import { html as o } from "lit";
 import { property as s } from "lit/decorators.js";
-//#region src/components/access-control-modal/AccessControlGeneralAccess.ts
-var c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C;
-function w(e, t, n) {
-	T(e, t), t.set(e, n);
+// src/components/access-control-modal/AccessControlGeneralAccess.ts
+var c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E;
+function D(e, t, n) {
+	O(e, t), t.set(e, n);
 }
-function T(e, t) {
+function O(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function E(e, t, n) {
-	return e.set(O(e, t), n), n;
+function k(e, t, n) {
+	return e.set(j(e, t), n), n;
 }
-function D(e, t) {
-	return e.get(O(e, t));
+function A(e, t) {
+	return e.get(j(e, t));
 }
-function O(e, t, n) {
+function j(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function k(e, t, n) {
-	return (t = j(t)) in e ? Object.defineProperty(e, t, {
+function M(e, t, n) {
+	return (t = P(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function A(e, t, n, r, i, a) {
+function N(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -60,13 +60,13 @@ function A(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: N(function() {
+				get: I(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || N(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || I(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -126,7 +126,7 @@ function A(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return P(t) === e;
+			return L(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -140,7 +140,7 @@ function A(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : j(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : P(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -153,11 +153,11 @@ function A(e, t, n, r, i, a) {
 		}
 	};
 }
-function j(e) {
-	var t = M(e, "string");
+function P(e) {
+	var t = F(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function M(e, t) {
+function F(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -167,7 +167,7 @@ function M(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function N(e, t, n) {
+function I(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -177,36 +177,42 @@ function N(e, t, n) {
 	} catch {}
 	return e;
 }
-function P(e) {
+function L(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function F(e) {
+function R(e) {
 	return e;
 }
-h = [t("solid-ui-access-control-general-access")];
-var I;
-new (S = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), C = (g = s({ attribute: !1 }), v = s({ attribute: !1 }), b = s({ attribute: !1 }), "subjectUri"), l = class extends n {
+g = [t("solid-ui-access-control-general-access")];
+var z;
+new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), E = (_ = s({ attribute: !1 }), y = s({ attribute: !1 }), x = s({ attribute: !1 }), C = s({ type: Boolean }), "subjectUri"), l = class extends n {
 	constructor(...e) {
-		super(...e), w(this, u, (p(this), _(this, void 0))), w(this, d, y(this, "No Access")), w(this, f, x(this, "No Access"));
+		super(...e), D(this, u, (m(this), v(this, void 0))), D(this, d, b(this, "No Access")), D(this, f, S(this, "No Access")), D(this, p, w(this, !1));
 	}
-	get [C]() {
-		return D(u, this);
+	get [E]() {
+		return A(u, this);
 	}
 	set subjectUri(e) {
-		E(u, this, e);
+		k(u, this, e);
 	}
 	get authenticatedAccessRoleValue() {
-		return D(d, this);
+		return A(d, this);
 	}
 	set authenticatedAccessRoleValue(e) {
-		E(d, this, e);
+		k(d, this, e);
 	}
 	get publicAccessRoleValue() {
-		return D(f, this);
+		return A(f, this);
 	}
 	set publicAccessRoleValue(e) {
-		E(f, this, e);
+		k(f, this, e);
+	}
+	get disabled() {
+		return A(p, this);
+	}
+	set disabled(e) {
+		k(p, this, e);
 	}
 	onAuthenticatedRoleChange(e) {
 		this.dispatchRoleChange("authenticated-role-changed", e, i);
@@ -245,6 +251,7 @@ new (S = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 		return o`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated"
+        .disabled=${this.disabled}
         .value=${this.authenticatedAccessRoleValue}
         @change=${this.onAuthenticatedRoleChange}
       >
@@ -256,6 +263,7 @@ new (S = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 		return o`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public"
+        .disabled=${this.disabled}
         .value=${this.publicAccessRoleValue}
         @change=${this.onPublicRoleChange}
       >
@@ -301,7 +309,7 @@ new (S = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
           </solid-ui-button>
         </div>
         ${this.renderGeneralShareRow({
-			title: "Share with Anyone Signed In",
+			title: "Only logged in users with the link",
 			description: "Users must sign in to SolidOS to access this shared item using the link.",
 			variant: "authenticated"
 		})}
@@ -313,28 +321,32 @@ new (S = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
       </section>
     `;
 	}
-}, {e: [_, y, x, p], c: [I, m]} = A(l, [
+}, {e: [v, b, S, w, m], c: [z, h]} = N(l, [
 	[
-		g,
+		_,
 		1,
 		"subjectUri"
 	],
 	[
-		v,
+		y,
 		1,
 		"authenticatedAccessRoleValue"
 	],
 	[
-		b,
+		x,
 		1,
 		"publicAccessRoleValue"
+	],
+	[
+		C,
+		1,
+		"disabled"
 	]
-], h, 0, void 0, n), l), c = class extends F {
+], g, 0, void 0, n), l), c = class extends R {
 	constructor() {
-		super(I), k(this, "styles", r), m();
+		super(z), M(this, "styles", r), h();
 	}
-}, k(c, S, void 0), c)();
-//#endregion
-export { I as default };
+}, M(c, T, void 0), c)();
+export { z as default };
 
 //# sourceMappingURL=AccessControlGeneralAccess.esm.js.map

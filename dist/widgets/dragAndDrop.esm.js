@@ -1,7 +1,7 @@
 import { log as e } from "../lib/debug.esm.js";
 import { style as t } from "../lib/style.esm.js";
 import * as n from "mime-types";
-//#region src/widgets/dragAndDrop.js
+// src/widgets/dragAndDrop.js
 function r(n, r, i) {
 	let a = function(e) {
 		return e.split("\n").map((e) => e.trim()).filter((e) => e && e[0] !== "#");
@@ -83,7 +83,6 @@ function a(t, r, i, a, o) {
 		})(l), u.readAsArrayBuffer(l);
 	}
 }
-//#endregion
 export { i as makeDraggable, r as makeDropTarget, a as uploadFiles };
 
 //# sourceMappingURL=dragAndDrop.esm.js.map

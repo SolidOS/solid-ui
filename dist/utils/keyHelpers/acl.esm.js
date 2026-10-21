@@ -1,6 +1,6 @@
 import { log as e } from "../../lib/debug.esm.js";
 import { store as t } from "solid-logic";
-//#region src/utils/keyHelpers/acl.ts
+// src/utils/keyHelpers/acl.ts
 async function n(n, r) {
 	await t.fetcher.load(n);
 	let i = t.any(t.sym(n), t.sym("http://www.iana.org/assignments/link-relations/acl"));
@@ -39,7 +39,6 @@ var r = (e) => `
     acl:mode acl:Read.
 `;
 };
-//#endregion
 export { i as keyAclBody, r as keyContainerAclBody, n as setAcl };
 
 //# sourceMappingURL=acl.esm.js.map

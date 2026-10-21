@@ -13,7 +13,7 @@ import { Literal as l, st as u } from "rdflib";
 import { consume as d } from "@lit/context";
 import { property as f, state as p } from "lit/decorators.js";
 import { html as m } from "lit/html.js";
-//#region src/components/rdf-input/RDFInput.ts
+// src/components/rdf-input/RDFInput.ts
 var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
 function M(e, t, n) {
 	return (t = z(t)) in e ? Object.defineProperty(e, t, {
@@ -343,7 +343,6 @@ j = (y = d({
 		"readonly"
 	]
 ], v, 0, void 0, i), _();
-//#endregion
 export { U as default };
 
 //# sourceMappingURL=RDFInput.esm.js.map

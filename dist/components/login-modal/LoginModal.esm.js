@@ -15,7 +15,7 @@ import { getSuggestedIssuers as a } from "solid-logic";
 import { consume as o } from "@lit/context";
 import { html as s, nothing as c } from "lit";
 import { property as l, query as u, state as d } from "lit/decorators.js";
-//#region src/components/login-modal/LoginModal.ts
+// src/components/login-modal/LoginModal.ts
 var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I;
 function L(e, t, n) {
 	R(e, t), t.set(e, n);
@@ -322,7 +322,6 @@ new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		super(Y), H(this, "styles", i), x();
 	}
 }, H(f, F, void 0), f)();
-//#endregion
 export { Y as default };
 
 //# sourceMappingURL=LoginModal.esm.js.map

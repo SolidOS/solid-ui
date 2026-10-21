@@ -26,7 +26,6 @@ function l(t, r, i) {
 function u(r, i) {
 	return t(e.sign(n(c(r)), n(i)));
 }
-//#endregion
 export { a as SEC, o as getBlankMsg, c as getMsgHash, s as serializeMsg, u as signMsg, i as utf8Encoder, l as verifySignature };
 
 //# sourceMappingURL=signature.esm.js.map

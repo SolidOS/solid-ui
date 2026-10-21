@@ -4,7 +4,7 @@ import { log_exports as n } from "../lib/log.esm.js";
 import { label as r } from "./label.esm.js";
 import * as i from "rdflib";
 import { store as a } from "solid-logic";
-//#region src/utils/index.js
+// src/utils/index.js
 var o = /* @__PURE__ */ e({
 	AJARImage: () => D,
 	RDFComparePredicateObject: () => F,
@@ -269,7 +269,6 @@ function L(e) {
 	else if (t.previousSibling && t.previousSibling.nodeName === "TR") t = t.previousSibling;
 	else return s.log.error("Could not find predParent"), e;
 }
-//#endregion
 export { D as AJARImage, F as RDFComparePredicateObject, I as RDFComparePredicateSubject, w as addLoadEvent, b as ancestor, f as beep, u as clearVariableNames, v as emptyNode, j as escapeForXML, T as findPos, m as genUuid, x as getAbout, E as getEyeFocus, y as getTarget, S as getTerm, p as hashColor, C as include, r as label, M as labelForXML, A as labelWithOntology, l as newVariableName, k as ontologyLabel, L as predParentOf, P as predicateLabel, N as predicateLabelForXML, O as shortName, _ as stackString, h as syncTableToArray, g as syncTableToArrayReOrdered, o as utils_exports };
 
 //# sourceMappingURL=index.esm.js.map

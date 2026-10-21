@@ -1,4 +1,4 @@
-//#region src/lib/auth/NoopAuth.ts
+// src/lib/auth/NoopAuth.ts
 var e = class {
 	initialized = !1;
 	account = null;
@@ -15,7 +15,6 @@ var e = class {
 		return () => void 0;
 	}
 };
-//#endregion
 export { e as default };
 
 //# sourceMappingURL=NoopAuth.esm.js.map

@@ -5,7 +5,7 @@ import "../../_virtual/~icons/svg-spinners/180-ring.esm.js";
 import n from "./Button.styles.esm.js";
 import { html as r, nothing as i } from "lit";
 import { property as a } from "lit/decorators.js";
-//#region src/components/button/Button.ts
+// src/components/button/Button.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w;
 function T(e, t, n) {
 	E(e, t), t.set(e, n);
@@ -271,7 +271,6 @@ new (C = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 		super(R), A(this, "styles", n), A(this, "formAssociated", !0), p();
 	}
 }, A(o, C, void 0), o)();
-//#endregion
 export { L as BUTTON_VARIANTS, R as default };
 
 //# sourceMappingURL=Button.esm.js.map

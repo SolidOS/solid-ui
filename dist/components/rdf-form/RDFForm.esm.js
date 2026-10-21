@@ -9,7 +9,7 @@ import { sym as c } from "rdflib";
 import { consume as l } from "@lit/context";
 import { property as u, state as d } from "lit/decorators.js";
 import { html as f } from "lit/html.js";
-//#region src/components/rdf-form/RDFForm.ts
+// src/components/rdf-form/RDFForm.ts
 var p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
 function M(e, t, n) {
 	N(e, t), t.set(e, n);
@@ -338,7 +338,6 @@ j = (_ = l({
 		"subjectUrl"
 	]
 ], g, 0, void 0, n), h();
-//#endregion
 export { W as default };
 
 //# sourceMappingURL=RDFForm.esm.js.map

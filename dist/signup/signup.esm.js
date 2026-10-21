@@ -1,5 +1,5 @@
 import e from "./config-default.esm.js";
-//#region src/signup/signup.js
+// src/signup/signup.js
 function t(t) {
 	this.config = t || e;
 }
@@ -25,7 +25,6 @@ t.prototype.listen = function() {
 		});
 	});
 };
-//#endregion
 export { t as Signup };
 
 //# sourceMappingURL=signup.esm.js.map

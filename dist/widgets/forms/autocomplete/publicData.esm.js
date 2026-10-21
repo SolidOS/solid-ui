@@ -4,7 +4,7 @@ import { log as n, warn as r } from "../../../lib/debug.esm.js";
 import { defaultPreferredLanguages as i, getPreferredLanguages as a } from "./language.esm.js";
 import { Literal as o, parse as s } from "rdflib";
 import { store as c } from "solid-logic";
-//#region src/widgets/forms/autocomplete/publicData.ts
+// src/widgets/forms/autocomplete/publicData.ts
 var l = /* @__PURE__ */ e({
 	AUTOCOMPLETE_LIMIT: () => 200,
 	ESCOResultToBindings: () => C,
@@ -245,7 +245,6 @@ async function N(e, t, r) {
     OPTIONAL { ${r} <http://dbpedia.org/ontology/country> ?country }
    }`, h), r.doc()), n("Finished getDbpediaDetails.");
 }
-//#endregion
 export { C as ESCOResultToBindings, x as bindingToTerm, g as dbPediaTypeMap, h as dbpediaParameters, m as escoParameters, p as fetcherOptionsJsonPublicData, N as getDbpediaDetails, A as getWikidataDetails, j as getWikidataDetailsOld, M as getWikidataLocation, f as instituteDetailsWikidataQuery, S as loadFromBindings, k as loadPublicDataThing, l as publicData_exports, w as queryESCODataByName, E as queryPublicDataByName, O as queryPublicDataConstruct, D as queryPublicDataSelect, b as variableNameToPredicateMap, d as wikidataClasses, y as wikidataIncomingClassMap, _ as wikidataOutgoingClassMap, v as wikidataParameters };
 
 //# sourceMappingURL=publicData.esm.js.map

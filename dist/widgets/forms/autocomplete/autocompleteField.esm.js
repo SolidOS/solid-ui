@@ -6,7 +6,7 @@ import { renderAutocompleteControl as i } from "./autocompleteBar.esm.js";
 import "../../index.esm.js";
 import { st as a } from "rdflib";
 import { store as o } from "solid-logic";
-//#region src/widgets/forms/autocomplete/autocompleteField.ts
+// src/widgets/forms/autocomplete/autocompleteField.ts
 function s(s, c, l, u, d, f, p) {
 	async function m(e, t) {
 		if (!t) throw Error("autocompleteField:  No name set.");
@@ -84,7 +84,6 @@ function s(s, c, l, u, d, f, p) {
 		b.appendChild(n(s, `Error rendering autocomplete ${d}: ${e}`, "#fee", e));
 	}), v;
 }
-//#endregion
 export { s as autocompleteField };
 
 //# sourceMappingURL=autocompleteField.esm.js.map

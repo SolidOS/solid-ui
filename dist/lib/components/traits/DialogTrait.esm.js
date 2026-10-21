@@ -1,5 +1,5 @@
 import { CloseDialogEvent as e } from "../../dialogs/events/close-dialog.esm.js";
-//#region src/lib/components/traits/DialogTrait.ts
+// src/lib/components/traits/DialogTrait.ts
 function t(e, t, r) {
 	return (t = n(t)) in e ? Object.defineProperty(e, t, {
 		value: r,
@@ -30,7 +30,6 @@ var i = class {
 		window.dispatchEvent(new e(this.config.getContext().id, t));
 	}
 };
-//#endregion
 export { i as default };
 
 //# sourceMappingURL=DialogTrait.esm.js.map

@@ -1,4 +1,4 @@
-//#region src/lib/auth/Account.ts
+// src/lib/auth/Account.ts
 var e = class {
 	webId;
 	avatarUrl;
@@ -6,7 +6,6 @@ var e = class {
 		this.webId = e, this.avatarUrl = t;
 	}
 };
-//#endregion
 export { e as default };
 
 //# sourceMappingURL=Account.esm.js.map

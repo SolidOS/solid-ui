@@ -6,7 +6,7 @@ import { loginStatusBox as r } from "../login/login.esm.js";
 import { emptyProfile as i } from "./empty-profile.esm.js";
 import { getPod as a, throttle as o } from "../utils/headerFooterHelpers.esm.js";
 import { authSession as s, authn as c } from "solid-logic";
-//#region src/header/index.ts
+// src/header/index.ts
 var l = t.iconBase + "noun_help.svg", u = "https://solidproject.org/assets/img/solid-emblem.svg";
 async function d(e, t, n) {
 	let r = document.getElementById("PageHeader");
@@ -119,7 +119,6 @@ function x(e, t, n) {
 	let r = t.getAttribute("aria-expanded") === "true", i = e.type === "mouseover", a = e.type === "mouseout";
 	r && i || !r && a || (t.setAttribute("aria-expanded", (!r).toString()), n.setAttribute("aria-hidden", r.toString()));
 }
-//#endregion
 export { p as createBanner, m as createHelpMenu, h as createLoginSignUpButtons, v as createUserMenu, g as createUserMenuButton, y as createUserMenuItem, _ as createUserMenuLink, b as getProfileImg, d as initHeader, f as rebuildHeader };
 
 //# sourceMappingURL=index.esm.js.map

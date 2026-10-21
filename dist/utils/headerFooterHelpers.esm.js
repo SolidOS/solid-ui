@@ -1,6 +1,6 @@
 import e from "../lib/ns.esm.js";
 import { parse as t, sym as n } from "rdflib";
-//#region src/utils/headerFooterHelpers.ts
+// src/utils/headerFooterHelpers.ts
 function r() {
 	let { origin: e, pathname: t } = document.location, r = document.body?.dataset?.appShell === "databrowser", i = t.split("/").filter(Boolean), a = i[i.length - 1] || "", o = /\.[^/]+$/.test(a);
 	return r && i.length > 0 && !o ? n(`${e}/${i[0]}/`) : n(e).site();
@@ -48,7 +48,6 @@ function o(e, t, n = {}) {
 		return r = this, i = arguments, u <= 0 || u > t ? (o &&= (clearTimeout(o), null), s = l, a = e.apply(r, i), o || (r = i = null)) : !o && n.trailing !== !1 && (o = setTimeout(c, u)), a;
 	};
 }
-//#endregion
 export { a as getName, r as getPod, i as getPodOwner, o as throttle };
 
 //# sourceMappingURL=headerFooterHelpers.esm.js.map

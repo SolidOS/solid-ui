@@ -9,6 +9,7 @@ export default class AccessControlAddAccess extends WebComponent {
     accessor addAccessRoleValue: AccessRole;
     accessor pendingAccessGrants: PendingAccessGrant[];
     accessor inputError: string;
+    accessor disabled: boolean;
     accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null;
     private onPrincipalInput;
     private onPrincipalSelect;

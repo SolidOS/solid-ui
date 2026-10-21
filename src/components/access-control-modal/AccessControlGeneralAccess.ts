@@ -27,6 +27,9 @@ export default class AccessControlGeneralAccess extends WebComponent {
   @property({ attribute: false })
   accessor publicAccessRoleValue: AccessRole = 'No Access'
 
+  @property({ type: Boolean })
+  accessor disabled = false
+
   private onAuthenticatedRoleChange (event: ComboboxChangeEvent) {
     this.dispatchRoleChange('authenticated-role-changed', event, ACCESS_ROLES)
   }
@@ -83,6 +86,7 @@ export default class AccessControlGeneralAccess extends WebComponent {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated"
+        .disabled=${this.disabled}
         .value=${this.authenticatedAccessRoleValue}
         @change=${this.onAuthenticatedRoleChange}
       >
@@ -95,6 +99,7 @@ export default class AccessControlGeneralAccess extends WebComponent {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public"
+        .disabled=${this.disabled}
         .value=${this.publicAccessRoleValue}
         @change=${this.onPublicRoleChange}
       >
@@ -149,7 +154,7 @@ export default class AccessControlGeneralAccess extends WebComponent {
           </solid-ui-button>
         </div>
         ${this.renderGeneralShareRow({
-          title: 'Share with Anyone Signed In',
+          title: 'Only logged in users with the link',
           description: 'Users must sign in to SolidOS to access this shared item using the link.',
           variant: 'authenticated'
         })}

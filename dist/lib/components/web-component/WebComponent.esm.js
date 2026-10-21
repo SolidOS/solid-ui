@@ -1,6 +1,6 @@
 import e from "./WebComponent.styles.esm.js";
 import { LitElement as t, html as n } from "lit";
-//#region src/lib/components/web-component/WebComponent.ts
+// src/lib/components/web-component/WebComponent.ts
 function r(e, t, n) {
 	return (t = i(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
@@ -70,7 +70,6 @@ var o = Symbol("WebComponentMetadata"), s = class extends t {
 	}
 };
 r(s, "states", void 0);
-//#endregion
 export { s as default };
 
 //# sourceMappingURL=WebComponent.esm.js.map

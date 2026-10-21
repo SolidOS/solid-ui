@@ -12,7 +12,7 @@ import { addClickListenerToElement as m, createImageDiv as h, wrapDivInATR as g 
 import { createLinkForURI as _, linkIcon as v } from "./buttons/iconLinks.esm.js";
 import { Util as y, st as b, sym as x, uri as S } from "rdflib";
 import { store as C } from "solid-logic";
-//#region src/widgets/buttons.ts
+// src/widgets/buttons.ts
 var { iconBase: w } = f, T = w + "noun_1180156.svg", E = w + "noun_1180158.svg";
 function D(e) {
 	let t = e && e.statusArea || e && e.div || null;
@@ -543,7 +543,6 @@ Z = {
 		widgetForClass: he
 	}
 };
-//#endregion
 export { ve as addStyleSheet, le as allClassURIs, ie as askName, oe as attachmentList, H as button, U as cancelButton, k as clearElement, O as complain, W as continueButton, J as createLinkDiv, q as createNameDiv, ce as defaultAnnotationStore, V as deleteButtonWithCheck, A as extractLogURI, B as faviconOrDefault, $ as fileUploadButtonDiv, L as findImage, I as findImageFromURI, M as formatDateTime, P as iconForClass, ne as imagesOf, Z as index, ye as isAudio, Q as isImage, be as isVideo, de as linkButton, se as openHrefInOutlineMode, G as personTR, ue as propertyTriage, Y as refreshTree, fe as removeButton, ae as renderAsDiv, K as renderAsRow, pe as selectorPanel, X as selectorPanelRefresh, z as setImage, N as setName, j as shortDate, te as shortTime, ee as timestamp };
 
 //# sourceMappingURL=buttons.esm.js.map

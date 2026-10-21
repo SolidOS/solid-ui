@@ -9,7 +9,7 @@ import { ensureLoadedPreferences as s } from "../login/login.esm.js";
 import { participationObject as c } from "./participation.esm.js";
 import * as l from "rdflib";
 import { store as u } from "solid-logic";
-//#region src/lib/preferences.js
+// src/lib/preferences.js
 var d = /* @__PURE__ */ e({
 	get: () => m,
 	getPreferencesForClass: () => b,
@@ -115,7 +115,6 @@ function b(e, t, n, r) {
 		});
 	});
 }
-//#endregion
 export { m as get, b as getPreferencesForClass, d as preferences_exports, _ as recordPersonalDefaults, g as recordSharedPreferences, v as renderPreferencesForm, h as set, p as value };
 
 //# sourceMappingURL=preferences.esm.js.map

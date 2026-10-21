@@ -2,7 +2,7 @@ import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import n from "./DialogHeader.styles.esm.js";
-//#region src/components/dialog-header/DialogHeader.ts
+// src/components/dialog-header/DialogHeader.ts
 var r, i, a, o, s;
 function c(e, t, n) {
 	return (t = u(t)) in e ? Object.defineProperty(e, t, {
@@ -166,7 +166,6 @@ new (s = (i = class extends t {}, [h, a] = l(i, [], o, 0, void 0, t).c, i), r = 
 		super(h), c(this, "styles", n), a();
 	}
 }, c(r, s, void 0), r)();
-//#endregion
 export { h as default };
 
 //# sourceMappingURL=DialogHeader.esm.js.map

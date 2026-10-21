@@ -6,7 +6,7 @@ import { style as c } from "../lib/style.esm.js";
 import { AccessGroups as l } from "./access-groups.esm.js";
 import { shortNameForFolder as u } from "./acl-control.esm.js";
 import { UpdateManager as d, fetcher as f, graph as p } from "rdflib";
-//#region src/acl/access-controller.ts
+// src/acl/access-controller.ts
 var m = class {
 	subject;
 	noun;
@@ -128,7 +128,6 @@ var m = class {
 		});
 	}
 };
-//#endregion
 export { m as AccessController };
 
 //# sourceMappingURL=access-controller.esm.js.map

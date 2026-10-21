@@ -1,7 +1,6 @@
-import { t as e } from "../chunks/DialogProvider-B7oVYKJO.js";
-//#region src/components/dialog-provider/index.ts
+import { t as e } from "../chunks/DialogProvider-C89v7x0r.js";
+// src/components/dialog-provider/index.ts
 var t = e;
-//#endregion
 export { e as DialogProvider, t as default };
 
 //# sourceMappingURL=dialog-provider.js.map

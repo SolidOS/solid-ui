@@ -17,7 +17,7 @@ import { IconicMultiSelect as A } from "./multiSelect.esm.js";
 import "./index.esm.js";
 import * as j from "rdflib";
 import { store as M } from "solid-logic";
-//#region src/widgets/forms.js
+// src/widgets/forms.js
 var N = "✓", P = "✕", F = "-", I = M;
 x[e.ui("AutocompleteField").uri] = k;
 function L(t, n, r, i, a, o, c) {
@@ -761,7 +761,6 @@ function ie(e, t, n) {
 	}
 	return h;
 }
-//#endregion
 export { V as appendForm, T as basicField, Z as buildCheckboxForm, B as editFormButton, x as field, S as fieldFunction, E as fieldLabel, b as fieldParams, D as fieldStore, U as findClosest, ee as formsFor, q as makeDescription, Y as makeSelectForCategory, re as makeSelectForChoice, J as makeSelectForClassifierOptions, X as makeSelectForNestedCategory, ne as makeSelectForOptions, C as mostSpecificClassURI, te as newButton, Q as newThing, K as promptForNew, H as propertiesForClass, O as renderNameValuePair, G as sortByLabel, W as sortBySequence };
 
 //# sourceMappingURL=forms.esm.js.map

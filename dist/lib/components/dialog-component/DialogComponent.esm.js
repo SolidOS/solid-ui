@@ -3,7 +3,7 @@ import n from "../traits/DialogTrait.esm.js";
 import r from "../web-component/WebComponent.esm.js";
 import "../web-component/index.esm.js";
 import { consume as i } from "@lit/context";
-//#region src/lib/components/dialog-component/DialogComponent.ts
+// src/lib/components/dialog-component/DialogComponent.ts
 var a, o, s, c, l;
 function u(e, t, n) {
 	d(e, t), t.set(e, n);
@@ -197,7 +197,6 @@ a = S, [c, o] = g(a, [[
 	1,
 	"context"
 ]], [], 0, void 0, r).e;
-//#endregion
 export { S as default };
 
 //# sourceMappingURL=DialogComponent.esm.js.map

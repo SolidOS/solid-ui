@@ -4,7 +4,7 @@ import "../../lib/components/index.esm.js";
 import "../../_virtual/~icons/app/solid-emblem.esm.js";
 import n from "./SolidEmblem.styles.esm.js";
 import { html as r } from "lit";
-//#region src/components/solid-emblem/SolidEmblem.ts
+// src/components/solid-emblem/SolidEmblem.ts
 var i, a, o, s, c;
 function l(e, t, n) {
 	return (t = d(t)) in e ? Object.defineProperty(e, t, {
@@ -172,7 +172,6 @@ new (c = (a = class extends t {
 		super(g), l(this, "styles", n), o();
 	}
 }, l(i, c, void 0), i)();
-//#endregion
 export { g as default };
 
 //# sourceMappingURL=SolidEmblem.esm.js.map

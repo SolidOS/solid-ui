@@ -19,7 +19,7 @@ import i from "./Account.styles.esm.js";
 import { consume as a } from "@lit/context";
 import { html as o, nothing as s } from "lit";
 import { property as c } from "lit/decorators.js";
-//#region src/components/account/Account.ts
+// src/components/account/Account.ts
 var l, u, d, f, p, m, h, g, _, v, y, b, x;
 function S(e, t, n) {
 	C(e, t), t.set(e, n);
@@ -272,7 +272,6 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		}), m();
 	}
 }, D(l, b, void 0), l)();
-//#endregion
 export { P as default };
 
 //# sourceMappingURL=Account.esm.js.map

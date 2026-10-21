@@ -10,7 +10,7 @@ import { media as u } from "../media/index.esm.js";
 import { pad_exports as d } from "../lib/pad.esm.js";
 import * as f from "rdflib";
 import { authn as p, createTypeIndexLogic as m, store as h } from "solid-logic";
-//#region src/chat/bookmarks.js
+// src/chat/bookmarks.js
 var g = {
 	icons: s,
 	ns: e,
@@ -87,7 +87,6 @@ async function T(e, t) {
 		w(e, t, r);
 	}), r.target = t, await n(r), r;
 }
-//#endregion
 export { S as findBookmarkDocument, T as renderBookmarksButton, w as toggleBookmark };
 
 //# sourceMappingURL=bookmarks.esm.js.map

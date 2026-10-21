@@ -6,7 +6,7 @@ import "../../lib/dialogs/index.esm.js";
 import r from "../photo-capture-modal/index.esm.js";
 import { html as i } from "lit";
 import { property as a } from "lit/decorators.js";
-//#region src/components/photo-capture/PhotoCapture.ts
+// src/components/photo-capture/PhotoCapture.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I;
 function ee(e, t, n) {
 	return (t = re(t)) in e ? Object.defineProperty(e, t, {
@@ -398,7 +398,6 @@ I = (u = a({
 		"mediaConstraints"
 	]
 ], l, 0, void 0, t), c();
-//#endregion
 export { se as default };
 
 //# sourceMappingURL=PhotoCapture.esm.js.map

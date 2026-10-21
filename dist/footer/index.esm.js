@@ -1,7 +1,7 @@
 import { style as e } from "../lib/style.esm.js";
 import { getName as t, getPod as n, getPodOwner as r } from "../utils/headerFooterHelpers.esm.js";
 import { authSession as i, authn as a } from "solid-logic";
-//#region src/footer/index.ts
+// src/footer/index.ts
 var o = "https://solidproject.org", s = "solidproject.org";
 async function c(e, t) {
 	let a = document.getElementById("PageFooter");
@@ -34,7 +34,6 @@ function u(n, r, i, a, c) {
 	let g = document.createElement("span");
 	return g.innerText = ".", l.appendChild(d), l.appendChild(f), l.appendChild(p), l.appendChild(m), l.appendChild(h), l.appendChild(u), l.appendChild(g), l;
 }
-//#endregion
 export { u as createControllerInfoBlock, c as initFooter, l as rebuildFooter };
 
 //# sourceMappingURL=index.esm.js.map

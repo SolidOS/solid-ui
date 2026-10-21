@@ -12,7 +12,7 @@ import "../widgets/index.esm.js";
 import { Signup as p } from "../signup/signup.esm.js";
 import { BlankNode as m, st as h } from "rdflib";
 import { CrossOriginForbiddenError as g, FetchError as _, NotEditableError as v, SameOriginForbiddenError as y, UnauthorizedError as b, WebOperationError as x, authSession as S, authn as C, getSuggestedIssuers as w, offlineTestID as T, solidLogicSingleton as E } from "solid-logic";
-//#region src/login/login.ts
+// src/login/login.ts
 var D = /* @__PURE__ */ e({
 	ensureLoadedPreferences: () => L,
 	ensureLoadedProfile: () => R,
@@ -364,7 +364,6 @@ async function X(e) {
 function Z(e, t) {
 	return (e.audience || []).reduce((e, n) => e && !!t.find((e) => e.equals(n)), !0);
 }
-//#endregion
 export { L as ensureLoadedPreferences, R as ensureLoadedProfile, I as ensureLoggedIn, X as filterAvailablePanes, z as findAppInstances, Y as getUserRoles, K as loginStatusBox, D as login_exports, J as newAppInstance, V as registrationControl, U as registrationList, H as renderScopeHeadingRow, G as renderSignInPopup, B as scopeLabel, q as selectWorkspace };
 
 //# sourceMappingURL=login.esm.js.map

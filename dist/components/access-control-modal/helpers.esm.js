@@ -1,4 +1,4 @@
-//#region src/components/access-control-modal/helpers.ts
+// src/components/access-control-modal/helpers.ts
 function e(e) {
 	try {
 		let t = new URL(e);
@@ -32,7 +32,6 @@ function r(e, t) {
 function i(e) {
 	return r(e, (e) => e.value);
 }
-//#endregion
 export { r as dedupeByKey, i as dedupeComboboxOptions, e as isAbsoluteHttpUri, t as isOriginUrl, n as normalizeOriginInput };
 
 //# sourceMappingURL=helpers.esm.js.map

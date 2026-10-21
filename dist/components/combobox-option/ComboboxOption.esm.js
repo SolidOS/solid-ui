@@ -3,7 +3,7 @@ import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import { html as n, nothing as r } from "lit";
 import { property as i } from "lit/decorators.js";
-//#region src/components/combobox-option/ComboboxOption.ts
+// src/components/combobox-option/ComboboxOption.ts
 var a, o, s, c, l, u, d;
 function f(e, t, n) {
 	p(e, t), t.set(e, n);
@@ -188,7 +188,6 @@ d = (l = i({
 	1,
 	"value"
 ]], c, 0, void 0, t), s();
-//#endregion
 export { S as default };
 
 //# sourceMappingURL=ComboboxOption.esm.js.map

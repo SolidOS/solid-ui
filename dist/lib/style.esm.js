@@ -1,5 +1,5 @@
 import e from "./styleConstants.esm.js";
-//#region src/lib/style.js
+// src/lib/style.js
 var t = {
 	checkboxStyle: "color: black; font-size: 100%; padding-left: 0.5 em; padding-right: 0.5 em;",
 	checkboxInputStyle: "font-size: 150%; height: 1.2em; width: 1.2em; background-color: #eef; border-radius:0.2em; margin: 0.1em;",
@@ -120,7 +120,6 @@ var t = {
 t.setStyle = function(e, n) {
 	e.style = t[n];
 };
-//#endregion
 export { t as style };
 
 //# sourceMappingURL=style.esm.js.map

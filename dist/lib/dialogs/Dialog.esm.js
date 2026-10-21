@@ -1,6 +1,6 @@
 import { generateId as e } from "../components/ids.esm.js";
 import "../components/index.esm.js";
-//#region src/lib/dialogs/Dialog.ts
+// src/lib/dialogs/Dialog.ts
 var t = class {
 	id;
 	element;
@@ -12,7 +12,6 @@ var t = class {
 		this.config.onClose?.(e);
 	}
 };
-//#endregion
 export { t as default };
 
 //# sourceMappingURL=Dialog.esm.js.map

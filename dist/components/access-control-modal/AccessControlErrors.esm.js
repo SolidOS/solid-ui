@@ -5,7 +5,7 @@ import "../error-state/index.esm.js";
 import n from "./AccessControlErrors.styles.esm.js";
 import { html as r } from "lit";
 import { property as i } from "lit/decorators.js";
-//#region src/components/access-control-modal/AccessControlErrors.ts
+// src/components/access-control-modal/AccessControlErrors.ts
 var a, o, s, c, l, u, d, f, p, m, h, g, _;
 function v(e, t, n) {
 	y(e, t), t.set(e, n);
@@ -202,6 +202,9 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
 			composed: !0
 		}));
 	}
+	getScopeLabel(e) {
+		return e === "folder+contents" ? "folder and contents" : e === "container" ? "folder" : e === "contents" ? "contents" : "resource";
+	}
 	render() {
 		return this.errors.length ? r`
       <solid-ui-error-state
@@ -214,8 +217,9 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
             <li>
               <span class="access-control-save-error-label">${e.label}</span>
               <span class="access-control-save-error-detail">
-                ${e.action === "grant" ? `Could not grant ${e.role ?? "access"}` : e.action === "revoke" ? "Could not remove access" : "Could not save access changes"}
+                ${e.action === "grant" ? `Could not grant ${e.role ?? "access"} for ${e.scope ? this.getScopeLabel(e.scope) : "resource"}` : e.action === "revoke" ? `Could not remove access for ${e.scope ? this.getScopeLabel(e.scope) : "resource"}` : e.action === "reset" ? "Could not reset sharing" : "Could not save access changes"}
               </span>
+              <span class="access-control-save-error-message">${e.message}</span>
             </li>
           `)}
         </ul>
@@ -235,7 +239,6 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
 		super(A), C(this, "styles", n), u();
 	}
 }, C(a, g, void 0), a)();
-//#endregion
 export { A as default };
 
 //# sourceMappingURL=AccessControlErrors.esm.js.map

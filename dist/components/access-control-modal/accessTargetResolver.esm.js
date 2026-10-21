@@ -1,88 +1,128 @@
-import { label as e } from "../../utils/label.esm.js";
-import { defineAsyncComboboxOptionsProvider as t } from "../combobox/Combobox.esm.js";
+import e from "../../lib/ns.esm.js";
+import { label as t } from "../../utils/label.esm.js";
+import { defineAsyncComboboxOptionsProvider as n } from "../combobox/Combobox.esm.js";
 import "../combobox/index.esm.js";
-import { dedupeByKey as n, dedupeComboboxOptions as r, isAbsoluteHttpUri as i, isOriginUrl as a, normalizeOriginInput as o } from "./helpers.esm.js";
-import { directoryEntryOptionTemplate as s } from "./AccessControlAddAccess.esm.js";
-import { sym as c } from "rdflib";
-import { DEFAULT_DIRECTORY_SOURCES as l, solidLogicSingleton as u } from "solid-logic";
-//#region src/components/access-control-modal/accessTargetResolver.ts
-async function d(e) {
-	let t = o(e);
+import "../../_virtual/~icons/lucide/globe.esm.js";
+import { directoryEntryOptionTemplate as r } from "./AccessControlAddAccess.esm.js";
+import { dedupeByKey as i, dedupeComboboxOptions as a, isAbsoluteHttpUri as o, isOriginUrl as s, normalizeOriginInput as c } from "./helpers.esm.js";
+import { sym as l } from "rdflib";
+import { DEFAULT_DIRECTORY_SOURCES as u, solidLogicSingleton as d } from "solid-logic";
+import { html as f } from "lit";
+// src/components/access-control-modal/accessTargetResolver.ts
+async function p(e) {
+	let t = c(e);
 	return t ? {
 		kind: "origin",
 		subjectValue: t
-	} : await u.acl.classifyAccessControlSubject(e);
+	} : s(e) ? {
+		kind: "origin",
+		subjectValue: new URL(e).origin
+	} : await d.acl.classifyAccessControlSubject(e);
 }
-async function f(t, n) {
-	if (!t || t.kind === "origin") return t?.subjectValue;
-	let r = c(t.subjectValue);
-	await u.store.fetcher.load(r.doc());
-	let i = n?.trim() || e(r).trim();
-	if (i && i !== t.subjectValue) return i;
+async function m(e, n) {
+	if (!e || e.kind === "origin") return e?.subjectValue;
+	let r = l(e.subjectValue);
+	await d.store.fetcher.load(r.doc());
+	let i = n?.trim() || t(r).trim();
+	if (!i || i === e.subjectValue) throw Error("The access target has no usable display label.");
+	return i;
 }
-async function p(e, t) {
-	let n = await d(e);
+async function h(e, t) {
+	let n = await p(e);
 	if (!n) return;
-	let r = await f(n, t);
+	let r = await m(n, t);
 	if (r) return {
 		subjectType: n.kind,
 		subjectValue: n.subjectValue,
-		label: r
+		label: r,
+		targetKind: n.kind === "origin" ? "origin" : void 0
 	};
 }
-async function m(e) {
-	let t = await p(e);
+async function g(e) {
+	let t = await h(e);
 	return t ? {
 		label: t.label,
 		value: e
 	} : void 0;
 }
-function h(e, t) {
+function _(e, t) {
 	return {
 		label: t,
 		value: e.uri,
-		template: s({
+		template: r({
 			...e,
 			label: t
 		})
 	};
 }
-async function g(e) {
-	let t = o(e);
+async function v(e) {
+	let t = c(e);
 	if (t) return [{
 		label: `Use origin ${t}`,
-		value: t
+		value: t,
+		targetKind: "origin",
+		template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${t}</span></span>`
 	}];
-	if (!i(e)) return [];
-	if (a(e)) return [{
+	if (!o(e)) return [];
+	if (s(e)) return [{
 		label: `Use origin ${new URL(e).origin}`,
-		value: new URL(e).origin
+		value: new URL(e).origin,
+		targetKind: "origin",
+		template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${new URL(e).origin}</span></span>`
 	}];
-	let n = await m(e);
-	return r(n ? [n] : []);
+	let n = await g(e);
+	return a(n ? [n] : []);
 }
-function _(e) {
+async function y(t) {
+	try {
+		let n = d.authn.currentUser();
+		if (!n) return [];
+		await d.profile.loadProfile(n);
+		let r = d.store;
+		return r.each(n, e.acl("trustedApp")).flatMap((n) => {
+			let i = r.any(n, e.acl("origin"));
+			if (!i || !s(i.value)) return [];
+			let a = new URL(i.value).origin;
+			return t && !`${a} trusted app`.toLowerCase().includes(t.toLowerCase()) ? [] : [{
+				label: `Trusted app: ${a}`,
+				value: a,
+				targetKind: "trustedApp",
+				template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Trusted app: ${a}</span></span>`
+			}];
+		});
+	} catch {
+		return [];
+	}
+}
+function b(e) {
 	return e.length ? e : [{
 		label: "Type at least 2 characters to search",
 		value: "",
 		selectable: !1
 	}];
 }
-var v = t(async (e) => {
-	let t = e.trim(), r = await g(t);
-	if (t.length < 2) return _(r);
-	let i = [];
+var x = n(async (e) => {
+	let t = e.trim(), n = await v(t), r = await y(t);
+	if (t.length < 2) return i([
+		...n,
+		...r,
+		...b(n)
+	], (e) => {
+		let t = e;
+		return typeof t.value == "string" ? `${t.value}:${t.targetKind ?? "default"}` : void 0;
+	});
+	let a = [];
 	try {
-		i = await u.directory.search({
+		a = await d.directory.search({
 			query: t,
-			sources: l
+			sources: u
 		});
 	} catch (e) {
-		if (!r.length) throw e;
+		if (!n.length && !r.length) throw e;
 	}
-	let a = (await Promise.all(i.map(async (e) => {
+	let o = (await Promise.all(a.map(async (e) => {
 		try {
-			let t = await p(e.uri, e.label);
+			let t = await h(e.uri, e.label);
 			return t ? {
 				entry: e,
 				label: t.label
@@ -90,10 +130,16 @@ var v = t(async (e) => {
 		} catch {
 			return;
 		}
-	}))).filter((e) => e !== void 0).map(({ entry: e, label: t }) => h(e, t));
-	return n([...r, ...a], (e) => typeof e.value == "string" ? e.value : void 0);
+	}))).filter((e) => e !== void 0).map(({ entry: e, label: t }) => _(e, t));
+	return i([
+		...n,
+		...r,
+		...o
+	], (e) => {
+		let t = e;
+		return typeof t.value == "string" ? `${t.value}:${t.targetKind ?? "default"}` : void 0;
+	});
 });
-//#endregion
-export { v as accessPrincipalOptionsProvider, p as resolveAccessTarget };
+export { x as accessPrincipalOptionsProvider, h as resolveAccessTarget };
 
 //# sourceMappingURL=accessTargetResolver.esm.js.map

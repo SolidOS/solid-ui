@@ -8,7 +8,7 @@ import "../dialog-footer/index.esm.js";
 import n from "./PhotoCaptureModal.styles.esm.js";
 import { html as r, nothing as i } from "lit";
 import { property as a, state as o } from "lit/decorators.js";
-//#region src/components/photo-capture-modal/PhotoCaptureModal.ts
+// src/components/photo-capture-modal/PhotoCaptureModal.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, M, ie, ae, N, P, F, I, L, R, z, B, V, H, U, W, G, K, q, J, oe, se, ce, le, ue, de, fe, pe, me, he;
 function Y(e, t, n) {
 	ge(e, t), t.set(e, n);
@@ -344,7 +344,7 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 		}
 	}
 	updated(e) {
-		if (!this.value && !this.stream && !this.startingPreview && (e.has("previewUrl") || e.has("value")) && this.queuePreviewStart(), this.stream) {
+		if (this.value || this.stream || this.startingPreview || !e.has("previewUrl") && !e.has("value") || this.queuePreviewStart(), this.stream) {
 			let e = this.shadowRoot?.querySelector("video");
 			e && e.srcObject !== this.stream && (e.srcObject = this.stream);
 		}
@@ -551,7 +551,6 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 		super($), Q(this, "styles", n), D();
 	}
 }, Q(s, me, void 0), s)();
-//#endregion
 export { $ as default };
 
 //# sourceMappingURL=PhotoCaptureModal.esm.js.map

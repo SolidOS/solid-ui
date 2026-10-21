@@ -7,7 +7,7 @@ import "../../_virtual/~icons/lucide/triangle-alert.esm.js";
 import n from "./ErrorState.styles.esm.js";
 import { html as r, nothing as i } from "lit";
 import { property as a } from "lit/decorators.js";
-//#region src/components/error-state/ErrorState.ts
+// src/components/error-state/ErrorState.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v;
 function y(e, t, n) {
 	b(e, t), t.set(e, n);
@@ -235,7 +235,6 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
 		super(j), w(this, "styles", n), d();
 	}
 }, w(o, _, void 0), o)();
-//#endregion
 export { j as default };
 
 //# sourceMappingURL=ErrorState.esm.js.map

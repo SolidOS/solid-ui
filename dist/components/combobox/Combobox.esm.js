@@ -9,7 +9,7 @@ import { html as i, nothing as a } from "lit";
 import { property as o, query as s, state as c } from "lit/decorators.js";
 import { Task as l } from "@lit/task";
 import "@awesome.me/webawesome/dist/components/popup/popup.js";
-//#region src/components/combobox/Combobox.ts
+// src/components/combobox/Combobox.ts
 var u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, M, N, P, F, I, L, R, z, B, V, H, U, W, G, K, se, ce;
 function q(e, t, n) {
 	le(e, t), t.set(e, n);
@@ -335,6 +335,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
             aria-required=${this.required ? "true" : a}
             autocomplete="off"
             spellcheck="false"
+            ?disabled=${this.disabled}
             ?required=${this.required}
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}
@@ -572,7 +573,6 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		super($), X(this, "styles", r), E();
 	}
 }, X(u, se, void 0), u)();
-//#endregion
 export { $ as default, ge as defineAsyncComboboxOptionsProvider };
 
 //# sourceMappingURL=Combobox.esm.js.map

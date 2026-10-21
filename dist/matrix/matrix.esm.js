@@ -2,7 +2,7 @@ import { label as e } from "../utils/label.esm.js";
 import "../utils/index.esm.js";
 import * as t from "rdflib";
 import { solidLogicSingleton as n } from "solid-logic";
-//#region src/matrix/matrix.ts
+// src/matrix/matrix.ts
 var r = n.store;
 function i(n, i, a, o, s, c, l) {
 	let u = n.createElement("table"), d = n.createElement("tr");
@@ -77,7 +77,6 @@ function i(n, i, a, o, s, c, l) {
 	if (c.set_x) for (let e = 0; e < c.set_x.length; e++) g(c.set_x[e]);
 	return r.query(i, y, void 0, l), u;
 }
-//#endregion
 export { i as matrixForQuery };
 
 //# sourceMappingURL=matrix.esm.js.map

@@ -4,7 +4,7 @@ import "../../lib/components/index.esm.js";
 import n from "./Input.styles.esm.js";
 import { html as r } from "lit";
 import { property as i, query as a } from "lit/decorators.js";
-//#region src/components/input/Input.ts
+// src/components/input/Input.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D;
 function O(e, t, n) {
 	k(e, t), t.set(e, n);
@@ -283,7 +283,6 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 		super(B), N(this, "styles", n), m();
 	}
 }, N(o, E, void 0), o)();
-//#endregion
 export { B as default };
 
 //# sourceMappingURL=Input.esm.js.map

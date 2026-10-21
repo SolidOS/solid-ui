@@ -1,4 +1,263 @@
 :host {
+  .access-control-mixed-policy-warning {
+    display: grid;
+    gap: 4px;
+    margin: 0 0 16px;
+    padding: 12px 14px;
+    border: 1px solid var(--solid-ui-color-red-300, #FCA5A5);
+    border-radius: 5px;
+    background: var(--solid-ui-color-red-50, #FEF2F2);
+    color: var(--solid-ui-color-red-800, #991B1B);
+    font-size: var(--solid-ui-font-size-sm, .875rem);
+    line-height: 1.45;
+
+    strong {
+      font-weight: 600;
+    }
+  }
+
+  .access-control-same-access-toggle {
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    margin-top: 12px;
+    color: var(--solid-ui-color-gray-900, #101828);
+    line-height: 1.4;
+    border: 0;
+    background: transparent;
+    padding: 0;
+    text-align: left;
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .access-control-switch-track {
+    display: inline-flex;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 20px;
+    margin-top: 1px;
+    border-radius: 999px;
+    background: var(--solid-ui-color-slate-300, #CBD5E1);
+    padding: 2px;
+    transition: background .15s ease;
+  }
+
+  .access-control-same-access-toggle[aria-checked='true'] .access-control-switch-track {
+    background: var(--solid-ui-color-purple-600, #9333EA);
+  }
+
+  .access-control-switch-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: white;
+    box-shadow: 0 1px 2px rgb(0 0 0 / 25%);
+    transition: transform .15s ease;
+  }
+
+  .access-control-same-access-toggle[aria-checked='true'] .access-control-switch-thumb {
+    transform: translateX(14px);
+  }
+
+  .access-control-same-access-toggle > span:last-child {
+    min-width: 0;
+    max-width: 100%;
+    overflow-wrap: anywhere;
+  }
+
+  .access-control-sharing-state,
+  .access-control-contents-prompt {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    padding: 10px;
+    margin-bottom: 16px;
+    font-size: var(--solid-ui-font-size-sm, .875rem);
+
+    h2 {
+      margin: 0 0 10px;
+      color: var(--solid-ui-color-gray-900, #101828);
+      font-size: var(--solid-ui-font-size-md, 1rem);
+      font-weight: 600;
+    }
+
+    .access-control-advanced-sharing {
+      box-sizing: border-box;
+      min-width: 0;
+      width: 100%;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      margin-top: 10px;
+      padding: 10px 15px;
+      position: relative;
+      padding-right: 48px;
+
+      h2 {
+        margin: 0 0 4px;
+        color: var(--solid-ui-color-gray-900, #101828);
+        font-size: var(--solid-ui-font-size-md, 1rem);
+        font-weight: 600;
+      }
+
+      p {
+        margin: 0;
+        min-width: 0;
+        max-width: 100%;
+        overflow-wrap: anywhere;
+        color: var(--solid-ui-color-gray-600, #4A5565);
+        font-size: var(--solid-ui-font-size-xs, .75rem);
+        line-height: 1.5;
+      }
+
+      .access-control-advanced-sharing-description-line {
+        display: block;
+        max-width: 100%;
+      }
+    }
+
+    .access-control-advanced-sharing-options,
+    .access-control-advanced-sharing-actions {
+      display: flex;
+      flex-wrap: wrap;
+      min-width: 0;
+      gap: 8px;
+      margin-top: 10px;
+
+      solid-ui-button {
+        --solid-ui-font-size-md: var(--solid-ui-font-size-sm, .875rem);
+        min-width: 0;
+        max-width: 100%;
+        white-space: normal;
+      }
+    }
+
+    .access-control-advanced-sharing-actions {
+      justify-content: flex-end;
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      margin-top: 0;
+
+      solid-ui-button {
+        color: var(--solid-ui-color-gray-600, #4A5565);
+      }
+    }
+
+    p {
+      margin: 0;
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+      color: var(--solid-ui-color-gray-600, #4A5565);
+      line-height: 1.5;
+    }
+  }
+
+  .access-control-sharing-state-panel,
+  .access-control-contents-prompt {
+    box-sizing: border-box;
+    min-width: 0;
+    max-width: 100%;
+    border: 1px solid var(--solid-ui-color-slate-200, #E2E8F0);
+    border-radius: 5px;
+    background: var(--solid-ui-color-white, #FFF);
+    padding: 10px 15px;
+  }
+
+  .access-control-sharing-state-panel {
+    display: grid;
+    gap: 10px;
+
+    p {
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    .access-control-sharing-state-custom-row {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 8px;
+
+      p {
+        flex: 1 1 auto;
+      }
+
+      solid-ui-button {
+        flex: 0 0 auto;
+        --solid-ui-font-size-md: var(--solid-ui-font-size-sm, .875rem);
+      }
+    }
+  }
+
+  .access-control-sharing-guidance {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-width: 0;
+    gap: 12px;
+
+    p {
+      min-width: 0;
+      max-width: 100%;
+      overflow-wrap: anywhere;
+    }
+
+    solid-ui-button {
+      flex: 0 0 auto;
+      --solid-ui-font-size-md: var(--solid-ui-font-size-sm, .875rem);
+    }
+  }
+
+  .access-control-sharing-state-actions {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    min-width: 0;
+    justify-content: flex-end;
+    margin-top: 10px;
+    gap: 8px;
+
+    solid-ui-button {
+      --solid-ui-font-size-md: var(--solid-ui-font-size-sm, .875rem);
+      max-width: 100%;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .access-control-sharing-guidance {
+      align-items: flex-start;
+      flex-direction: column;
+      gap: 8px;
+
+      solid-ui-button {
+        align-self: flex-end;
+      }
+    }
+  }
+
+  .access-control-contents-prompt {
+    .access-control-contents-prompt-actions {
+      display: flex;
+      flex-wrap: wrap;
+      min-width: 0;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    solid-ui-button {
+      --solid-ui-font-size-md: var(--solid-ui-font-size-sm, .875rem);
+      max-width: 100%;
+      flex: 0 1 auto;
+    }
+  }
+
+  .access-control-contents-prompt h2 {
+    margin-bottom: 4px;
+  }
+
   .access-control-footer-actions {
     display: flex;
     justify-content: flex-end;

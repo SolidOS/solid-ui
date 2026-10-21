@@ -4,7 +4,7 @@ import "../../lib/components/index.esm.js";
 import n from "./MenuItem.styles.esm.js";
 import { html as r } from "lit";
 import { property as i, query as a } from "lit/decorators.js";
-//#region src/components/menu-item/MenuItem.ts
+// src/components/menu-item/MenuItem.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x;
 function S(e, t, n) {
 	C(e, t), t.set(e, n);
@@ -246,7 +246,6 @@ new (b = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 		super(P), D(this, "styles", n), f();
 	}
 }, D(o, b, void 0), o)();
-//#endregion
 export { P as default };
 
 //# sourceMappingURL=MenuItem.esm.js.map

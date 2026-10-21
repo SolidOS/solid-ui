@@ -5,7 +5,7 @@ import "../../lib/components/index.esm.js";
 import "../../lib/auth/index.esm.js";
 import { consume as i } from "@lit/context";
 import { html as a } from "lit";
-//#region src/components/guard/Guard.ts
+// src/components/guard/Guard.ts
 var o, s, c, l, u, d, f, p, m, h;
 function g(e, t, n) {
 	_(e, t), t.set(e, n);
@@ -220,7 +220,6 @@ new (m = (c = /*#__PURE__*/ new WeakMap(), h = (f = i({
 		}), u();
 	}
 }, x(o, m, void 0), o)();
-//#endregion
 export { O as default };
 
 //# sourceMappingURL=Guard.esm.js.map

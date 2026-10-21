@@ -2,7 +2,7 @@ import e from "../lib/ns.esm.js";
 import { log as t, trace as n } from "../lib/debug.esm.js";
 import * as r from "rdflib";
 import { store as i } from "solid-logic";
-//#region src/chat/dateFolder.js
+// src/chat/dateFolder.js
 async function a(t) {
 	return await i.fetcher.load(t), !(i.statementsMatching(null, e.dct("created"), null, t).length > 0);
 }
@@ -78,7 +78,6 @@ var o = class {
 		return u.sort(), t && u.reverse(), u[0][1];
 	}
 };
-//#endregion
 export { o as DateFolder, a as emptyLeaf };
 
 //# sourceMappingURL=dateFolder.esm.js.map

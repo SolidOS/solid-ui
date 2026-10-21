@@ -1,7 +1,6 @@
 import { css as e } from "lit";
-//#region src/components/access-control-modal/AccessControlErrors.styles.css
+// src/components/access-control-modal/AccessControlErrors.styles.css
 var t = e`:host{contain:inline-size;width:100%;display:block}:host solid-ui-error-state{contain:inline-size;width:100%;max-width:100%}:host .access-control-save-errors{box-sizing:border-box;gap:8px;width:100%;margin:0;padding-left:0;list-style:none;display:grid}:host .access-control-save-errors li{min-width:0;color:var(--solid-ui-color-red-600,#be2e48);font-size:var(--solid-ui-font-size-sm,.875rem);grid-template-columns:minmax(0,18rem) minmax(0,1fr);align-items:baseline;gap:6px;line-height:1.4;display:grid}:host .access-control-save-errors .access-control-save-error-label{overflow-wrap:anywhere;font-weight:500}:host .access-control-save-errors .access-control-save-error-detail{overflow-wrap:anywhere;min-width:0}@media (width<=600px){:host .access-control-save-errors li{grid-template-columns:minmax(0,40%) minmax(0,1fr)}}`;
-//#endregion
 export { t as default };
 
 //# sourceMappingURL=AccessControlErrors.styles.esm.js.map

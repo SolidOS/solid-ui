@@ -5,7 +5,7 @@ import { log as n, warn as r } from "../lib/debug.esm.js";
 import { getACLorDefault as i, getProspectiveHolder as a } from "./acl.esm.js";
 import { style as o } from "../lib/style.esm.js";
 import { AccessController as s } from "./access-controller.esm.js";
-//#region src/acl/acl-control.ts
+// src/acl/acl-control.ts
 var c = window, l = Symbol("prevent double triggering of drop event");
 function u(e) {
 	if (n("preventBrowserDropEvents called."), c !== void 0) {
@@ -65,7 +65,6 @@ function _(t, n, r) {
 function v(e) {
 	return e.uri === e.site().uri;
 }
-//#endregion
 export { m as ACLControlBox5, f as handleDrop, u as preventBrowserDropEvents, d as preventDrag, p as shortNameForFolder };
 
 //# sourceMappingURL=acl-control.esm.js.map

@@ -7,7 +7,7 @@ import { widgets_exports as i } from "../widgets/index.esm.js";
 import { ensureLoggedIn as a } from "../login/login.esm.js";
 import * as o from "rdflib";
 import { solidLogicSingleton as s } from "solid-logic";
-//#region src/lib/messageArea.js
+// src/lib/messageArea.js
 var c = {
 	icons: r,
 	ns: e,
@@ -152,7 +152,6 @@ function l(e, n, r, i, l) {
 		T(r, g);
 	}, h;
 }
-//#endregion
 export { l as messageArea };
 
 //# sourceMappingURL=messageArea.esm.js.map

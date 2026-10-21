@@ -26,6 +26,7 @@ const e=require("../../lib/components/decorators.cjs.js"),t=require("../../lib/c
             aria-required=${this.required?`true`:i.nothing}
             autocomplete="off"
             spellcheck="false"
+            ?disabled=${this.disabled}
             ?required=${this.required}
             .value=${this.displayValue}
             @keydown=${this.onInputKeyDown}

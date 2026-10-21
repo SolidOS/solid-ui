@@ -1,5 +1,5 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
-//#region src/lib/log.ts
+// src/lib/log.ts
 var t = /* @__PURE__ */ e({
 	LogLevel: () => l,
 	alert: () => x,
@@ -76,7 +76,6 @@ function D(e) {
 function O(e, t) {
 	p = e, f = t;
 }
-//#endregion
 export { l as LogLevel, x as alert, S as clear, _ as debug, w as dumpHTML, y as error, D as escapeForXML, v as info, T as logAscending, E as logDescending, t as log_exports, h as msg, O as setInternals, C as setLevel, b as success, g as warn };
 
 //# sourceMappingURL=log.esm.js.map

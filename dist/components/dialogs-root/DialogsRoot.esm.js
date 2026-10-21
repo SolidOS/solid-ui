@@ -6,7 +6,7 @@ import { ShowDialogEvent as r } from "../../lib/dialogs/events/show-dialog.esm.j
 import "../dialog-provider/DialogProvider.esm.js";
 import { html as i } from "lit";
 import { state as a } from "lit/decorators.js";
-//#region src/components/dialogs-root/DialogsRoot.ts
+// src/components/dialogs-root/DialogsRoot.ts
 var o, s, c, l, u, d, f;
 function p(e, t, n) {
 	m(e, t), t.set(e, n);
@@ -201,7 +201,6 @@ f = (u = a(), "dialogs"), o = class extends n {
 	1,
 	"dialogs"
 ]], l, 0, void 0, n), c();
-//#endregion
 export { C as default };
 
 //# sourceMappingURL=DialogsRoot.esm.js.map

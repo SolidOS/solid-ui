@@ -5,6 +5,7 @@ import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
 import "../../_virtual/~icons/lucide/circle-x.esm.js";
+import "../../_virtual/~icons/lucide/globe.esm.js";
 import "../../_virtual/~icons/lucide/book-user.esm.js";
 import "../../_virtual/~icons/lucide/user-round.esm.js";
 import "../../_virtual/~icons/lucide/users.esm.js";
@@ -12,33 +13,33 @@ import n from "./AccessControlAddAccess.styles.esm.js";
 import { ACCESS_ROLES as r } from "solid-logic";
 import { html as i, nothing as a } from "lit";
 import { property as o } from "lit/decorators.js";
-//#region src/components/access-control-modal/AccessControlAddAccess.ts
-var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O;
-function k(e, t, n) {
-	A(e, t), t.set(e, n);
+// src/components/access-control-modal/AccessControlAddAccess.ts
+var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
+function M(e, t, n) {
+	N(e, t), t.set(e, n);
 }
-function A(e, t) {
+function N(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function j(e, t, n) {
-	return e.set(N(e, t), n), n;
+function P(e, t, n) {
+	return e.set(I(e, t), n), n;
 }
-function M(e, t) {
-	return e.get(N(e, t));
+function F(e, t) {
+	return e.get(I(e, t));
 }
-function N(e, t, n) {
+function I(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function P(e, t, n) {
-	return (t = I(t)) in e ? Object.defineProperty(e, t, {
+function L(e, t, n) {
+	return (t = z(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function F(e, t, n, r, i, a) {
+function R(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -61,13 +62,13 @@ function F(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: R(function() {
+				get: V(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || R(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || V(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -127,7 +128,7 @@ function F(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return z(t) === e;
+			return H(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -141,7 +142,7 @@ function F(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : I(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : z(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -154,11 +155,11 @@ function F(e, t, n, r, i, a) {
 		}
 	};
 }
-function I(e) {
-	var t = L(e, "string");
+function z(e) {
+	var t = B(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function L(e, t) {
+function B(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -168,7 +169,7 @@ function L(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function R(e, t, n) {
+function V(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -178,59 +179,65 @@ function R(e, t, n) {
 	} catch {}
 	return e;
 }
-function z(e) {
+function H(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function B(e) {
+function U(e) {
 	return e;
 }
-function V(e) {
+function W(e) {
 	return i`
     <span class="access-grants-directory-entry">
-      ${H(e)}
+      ${G(e)}
       <span>${e.label}</span>
     </span>
   `;
 }
-function H(e) {
+function G(e) {
 	return e.sources.includes("contacts") || e.sources.includes("groups") ? i`<icon-lucide-book-user style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-book-user>` : e.sources.includes("friends") ? i`<icon-lucide-users style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-users>` : e.sources.includes("catalog") ? i`<icon-lucide-user-round style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-user-round>` : a;
 }
-g = [e("solid-ui-access-control-add-access")];
-var U;
-new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), O = (_ = o({ attribute: !1 }), y = o({ attribute: !1 }), x = o({ attribute: !1 }), C = o({ attribute: !1 }), T = o({ attribute: !1 }), "principalInputValue"), c = class extends t {
+_ = [e("solid-ui-access-control-add-access")];
+var K;
+new (A = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), j = (v = o({ attribute: !1 }), b = o({ attribute: !1 }), S = o({ attribute: !1 }), w = o({ attribute: !1 }), E = o({ type: Boolean }), O = o({ attribute: !1 }), "principalInputValue"), c = class extends t {
 	constructor(...e) {
-		super(...e), k(this, l, (m(this), v(this, ""))), k(this, u, b(this, "Viewer")), k(this, d, S(this, [])), k(this, f, w(this, "")), k(this, p, E(this, null));
+		super(...e), M(this, l, (h(this), y(this, ""))), M(this, u, x(this, "Viewer")), M(this, d, C(this, [])), M(this, f, T(this, "")), M(this, p, D(this, !1)), M(this, m, k(this, null));
 	}
-	get [O]() {
-		return M(l, this);
+	get [j]() {
+		return F(l, this);
 	}
 	set principalInputValue(e) {
-		j(l, this, e);
+		P(l, this, e);
 	}
 	get addAccessRoleValue() {
-		return M(u, this);
+		return F(u, this);
 	}
 	set addAccessRoleValue(e) {
-		j(u, this, e);
+		P(u, this, e);
 	}
 	get pendingAccessGrants() {
-		return M(d, this);
+		return F(d, this);
 	}
 	set pendingAccessGrants(e) {
-		j(d, this, e);
+		P(d, this, e);
 	}
 	get inputError() {
-		return M(f, this);
+		return F(f, this);
 	}
 	set inputError(e) {
-		j(f, this, e);
+		P(f, this, e);
+	}
+	get disabled() {
+		return F(p, this);
+	}
+	set disabled(e) {
+		P(p, this, e);
 	}
 	get asyncOptionsProvider() {
-		return M(p, this);
+		return F(m, this);
 	}
 	set asyncOptionsProvider(e) {
-		j(p, this, e);
+		P(m, this, e);
 	}
 	onPrincipalInput(e) {
 		let t = this.getEventValue(e);
@@ -245,16 +252,17 @@ new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		typeof t.value == "string" && this.dispatchEvent(new CustomEvent("target-selected", {
 			detail: {
 				value: t.value,
-				label: t.label
+				label: t.label,
+				targetKind: t.targetKind
 			},
 			bubbles: !0,
 			composed: !0
 		}));
 	}
 	onRoleChange(e) {
-		let t = e.detail.option.value;
-		typeof t == "string" && r.includes(t) && this.dispatchEvent(new CustomEvent("role-changed", {
-			detail: { role: t },
+		let t = e.detail.option.value, n = typeof t == "string" ? r.find((e) => e === t) : void 0;
+		n && this.dispatchEvent(new CustomEvent("role-changed", {
+			detail: { role: n },
 			bubbles: !0,
 			composed: !0
 		}));
@@ -278,6 +286,7 @@ new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
           <div class="access-grants-input">
             <solid-ui-combobox
               class="access-principal-combobox"
+              .disabled=${this.disabled}
               label="Add person, group or software agent URL."
               .srOnlyLabel=${!0}
               .value=${this.principalInputValue}
@@ -291,6 +300,7 @@ new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
           </div>
           <solid-ui-combobox
             class="access-role-select access-role-select--top"
+            .disabled=${this.disabled}
             .value=${this.addAccessRoleValue}
             @change=${this.onRoleChange}
           >
@@ -307,11 +317,15 @@ new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
       <div class="access-grants-pending">
         ${this.pendingAccessGrants.map((e, t) => i`
           <div class="access-grants-pending-item">
-            <span class="access-grants-pending-item-label">${e.label}</span>
+            <span class="access-grants-pending-item-label">
+              ${e.targetKind === "trustedApp" ? i`<icon-lucide-globe style="width: 13px; height: 13px; vertical-align: -2px;"></icon-lucide-globe>` : a}
+              ${e.label}
+            </span>
             <solid-ui-button
               type="button"
               variant="ghost"
               class="access-grants-pending-item-remove"
+              ?disabled=${this.disabled}
               @click=${() => this.onPendingGrantRemove(t)}
             >
               <span class="sr-only">Remove ${e.label}</span>
@@ -322,38 +336,42 @@ new (D = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
       </div>
     ` : a;
 	}
-}, {e: [v, b, S, w, E, m], c: [U, h]} = F(c, [
+}, {e: [y, x, C, T, D, k, h], c: [K, g]} = R(c, [
 	[
-		_,
+		v,
 		1,
 		"principalInputValue"
 	],
 	[
-		y,
+		b,
 		1,
 		"addAccessRoleValue"
 	],
 	[
-		x,
+		S,
 		1,
 		"pendingAccessGrants"
 	],
 	[
-		C,
+		w,
 		1,
 		"inputError"
 	],
 	[
-		T,
+		E,
+		1,
+		"disabled"
+	],
+	[
+		O,
 		1,
 		"asyncOptionsProvider"
 	]
-], g, 0, void 0, t), c), s = class extends B {
+], _, 0, void 0, t), c), s = class extends U {
 	constructor() {
-		super(U), P(this, "styles", n), h();
+		super(K), L(this, "styles", n), g();
 	}
-}, P(s, D, void 0), s)();
-//#endregion
-export { U as default, V as directoryEntryOptionTemplate };
+}, L(s, A, void 0), s)();
+export { K as default, W as directoryEntryOptionTemplate };
 
 //# sourceMappingURL=AccessControlAddAccess.esm.js.map

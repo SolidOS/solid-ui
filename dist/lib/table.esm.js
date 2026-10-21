@@ -7,7 +7,7 @@ import { icons as o } from "./iconBase.esm.js";
 import { widgets_exports as s } from "../widgets/index.esm.js";
 import * as c from "rdflib";
 import { store as l } from "solid-logic";
-//#region src/lib/table.js
+// src/lib/table.js
 var u = {
 	icons: o,
 	log: t,
@@ -549,7 +549,6 @@ function d(e, t) {
 		return n;
 	}
 }
-//#endregion
 export { d as renderTableViewPane };
 
 //# sourceMappingURL=table.esm.js.map

@@ -3,7 +3,7 @@ import { style as t } from "../lib/style.esm.js";
 import { icons as n } from "../lib/iconBase.esm.js";
 import { button as r, cancelButton as i, continueButton as a } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
-//#region src/media/media-capture.ts
+// src/media/media-capture.ts
 var o = n.iconBase + "noun_Camera_1618446_000000.svg", s = n.iconBase + "noun_479395.svg", c = "image/png";
 function l(o, l, u, d) {
 	let f = o.createElement("div"), p, m, h, g, _ = f.appendChild(o.createElement("table")), v = _.appendChild(o.createElement("tr")).appendChild(o.createElement("td"));
@@ -66,7 +66,6 @@ function u(e, t, n, i) {
 		a.removeChild(s), c = l(e, t, n, u), a.appendChild(c);
 	}), a;
 }
-//#endregion
 export { u as cameraButton, l as cameraCaptureControl };
 
 //# sourceMappingURL=media-capture.esm.js.map

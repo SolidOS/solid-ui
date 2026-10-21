@@ -1,7 +1,7 @@
 import { label as e } from "../../utils/label.esm.js";
 import { sym as t } from "rdflib";
 import { Authenticated as n, Public as r, solidLogicSingleton as i } from "solid-logic";
-//#region src/components/access-control-modal/accessGrantDrafts.ts
+// src/components/access-control-modal/accessGrantDrafts.ts
 function a(e) {
 	return {
 		...e,
@@ -32,7 +32,7 @@ function o(e) {
 	})));
 }
 function s(e) {
-	return o(e).map((e) => `${e.type}:${e.iri}`).sort().join("|");
+	return e.id ? e.id : o(e).map((e) => `${e.type}:${e.iri}`).sort().join("|");
 }
 function c(e) {
 	let t = /* @__PURE__ */ new Map();
@@ -85,17 +85,16 @@ function m(e) {
 	}));
 }
 function h(e) {
-	let t = e.find((e) => e.agentClass.includes(n.iri));
-	return t ? u(t) : "No Access";
+	let t = e.filter((e) => e.agentClass.includes(n.iri)).flatMap((e) => e.mode);
+	return t.length ? i.acl.roleFromModes(t) : "No Access";
 }
 function g(e) {
-	let t = e.find((e) => e.agentClass.includes(r.iri));
-	return t ? i.acl.publicRoleFromModes(t.mode) : "No Access";
+	let t = e.filter((e) => e.agentClass.includes(r.iri)).flatMap((e) => e.mode);
+	return t.length ? i.acl.publicRoleFromModes(t) : "No Access";
 }
 function _(i) {
 	return i.iri === n.iri ? "Authenticated users" : i.iri === r.iri ? "Public" : e(t(i.iri)).trim() || i.iri;
 }
-//#endregion
 export { d as createAccessGrantDraft, f as createAccessGrantDrafts, s as getAccessGrantId, c as getAccessGrantIds, p as getAccessGrantViewModels, _ as getAccessSubjectLabel, h as getAuthenticatedAccessRole, u as getAuthorizationRole, o as getAuthorizationSubjectEntries, l as getAuthorizationSubjectLabel, m as getChangedAccessGrants, g as getPublicAccessRole, a as getSharedAuthorization };
 
 //# sourceMappingURL=accessGrantDrafts.esm.js.map

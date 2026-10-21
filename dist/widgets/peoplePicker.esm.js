@@ -7,7 +7,7 @@ import * as a from "rdflib";
 import { solidLogicSingleton as o } from "solid-logic";
 import s from "escape-html";
 import { v4 as c } from "uuid";
-//#region src/widgets/peoplePicker.js
+// src/widgets/peoplePicker.js
 var l = o.store, u = class {
 	constructor(e, t, n, r) {
 		this.options = r || {}, this.element = e, this.typeIndex = t, this.groupPickedCb = n, this.selectedgroup = this.options.selectedgroup, this.onSelectGroup = this.onSelectGroup.bind(this);
@@ -218,7 +218,6 @@ function _(t) {
 		groupContainer: l.sym(t.dir().uri + "Group/")
 	};
 }
-//#endregion
 export { f as Group, p as GroupBuilder, d as GroupPicker, u as PeoplePicker, m as Person };
 
 //# sourceMappingURL=peoplePicker.esm.js.map

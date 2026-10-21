@@ -4,7 +4,7 @@ import "../utils/index.esm.js";
 import { log as n } from "../lib/debug.esm.js";
 import { graph as r, serialize as i, st as a, sym as o } from "rdflib";
 import { ACL_LINK as s, solidLogicSingleton as c } from "solid-logic";
-//#region src/acl/acl.ts
+// src/acl/acl.ts
 var l = c.store;
 function u(t, n, i, s) {
 	let c = e.acl, u = t.uri.slice(-1) === "/", d = l.each(void 0, c("default"), i, s).concat(l.each(void 0, c("defaultForNew"), i, s)).reduce((n, r) => n.concat(l.statementsMatching(r, e.rdf("type"), c("Authorization"), s)).concat(l.statementsMatching(r, c("agent"), void 0, s)).concat(l.statementsMatching(r, c("agentClass"), void 0, s)).concat(l.statementsMatching(r, c("agentGroup"), void 0, s)).concat(l.statementsMatching(r, c("origin"), void 0, s)).concat(l.statementsMatching(r, c("originClass"), void 0, s)).concat(l.statementsMatching(r, c("mode"), void 0, s)).concat(a(r, c("accessTo"), t, s)).concat(u ? a(r, c("default"), t, s) : []), []), f = r();
@@ -223,7 +223,6 @@ function D(e, t) {
 async function O(e) {
 	return new Promise((t, n) => E(o(e), (r, i, a, o, s) => r ? t(i ? a : s) : n(/* @__PURE__ */ Error(`Error loading ${e}`))));
 }
-//#endregion
 export { v as ACLToString, h as ACLbyCombination, p as ACLunion, u as adoptACLDefault, y as comboToString, w as fixIndividualACL, C as fixIndividualCardACL, D as getACL, E as getACLorDefault, O as getProspectiveHolder, m as loadUnionACL, g as makeACLGraph, _ as makeACLGraphbyCombo, b as makeACLString, x as putACLObject, S as putACLbyCombo, d as readACL, f as sameACL, T as setACL };
 
 //# sourceMappingURL=acl.esm.js.map

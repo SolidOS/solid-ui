@@ -1,4 +1,4 @@
-//#region src/lib/dialogs/events/show-dialog.ts
+// src/lib/dialogs/events/show-dialog.ts
 var e = "solid-ui:show-dialog", t = class t extends Event {
 	dialog;
 	static eventName = e;
@@ -9,7 +9,6 @@ var e = "solid-ui:show-dialog", t = class t extends Event {
 		}), this.dialog = e;
 	}
 };
-//#endregion
 export { t as ShowDialogEvent };
 
 //# sourceMappingURL=show-dialog.esm.js.map

@@ -2,7 +2,7 @@ import e from "../../lib/ns.esm.js";
 import { fieldParams as t } from "./fieldParams.esm.js";
 import { mostSpecificClassURI as n } from "./fieldFunction.esm.js";
 import { store as r } from "solid-logic";
-//#region src/widgets/forms/formStyle.ts
+// src/widgets/forms/formStyle.ts
 var i = "https://www.w3.org/ns/css#";
 function a(a, o) {
 	let s = n(o), c = t[s] || {}, l = r.any(o, e.ui("style"));
@@ -17,7 +17,6 @@ function a(a, o) {
 		}
 	}) : c.style && a.setAttribute("style", c.style);
 }
-//#endregion
 export { a as setFieldStyle };
 
 //# sourceMappingURL=formStyle.esm.js.map

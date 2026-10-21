@@ -2,7 +2,7 @@ import e from "../web-component/WebComponent.esm.js";
 import "../web-component/index.esm.js";
 import t from "../traits/FormControlTrait.esm.js";
 import { property as n } from "lit/decorators.js";
-//#region src/lib/components/form-control-component/FormControlComponent.ts
+// src/lib/components/form-control-component/FormControlComponent.ts
 var r, i, a, o, s, c, l, u, d, f, p, m, h, g, _, v, y;
 function b(e, t, n) {
 	x(e, t), t.set(e, n);
@@ -280,7 +280,6 @@ r = R, [o, c, u, f, m, g, v, i] = E(r, [
 		"disabled"
 	]
 ], [], 0, void 0, e).e, S(R, y, !0);
-//#endregion
 export { R as default };
 
 //# sourceMappingURL=FormControlComponent.esm.js.map

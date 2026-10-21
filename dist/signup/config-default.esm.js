@@ -1,4 +1,4 @@
-//#region src/signup/config-default.js
+// src/signup/config-default.js
 var e = {
 	authEndpoint: "",
 	fallbackAuthEndpoint: "https://databox.me/",
@@ -8,7 +8,6 @@ var e = {
 	key: "",
 	cert: ""
 };
-//#endregion
 export { e as default };
 
 //# sourceMappingURL=config-default.esm.js.map

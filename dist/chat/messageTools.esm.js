@@ -12,7 +12,7 @@ import { renderBookmarksButton as m } from "./bookmarks.esm.js";
 import { switchToEditor as h } from "./message.esm.js";
 import * as g from "rdflib";
 import { authn as _, store as v } from "solid-logic";
-//#region src/chat/messageTools.js
+// src/chat/messageTools.js
 var y = window.document, b = "noun_253504.svg", x = "noun_1384132.svg", S = "noun_1384135.svg", C = "noun-reply-5506924.svg", w = {};
 w[e.schema("AgreeAction")] = "👍", w[e.schema("DisagreeAction")] = "👎", w[e.schema("EndorseAction")] = "⭐️", w[e.schema("LikeAction")] = "❤️";
 async function T(t, r) {
@@ -115,7 +115,6 @@ async function E(n, d, f, w) {
 	let N = O.appendChild(s(y));
 	return N.style.float = "right", N.firstChild.style.opacity = "0.3", N.addEventListener("click", k), O;
 }
-//#endregion
 export { E as messageToolbar, T as sentimentStripLinked };
 
 //# sourceMappingURL=messageTools.esm.js.map

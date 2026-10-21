@@ -1,4 +1,4 @@
-//#region src/lib/styleConstants.js
+// src/lib/styleConstants.js
 var e = {
 	highlightColor: "#7C4DFF",
 	formBorderColor: "#888888",
@@ -17,7 +17,6 @@ var e = {
 	participationDefaultBackground: "white",
 	basicMaxLength: "4096"
 };
-//#endregion
 export { e as default };
 
 //# sourceMappingURL=styleConstants.esm.js.map

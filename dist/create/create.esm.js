@@ -7,7 +7,7 @@ import { askName as i } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 import { ensureLoadedProfile as a, selectWorkspace as o } from "../login/login.esm.js";
 import { solidLogicSingleton as s } from "solid-logic";
-//#region src/create/create.ts
+// src/create/create.ts
 var c = s.store;
 function l(s, l, u) {
 	let d = s.dom, f = s.div;
@@ -93,7 +93,6 @@ function l(s, l, u) {
 		});
 	});
 }
-//#endregion
 export { l as newThingUI };
 
 //# sourceMappingURL=create.esm.js.map

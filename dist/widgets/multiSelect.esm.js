@@ -1,5 +1,5 @@
 import { style as e } from "../lib/style_multiSelect.esm.js";
-//#region src/widgets/multiSelect.js
+// src/widgets/multiSelect.js
 var t = class {
 	_data;
 	_domElements;
@@ -270,7 +270,6 @@ var t = class {
 		} else n && n.parentNode && n.parentNode.removeChild(n);
 	}
 };
-//#endregion
 export { t as IconicMultiSelect };
 
 //# sourceMappingURL=multiSelect.esm.js.map

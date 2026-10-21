@@ -19,7 +19,7 @@ import { findBookmarkDocument as E } from "./bookmarks.esm.js";
 import { messageToolbar as D, sentimentStripLinked as O } from "./messageTools.esm.js";
 import { insertMessageIntoTable as k } from "./infinite.esm.js";
 import { authn as A, store as j } from "solid-logic";
-//#region src/chat/message.js
+// src/chat/message.js
 var M = window.document, N = i.messageBodyStyle, P = t;
 function F(e, t) {
 	let n = M.createElement("img"), r = "10";
@@ -180,7 +180,6 @@ function H(t, n, a, f, p) {
 		x(), Object.assign(e, a), E(e).then((e) => {});
 	}), T;
 }
-//#endregion
 export { R as creatorAndDate, z as creatorAndDateHorizontal, F as elementForImageURI, H as renderMessageEditor, B as renderMessageRow, V as switchToEditor };
 
 //# sourceMappingURL=message.esm.js.map

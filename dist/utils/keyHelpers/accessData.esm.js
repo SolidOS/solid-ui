@@ -2,7 +2,7 @@ import e from "../../lib/ns.esm.js";
 import { error as t, log as n } from "../../lib/debug.esm.js";
 import { getRootIfPreferencesExist as r } from "./otherHelpers.esm.js";
 import { store as i } from "solid-logic";
-//#region src/utils/keyHelpers/accessData.ts
+// src/utils/keyHelpers/accessData.ts
 var a = (e) => {
 	let n;
 	try {
@@ -46,7 +46,6 @@ async function l(t, r, a) {
 		throw n("createIfNotExists doc FAILED: " + r + ": " + e), e;
 	}
 }
-//#endregion
 export { c as getExistingPrivateKey, s as getExistingPublicKey, l as getKeyIfExists, o as privKeyUrl, a as pubKeyUrl };
 
 //# sourceMappingURL=accessData.esm.js.map

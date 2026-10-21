@@ -1,6 +1,6 @@
 import e from "../ns.esm.js";
 import { sym as t } from "rdflib";
-//#region src/lib/forms/rdfFormsHelper.ts
+// src/lib/forms/rdfFormsHelper.ts
 async function n(e, n) {
 	let r = t(n);
 	return e.holds(void 0, void 0, void 0, r) && e.removeStatements(e.statementsMatching(void 0, void 0, void 0, r)), await e.fetcher.load(n, {
@@ -28,7 +28,6 @@ function a(n, r) {
 	}
 	return n.each(null, e.rdf("type"), e.ui("Form")).find((e) => e.termType === "NamedNode") || null;
 }
-//#endregion
 export { n as fetchData, a as findForm, i as mostSpecificClassURI, r as sortBySequence };
 
 //# sourceMappingURL=rdfFormsHelper.esm.js.map

@@ -3,6 +3,7 @@ import { AccessGrantViewModel } from './types';
 export default class AccessControlSharedAccess extends WebComponent {
     static styles: import('lit').CSSResult;
     accessor accessGrantViewModels: AccessGrantViewModel[];
+    accessor disabled: boolean;
     private accessor searchValue;
     private onSearchInput;
     private onSearchSelect;

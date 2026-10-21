@@ -6,7 +6,7 @@ import { isEmptyValue as n } from "../../lib/values.esm.js";
 import r from "./Select.styles.esm.js";
 import { html as i, nothing as a } from "lit";
 import { property as o, query as s, state as c } from "lit/decorators.js";
-//#region src/components/select/Select.ts
+// src/components/select/Select.ts
 var l, u, d, f, p, m, h, g, _, v, y, b, x, S;
 function C(e, t, n) {
 	w(e, t), t.set(e, n);
@@ -261,7 +261,6 @@ new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = 
 		super(F), O(this, "styles", r), m();
 	}
 }, O(l, x, void 0), l)();
-//#endregion
 export { F as default };
 
 //# sourceMappingURL=Select.esm.js.map

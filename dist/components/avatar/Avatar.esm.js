@@ -7,7 +7,7 @@ import "../../_virtual/~icons/lucide/circle-user.esm.js";
 import i from "./Avatar.styles.esm.js";
 import { consume as a } from "@lit/context";
 import { html as o } from "lit";
-//#region src/components/avatar/Avatar.ts
+// src/components/avatar/Avatar.ts
 var s, c, l, u, d, f, p, m, h, g;
 function _(e, t, n) {
 	v(e, t), t.set(e, n);
@@ -219,7 +219,6 @@ new (h = (l = /*#__PURE__*/ new WeakMap(), g = (p = a({
 		super(k), S(this, "styles", i), S(this, "states", { fallback: (e) => !e.auth.account?.avatarUrl }), d();
 	}
 }, S(s, h, void 0), s)();
-//#endregion
 export { k as default };
 
 //# sourceMappingURL=Avatar.esm.js.map

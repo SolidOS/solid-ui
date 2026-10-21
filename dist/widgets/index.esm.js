@@ -11,7 +11,7 @@ import { publicData_exports as oe } from "./forms/autocomplete/publicData.esm.js
 import { renderAutoComplete as se, setVisible as ce } from "./forms/autocomplete/autocompletePicker.esm.js";
 import { renderAutocompleteControl as le } from "./forms/autocomplete/autocompleteBar.esm.js";
 import { appendForm as ue, buildCheckboxForm as de, editFormButton as fe, findClosest as pe, formsFor as me, makeDescription as he, makeSelectForCategory as ge, makeSelectForChoice as _e, makeSelectForClassifierOptions as ve, makeSelectForNestedCategory as ye, makeSelectForOptions as be, newButton as xe, newThing as Se, promptForNew as Ce, propertiesForClass as we, sortByLabel as Te, sortBySequence as Ee } from "./forms.esm.js";
-//#region src/widgets/index.js
+// src/widgets/index.js
 var De = /* @__PURE__ */ ee({
 	Group: () => i,
 	GroupBuilder: () => a,
@@ -94,7 +94,6 @@ var De = /* @__PURE__ */ ee({
 	timestamp: () => Y,
 	uploadFiles: () => n
 });
-//#endregion
 export { i as Group, a as GroupBuilder, o as GroupPicker, s as PeoplePicker, c as Person, d as addStyleSheet, f as allClassURIs, ue as appendForm, p as askName, m as attachmentList, ne as basicField, de as buildCheckboxForm, h as button, g as cancelButton, _ as clearElement, v as complain, y as continueButton, b as createLinkDiv, l as createLinkForURI, x as createNameDiv, S as defaultAnnotationStore, C as deleteButtonWithCheck, fe as editFormButton, r as errorMessageBlock, w as extractLogURI, T as faviconOrDefault, Z as field, Q as fieldFunction, re as fieldLabel, X as fieldParams, ie as fieldStore, E as fileUploadButtonDiv, pe as findClosest, D as findImage, O as findImageFromURI, k as formatDateTime, me as formsFor, A as iconForClass, j as imagesOf, M as index, N as isAudio, P as isImage, F as isVideo, I as linkButton, u as linkIcon, he as makeDescription, e as makeDraggable, t as makeDropTarget, ge as makeSelectForCategory, _e as makeSelectForChoice, ve as makeSelectForClassifierOptions, ye as makeSelectForNestedCategory, be as makeSelectForOptions, $ as mostSpecificClassURI, xe as newButton, Se as newThing, L as openHrefInOutlineMode, R as personTR, Ce as promptForNew, we as propertiesForClass, z as propertyTriage, oe as publicData, B as refreshTree, V as removeButton, H as renderAsDiv, U as renderAsRow, se as renderAutoComplete, le as renderAutocompleteControl, ae as renderNameValuePair, te as selectorPanel, W as selectorPanelRefresh, G as setImage, K as setName, ce as setVisible, q as shortDate, J as shortTime, Te as sortByLabel, Ee as sortBySequence, Y as timestamp, n as uploadFiles, De as widgets_exports };
 
 //# sourceMappingURL=index.esm.js.map

@@ -5,38 +5,39 @@ import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
+import "../../_virtual/~icons/lucide/globe.esm.js";
 import r from "./AccessControlSharedAccess.styles.esm.js";
 import { sym as i } from "rdflib";
 import { ACCESS_ROLES as a } from "solid-logic";
 import { html as o } from "lit";
 import { property as s, state as c } from "lit/decorators.js";
-//#region src/components/access-control-modal/AccessControlSharedAccess.ts
-var l, u, d, f, p, m, h, g, _, v, y, b, x;
-function S(e, t, n) {
-	C(e, t), t.set(e, n);
+// src/components/access-control-modal/AccessControlSharedAccess.ts
+var l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w;
+function T(e, t, n) {
+	E(e, t), t.set(e, n);
 }
-function C(e, t) {
+function E(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function w(e, t, n) {
-	return e.set(E(e, t), n), n;
+function D(e, t, n) {
+	return e.set(k(e, t), n), n;
 }
-function T(e, t) {
-	return e.get(E(e, t));
+function O(e, t) {
+	return e.get(k(e, t));
 }
-function E(e, t, n) {
+function k(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function D(e, t, n) {
-	return (t = k(t)) in e ? Object.defineProperty(e, t, {
+function A(e, t, n) {
+	return (t = M(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function O(e, t, n, r, i, a) {
+function j(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -59,13 +60,13 @@ function O(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: j(function() {
+				get: P(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || j(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || P(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -95,10 +96,10 @@ function O(e, t, n, r, i, a) {
 					}, (i < 2 || i === 4) && (A = function(e, t) {
 						e[r] = t;
 					}));
-					var M = O.access = { has: d ? m.bind() : function(e) {
+					var j = O.access = { has: d ? m.bind() : function(e) {
 						return r in e;
 					} };
-					if (k && (M.get = k), A && (M.set = A), C = T.call(E, p ? {
+					if (k && (j.get = k), A && (j.set = A), C = T.call(E, p ? {
 						get: b.get,
 						set: b.set
 					} : b[S], O), p) {
@@ -125,7 +126,7 @@ function O(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return M(t) === e;
+			return F(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -139,7 +140,7 @@ function O(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : k(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : M(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -152,11 +153,11 @@ function O(e, t, n, r, i, a) {
 		}
 	};
 }
-function k(e) {
-	var t = A(e, "string");
+function M(e) {
+	var t = N(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function A(e, t) {
+function N(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -166,7 +167,7 @@ function A(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function j(e, t, n) {
+function P(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -176,30 +177,36 @@ function j(e, t, n) {
 	} catch {}
 	return e;
 }
-function M(e) {
+function F(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function N(e) {
+function I(e) {
 	return e;
 }
-h = [t("solid-ui-access-control-shared-access")];
-var P;
-new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = (g = s({ attribute: !1 }), v = c(), "accessGrantViewModels"), u = class extends n {
+g = [t("solid-ui-access-control-shared-access")];
+var L;
+new (C = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), w = (_ = s({ attribute: !1 }), y = s({ type: Boolean }), x = c(), "accessGrantViewModels"), u = class extends n {
 	constructor(...e) {
-		super(...e), S(this, d, (p(this), _(this, []))), S(this, f, y(this, ""));
+		super(...e), T(this, d, (m(this), v(this, []))), T(this, f, b(this, !1)), T(this, p, S(this, ""));
 	}
-	get [x]() {
-		return T(d, this);
+	get [w]() {
+		return O(d, this);
 	}
 	set accessGrantViewModels(e) {
-		w(d, this, e);
+		D(d, this, e);
+	}
+	get disabled() {
+		return O(f, this);
+	}
+	set disabled(e) {
+		D(f, this, e);
 	}
 	get searchValue() {
-		return T(f, this);
+		return O(p, this);
 	}
 	set searchValue(e) {
-		w(f, this, e);
+		D(p, this, e);
 	}
 	onSearchInput(e) {
 		let t = e.currentTarget;
@@ -210,14 +217,14 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		typeof t.label == "string" && (this.searchValue = t.label);
 	}
 	onAccessGrantRoleChange(e, t) {
-		let n = t.detail.option.value;
-		if (typeof n != "string" || !a.includes(n)) return;
-		let r = {
+		let n = t.detail.option.value, r = typeof n == "string" ? a.find((e) => e === n) : void 0;
+		if (!r) return;
+		let i = {
 			id: e,
-			role: n
+			role: r
 		};
 		this.dispatchEvent(new CustomEvent("access-grant-role-changed", {
-			detail: r,
+			detail: i,
 			bubbles: !0,
 			composed: !0
 		}));
@@ -239,7 +246,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		let n = this.getAuthorizationBadge(e, t);
 		return o`
       <div class="access-grants-image access-grants-image--${n.kind}">
-        ${n.image ? o`<img src=${n.image} alt="" aria-hidden="true" />` : o`<span aria-hidden="true">${n.text}</span>`}
+        ${n.image ? o`<img src=${n.image} alt="" aria-hidden="true" />` : n.kind === "origin" ? o`<icon-lucide-globe aria-hidden="true"></icon-lucide-globe>` : o`<span aria-hidden="true">${n.text}</span>`}
       </div>
     `;
 	}
@@ -268,7 +275,8 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		}
 		return t.origin[0] ? {
 			kind: "origin",
-			text: "O"
+			text: "O",
+			image: ""
 		} : {
 			kind: "unknown",
 			text: "?"
@@ -281,6 +289,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		return o`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${e === "Owner" ? "access-grants-role--owner" : ""}"
+        .disabled=${this.disabled}
         .value=${e}
         @change=${(e) => this.onAccessGrantRoleChange(t, e)}
       >
@@ -298,7 +307,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		return o`
       <section aria-labelledby="access-grants-heading">
         <div class="access-grants-header">
-          <h2 id="access-grants-heading">Share with</h2>
+          <h2 id="access-grants-heading">Shared with</h2>
           <solid-ui-combobox
             class="access-grants-search-input"
             label="Search access grants"
@@ -323,20 +332,27 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
       </section>
     `;
 	}
-}, {e: [_, y, p], c: [P, m]} = O(u, [[
-	g,
-	1,
-	"accessGrantViewModels"
-], [
-	v,
-	1,
-	"searchValue"
-]], h, 0, void 0, n), u), l = class extends N {
+}, {e: [v, b, S, m], c: [L, h]} = j(u, [
+	[
+		_,
+		1,
+		"accessGrantViewModels"
+	],
+	[
+		y,
+		1,
+		"disabled"
+	],
+	[
+		x,
+		1,
+		"searchValue"
+	]
+], g, 0, void 0, n), u), l = class extends I {
 	constructor() {
-		super(P), D(this, "styles", r), m();
+		super(L), A(this, "styles", r), h();
 	}
-}, D(l, b, void 0), l)();
-//#endregion
-export { P as default };
+}, A(l, C, void 0), l)();
+export { L as default };
 
 //# sourceMappingURL=AccessControlSharedAccess.esm.js.map

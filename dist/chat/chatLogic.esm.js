@@ -6,7 +6,7 @@ import { SEC as i, getBlankMsg as a, signMsg as o } from "./signature.esm.js";
 import { getPrivateKey as s } from "./keys.esm.js";
 import * as c from "rdflib";
 import { authn as l, store as u } from "solid-logic";
-//#region src/chat/chatLogic.js
+// src/chat/chatLogic.js
 var d = class {
 	constructor(e, t) {
 		this.channel = e, this.channelRoot = e.doc(), this.options = t, this.dateFolder = new r(this.channelRoot, "chat.ttl"), this.div = null;
@@ -87,7 +87,6 @@ async function m(n) {
 function h(t) {
 	return u.holds(t, e.schema("dateDeleted"), null, t.doc());
 }
-//#endregion
 export { d as ChatChannel, f as allVersions, h as isDeleted, m as mostRecentVersion, p as originalVersion };
 
 //# sourceMappingURL=chatLogic.esm.js.map

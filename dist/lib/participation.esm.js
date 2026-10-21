@@ -11,7 +11,7 @@ import "../widgets/index.esm.js";
 import { lightColorHash as u } from "./pad.esm.js";
 import { st as d } from "rdflib";
 import { authn as f, solidLogicSingleton as p } from "solid-logic";
-//#region src/lib/participation.ts
+// src/lib/participation.ts
 var m = /* @__PURE__ */ e({
 	manageParticipation: () => y,
 	participationObject: () => _,
@@ -99,7 +99,6 @@ function y(e, t, n, r, i, a) {
 	}
 	return o;
 }
-//#endregion
 export { y as manageParticipation, _ as participationObject, m as participation_exports, v as recordParticipation, g as renderParticipants };
 
 //# sourceMappingURL=participation.esm.js.map

@@ -5,6 +5,7 @@ export default class AccessControlErrors extends WebComponent {
     accessor errors: AccessSaveError[];
     accessor successfulChangesRefreshed: boolean;
     private onClose;
+    private getScopeLabel;
     protected render(): import('lit-html').TemplateResult<1>;
 }
 //# sourceMappingURL=AccessControlErrors.d.ts.map

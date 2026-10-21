@@ -1,4 +1,4 @@
-//#region src/lib/dialogs/events/close-dialog.ts
+// src/lib/dialogs/events/close-dialog.ts
 var e = "solid-ui:close-dialog", t = class t extends Event {
 	id;
 	data;
@@ -10,7 +10,6 @@ var e = "solid-ui:close-dialog", t = class t extends Event {
 		}), this.id = e, this.data = n;
 	}
 };
-//#endregion
 export { t as CloseDialogEvent };
 
 //# sourceMappingURL=close-dialog.esm.js.map

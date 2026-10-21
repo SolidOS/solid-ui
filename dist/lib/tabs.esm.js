@@ -5,7 +5,7 @@ import { style as n } from "./style.esm.js";
 import { cancelButton as r } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 import { store as i } from "solid-logic";
-//#region src/lib/tabs.ts
+// src/lib/tabs.ts
 var a = /* @__PURE__ */ e({
 	TabWidgetElement: () => o,
 	tabWidget: () => c
@@ -126,7 +126,6 @@ function d(e) {
 	for (let n = 0; n < 3; n++) t += parseInt(e.slice(n * 2 + 1, n * 2 + 3), 16);
 	return t > 384;
 }
-//#endregion
 export { o as TabWidgetElement, c as tabWidget, a as tabs_exports };
 
 //# sourceMappingURL=tabs.esm.js.map

@@ -6,7 +6,7 @@ import * as l from "rdflib";
 import { store as u } from "solid-logic";
 import { schnorr as d } from "@noble/curves/secp256k1.js";
 import { bytesToHex as f, hexToBytes as p } from "@noble/hashes/utils.js";
-//#region src/chat/keys.ts
+// src/chat/keys.ts
 function m() {
 	return f(d.utils.randomSecretKey());
 }
@@ -53,7 +53,6 @@ async function y(e, t, n, r = "") {
 	let i = o(e, r);
 	await c(e, i);
 }
-//#endregion
 export { m as generatePrivateKey, h as generatePublicKey, _ as getPrivateKey, g as getPublicKey };
 
 //# sourceMappingURL=keys.esm.js.map

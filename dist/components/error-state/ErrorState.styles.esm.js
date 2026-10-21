@@ -1,7 +1,6 @@
 import { css as e } from "lit";
-//#region src/components/error-state/ErrorState.styles.css
+// src/components/error-state/ErrorState.styles.css
 var t = e`:host{color:var(--solid-ui-color-gray-800,#334155);display:block}section{box-sizing:border-box;border:1px solid var(--solid-ui-color-pink-200,#f0d8dc);background:var(--solid-ui-color-pink-50,#fff7f8);border-radius:10px;align-items:flex-start;gap:12px;width:100%;padding:16px 18px;display:flex;position:relative;box-shadow:0 1px 2px #0f172a14}.close-button{--solid-ui-font-size-2xl:var(--solid-ui-font-size-md,1rem);color:var(--solid-ui-color-gray-500);position:absolute;top:10px;right:10px}.icon{height:28px;color:var(--solid-ui-color-red-500,#fb2c36);background:var(--solid-ui-color-pink-100,#ffe7eb);border-radius:7px;flex:0 0 28px;place-items:center;display:grid}icon-lucide-triangle-alert{width:16px;height:16px}.content{flex:1;min-width:0;max-width:100%;padding-right:28px}h2{color:var(--solid-ui-color-red-700,#b00020);font-size:var(--solid-ui-font-size-lg,1.125rem);margin:1px 0 4px;font-weight:600;line-height:1.3}p{width:100%;max-width:70ch;color:var(--solid-ui-color-gray-600,#64748b);font-size:var(--solid-ui-font-size-sm,.875rem);overflow-wrap:anywhere;margin:0 0 8px;line-height:1.5}slot:not(:empty){margin-top:8px;display:block}::slotted(*){max-width:100%;color:var(--solid-ui-error-state-slot-color,var(--solid-ui-color-gray-600,#64748b));font-size:var(--solid-ui-error-state-slot-font-size,var(--solid-ui-font-size-xs,.75rem));line-height:1.5}`;
-//#endregion
 export { t as default };
 
 //# sourceMappingURL=ErrorState.styles.esm.js.map

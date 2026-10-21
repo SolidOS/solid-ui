@@ -8,7 +8,7 @@ import { fieldParams as a } from "./fieldParams.esm.js";
 import { mostSpecificClassURI as o } from "./fieldFunction.esm.js";
 import { Literal as s, st as c } from "rdflib";
 import { solidLogicSingleton as l } from "solid-logic";
-//#region src/widgets/forms/basic.ts
+// src/widgets/forms/basic.ts
 var u = l.store;
 function d(t, a, o, s, c) {
 	o.style.display = "flex", o.style.flexDirection = "row";
@@ -85,7 +85,6 @@ function m(t, l, f, m, h, g, _) {
 		}
 	}, !0), b) : (O.readOnly = !0, O.style = r.textInputStyleUneditable + E, C && O.value === "" && (b.style.display = "none"), b);
 }
-//#endregion
 export { m as basicField, f as fieldLabel, p as fieldStore, d as renderNameValuePair };
 
 //# sourceMappingURL=basic.esm.js.map

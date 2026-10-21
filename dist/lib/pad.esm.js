@@ -9,7 +9,7 @@ import "../widgets/index.esm.js";
 import { manageParticipation as s, participationObject as c, recordParticipation as l, renderParticipants as u } from "./participation.esm.js";
 import { NamedNode as d, Namespace as f, st as p } from "rdflib";
 import { solidLogicSingleton as m } from "solid-logic";
-//#region src/lib/pad.ts
+// src/lib/pad.ts
 var h = /* @__PURE__ */ e({
 	getChunks: () => b,
 	lightColorHash: () => v,
@@ -298,7 +298,6 @@ function S(e, n) {
 		} else r > 0 ? (c(r), s(r), i += `<li>${o}</li>\n`) : (c(r), i += `<p>${o}</p>\n`);
 	}), c(0), i += "  </body>\n</html>\n", i;
 }
-//#endregion
 export { b as getChunks, v as lightColorHash, s as manageParticipation, y as notepad, S as notepadToHTML, h as pad_exports, c as participationObject, l as recordParticipation, u as renderParticipants, x as xmlEncode };
 
 //# sourceMappingURL=pad.esm.js.map

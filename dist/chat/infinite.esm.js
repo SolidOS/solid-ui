@@ -8,7 +8,7 @@ import { ChatChannel as s, isDeleted as c } from "./chatLogic.esm.js";
 import { renderMessageEditor as l, renderMessageRow as u } from "./message.esm.js";
 import * as d from "rdflib";
 import { store as f } from "solid-logic";
-//#region src/chat/infinite.js
+// src/chat/infinite.js
 function p(e) {
 	"Notification" in window ? Notification.permission === "granted" ? new Notification(e) : Notification.permission !== "denied" && Notification.requestPermission().then(function(t) {
 		t === "granted" && new Notification(e);
@@ -47,7 +47,7 @@ async function h(n, u, h, g) {
 	async function y(e) {
 		let t = e ? P : F, n = t.messageTable.date;
 		if (e && P.limit && n <= P.limit) return M || await C(), !0;
-		if (n = await O.loadPrevious(n, e), !n && !e && !M && await C(), !n) return !0;
+		if (n = await O.loadPrevious(n, e), n || e || M || await C(), !n) return !0;
 		let r = !1;
 		if (!e) {
 			let e = O.leafDocumentFromDate(/* @__PURE__ */ new Date());
@@ -169,7 +169,6 @@ async function h(n, u, h, g) {
 	let I = !1;
 	return await T(), k;
 }
-//#endregion
 export { p as desktopNotification, h as infiniteMessageArea, m as insertMessageIntoTable };
 
 //# sourceMappingURL=infinite.esm.js.map

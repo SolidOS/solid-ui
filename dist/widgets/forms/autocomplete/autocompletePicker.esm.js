@@ -6,7 +6,7 @@ import { defaultPreferredLanguages as i, filterByLanguage as a, getPreferredLang
 import { bindingToTerm as s, queryPublicDataByName as c } from "./publicData.esm.js";
 import "../../index.esm.js";
 import { store as l } from "solid-logic";
-//#region src/widgets/forms/autocomplete/autocompletePicker.ts
+// src/widgets/forms/autocomplete/autocompletePicker.ts
 var u = 4, d = 20, f = 40;
 function p(e, t) {
 	e.style.display = t ? "" : "none";
@@ -77,7 +77,7 @@ async function m(m, h, g, _) {
 		let i = await o(), a = H.value.trim().toLowerCase();
 		if (a.length < u) w(), I = d;
 		else {
-			(!P || !F || !a.startsWith(F)) && (e(`   Querying database at "${a}" cf last "${F}".`), j = await E(a, i) || []);
+			P && F && a.startsWith(F) || (e(`   Querying database at "${a}" cf last "${F}".`), j = await E(a, i) || []);
 			let n = D(a, j);
 			M && n.length <= f && (I = n.length), P = M && n.length <= I, e(` Filter:"${a}" lastBindings: ${j.length}, slimmed to ${n.length}; rows: ${I}, Enough? ${M}, All displayed? ${P}`);
 			let o = n.slice(0, I);
@@ -106,7 +106,6 @@ async function m(m, h, g, _) {
 		e.keyCode === 13 && x(e);
 	}, !1), H.addEventListener("input", T), L;
 }
-//#endregion
 export { m as renderAutoComplete, p as setVisible };
 
 //# sourceMappingURL=autocompletePicker.esm.js.map

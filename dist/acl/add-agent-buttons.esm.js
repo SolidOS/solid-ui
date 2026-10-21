@@ -7,7 +7,7 @@ import { icons as i } from "../lib/iconBase.esm.js";
 import { askName as a, button as o, cancelButton as s, continueButton as c, iconForClass as l, personTR as u } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 import { ensureLoadedProfile as d } from "../login/login.esm.js";
-//#region src/acl/add-agent-buttons.ts
+// src/acl/add-agent-buttons.ts
 var f = class {
 	groupList;
 	rootElement;
@@ -123,7 +123,6 @@ var f = class {
 		this.isExpanded = !this.isExpanded;
 	}
 };
-//#endregion
 export { f as AddAgentButtons };
 
 //# sourceMappingURL=add-agent-buttons.esm.js.map

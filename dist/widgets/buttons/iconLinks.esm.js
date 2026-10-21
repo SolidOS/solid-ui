@@ -1,5 +1,5 @@
 import "../../_virtual/~icons/lucide/square-arrow-out-up-right.esm.js";
-//#region src/widgets/buttons/iconLinks.ts
+// src/widgets/buttons/iconLinks.ts
 function e(e, t, n) {
 	let r = e.createElement("a");
 	if (r.setAttribute("href", t.uri), t.uri.startsWith("http") && r.setAttribute("target", "_blank"), n) {
@@ -16,7 +16,6 @@ var t = (t, n, r) => {
 	let i = e(t, r);
 	n.appendChild(i).classList.add("HoverControlHide"), n.appendChild(t.createElement("br"));
 };
-//#endregion
 export { t as createLinkForURI, e as linkIcon };
 
 //# sourceMappingURL=iconLinks.esm.js.map

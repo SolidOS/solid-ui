@@ -4,7 +4,7 @@ import { showDialog as n } from "../dialogs/helpers.esm.js";
 import "../dialogs/index.esm.js";
 import r from "../../components/login-modal/index.esm.js";
 import { authSession as i, authn as a, reloadOnIdentityReplaced as o, solidLogicSingleton as s } from "solid-logic";
-//#region src/lib/auth/SolidAuth.ts
+// src/lib/auth/SolidAuth.ts
 var c = "https://solidproject.org/get_a_pod";
 function l(t) {
 	let n = s.store, r = n.sym(t), i = n.any(r, e.sioc("avatar")) || n.any(r, e.foaf("img")) || n.any(r, e.vcard("logo")) || n.any(r, e.vcard("hasPhoto")) || n.any(r, e.vcard("photo")) || n.any(r, e.foaf("depiction"));
@@ -63,7 +63,6 @@ var u = class {
 		};
 	}
 };
-//#endregion
 export { c as DEFAULT_SIGNUP_URL, u as default };
 
 //# sourceMappingURL=SolidAuth.esm.js.map

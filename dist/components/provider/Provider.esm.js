@@ -8,7 +8,7 @@ import "../dialogs-root/index.esm.js";
 import { provide as i } from "@lit/context";
 import { html as a } from "lit";
 import { property as o } from "lit/decorators.js";
-//#region src/components/provider/Provider.ts
+// src/components/provider/Provider.ts
 var s, c, l, u, d, f, p, m, h;
 function g(e, t, n) {
 	_(e, t), t.set(e, n);
@@ -212,7 +212,6 @@ h = (d = o({
 	1,
 	"auth"
 ]], u, 0, void 0, n), l();
-//#endregion
 export { E as default };
 
 //# sourceMappingURL=Provider.esm.js.map

@@ -1,5 +1,6 @@
 import { AccessControlSubjectKind, AccessMode, AccessRole, AccessSubject, Authorization } from 'solid-logic';
 export type AccessAuthorization = Omit<Pick<Authorization, 'agent' | 'agentGroup' | 'agentClass' | 'origin' | 'mode'>, 'mode'> & {
+    id?: string;
     mode: readonly AccessMode[];
 };
 export type TargetInputDetail = {
@@ -8,6 +9,7 @@ export type TargetInputDetail = {
 export type TargetSelectedDetail = {
     value: string;
     label: string;
+    targetKind?: 'origin' | 'trustedApp';
 };
 export type RoleChangedDetail = {
     role: AccessRole;
@@ -29,6 +31,7 @@ export type PendingAccessGrant = {
     subjectValue: string;
     role: AccessRole;
     label: string;
+    targetKind?: 'origin' | 'trustedApp';
 };
 export type AccessGrantEntry = {
     id: string;
@@ -55,6 +58,7 @@ export type AccessChange = {
     role: AccessRole;
     label: string;
 };
+export type AccessSaveScope = 'folder+contents' | 'container' | 'contents' | 'file';
 export type InputAccessControlError = {
     action: 'input';
     targetUri: string;
@@ -66,9 +70,10 @@ export type AccessSaveError = {
     targetUri: string;
     label: string;
     role: AccessRole;
+    scope: AccessSaveScope;
     message: string;
 } | {
-    action: 'save';
+    action: 'save' | 'reset';
     targetUri: string;
     label: string;
     message: string;

@@ -10,7 +10,7 @@ import a from "./Dialog.styles.esm.js";
 import { consume as o } from "@lit/context";
 import { html as s, nothing as c } from "lit";
 import { property as l, query as u } from "lit/decorators.js";
-//#region src/components/dialog/Dialog.ts
+// src/components/dialog/Dialog.ts
 var d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E;
 function D(e, t, n) {
 	O(e, t), t.set(e, n);
@@ -259,7 +259,6 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		super(z), M(this, "styles", a), _();
 	}
 }, M(d, T, void 0), d)();
-//#endregion
 export { z as default };
 
 //# sourceMappingURL=Dialog.esm.js.map

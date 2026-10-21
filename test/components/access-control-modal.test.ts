@@ -6,11 +6,17 @@ import type { AccessMode } from 'solid-logic'
 import { isAbsoluteHttpUri, isOriginUrl } from '../../src/components/access-control-modal/helpers'
 
 const planGrant = vi.fn()
+const planGrantContainer = vi.fn()
+const planGrantContainerContents = vi.fn()
+const planGrantContainerAndContents = vi.fn()
 const planRevoke = vi.fn()
 const planPublicRead = vi.fn()
 const applyPlan = vi.fn()
 const classifyAccessControlSubject = vi.fn()
 const findAccessGrants = vi.fn()
+const findEffectiveAcl = vi.fn()
+const resetToDefault = vi.fn()
+const isProtectedResource = vi.fn()
 const load = vi.fn()
 
 vi.mock('@/components/combobox', () => ({
@@ -30,10 +36,16 @@ vi.mock('solid-logic', async (importOriginal) => {
         ...actual.solidLogicSingleton.acl,
         classifyAccessControlSubject,
         planGrant,
+        planGrantContainer,
+        planGrantContainerContents,
+        planGrantContainerAndContents,
         planPublicRead,
         planRevoke,
         applyPlan,
-        findAccessGrants
+        findAccessGrants,
+        findEffectiveAcl,
+        resetToDefault,
+        isProtectedResource
       },
       store: {
         ...actual.solidLogicSingleton.store,
@@ -53,20 +65,32 @@ vi.mock('solid-logic', async (importOriginal) => {
 describe('AccessControlModal submit', () => {
   beforeEach(async () => {
     planGrant.mockReset()
+    planGrantContainer.mockReset()
+    planGrantContainerContents.mockReset()
+    planGrantContainerAndContents.mockReset()
     planRevoke.mockReset()
     planPublicRead.mockReset()
     applyPlan.mockReset()
     classifyAccessControlSubject.mockReset()
     findAccessGrants.mockReset()
+    findEffectiveAcl.mockReset()
+    resetToDefault.mockReset()
+    isProtectedResource.mockReset()
     load.mockReset()
     classifyAccessControlSubject.mockImplementation(async (principal: string) => ({
       kind: 'agent' as const,
       subjectValue: principal
     }))
     planGrant.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
+    planGrantContainer.mockResolvedValue({ target: 'https://example.com/container/.acl', deletes: [], inserts: [] })
+    planGrantContainerContents.mockResolvedValue({ target: 'https://example.com/container/.acl', deletes: [], inserts: [] })
+    planGrantContainerAndContents.mockResolvedValue({ target: 'https://example.com/container/.acl', deletes: [], inserts: [] })
     planPublicRead.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     applyPlan.mockResolvedValue(new Response('ok', { status: 200 }))
     findAccessGrants.mockResolvedValue([])
+    findEffectiveAcl.mockResolvedValue({ inherited: true, authorizations: [] })
+    resetToDefault.mockResolvedValue(new Response(null, { status: 204 }))
+    isProtectedResource.mockReturnValue(false)
     load.mockResolvedValue(undefined)
     await import('../../src/components/access-control-modal/AccessControlModal')
     await import('../../src/components/access-control-modal/AccessControlErrors')
@@ -309,6 +333,73 @@ describe('AccessControlModal submit', () => {
     expect(applyPlan).toHaveBeenCalledTimes(1)
     expect(element.submitting).toBe(false)
     expect(element.pendingAccessGrants).toEqual([])
+  })
+
+  it('does not apply changes while the effective ACL context is loading', async () => {
+    let resolveContext!: (context: { inherited: boolean, authorizations: [] }) => void
+    findEffectiveAcl.mockImplementationOnce(() => new Promise(resolve => {
+      resolveContext = resolve
+    }))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+      role: 'Editor',
+      label: 'Alice'
+    }]
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    const savePromise = element.onSaveClick()
+    await Promise.resolve()
+    expect(applyPlan).not.toHaveBeenCalled()
+
+    resolveContext({ inherited: true, authorizations: [] })
+    await savePromise
+
+    expect(applyPlan).toHaveBeenCalledTimes(1)
+    document.body.removeChild(element)
+  })
+
+  it('shows a retry action when the effective ACL context fails to load', async () => {
+    findEffectiveAcl.mockRejectedValueOnce(new Error('ACL service unavailable'))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+      role: 'Editor',
+      label: 'Alice'
+    }]
+    document.body.appendChild(element)
+    await element.updateComplete
+    await vi.waitFor(() => {
+      expect(element.accessContextError).toBe('ACL service unavailable')
+    })
+
+    const errorState = element.shadowRoot.querySelector('solid-ui-error-state') as any
+    expect(errorState.message).toBe('ACL service unavailable')
+    const retryButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Retry')) as HTMLElement
+    expect(retryButton).not.toBeUndefined()
+    expect(applyPlan).not.toHaveBeenCalled()
+
+    findEffectiveAcl.mockResolvedValueOnce({ inherited: true, authorizations: [] })
+    retryButton.click()
+    await vi.waitFor(() => {
+      expect(element.accessContext).toBeDefined()
+    })
+
+    expect(element.accessContextError).toBe('')
+    expect(element.accessContext).toBeDefined()
+    document.body.removeChild(element)
   })
 
   it('passes a queued origin grant to planGrant on save', async () => {
@@ -787,7 +878,7 @@ describe('AccessControlModal submit', () => {
   it('uses the default share title when no subject uri is present', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
 
-    expect(element.getDialogTitle()).toBe('Share this resource')
+    expect(element.getDialogTitle()).toBe('Manage Access of "this resource"')
   })
 
   it('hides no access in the add selector, keeps it in the authenticated selector, and exposes dokieli public roles', async () => {
@@ -969,6 +1060,78 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
+  it('refreshes labels for a filtered container grant', async () => {
+    const folder = 'https://example.com/folder/'
+    const authorization = {
+      id: `${folder}.acl#group`,
+      agent: [],
+      agentGroup: ['https://example.com/groups/team'],
+      agentClass: [],
+      origin: [],
+      mode: ['Read'],
+      accessTo: [folder],
+      default: [folder]
+    }
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = folder
+    element.accessContext = { resource: folder, inherited: false, authorizations: [authorization] }
+    element.accessGrants = [authorization]
+    document.body.appendChild(element)
+    await element.updateComplete
+    element.accessGrantDrafts = [{
+      id: authorization.id,
+      authorization,
+      role: 'Viewer',
+      initialRole: 'Viewer',
+      subjectLabel: 'stale label',
+      subjects: [{
+        type: 'agentGroup',
+        iri: authorization.agentGroup[0]
+      }]
+    }]
+
+    await element.refreshAccessGrantLabels()
+
+    expect(element.accessGrantDrafts[0].subjectLabel).not.toBe('stale label')
+    document.body.removeChild(element)
+  })
+
+  it('ignores an access context that resolves after the resource changes', async () => {
+    let resolveFirst!: (context: any) => void
+    let resolveSecond!: (context: any) => void
+    findEffectiveAcl
+      .mockImplementationOnce(() => new Promise(resolve => { resolveFirst = resolve }))
+      .mockImplementationOnce(() => new Promise(resolve => { resolveSecond = resolve }))
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/first.ttl'
+    const firstLoad = element.loadAccessContext()
+    element.subjectUri = 'https://example.com/second.ttl'
+    const secondLoad = element.loadAccessContext()
+
+    resolveSecond({ resource: 'https://example.com/second.ttl', inherited: true, authorizations: [] })
+    await secondLoad
+    resolveFirst({ resource: 'https://example.com/first.ttl', inherited: false, authorizations: [] })
+    await firstLoad
+
+    expect(element.accessContext.resource).toBe('https://example.com/second.ttl')
+  })
+
+  it('replaces a duplicate pending principal with its latest role', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/resource.ttl'
+
+    await element.queuePendingPrincipal('https://alice.example.com/profile/card.ttl#me', 'Viewer')
+    await element.queuePendingPrincipal('https://alice.example.com/profile/card.ttl#me', 'Editor')
+
+    expect(element.pendingAccessGrants).toEqual([
+      expect.objectContaining({
+        subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+        role: 'Editor'
+      })
+    ])
+  })
+
   it('persists a changed shared access grant on save', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
@@ -1064,6 +1227,544 @@ describe('AccessControlModal submit', () => {
     expect(planRevoke).not.toHaveBeenCalled()
     expect(applyPlan).toHaveBeenCalledTimes(2)
 
+    document.body.removeChild(element)
+  })
+
+  it('saves a file directly without an apply-to-contents prompt', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Viewer',
+      label: 'Alice'
+    }]
+
+    await element.onSaveClick()
+
+    expect(planGrant).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read']
+    )
+  })
+
+  it('uses the common container-and-contents scope by default', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Viewer',
+      label: 'Alice'
+    }]
+
+    await element.onSaveClick()
+
+    expect(planGrant).not.toHaveBeenCalled()
+    expect(planGrantContainer).not.toHaveBeenCalled()
+    expect(planGrantContainerContents).not.toHaveBeenCalled()
+    expect(planGrantContainerAndContents).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read']
+    )
+  })
+
+  it('uses the advanced folder-access scope when selected', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Viewer',
+      label: 'Alice'
+    }]
+
+    element.advancedSharingOpen = true
+    element.containerScope = 'folder'
+    await element.onSaveClick()
+
+    expect(planGrantContainer).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read']
+    )
+    expect(planGrantContainerContents).not.toHaveBeenCalled()
+  })
+
+  it('uses the advanced contents-defaults scope when selected', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Viewer',
+      label: 'Alice'
+    }]
+
+    element.advancedSharingOpen = true
+    element.containerScope = 'contents'
+    await element.onSaveClick()
+
+    expect(planGrantContainerContents).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read']
+    )
+    expect(planGrantContainer).not.toHaveBeenCalled()
+  })
+
+  it('offers advanced folder-versus-contents sharing for containers', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    element.accessContext = { inherited: true, effectiveContainer: 'https://example.com/' }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    element.advancedSharingOpen = true
+    await element.updateComplete
+    expect(element.shadowRoot.textContent).toContain('different access requirements')
+    expect(element.shadowRoot.textContent).toContain('Folder Only')
+    expect(element.shadowRoot.textContent).toContain('Contents Only')
+
+    document.body.removeChild(element)
+  })
+
+  it('defaults containers to folder-and-contents without a scope summary', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(element.containerScope).toBe('folder+contents')
+    expect(element.shadowRoot.querySelector('.access-control-scope-summary')).toBeNull()
+
+    document.body.removeChild(element)
+  })
+
+  it.each([
+    ['folder+contents', ['https://example.com/both#me']],
+    ['folder', ['https://example.com/folder#me']],
+    ['contents', ['https://example.com/contents#me']]
+  ] as const)('shows only %s authorizations in Shared with', async (scope, expectedSubjects) => {
+    const folder = 'https://example.com/folder/'
+    const grants = [
+      { agent: ['https://example.com/folder#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [folder], default: [] },
+      { agent: ['https://example.com/contents#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [], default: [folder] },
+      { agent: ['https://example.com/both#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [folder], default: [folder] }
+    ]
+    findEffectiveAcl.mockResolvedValue({
+      resource: folder,
+      inherited: false,
+      effectiveContainer: folder,
+      authorizations: grants
+    })
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = folder
+    element.accessGrants = grants
+    document.body.appendChild(element)
+    await element.updateComplete
+    await Promise.resolve()
+    await element.updateComplete
+    element.selectContainerScope(scope)
+    await element.updateComplete
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access') as any
+    await sharedAccess.updateComplete
+
+    expect(sharedAccess.accessGrantViewModels.map((entry: any) => entry.authorization.agent[0]))
+      .toEqual(expectedSubjects)
+
+    document.body.removeChild(element)
+  })
+
+  it('recomputes Shared with entries immediately when Advanced changes scope', async () => {
+    const folder = 'https://example.com/folder/'
+    const grants = [
+      { agent: ['https://example.com/folder#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [folder], default: [] },
+      { agent: ['https://example.com/contents#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [], default: [folder] },
+      { agent: ['https://example.com/both#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[], accessTo: [folder], default: [folder] }
+    ]
+    findEffectiveAcl.mockResolvedValue({ resource: folder, inherited: false, effectiveContainer: folder, authorizations: grants })
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = folder
+    element.accessGrants = grants
+    element.advancedSharingOpen = true
+    document.body.appendChild(element)
+    await element.updateComplete
+    const sharedAccess = () => element.shadowRoot.querySelector('solid-ui-access-control-shared-access') as any
+    await sharedAccess().updateComplete
+    expect(sharedAccess().accessGrantViewModels).toHaveLength(1)
+
+    const contentsOnly = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: HTMLElement) => button.textContent?.includes('Contents Only')) as HTMLElement
+    contentsOnly.click()
+    await element.updateComplete
+    await sharedAccess().updateComplete
+    expect(sharedAccess().accessGrantViewModels).toHaveLength(1)
+    expect(sharedAccess().accessGrantViewModels[0].authorization.agent).toEqual(['https://example.com/contents#me'])
+
+    document.body.removeChild(element)
+  })
+
+  it('updates the summary and save planner when a scope card is selected', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Viewer',
+      label: 'Alice'
+    }]
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    element.advancedSharingOpen = true
+    await element.updateComplete
+    const folderOnly = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: HTMLElement) => button.textContent?.includes('Folder Only')) as HTMLElement
+    folderOnly.click()
+    await element.updateComplete
+
+    await element.onSaveClick()
+    expect(planGrantContainer).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read']
+    )
+
+    document.body.removeChild(element)
+  })
+
+  it('supports the same-access toggle in advanced mode', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    element.advancedSharingOpen = true
+    await element.updateComplete
+    const toggle = element.shadowRoot.querySelector('.access-control-same-access-toggle') as HTMLButtonElement
+    expect(toggle.getAttribute('aria-checked')).toBe('true')
+    toggle.click()
+    await element.updateComplete
+
+    expect(element.containerScope).toBe('folder')
+    document.body.removeChild(element)
+  })
+
+  it('closes advanced sharing with an accessible ghost X button', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    element.advancedSharingOpen = true
+    await element.updateComplete
+    const closeButton = element.shadowRoot.querySelector('.access-control-advanced-sharing-actions solid-ui-button') as HTMLElement
+    expect(closeButton?.getAttribute('variant')).toBe('ghost')
+    expect(closeButton?.getAttribute('aria-label')).toBe('Close advanced sharing')
+    expect(closeButton?.getAttribute('title')).toBe('Close advanced sharing')
+    expect(closeButton?.querySelector('icon-lucide-x')).not.toBeNull()
+    expect(closeButton?.querySelector('.sr-only')?.textContent).toBe('Close')
+
+    closeButton.click()
+    await element.updateComplete
+    expect(element.shadowRoot.querySelector('.access-control-advanced-sharing')).toBeNull()
+
+    document.body.removeChild(element)
+  })
+
+  it('places sharing details inside Advanced', async () => {
+    const inherited = document.createElement('solid-ui-access-control-modal') as any
+    inherited.subjectUri = 'https://example.com/inherited-folder/'
+    inherited.accessContext = {
+      inherited: true,
+      effectiveContainer: 'https://example.com/'
+    }
+    document.body.appendChild(inherited)
+    await inherited.updateComplete
+
+    inherited.advancedSharingOpen = true
+    await inherited.updateComplete
+    expect(inherited.shadowRoot.querySelector('.access-control-advanced-sharing')).not.toBeNull()
+    document.body.removeChild(inherited)
+
+    const custom = document.createElement('solid-ui-access-control-modal') as any
+    custom.subjectUri = 'https://example.com/custom-folder/'
+    custom.accessContext = {
+      inherited: false,
+      effectiveContainer: 'https://example.com/',
+      authorizations: []
+    }
+    document.body.appendChild(custom)
+    await custom.updateComplete
+
+    custom.advancedSharingOpen = true
+    await custom.updateComplete
+    const advancedActions = custom.shadowRoot.querySelector('.access-control-advanced-sharing-actions')
+    expect(advancedActions).not.toBeNull()
+    document.body.removeChild(custom)
+  })
+
+  it.each([
+    { subjectUri: 'https://example.com/file.ttl', inherited: false, protectedTarget: false },
+    { subjectUri: 'https://example.com/file.ttl', inherited: true, protectedTarget: false },
+    { subjectUri: 'https://example.com/folder/', inherited: false, protectedTarget: false },
+    { subjectUri: 'https://example.com/folder/', inherited: true, protectedTarget: false },
+    { subjectUri: 'https://example.com/protected/', inherited: false, protectedTarget: true },
+    { subjectUri: 'https://example.com/protected/', inherited: true, protectedTarget: true }
+  ])('keeps Advanced and reset unreleased for $subjectUri (inherited: $inherited)', async ({
+    subjectUri, inherited, protectedTarget
+  }) => {
+    findEffectiveAcl.mockResolvedValueOnce({
+      resource: subjectUri,
+      inherited,
+      effectiveContainer: 'https://example.com/',
+      authorizations: []
+    })
+    isProtectedResource.mockReturnValue(protectedTarget)
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = subjectUri
+    document.body.appendChild(element)
+
+    try {
+      await vi.waitFor(() => {
+        expect(element.accessContext?.resource).toBe(subjectUri)
+        expect(element.accessContextLoading).toBe(false)
+      })
+      await element.updateComplete
+
+      expect(element.shadowRoot.querySelector('.access-control-sharing-state')).toBeNull()
+      expect(element.shadowRoot.querySelector('.access-control-advanced-sharing')).toBeNull()
+      expect(element.shadowRoot.querySelector('.access-control-same-access-toggle')).toBeNull()
+      expect(element.shadowRoot.querySelector('[aria-label="Reset custom sharing to default"]')).toBeNull()
+      expect(element.shadowRoot.textContent).not.toMatch(/Advanced sharing|Folder Only|Contents Only|Reset to default/)
+      expect(resetToDefault).not.toHaveBeenCalled()
+    } finally {
+      element.remove()
+    }
+  })
+
+  it('hides Advanced for files and protected containers without offering reset controls', async () => {
+    const file = document.createElement('solid-ui-access-control-modal') as any
+    file.subjectUri = 'https://example.com/file.ttl'
+    file.accessContext = { inherited: true, effectiveContainer: 'https://example.com/' }
+    document.body.appendChild(file)
+    await file.updateComplete
+    expect(file.shadowRoot.querySelector('.access-control-sharing-state')).toBeNull()
+    expect(file.shadowRoot.querySelector('solid-ui-button')?.textContent ?? '').not.toContain('Advanced')
+    document.body.removeChild(file)
+
+    const protectedContainer = document.createElement('solid-ui-access-control-modal') as any
+    protectedContainer.subjectUri = 'https://example.com/protected/'
+    protectedContainer.accessContext = { inherited: true, effectiveContainer: 'https://example.com/' }
+    document.body.appendChild(protectedContainer)
+    await protectedContainer.updateComplete
+    protectedContainer.protectedTarget = true
+    await protectedContainer.updateComplete
+    expect(protectedContainer.shadowRoot.querySelector('.access-control-sharing-state')).toBeNull()
+    expect(protectedContainer.shadowRoot.querySelector('solid-ui-button')?.textContent ?? '').not.toContain('Advanced')
+    expect(protectedContainer.shadowRoot.querySelector('[aria-label="Reset custom sharing to default"]')).toBeNull()
+    document.body.removeChild(protectedContainer)
+  })
+
+  it('keeps resource sharing details inside Advanced', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/file.ttl'
+    element.accessContext = {
+      inherited: false,
+      effectiveContainer: 'https://example.com/folder/',
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+    element.advancedSharingOpen = true
+    await element.updateComplete
+
+    const generalAccess = element.shadowRoot.querySelector('solid-ui-access-control-general-access')
+    const customSharing = element.shadowRoot.querySelector('.access-control-sharing-state')
+    expect(generalAccess).not.toBeNull()
+    expect(customSharing).not.toBeNull()
+    expect(generalAccess.compareDocumentPosition(customSharing) & Node.DOCUMENT_POSITION_FOLLOWING).toBeTruthy()
+    expect(element.shadowRoot.querySelector('.access-control-advanced-sharing')).not.toBeNull()
+    const panel = element.shadowRoot.querySelector('.access-control-sharing-state-panel')
+    expect(panel).not.toBeNull()
+    expect(panel?.querySelector('p')).not.toBeNull()
+    document.body.removeChild(element)
+  })
+
+  it('shows inherited sharing details inside Advanced', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = {
+      inherited: true,
+      effectiveContainer: 'https://example.com/folder/',
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+    element.advancedSharingOpen = true
+    await element.updateComplete
+
+    const sharingState = element.shadowRoot.querySelector('.access-control-sharing-state')
+    expect(sharingState).not.toBeNull()
+    expect(sharingState?.querySelector('.access-control-advanced-sharing')).not.toBeNull()
+    expect(sharingState?.textContent).not.toContain('Reset to default')
+    document.body.removeChild(element)
+  })
+
+  it('keeps the sharing state inside Advanced when no inherited container is known', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = {
+      inherited: false,
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+    element.advancedSharingOpen = true
+    await element.updateComplete
+
+    const sharingState = element.shadowRoot.querySelector('.access-control-sharing-state')
+    expect(sharingState?.querySelector('.access-control-advanced-sharing')).not.toBeNull()
+    document.body.removeChild(element)
+  })
+
+  it('explains when an inherited resource has no default container', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = {
+      inherited: true,
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+    element.advancedSharingOpen = true
+    await element.updateComplete
+
+    const sharingState = element.shadowRoot.querySelector('.access-control-sharing-state')
+    expect(sharingState?.textContent).toContain('no inherited default is available')
+    expect(sharingState?.textContent).not.toContain('sharing from')
+    expect(sharingState?.textContent).not.toContain('Reset to default')
+    document.body.removeChild(element)
+  })
+
+  it('blocks edits and explains mixed container policies until Advanced is released', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/'
+    findEffectiveAcl.mockResolvedValueOnce({
+      resource: element.subjectUri,
+      inherited: false,
+      authorizations: [
+        {
+          agent: ['https://example.com/folder-agent#me'],
+          agentGroup: [],
+          agentClass: [],
+          origin: [],
+          accessTo: [element.subjectUri],
+          default: [],
+          mode: ['Read']
+        },
+        {
+          agent: ['https://example.com/contents-agent#me'],
+          agentGroup: [],
+          agentClass: [],
+          origin: [],
+          accessTo: [],
+          default: [element.subjectUri],
+          mode: ['Read']
+        }
+      ]
+    })
+    document.body.appendChild(element)
+    await element.updateComplete
+    await Promise.resolve()
+    await element.updateComplete
+
+    const warning = element.shadowRoot.querySelector('.access-control-mixed-policy-warning')
+    expect(warning?.getAttribute('role')).toBe('alert')
+    expect(warning?.textContent).toContain('different access settings for the folder and its contents')
+    expect(warning?.textContent).toContain('available in the next release')
+    expect(element.shadowRoot.querySelector('solid-ui-access-control-add-access')?.disabled).toBe(true)
+    expect(element.shadowRoot.querySelector('solid-ui-access-control-shared-access')?.disabled).toBe(true)
+    expect(element.shadowRoot.querySelector('solid-ui-access-control-general-access')?.disabled).toBe(true)
+    const saveButton = [...element.shadowRoot.querySelectorAll('solid-ui-button')]
+      .find((button: Element) => button.textContent?.includes('Save Changes')) as HTMLElement
+    expect(saveButton.hasAttribute('disabled')).toBe(true)
+
+    await element.onSaveClick()
+    expect(planGrant).not.toHaveBeenCalled()
+    document.body.removeChild(element)
+  })
+
+  it('resets custom sharing and refreshes context and grants', async () => {
+    findEffectiveAcl
+      .mockResolvedValueOnce({ inherited: true, authorizations: [{ agent: ['https://example.com/owner#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] }] })
+    findAccessGrants.mockResolvedValueOnce([])
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = { inherited: false, effectiveContainer: 'https://example.com/folder/', authorizations: [] }
+
+    await element.onResetToDefault()
+
+    expect(resetToDefault).toHaveBeenCalledWith(element.subjectUri)
+    expect(findEffectiveAcl).toHaveBeenCalled()
+    expect(findAccessGrants).toHaveBeenCalledWith(element.subjectUri)
+    expect(element.accessContext.inherited).toBe(true)
+    expect(element.accessGrants[0].agent).toEqual(['https://example.com/owner#me'])
+  })
+
+  it('shows inherited effective authorizations when the resource has no direct ACL', async () => {
+    const inheritedAuthorization = {
+      agent: ['https://example.com/owner#me'],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read']
+    }
+    findEffectiveAcl.mockResolvedValueOnce({
+      inherited: true,
+      effectiveContainer: 'https://example.com/folder/',
+      authorizations: [inheritedAuthorization]
+    })
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    document.body.appendChild(element)
+    await element.updateComplete
+    await Promise.resolve()
+    await element.updateComplete
+
+    expect(element.accessGrants).toEqual([inheritedAuthorization])
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    expect(sharedAccess.shadowRoot.querySelectorAll('.access-grants-list h3')).toHaveLength(1)
+    document.body.removeChild(element)
+  })
+
+  it('reports reset errors without changing the custom state', async () => {
+    resetToDefault.mockRejectedValueOnce(new Error('reset failed'))
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = { inherited: false, authorizations: [] }
+
+    await element.onResetToDefault()
+
+    expect(element.accessContext.inherited).toBe(false)
+    expect(element.saveErrors[0]).toEqual(expect.objectContaining({ action: 'reset', message: 'reset failed' }))
+  })
+
+  it('does not offer reset for an inherited resource', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    element.accessContext = { inherited: true, effectiveContainer: 'https://example.com/folder/', authorizations: [] }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    expect(element.shadowRoot.textContent).not.toContain('Reset to default')
     document.body.removeChild(element)
   })
 })

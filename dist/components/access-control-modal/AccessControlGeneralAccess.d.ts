@@ -5,6 +5,7 @@ export default class AccessControlGeneralAccess extends WebComponent {
     accessor subjectUri: string | undefined;
     accessor authenticatedAccessRoleValue: AccessRole;
     accessor publicAccessRoleValue: AccessRole;
+    accessor disabled: boolean;
     private onAuthenticatedRoleChange;
     private onPublicRoleChange;
     private dispatchRoleChange;

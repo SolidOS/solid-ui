@@ -1,6 +1,6 @@
 import e from "../../lib/ns.esm.js";
 import { style as t } from "../../lib/style.esm.js";
-//#region src/widgets/forms/fieldParams.ts
+// src/widgets/forms/fieldParams.ts
 var n = {
 	[e.ui("ColorField").uri]: {
 		size: 9,
@@ -68,7 +68,6 @@ var n = {
 		style: t.formHeadingStyle
 	}
 };
-//#endregion
 export { n as fieldParams };
 
 //# sourceMappingURL=fieldParams.esm.js.map
