@@ -4,6 +4,7 @@ export type AccessAuthorization = Omit<
   Pick<Authorization, 'agent' | 'agentGroup' | 'agentClass' | 'origin' | 'mode'>,
   'mode'
 > & {
+  id?: string
   mode: readonly AccessMode[]
 }
 
@@ -14,6 +15,7 @@ export type TargetInputDetail = {
 export type TargetSelectedDetail = {
   value: string
   label: string
+  targetKind?: 'origin' | 'trustedApp'
 }
 
 export type RoleChangedDetail = {
@@ -41,6 +43,7 @@ export type PendingAccessGrant = {
   subjectValue: string
   role: AccessRole
   label: string
+  targetKind?: 'origin' | 'trustedApp'
 }
 
 export type AccessGrantEntry = {
@@ -74,6 +77,8 @@ export type AccessChange = {
   label: string
 }
 
+export type AccessSaveScope = 'folder+contents' | 'container' | 'contents' | 'file'
+
 export type InputAccessControlError = {
   action: 'input'
   targetUri: string
@@ -86,9 +91,10 @@ export type AccessSaveError = {
   targetUri: string
   label: string
   role: AccessRole
+  scope: AccessSaveScope
   message: string
 } | {
-  action: 'save'
+  action: 'save' | 'reset'
   targetUri: string
   label: string
   message: string
