@@ -13,4 +13,4 @@ export interface AuthContext {
 }
 
 export const DEFAULT_AUTH_CONTEXT = new NoopAuth()
-export const authContext = createContext<AuthContext>(Symbol('auth'))
+export const authContext = createContext<AuthContext>(Symbol.for('solid-ui.auth'))
