@@ -77,15 +77,7 @@ export default class ResourceActionsMenu extends WebComponent {
               </solid-ui-menu-item>
             `
           : nothing}
-        ${!isContainerResource && this.isMobile && canManageAccess
-          ? html`
-              <solid-ui-menu-item @solid-ui-select=${this.handleAccessClick}>
-                <icon-lucide-user-round-cog slot="left-icon"></icon-lucide-user-round-cog>
-                Manage Access
-              </solid-ui-menu-item>
-            `
-          : nothing}
-        ${isContainerResource && canManageAccess
+        ${canManageAccess
           ? html`
               <solid-ui-menu-item @solid-ui-select=${this.handleAccessClick}>
                 <icon-lucide-user-round-cog slot="left-icon"></icon-lucide-user-round-cog>

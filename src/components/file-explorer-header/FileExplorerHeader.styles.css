@@ -5,6 +5,7 @@
     align-items: center;
     gap: 6px;
     flex-wrap: nowrap;
+    box-sizing: border-box;
     width: 100%;
     text-align: right;
     padding: 10px;
