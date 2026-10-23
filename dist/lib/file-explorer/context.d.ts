@@ -1,22 +1,20 @@
-import { LiveStore, NamedNode } from 'rdflib';
+import { LiveStore } from 'rdflib';
 import { PaneDefinition } from 'pane-registry';
-export interface FileExplorerEdit {
-    onEdit?: () => void;
-    isDirty?: boolean;
-    updateDirtyState?: (dirty: boolean) => void;
+export interface FileExplorerEditor {
+    beginEditing(): void;
 }
 export interface FileExplorerContext {
-    store: LiveStore | undefined;
-    subjectUri: string | undefined;
-    pane?: PaneDefinition;
-    soloPane?: boolean;
-    onBack?: () => void;
-    openPane?: (subject: NamedNode, paneName: string) => void;
-    handleAccessClick?: () => void;
-    paneSupportsEditing?: boolean;
-    edit?: FileExplorerEdit;
+    readonly store: LiveStore | undefined;
+    readonly subjectUri: string | undefined;
+    readonly pane: PaneDefinition | undefined;
+    readonly isDirty: boolean;
+    readonly canEdit: boolean;
+    registerEditor(editor: FileExplorerEditor): () => void;
+    beginEditing(): void;
+    setDirty(dirty: boolean): void;
 }
 export declare const fileExplorerContext: {
     __context__: FileExplorerContext;
 };
+export declare const DEFAULT_FILE_EXPLORER_CONTEXT: FileExplorerContext;
 //# sourceMappingURL=context.d.ts.map

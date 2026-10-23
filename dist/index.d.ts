@@ -26,6 +26,6 @@ export type { CreateContext, NewAppInstanceOptions } from './create/types';
 export * from './lib/auth';
 export * from './lib/components';
 export * from './lib/dialogs';
-export * from './lib/file-explorer/context';
+export * from './lib/file-explorer';
 export * from './lib/code-editor';
 //# sourceMappingURL=index.d.ts.map

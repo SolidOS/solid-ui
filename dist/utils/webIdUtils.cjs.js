@@ -1,0 +1,1 @@
+require("../lib/ns.cjs.js"),require("rdflib"),require("solid-logic");

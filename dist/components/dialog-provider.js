@@ -1,4 +1,4 @@
-import { t as e } from "../chunks/DialogProvider-C89v7x0r.js";
+import { t as e } from "../chunks/DialogProvider-dagk2fHm.js";
 // src/components/dialog-provider/index.ts
 var t = e;
 export { e as DialogProvider, t as default };

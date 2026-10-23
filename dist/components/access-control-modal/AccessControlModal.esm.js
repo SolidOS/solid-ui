@@ -452,7 +452,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		return this.hasMixedContainerPolicy() ? C`
       <div class="access-control-mixed-policy-warning" role="alert">
         <strong>This container has different access settings for the folder and its contents.</strong>
-        <span>Changing this mixed policy is an advanced feature and will be available in the next release. Access changes are disabled for now.</span>
+        <span>Changing this mixed policy is an advanced feature. You can still change access for the folder or its contents separately below.</span>
       </div>
     ` : C``;
 	}

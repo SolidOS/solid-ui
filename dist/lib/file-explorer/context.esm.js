@@ -1,6 +1,7 @@
-import { createContext as e } from "@lit/context";
+import { noopContext as e } from "../context/noopContext.esm.js";
+import { createContext as t } from "@lit/context";
 // src/lib/file-explorer/context.ts
-var t = e(Symbol("file-explorer"));
-export { t as fileExplorerContext };
+var n = t(Symbol("file-explorer")), r = e("file-explorer");
+export { r as DEFAULT_FILE_EXPLORER_CONTEXT, n as fileExplorerContext };
 
 //# sourceMappingURL=context.esm.js.map

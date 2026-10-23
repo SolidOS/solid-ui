@@ -1,1 +1,1 @@
-require("./provider/index.cjs.js"),require("./all.cjs.js");
+require("./provider/index.cjs.js"),require("./file-explorer-provider/index.cjs.js"),require("./all.cjs.js");

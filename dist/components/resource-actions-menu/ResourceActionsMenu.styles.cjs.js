@@ -1,0 +1,2 @@
+var e=require("lit").css`:host .file-explorer-header-more-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}:host .ellipsisIcon{width:16px;height:16px}`;exports.default=e;
+//# sourceMappingURL=ResourceActionsMenu.styles.cjs.js.map

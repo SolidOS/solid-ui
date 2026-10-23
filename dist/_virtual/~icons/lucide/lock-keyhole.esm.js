@@ -1,0 +1,10 @@
+// ~icons/lucide/lock-keyhole
+var e = class extends HTMLElement {
+	constructor() {
+		super(), this.attachShadow({ mode: "open" }).innerHTML = "<style>:host { display: inline-flex; }</style><svg viewBox=\"0 0 24 24\" width=\"100%\" height=\"100%\" ><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\"><circle cx=\"12\" cy=\"16\" r=\"1\"/><rect width=\"18\" height=\"12\" x=\"3\" y=\"10\" rx=\"2\"/><path d=\"M7 10V7a5 5 0 0 1 10 0v3\"/></g></svg>";
+	}
+};
+customElements.get("icon-lucide-lock-keyhole") || customElements.define("icon-lucide-lock-keyhole", e);
+export { e as default };
+
+//# sourceMappingURL=lock-keyhole.esm.js.map

@@ -1,0 +1,1 @@
+const e=require("./ResourceActionsMenu.cjs.js");module.exports=e.default;

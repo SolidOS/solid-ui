@@ -1,2 +1,2 @@
-var e=(0,require("@lit/context").createContext)(Symbol(`file-explorer`));exports.fileExplorerContext=e;
+const e=require("../context/noopContext.cjs.js");var t=(0,require("@lit/context").createContext)(Symbol(`file-explorer`)),n=e.noopContext(`file-explorer`);exports.DEFAULT_FILE_EXPLORER_CONTEXT=n,exports.fileExplorerContext=t;
 //# sourceMappingURL=context.cjs.js.map

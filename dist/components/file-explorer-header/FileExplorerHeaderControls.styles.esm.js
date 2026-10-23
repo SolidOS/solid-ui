@@ -1,0 +1,6 @@
+import { css as e } from "lit";
+// src/components/file-explorer-header/FileExplorerHeaderControls.styles.css
+var t = e`:host{flex:0 auto;min-width:0}:host div{text-align:right;flex:none;justify-content:flex-end;align-items:center;gap:6px;display:flex}:host div>*{flex:0 auto}:host .file-explorer-header-action-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}:host .dirtyIndicator{color:#92400e;white-space:nowrap;background:#fffbeb;border:1px solid #f59e0b;border-radius:999px;align-items:center;padding:4px 8px;font-size:.72rem;font-weight:600;line-height:1;display:inline-flex}:host icon-lucide-user-round-cog,:host icon-lucide-pencil{width:16px;height:16px}@media (width<=900px){:host div{padding-right:3px}}@media (width<=600px){:host div{justify-content:flex-start;gap:5px}:host .file-explorer-header-action-button{display:none}:host icon-lucide-ellipsis-vertical{aspect-ratio:1;flex-shrink:0;width:15.36px;height:15.36px}}`;
+export { t as default };
+
+//# sourceMappingURL=FileExplorerHeaderControls.styles.esm.js.map

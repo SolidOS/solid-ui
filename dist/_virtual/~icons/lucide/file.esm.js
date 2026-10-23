@@ -1,0 +1,10 @@
+// ~icons/lucide/file
+var e = class extends HTMLElement {
+	constructor() {
+		super(), this.attachShadow({ mode: "open" }).innerHTML = "<style>:host { display: inline-flex; }</style><svg viewBox=\"0 0 24 24\" width=\"100%\" height=\"100%\" ><g fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\"><path d=\"M6 22a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h8a2.4 2.4 0 0 1 1.704.706l3.588 3.588A2.4 2.4 0 0 1 20 8v12a2 2 0 0 1-2 2z\"/><path d=\"M14 2v5a1 1 0 0 0 1 1h5\"/></g></svg>";
+	}
+};
+customElements.get("icon-lucide-file") || customElements.define("icon-lucide-file", e);
+export { e as default };
+
+//# sourceMappingURL=file.esm.js.map

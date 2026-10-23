@@ -1687,7 +1687,7 @@ describe('AccessControlModal submit', () => {
     const warning = element.shadowRoot.querySelector('.access-control-mixed-policy-warning')
     expect(warning?.getAttribute('role')).toBe('alert')
     expect(warning?.textContent).toContain('different access settings for the folder and its contents')
-    expect(warning?.textContent).toContain('available in the next release')
+    expect(warning?.textContent).toContain('You can still change access for the folder or its contents separately below.')
     expect(element.shadowRoot.querySelector('solid-ui-access-control-add-access')?.disabled).toBe(true)
     expect(element.shadowRoot.querySelector('solid-ui-access-control-shared-access')?.disabled).toBe(true)
     expect(element.shadowRoot.querySelector('solid-ui-access-control-general-access')?.disabled).toBe(true)

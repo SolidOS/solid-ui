@@ -37,7 +37,7 @@ const e=require("../../utils/label.cjs.js"),t=require("../../lib/debug.cjs.js"),
       `:this.accessContext?d.html``:d.html`<p role="status">Access settings are not ready yet.</p>`}renderMixedContainerWarning(){return this.hasMixedContainerPolicy()?d.html`
       <div class="access-control-mixed-policy-warning" role="alert">
         <strong>This container has different access settings for the folder and its contents.</strong>
-        <span>Changing this mixed policy is an advanced feature and will be available in the next release. Access changes are disabled for now.</span>
+        <span>Changing this mixed policy is an advanced feature. You can still change access for the folder or its contents separately below.</span>
       </div>
     `:d.html``}getScopedAccessGrants(e=this.getSelectedContainerScope()){let t=this.accessGrants??[];return!this.isContainer()||!this.subjectUri||this.protectedTarget?t:(0,u.filterAuthorizationsByContainerScope)(this.subjectUri,t,e,this.accessContext?.inherited??!1)}refreshScopedAccessGrantDrafts(){let e=this.getScopedAccessGrants();this.accessGrantDrafts=a.createAccessGrantDrafts(e),this.authenticatedAccessRoleValue=a.getAuthenticatedAccessRole(e),this.publicAccessRoleValue=a.getPublicAccessRole(e)}selectContainerScope(e){this.containerScope=e,this.refreshScopedAccessGrantDrafts()}renderAdvancedSharing(){return this.advancedSharingOpen?d.html`
       <section
