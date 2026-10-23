@@ -1,7 +1,8 @@
 import { ShowDialogEvent } from './events/show-dialog'
 import Dialog, { DialogConfig } from './Dialog'
 import type WebComponent from '@/lib/components/web-component/WebComponent'
-import { getCustomElementTagName, type GetWebComponentMetadata, type WebComponentConstructor } from '@/lib/components/web-component/WebComponent'
+import { getCustomElementTagName } from '@/lib/components/decorators'
+import type { GetWebComponentMetadata, WebComponentConstructor } from '@/lib/components/web-component/WebComponent'
 
 export type GetDialogResult<T, TFallback = unknown> = GetWebComponentMetadata<T> extends { dialogResult: infer TResult } ? TResult : TFallback
 

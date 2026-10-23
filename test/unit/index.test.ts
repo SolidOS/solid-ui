@@ -37,6 +37,7 @@ describe('Index', () => {
       'dom',
       'fileExplorerContext',
       'generateId',
+      'getCustomElementTagName',
       'getRelevantPanes',
       'icons',
       'infiniteMessageArea',
