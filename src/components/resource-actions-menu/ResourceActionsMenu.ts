@@ -45,7 +45,13 @@ export default class ResourceActionsMenu extends WebComponent {
   accessor canEdit = false
 
   @property({ type: Boolean })
+  accessor canManageAccess = false
+
+  @property({ type: Boolean })
   accessor isMobile = false
+
+  @property({ type: Boolean, attribute: 'show-access-in-menu' })
+  accessor showAccessInMenu = false
 
   @property({ attribute: false })
   accessor menuItems: ResourceActionMenuItem[] = []
@@ -53,7 +59,8 @@ export default class ResourceActionsMenu extends WebComponent {
   render () {
     const isContainerResource = isContainerSubject(this.store, this.subjectUri)
     const canEdit = !isContainerResource && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick
-    const canManageAccess = !!this.handleAccessClick
+    const canManageAccess = this.canManageAccess && !!this.handleAccessClick &&
+      (this.showAccessInMenu || this.isMobile)
     const actionableMenuItems = this.menuItems.filter((item): item is ActionableResourceActionMenuItem => typeof item.action === 'function')
     return html`
       <solid-ui-menu>

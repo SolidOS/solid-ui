@@ -32,10 +32,11 @@ export default class FileExplorerHeader extends WebComponent {
   accessor paneIcon: PaneIcon = undefined as unknown as PaneIcon
 
   @state()
-  accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> = {
+  accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'canManageAccess' | 'aclUri'> = {
     modified: undefined,
     isPublic: false,
     canEdit: false,
+    canManageAccess: false,
     aclUri: undefined
   }
 
@@ -49,11 +50,12 @@ export default class FileExplorerHeader extends WebComponent {
     }))
   }
 
-  private getDefaultResponseMetadata (): Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'aclUri'> {
+  private getDefaultResponseMetadata (): Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'canManageAccess' | 'aclUri'> {
     return {
       modified: undefined,
       isPublic: false,
       canEdit: false,
+      canManageAccess: false,
       aclUri: undefined
     }
   }
@@ -76,6 +78,7 @@ export default class FileExplorerHeader extends WebComponent {
           modified: metadata.modified,
           isPublic: metadata.access.isPublic,
           canEdit: metadata.access.canEdit,
+          canManageAccess: metadata.access.canManageAccess,
           aclUri: metadata.aclUri
         }
       }
@@ -98,6 +101,7 @@ export default class FileExplorerHeader extends WebComponent {
         <solid-ui-file-explorer-header-controls
           .menuItems=${this.menuItems}
           .canEdit=${this.responseMetadata.canEdit}
+          .canManageAccess=${this.responseMetadata.canManageAccess}
         ></solid-ui-file-explorer-header-controls>
       </header>
     `

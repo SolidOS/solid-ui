@@ -30,6 +30,9 @@ export default class FileExplorerHeaderControls extends WebComponent {
   @property({ type: Boolean })
   accessor canEdit: boolean = false
 
+  @property({ type: Boolean })
+  accessor canManageAccess = false
+
   @state()
   accessor isMobile = typeof window !== 'undefined' && typeof window.matchMedia === 'function'
     ? window.matchMedia('(max-width: 600px)').matches
@@ -92,7 +95,7 @@ export default class FileExplorerHeaderControls extends WebComponent {
     return html`
       <div>
         ${this.renderDirtyIndicator()}
-        ${!isContainerResource && !this.isMobile
+        ${!isContainerResource && !this.isMobile && this.canManageAccess
           ? html`
               <solid-ui-button class="file-explorer-header-action-button" variant="ghost" title="Manage Access" @click=${this.handleManageAccess}>
                 <icon-lucide-user-round-cog slot="icon"></icon-lucide-user-round-cog>
@@ -120,6 +123,7 @@ export default class FileExplorerHeaderControls extends WebComponent {
           .handleEditingClick=${this.fileExplorerContext.beginEditing}
           .paneSupportsEditing=${this.fileExplorerContext.canEdit}
           .canEdit=${this.canEdit}
+          .canManageAccess=${this.canManageAccess}
           .subjectUri=${this.fileExplorerContext.subjectUri}
           .menuItems=${this.menuItems}
           .isMobile=${this.isMobile}
