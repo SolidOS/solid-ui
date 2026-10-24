@@ -1,5 +1,5 @@
-import { WebComponent } from '@/lib/components'
-import { customElement, property } from 'lit/decorators.js'
+import { customElement, WebComponent } from '@/lib/components'
+import { property } from 'lit/decorators.js'
 import { html, nothing } from 'lit'
 import '@/components/button'
 import '@/components/menu'
