@@ -1,8 +1,8 @@
 import { html } from 'lit-html'
 import { provide } from '@lit/context'
-import { customElement, property, state } from 'lit/decorators.js'
+import { customElement, WebComponent } from '@/lib/components'
+import { property, state } from 'lit/decorators.js'
 import { DataBrowserContext, PaneDefinition } from 'pane-registry'
-import { WebComponent } from '@/lib/components'
 import { FileExplorerContext, FileExplorerEditor, fileExplorerContext } from '@/lib/file-explorer/context'
 
 @customElement('solid-ui-file-explorer-provider')
