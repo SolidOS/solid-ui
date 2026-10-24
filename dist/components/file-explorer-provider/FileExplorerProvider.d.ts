@@ -1,5 +1,5 @@
-import { DataBrowserContext, PaneDefinition } from 'pane-registry';
 import { WebComponent } from '../../lib/components';
+import { DataBrowserContext, PaneDefinition } from 'pane-registry';
 import { FileExplorerContext } from '../../lib/file-explorer/context';
 export default class FileExplorerProvider extends WebComponent {
     accessor context: DataBrowserContext | undefined;

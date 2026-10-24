@@ -1,16 +1,17 @@
-import e from "../../lib/components/web-component/WebComponent.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import "../button/index.esm.js";
 import "../menu-item/index.esm.js";
 import "../menu/index.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
 import "../../_virtual/~icons/lucide/ellipsis-vertical.esm.js";
-import { isContainerSubject as t } from "../../utils/podUtils.esm.js";
+import { isContainerSubject as n } from "../../utils/podUtils.esm.js";
 import "../../_virtual/~icons/lucide/user-round-cog.esm.js";
 import "../../_virtual/~icons/lucide/file.esm.js";
-import n from "./ResourceActionsMenu.styles.esm.js";
-import { html as r, nothing as i } from "lit";
-import { customElement as a, property as o } from "lit/decorators.js";
+import r from "./ResourceActionsMenu.styles.esm.js";
+import { html as i, nothing as a } from "lit";
+import { property as o } from "lit/decorators.js";
 // src/components/resource-actions-menu/ResourceActionsMenu.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I, L, R, z, B, V, H, U;
 function W(e, t, n) {
@@ -184,12 +185,12 @@ function te(e) {
 function ne(e) {
 	return e;
 }
-x = [a("solid-ui-resource-actions-menu")];
+x = [e("solid-ui-resource-actions-menu")];
 var $;
 new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), U = (S = o({ attribute: !1 }), w = o({ type: String }), E = o({ attribute: !1 }), O = o({ attribute: !1 }), A = o({ type: Boolean }), M = o({ type: Boolean }), P = o({ type: Boolean }), I = o({ type: Boolean }), R = o({
 	type: Boolean,
 	attribute: "show-access-in-menu"
-}), B = o({ attribute: !1 }), "store"), c = class extends e {
+}), B = o({ attribute: !1 }), "store"), c = class extends t {
 	constructor(...e) {
 		super(...e), W(this, l, (y(this), C(this))), W(this, u, T(this)), W(this, d, D(this, void 0)), W(this, f, k(this, void 0)), W(this, p, j(this, !1)), W(this, m, N(this, !1)), W(this, h, F(this, !1)), W(this, g, L(this, !1)), W(this, _, z(this, !1)), W(this, v, V(this, []));
 	}
@@ -254,31 +255,31 @@ new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		K(v, this, e);
 	}
 	render() {
-		let e = !t(this.store, this.subjectUri) && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick, n = this.canManageAccess && !!this.handleAccessClick && (this.showAccessInMenu || this.isMobile), a = this.menuItems.filter((e) => typeof e.action == "function");
-		return r`
+		let e = !n(this.store, this.subjectUri) && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick, t = this.canManageAccess && !!this.handleAccessClick && (this.showAccessInMenu || this.isMobile), r = this.menuItems.filter((e) => typeof e.action == "function");
+		return i`
       <solid-ui-menu>
         <solid-ui-button slot="trigger" class="file-explorer-header-more-button" variant="ghost" title="More options">
           <icon-lucide-ellipsis-vertical slot="icon" class="ellipsisIcon"></icon-lucide-ellipsis-vertical>
           <span class="sr-only">More options</span>
         </solid-ui-button>
-        ${a.map((e) => r`
+        ${r.map((e) => i`
           <solid-ui-menu-item @solid-ui-select=${(t) => e.action(t)}>
-            ${typeof e.icon == "string" ? r`<img slot="left-icon" src=${e.icon} alt="">` : e.icon ?? r`<icon-lucide-file slot="left-icon" aria-hidden="true"></icon-lucide-file>`}
+            ${typeof e.icon == "string" ? i`<img slot="left-icon" src=${e.icon} alt="">` : e.icon ?? i`<icon-lucide-file slot="left-icon" aria-hidden="true"></icon-lucide-file>`}
             ${e.label}
           </solid-ui-menu-item>
         `)}
-        ${e ? r`
+        ${e ? i`
               <solid-ui-menu-item @solid-ui-select=${this.handleEditingClick}>
                 <icon-lucide-pencil slot="left-icon"></icon-lucide-pencil>
                 Edit
               </solid-ui-menu-item>
-            ` : i}
-        ${n ? r`
+            ` : a}
+        ${t ? i`
               <solid-ui-menu-item @solid-ui-select=${this.handleAccessClick}>
                 <icon-lucide-user-round-cog slot="left-icon"></icon-lucide-user-round-cog>
                 Manage Access
               </solid-ui-menu-item>
-            ` : i}
+            ` : a}
       </solid-ui-menu>
     `;
 	}
@@ -333,9 +334,9 @@ new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		1,
 		"menuItems"
 	]
-], x, 0, void 0, e), c), s = class extends ne {
+], x, 0, void 0, t), c), s = class extends ne {
 	constructor() {
-		super($), Y(this, "styles", n), b();
+		super($), Y(this, "styles", r), b();
 	}
 }, Y(s, H, void 0), s)();
 export { $ as default };

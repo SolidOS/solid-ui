@@ -1,8 +1,9 @@
-import e from "../../lib/components/web-component/WebComponent.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import { fileExplorerContext as t } from "../../lib/file-explorer/context.esm.js";
-import { provide as n } from "@lit/context";
-import { customElement as r, property as i, state as a } from "lit/decorators.js";
+import { fileExplorerContext as n } from "../../lib/file-explorer/context.esm.js";
+import { provide as r } from "@lit/context";
+import { property as i, state as a } from "lit/decorators.js";
 import { html as o } from "lit-html";
 // src/components/file-explorer-provider/FileExplorerProvider.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D;
@@ -174,9 +175,9 @@ function R(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-u = [r("solid-ui-file-explorer-provider")];
+u = [e("solid-ui-file-explorer-provider")];
 var z, B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap();
-D = (d = i({ attribute: !1 }), p = i({ attribute: !1 }), h = i({ attribute: !1 }), _ = i({ attribute: !1 }), y = i({ attribute: !1 }), x = a(), C = a(), T = n({ context: t }), "context"), s = class extends e {
+D = (d = i({ attribute: !1 }), p = i({ attribute: !1 }), h = i({ attribute: !1 }), _ = i({ attribute: !1 }), y = i({ attribute: !1 }), x = a(), C = a(), T = r({ context: n }), "context"), s = class extends t {
 	constructor(...e) {
 		super(...e), k(this, B, (c(this), f(this))), k(this, V, m(this)), k(this, H, g(this)), k(this, U, v(this, [])), k(this, W, b(this)), k(this, G, S(this)), k(this, K, w(this, !1)), k(this, q, E(this)), O(this, "registerEditor", (e) => (this.editor = e, () => {
 			this.editor === e && (this.editor = void 0);
@@ -290,7 +291,7 @@ D = (d = i({ attribute: !1 }), p = i({ attribute: !1 }), h = i({ attribute: !1 }
 		1,
 		"value"
 	]
-], u, 0, void 0, e), l();
+], u, 0, void 0, t), l();
 export { z as default };
 
 //# sourceMappingURL=FileExplorerProvider.esm.js.map

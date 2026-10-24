@@ -1,16 +1,17 @@
-import e from "../../lib/components/web-component/WebComponent.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import "../button/index.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as t, fileExplorerContext as n } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_MANAGE_ACCESS_EVENT as r } from "../../lib/file-explorer/events.esm.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as n, fileExplorerContext as r } from "../../lib/file-explorer/context.esm.js";
+import { FILE_EXPLORER_MANAGE_ACCESS_EVENT as i } from "../../lib/file-explorer/events.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
-import { isContainerSubject as i } from "../../utils/podUtils.esm.js";
+import { isContainerSubject as a } from "../../utils/podUtils.esm.js";
 import "../../_virtual/~icons/lucide/user-round-cog.esm.js";
-import a from "./FileExplorerHeaderControls.styles.esm.js";
+import o from "./FileExplorerHeaderControls.styles.esm.js";
 import "../resource-actions-menu/ResourceActionsMenu.esm.js";
-import { consume as o } from "@lit/context";
-import { html as s, nothing as c } from "lit";
-import { customElement as l, property as u, state as d } from "lit/decorators.js";
+import { consume as s } from "@lit/context";
+import { html as c, nothing as l } from "lit";
+import { property as u, state as d } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeaderControls.ts
 var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N;
 function P(e, t, n) {
@@ -184,18 +185,18 @@ function W(e) {
 function G(e) {
 	return e;
 }
-x = [l("solid-ui-file-explorer-header-controls")];
+x = [e("solid-ui-file-explorer-header-controls")];
 var K;
-new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = o({
-	context: n,
+new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = s({
+	context: r,
 	subscribe: !0
-}), w = u({ attribute: !1 }), E = u({ type: Boolean }), O = u({ type: Boolean }), A = d(), "mobileMediaQuery"), p = class extends e {
+}), w = u({ attribute: !1 }), E = u({ type: Boolean }), O = u({ type: Boolean }), A = d(), "mobileMediaQuery"), p = class extends t {
 	constructor(...e) {
 		super(...e), z(this, N, void y(this)), z(this, "mobileQuery", "(max-width: 600px)"), z(this, "handleMobileMediaChange", (e) => {
 			this.isMobile = e.matches;
-		}), P(this, m, C(this, t)), P(this, h, T(this, [])), P(this, g, D(this, !1)), P(this, _, k(this, !1)), P(this, v, j(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), z(this, "handleManageAccess", () => {
+		}), P(this, m, C(this, n)), P(this, h, T(this, [])), P(this, g, D(this, !1)), P(this, _, k(this, !1)), P(this, v, j(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), z(this, "handleManageAccess", () => {
 			let e = this.fileExplorerContext.subjectUri;
-			e && this.dispatchEvent(new CustomEvent(r, {
+			e && this.dispatchEvent(new CustomEvent(i, {
 				bubbles: !0,
 				composed: !0,
 				detail: { subjectUri: e }
@@ -242,19 +243,19 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		return this.canEdit ? "Edit" : "No Access";
 	}
 	renderDirtyIndicator() {
-		return this.fileExplorerContext.isDirty ? s`<span class="dirtyIndicator" title="This file has unsaved changes">Unsaved</span>` : c;
+		return this.fileExplorerContext.isDirty ? c`<span class="dirtyIndicator" title="This file has unsaved changes">Unsaved</span>` : l;
 	}
 	render() {
-		let e = i(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
-		return s`
+		let e = a(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
+		return c`
       <div>
         ${this.renderDirtyIndicator()}
-        ${!e && !this.isMobile && this.canManageAccess ? s`
+        ${!e && !this.isMobile && this.canManageAccess ? c`
               <solid-ui-button class="file-explorer-header-action-button" variant="ghost" title="Manage Access" @click=${this.handleManageAccess}>
                 <icon-lucide-user-round-cog slot="icon"></icon-lucide-user-round-cog>
                 <span class="sr-only">Manage access</span>
               </solid-ui-button>
-              ${t ? s`
+              ${t ? c`
                     <solid-ui-button
                       class="file-explorer-header-action-button"
                       variant="ghost"
@@ -265,8 +266,8 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
                       <icon-lucide-pencil slot="icon"></icon-lucide-pencil>
                       <span class="sr-only">Edit</span>
                     </solid-ui-button>
-                  ` : c}
-            ` : c}
+                  ` : l}
+            ` : l}
         <solid-ui-resource-actions-menu
           .store=${this.fileExplorerContext.store}
           .handleAccessClick=${this.handleManageAccess}
@@ -307,9 +308,9 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		1,
 		"isMobile"
 	]
-], x, 0, void 0, e), p), f = class extends G {
+], x, 0, void 0, t), p), f = class extends G {
 	constructor() {
-		super(K), z(this, "styles", a), b();
+		super(K), z(this, "styles", o), b();
 	}
 }, z(f, M, void 0), f)();
 export { K as default };

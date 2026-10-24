@@ -1,18 +1,19 @@
-import e from "../../lib/components/web-component/WebComponent.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as t, fileExplorerContext as n } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_BACK_EVENT as r } from "../../lib/file-explorer/events.esm.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as n, fileExplorerContext as r } from "../../lib/file-explorer/context.esm.js";
+import { FILE_EXPLORER_BACK_EVENT as i } from "../../lib/file-explorer/events.esm.js";
 import "../../_virtual/~icons/lucide/share-2.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
 import "../../_virtual/~icons/lucide/ellipsis-vertical.esm.js";
-import i from "./FileExplorerHeader.styles.esm.js";
+import a from "./FileExplorerHeader.styles.esm.js";
 import "./FileExplorerHeaderSummary.esm.js";
 import "./FileExplorerHeaderControls.esm.js";
-import { sym as a } from "rdflib";
-import { solidLogicSingleton as o } from "solid-logic";
-import { consume as s } from "@lit/context";
-import { html as c } from "lit";
-import { customElement as l, property as u, state as d } from "lit/decorators.js";
+import { sym as o } from "rdflib";
+import { solidLogicSingleton as s } from "solid-logic";
+import { consume as c } from "@lit/context";
+import { html as l } from "lit";
+import { property as u, state as d } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeader.ts
 var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A;
 function j(e, t, n) {
@@ -186,21 +187,21 @@ function V(e) {
 function H(e) {
 	return e;
 }
-b = [l("solid-ui-file-explorer-header")];
+b = [e("solid-ui-file-explorer-header")];
 var U;
-new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), A = (x = s({
-	context: n,
+new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), A = (x = c({
+	context: r,
 	subscribe: !0
-}), C = u({ attribute: !1 }), T = u({ attribute: !1 }), D = d(), "_loadedMetadataForUri"), p = class extends e {
+}), C = u({ attribute: !1 }), T = u({ attribute: !1 }), D = d(), "_loadedMetadataForUri"), p = class extends t {
 	constructor(...e) {
-		super(...e), I(this, A, void v(this)), I(this, "_metadataGeneration", 0), j(this, m, S(this, t)), j(this, h, w(this, [])), j(this, g, E(this, void 0)), j(this, _, O(this, {
+		super(...e), I(this, A, void v(this)), I(this, "_metadataGeneration", 0), j(this, m, S(this, n)), j(this, h, w(this, [])), j(this, g, E(this, void 0)), j(this, _, O(this, {
 			modified: void 0,
 			isPublic: !1,
 			canEdit: !1,
 			canManageAccess: !1,
 			aclUri: void 0
 		})), I(this, "handleBack", () => {
-			this.dispatchEvent(new CustomEvent(r, {
+			this.dispatchEvent(new CustomEvent(i, {
 				bubbles: !0,
 				composed: !0,
 				detail: { subjectUri: this.fileExplorerContext.subjectUri }
@@ -250,7 +251,7 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 	}
 	async loadResponseMetadata(e, t) {
 		try {
-			let n = await o.resource.fetchMetadata(a(e));
+			let n = await s.resource.fetchMetadata(o(e));
 			t === this._metadataGeneration && this.fileExplorerContext.subjectUri === e && (this.responseMetadata = {
 				modified: n.modified,
 				isPublic: n.access.isPublic,
@@ -263,7 +264,7 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		}
 	}
 	render() {
-		return c`
+		return l`
       <header>
         <solid-ui-file-explorer-header-summary
           .paneIcon=${this.paneIcon}
@@ -299,9 +300,9 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		1,
 		"responseMetadata"
 	]
-], b, 0, void 0, e), p), f = class extends H {
+], b, 0, void 0, t), p), f = class extends H {
 	constructor() {
-		super(U), I(this, "styles", i), y();
+		super(U), I(this, "styles", a), y();
 	}
 }, I(f, k, void 0), f)();
 export { U as default };
