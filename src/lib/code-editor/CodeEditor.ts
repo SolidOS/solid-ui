@@ -2,7 +2,7 @@ import type { ThemeMode } from 'pane-registry'
 import { Compartment, EditorState } from '@codemirror/state'
 import { EditorView, drawSelection, keymap, lineNumbers } from '@codemirror/view'
 import { defaultHighlightStyle, syntaxHighlighting, StreamLanguage } from '@codemirror/language'
-import { defaultKeymap, history, historyKeymap } from '@codemirror/commands'
+import { defaultKeymap, history, historyKeymap, indentWithTab } from '@codemirror/commands'
 import { css } from '@codemirror/lang-css'
 import { html } from '@codemirror/lang-html'
 import { javascript } from '@codemirror/lang-javascript'
@@ -55,6 +55,7 @@ export class CodeEditor {
           }
         }),
         keymap.of([
+          indentWithTab,
           ...defaultKeymap,
           ...historyKeymap
         ])

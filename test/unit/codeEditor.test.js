@@ -79,7 +79,8 @@ vi.mock('@codemirror/language', () => ({
 vi.mock('@codemirror/commands', () => ({
   defaultKeymap: [{ key: 'default' }],
   history: vi.fn(() => ({ type: 'history' })),
-  historyKeymap: [{ key: 'history' }]
+  historyKeymap: [{ key: 'history' }],
+  indentWithTab: { key: 'Tab', run: vi.fn() }
 }))
 
 vi.mock('@codemirror/lang-css', () => ({
@@ -186,5 +187,18 @@ describe('CodeEditor', () => {
 
     expect(onDirtyChange).toHaveBeenCalledTimes(1)
     expect(onDirtyChange).toHaveBeenCalledWith(true)
+  })
+
+  it('keeps Tab in the editor for indentation', async () => {
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    await editor.initialize(container, 'first', 'text/plain')
+
+    const keymapExtension = createdViews[0].state.extensions.find(
+      extension => extension.type === 'keymap'
+    )
+    expect(keymapExtension.value[0]).toMatchObject({ key: 'Tab' })
   })
 })
