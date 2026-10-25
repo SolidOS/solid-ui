@@ -1,6 +1,7 @@
 import type { DataBrowserContext, PaneDefinition } from 'pane-registry'
 import type { NamedNode } from 'rdflib'
 import { filterAvailablePanes } from '@/login/login'
+import ns from '@/lib/ns'
 
 export type RelevantPaneOptions = {
   excludedPaneNames?: readonly string[]
@@ -42,4 +43,26 @@ export async function getRelevantPanes (
   return firstRelevantPaneIndex < firstFilteredPaneIndex
     ? [relevantPanes[0]].concat(filteredPanes)
     : filteredPanes
+}
+
+/**
+ * Chooses the default pane from the relevant panes for a resource.
+ *
+ * A resource's `ui:mintClass` is an explicit declaration of the pane that
+ * created it, so it takes precedence over panes that merely request focus.
+ */
+export function getPreferredPane (
+  subject: NamedNode,
+  context: DataBrowserContext,
+  relevantPanes: PaneDefinition[]
+): PaneDefinition | undefined {
+  const store = context.session.store
+  const mintClass = store.any(subject, ns.ui('mintClass'), undefined, subject.doc()) ||
+    store.any(subject.doc(), ns.ui('mintClass'), undefined, subject.doc())
+  if (mintClass) {
+    const mintClassPane = relevantPanes.find(pane => pane.mintClass?.sameTerm(mintClass))
+    if (mintClassPane) return mintClassPane
+  }
+
+  return relevantPanes.find(pane => pane.shouldGetFocus?.(subject)) || relevantPanes[0]
 }
