@@ -41,13 +41,13 @@ import B, { DEFAULT_SIGNUP_URL as V } from "./lib/auth/SolidAuth.esm.js";
 import "./lib/auth/index.esm.js";
 import { DEFAULT_FILE_EXPLORER_CONTEXT as H, fileExplorerContext as U } from "./lib/file-explorer/context.esm.js";
 import { FILE_EXPLORER_BACK_EVENT as W, FILE_EXPLORER_MANAGE_ACCESS_EVENT as G, FILE_EXPLORER_OPEN_PANE_EVENT as K, isExplorerEvent as q } from "./lib/file-explorer/events.esm.js";
-import { getRelevantPanes as J } from "./lib/file-explorer/relevant-panes.esm.js";
-import { composeExplorer as Y } from "./lib/file-explorer/compose-explorer.esm.js";
+import { getPreferredPane as J, getRelevantPanes as Y } from "./lib/file-explorer/relevant-panes.esm.js";
+import { composeExplorer as X } from "./lib/file-explorer/compose-explorer.esm.js";
 import "./lib/file-explorer/index.esm.js";
-import { CodeEditor as X } from "./lib/code-editor/CodeEditor.esm.js";
+import { CodeEditor as Z } from "./lib/code-editor/CodeEditor.esm.js";
 import "./lib/code-editor/index.esm.js";
 // src/index.ts
-var Z = typeof window < "u" ? window.document : null;
-export { C as Account, j as CloseDialogEvent, X as CodeEditor, T as DEFAULT_AUTH_CONTEXT, O as DEFAULT_DIALOG_CONTEXT, H as DEFAULT_FILE_EXPLORER_CONTEXT, V as DEFAULT_SIGNUP_URL, L as Dialog, P as DialogComponent, M as DialogTrait, W as FILE_EXPLORER_BACK_EVENT, G as FILE_EXPLORER_MANAGE_ACCESS_EVENT, K as FILE_EXPLORER_OPEN_PANE_EVENT, I as FormControlComponent, F as FormControlTrait, w as NoopAuth, R as ShowDialogEvent, B as SolidAuth, N as WebComponent, c as acl, l as aclControl, E as authContext, Y as composeExplorer, u as create, S as createTypes, A as customElement, k as dialogContext, Z as dom, U as fileExplorerContext, D as generateId, J as getRelevantPanes, i as icons, g as infiniteMessageArea, x as initFooter, b as initHeader, q as isExplorerEvent, a as language, t as log, s as login, d as matrix, f as media, p as messageArea, e as ns, h as pad, m as participation, _ as preferences, z as showDialog, r as style, v as table, y as tabs, n as utils, o as widgets };
+var Q = typeof window < "u" ? window.document : null;
+export { C as Account, j as CloseDialogEvent, Z as CodeEditor, T as DEFAULT_AUTH_CONTEXT, O as DEFAULT_DIALOG_CONTEXT, H as DEFAULT_FILE_EXPLORER_CONTEXT, V as DEFAULT_SIGNUP_URL, L as Dialog, P as DialogComponent, M as DialogTrait, W as FILE_EXPLORER_BACK_EVENT, G as FILE_EXPLORER_MANAGE_ACCESS_EVENT, K as FILE_EXPLORER_OPEN_PANE_EVENT, I as FormControlComponent, F as FormControlTrait, w as NoopAuth, R as ShowDialogEvent, B as SolidAuth, N as WebComponent, c as acl, l as aclControl, E as authContext, X as composeExplorer, u as create, S as createTypes, A as customElement, k as dialogContext, Q as dom, U as fileExplorerContext, D as generateId, J as getPreferredPane, Y as getRelevantPanes, i as icons, g as infiniteMessageArea, x as initFooter, b as initHeader, q as isExplorerEvent, a as language, t as log, s as login, d as matrix, f as media, p as messageArea, e as ns, h as pad, m as participation, _ as preferences, z as showDialog, r as style, v as table, y as tabs, n as utils, o as widgets };
 
 //# sourceMappingURL=index.esm.js.map

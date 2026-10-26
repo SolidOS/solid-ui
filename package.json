@@ -1,6 +1,6 @@
 {
 	"name": "solid-ui",
-	"version": "5.0.2-3",
+	"version": "5.0.2-4",
 	"description": "UI library for Solid applications",
 	"main": "dist/index.cjs.js",
 	"types": "dist/index.d.ts",

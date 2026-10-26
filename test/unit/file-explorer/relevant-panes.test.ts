@@ -3,7 +3,8 @@ import type { DataBrowserContext, PaneDefinition } from 'pane-registry'
 import { sym } from 'rdflib'
 import { solidLogicSingleton } from 'solid-logic'
 import { filterAvailablePanes } from '../../../src/login/login'
-import { getRelevantPanes } from '../../../src/lib/file-explorer/relevant-panes'
+import ns from '../../../src/lib/ns'
+import { getPreferredPane, getRelevantPanes } from '../../../src/lib/file-explorer/relevant-panes'
 
 vi.mock('../../../src/login/login', () => ({
   filterAvailablePanes: vi.fn()
@@ -126,5 +127,54 @@ describe('getRelevantPanes', () => {
     vi.mocked(filterAvailablePanes).mockRejectedValue(error)
 
     await expect(getRelevantPanes(subject, createContext([createPane('first')]))).rejects.toBe(error)
+  })
+})
+
+describe('getPreferredPane', () => {
+  function contextWithMintClass (mintClass?: string): DataBrowserContext {
+    const store = Object.create(solidLogicSingleton.store)
+    store.any = vi.fn((candidate, predicate) => {
+      if (mintClass && candidate.sameTerm(subject) && predicate.sameTerm(ns.ui('mintClass'))) {
+        return sym(mintClass)
+      }
+      return undefined
+    })
+    return {
+      dom: document,
+      getOutliner: () => undefined,
+      session: {
+        logic: solidLogicSingleton,
+        store,
+        paneRegistry: {
+          list: [],
+          paneForIcon: {},
+          paneForPredicate: {},
+          register: vi.fn(),
+          byName: () => null
+        }
+      }
+    }
+  }
+
+  it('prefers the pane matching a resource mint class over a focus request', () => {
+    const mintClass = sym('https://schema.example/PhotoAlbum')
+    const focus = createPane('focus', { shouldGetFocus: () => true })
+    const minted = createPane('album', { mintClass })
+
+    expect(getPreferredPane(subject, contextWithMintClass(mintClass.uri), [focus, minted])).toBe(minted)
+  })
+
+  it('uses a focus request when no relevant pane matches the mint class', () => {
+    const focus = createPane('focus', { shouldGetFocus: () => true })
+    const other = createPane('other', { mintClass: sym('https://schema.example/Other') })
+
+    expect(getPreferredPane(subject, contextWithMintClass('https://schema.example/PhotoAlbum'), [other, focus])).toBe(focus)
+  })
+
+  it('falls back to registry order when no pane requests focus', () => {
+    const first = createPane('first')
+    const second = createPane('second')
+
+    expect(getPreferredPane(subject, contextWithMintClass(), [first, second])).toBe(first)
   })
 })
