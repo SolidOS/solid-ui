@@ -1,6 +1,7 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { property } from 'lit/decorators.js'
 import { html, nothing } from 'lit'
+import { keyed } from 'lit/directives/keyed.js'
 import '@/components/button'
 import '@/components/menu'
 import '@/components/menu-item'
@@ -13,6 +14,7 @@ import styles from './ResourceActionsMenu.styles.css'
 import { isContainerSubject } from '@/utils/podUtils'
 
 type ResourceActionMenuItem = {
+  key?: string
   label: string
   icon?: HTMLElement | string
   action?: (event: Event) => void
@@ -68,14 +70,17 @@ export default class ResourceActionsMenu extends WebComponent {
           <icon-lucide-ellipsis-vertical slot="icon" class="ellipsisIcon"></icon-lucide-ellipsis-vertical>
           <span class="sr-only">More options</span>
         </solid-ui-button>
-        ${actionableMenuItems.map(item => html`
-          <solid-ui-menu-item @solid-ui-select=${(event: Event) => item.action(event)}>
+        ${actionableMenuItems.map(item => keyed(item.key ?? item.label, html`
+          <solid-ui-menu-item
+            data-menu-key=${item.key ?? nothing}
+            @solid-ui-select=${(event: Event) => item.action(event)}
+          >
             ${typeof item.icon === 'string'
               ? html`<img slot="left-icon" src=${item.icon} alt="">`
               : item.icon ?? html`<icon-lucide-file slot="left-icon" aria-hidden="true"></icon-lucide-file>`}
             ${item.label}
           </solid-ui-menu-item>
-        `)}
+        `))}
         ${canEdit
           ? html`
               <solid-ui-menu-item @solid-ui-select=${this.handleEditingClick}>

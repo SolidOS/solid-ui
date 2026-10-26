@@ -1,6 +1,7 @@
 import { customElement, WebComponent } from '@/lib/components'
 import { html } from 'lit'
 import { property, query, state } from 'lit/decorators.js'
+import { repeat } from 'lit/directives/repeat.js'
 import type WaDropdown from '@awesome.me/webawesome/dist/components/dropdown/dropdown.js'
 import type WaDropdownItem from '@awesome.me/webawesome/dist/components/dropdown-item/dropdown-item.js'
 import type { WaDropdownSelectEvent } from '@awesome.me/webawesome'
@@ -26,6 +27,7 @@ export default class Menu extends WebComponent {
   @state()
   private accessor items: { slot: string; }[] = []
 
+  private slotToRestoreFocus: string | undefined
   private observer: MutationObserver = new MutationObserver(() => this.syncItems())
 
   connectedCallback () {
@@ -50,17 +52,22 @@ export default class Menu extends WebComponent {
       >
         <slot name="trigger" slot="trigger"></slot>
 
-        ${this.items.map(
-          (item) =>
-            html`<wa-dropdown-item @click=${this.onItemClick}>
-                <slot name=${item.slot}></slot>
-            </wa-dropdown-item>`
+        ${repeat(
+          this.items,
+          item => item.slot,
+          item => html`<wa-dropdown-item @click=${this.onItemClick}>
+              <slot name=${item.slot}></slot>
+          </wa-dropdown-item>`
         )}
       </wa-dropdown>
     `
   }
 
   private syncItems (): void {
+    const activeElement = this.shadowRoot?.activeElement as WaDropdownItem | null
+    const activeSlot = activeElement?.children[0]?.getAttribute('name')
+    if (activeSlot) this.slotToRestoreFocus = activeSlot
+
     // Exclude only the trigger element; include all other children
     // regardless of whether they already have a slot assigned.
     const items = Array.from(this.children).filter(
@@ -68,7 +75,10 @@ export default class Menu extends WebComponent {
     )
 
     this.items = items.map((item, index) => {
-      const slotName = `menu-item-${index}`
+      const key = item.getAttribute('data-menu-key')
+      const slotName = key
+        ? `menu-item-key-${encodeURIComponent(key)}`
+        : `menu-item-index-${index}`
 
       if (item.getAttribute('slot') !== slotName) {
         item.setAttribute('slot', slotName)
@@ -76,6 +86,16 @@ export default class Menu extends WebComponent {
 
       return { slot: slotName }
     })
+  }
+
+  protected updated (): void {
+    if (!this.slotToRestoreFocus) return
+
+    const slotToRestore = this.slotToRestoreFocus
+    this.slotToRestoreFocus = undefined
+    const item = Array.from(this.shadowRoot?.querySelectorAll<WaDropdownItem>('wa-dropdown-item') || [])
+      .find(candidate => candidate.children[0]?.getAttribute('name') === slotToRestore)
+    item?.focus({ preventScroll: true })
   }
 
   private onItemClick (event: Event) {
