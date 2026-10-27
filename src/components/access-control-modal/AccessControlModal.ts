@@ -404,8 +404,8 @@ export default class AccessControlModal extends DialogComponent<void> {
 
     return html`
       <div class="access-control-mixed-policy-warning" role="alert">
-        <strong>This container has different access settings for the folder and its contents.</strong>
-        <span>Changing this mixed policy is an advanced feature. You can still change access for the folder or its contents separately below.</span>
+        <strong>This container has different access settings in addition to the folder and its contents access shown below.</strong>
+        <span>Currently you can only add and/or update access on the folder and contents combined.</span>
       </div>
     `
   }
