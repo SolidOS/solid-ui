@@ -1,41 +1,41 @@
 import e from "../../../lib/ns.esm.js";
-import { style as t } from "../../../lib/style.esm.js";
-import { errorMessageBlock as n } from "../../error.esm.js";
-import { fieldLabel as r } from "../basic.esm.js";
-import { renderAutocompleteControl as i } from "./autocompleteBar.esm.js";
 import "../../index.esm.js";
+import { errorMessageBlock as t } from "../../error.esm.js";
+import { fieldLabel as n } from "../basic.esm.js";
+import { style as r } from "../../../lib/style.esm.js";
+import { renderAutocompleteControl as i } from "./autocompleteBar.esm.js";
 import { st as a } from "rdflib";
 import { store as o } from "solid-logic";
 // src/widgets/forms/autocomplete/autocompleteField.ts
 function s(s, c, l, u, d, f, p) {
-	async function m(e, t) {
-		if (!t) throw Error("autocompleteField:  No name set.");
+	async function m(e, n) {
+		if (!n) throw Error("autocompleteField:  No name set.");
 		let r = g.the(u, x, null, f);
 		if (r) {
-			let n = g.any(r, S, null, f);
-			if (r.equals(e) && n && n.sameTerm(t)) return;
+			let t = g.any(r, S, null, f);
+			if (r.equals(e) && t && t.sameTerm(n)) return;
 		}
-		let i = r ? g.statementsMatching(u, x, r, f).concat(g.statementsMatching(r, S, null, f)) : [], o = [a(u, x, e, f), a(e, S, t, f)];
+		let i = r ? g.statementsMatching(u, x, r, f).concat(g.statementsMatching(r, S, null, f)) : [], o = [a(u, x, e, f), a(e, S, n, f)];
 		try {
 			await g.updater?.updateMany(i, o);
 		} catch (e) {
-			p(!1, e), v.appendChild(n(s, "Autocomplete form data update error:" + e, null, e));
+			p(!1, e), v.appendChild(t(s, "Autocomplete form data update error:" + e, null, e));
 			return;
 		}
 		p(!0, "");
 	}
-	async function h(e, t) {
+	async function h(e, n) {
 		let r = g.the(u, x, null, f);
 		if (!r) {
-			p(!1, "NO data to elete"), v.appendChild(n(s, "Autocomplete delete: no old data!"));
+			p(!1, "NO data to elete"), v.appendChild(t(s, "Autocomplete delete: no old data!"));
 			return;
 		}
 		let i = g.statementsMatching(u, x, r, f).concat(g.statementsMatching(r, S, null, f)), a = [];
 		try {
 			await g.updater?.updateMany(i, a);
 		} catch (e) {
-			let t = /* @__PURE__ */ Error("Autocomplete form data delete error:" + e);
-			p(!1, e), v.appendChild(n(s, t, null, e));
+			let n = /* @__PURE__ */ Error("Autocomplete form data delete error:" + e);
+			p(!1, e), v.appendChild(t(s, n, null, e));
 			return;
 		}
 		p(!0, "");
@@ -44,13 +44,13 @@ function s(s, c, l, u, d, f, p) {
 	let g = o, _ = d.doc ? d.doc() : null, v = s.createElement("div");
 	c && c.appendChild(v);
 	let y = s.createElement("div");
-	y.setAttribute("class", "formFieldName"), y.setAttribute("style", t.formFieldNameBoxStyle), v.appendChild(y);
+	y.setAttribute("class", "formFieldName"), y.setAttribute("style", r.formFieldNameBoxStyle), v.appendChild(y);
 	let b = s.createElement("div");
 	b.setAttribute("class", "formFieldValue"), v.appendChild(b);
 	let x = g.any(d, e.ui("property"));
-	if (!x) return v.appendChild(n(s, "Error: No property given for autocomplete field: " + d));
+	if (!x) return v.appendChild(t(s, "Error: No property given for autocomplete field: " + d));
 	let S = g.any(d, e.ui("labelProperty")) || e.schema("name"), C = g.any(d, e.ui("dataSource"));
-	if (!C) return v.appendChild(n(s, "Error: No data source given for autocomplete field: " + d));
+	if (!C) return v.appendChild(t(s, "Error: No data source given for autocomplete field: " + d));
 	let w = {
 		label: g.anyJS(C, e.schema("name"), null, C.doc()),
 		logo: g.any(C, e.schema("logo"), null, C.doc())
@@ -58,12 +58,12 @@ function s(s, c, l, u, d, f, p) {
 	T && (w.targetClass = T), w.objectURIBase = g.any(C, e.ui("objectURIBase"), null, C.doc()) || void 0;
 	let E = g.anyJS(C, e.ui("endpoint"), null, C.doc());
 	if (E) {
-		if (w.endpoint = E, w.searchByNameQuery = g.anyJS(C, e.ui("searchByNameQuery"), null, C.doc()), !w.searchByNameQuery) return v.appendChild(n(s, "Error: No searchByNameQuery given for endpoint data Source: " + d));
+		if (w.endpoint = E, w.searchByNameQuery = g.anyJS(C, e.ui("searchByNameQuery"), null, C.doc()), !w.searchByNameQuery) return v.appendChild(t(s, "Error: No searchByNameQuery given for endpoint data Source: " + d));
 		w.insitituteDetailsQuery = g.anyJS(C, e.ui("insitituteDetailsQuery"), null, C.doc());
 	} else {
-		let t = g.anyJS(C, e.ui("searchByNameURI"));
-		if (!t) return v.appendChild(n(s, "Error: No searchByNameURI OR sparql endpoint given for dataSource: " + C));
-		w.searchByNameURI = t;
+		let n = g.anyJS(C, e.ui("searchByNameURI"));
+		if (!n) return v.appendChild(t(s, "Error: No searchByNameURI OR sparql endpoint given for dataSource: " + C));
+		w.searchByNameURI = n;
 	}
 	let D = g.anyJS(d, e.ui("suppressEmptyUneditable"), null, _), O = g.updater?.editable(f.uri), k = {
 		permanent: !0,
@@ -75,13 +75,13 @@ function s(s, c, l, u, d, f, p) {
 	if (A) k.currentObject = A, k.currentName = g.any(k.currentObject, S, null, f);
 	else if (A = g.any(d, e.ui("default")), A) k.currentObject = A, k.currentName = g.any(k.currentObject, S, null, f);
 	else if (D && !O) return v.style.display = "none", v;
-	return y.appendChild(r(s, x, d)), i(s, u, {
+	return y.appendChild(n(s, x, d)), i(s, u, {
 		editable: O,
 		dbLookup: !0
 	}, k, m, h).then((e) => {
 		b.appendChild(e);
 	}, (e) => {
-		b.appendChild(n(s, `Error rendering autocomplete ${d}: ${e}`, "#fee", e));
+		b.appendChild(t(s, `Error rendering autocomplete ${d}: ${e}`, "#fee", e));
 	}), v;
 }
 export { s as autocompleteField };

@@ -1,6 +1,6 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
-import t from "../lib/ns.esm.js";
-import { log_exports as n } from "../lib/log.esm.js";
+import { log_exports as t } from "../lib/log.esm.js";
+import n from "../lib/ns.esm.js";
 import { label as r } from "./label.esm.js";
 import * as i from "rdflib";
 import { store as a } from "solid-logic";
@@ -36,8 +36,8 @@ var o = /* @__PURE__ */ e({
 	syncTableToArray: () => h,
 	syncTableToArrayReOrdered: () => g
 }), s = {
-	log: n,
-	ns: t,
+	log: t,
+	ns: n,
 	rdf: i
 }, c = 0;
 function l() {

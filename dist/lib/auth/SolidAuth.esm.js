@@ -1,13 +1,13 @@
-import e from "../ns.esm.js";
-import t from "./Account.esm.js";
+import e from "./Account.esm.js";
+import t from "../ns.esm.js";
 import { showDialog as n } from "../dialogs/helpers.esm.js";
 import "../dialogs/index.esm.js";
 import r from "../../components/login-modal/index.esm.js";
 import { authSession as i, authn as a, reloadOnIdentityReplaced as o, solidLogicSingleton as s } from "solid-logic";
 // src/lib/auth/SolidAuth.ts
 var c = "https://solidproject.org/get_a_pod";
-function l(t) {
-	let n = s.store, r = n.sym(t), i = n.any(r, e.sioc("avatar")) || n.any(r, e.foaf("img")) || n.any(r, e.vcard("logo")) || n.any(r, e.vcard("hasPhoto")) || n.any(r, e.vcard("photo")) || n.any(r, e.foaf("depiction"));
+function l(e) {
+	let n = s.store, r = n.sym(e), i = n.any(r, t.sioc("avatar")) || n.any(r, t.foaf("img")) || n.any(r, t.vcard("logo")) || n.any(r, t.vcard("hasPhoto")) || n.any(r, t.vcard("photo")) || n.any(r, t.foaf("depiction"));
 	return i ? i.value : void 0;
 }
 var u = class {
@@ -32,10 +32,10 @@ var u = class {
 		return this._initialized;
 	}
 	get account() {
-		let e = i.webId ?? i.info?.webId;
-		if (!(i.isActive ?? i.info?.isLoggedIn ?? !!e) || !e) return null;
-		let n = l(e);
-		return new t(e, n);
+		let t = i.webId ?? i.info?.webId;
+		if (!(i.isActive ?? i.info?.isLoggedIn ?? !!t) || !t) return null;
+		let n = l(t);
+		return new e(t, n);
 	}
 	async login(e) {
 		if (!e) {

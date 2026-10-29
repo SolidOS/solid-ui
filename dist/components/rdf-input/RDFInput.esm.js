@@ -1,14 +1,14 @@
 import e from "../../lib/ns.esm.js";
 import { label as t } from "../../utils/label.esm.js";
-import "../../utils/index.esm.js";
+import "../../lib/components/index.esm.js";
 import { generateId as n } from "../../lib/components/ids.esm.js";
 import { customElement as r } from "../../lib/components/decorators.esm.js";
 import i from "../../lib/components/web-component/WebComponent.esm.js";
-import "../../lib/components/index.esm.js";
-import "../input/index.esm.js";
+import "../../utils/index.esm.js";
 import { mostSpecificClassURI as a } from "../../lib/forms/rdfFormsHelper.esm.js";
 import { fieldParams as o } from "../../lib/forms/fieldParams.esm.js";
 import { DEFAULT_STORE as s, storeContext as c } from "../../lib/forms/store/StoreContext.esm.js";
+import "../input/index.esm.js";
 import { Literal as l, st as u } from "rdflib";
 import { consume as d } from "@lit/context";
 import { property as f, state as p } from "lit/decorators.js";
@@ -281,7 +281,7 @@ j = (y = d({
 	}
 	async updateData(e) {
 		let t = e.target.value;
-		this.localInputValue = t, this._pendingUpdateValue = t, !this._updateInFlight && await this.runPendingUpdate();
+		this.localInputValue = t, this._pendingUpdateValue = t, this._updateInFlight || await this.runPendingUpdate();
 	}
 	async runPendingUpdate() {
 		if (this._pendingUpdateValue === null) return;

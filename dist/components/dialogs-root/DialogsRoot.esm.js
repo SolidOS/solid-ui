@@ -1,8 +1,8 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
-import { CloseDialogEvent as t } from "../../lib/dialogs/events/close-dialog.esm.js";
-import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import { ShowDialogEvent as r } from "../../lib/dialogs/events/show-dialog.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
+import { ShowDialogEvent as n } from "../../lib/dialogs/events/show-dialog.esm.js";
+import { CloseDialogEvent as r } from "../../lib/dialogs/events/close-dialog.esm.js";
 import "../dialog-provider/DialogProvider.esm.js";
 import { html as i } from "lit";
 import { state as a } from "lit/decorators.js";
@@ -170,7 +170,7 @@ function S(e) {
 }
 l = [e("solid-ui-dialogs-root")];
 var C, w = /*#__PURE__*/ new WeakMap();
-f = (u = a(), "dialogs"), o = class extends n {
+f = (u = a(), "dialogs"), o = class extends t {
 	constructor(...e) {
 		super(...e), p(this, w, (s(this), d(this, [])));
 	}
@@ -181,9 +181,9 @@ f = (u = a(), "dialogs"), o = class extends n {
 		h(w, this, e);
 	}
 	connectedCallback() {
-		super.connectedCallback(), this.addGlobalEventListener(r.eventName, (e) => {
+		super.connectedCallback(), this.addGlobalEventListener(n.eventName, (e) => {
 			e.stopImmediatePropagation(), this.dialogs = [...this.dialogs, e.dialog];
-		}), this.addGlobalEventListener(t.eventName, (e) => {
+		}), this.addGlobalEventListener(r.eventName, (e) => {
 			e.stopImmediatePropagation();
 			let t = this.dialogs.find((t) => t.id === e.id);
 			this.dialogs = this.dialogs.filter((t) => t.id !== e.id), t?.closed(e.data);
@@ -200,7 +200,7 @@ f = (u = a(), "dialogs"), o = class extends n {
 	u,
 	1,
 	"dialogs"
-]], l, 0, void 0, n), c();
+]], l, 0, void 0, t), c();
 export { C as default };
 
 //# sourceMappingURL=DialogsRoot.esm.js.map

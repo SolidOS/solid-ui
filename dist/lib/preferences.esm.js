@@ -1,12 +1,12 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
-import t from "./ns.esm.js";
-import { log as n } from "./debug.esm.js";
+import { log as t } from "./debug.esm.js";
+import { ensureLoadedPreferences as n } from "../login/login.esm.js";
 import { errorMessageBlock as r } from "../widgets/error.esm.js";
 import { complain as i } from "../widgets/buttons.esm.js";
 import { appendForm as a, newThing as o } from "../widgets/forms.esm.js";
-import "../widgets/index.esm.js";
-import { ensureLoadedPreferences as s } from "../login/login.esm.js";
+import s from "./ns.esm.js";
 import { participationObject as c } from "./participation.esm.js";
+import "../widgets/index.esm.js";
 import * as l from "rdflib";
 import { store as u } from "solid-logic";
 // src/lib/preferences.js
@@ -22,42 +22,42 @@ var d = /* @__PURE__ */ e({
 function m(e) {
 	return p[e];
 }
-function h(e, t) {
-	if (typeof t != "string") throw n("Non-string value of preference " + e + ": " + t), Error("Non-string value of preference " + e + ": " + t);
-	this.value[e] = t;
+function h(e, n) {
+	if (typeof n != "string") throw t("Non-string value of preference " + e + ": " + n), Error("Non-string value of preference " + e + ": " + n);
+	this.value[e] = n;
 }
-function g(e, r) {
-	return new Promise(function(i, a) {
-		let o = f.any(e, t.ui("sharedPreferences"));
-		if (o) r.sharedPreferences = o, i(r);
+function g(e, n) {
+	return new Promise(function(r, i) {
+		let a = f.any(e, s.ui("sharedPreferences"));
+		if (a) n.sharedPreferences = a, r(n);
 		else {
-			f.updater.editable(e.doc()) || (n(` Cant make shared preferences, may not change ${e.doc}`), i(r));
-			let o = l.sym(e.doc().uri + "#SharedPreferences"), s = [l.st(e, t.ui("sharedPreferences"), o, e.doc())];
-			n("Creating shared preferences " + o), f.updater.update([], s, function(e, t, n) {
-				t ? (r.sharedPreferences = o, i(r)) : a(/* @__PURE__ */ Error("Error creating shared prefs: " + n));
+			f.updater.editable(e.doc()) || (t(` Cant make shared preferences, may not change ${e.doc}`), r(n));
+			let a = l.sym(e.doc().uri + "#SharedPreferences"), o = [l.st(e, s.ui("sharedPreferences"), a, e.doc())];
+			t("Creating shared preferences " + a), f.updater.update([], o, function(e, t, o) {
+				t ? (n.sharedPreferences = a, r(n)) : i(/* @__PURE__ */ Error("Error creating shared prefs: " + o));
 			});
 		}
 	});
 }
 function _(e, r) {
 	return new Promise(function(i, a) {
-		s(r).then((r) => {
-			if (!r.preferencesFile) {
-				n("Not doing private class preferences as no access to preferences file. " + r.preferencesFileError);
+		n(r).then((n) => {
+			if (!n.preferencesFile) {
+				t("Not doing private class preferences as no access to preferences file. " + n.preferencesFileError);
 				return;
 			}
-			let s = f.each(null, t.solid("forClass"), e, r.preferencesFile), c = [], u, d;
-			if (s.length) {
-				if (s.forEach((e) => {
-					u ||= f.any(e, t.solid("personalDefaults"));
+			let r = f.each(null, s.solid("forClass"), e, n.preferencesFile), c = [], u, d;
+			if (r.length) {
+				if (r.forEach((e) => {
+					u ||= f.any(e, s.solid("personalDefaults"));
 				}), u) {
-					r.personalDefaults = u, i(r);
+					n.personalDefaults = u, i(n);
 					return;
 				}
-				u = o(r.preferencesFile), d = s[0];
-			} else d = o(r.preferencesFile), c = [l.st(d, t.rdf("type"), t.solid("TypeRegistration"), r.preferencesFile), l.st(d, t.solid("forClass"), e, r.preferencesFile)];
-			u = o(r.preferencesFile), c.push(l.st(d, t.solid("personalDefaults"), u, r.preferencesFile)), f.updater.update([], c, function(t, n, o) {
-				n ? (r.personalDefaults = u, i(r)) : a(/* @__PURE__ */ Error("Setting preferences for " + e + ": " + o));
+				u = o(n.preferencesFile), d = r[0];
+			} else d = o(n.preferencesFile), c = [l.st(d, s.rdf("type"), s.solid("TypeRegistration"), n.preferencesFile), l.st(d, s.solid("forClass"), e, n.preferencesFile)];
+			u = o(n.preferencesFile), c.push(l.st(d, s.solid("personalDefaults"), u, n.preferencesFile)), f.updater.update([], c, function(t, r, o) {
+				r ? (n.personalDefaults = u, i(n)) : a(/* @__PURE__ */ Error("Setting preferences for " + e + ": " + o));
 			});
 		}, (e) => {
 			a(e);
@@ -90,7 +90,7 @@ function v(e, t, n, o) {
 	}), s;
 }
 function y(e) {
-	return e.datatype ? e.datatype.equals(t.xsd("boolean")) ? e.value === "1" : e.datatype.equals(t.xsd("dateTime")) || e.datatype.equals(t.xsd("date")) ? new Date(e.value) : e.datatype.equals(t.xsd("integer")) || e.datatype.equals(t.xsd("float")) || e.datatype.equals(t.xsd("decimal")) ? Number(e.value) : e.value : e;
+	return e.datatype ? e.datatype.equals(s.xsd("boolean")) ? e.value === "1" : e.datatype.equals(s.xsd("dateTime")) || e.datatype.equals(s.xsd("date")) ? new Date(e.value) : e.datatype.equals(s.xsd("integer")) || e.datatype.equals(s.xsd("float")) || e.datatype.equals(s.xsd("decimal")) ? Number(e.value) : e.value : e;
 }
 function b(e, t, n, r) {
 	return new Promise(function(i, a) {

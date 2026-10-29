@@ -1,12 +1,12 @@
-import { error as e } from "../../lib/debug.esm.js";
-import { customElement as t } from "../../lib/components/decorators.esm.js";
-import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
+import { error as n } from "../../lib/debug.esm.js";
+import "../../_virtual/~icons/lucide/link.esm.js";
+import "../../_virtual/~icons/lucide/globe.esm.js";
 import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
-import "../../_virtual/~icons/lucide/globe.esm.js";
-import "../../_virtual/~icons/lucide/link.esm.js";
 import r from "./AccessControlGeneralAccess.styles.esm.js";
 import { ACCESS_ROLES as i, PUBLIC_ACCESS_ROLES as a } from "solid-logic";
 import { html as o } from "lit";
@@ -184,9 +184,9 @@ function L(e) {
 function R(e) {
 	return e;
 }
-g = [t("solid-ui-access-control-general-access")];
+g = [e("solid-ui-access-control-general-access")];
 var z;
-new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), E = (_ = s({ attribute: !1 }), y = s({ attribute: !1 }), x = s({ attribute: !1 }), C = s({ type: Boolean }), "subjectUri"), l = class extends n {
+new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), E = (_ = s({ attribute: !1 }), y = s({ attribute: !1 }), x = s({ attribute: !1 }), C = s({ type: Boolean }), "subjectUri"), l = class extends t {
 	constructor(...e) {
 		super(...e), D(this, u, (m(this), v(this, void 0))), D(this, d, b(this, "No Access")), D(this, f, S(this, "No Access")), D(this, p, w(this, !1));
 	}
@@ -230,11 +230,11 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 			composed: !0
 		}));
 	}
-	async onCopyLinkClick(t) {
-		if (t.preventDefault(), this.subjectUri) try {
+	async onCopyLinkClick(e) {
+		if (e.preventDefault(), this.subjectUri) try {
 			await navigator.clipboard.writeText(this.subjectUri);
-		} catch (t) {
-			e("Failed to copy resource link", t);
+		} catch (e) {
+			n("Failed to copy resource link", e);
 		}
 	}
 	renderAuthenticatedRoleOptions() {
@@ -342,7 +342,7 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 		1,
 		"disabled"
 	]
-], g, 0, void 0, n), l), c = class extends R {
+], g, 0, void 0, t), l), c = class extends R {
 	constructor() {
 		super(z), M(this, "styles", r), h();
 	}

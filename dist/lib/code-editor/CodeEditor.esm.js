@@ -1,32 +1,32 @@
 import { Compartment as e, EditorState as t } from "@codemirror/state";
 import { EditorView as n, drawSelection as r, keymap as i, lineNumbers as a } from "@codemirror/view";
 import { StreamLanguage as o, defaultHighlightStyle as s, syntaxHighlighting as c } from "@codemirror/language";
-import { defaultKeymap as l, history as u, historyKeymap as d } from "@codemirror/commands";
-import { css as f } from "@codemirror/lang-css";
-import { html as p } from "@codemirror/lang-html";
-import { javascript as m } from "@codemirror/lang-javascript";
-import { json as h } from "@codemirror/lang-json";
-import { markdown as g } from "@codemirror/lang-markdown";
-import { xml as _ } from "@codemirror/lang-xml";
-import { vscodeDark as v, vscodeLight as y } from "@uiw/codemirror-theme-vscode";
-import { turtle as b } from "@codemirror/legacy-modes/mode/turtle";
-import { sparql as x } from "@codemirror/legacy-modes/mode/sparql";
-import { ntriples as S } from "@codemirror/legacy-modes/mode/ntriples";
+import { defaultKeymap as l, history as u, historyKeymap as d, indentWithTab as f } from "@codemirror/commands";
+import { css as p } from "@codemirror/lang-css";
+import { html as m } from "@codemirror/lang-html";
+import { javascript as h } from "@codemirror/lang-javascript";
+import { json as g } from "@codemirror/lang-json";
+import { markdown as _ } from "@codemirror/lang-markdown";
+import { xml as v } from "@codemirror/lang-xml";
+import { vscodeDark as y, vscodeLight as b } from "@uiw/codemirror-theme-vscode";
+import { turtle as x } from "@codemirror/legacy-modes/mode/turtle";
+import { sparql as S } from "@codemirror/legacy-modes/mode/sparql";
+import { ntriples as C } from "@codemirror/legacy-modes/mode/ntriples";
 // src/lib/code-editor/CodeEditor.ts
-var C = class {
+var w = class {
 	_view = null;
 	_languageCompartment = null;
 	_editableCompartment = null;
 	_onDirtyChange;
 	_isDirty = !1;
-	async initialize(o, f = "", p = "text/turtle", m = "dark", h) {
-		this._view && this._view.destroy(), this._languageCompartment = new e(), this._editableCompartment = new e(), this._onDirtyChange = h, this._isDirty = !1;
-		let g = await this._getLanguageExtension(p), _ = t.create({
-			doc: f,
+	async initialize(o, p = "", m = "text/turtle", h = "dark", g) {
+		this._view && this._view.destroy(), this._languageCompartment = new e(), this._editableCompartment = new e(), this._onDirtyChange = g, this._isDirty = !1;
+		let _ = await this._getLanguageExtension(m), v = t.create({
+			doc: p,
 			extensions: [
-				m === "dark" ? v : y,
+				h === "dark" ? y : b,
 				n.theme({ "&": { minHeight: "6lh" } }),
-				this._languageCompartment.of(g),
+				this._languageCompartment.of(_),
 				this._editableCompartment.of(n.editable.of(!0)),
 				c(s, { fallback: !0 }),
 				a(),
@@ -36,11 +36,15 @@ var C = class {
 				n.updateListener.of((e) => {
 					e.docChanged && !this._isDirty && (this._isDirty = !0, this._onDirtyChange?.(!0));
 				}),
-				i.of([...l, ...d])
+				i.of([
+					f,
+					...l,
+					...d
+				])
 			]
 		});
 		this._view = new n({
-			state: _,
+			state: v,
 			parent: o
 		});
 	}
@@ -78,29 +82,29 @@ var C = class {
 	async _getLanguageExtension(e) {
 		switch (e) {
 			case "text/turtle":
-			case "text/n3": return o.define(b);
+			case "text/n3": return o.define(x);
 			case "application/sparql-update":
-			case "application/sparql-query": return o.define(x);
+			case "application/sparql-query": return o.define(S);
 			case "application/nquads":
 			case "application/n-quads":
-			case "application/n-triples": return o.define(S);
+			case "application/n-triples": return o.define(C);
 			case "application/json":
-			case "application/ld+json": return h();
+			case "application/ld+json": return g();
 			case "text/html":
-			case "application/xhtml+xml": return p();
+			case "application/xhtml+xml": return m();
 			case "text/markdown":
 			case "text/x-markdown":
-			case "text/md": return g();
+			case "text/md": return _();
 			case "application/rdf+xml":
-			case "application/xml": return _();
-			case "text/css": return f();
+			case "application/xml": return v();
+			case "text/css": return p();
 			case "text/javascript":
 			case "application/javascript":
-			case "application/ecmascript": return m();
+			case "application/ecmascript": return h();
 			default: return [];
 		}
 	}
 };
-export { C as CodeEditor };
+export { w as CodeEditor };
 
 //# sourceMappingURL=CodeEditor.esm.js.map

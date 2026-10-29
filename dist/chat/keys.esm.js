@@ -1,5 +1,5 @@
-import e from "../lib/ns.esm.js";
-import { log as t } from "../lib/debug.esm.js";
+import { log as e } from "../lib/debug.esm.js";
+import t from "../lib/ns.esm.js";
 import { getExistingPrivateKey as n, getExistingPublicKey as r, privKeyUrl as i, pubKeyUrl as a } from "../utils/keyHelpers/accessData.esm.js";
 import { keyAclBody as o, keyContainerAclBody as s, setAcl as c } from "../utils/keyHelpers/acl.esm.js";
 import * as l from "rdflib";
@@ -13,11 +13,11 @@ function m() {
 function h(e) {
 	return f(d.getPublicKey(p(e)));
 }
-async function g(t) {
-	await u.fetcher.load(t);
-	let n = await a(t);
+async function g(e) {
+	await u.fetcher.load(e);
+	let n = await a(e);
 	try {
-		return await u.fetcher.load(n), u.any(t, e.solid("publicKey"))?.value;
+		return await u.fetcher.load(n), u.any(e, t.solid("publicKey"))?.value;
 	} catch {
 		return;
 	}
@@ -27,25 +27,25 @@ async function _(o) {
 	let d = await a(o), f = await i(o), p = await r(o, d), g = await n(o, f), _ = !0;
 	if (g && p !== h(g) && confirm("This is strange the publicKey is not valid for\n" + o?.uri + "'shall we repair keeping the private key ?") && (_ = !1), !g || !p || !_) {
 		let n = [], r = [];
-		if (g || (g = m(), r = [l.st(o, e.solid("privateKey"), l.literal(g), u.sym(f))], await y(f, [], r, o.uri)), !p || !_) {
-			n = [], p && (n = [l.st(o, e.solid("publicKey"), l.lit(p), u.sym(d))], t("delete invalid publicKey " + n));
+		if (g || (g = m(), r = [l.st(o, t.solid("privateKey"), l.literal(g), u.sym(f))], await y(f, [], r, o.uri)), !p || !_) {
+			n = [], p && (n = [l.st(o, t.solid("publicKey"), l.lit(p), u.sym(d))], e("delete invalid publicKey " + n));
 			let i = h(g);
-			r = [l.st(o, e.solid("publicKey"), l.literal(i), u.sym(d))], await y(d, n, r);
+			r = [l.st(o, t.solid("publicKey"), l.literal(i), u.sym(d))], await y(d, n, r);
 		}
 		let i = f.substring(0, f.lastIndexOf("/") + 1);
 		await c(i, s(o.uri));
 	}
 	return g;
 }
-var v = async (e) => {
-	await u.fetcher.load(e);
-	let n = u.any(u.sym(e), u.sym("http://www.iana.org/assignments/link-relations/acl"));
+var v = async (t) => {
+	await u.fetcher.load(t);
+	let n = u.any(u.sym(t), u.sym("http://www.iana.org/assignments/link-relations/acl"));
 	if (n) try {
-		let e = await u.fetcher.webOperation("DELETE", n.value);
-		t("delete keyAcl" + n.value + " " + e.status);
-	} catch (e) {
-		if (e.response.status !== 404) throw Error(e);
-		t("delete keyAcl" + n.value + " " + e.response.status);
+		let t = await u.fetcher.webOperation("DELETE", n.value);
+		e("delete keyAcl" + n.value + " " + t.status);
+	} catch (t) {
+		if (t.response.status !== 404) throw Error(t);
+		e("delete keyAcl" + n.value + " " + t.response.status);
 	}
 };
 async function y(e, t, n, r = "") {

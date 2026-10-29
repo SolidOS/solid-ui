@@ -2,15 +2,15 @@ import { DEFAULT_AUTH_CONTEXT as e, authContext as t } from "../../lib/auth/cont
 import { customElement as n } from "../../lib/components/decorators.esm.js";
 import r from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import "../../lib/auth/index.esm.js";
 import "../../_virtual/~icons/lucide/chevron-down.esm.js";
-import "../button/index.esm.js";
 import "../dialog/index.esm.js";
 import "../dialog-content/index.esm.js";
 import "../dialog-footer/index.esm.js";
+import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
 import i from "./LoginModal.styles.esm.js";
-import "../../lib/auth/index.esm.js";
 import { getSuggestedIssuers as a } from "solid-logic";
 import { consume as o } from "@lit/context";
 import { html as s, nothing as c } from "lit";

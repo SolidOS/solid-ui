@@ -1,25 +1,25 @@
-import e from "../lib/ns.esm.js";
-import { label as t } from "../utils/label.esm.js";
-import { utils_exports as n } from "../utils/index.esm.js";
-import { error as r, log as i, warn as a } from "../lib/debug.esm.js";
-import { style as o } from "../lib/style.esm.js";
-import { icons as s } from "../lib/iconBase.esm.js";
-import { widgets_exports as c } from "../widgets/index.esm.js";
-import { findAppInstances as l } from "../login/login.esm.js";
-import { media as u } from "../media/index.esm.js";
-import { pad_exports as d } from "../lib/pad.esm.js";
+import { error as e, log as t, warn as n } from "../lib/debug.esm.js";
+import { label as r } from "../utils/label.esm.js";
+import { icons as i } from "../lib/iconBase.esm.js";
+import { media as a } from "../media/index.esm.js";
+import o from "../lib/ns.esm.js";
+import { pad_exports as s } from "../lib/pad.esm.js";
+import { style as c } from "../lib/style.esm.js";
+import { utils_exports as l } from "../utils/index.esm.js";
+import { widgets_exports as u } from "../widgets/index.esm.js";
+import { findAppInstances as d } from "../login/login.esm.js";
 import * as f from "rdflib";
 import { authn as p, createTypeIndexLogic as m, store as h } from "solid-logic";
 // src/chat/bookmarks.js
 var g = {
-	icons: s,
-	ns: e,
-	media: u,
-	pad: d,
-	style: o,
-	utils: n,
-	widgets: c
-}, _ = f.Namespace("http://www.w3.org/2002/01/bookmark#"), v = "noun_45961.svg", y = t, b = window.document || null;
+	icons: i,
+	ns: o,
+	media: a,
+	pad: s,
+	style: c,
+	utils: l,
+	widgets: u
+}, _ = f.Namespace("http://www.w3.org/2002/01/bookmark#"), v = "noun_45961.svg", y = r, b = window.document || null;
 function x(e, t) {
 	return new Promise(function(n, r) {
 		h.updater.update(e, t, function(e, t, i) {
@@ -28,52 +28,52 @@ function x(e, t) {
 	});
 }
 async function S(e) {
-	let t = _("Bookmark");
-	if (await l(e, t, !0), e.instances && e.instances.length > 0) e.bookmarkDocument = e.instances[0], e.instances.length > 1 && a("More than one bookmark file! " + e.instances);
+	let r = _("Bookmark");
+	if (await d(e, r, !0), e.instances && e.instances.length > 0) e.bookmarkDocument = e.instances[0], e.instances.length > 1 && n("More than one bookmark file! " + e.instances);
 	else if (e.publicProfile) {
-		let n = f.sym(e.publicProfile.dir().uri + "bookmarks.ttl");
+		let i = f.sym(e.publicProfile.dir().uri + "bookmarks.ttl");
 		try {
-			i("Creating new bookmark file " + n), await h.fetcher.createIfNotExists(n);
+			t("Creating new bookmark file " + i), await h.fetcher.createIfNotExists(i);
 		} catch (t) {
-			return a("Can't make fresh bookmark file:" + t), e;
+			return n("Can't make fresh bookmark file:" + t), e;
 		}
-		await m.registerInTypeIndex(n, e.index, t), e.bookmarkDocument = n;
-	} else a("You seem to have no bookmark file, nor even a profile file!");
+		await m.registerInTypeIndex(i, e.index, r), e.bookmarkDocument = i;
+	} else n("You seem to have no bookmark file, nor even a profile file!");
 	return e;
 }
-async function C(t, n) {
+async function C(e, t) {
 	let r = "", i = p.currentUser();
 	if (!i) throw Error("Must be logged on to add Bookmark");
-	r = y(h.any(n, e.foaf("maker"))) + ": " + h.anyValue(n, e.sioc("content")).slice(0, 80);
-	let o = t.bookmarkDocument, s = g.widgets.newThing(o, r), c = [
-		f.st(o, g.ns.dct("references"), s, o),
-		f.st(s, g.ns.rdf("type"), _("Bookmark"), o),
-		f.st(s, g.ns.dct("created"), /* @__PURE__ */ new Date(), o),
-		f.st(s, _("recalls"), n, o),
-		f.st(s, g.ns.foaf("maker"), i, o),
-		f.st(s, g.ns.dct("title"), r, o)
+	r = y(h.any(t, o.foaf("maker"))) + ": " + h.anyValue(t, o.sioc("content")).slice(0, 80);
+	let a = e.bookmarkDocument, s = g.widgets.newThing(a, r), c = [
+		f.st(a, g.ns.dct("references"), s, a),
+		f.st(s, g.ns.rdf("type"), _("Bookmark"), a),
+		f.st(s, g.ns.dct("created"), /* @__PURE__ */ new Date(), a),
+		f.st(s, _("recalls"), t, a),
+		f.st(s, g.ns.foaf("maker"), i, a),
+		f.st(s, g.ns.dct("title"), r, a)
 	];
 	try {
 		await x([], c);
 	} catch (e) {
 		let t = "Making bookmark: " + e;
-		return a(t), null;
+		return n(t), null;
 	}
 	return s;
 }
-async function w(e, t, n) {
-	await h.fetcher.load(e.bookmarkDocument);
-	let o = h.each(null, _("recalls"), t, e.bookmarkDocument);
+async function w(r, i, a) {
+	await h.fetcher.load(r.bookmarkDocument);
+	let o = h.each(null, _("recalls"), i, r.bookmarkDocument);
 	if (o.length) {
 		if (!confirm("Delete bookmark on this?" + o.length)) return;
-		for (let e = 0; e < o.length; e++) try {
-			await x(h.connectedStatements(o[e]), []), n.style.backgroundColor = "white", i("Bookmark deleted: " + o[e]);
-		} catch (e) {
-			r("Cant delete bookmark:" + e), a("Cannot delete bookmark:" + e);
+		for (let r = 0; r < o.length; r++) try {
+			await x(h.connectedStatements(o[r]), []), a.style.backgroundColor = "white", t("Bookmark deleted: " + o[r]);
+		} catch (t) {
+			e("Cant delete bookmark:" + t), n("Cannot delete bookmark:" + t);
 		}
 	} else {
-		let r = await C(e, t);
-		n.style.backgroundColor = "yellow", i("Bookmark added: " + r);
+		let e = await C(r, i);
+		a.style.backgroundColor = "yellow", t("Bookmark added: " + e);
 	}
 }
 async function T(e, t) {

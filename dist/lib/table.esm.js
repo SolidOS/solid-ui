@@ -1,22 +1,22 @@
-import e from "./ns.esm.js";
-import { log_exports as t } from "./log.esm.js";
+import { log as e } from "./debug.esm.js";
+import { icons as t } from "./iconBase.esm.js";
 import { label as n } from "../utils/label.esm.js";
-import { getTarget as r, utils_exports as i } from "../utils/index.esm.js";
-import { log as a } from "./debug.esm.js";
-import { icons as o } from "./iconBase.esm.js";
+import { log_exports as r } from "./log.esm.js";
+import i from "./ns.esm.js";
+import { getTarget as a, utils_exports as o } from "../utils/index.esm.js";
 import { widgets_exports as s } from "../widgets/index.esm.js";
 import * as c from "rdflib";
 import { store as l } from "solid-logic";
 // src/lib/table.js
 var u = {
-	icons: o,
-	log: t,
-	ns: e,
-	utils: i,
+	icons: t,
+	log: r,
+	ns: i,
+	utils: o,
 	widgets: s
 };
-function d(e, t) {
-	let i = t.sourceDocument, o = t.tableClass, s = t.query, d = u.ns, f = l, p = {}, ee = {
+function d(t, r) {
+	let i = r.sourceDocument, o = r.tableClass, s = r.query, d = u.ns, f = l, p = {}, ee = {
 		"http://www.w3.org/2002/07/owl#sameAs": !0,
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#type": !0
 	}, m = {
@@ -42,9 +42,9 @@ function d(e, t) {
 	}, ne = {
 		"http://xmlns.com/foaf/0.1/Image": !0,
 		"http://purl.org/dc/terms/Image": !0
-	}, h = t.keyVariable || "?_row", g = 0, _, v, y, b, x = null, S = null, C = e.createElement("div");
+	}, h = r.keyVariable || "?_row", g = 0, _, v, y, b, x = null, S = null, C = t.createElement("div");
 	C.className = "tableViewPane", C.appendChild(re());
-	let w = e.createElement("div");
+	let w = t.createElement("div");
 	C.appendChild(w), C.refresh = function() {
 		Z(T.query, T.logicalRows, T.columns, T);
 	};
@@ -56,10 +56,10 @@ function d(e, t) {
 	}
 	return C;
 	function re() {
-		let t = e.createElement("table");
-		t.setAttribute("class", "toolbar");
-		let n = e.createElement("tr");
-		return y = e.createElement("td"), n.appendChild(y), b = e.createElement("td"), n.appendChild(b), t.appendChild(n), t;
+		let e = t.createElement("table");
+		e.setAttribute("class", "toolbar");
+		let n = t.createElement("tr");
+		return y = t.createElement("td"), n.appendChild(y), b = t.createElement("td"), n.appendChild(b), e.appendChild(n), e;
 	}
 	function ie(e, t) {
 		let n = t.getColumns();
@@ -132,7 +132,7 @@ function d(e, t) {
 		}, this.addUse = function() {
 			this.useCount += 1;
 		}, this.getHints = function() {
-			return t && t.hints && this.variable && t.hints[this.variable.toNT()] ? t.hints[this.variable.toNT()] : {};
+			return r && r.hints && this.variable && r.hints[this.variable.toNT()] ? r.hints[this.variable.toNT()] : {};
 		}, this.getLabel = function() {
 			return this.getHints().label ? this.getHints().label : this.predicate ? this.predicate.sameTerm(d.rdf("type")) && this.superClass ? n(this.superClass, !0) : n(this.predicate) : this.variable ? this.variable.toString() : "unlabeled column?";
 		}, this.setPredicate = function(e, t, n) {
@@ -156,40 +156,40 @@ function d(e, t) {
 		}
 		return n;
 	}
-	function j(t, n) {
-		let r = e.createElement("option");
-		return r.setAttribute("value", n), r.appendChild(e.createTextNode(t)), r;
+	function j(e, n) {
+		let r = t.createElement("option");
+		return r.setAttribute("value", n), r.appendChild(t.createTextNode(e)), r;
 	}
-	function le(t, n) {
-		let r = e.createElement("div");
-		r.appendChild(e.createTextNode("Select type: "));
-		let i = e.createElement("select");
+	function le(e, n) {
+		let r = t.createElement("div");
+		r.appendChild(t.createTextNode("Select type: "));
+		let i = t.createElement("select");
 		i.appendChild(j("All types", "null"));
 		for (let e in n) i.appendChild(j(n[e].getLabel(), e));
 		return i.addEventListener("click", function() {
-			let e;
-			e = i.value === "null" ? t : n[i.value], ue(e);
+			let t;
+			t = i.value === "null" ? e : n[i.value], ue(t);
 		}, !1), r.appendChild(i), r;
 	}
 	function ue(e) {
 		E(e);
 	}
-	function de(t) {
-		let n = e.createElement("div"), r = t.getUnusedColumns();
+	function de(e) {
+		let n = t.createElement("div"), r = e.getUnusedColumns();
 		if (r.sort(function(e, t) {
 			let n = e.sortKey(), r = t.sortKey();
 			return (n > r) - (n < r);
 		}), r.length > 0) {
-			n.appendChild(e.createTextNode("Add column: "));
-			let i = e.createElement("select");
+			n.appendChild(t.createTextNode("Add column: "));
+			let i = t.createElement("select");
 			i.appendChild(j("", "-1"));
 			for (let e = 0; e < r.length; ++e) {
 				let t = r[e];
 				i.appendChild(j(t.getLabel(), "" + e));
 			}
 			n.appendChild(i), i.addEventListener("click", function() {
-				let e = Number(i.value);
-				e >= 0 && (t.addColumn(r[e]), E(t));
+				let t = Number(i.value);
+				t >= 0 && (e.addColumn(r[t]), E(e));
 			}, !1);
 		}
 		return n;
@@ -253,18 +253,18 @@ function d(e, t) {
 		}
 		e.sort(t);
 	}
-	function R(t, n) {
-		let r = e.createElement("a");
-		return r.appendChild(e.createTextNode("[x]")), r.addEventListener("click", function() {
-			t.removeColumn(n), E(t);
+	function R(e, n) {
+		let r = t.createElement("a");
+		return r.appendChild(t.createTextNode("[x]")), r.addEventListener("click", function() {
+			e.removeColumn(n), E(e);
 		}, !1), r;
 	}
-	function z(t, n) {
-		let r = e.createElement("tr"), i = e.createElement("th");
+	function z(e, n) {
+		let r = t.createElement("tr"), i = t.createElement("th");
 		r.appendChild(i);
-		for (let i = 0; i < t.length; ++i) {
-			let a = e.createElement("th"), o = t[i];
-			a.appendChild(e.createTextNode(o.getLabel())), n && a.appendChild(R(n, o)), r.appendChild(a);
+		for (let i = 0; i < e.length; ++i) {
+			let a = t.createElement("th"), o = e[i];
+			a.appendChild(t.createTextNode(o.getLabel())), n && a.appendChild(R(n, o)), r.appendChild(a);
 		}
 		return r;
 	}
@@ -309,16 +309,16 @@ function d(e, t) {
 		}
 		me(e, t, a, r);
 	}
-	function U(t, r, i) {
-		let a = e.createElement("div"), o = e.createElement("input");
+	function U(e, r, i) {
+		let a = t.createElement("div"), o = t.createElement("input");
 		o.setAttribute("type", "text"), o.style.width = "70%", a.appendChild(o);
-		let s = e.createElement("span");
-		s.appendChild(e.createTextNode("▼")), s.addEventListener("click", function() {
-			H(t, i, !1);
+		let s = t.createElement("span");
+		s.appendChild(t.createTextNode("▼")), s.addEventListener("click", function() {
+			H(e, i, !1);
 		}, !1), a.appendChild(s);
-		let c = e.createElement("span");
-		c.appendChild(e.createTextNode("▲")), c.addEventListener("click", function() {
-			H(t, i, !0);
+		let c = t.createElement("span");
+		c.appendChild(t.createTextNode("▲")), c.addEventListener("click", function() {
+			H(e, i, !0);
 		}, !1), a.appendChild(c);
 		let l = null;
 		return i.filterFunction = function(e) {
@@ -329,11 +329,11 @@ function d(e, t) {
 			}
 			return !1;
 		}, o.addEventListener("keyup", function() {
-			l = o.value === "" ? null : o.value.toLowerCase(), V(t, r);
+			l = o.value === "" ? null : o.value.toLowerCase(), V(e, r);
 		}, !1), a;
 	}
-	function W(t, r, i, a) {
-		let o = e.createElement("div"), s = e.createElement("select"), c = {};
+	function W(e, r, i, a) {
+		let o = t.createElement("div"), s = t.createElement("select"), c = {};
 		for (let e = 0; e < a.length; ++e) {
 			let t = a[e];
 			c[t.uri] = !0;
@@ -355,20 +355,20 @@ function d(e, t) {
 					e[t].selected && (c[a[r].uri] = !0);
 				}
 			}
-			V(t, r);
+			V(e, r);
 		}, !0), o;
 	}
-	function G(t, n, r) {
-		let i = e.createElement("div"), a = e.createElement("input");
+	function G(e, n, r) {
+		let i = t.createElement("div"), a = t.createElement("input");
 		a.setAttribute("type", "text"), a.style.width = "40px", i.appendChild(a);
-		let o = e.createElement("input");
+		let o = t.createElement("input");
 		o.setAttribute("type", "text"), o.style.width = "40px", i.appendChild(o);
 		let s = null, c = null;
 		r.filterFunction = function(e) {
 			return e &&= Number(e), !(s && (!e || e < s) || c && (!e || e > c));
 		};
 		function l() {
-			s = a.value === "" ? null : Number(a.value), c = o.value === "" ? null : Number(o.value), V(t, n);
+			s = a.value === "" ? null : Number(a.value), c = o.value === "" ? null : Number(o.value), V(e, n);
 		}
 		return a.addEventListener("keyup", l, !1), o.addEventListener("keyup", l, !1), i;
 	}
@@ -386,74 +386,74 @@ function d(e, t) {
 		}
 		return he(e, t, n);
 	}
-	function _e(t, n) {
-		let r = e.createElement("tr");
-		r.className = "selectors", r.appendChild(e.createElement("td"));
+	function _e(e, n) {
+		let r = t.createElement("tr");
+		r.className = "selectors", r.appendChild(t.createElement("td"));
 		for (let i = 0; i < n.length; ++i) {
-			let a = e.createElement("td"), o = ge(t, n, n[i]);
+			let a = t.createElement("td"), o = ge(e, n, n[i]);
 			o && a.appendChild(o), r.appendChild(a);
 		}
 		return r;
 	}
-	function K(t, n, i) {
+	function K(n, r, i) {
 		i ||= {};
-		let o = e.createElement("a"), s = i.linkFunction;
-		return o.setAttribute("href", t), o.appendChild(e.createTextNode(n)), s ? o.addEventListener("click", function(e) {
-			e.preventDefault(), e.stopPropagation();
-			let t = r(e).getAttribute("href");
-			t || a("No href found \n"), s(t);
+		let o = t.createElement("a"), s = i.linkFunction;
+		return o.setAttribute("href", n), o.appendChild(t.createTextNode(r)), s ? o.addEventListener("click", function(t) {
+			t.preventDefault(), t.stopPropagation();
+			let n = a(t).getAttribute("href");
+			n || e("No href found \n"), s(n);
 		}, !0) : o.addEventListener("click", u.widgets.openHrefInOutlineMode, !0), o;
 	}
 	function ve(e, t) {
 		let r = !1;
 		return e.uri && (r = e.uri.match(/^mailto:(.*)/)), r ? K(e.uri, r[1], t) : K(e.uri, n(e), t);
 	}
-	function ye(t) {
-		let n = e.createElement("img");
-		return n.setAttribute("src", t.uri), n.style.height = "40px", n;
+	function ye(e) {
+		let n = t.createElement("img");
+		return n.setAttribute("src", e.uri), n.style.height = "40px", n;
 	}
 	function q(e) {
-		return t && t.hints && e.variable && t.hints[e.variable.toNT()] ? t.hints[e.variable.toNT()] : {};
+		return r && r.hints && e.variable && r.hints[e.variable.toNT()] ? r.hints[e.variable.toNT()] : {};
 	}
-	function J(t, n) {
+	function J(e, n) {
 		let r = q(n), i = r.cellFormat;
 		if (i) switch (i) {
-			case "shortDate": return e.createTextNode(u.widgets.shortDate(t.value));
+			case "shortDate": return t.createTextNode(u.widgets.shortDate(e.value));
 		}
-		else if (t.termType === "Literal") {
-			if (t.datatype) {
-				if (te[t.datatype.uri]) return e.createTextNode(u.widgets.shortDate(t.value));
-				if (m[t.datatype.uri]) {
-					let n = e.createElement("span");
-					return n.textContent = t.value, n.setAttribute("style", "text-align: right"), n;
+		else if (e.termType === "Literal") {
+			if (e.datatype) {
+				if (te[e.datatype.uri]) return t.createTextNode(u.widgets.shortDate(e.value));
+				if (m[e.datatype.uri]) {
+					let n = t.createElement("span");
+					return n.textContent = e.value, n.setAttribute("style", "text-align: right"), n;
 				}
 			}
-			return e.createTextNode(t.value);
-		} else if (t.termType === "NamedNode" && n.isImageColumn()) return ye(t);
-		else if (t.termType === "NamedNode" || t.termType === "BlankNode") return ve(t, r);
-		else if (t.termType === "Collection") {
-			let r = e.createElement("span");
-			return r.appendChild(e.createTextNode("[")), t.elements.forEach(function(t) {
-				r.appendChild(J(t, n)), r.appendChild(e.createTextNode(", "));
-			}), r.removeChild(r.lastChild), r.appendChild(e.createTextNode("]")), r;
-		} else return e.createTextNode("unknown termtype '" + t.termType + "'!");
+			return t.createTextNode(e.value);
+		} else if (e.termType === "NamedNode" && n.isImageColumn()) return ye(e);
+		else if (e.termType === "NamedNode" || e.termType === "BlankNode") return ve(e, r);
+		else if (e.termType === "Collection") {
+			let r = t.createElement("span");
+			return r.appendChild(t.createTextNode("[")), e.elements.forEach(function(e) {
+				r.appendChild(J(e, n)), r.appendChild(t.createTextNode(", "));
+			}), r.removeChild(r.lastChild), r.appendChild(t.createTextNode("]")), r;
+		} else return t.createTextNode("unknown termtype '" + e.termType + "'!");
 	}
-	function be(t, n, r, i) {
-		let a = e.createElement("td");
-		n._subject && "uri" in n._subject && a.appendChild(K(n._subject.uri, "→")), t.appendChild(a);
+	function be(e, n, r, i) {
+		let a = t.createElement("td");
+		n._subject && "uri" in n._subject && a.appendChild(K(n._subject.uri, "→")), e.appendChild(a);
 		for (let i = 0; i < r.length; ++i) {
-			let a = r[i], o = e.createElement("td"), s, c = a.getKey();
+			let a = r[i], o = t.createElement("td"), s, c = a.getKey();
 			if (c in n.values) {
-				let t = n.values[c], r = !1;
-				n.originalValues && n.originalValues[c] && t.length !== n.originalValues[c].length && (r = !0);
-				for (let i = 0; i < t.length; ++i) {
-					let l = t[i];
-					n.originalValues && n.originalValues[c] && n.originalValues[c].length > i && (s = n.originalValues[c][i], l.toString() !== s.toString() && (r = !0)), o.appendChild(J(l, a)), i !== t.length - 1 && o.appendChild(e.createTextNode(",\n")), r && (o.style.background = "#efe");
+				let e = n.values[c], r = !1;
+				n.originalValues && n.originalValues[c] && e.length !== n.originalValues[c].length && (r = !0);
+				for (let i = 0; i < e.length; ++i) {
+					let l = e[i];
+					n.originalValues && n.originalValues[c] && n.originalValues[c].length > i && (s = n.originalValues[c][i], l.toString() !== s.toString() && (r = !0)), o.appendChild(J(l, a)), i !== e.length - 1 && o.appendChild(t.createTextNode(",\n")), r && (o.style.background = "#efe");
 				}
 			}
-			t.appendChild(o);
+			e.appendChild(o);
 		}
-		return n._htmlRow = t, t;
+		return n._htmlRow = e, e;
 	}
 	function Y(e, t) {
 		let n = null;
@@ -480,34 +480,34 @@ function d(e, t) {
 			return e._subject_id = t, ++g, t;
 		}
 	}
-	function Z(n, r, i, o) {
+	function Z(n, i, a, o) {
 		n.running = !0;
-		let s = Date.now(), c = e.createElement("tr");
+		let s = Date.now(), c = t.createElement("tr");
 		o.appendChild(c), c.textContent = "Loading ...";
-		for (let e = 0; e < r.length; e++) r[e].original = !0, r[e].originalValues || (r[e].originalValues = r[e].values), r[e].values = {};
-		f.query(n, function(t) {
+		for (let e = 0; e < i.length; e++) i[e].original = !0, i[e].originalValues || (i[e].originalValues = i[e].values), i[e].values = {};
+		f.query(n, function(e) {
 			if (!n.running) return;
 			c.textContent += ".";
-			let a = null, s = null, l;
-			if (h in t && (s = t[h], l = X(s), l in p && (a = p[l])), !a) {
-				let t = e.createElement("tr");
-				o.appendChild(t), a = {
-					_htmlRow: t,
+			let r = null, s = null, l;
+			if (h in e && (s = e[h], l = X(s), l in p && (r = p[l])), !r) {
+				let e = t.createElement("tr");
+				o.appendChild(e), r = {
+					_htmlRow: e,
 					_subject: s,
 					values: {}
-				}, r.push(a), s && (p[l] = a);
+				}, i.push(r), s && (p[l] = r);
 			}
-			delete a.original, xe(a, i, t);
+			delete r.original, xe(r, a, e);
 		}, void 0, function() {
 			c && c.parentNode && c.parentNode.removeChild && (c.parentNode.removeChild(c), c = null);
-			let e = Date.now() - s;
-			a("Query done: " + r.length + " rows, " + e + "ms");
-			for (let e = r.length - 1; e >= 0; e--) if (r[e].original) {
-				a("   deleting row " + r[e]._subject);
-				let t = r[e]._htmlRow;
-				t.parentNode.removeChild(t), delete p[X(r[e]._subject)], r.splice(e, 1);
+			let t = Date.now() - s;
+			e("Query done: " + i.length + " rows, " + t + "ms");
+			for (let t = i.length - 1; t >= 0; t--) if (i[t].original) {
+				e("   deleting row " + i[t]._subject);
+				let n = i[t]._htmlRow;
+				n.parentNode.removeChild(n), delete p[X(i[t]._subject)], i.splice(t, 1);
 			}
-			t.sortBy && H(r, fe(i, t.sortBy), t.sortReverse), t.onDone && t.onDone(C);
+			r.sortBy && H(i, fe(a, r.sortBy), r.sortReverse), r.onDone && r.onDone(C);
 		});
 	}
 	function Q(e, t) {
@@ -534,11 +534,11 @@ function d(e, t) {
 		}
 		return Q(n, e.pat), t;
 	}
-	function $(t, n) {
+	function $(e, n) {
 		let r;
-		r = s ? Se(t) : n.getColumns();
-		let i = [], a = e.createElement("table");
-		return a.appendChild(z(r, n)), a.appendChild(_e(i, r)), a.logicalRows = i, a.columns = r, a.query = t, Z(t, i, r, a), a;
+		r = s ? Se(e) : n.getColumns();
+		let i = [], a = t.createElement("table");
+		return a.appendChild(z(r, n)), a.appendChild(_e(i, r)), a.logicalRows = i, a.columns = r, a.query = e, Z(e, i, r, a), a;
 	}
 	function Ce(e) {
 		let t = -1, n = null, r;

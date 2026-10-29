@@ -1,7 +1,7 @@
-import { dialogContext as e } from "../../lib/dialogs/context.esm.js";
-import { customElement as t } from "../../lib/components/decorators.esm.js";
-import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
+import { dialogContext as n } from "../../lib/dialogs/context.esm.js";
 import { provide as r } from "@lit/context";
 import { property as i } from "lit/decorators.js";
 // src/components/dialog-provider/DialogProvider.ts
@@ -166,12 +166,12 @@ function C(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-c = [t("solid-ui-dialog-provider")];
+c = [e("solid-ui-dialog-provider")];
 var w, T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap();
 p = (l = i({
 	type: String,
 	reflect: !0
-}), d = r({ context: e }), "dialogId"), a = class extends n {
+}), d = r({ context: n }), "dialogId"), a = class extends t {
 	constructor(...e) {
 		super(...e), m(this, T, (o(this), u(this))), m(this, E, f(this, { id: "" }));
 	}
@@ -206,7 +206,7 @@ p = (l = i({
 	d,
 	1,
 	"dialog"
-]], c, 0, void 0, n), s();
+]], c, 0, void 0, t), s();
 export { w as default };
 
 //# sourceMappingURL=DialogProvider.esm.js.map

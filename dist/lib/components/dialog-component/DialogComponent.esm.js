@@ -1,5 +1,5 @@
-import { DEFAULT_DIALOG_CONTEXT as e, dialogContext as t } from "../../dialogs/context.esm.js";
-import n from "../traits/DialogTrait.esm.js";
+import e from "../traits/DialogTrait.esm.js";
+import { DEFAULT_DIALOG_CONTEXT as t, dialogContext as n } from "../../dialogs/context.esm.js";
 import r from "../web-component/WebComponent.esm.js";
 import "../web-component/index.esm.js";
 import { consume as i } from "@lit/context";
@@ -175,7 +175,7 @@ function b(e) {
 }
 var x = /*#__PURE__*/ new WeakMap();
 l = (s = i({
-	context: t,
+	context: n,
 	subscribe: !0
 }), "dialogTrait");
 var S = class extends r {
@@ -186,7 +186,7 @@ var S = class extends r {
 		p(x, this, e);
 	}
 	constructor() {
-		super(), f(this, l, void o(this)), u(this, x, c(this, e)), this.dialogTrait = this.addTrait(new n(this, { getContext: () => this.context }));
+		super(), f(this, l, void o(this)), u(this, x, c(this, t)), this.dialogTrait = this.addTrait(new e(this, { getContext: () => this.context }));
 	}
 	close(e) {
 		this.dialogTrait.close(e);

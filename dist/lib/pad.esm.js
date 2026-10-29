@@ -1,11 +1,11 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
 import t from "./ns.esm.js";
+import "../widgets/index.esm.js";
 import { beep as n } from "../utils/index.esm.js";
 import { log as r } from "./debug.esm.js";
-import { style as i } from "./style.esm.js";
-import { errorMessageBlock as a } from "../widgets/error.esm.js";
-import { newThing as o } from "../widgets/forms.esm.js";
-import "../widgets/index.esm.js";
+import { errorMessageBlock as i } from "../widgets/error.esm.js";
+import { newThing as a } from "../widgets/forms.esm.js";
+import { style as o } from "./style.esm.js";
 import { manageParticipation as s, participationObject as c, recordParticipation as l, renderParticipants as u } from "./participation.esm.js";
 import { NamedNode as d, Namespace as f, st as p } from "rdflib";
 import { solidLogicSingleton as m } from "solid-logic";
@@ -33,27 +33,27 @@ function y(e, s, c, l, u) {
 	let m = u.exists, h = e.createElement("table"), _ = g;
 	if (l && !l.uri) throw Error("UI.pad.notepad:  Invalid userid");
 	let y = g.updater, b = f("http://www.w3.org/ns/pim/pad#");
-	h.setAttribute("style", i.notepadStyle);
+	h.setAttribute("style", o.notepadStyle);
 	let x = null, S = null;
 	if (u.statusArea) {
 		let t = u.statusArea.appendChild(e.createElement("table")).appendChild(e.createElement("tr"));
-		x = t.appendChild(e.createElement("td")), S = t.appendChild(e.createElement("td")), x && x.setAttribute("style", i.upstreamStatus), S && S.setAttribute("style", i.downstreamStatus);
+		x = t.appendChild(e.createElement("td")), S = t.appendChild(e.createElement("td")), x && x.setAttribute("style", o.upstreamStatus), S && S.setAttribute("style", o.downstreamStatus);
 	}
 	let C = function(t, n = !1) {
-		r(t), u.statusArea && (n ? x : S).appendChild(a(e, t, "pink"));
+		r(t), u.statusArea && (n ? x : S).appendChild(i(e, t, "pink"));
 	}, w = function(e) {
 		u.statusArea && (u.statusArea.innerHTML = "");
 	}, T = function(e, n, r) {
-		let a = e.subject;
+		let i = e.subject;
 		n ||= "";
-		let o = i.baseStyle, s = i.headingCore, c = i.headingStyle, l = _.any(a, t.dc("author"));
+		let a = o.baseStyle, s = o.headingCore, c = o.headingStyle, l = _.any(i, t.dc("author"));
 		if (!n && l) {
 			let e = v(l);
 			n = "color: " + (r ? "#888" : "black") + "; background-color: " + e + ";";
 		}
-		let u = _.any(a, b("indent"));
+		let u = _.any(i, b("indent"));
 		u = u ? u.value : 0;
-		let d = u >= 0 ? o + "text-indent: " + u * 3 + "em;" : s + c[-1 - u];
+		let d = u >= 0 ? a + "text-indent: " + u * 3 + "em;" : s + c[-1 - u];
 		e.setAttribute("style", d + n);
 	}, E = function(e) {
 		let t = e.subject;
@@ -180,15 +180,15 @@ function y(e, s, c, l, u) {
 		let c = s.appendChild(e.createElement("input"));
 		return c.subject = i, c.setAttribute("type", "text"), c.value = o, l ? (T(c, ""), O(c, i)) : (T(c, "color: #222; background-color: #fff"), r("Note can't add listeners - not logged in")), c;
 	}, A = function(e, n) {
-		let i = g, a = 0, u = null, d, f, m, h, _;
-		e ? (e.tagName.toLowerCase() !== "input" && r("return pressed when current document is: " + e.tagName), d = e.subject, a = i.any(d, b("indent")), a = a ? Number(a.value) : 0, n ? (f = i.any(void 0, b("next"), d), m = d, h = f, u = "newlinesAfter") : (f = d, m = i.any(d, b("next")), h = m, u = "newlinesBefore"), _ = e.parentNode) : (f = c, m = c, _ = void 0);
-		let v = o(s), x = v.uri.slice(-4), S = [p(f, b("next"), m, s)], C = [
+		let i = g, o = 0, u = null, d, f, m, h, _;
+		e ? (e.tagName.toLowerCase() !== "input" && r("return pressed when current document is: " + e.tagName), d = e.subject, o = i.any(d, b("indent")), o = o ? Number(o.value) : 0, n ? (f = i.any(void 0, b("next"), d), m = d, h = f, u = "newlinesAfter") : (f = d, m = i.any(d, b("next")), h = m, u = "newlinesBefore"), _ = e.parentNode) : (f = c, m = c, _ = void 0);
+		let v = a(s), x = v.uri.slice(-4), S = [p(f, b("next"), m, s)], C = [
 			p(f, b("next"), v, s),
 			p(v, b("next"), m, s),
 			p(v, t.dc("author"), l, s),
 			p(v, t.sioc("content"), "", s)
 		];
-		if (a > 0 && C.push(p(v, b("indent"), a, s)), r("    Fresh chunk " + x + " proposed"), !y) throw Error("no updater");
+		if (o > 0 && C.push(p(v, b("indent"), o, s)), r("    Fresh chunk " + x + " proposed"), !y) throw Error("no updater");
 		y.update(S, C, function(e, t, i, a) {
 			if (!t) r("    ERROR writing new line " + x + ": " + i);
 			else {

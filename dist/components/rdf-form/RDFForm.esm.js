@@ -1,10 +1,10 @@
-import e from "../../lib/ns.esm.js";
-import { customElement as t } from "../../lib/components/decorators.esm.js";
-import n from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import t from "../../lib/components/web-component/WebComponent.esm.js";
+import n from "../../lib/ns.esm.js";
 import { fetchData as r, findForm as i, sortBySequence as a } from "../../lib/forms/rdfFormsHelper.esm.js";
-import { DEFAULT_STORE as o, storeContext as s } from "../../lib/forms/store/StoreContext.esm.js";
 import "../rdf-input/index.esm.js";
+import { DEFAULT_STORE as o, storeContext as s } from "../../lib/forms/store/StoreContext.esm.js";
 import { sym as c } from "rdflib";
 import { consume as l } from "@lit/context";
 import { property as u, state as d } from "lit/decorators.js";
@@ -184,12 +184,12 @@ var H = {
 		return e || null;
 	}
 }, U = (e) => e?.href ?? "";
-g = [t("solid-ui-rdf-form")];
+g = [e("solid-ui-rdf-form")];
 var W, G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), X = /*#__PURE__*/ new WeakMap(), Z = /*#__PURE__*/ new WeakMap();
 j = (_ = l({
 	context: s,
 	subscribe: !0
-}), y = u({ attribute: !1 }), x = d(), C = d(), T = d(), D = u({ converter: H }), k = u({ converter: H }), "storeContext"), p = class extends n {
+}), y = u({ attribute: !1 }), x = d(), C = d(), T = d(), D = u({ converter: H }), k = u({ converter: H }), "storeContext"), p = class extends t {
 	constructor(...e) {
 		super(...e), M(this, G, (m(this), v(this, o))), M(this, K, b(this, null)), M(this, q, S(this, !0)), M(this, J, w(this, 0)), M(this, Y, E(this, !1)), M(this, X, O(this, null)), M(this, Z, A(this, null));
 	}
@@ -240,14 +240,14 @@ j = (_ = l({
 	}
 	render() {
 		if (!this._documentsLoaded) return f``;
-		let t = this.currentStore, n = U(this.subjectUrl);
-		n && t.updater?.editable(n) !== void 0 && t.updater?.editable(n) !== !1 && (this.entireDataIsReadonly = !1);
+		let e = this.currentStore, t = U(this.subjectUrl);
+		t && e.updater?.editable(t) !== void 0 && e.updater?.editable(t) !== !1 && (this.entireDataIsReadonly = !1);
 		let r = i(this.currentStore, U(this.formUrl));
 		if (!r) throw Error("No ui:Form found in " + U(this.formUrl));
-		let o = c(U(this.formUrl)), s = t.each(r, e.ui("parts"), null, o), l = (a(t, s) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((n) => {
-			let r = t.each(n, e.rdf("type"), null, o)[0], i = r ? r.value || String(r) : n.value || String(n), a = i.lastIndexOf("#");
+		let o = c(U(this.formUrl)), s = e.each(r, n.ui("parts"), null, o), l = (a(e, s) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((t) => {
+			let r = e.each(t, n.rdf("type"), null, o)[0], i = r ? r.value || String(r) : t.value || String(t), a = i.lastIndexOf("#");
 			return {
-				value: n,
+				value: t,
 				fieldValue: a >= 0 ? i.slice(a + 1) : i
 			};
 		});
@@ -269,7 +269,7 @@ j = (_ = l({
 				case "SingleLineTextField":
 				case "NamedNodeURIField": return f` <solid-ui-rdf-input 
                   .formSubject=${c(e.value)} 
-                  .dataSubject=${c(n)}
+                  .dataSubject=${c(t)}
                   .storeVersion=${this._loadVersion}
                   .readonly=${this.entireDataIsReadonly}
                 ></solid-ui-rdf-input>
@@ -337,7 +337,7 @@ j = (_ = l({
 		1,
 		"subjectUrl"
 	]
-], g, 0, void 0, n), h();
+], g, 0, void 0, t), h();
 export { W as default };
 
 //# sourceMappingURL=RDFForm.esm.js.map

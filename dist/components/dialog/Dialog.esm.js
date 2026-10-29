@@ -1,8 +1,8 @@
-import { DEFAULT_DIALOG_CONTEXT as e, dialogContext as t } from "../../lib/dialogs/context.esm.js";
-import { customElement as n } from "../../lib/components/decorators.esm.js";
-import r from "../../lib/components/traits/DialogTrait.esm.js";
-import i from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { customElement as e } from "../../lib/components/decorators.esm.js";
+import { DEFAULT_DIALOG_CONTEXT as t, dialogContext as n } from "../../lib/dialogs/context.esm.js";
+import r from "../../lib/components/web-component/WebComponent.esm.js";
+import i from "../../lib/components/traits/DialogTrait.esm.js";
 import "../../_virtual/~icons/lucide/x.esm.js";
 import "../dialog-header/index.esm.js";
 import "../button/index.esm.js";
@@ -183,15 +183,15 @@ function L(e) {
 function R(e) {
 	return e;
 }
-v = [n("solid-ui-dialog")];
+v = [e("solid-ui-dialog")];
 var z;
 new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), E = (y = l({
 	type: String,
 	reflect: !0
 }), x = u("dialog"), C = o({
-	context: t,
+	context: n,
 	subscribe: !0
-}), "title"), f = class extends i {
+}), "title"), f = class extends r {
 	get [E]() {
 		return A(p, this);
 	}
@@ -211,7 +211,7 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		k(h, this, e);
 	}
 	constructor() {
-		super(), D(this, p, (g(this), b(this, ""))), D(this, m, S(this, null)), D(this, h, w(this, e)), M(this, "dialogTrait", void 0), this.dialogTrait = this.addTrait(new r(this, { getContext: () => this.context }));
+		super(), D(this, p, (g(this), b(this, ""))), D(this, m, S(this, null)), D(this, h, w(this, t)), M(this, "dialogTrait", void 0), this.dialogTrait = this.addTrait(new i(this, { getContext: () => this.context }));
 	}
 	close(e) {
 		this.dialogTrait.close(e);
@@ -254,7 +254,7 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		1,
 		"context"
 	]
-], v, 0, void 0, i), f), d = class extends R {
+], v, 0, void 0, r), f), d = class extends R {
 	constructor() {
 		super(z), M(this, "styles", a), _();
 	}

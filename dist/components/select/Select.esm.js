@@ -1,8 +1,8 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import { isEmptyValue as n } from "../../lib/values.esm.js";
+import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import r from "./Select.styles.esm.js";
 import { html as i, nothing as a } from "lit";
 import { property as o, query as s, state as c } from "lit/decorators.js";

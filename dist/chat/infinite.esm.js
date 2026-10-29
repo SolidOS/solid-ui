@@ -1,7 +1,7 @@
-import e from "../lib/ns.esm.js";
-import { log as t, warn as n } from "../lib/debug.esm.js";
-import { errorMessageBlock as r } from "../widgets/error.esm.js";
+import { log as e, warn as t } from "../lib/debug.esm.js";
 import "../lib/iconBase.esm.js";
+import { errorMessageBlock as n } from "../widgets/error.esm.js";
+import r from "../lib/ns.esm.js";
 import { cancelButton as i, refreshTree as a, shortDate as o } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 import { ChatChannel as s, isDeleted as c } from "./chatLogic.esm.js";
@@ -12,7 +12,7 @@ import { store as f } from "solid-logic";
 function p(e) {
 	"Notification" in window ? Notification.permission === "granted" ? new Notification(e) : Notification.permission !== "denied" && Notification.requestPermission().then(function(t) {
 		t === "granted" && new Notification(e);
-	}) : n("This browser does no t support desktop notification");
+	}) : t("This browser does no t support desktop notification");
 }
 async function m(e, t, n, r, i, a) {
 	let o = await u(e, n, r, i, a);
@@ -27,22 +27,22 @@ async function m(e, t, n, r, i, a) {
 	}
 	s || t.appendChild(o);
 }
-async function h(n, u, h, g) {
-	async function _(t, n) {
-		let r = {}, i, o;
-		for (i = n.firstChild; i; i = i.nextSibling) i.AJAR_subject && (r[i.AJAR_subject.uri] = !0);
-		let s = f.each(t, e.wf("message"), null, n.chatDocument), c = {};
-		for (let e of s) c[e.uri] = !0, r[e.uri] || await v(e, n);
-		for (i = n.firstChild; i;) o = i.nextSibling, i.AJAR_subject && !c[i.AJAR_subject.uri] && n.removeChild(i), i = o;
-		for (i = n.firstChild; i; i = i.nextSibling) i.AJAR_subject && a(i);
+async function h(t, u, h, g) {
+	async function _(e, t) {
+		let n = {}, i, o;
+		for (i = t.firstChild; i; i = i.nextSibling) i.AJAR_subject && (n[i.AJAR_subject.uri] = !0);
+		let s = f.each(e, r.wf("message"), null, t.chatDocument), c = {};
+		for (let e of s) c[e.uri] = !0, n[e.uri] || await v(e, t);
+		for (i = t.firstChild; i;) o = i.nextSibling, i.AJAR_subject && !c[i.AJAR_subject.uri] && t.removeChild(i), i = o;
+		for (i = t.firstChild; i; i = i.nextSibling) i.AJAR_subject && a(i);
 	}
-	async function v(t, n) {
-		if (c(t) && !g.showDeletedMessages) return;
-		let r = f.any(null, e.sioc("has_member"), t, t.doc()), i = f.any(t, e.sioc("id"), null, t.doc());
-		if (i && !r && (r = f.any(null, e.sioc("has_member"), i, t.doc())), g.thread) {
-			if (!f.holds(t, e.sioc("has_reply"), g.thread) && !(r && r.sameTerm(g.thread))) return;
-		} else if (r) return;
-		n.fresh || await m(D, n, t, n.fresh, g, j);
+	async function v(e, t) {
+		if (c(e) && !g.showDeletedMessages) return;
+		let n = f.any(null, r.sioc("has_member"), e, e.doc()), i = f.any(e, r.sioc("id"), null, e.doc());
+		if (i && !n && (n = f.any(null, r.sioc("has_member"), i, e.doc())), g.thread) {
+			if (!f.holds(e, r.sioc("has_reply"), g.thread) && !(n && n.sameTerm(g.thread))) return;
+		} else if (n) return;
+		t.fresh || await m(D, t, e, t.fresh, g, j);
 	}
 	async function y(e) {
 		let t = e ? P : F, n = t.messageTable.date;
@@ -56,17 +56,17 @@ async function h(n, u, h, g) {
 		let i = await b(n, r);
 		return t.messageTable = i, (e ? E : !E) ? k.appendChild(i) : k.insertBefore(i, k.firstChild), r;
 	}
-	async function b(e, i) {
-		let a = O.leafDocumentFromDate(e);
+	async function b(r, i) {
+		let a = O.leafDocumentFromDate(r);
 		try {
 			await f.fetcher.createIfNotExists(a);
 		} catch (o) {
-			let s = n.createElement("table").appendChild(n.createElement("tr"));
-			return o.response && o.response.status && o.response.status === 404 ? await x(e, i) : (t("*** Error NON 404 for chat file " + a), s.appendChild(r(n, o, "pink")), s);
+			let s = t.createElement("table").appendChild(t.createElement("tr"));
+			return o.response && o.response.status && o.response.status === 404 ? await x(r, i) : (e("*** Error NON 404 for chat file " + a), s.appendChild(n(t, o, "pink")), s);
 		}
-		return await x(e, i);
+		return await x(r, i);
 	}
-	async function x(t, r) {
+	async function x(e, n) {
 		async function a() {
 			let e = await y(!0);
 			return e ? c.initial = !0 : c.extendedBack = !0, e;
@@ -74,36 +74,36 @@ async function h(n, u, h, g) {
 		async function s() {
 			return await y(!1);
 		}
-		let c = n.createElement("table");
-		c.style.width = "100%", c.extendBackwards = a, c.extendForwards = s, c.date = t;
-		let u = O.leafDocumentFromDate(t);
-		if (c.chatDocument = u, c.fresh = !1, c.setAttribute("style", "width: 100%;"), r) {
+		let c = t.createElement("table");
+		c.style.width = "100%", c.extendBackwards = a, c.extendForwards = s, c.date = e;
+		let u = O.leafDocumentFromDate(e);
+		if (c.chatDocument = u, c.fresh = !1, c.setAttribute("style", "width: 100%;"), n) {
 			c.final = !0, M = c, F.messageTable = c;
 			let e = l(D, c, j, g);
 			E ? c.insertBefore(e, c.firstChild) : c.appendChild(e), c.inputRow = e;
 		}
 		{
-			let e = n.createElement("tr"), r = e.appendChild(n.createElement("td"));
-			r.style = "text-align: center; vertical-align: middle; color: #888; font-style: italic;", r.textContent = o(t.toISOString(), !0);
-			let a = e.appendChild(n.createElement("td"));
-			g.includeRemoveButton && a.appendChild(i(n, (e) => {
+			let n = t.createElement("tr"), r = n.appendChild(t.createElement("td"));
+			r.style = "text-align: center; vertical-align: middle; color: #888; font-style: italic;", r.textContent = o(e.toISOString(), !0);
+			let a = n.appendChild(t.createElement("td"));
+			g.includeRemoveButton && a.appendChild(i(t, (e) => {
 				k.parentNode.removeChild(k);
-			})), c.extendedForwards = !1, E ? c.appendChild(e) : c.insertBefore(e, c.firstChild);
+			})), c.extendedForwards = !1, E ? c.appendChild(n) : c.insertBefore(n, c.firstChild);
 		}
-		let d = f.statementsMatching(null, e.wf("message"), null, u);
-		!r && d.length;
+		let d = f.statementsMatching(null, r.wf("message"), null, u);
+		!n && d.length;
 		for (let e of d) await v(e.object, c);
 		return c.fresh = !0, c;
 	}
 	async function S() {
-		let t = O.leafDocumentFromDate(/* @__PURE__ */ new Date());
-		if (!t.sameTerm(F.messageTable.chatDocument)) {
+		let e = O.leafDocumentFromDate(/* @__PURE__ */ new Date());
+		if (!e.sameTerm(F.messageTable.chatDocument)) {
 			M.inputRow && (M.removeChild(M.inputRow), delete M.inputRow);
-			let n = F.messageTable.chatDocument;
-			if (await C(), !f.holds(n, e.rdfs("seeAlso"), t, n)) {
-				let r = [d.st(n, e.rdfs("seeAlso"), t, n)];
+			let t = F.messageTable.chatDocument;
+			if (await C(), !f.holds(t, r.rdfs("seeAlso"), e, t)) {
+				let n = [d.st(t, r.rdfs("seeAlso"), e, t)];
 				try {
-					f.updater.update([], r);
+					f.updater.update([], n);
 				} catch (e) {
 					alert("Unable to link old chat file to new one:" + e);
 				}
@@ -152,18 +152,18 @@ async function h(n, u, h, g) {
 		a && !n ? (o = await b(O.dateFromLeafDocument(a), n), k.appendChild(o), P.messageTable = o, F.messageTable = o, e(), setTimeout(e, 1e3)) : (await C(), P.messageTable = M, F.messageTable = M), await w(null, t), k.addEventListener("scroll", w), g.solo && document.body.addEventListener("scroll", w);
 	}
 	g ||= {}, g.authorDateOnLeft = !1;
-	let E = g.newestFirst === "1" || g.newestFirst === !0, D = new s(h, g), O = D.dateFolder, k = n.createElement("div");
+	let E = g.newestFirst === "1" || g.newestFirst === !0, D = new s(h, g), O = D.dateFolder, k = t.createElement("div");
 	D.div = k;
-	let A = k.appendChild(n.createElement("div")), j = {
-		dom: n,
+	let A = k.appendChild(t.createElement("div")), j = {
+		dom: t,
 		statusArea: A,
 		div: A
 	}, M, N, P = { messageTable: null }, F = { messageTable: null };
 	if (g.thread) {
-		let t = g.thread;
-		if (N = f.any(null, e.sioc("has_reply"), t, t.doc()), N) {
-			let t = f.any(N, e.dct("created"), null, N.doc());
-			t && (P.limit = new Date(t.value));
+		let e = g.thread;
+		if (N = f.any(null, r.sioc("has_reply"), e, e.doc()), N) {
+			let e = f.any(N, r.dct("created"), null, N.doc());
+			e && (P.limit = new Date(e.value));
 		}
 	}
 	let I = !1;

@@ -1,11 +1,11 @@
 import e from "../../lib/ns.esm.js";
 import { label as t } from "../../utils/label.esm.js";
+import { style as n } from "../../lib/style.esm.js";
+import r from "../../lib/styleConstants.esm.js";
 import "../../utils/index.esm.js";
-import n from "../../lib/styleConstants.esm.js";
-import { style as r } from "../../lib/style.esm.js";
 import { errorMessageBlock as i } from "../error.esm.js";
-import { fieldParams as a } from "./fieldParams.esm.js";
-import { mostSpecificClassURI as o } from "./fieldFunction.esm.js";
+import { mostSpecificClassURI as a } from "./fieldFunction.esm.js";
+import { fieldParams as o } from "./fieldParams.esm.js";
 import { Literal as s, st as c } from "rdflib";
 import { solidLogicSingleton as l } from "solid-logic";
 // src/widgets/forms/basic.ts
@@ -13,9 +13,9 @@ var u = l.store;
 function d(t, a, o, s, c) {
 	o.style.display = "flex", o.style.flexDirection = "row";
 	let l = o.appendChild(t.createElement("div"));
-	l.style.width = n.formFieldNameBoxWidth;
+	l.style.width = r.formFieldNameBoxWidth;
 	let u = o.appendChild(t.createElement("div"));
-	return l.setAttribute("class", "formFieldName"), l.setAttribute("style", r.formFieldNameBoxStyle), u.setAttribute("class", "formFieldValue"), c ? l.appendChild(t.createTextNode(c)) : a.any(s, e.ui("property")) ? l.appendChild(f(t, a.any(s, e.ui("property")), s)) : (u.appendChild(i(t, "No property or label given for form field: " + s)), l.appendChild(t.createTextNode("???"))), u;
+	return l.setAttribute("class", "formFieldName"), l.setAttribute("style", n.formFieldNameBoxStyle), u.setAttribute("class", "formFieldValue"), c ? l.appendChild(t.createTextNode(c)) : a.any(s, e.ui("property")) ? l.appendChild(f(t, a.any(s, e.ui("property")), s)) : (u.appendChild(i(t, "No property or label given for form field: " + s)), l.appendChild(t.createTextNode("???"))), u;
 }
 function f(n, r, i) {
 	let a = u.any(i, e.ui("label"));
@@ -32,14 +32,14 @@ function p(e, t, n) {
 function m(t, l, f, m, h, g, _) {
 	let v = u, y = h.doc ? h.doc() : null, b = t.createElement("div"), x = v.any(h, e.ui("property"));
 	if (l && l.appendChild(b), !x) return b.appendChild(i(t, "Error: No property given for text field: " + h));
-	let S = d(t, v, b, h), C = v.anyJS(h, e.ui("suppressEmptyUneditable"), null, y), w = o(h), T = a[w];
+	let S = d(t, v, b, h), C = v.anyJS(h, e.ui("suppressEmptyUneditable"), null, y), w = a(h), T = o[w];
 	T === void 0 && (T = { style: "" });
-	let E = T.style || "", D = r.textInputStyle + E, O = t.createElement("input");
+	let E = T.style || "", D = n.textInputStyle + E, O = t.createElement("input");
 	O.style = D, S.appendChild(O), O.setAttribute("type", T.type ? T.type : "text");
-	let k = (O.getAttribute("type") || "").toLowerCase(), A = k === "date" || k === "datetime-local", j = v.anyJS(h, e.ui("size")) || n.textInputSize || 20;
+	let k = (O.getAttribute("type") || "").toLowerCase(), A = k === "date" || k === "datetime-local", j = v.anyJS(h, e.ui("size")) || r.textInputSize || 20;
 	O.setAttribute("size", j);
 	let M = v.any(h, e.ui("maxLength"));
-	O.setAttribute("maxLength", M ? "" + M : n.basicMaxLength), g ||= p(m, x, g);
+	O.setAttribute("maxLength", M ? "" + M : r.basicMaxLength), g ||= p(m, x, g);
 	let N = v.any(m, x, void 0, g);
 	if (N ||= v.any(h, e.ui("default")), N && N.value && T.uriPrefix ? O.value = decodeURIComponent(N.value.replace(T.uriPrefix, "")).replace(/ /g, "") : N && 
 	/* istanbul ignore next */
@@ -83,7 +83,7 @@ function m(t, l, f, m, h, g, _) {
 			let e = new Event("change", { bubbles: !0 });
 			O.dispatchEvent(e);
 		}
-	}, !0), b) : (O.readOnly = !0, O.style = r.textInputStyleUneditable + E, C && O.value === "" && (b.style.display = "none"), b);
+	}, !0), b) : (O.readOnly = !0, O.style = n.textInputStyleUneditable + E, C && O.value === "" && (b.style.display = "none"), b);
 }
 export { m as basicField, f as fieldLabel, p as fieldStore, d as renderNameValuePair };
 

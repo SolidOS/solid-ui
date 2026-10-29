@@ -1,9 +1,9 @@
-import e from "../../lib/ns.esm.js";
-import { label as t } from "../../utils/label.esm.js";
-import { defineAsyncComboboxOptionsProvider as n } from "../combobox/Combobox.esm.js";
 import "../combobox/index.esm.js";
+import { directoryEntryOptionTemplate as e } from "./AccessControlAddAccess.esm.js";
+import { defineAsyncComboboxOptionsProvider as t } from "../combobox/Combobox.esm.js";
+import { label as n } from "../../utils/label.esm.js";
+import r from "../../lib/ns.esm.js";
 import "../../_virtual/~icons/lucide/globe.esm.js";
-import { directoryEntryOptionTemplate as r } from "./AccessControlAddAccess.esm.js";
 import { dedupeByKey as i, dedupeComboboxOptions as a, isAbsoluteHttpUri as o, isOriginUrl as s, normalizeOriginInput as c } from "./helpers.esm.js";
 import { sym as l } from "rdflib";
 import { DEFAULT_DIRECTORY_SOURCES as u, solidLogicSingleton as d } from "solid-logic";
@@ -19,11 +19,11 @@ async function p(e) {
 		subjectValue: new URL(e).origin
 	} : await d.acl.classifyAccessControlSubject(e);
 }
-async function m(e, n) {
+async function m(e, t) {
 	if (!e || e.kind === "origin") return e?.subjectValue;
 	let r = l(e.subjectValue);
 	await d.store.fetcher.load(r.doc());
-	let i = n?.trim() || t(r).trim();
+	let i = t?.trim() || n(r).trim();
 	if (!i || i === e.subjectValue) throw Error("The access target has no usable display label.");
 	return i;
 }
@@ -45,13 +45,13 @@ async function g(e) {
 		value: e
 	} : void 0;
 }
-function _(e, t) {
+function _(t, n) {
 	return {
-		label: t,
-		value: e.uri,
-		template: r({
-			...e,
-			label: t
+		label: n,
+		value: t.uri,
+		template: e({
+			...t,
+			label: n
 		})
 	};
 }
@@ -73,17 +73,17 @@ async function v(e) {
 	let n = await g(e);
 	return a(n ? [n] : []);
 }
-async function y(t) {
+async function y(e) {
 	try {
-		let n = d.authn.currentUser();
-		if (!n) return [];
-		await d.profile.loadProfile(n);
-		let r = d.store;
-		return r.each(n, e.acl("trustedApp")).flatMap((n) => {
-			let i = r.any(n, e.acl("origin"));
+		let t = d.authn.currentUser();
+		if (!t) return [];
+		await d.profile.loadProfile(t);
+		let n = d.store;
+		return n.each(t, r.acl("trustedApp")).flatMap((t) => {
+			let i = n.any(t, r.acl("origin"));
 			if (!i || !s(i.value)) return [];
 			let a = new URL(i.value).origin;
-			return t && !`${a} trusted app`.toLowerCase().includes(t.toLowerCase()) ? [] : [{
+			return e && !`${a} trusted app`.toLowerCase().includes(e.toLowerCase()) ? [] : [{
 				label: `Trusted app: ${a}`,
 				value: a,
 				targetKind: "trustedApp",
@@ -101,7 +101,7 @@ function b(e) {
 		selectable: !1
 	}];
 }
-var x = n(async (e) => {
+var x = t(async (e) => {
 	let t = e.trim(), n = await v(t), r = await y(t);
 	if (t.length < 2) return i([
 		...n,

@@ -1,18 +1,18 @@
-import { label as e } from "../../utils/label.esm.js";
-import { error as t } from "../../lib/debug.esm.js";
-import { customElement as n } from "../../lib/components/decorators.esm.js";
-import r from "../../lib/components/dialog-component/DialogComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import "../../_virtual/~icons/lucide/x.esm.js";
-import "../button/index.esm.js";
-import "../dialog/index.esm.js";
-import "../dialog-content/index.esm.js";
-import "../dialog-footer/index.esm.js";
-import "../combobox/index.esm.js";
-import "../combobox-option/index.esm.js";
+import { label as e } from "../../utils/label.esm.js";
+import { customElement as t } from "../../lib/components/decorators.esm.js";
+import n from "../../lib/components/dialog-component/DialogComponent.esm.js";
+import { error as r } from "../../lib/debug.esm.js";
 import "../../_virtual/~icons/lucide/circle-x.esm.js";
 import "../../_virtual/~icons/lucide/folder.esm.js";
 import "../../_virtual/~icons/lucide/folder-open.esm.js";
+import "../../_virtual/~icons/lucide/x.esm.js";
+import "../dialog/index.esm.js";
+import "../dialog-content/index.esm.js";
+import "../dialog-footer/index.esm.js";
+import "../button/index.esm.js";
+import "../combobox/index.esm.js";
+import "../combobox-option/index.esm.js";
 import "./AccessControlSharedAccess.esm.js";
 import "./AccessControlGeneralAccess.esm.js";
 import "./AccessControlErrors.esm.js";
@@ -201,9 +201,9 @@ function Ge(e) {
 function Ke(e) {
 	return e != null;
 }
-ne = [n("solid-ui-access-control-modal")];
+ne = [t("solid-ui-access-control-modal")];
 var $;
-new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), Le = (re = w({ attribute: !1 }), ae = w({ attribute: !1 }), K = T(), se = T(), le = T(), de = T(), pe = T(), he = T(), _e = T(), ye = T(), xe = T(), Ce = T(), Te = T(), De = T(), ke = T(), je = T(), Ne = T(), Fe = T(), "subjectUri"), D = class extends r {
+new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), Le = (re = w({ attribute: !1 }), ae = w({ attribute: !1 }), K = T(), se = T(), le = T(), de = T(), pe = T(), he = T(), _e = T(), ye = T(), xe = T(), Ce = T(), Te = T(), De = T(), ke = T(), je = T(), Ne = T(), Fe = T(), "subjectUri"), D = class extends n {
 	constructor(...e) {
 		super(...e), Y(this, O, (ee(this), ie(this, void 0))), Y(this, k, oe(this, void 0)), Y(this, A, q(this, "")), Y(this, j, ce(this, "Viewer")), Y(this, M, ue(this, "No Access")), Y(this, N, fe(this, "No Access")), Y(this, P, me(this, !1)), Y(this, F, ge(this, [])), Y(this, I, ve(this, [])), Y(this, L, be(this, [])), Y(this, R, Se(this, !0)), Y(this, z, we(this)), Y(this, B, Ee(this, !1)), Y(this, V, Oe(this, "")), Y(this, H, Ae(this, !1)), Y(this, U, Me(this, "folder+contents")), Y(this, W, Pe(this)), Y(this, G, J(this, !1)), Q(this, "accessGrantLabelRequestVersion", 0), Q(this, "accessContextRequestVersion", 0), Q(this, "accessContextSubjectUri", void 0);
 	}
@@ -338,9 +338,9 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 	}
 	updated(e) {
 		super.updated(e), e.has("subjectUri") && this.loadAccessContext().catch((e) => {
-			t("Failed to load access control context", e);
+			r("Failed to load access control context", e);
 		}), e.has("accessGrants") && this.refreshAccessGrantLabels().catch((e) => {
-			t("Failed to refresh access grant labels", e);
+			r("Failed to refresh access grant labels", e);
 		}), e.has("accessContext") && !e.has("subjectUri") && this.refreshContainerScopeAnalysis();
 	}
 	refreshContainerScopeAnalysis() {
@@ -373,17 +373,17 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		return !!(this.subjectUri && new URL(this.subjectUri).pathname.endsWith("/"));
 	}
 	async loadAccessContext() {
-		let e = ++this.accessContextRequestVersion, n = this.subjectUri;
-		if (this.accessContext = void 0, this.accessContextSubjectUri = void 0, this.accessContextError = "", this.accessContextLoading = !!n, !n) this.accessContextLoading = !1;
+		let e = ++this.accessContextRequestVersion, t = this.subjectUri;
+		if (this.accessContext = void 0, this.accessContextSubjectUri = void 0, this.accessContextError = "", this.accessContextLoading = !!t, !t) this.accessContextLoading = !1;
 		else try {
-			let t = await S.acl.findEffectiveAcl(n);
-			if (e !== this.accessContextRequestVersion || this.subjectUri !== n) return;
-			this.accessContext = t, this.accessContextSubjectUri = n, this.accessContext?.inherited && !this.accessGrants?.length && (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeAnalysis(), this.protectedTarget = S.acl.isProtectedResource(n), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
-		} catch (r) {
-			if (e !== this.accessContextRequestVersion || this.subjectUri !== n) return;
-			this.accessContextError = r instanceof Error && r.message.trim() ? r.message : "Unable to load access settings for this resource.", t("Failed to load access control context", r);
+			let n = await S.acl.findEffectiveAcl(t);
+			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
+			this.accessContext = n, this.accessContextSubjectUri = t, this.accessContext?.inherited && !this.accessGrants?.length && (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeAnalysis(), this.protectedTarget = S.acl.isProtectedResource(t), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
+		} catch (n) {
+			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
+			this.accessContextError = n instanceof Error && n.message.trim() ? n.message : "Unable to load access settings for this resource.", r("Failed to load access control context", n);
 		} finally {
-			e === this.accessContextRequestVersion && this.subjectUri === n && (this.accessContextLoading = !1);
+			e === this.accessContextRequestVersion && this.subjectUri === t && (this.accessContextLoading = !1);
 		}
 	}
 	async ensureAccessContext() {
@@ -600,7 +600,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
     `;
 	}
 	async onSubmit(e) {
-		e.preventDefault(), this.submitting || this.hasMixedContainerPolicy() || this.isConnected && !await this.ensureAccessContext() || await this.commitPrincipalFromInputSafely();
+		e.preventDefault(), this.submitting || this.hasMixedContainerPolicy() || (!this.isConnected || await this.ensureAccessContext()) && await this.commitPrincipalFromInputSafely();
 	}
 	async onSaveClick() {
 		if (this.submitting || this.hasMixedContainerPolicy() || this.isConnected && !await this.ensureAccessContext() || this.principalInputValue.trim() && !await this.commitPrincipalFromInputSafely()) return;
@@ -626,7 +626,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 					targetUri: this.subjectUri,
 					label: "Custom sharing",
 					message: e instanceof Error ? e.message : "Unable to reset sharing."
-				}], t("Failed to reset access control", e);
+				}], r("Failed to reset access control", e);
 			} finally {
 				this.submitting = !1;
 			}
@@ -634,14 +634,14 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 	}
 	async saveAccessChanges(e = "file") {
 		if (this.submitting || !this.canMutate() || this.hasMixedContainerPolicy()) return;
-		let n = u(this.accessGrantDrafts), r = this.getGeneralAccessChanges();
-		if ((this.pendingAccessGrants.length || n.length || r.length) && this.subjectUri) {
+		let t = u(this.accessGrantDrafts), n = this.getGeneralAccessChanges();
+		if ((this.pendingAccessGrants.length || t.length || n.length) && this.subjectUri) {
 			this.submitting = !0, this.errors = this.errors.filter((e) => e.action === "input"), this.successfulChangesRefreshed = !0;
 			try {
 				let i = g({
 					pendingAccessGrants: this.pendingAccessGrants,
-					generalAccessChanges: r,
-					changedAccessGrants: n
+					generalAccessChanges: n,
+					changedAccessGrants: t
 				}), a = await h(this.subjectUri, i, { containerScope: e });
 				if (a.length) {
 					this.errors = [...this.errors, ...a], this.principalInputValue = "", this.pendingAccessGrants = [];
@@ -653,9 +653,9 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 							targetUri: this.subjectUri,
 							label: "Shared with list",
 							message: e instanceof Error ? e.message : "Unable to refresh the access list."
-						}], t("Failed to refresh access grants after save errors", e);
+						}], r("Failed to refresh access grants after save errors", e);
 					}
-					t("Failed to save some access changes", a);
+					r("Failed to save some access changes", a);
 					return;
 				}
 				this.principalInputValue = "", this.pendingAccessGrants = [], this.close();
@@ -723,18 +723,18 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		let e = this.principalInputValue.trim();
 		try {
 			return await this.commitPrincipalFromInput();
-		} catch (n) {
+		} catch (t) {
 			return this.principalInputValue.trim() === e ? (this.setInputError({
 				action: "input",
 				label: "Access target",
 				targetUri: this.principalInputValue.trim(),
 				message: "We could not verify this access target. Check the value and try again."
-			}), t("Failed to commit pending access grants", n), !1) : (t("Ignored stale access-target validation error", n), !1);
+			}), r("Failed to commit pending access grants", t), !1) : (r("Ignored stale access-target validation error", t), !1);
 		}
 	}
-	async queuePendingPrincipal(e, n = this.addAccessRoleValue, r, i, a) {
-		let o = i ?? this.principalInputValue.trim(), s = await this.createPendingAccessGrant(e, n, r, a);
-		if ("error" in s) return this.principalInputValue.trim() === o && this.setInputError(s.error), t("Failed to add access grant:", s.error.message), !1;
+	async queuePendingPrincipal(e, t = this.addAccessRoleValue, n, i, a) {
+		let o = i ?? this.principalInputValue.trim(), s = await this.createPendingAccessGrant(e, t, n, a);
+		if ("error" in s) return this.principalInputValue.trim() === o && this.setInputError(s.error), r("Failed to add access grant:", s.error.message), !1;
 		let c = [...this.pendingAccessGrants, s.grant];
 		return this.pendingAccessGrants = this.dedupePendingAccessGrants(c), this.principalInputValue.trim() === o && (this.clearInputError(), this.principalInputValue = ""), !0;
 	}
@@ -858,7 +858,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		1,
 		"protectedTarget"
 	]
-], ne, 0, void 0, r), D), E = class extends Ge {
+], ne, 0, void 0, n), D), E = class extends Ge {
 	constructor() {
 		super($), Q(this, "styles", i), te();
 	}

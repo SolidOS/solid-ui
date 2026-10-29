@@ -1,8 +1,8 @@
 import { findImage as e } from "../../widgets/buttons.esm.js";
-import "../../widgets/index.esm.js";
+import "../../lib/components/index.esm.js";
 import { customElement as t } from "../../lib/components/decorators.esm.js";
 import n from "../../lib/components/web-component/WebComponent.esm.js";
-import "../../lib/components/index.esm.js";
+import "../../widgets/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
 import "../../_virtual/~icons/lucide/globe.esm.js";

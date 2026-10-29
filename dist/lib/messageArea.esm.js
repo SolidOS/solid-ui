@@ -1,22 +1,22 @@
-import e from "./ns.esm.js";
+import { icons as e } from "./iconBase.esm.js";
 import { label as t } from "../utils/label.esm.js";
+import { ensureLoggedIn as n } from "../login/login.esm.js";
+import r from "./ns.esm.js";
+import { style as i } from "./style.esm.js";
 import "../utils/index.esm.js";
-import { style as n } from "./style.esm.js";
-import { icons as r } from "./iconBase.esm.js";
-import { widgets_exports as i } from "../widgets/index.esm.js";
-import { ensureLoggedIn as a } from "../login/login.esm.js";
+import { widgets_exports as a } from "../widgets/index.esm.js";
 import * as o from "rdflib";
 import { solidLogicSingleton as s } from "solid-logic";
 // src/lib/messageArea.js
 var c = {
-	icons: r,
-	ns: e,
+	icons: e,
+	ns: r,
 	rdf: o,
-	style: n,
-	widgets: i
+	style: i,
+	widgets: a
 };
-function l(e, n, r, i, l) {
-	n ||= s.store, i = i.doc();
+function l(e, r, i, a, l) {
+	r ||= s.store, a = a.doc();
 	let u = c.ns, d = o.Namespace("http://www.w3.org/2005/01/wf/flow#"), f = o.Namespace("http://purl.org/dc/terms/");
 	l ||= {};
 	let p = !!l.newestFirst, m = "white-space: pre-wrap; width: 90%; font-size:100%; border: 0.07em solid #eee; padding: .2em 0.5em; margin: 0.1em 1em 0.1em 1em;", h = e.createElement("div"), g, _, v = s.store.updater, y = function(t, n) {
@@ -40,13 +40,13 @@ function l(e, n, r, i, l) {
 		t.appendChild(s), t.appendChild(l), t.appendChild(d), t.AJAR_date = "9999-01-01T00:00:00Z";
 		let p = function() {
 			h.setAttribute("class", "pendingedit"), h.disabled = !0;
-			let a = [], s = /* @__PURE__ */ new Date(), l = "" + s.getTime(), d = o.term(s), p = n.sym(i.uri + "#Msg" + l);
-			a.push(new o.Statement(r, u.wf("message"), p, i)), a.push(new o.Statement(p, u.sioc("content"), n.literal(h.value), i)), a.push(new o.Statement(p, f("created"), d, i)), _ && a.push(new o.Statement(p, u.foaf("maker"), _, i)), v.update([], a, function(r, i, a) {
+			let n = [], s = /* @__PURE__ */ new Date(), l = "" + s.getTime(), d = o.term(s), p = r.sym(a.uri + "#Msg" + l);
+			n.push(new o.Statement(i, u.wf("message"), p, a)), n.push(new o.Statement(p, u.sioc("content"), r.literal(h.value), a)), n.push(new o.Statement(p, f("created"), d, a)), _ && n.push(new o.Statement(p, u.foaf("maker"), _, a)), v.update([], n, function(n, i, a) {
 				if (!i) t.appendChild(c.widgets.errorMessageBlock(e, "Error writing message: " + a));
 				else {
 					let e = {
 						"?msg": p,
-						"?content": n.literal(h.value),
+						"?content": r.literal(h.value),
 						"?date": d,
 						"?creator": _
 					};
@@ -60,7 +60,7 @@ function l(e, n, r, i, l) {
 				e.keyCode === 13 && (e.altKey || p());
 			}, !1), d.innerHTML = "", g = c.widgets.button(e, c.icons.iconBase + "noun_383448.svg", "Send"), g.setAttribute("style", c.style.buttonStyle + "float: right;"), g.addEventListener("click", p, !1), d.appendChild(g);
 		};
-		return a({
+		return n({
 			div: l,
 			dom: e
 		}).then((e) => {
@@ -78,24 +78,24 @@ function l(e, n, r, i, l) {
 		}), t.appendChild(e.createElement("br")), t.appendChild(y(r, i));
 	}
 	function T(e, t) {
-		let r = {}, i, a;
-		for (i = t.firstChild; i; i = i.nextSibling) i.AJAR_subject && (r[i.AJAR_subject.uri] = !0);
-		let o = n.each(e, u.wf("message")), s = {};
+		let n = {}, i, a;
+		for (i = t.firstChild; i; i = i.nextSibling) i.AJAR_subject && (n[i.AJAR_subject.uri] = !0);
+		let o = r.each(e, u.wf("message")), s = {};
 		for (o.forEach(function(e) {
-			s[e.uri] = !0, r[e.uri] || D(e);
+			s[e.uri] = !0, n[e.uri] || D(e);
 		}), i = t.firstChild; i;) a = i.nextSibling, i.AJAR_subject && !s[i.AJAR_subject.uri] && t.removeChild(i), i = a;
 	}
 	let E = function(e) {
-		let t = n.statementsMatching(e).concat(n.statementsMatching(void 0, void 0, e));
+		let t = r.statementsMatching(e).concat(r.statementsMatching(void 0, void 0, e));
 		v.update(t, [], function(e, t, n) {
-			t ? T(r, g) : x.error("Cant delete messages:" + n);
+			t ? T(i, g) : x.error("Cant delete messages:" + n);
 		});
 	}, D = function(e) {
 		let t = {
 			"?msg": e,
-			"?creator": n.any(e, u.foaf("maker")),
-			"?date": n.any(e, f("created")),
-			"?content": n.any(e, u.sioc("content"))
+			"?creator": r.any(e, u.foaf("maker")),
+			"?date": r.any(e, f("created")),
+			"?content": r.any(e, u.sioc("content"))
 		};
 		O(t, !0);
 	}, O = function(t, n) {
@@ -143,13 +143,13 @@ function l(e, n, r, i, l) {
 			"content"
 		].forEach(function(t) {
 			A.vars.push(e[t] = o.variable(t));
-		}), A.pat.add(r, d("message"), e.msg), A.pat.add(e.msg, u.dct("created"), e.date), A.pat.add(e.msg, u.foaf("maker"), e.creator), A.pat.add(e.msg, u.sioc("content"), e.content);
+		}), A.pat.add(i, d("message"), e.msg), A.pat.add(e.msg, u.dct("created"), e.date), A.pat.add(e.msg, u.foaf("maker"), e.creator), A.pat.add(e.msg, u.sioc("content"), e.content);
 	}
 	function j() {
 		g.fresh = !0;
 	}
-	return n.query(A, O, void 0, j), h.refresh = function() {
-		T(r, g);
+	return r.query(A, O, void 0, j), h.refresh = function() {
+		T(i, g);
 	}, h;
 }
 export { l as messageArea };

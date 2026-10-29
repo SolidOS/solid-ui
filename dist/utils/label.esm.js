@@ -1,11 +1,11 @@
-import e from "../lib/ns.esm.js";
-import { log_exports as t } from "../lib/log.esm.js";
+import { log_exports as e } from "../lib/log.esm.js";
+import t from "../lib/ns.esm.js";
 import * as n from "rdflib";
 import { store as r } from "solid-logic";
 // src/utils/label.ts
 var i = {
-	log: t,
-	ns: e,
+	log: e,
+	ns: t,
 	rdf: n
 };
 function a(e, t = !1) {

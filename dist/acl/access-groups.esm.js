@@ -1,14 +1,14 @@
-import e from "../lib/ns.esm.js";
-import { error as t, log as n } from "../lib/debug.esm.js";
-import { ACLbyCombination as r, readACL as i } from "./acl.esm.js";
-import { style as a } from "../lib/style.esm.js";
-import { makeDropTarget as o } from "../widgets/dragAndDrop.esm.js";
-import { personTR as s } from "../widgets/buttons.esm.js";
+import { ACLbyCombination as e, readACL as t } from "./acl.esm.js";
 import "../widgets/index.esm.js";
-import { AddAgentButtons as c } from "./add-agent-buttons.esm.js";
+import n from "../lib/ns.esm.js";
+import { AddAgentButtons as r } from "./add-agent-buttons.esm.js";
+import { makeDropTarget as i } from "../widgets/dragAndDrop.esm.js";
+import { personTR as a } from "../widgets/buttons.esm.js";
+import { error as o, log as s } from "../lib/debug.esm.js";
+import { style as c } from "../lib/style.esm.js";
 import { sym as l } from "rdflib";
 // src/acl/access-groups.ts
-var u = e.acl, d = {
+var u = n.acl, d = {
 	13: "Owners",
 	9: "Owners (write locked)",
 	5: "Editors",
@@ -39,14 +39,14 @@ var u = e.acl, d = {
 	addAgentButton;
 	rootElement;
 	_store;
-	constructor(e, t, n, o, s = {}) {
-		this.doc = e, this.aclDoc = t, this.controller = n, this._options = s, this.defaults = this._options.defaults || !1, this._store = o, this.aclMap = i(e, t, o, this.defaults), this.byCombo = r(this.aclMap), this.addAgentButton = new c(this), this.rootElement = this.controller.dom.createElement("div"), this.rootElement.setAttribute("style", a.accessGroupList);
+	constructor(n, i, a, o, s = {}) {
+		this.doc = n, this.aclDoc = i, this.controller = a, this._options = s, this.defaults = this._options.defaults || !1, this._store = o, this.aclMap = t(n, i, o, this.defaults), this.byCombo = e(this.aclMap), this.addAgentButton = new r(this), this.rootElement = this.controller.dom.createElement("div"), this.rootElement.setAttribute("style", c.accessGroupList);
 	}
 	get store() {
 		return this._store;
 	}
-	set store(e) {
-		this._store = e, this.aclMap = i(this.doc, this.aclDoc, e, this.defaults), this.byCombo = r(this.aclMap);
+	set store(n) {
+		this._store = n, this.aclMap = t(this.doc, this.aclDoc, n, this.defaults), this.byCombo = e(this.aclMap);
 	}
 	render() {
 		return this.rootElement.innerHTML = "", this.renderGroups().forEach((e) => this.rootElement.appendChild(e)), this.controller.isEditable && this.rootElement.appendChild(this.addAgentButton.render()), this.rootElement;
@@ -61,86 +61,86 @@ var u = e.acl, d = {
 	}
 	renderGroup(e, t) {
 		let n = this.controller.dom.createElement("div");
-		return n.setAttribute("style", a.accessGroupListItem), o(n, (e) => this.handleDroppedUris(e, t).then(() => this.controller.render()).catch((e) => this.controller.renderStatus(e))), this.renderGroupElements(e, t).forEach((e) => n.appendChild(e)), n;
+		return n.setAttribute("style", c.accessGroupListItem), i(n, (e) => this.handleDroppedUris(e, t).then(() => this.controller.render()).catch((e) => this.controller.renderStatus(e))), this.renderGroupElements(e, t).forEach((e) => n.appendChild(e)), n;
 	}
 	renderGroupElements(e, t) {
 		let n = this.controller.dom.createElement("div");
-		if (n.setAttribute("style", a.group), this.controller.isEditable) switch (e) {
+		if (n.setAttribute("style", c.group), this.controller.isEditable) switch (e) {
 			case 1:
-				n.setAttribute("style", a.group1);
+				n.setAttribute("style", c.group1);
 				break;
 			case 2:
-				n.setAttribute("style", a.group2);
+				n.setAttribute("style", c.group2);
 				break;
 			case 3:
-				n.setAttribute("style", a.group3);
+				n.setAttribute("style", c.group3);
 				break;
 			case 5:
-				n.setAttribute("style", a.group5);
+				n.setAttribute("style", c.group5);
 				break;
 			case 9:
-				n.setAttribute("style", a.group9);
+				n.setAttribute("style", c.group9);
 				break;
 			case 13:
-				n.setAttribute("style", a.group13);
+				n.setAttribute("style", c.group13);
 				break;
-			default: n.setAttribute("style", a.group);
+			default: n.setAttribute("style", c.group);
 		}
 		n.innerText = d[e] || g(e);
 		let r = this.controller.dom.createElement("div");
-		if (r.setAttribute("style", a.group), this.controller.isEditable) switch (e) {
+		if (r.setAttribute("style", c.group), this.controller.isEditable) switch (e) {
 			case 1:
-				r.setAttribute("style", a.group1);
+				r.setAttribute("style", c.group1);
 				break;
 			case 2:
-				r.setAttribute("style", a.group2);
+				r.setAttribute("style", c.group2);
 				break;
 			case 3:
-				r.setAttribute("style", a.group3);
+				r.setAttribute("style", c.group3);
 				break;
 			case 5:
-				r.setAttribute("style", a.group5);
+				r.setAttribute("style", c.group5);
 				break;
 			case 9:
-				r.setAttribute("style", a.group9);
+				r.setAttribute("style", c.group9);
 				break;
 			case 13:
-				r.setAttribute("style", a.group13);
+				r.setAttribute("style", c.group13);
 				break;
-			default: r.setAttribute("style", a.group);
+			default: r.setAttribute("style", c.group);
 		}
 		let i = r.appendChild(this.controller.dom.createElement("table"));
 		(this.byCombo[t] || []).map(([e, n]) => this.renderAgent(i, t, e, n)).forEach((e) => i.appendChild(e));
-		let o = this.controller.dom.createElement("div");
-		if (o.setAttribute("style", a.group), this.controller.isEditable) switch (e) {
+		let a = this.controller.dom.createElement("div");
+		if (a.setAttribute("style", c.group), this.controller.isEditable) switch (e) {
 			case 1:
-				o.setAttribute("style", a.group1);
+				a.setAttribute("style", c.group1);
 				break;
 			case 2:
-				o.setAttribute("style", a.group2);
+				a.setAttribute("style", c.group2);
 				break;
 			case 3:
-				o.setAttribute("style", a.group3);
+				a.setAttribute("style", c.group3);
 				break;
 			case 5:
-				o.setAttribute("style", a.group5);
+				a.setAttribute("style", c.group5);
 				break;
 			case 9:
-				o.setAttribute("style", a.group9);
+				a.setAttribute("style", c.group9);
 				break;
 			case 13:
-				o.setAttribute("style", a.group13);
+				a.setAttribute("style", c.group13);
 				break;
-			default: o.setAttribute("style", a.group);
+			default: a.setAttribute("style", c.group);
 		}
-		return o.innerText = p[e] || "Unusual combination", [
+		return a.innerText = p[e] || "Unusual combination", [
 			n,
 			r,
-			o
+			a
 		];
 	}
 	renderAgent(e, t, n, r) {
-		let i = s(this.controller.dom, u(n), l(r), this.controller.isEditable ? { deleteFunction: () => this.deleteAgent(t, n, r).then(() => e.removeChild(i)).catch((e) => this.controller.renderStatus(e)) } : {});
+		let i = a(this.controller.dom, u(n), l(r), this.controller.isEditable ? { deleteFunction: () => this.deleteAgent(t, n, r).then(() => e.removeChild(i)).catch((e) => this.controller.renderStatus(e)) } : {});
 		return i;
 	}
 	async deleteAgent(e, t, n) {
@@ -157,26 +157,26 @@ var u = e.acl, d = {
 			return Promise.reject(e);
 		}
 	}
-	async handleDroppedUri(e, r, i = !1) {
-		let a = _(e, this.store), o = l(e);
-		if (!a && !i) {
-			n(`   Not obvious: looking up dropped thing ${o}`);
+	async handleDroppedUri(e, t, n = !1) {
+		let r = _(e, this.store), i = l(e);
+		if (!r && !n) {
+			s(`   Not obvious: looking up dropped thing ${i}`);
 			try {
-				await this._store?.fetcher?.load(o.doc());
+				await this._store?.fetcher?.load(i.doc());
 			} catch (e) {
-				let n = `Ignore error looking up dropped thing: ${e}`;
-				return t(n), Promise.reject(Error(n));
+				let t = `Ignore error looking up dropped thing: ${e}`;
+				return o(t), Promise.reject(Error(t));
 			}
-			return this.handleDroppedUri(e, r, !0);
+			return this.handleDroppedUri(e, t, !0);
 		}
-		if (!a) {
-			let n = Object.keys(this.store.findTypeURIs(o)), r = n.length > 0 ? `Detected RDF types: ${n.join(", ")}` : "No RDF type was detected for this URI.", i = `Error: Failed to add access target: ${e} is not a recognized ACL target type. Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes. Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.` + r;
-			return t(i), Promise.reject(Error(i));
+		if (!r) {
+			let t = Object.keys(this.store.findTypeURIs(i)), n = t.length > 0 ? `Detected RDF types: ${t.join(", ")}` : "No RDF type was detected for this URI.", r = `Error: Failed to add access target: ${e} is not a recognized ACL target type. Expected one of: vcard:WebID, vcard:Group, foaf:Person, foaf:Agent, solid:AppProvider, solid:AppProviderClass, or recognized ACL classes. Hint: try dropping a WebID profile URI, a vcard:Group URI, or a web app origin.` + n;
+			return o(r), Promise.reject(Error(r));
 		}
-		this.setACLCombo(r, e, a, this.controller.subject);
+		this.setACLCombo(t, e, r, this.controller.subject);
 	}
-	setACLCombo(e, t, r, i) {
-		e in this.byCombo || (this.byCombo[e] = []), this.removeAgentFromCombos(t), this.byCombo[e].push([r.pred, r.obj.uri]), n(`ACL: setting access to ${i} by ${r.pred}: ${r.obj}`);
+	setACLCombo(e, t, n, r) {
+		e in this.byCombo || (this.byCombo[e] = []), this.removeAgentFromCombos(t), this.byCombo[e].push([n.pred, n.obj.uri]), s(`ACL: setting access to ${r} by ${n.pred}: ${n.obj}`);
 	}
 	removeAgentFromCombos(e) {
 		for (let t = 0; t < 16; t++) {
@@ -205,46 +205,46 @@ function g(e) {
 	for (let r = 0; r < 4; r++) e & 1 << r && (t += n[r]);
 	return t;
 }
-function _(t, r) {
-	let i = l(t), a = r.findTypeURIs(i);
-	for (let e in a) n("    drop object type includes: " + e);
-	if (t.startsWith("http") && t.split("/").length === 3) return {
+function _(e, t) {
+	let r = l(e), i = t.findTypeURIs(r);
+	for (let e in i) s("    drop object type includes: " + e);
+	if (e.startsWith("http") && e.split("/").length === 3) return {
 		pred: "origin",
-		obj: i
+		obj: r
 	};
-	if (t.startsWith("http") && t.split("/").length === 4 && t.endsWith("/")) return n("Assuming final slash on dragged origin URI was unintended!"), {
+	if (e.startsWith("http") && e.split("/").length === 4 && e.endsWith("/")) return s("Assuming final slash on dragged origin URI was unintended!"), {
 		pred: "origin",
-		obj: l(t.slice(0, -1))
+		obj: l(e.slice(0, -1))
 	};
-	if (e.vcard("WebID").uri in a) return {
+	if (n.vcard("WebID").uri in i) return {
 		pred: "agent",
-		obj: i
+		obj: r
 	};
-	if (e.vcard("Group").uri in a) return {
+	if (n.vcard("Group").uri in i) return {
 		pred: "agentGroup",
-		obj: i
+		obj: r
 	};
-	if (i.sameTerm(e.foaf("Agent")) || i.sameTerm(e.acl("AuthenticatedAgent")) || i.sameTerm(e.rdf("Resource")) || i.sameTerm(e.owl("Thing"))) return {
+	if (r.sameTerm(n.foaf("Agent")) || r.sameTerm(n.acl("AuthenticatedAgent")) || r.sameTerm(n.rdf("Resource")) || r.sameTerm(n.owl("Thing"))) return {
 		pred: "agentClass",
-		obj: i
+		obj: r
 	};
-	if (e.vcard("Individual").uri in a || e.foaf("Person").uri in a || e.foaf("Agent").uri in a) {
-		let t = r.any(i, e.foaf("preferredURI"));
-		return t ? {
+	if (n.vcard("Individual").uri in i || n.foaf("Person").uri in i || n.foaf("Agent").uri in i) {
+		let e = t.any(r, n.foaf("preferredURI"));
+		return e ? {
 			pred: "agent",
-			obj: l(t)
+			obj: l(e)
 		} : {
 			pred: "agent",
-			obj: i
+			obj: r
 		};
 	}
-	return e.solid("AppProvider").uri in a ? {
+	return n.solid("AppProvider").uri in i ? {
 		pred: "origin",
-		obj: i
-	} : e.solid("AppProviderClass").uri in a ? {
+		obj: r
+	} : n.solid("AppProviderClass").uri in i ? {
 		pred: "originClass",
-		obj: i
-	} : (n("    Triage fails for " + t), null);
+		obj: r
+	} : (s("    Triage fails for " + e), null);
 }
 export { m as AccessGroups };
 

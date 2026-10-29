@@ -2,8 +2,8 @@ import { DEFAULT_AUTH_CONTEXT as e, authContext as t } from "../../lib/auth/cont
 import { customElement as n } from "../../lib/components/decorators.esm.js";
 import r from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import "../button/index.esm.js";
 import "../../lib/auth/index.esm.js";
+import "../button/index.esm.js";
 import { consume as i } from "@lit/context";
 import { html as a } from "lit";
 // src/components/logout-button/LogoutButton.ts

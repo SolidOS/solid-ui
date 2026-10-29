@@ -1,63 +1,63 @@
-import e from "../lib/ns.esm.js";
-import { label as t } from "../utils/label.esm.js";
+import { log as e, warn as t } from "../lib/debug.esm.js";
+import { label as n } from "../utils/label.esm.js";
+import { icons as r } from "../lib/iconBase.esm.js";
+import i from "../lib/ns.esm.js";
+import { errorMessageBlock as a } from "../widgets/error.esm.js";
 import "../utils/index.esm.js";
-import { log as n, warn as r } from "../lib/debug.esm.js";
-import { errorMessageBlock as i } from "../widgets/error.esm.js";
-import { icons as a } from "../lib/iconBase.esm.js";
 import { button as o, cancelButton as s, deleteButtonWithCheck as c, refreshTree as l } from "../widgets/buttons.esm.js";
 import { newThing as u } from "../widgets/forms.esm.js";
 import "../widgets/index.esm.js";
-import { allVersions as d, isDeleted as f, mostRecentVersion as p } from "./chatLogic.esm.js";
-import { renderBookmarksButton as m } from "./bookmarks.esm.js";
+import { renderBookmarksButton as d } from "./bookmarks.esm.js";
+import { allVersions as f, isDeleted as p, mostRecentVersion as m } from "./chatLogic.esm.js";
 import { switchToEditor as h } from "./message.esm.js";
 import * as g from "rdflib";
 import { authn as _, store as v } from "solid-logic";
 // src/chat/messageTools.js
 var y = window.document, b = "noun_253504.svg", x = "noun_1384132.svg", S = "noun_1384135.svg", C = "noun-reply-5506924.svg", w = {};
-w[e.schema("AgreeAction")] = "👍", w[e.schema("DisagreeAction")] = "👎", w[e.schema("EndorseAction")] = "⭐️", w[e.schema("LikeAction")] = "❤️";
-async function T(t, r) {
-	let i = y.createElement("span");
+w[i.schema("AgreeAction")] = "👍", w[i.schema("DisagreeAction")] = "👎", w[i.schema("EndorseAction")] = "⭐️", w[i.schema("LikeAction")] = "❤️";
+async function T(t, n) {
+	let r = y.createElement("span");
 	async function a() {
-		if (i.innerHTML = "", f(t)) return i;
-		let n = (await d(t)).map((t) => v.each(null, e.schema("target"), t, r)).flat();
-		if (n.length === 0) return i;
-		let a = n.map((t) => [
-			v.any(t, e.rdf("type"), null, r),
-			v.any(t, e.sioc("content"), null, r),
-			v.any(t, e.schema("agent"), null, r)
+		if (r.innerHTML = "", p(t)) return r;
+		let e = (await f(t)).map((e) => v.each(null, i.schema("target"), e, n)).flat();
+		if (e.length === 0) return r;
+		let a = e.map((e) => [
+			v.any(e, i.rdf("type"), null, n),
+			v.any(e, i.sioc("content"), null, n),
+			v.any(e, i.schema("agent"), null, n)
 		]);
 		a.sort(), a.forEach((e) => {
-			let [t, n, r] = e, a;
-			r ? (a = y.createElement("a"), a.setAttribute("href", r.uri)) : a = y.createTextNode(""), a.textContent = n || w[t] || "⬜️", i.appendChild(a);
+			let [t, n, i] = e, a;
+			i ? (a = y.createElement("a"), a.setAttribute("href", i.uri)) : a = y.createTextNode(""), a.textContent = n || w[t] || "⬜️", r.appendChild(a);
 		});
 	}
-	return a().then(n("sentimentStripLinked: sentimentStripLinked async refreshed")), i.refresh = a, i;
+	return a().then(e("sentimentStripLinked: sentimentStripLinked async refreshed")), r.refresh = a, r;
 }
-async function E(n, d, f, w) {
+async function E(e, f, p, w) {
 	async function T() {
-		let t = v.any(n, e.foaf("maker"));
+		let n = v.any(e, i.foaf("maker"));
 		if (!j) alert("You can't delete the message, you are not logged in.");
-		else if (j.sameTerm(t)) {
+		else if (j.sameTerm(n)) {
 			try {
-				await w.deleteMessage(n);
+				await w.deleteMessage(e);
 			} catch (e) {
-				let t = "Error deleting messaage " + e;
-				r(t), alert(t), (f.statusArea || d.parentNode).appendChild(i(y, t));
+				let n = "Error deleting messaage " + e;
+				t(n), alert(n), (p.statusArea || f.parentNode).appendChild(a(y, n));
 			}
-			d.parentNode.removeChild(d);
-		} else alert("You can't delete the message, you are not logged in as the author, " + t);
+			f.parentNode.removeChild(f);
+		} else alert("You can't delete the message, you are not logged in as the author, " + n);
 		k();
 	}
 	async function E(t) {
-		j.value === v.any(n, e.foaf("maker")).value && (k(), await h(t, n, w, f));
+		j.value === v.any(e, i.foaf("maker")).value && (k(), await h(t, e, w, p));
 	}
 	async function D() {
-		let e = await w.createThread(n), t = f.chatOptions;
-		if (!t) throw Error("replyInThread: missing options");
-		t.showThread(e, t), k();
+		let t = await w.createThread(e), n = p.chatOptions;
+		if (!n) throw Error("replyInThread: missing options");
+		n.showThread(t, n), k();
 	}
 	let O = y.createElement("div");
-	if (await p(n).value === e.schema("dateDeleted").value) return O;
+	if (await m(e).value === i.schema("dateDeleted").value) return O;
 	function k() {
 		O.parentElement.parentElement.removeChild(O.parentElement);
 	}
@@ -65,51 +65,51 @@ async function E(n, d, f, w) {
 		await v.updater.update(v.connectedStatements(e), []);
 	}
 	let j = _.currentUser();
-	j && v.holds(n, e.foaf("maker"), j) && (O.appendChild(c(y, O, "message", T)), O.appendChild(o(y, a.iconBase + b, "edit", () => E(d)))), m(f).then((e) => {
+	j && v.holds(e, i.foaf("maker"), j) && (O.appendChild(c(y, O, "message", T)), O.appendChild(o(y, r.iconBase + b, "edit", () => E(f)))), d(p).then((e) => {
 		e && O.appendChild(e);
 	});
-	function M(n, r, i, a, s, c) {
-		function f() {
+	function M(e, t, r, a, s, c) {
+		function d() {
 			p.style.backgroundColor = _ ? "yellow" : "white";
 		}
-		let p = o(y, i, t(a), async function(t) {
-			if (_) await A(_), _ = null, f();
+		let p = o(y, r, n(a), async function(n) {
+			if (_) await A(_), _ = null, d();
 			else {
 				_ = u(s);
-				let t = [
-					g.st(_, e.schema("agent"), n.me, s),
-					g.st(_, e.rdf("type"), a, s),
-					g.st(_, e.schema("target"), r, s)
+				let n = [
+					g.st(_, i.schema("agent"), e.me, s),
+					g.st(_, i.rdf("type"), a, s),
+					g.st(_, i.schema("target"), t, s)
 				];
-				if (await v.updater.update([], t), f(), c) {
+				if (await v.updater.update([], n), d(), c) {
 					let e = !1;
 					for (let t = 0; t < c.length; t++) {
 						let n = m(c[t]);
 						n && (await A(n), e = !0);
 					}
-					e && l(d);
+					e && l(f);
 				}
 			}
 		});
-		function m(t) {
-			let i = v.each(null, e.schema("agent"), n.me, s).filter((n) => v.holds(n, e.rdf("type"), t, s)).filter((t) => v.holds(t, e.schema("target"), r, s));
-			return i.length ? i[0] : null;
+		function m(n) {
+			let r = v.each(null, i.schema("agent"), e.me, s).filter((e) => v.holds(e, i.rdf("type"), n, s)).filter((e) => v.holds(e, i.schema("target"), t, s));
+			return r.length ? r[0] : null;
 		}
 		function h() {
-			_ = m(a), f();
+			_ = m(a), d();
 		}
 		let _;
 		return p.refresh = h, h(), p;
 	}
-	if (j = _.currentUser(), j && await p(n).value !== e.schema("dateDeleted").value) {
+	if (j = _.currentUser(), j && await m(e).value !== i.schema("dateDeleted").value) {
 		let t = {
 			me: j,
 			dom: y,
 			div: O
 		};
-		O.appendChild(M(t, n, a.iconBase + x, e.schema("AgreeAction"), n.doc(), [e.schema("DisagreeAction")])), O.appendChild(M(t, n, a.iconBase + S, e.schema("DisagreeAction"), n.doc(), [e.schema("AgreeAction")]));
+		O.appendChild(M(t, e, r.iconBase + x, i.schema("AgreeAction"), e.doc(), [i.schema("DisagreeAction")])), O.appendChild(M(t, e, r.iconBase + S, i.schema("DisagreeAction"), e.doc(), [i.schema("AgreeAction")]));
 	}
-	v.any(n, e.dct("created")) && O.appendChild(o(y, a.iconBase + C, "Reply in thread", async () => {
+	v.any(e, i.dct("created")) && O.appendChild(o(y, r.iconBase + C, "Reply in thread", async () => {
 		await D();
 	}));
 	let N = O.appendChild(s(y));

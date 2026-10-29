@@ -1,10 +1,10 @@
 import { log as e } from "../lib/debug.esm.js";
-import { style as t } from "../lib/style.esm.js";
-import { icons as n } from "../lib/iconBase.esm.js";
+import { icons as t } from "../lib/iconBase.esm.js";
+import { style as n } from "../lib/style.esm.js";
 import { button as r, cancelButton as i, continueButton as a } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
 // src/media/media-capture.ts
-var o = n.iconBase + "noun_Camera_1618446_000000.svg", s = n.iconBase + "noun_479395.svg", c = "image/png";
+var o = t.iconBase + "noun_Camera_1618446_000000.svg", s = t.iconBase + "noun_479395.svg", c = "image/png";
 function l(o, l, u, d) {
 	let f = o.createElement("div"), p, m, h, g, _ = f.appendChild(o.createElement("table")), v = _.appendChild(o.createElement("tr")).appendChild(o.createElement("td"));
 	v.setAttribute("colspan", "4");
@@ -16,14 +16,14 @@ function l(o, l, u, d) {
 	b.addEventListener("click", (e) => {
 		T();
 	}), b.style.visibility = "collapse";
-	let x = y.appendChild(o.createElement("td")).appendChild(r(o, n.iconBase + "noun_10636.svg", "Snap"));
+	let x = y.appendChild(o.createElement("td")).appendChild(r(o, t.iconBase + "noun_10636.svg", "Snap"));
 	x.addEventListener("click", E), x.style.visibility = "collapse";
 	let S = y.appendChild(o.createElement("td")).appendChild(a(o));
 	S.addEventListener("click", (e) => {
 		k(m, p);
 	}), S.style.visibility = "collapse";
 	function C() {
-		if (h = v.appendChild(o.createElement("video")), h.setAttribute("controls", "1"), h.setAttribute("autoplay", "1"), h.setAttribute("style", t.controlStyle), !navigator.mediaDevices) throw Error("navigator.mediaDevices not available");
+		if (h = v.appendChild(o.createElement("video")), h.setAttribute("controls", "1"), h.setAttribute("autoplay", "1"), h.setAttribute("style", n.controlStyle), !navigator.mediaDevices) throw Error("navigator.mediaDevices not available");
 		navigator.mediaDevices.getUserMedia(w).then((e) => {
 			h.srcObject = e, x.style.visibility = "visible", S.style.visibility = "collapse", b.style.visibility = "collapse";
 		});
@@ -33,7 +33,7 @@ function l(o, l, u, d) {
 		v.removeChild(g), C();
 	}
 	function E() {
-		g = o.createElement("canvas"), g.setAttribute("width", t.canvasWidth), g.setAttribute("height", t.canvasHeight), g.setAttribute("style", t.controlStyle), v.appendChild(g), g.getContext("2d").drawImage(h, 0, 0, g.width, g.height), h.parentNode.removeChild(h), g.toBlob((t) => {
+		g = o.createElement("canvas"), g.setAttribute("width", n.canvasWidth), g.setAttribute("height", n.canvasHeight), g.setAttribute("style", n.controlStyle), v.appendChild(g), g.getContext("2d").drawImage(h, 0, 0, g.width, g.height), h.parentNode.removeChild(h), g.toBlob((t) => {
 			let n = `got blob type ${t.type} size ${t.size}`;
 			e(n), p = u(), m = t, D();
 		}, c);

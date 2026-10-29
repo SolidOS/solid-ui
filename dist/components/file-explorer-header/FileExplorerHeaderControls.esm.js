@@ -2,13 +2,13 @@ import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
 import "../button/index.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as n, fileExplorerContext as r } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_MANAGE_ACCESS_EVENT as i } from "../../lib/file-explorer/events.esm.js";
-import "../../_virtual/~icons/lucide/pencil.esm.js";
-import { isContainerSubject as a } from "../../utils/podUtils.esm.js";
 import "../../_virtual/~icons/lucide/user-round-cog.esm.js";
-import o from "./FileExplorerHeaderControls.styles.esm.js";
+import "../../_virtual/~icons/lucide/pencil.esm.js";
+import n from "./FileExplorerHeaderControls.styles.esm.js";
 import "../resource-actions-menu/ResourceActionsMenu.esm.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as r, fileExplorerContext as i } from "../../lib/file-explorer/context.esm.js";
+import { FILE_EXPLORER_MANAGE_ACCESS_EVENT as a } from "../../lib/file-explorer/events.esm.js";
+import { isContainerSubject as o } from "../../utils/podUtils.esm.js";
 import { consume as s } from "@lit/context";
 import { html as c, nothing as l } from "lit";
 import { property as u, state as d } from "lit/decorators.js";
@@ -188,15 +188,15 @@ function G(e) {
 x = [e("solid-ui-file-explorer-header-controls")];
 var K;
 new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = s({
-	context: r,
+	context: i,
 	subscribe: !0
 }), w = u({ attribute: !1 }), E = u({ type: Boolean }), O = u({ type: Boolean }), A = d(), "mobileMediaQuery"), p = class extends t {
 	constructor(...e) {
 		super(...e), z(this, N, void y(this)), z(this, "mobileQuery", "(max-width: 600px)"), z(this, "handleMobileMediaChange", (e) => {
 			this.isMobile = e.matches;
-		}), P(this, m, C(this, n)), P(this, h, T(this, [])), P(this, g, D(this, !1)), P(this, _, k(this, !1)), P(this, v, j(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), z(this, "handleManageAccess", () => {
+		}), P(this, m, C(this, r)), P(this, h, T(this, [])), P(this, g, D(this, !1)), P(this, _, k(this, !1)), P(this, v, j(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), z(this, "handleManageAccess", () => {
 			let e = this.fileExplorerContext.subjectUri;
-			e && this.dispatchEvent(new CustomEvent(i, {
+			e && this.dispatchEvent(new CustomEvent(a, {
 				bubbles: !0,
 				composed: !0,
 				detail: { subjectUri: e }
@@ -246,7 +246,7 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		return this.fileExplorerContext.isDirty ? c`<span class="dirtyIndicator" title="This file has unsaved changes">Unsaved</span>` : l;
 	}
 	render() {
-		let e = a(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
+		let e = o(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
 		return c`
       <div>
         ${this.renderDirtyIndicator()}
@@ -310,7 +310,7 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 	]
 ], x, 0, void 0, t), p), f = class extends G {
 	constructor() {
-		super(K), z(this, "styles", o), b();
+		super(K), z(this, "styles", n), b();
 	}
 }, z(f, M, void 0), f)();
 export { K as default };

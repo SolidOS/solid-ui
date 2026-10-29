@@ -1,6 +1,6 @@
 import { __exportAll as e } from "../../../_virtual/_rolldown/runtime.esm.js";
-import t from "../../../lib/ns.esm.js";
-import { log as n } from "../../../lib/debug.esm.js";
+import { log as t } from "../../../lib/debug.esm.js";
+import n from "../../../lib/ns.esm.js";
 import { authn as r, store as i } from "solid-logic";
 // src/widgets/forms/autocomplete/language.ts
 var a = /* @__PURE__ */ e({
@@ -21,13 +21,13 @@ function c(e) {
 	return e ||= [], e.concat(s.filter((t) => !e.includes(t)));
 }
 async function l(e) {
-	let n = e.doc();
-	await i.fetcher?.load(n);
-	let r = i.any(e, t.schema("knowsLanguage"), null, n);
+	let t = e.doc();
+	await i.fetcher?.load(t);
+	let r = i.any(e, n.schema("knowsLanguage"), null, t);
 	if (!r) return s;
 	let a = [];
 	return r.elements.forEach((e) => {
-		let r = i.any(e, t.solid("publicId"), null, n);
+		let r = i.any(e, n.solid("publicId"), null, t);
 		if (!r) {
 			console.warn("getPreferredLanguages: No publiID of language.");
 			return;
@@ -52,13 +52,13 @@ async function u() {
 	}
 	return s;
 }
-function d(e, t) {
+function d(e, n) {
 	let r = {};
 	e.forEach((e) => {
 		let t = e.subject.value;
 		r[t] = r[t] || [], r[t].push(e);
 	});
-	let i = t || s;
+	let i = n || s;
 	i.reverse();
 	let a = [];
 	for (let e in r) {
@@ -68,7 +68,7 @@ function d(e, t) {
 		});
 		t.sort(), t.reverse(), a.push(t[0][1]);
 	}
-	return n(` Filter by language: ${e.length} -> ${a.length}`), a;
+	return t(` Filter by language: ${e.length} -> ${a.length}`), a;
 }
 export { c as addDefaults, s as defaultPreferredLanguages, d as filterByLanguage, u as getPreferredLanguages, l as getPreferredLanguagesFor, o as languageCodeURIBase, a as language_exports };
 

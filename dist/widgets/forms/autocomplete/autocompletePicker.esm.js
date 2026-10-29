@@ -1,10 +1,10 @@
 import { log as e } from "../../../lib/debug.esm.js";
-import t from "../../../lib/styleConstants.esm.js";
-import { style as n } from "../../../lib/style.esm.js";
+import { style as t } from "../../../lib/style.esm.js";
+import n from "../../../lib/styleConstants.esm.js";
 import { errorMessageBlock as r } from "../../error.esm.js";
-import { defaultPreferredLanguages as i, filterByLanguage as a, getPreferredLanguages as o } from "./language.esm.js";
-import { bindingToTerm as s, queryPublicDataByName as c } from "./publicData.esm.js";
 import "../../index.esm.js";
+import { bindingToTerm as i, queryPublicDataByName as a } from "./publicData.esm.js";
+import { defaultPreferredLanguages as o, filterByLanguage as s, getPreferredLanguages as c } from "./language.esm.js";
 import { store as l } from "solid-logic";
 // src/widgets/forms/autocomplete/autocompletePicker.ts
 var u = 4, d = 20, f = 40;
@@ -12,11 +12,11 @@ function p(e, t) {
 	e.style.display = t ? "" : "none";
 }
 async function m(m, h, g, _) {
-	function v(t) {
+	function v(n) {
 		let i = B.appendChild(m.createElement("tr"));
-		e(t);
-		let a = Error(t);
-		i.appendChild(r(m, a, "pink")), n.setStyle(i, "autocompleteRowStyle"), i.style.padding = "1em";
+		e(n);
+		let a = Error(n);
+		i.appendChild(r(m, a, "pink")), t.setStyle(i, "autocompleteRowStyle"), i.style.padding = "1em";
 	}
 	function y(t, n) {
 		e("Auto complete: finish! " + t), t.termType === "Literal" && h.queryParams.objectURIBase && (t = l.sym(h.queryParams.objectURIBase.value + t.value)), w(), _(t, n);
@@ -47,23 +47,23 @@ async function m(m, h, g, _) {
 	async function E(e, t) {
 		let n;
 		try {
-			n = await c(e, A, t || i, h.queryParams);
+			n = await a(e, A, t || o, h.queryParams);
 		} catch (e) {
 			v("Error querying db of organizations: " + e), N = !1;
 			return;
 		}
-		return M = n.length < 200, F = M ? e : void 0, w(), a(n, t) || [];
+		return M = n.length < 200, F = M ? e : void 0, w(), s(n, t) || [];
 	}
 	function D(e, t) {
 		return (t || []).filter((t) => C(e, t.name.value));
 	}
 	async function O() {
-		function t(t) {
+		function n(n) {
 			let r = m.createElement("tr");
-			n.setStyle(r, "autocompleteRowStyle"), r.setAttribute("style", "padding: 0.3em;"), r.style.color = P ? "#080" : "#088", r.textContent = t.name.value;
-			let i = s(t.subject), a = s(t.name);
+			t.setStyle(r, "autocompleteRowStyle"), r.setAttribute("style", "padding: 0.3em;"), r.style.color = P ? "#080" : "#088", r.textContent = n.name.value;
+			let a = i(n.subject), o = i(n.name);
 			return r.addEventListener("click", async (t) => {
-				e("       click row textContent: " + r.textContent), e("       click name: " + a.value), i && a && b(i, a);
+				e("       click row textContent: " + r.textContent), e("       click name: " + o.value), a && o && b(a, o);
 			}), r;
 		}
 		function r(e, t) {
@@ -74,16 +74,16 @@ async function m(m, h, g, _) {
 			return;
 		}
 		e(`Setting lock at "${H.value}"`), N = !0;
-		let i = await o(), a = H.value.trim().toLowerCase();
-		if (a.length < u) w(), I = d;
+		let a = await c(), o = H.value.trim().toLowerCase();
+		if (o.length < u) w(), I = d;
 		else {
-			P && F && a.startsWith(F) || (e(`   Querying database at "${a}" cf last "${F}".`), j = await E(a, i) || []);
-			let n = D(a, j);
-			M && n.length <= f && (I = n.length), P = M && n.length <= I, e(` Filter:"${a}" lastBindings: ${j.length}, slimmed to ${n.length}; rows: ${I}, Enough? ${M}, All displayed? ${P}`);
-			let o = n.slice(0, I);
-			o.sort(r), w();
-			for (let e of o) B.appendChild(t(e));
-			n.length === 1 && b(s(n[0].subject), s(n[0].name));
+			P && F && o.startsWith(F) || (e(`   Querying database at "${o}" cf last "${F}".`), j = await E(o, a) || []);
+			let t = D(o, j);
+			M && t.length <= f && (I = t.length), P = M && t.length <= I, e(` Filter:"${o}" lastBindings: ${j.length}, slimmed to ${t.length}; rows: ${I}, Enough? ${M}, All displayed? ${P}`);
+			let s = t.slice(0, I);
+			s.sort(r), w();
+			for (let e of s) B.appendChild(n(e));
+			t.length === 1 && b(i(t[0].subject), i(t[0].name));
 		}
 		N = !1;
 	}
@@ -96,12 +96,12 @@ async function m(m, h, g, _) {
 	let j, M = !1, N = !1, P = !1, F, I = d, L = m.createElement("div"), R, z, B = L.appendChild(m.createElement("table"));
 	B.setAttribute("data-testid", "autocomplete-table"), B.setAttribute("style", "max-width: 30em; margin: 0.5em;");
 	let V = B.appendChild(m.createElement("tr"));
-	n.setStyle(V, "autocompleteRowStyle");
+	t.setStyle(V, "autocompleteRowStyle");
 	let H = V.appendChild(m.createElement("td")).appendChild(m.createElement("input"));
 	H.setAttribute("type", "text"), k();
-	let U = h.size || t.textInputSize || 20;
+	let U = h.size || n.textInputSize || 20;
 	H.setAttribute("size", U), H.setAttribute("data-testid", "autocomplete-input");
-	let W = n.textInputStyle || "border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em";
+	let W = t.textInputStyle || "border: 0.1em solid #444; border-radius: 0.5em; width: 100%; font-size: 100%; padding: 0.1em 0.6em";
 	return H.setAttribute("style", W), H.addEventListener("keyup", function(e) {
 		e.keyCode === 13 && x(e);
 	}, !1), H.addEventListener("input", T), L;

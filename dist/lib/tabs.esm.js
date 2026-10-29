@@ -1,9 +1,9 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
 import { label as t } from "../utils/label.esm.js";
-import "../utils/index.esm.js";
-import { style as n } from "./style.esm.js";
-import { cancelButton as r } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
+import "../utils/index.esm.js";
+import { cancelButton as n } from "../widgets/buttons.esm.js";
+import { style as r } from "./style.esm.js";
 import { store as i } from "solid-logic";
 // src/lib/tabs.ts
 var a = /* @__PURE__ */ e({
@@ -16,13 +16,13 @@ var a = /* @__PURE__ */ e({
 }, s = "#ddddcc";
 function c(e) {
 	let a = e.subject, o = e.dom || document, c = parseInt(e.orientation || "0"), u = e.backgroundColor || s, d = c & 2, f = c & 1, p = e.onClose, [m, h] = l(u), g = `display: grid; width: auto; height: 100%; border: 0.1em; border-style: solid; border-color: ${m}; padding: 1em;`, _ = o.createElement("div");
-	_.setAttribute("style", n.tabsRootElement), _.style.flexDirection = (f ? "row" : "column") + (d ? "-reverse" : "");
+	_.setAttribute("style", r.tabsRootElement), _.style.flexDirection = (f ? "row" : "column") + (d ? "-reverse" : "");
 	let v = _.appendChild(o.createElement("nav"));
-	v.setAttribute("style", n.tabsNavElement);
+	v.setAttribute("style", r.tabsNavElement);
 	let y = _.appendChild(o.createElement("div"));
-	y.setAttribute("style", n.tabsMainElement);
+	y.setAttribute("style", r.tabsMainElement);
 	let b = v.appendChild(o.createElement("ul"));
-	b.setAttribute("style", n.tabContainer), b.style.flexDirection = `${f ? "column" : "row"}`;
+	b.setAttribute("style", r.tabContainer), b.style.flexDirection = `${f ? "column" : "row"}`;
 	let x = y;
 	_.tabContainer = b, _.bodyContainer = x;
 	let S = [
@@ -51,31 +51,31 @@ function c(e) {
 		}
 		let t = o.createElement("li");
 		t.classList.add("unstyled");
-		let n = r(o, p);
-		n.setAttribute("style", n.getAttribute("style") + D), t.appendChild(n), e.appendChild(t), e.dataset.onCloseSet = "true";
+		let r = n(o, p);
+		r.setAttribute("style", r.getAttribute("style") + D), t.appendChild(r), e.appendChild(t), e.dataset.onCloseSet = "true";
 	}
 	function N() {
 		return e.items ? e.items : e.ordered === !1 ? i.each(a, e.predicate) : i.the(a, e.predicate).elements;
 	}
-	function P(r) {
+	function P(n) {
 		let i = o.createElement("li");
-		i.setAttribute("style", k), i.subject = r;
+		i.setAttribute("style", k), i.subject = n;
 		let a = i.appendChild(o.createElement("button"));
-		if (a.setAttribute("style", n.makeNewSlot), a.onclick = function() {
+		if (a.setAttribute("style", r.makeNewSlot), a.onclick = function() {
 			if (I(), L(), i.setAttribute("style", A), !i.bodyTR) return;
 			i.bodyTR.setAttribute("style", j);
 			let t = s(i);
-			e.renderMain && i.subject && t.asSettings !== !1 && (t.innerHTML = "loading item ..." + r, e.renderMain(t, i.subject), t.asSettings = !1);
+			e.renderMain && i.subject && t.asSettings !== !1 && (t.innerHTML = "loading item ..." + n, e.renderMain(t, i.subject), t.asSettings = !1);
 		}, e.renderTabSettings && i.subject) {
 			let t = o.createElement("button");
-			t.textContent = "...", t.setAttribute("style", n.ellipsis), t.onclick = function() {
+			t.textContent = "...", t.setAttribute("style", r.ellipsis), t.onclick = function() {
 				if (I(), L(), i.setAttribute("style", A), !i.bodyTR) return;
 				i.bodyTR.setAttribute("style", j);
 				let t = s(i);
-				e.renderTabSettings && i.subject && t.asSettings !== !0 && (t.innerHTML = "loading settings ..." + r, e.renderTabSettings(t, i.subject), t.asSettings = !0);
+				e.renderTabSettings && i.subject && t.asSettings !== !0 && (t.innerHTML = "loading settings ..." + n, e.renderTabSettings(t, i.subject), t.asSettings = !0);
 			}, i.appendChild(t);
 		}
-		return e.renderTab ? e.renderTab(a, r) : a.innerHTML = t(r), i;
+		return e.renderTab ? e.renderTab(a, n) : a.innerHTML = t(n), i;
 		function s(e) {
 			let t = e.bodyTR?.children[0];
 			if (t) return t;

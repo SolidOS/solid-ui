@@ -1,8 +1,8 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import { debounce as n } from "../../lib/timing.esm.js";
+import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import "../../_virtual/~icons/svg-spinners/3-dots-fade.esm.js";
 import r from "./Combobox.styles.esm.js";
 import { html as i, nothing as a } from "lit";
