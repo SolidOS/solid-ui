@@ -68,4 +68,28 @@ describe('solid-ui-resource-actions-menu', () => {
 
     menu.remove()
   })
+
+  it('opens the resource URI, including its fragment, in a new tab', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      subjectUri?: string
+      updateComplete: Promise<boolean>
+    }
+    const subjectUri = 'https://example.test/resource.ttl#subject'
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    menu.subjectUri = subjectUri
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const item = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(item => item.textContent?.includes('Open in New Tab'))
+    expect(item).toBeTruthy()
+
+    item?.dispatchEvent(new CustomEvent('solid-ui-select', { bubbles: true, composed: true }))
+    expect(open).toHaveBeenCalledOnce()
+    expect(open).toHaveBeenCalledWith(subjectUri, '_blank', 'noopener,noreferrer')
+
+    open.mockRestore()
+    menu.remove()
+  })
 })
