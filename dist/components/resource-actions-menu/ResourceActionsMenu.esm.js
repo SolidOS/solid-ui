@@ -1,6 +1,6 @@
+import "../../lib/components/index.esm.js";
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
-import "../../lib/components/index.esm.js";
 import "../button/index.esm.js";
 import "../menu/index.esm.js";
 import "../menu-item/index.esm.js";
@@ -8,6 +8,7 @@ import "../../_virtual/~icons/lucide/ellipsis-vertical.esm.js";
 import "../../_virtual/~icons/lucide/user-round-cog.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
 import "../../_virtual/~icons/lucide/file.esm.js";
+import "../../_virtual/~icons/lucide/square-arrow-out-up-right.esm.js";
 import n from "./ResourceActionsMenu.styles.esm.js";
 import { isContainerSubject as r } from "../../utils/podUtils.esm.js";
 import { html as i, nothing as a } from "lit";
@@ -192,7 +193,9 @@ new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 	attribute: "show-access-in-menu"
 }), B = o({ attribute: !1 }), "store"), c = class extends t {
 	constructor(...e) {
-		super(...e), W(this, l, (y(this), C(this))), W(this, u, T(this)), W(this, d, D(this, void 0)), W(this, f, k(this, void 0)), W(this, p, j(this, !1)), W(this, m, N(this, !1)), W(this, h, F(this, !1)), W(this, g, L(this, !1)), W(this, _, z(this, !1)), W(this, v, V(this, []));
+		super(...e), W(this, l, (y(this), C(this))), W(this, u, T(this)), W(this, d, D(this, void 0)), W(this, f, k(this, void 0)), W(this, p, j(this, !1)), W(this, m, N(this, !1)), W(this, h, F(this, !1)), W(this, g, L(this, !1)), W(this, _, z(this, !1)), W(this, v, V(this, [])), Y(this, "handleOpenInNewTab", () => {
+			this.subjectUri && window.open(this.subjectUri, "_blank", "noopener,noreferrer");
+		});
 	}
 	get [U]() {
 		return q(l, this);
@@ -268,6 +271,12 @@ new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
             ${e.label}
           </solid-ui-menu-item>
         `)}
+        ${this.subjectUri ? i`
+              <solid-ui-menu-item @solid-ui-select=${this.handleOpenInNewTab}>
+                <icon-lucide-square-arrow-out-up-right slot="left-icon"></icon-lucide-square-arrow-out-up-right>
+                Open in New Tab
+              </solid-ui-menu-item>
+            ` : a}
         ${e ? i`
               <solid-ui-menu-item @solid-ui-select=${this.handleEditingClick}>
                 <icon-lucide-pencil slot="left-icon"></icon-lucide-pencil>

@@ -8,6 +8,7 @@ import '~icons/lucide/ellipsis-vertical'
 import '~icons/lucide/user-round-cog'
 import '~icons/lucide/pencil'
 import '~icons/lucide/file'
+import '~icons/lucide/square-arrow-out-up-right'
 import { LiveStore } from 'rdflib'
 import styles from './ResourceActionsMenu.styles.css'
 import { isContainerSubject } from '@/utils/podUtils'
@@ -56,6 +57,11 @@ export default class ResourceActionsMenu extends WebComponent {
   @property({ attribute: false })
   accessor menuItems: ResourceActionMenuItem[] = []
 
+  private handleOpenInNewTab = () => {
+    if (!this.subjectUri) return
+    window.open(this.subjectUri, '_blank', 'noopener,noreferrer')
+  }
+
   render () {
     const isContainerResource = isContainerSubject(this.store, this.subjectUri)
     const canEdit = !isContainerResource && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick
@@ -76,6 +82,14 @@ export default class ResourceActionsMenu extends WebComponent {
             ${item.label}
           </solid-ui-menu-item>
         `)}
+        ${this.subjectUri
+          ? html`
+              <solid-ui-menu-item @solid-ui-select=${this.handleOpenInNewTab}>
+                <icon-lucide-square-arrow-out-up-right slot="left-icon"></icon-lucide-square-arrow-out-up-right>
+                Open in New Tab
+              </solid-ui-menu-item>
+            `
+          : nothing}
         ${canEdit
           ? html`
               <solid-ui-menu-item @solid-ui-select=${this.handleEditingClick}>

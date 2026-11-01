@@ -1,6 +1,7 @@
 import { B as e, D as t, E as n, G as r, I as i, J as a, K as o, M as s, P as c, R as l, T as u, V as d, W as f, q as p, t as m, y as h } from "./solidLogicSingleton.esm-Bvt7E7Vl.js";
 import { a as g, c as _, f as v, i as y, n as b, o as x, p as S, s as C, t as w, u as T } from "./style-Dlw9-wPn.js";
 import { r as E, t as D } from "./index.esm-BQrkxchZ.js";
+import "./square-arrow-out-up-right-DaALlpHo.js";
 // src/lib/debug.ts
 function O(...e) {
 	console.log(...e);
@@ -51,17 +52,17 @@ function P(e, t = 0) {
 	return (N[e[t + 0]] + N[e[t + 1]] + N[e[t + 2]] + N[e[t + 3]] + "-" + N[e[t + 4]] + N[e[t + 5]] + "-" + N[e[t + 6]] + N[e[t + 7]] + "-" + N[e[t + 8]] + N[e[t + 9]] + "-" + N[e[t + 10]] + N[e[t + 11]] + N[e[t + 12]] + N[e[t + 13]] + N[e[t + 14]] + N[e[t + 15]]).toLowerCase();
 }
 // node_modules/uuid/dist/rng.js
-var F = /* @__PURE__ */ new Uint8Array(16);
-function ee() {
-	return crypto.getRandomValues(F);
+var ee = /* @__PURE__ */ new Uint8Array(16);
+function te() {
+	return crypto.getRandomValues(ee);
 }
 // node_modules/uuid/dist/v4.js
-function te(e, t, n) {
-	return !t && !e && crypto.randomUUID ? crypto.randomUUID() : ne(e, t, n);
-}
 function ne(e, t, n) {
+	return !t && !e && crypto.randomUUID ? crypto.randomUUID() : re(e, t, n);
+}
+function re(e, t, n) {
 	e ||= {};
-	let r = e.random ?? e.rng?.() ?? ee();
+	let r = e.random ?? e.rng?.() ?? te();
 	if (r.length < 16) throw Error("Random bytes length must be >= 16");
 	if (r[6] = r[6] & 15 | 64, r[8] = r[8] & 63 | 128, t) {
 		if (n ||= 0, n < 0 || n + 16 > t.length) throw RangeError(`UUID byte range ${n}:${n + 15} is out of buffer bounds`);
@@ -71,8 +72,8 @@ function ne(e, t, n) {
 	return P(r);
 }
 // node_modules/mime-db/db.json
-var re = /* @__PURE__ */ o({ default: () => ie }), ie, ae = r((() => {
-	ie = {
+var ie = /* @__PURE__ */ o({ default: () => ae }), ae, oe = r((() => {
+	ae = {
 		"application/1d-interleaved-parityfec": { source: "iana" },
 		"application/3gpdash-qoe-report+xml": {
 			source: "iana",
@@ -7691,9 +7692,9 @@ var re = /* @__PURE__ */ o({ default: () => ie }), ie, ae = r((() => {
 		"x-shader/x-fragment": { compressible: !0 },
 		"x-shader/x-vertex": { compressible: !0 }
 	};
-})), oe = /* @__PURE__ */ f(((e, t) => {
-	t.exports = (ae(), p(re).default);
 })), se = /* @__PURE__ */ f(((e, t) => {
+	t.exports = (oe(), p(ie).default);
+})), ce = /* @__PURE__ */ f(((e, t) => {
 	function n(e) {
 		if (typeof e != "string") throw TypeError("Path must be a string. Received " + JSON.stringify(e));
 	}
@@ -7855,7 +7856,7 @@ var re = /* @__PURE__ */ o({ default: () => ie }), ie, ae = r((() => {
 		posix: null
 	};
 	a.posix = a, t.exports = a;
-})), ce = /* @__PURE__ */ f(((e, t) => {
+})), le = /* @__PURE__ */ f(((e, t) => {
 	var n = {
 		"prs.": 100,
 		"x-": 200,
@@ -7879,8 +7880,8 @@ var re = /* @__PURE__ */ o({ default: () => ie }), ie, ae = r((() => {
 		let [a, o] = e.split("/"), s = n[o.replace(/(\.|x-).*/, "$1")] || n.default, c = r[t] || r.default, l = i[a] || i.default, u = 1 - e.length / 100;
 		return s + c + l + u;
 	};
-})), le = /* @__PURE__ */ a((/* @__PURE__ */ f(((e) => {
-	var t = oe(), n = se().extname, r = ce(), i = /^\s*([^;\s]*)(?:;|\s|$)/, a = /^text\//i;
+})), ue = /* @__PURE__ */ a((/* @__PURE__ */ f(((e) => {
+	var t = se(), n = ce().extname, r = le(), i = /^\s*([^;\s]*)(?:;|\s|$)/, a = /^text\//i;
 	e.charset = o, e.charsets = { lookup: o }, e.contentType = s, e.extension = c, e.extensions = Object.create(null), e.lookup = l, e.types = Object.create(null), e._extensionConflicts = [], u(e.extensions, e.types);
 	function o(e) {
 		if (!e || typeof e != "string") return !1;
@@ -7938,7 +7939,7 @@ var re = /* @__PURE__ */ o({ default: () => ie }), ie, ae = r((() => {
 		return e.types[c] !== "application/octet-stream" && (o > s || o === s && e.types[c]?.slice(0, 12) === "application/") || o > s ? r : i;
 	}
 })))());
-function I(e, t, n) {
+function F(e, t, n) {
 	let r = function(e) {
 		return e.split("\n").map((e) => e.trim()).filter((e) => e && e[0] !== "#");
 	}, i = function(e) {
@@ -7973,7 +7974,7 @@ function I(e, t, n) {
 		e || O("@@@ addTargetListeners: ele " + e), e.addEventListener("dragover", i), e.addEventListener("dragenter", a), e.addEventListener("dragleave", o), e.addEventListener("drop", s);
 	})(e, t);
 }
-function ue(e, t) {
+function de(e, t) {
 	e.setAttribute("draggable", "true"), e.addEventListener("dragstart", function(n) {
 		e.style.fontWeight = "bold", n.dataTransfer.setData("text/uri-list", t.uri), n.dataTransfer.setData("text/plain", t.uri), n.dataTransfer.setData("text/html", e.outerHTML), O("Dragstart: " + e + " -> " + t + "de: " + n.dataTransfer.dropEffect);
 	}, !1), e.addEventListener("drag", function(e) {
@@ -7982,7 +7983,7 @@ function ue(e, t) {
 		e.style.fontWeight = "normal", O("Dragend dropeffect: " + n.dataTransfer.dropEffect), O("Dragend: " + e + " -> " + t);
 	}, !1);
 }
-function de(e, t, n, r, i) {
+function fe(e, t, n, r, i) {
 	let a = function(e, t) {
 		let n = t?.response?.status ?? t?.status, r = t?.message || String(t), i = `Upload failed while putting ${e}`;
 		return n === 413 ? `${i}: storage quota was exceeded. ${r}` : n ? `${i} (HTTP ${n}). ${r}` : `${i}. ${r}`;
@@ -7997,13 +7998,13 @@ function de(e, t, n, r, i) {
 				O(" File read byteLength : " + s.byteLength);
 				let l = t.type;
 				if (!t.type || t.type === "") {
-					if (l = le.lookup(t.name), !l) {
+					if (l = ue.lookup(t.name), !l) {
 						let e = "Filename needs to have an extension which gives a type we know: " + t.name;
 						throw O(e), alert(e), Error(e);
 					}
 				} else {
-					let e = le.extension(t.type);
-					e && e !== "false" && !t.name.endsWith("." + e) && t.type !== le.lookup(t.name) && (c = "_." + e);
+					let e = ue.extension(t.type);
+					e && e !== "false" && !t.name.endsWith("." + e) && t.type !== ue.lookup(t.name) && (c = "_." + e);
 				}
 				let u = t.type.startsWith("image/") && r || n, d = u + (u.endsWith("/") ? "" : "/") + encodeURIComponent(t.name) + c;
 				e.webOperation("PUT", d, {
@@ -8020,28 +8021,28 @@ function de(e, t, n, r, i) {
 	}
 }
 // src/widgets/error.ts
-function L(e, t, n, r) {
+function I(e, t, n, r) {
 	let i = e.createElement("div"), a = r || t instanceof Error ? t : null;
-	return a ? (console.error(`errorMessageBlock: ${a} at: ${a.stack || "??"}`, a), i.textContent = a.message) : i.textContent = t, i.appendChild(W(e, () => {
+	return a ? (console.error(`errorMessageBlock: ${a} at: ${a.stack || "??"}`, a), i.textContent = a.message) : i.textContent = t, i.appendChild(H(e, () => {
 		i.parentNode && i.parentNode.removeChild(i);
 	})).style = w.errorCancelButton, i.setAttribute("style", w.errorMessageBlockStyle), i.style.backgroundColor = n || b.defaultErrorBackgroundColor, i;
 }
 // src/lib/iconBase.ts
-var fe = "https://solidos.github.io/solid-ui/src", R = typeof module < "u" && module.scriptURI ? {
+var pe = "https://solidos.github.io/solid-ui/src", L = typeof module < "u" && module.scriptURI ? {
 	iconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf("/")) + "/icons/",
 	originalIconBase: module.scriptURI.slice(0, module.scriptURI.lastIndexOf("/")) + "/originalIcons/"
 } : typeof $SolidTestEnvironment < "u" && $SolidTestEnvironment.iconBase ? {
 	iconBase: $SolidTestEnvironment.iconBase,
 	originalIconBase: $SolidTestEnvironment.originalIconBase
 } : {
-	iconBase: fe + "/icons/",
-	originalIconBase: fe + "/originalIcons/"
+	iconBase: pe + "/icons/",
+	originalIconBase: pe + "/originalIcons/"
 };
-O("   icons.iconBase is set to : " + R.iconBase);
-var pe = R.iconBase;
-R.originalIconBase;
+O("   icons.iconBase is set to : " + L.iconBase);
+var me = L.iconBase;
+L.originalIconBase;
 // src/widgets/peoplePicker.js
-var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
+var R = /* @__PURE__ */ a(M()), z = m.store, he = class {
 	constructor(e, t, n, r) {
 		this.options = r || {}, this.element = e, this.typeIndex = t, this.groupPickedCb = n, this.selectedgroup = this.options.selectedgroup, this.onSelectGroup = this.onSelectGroup.bind(this);
 	}
@@ -8050,38 +8051,38 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 		if (e.style.maxWidth = "350px", e.style.minHeight = "200px", e.style.outline = "1px solid black", e.style.display = "flex", this.selectedgroup) {
 			e.style.flexDirection = "column";
 			let t = document.createElement("div");
-			new ge(t, this.selectedgroup).render();
+			new _e(t, this.selectedgroup).render();
 			let n = document.createElement("button");
-			n.textContent = (0, z.default)("Change group"), n.addEventListener("click", (e) => {
+			n.textContent = (0, R.default)("Change group"), n.addEventListener("click", (e) => {
 				this.selectedgroup = null, this.render();
 			}), e.appendChild(t), e.appendChild(n);
 		} else this.findAddressBook(this.typeIndex).then(({ book: t }) => {
 			let n = document.createElement("button");
-			n.textContent = (0, z.default)("Pick an existing group"), n.style.margin = "auto", n.addEventListener("click", (n) => {
-				new he(e, t, this.onSelectGroup).render();
+			n.textContent = (0, R.default)("Pick an existing group"), n.style.margin = "auto", n.addEventListener("click", (n) => {
+				new ge(e, t, this.onSelectGroup).render();
 			});
 			let r = document.createElement("button");
-			r.textContent = (0, z.default)("Create a new group"), r.style.margin = "auto", r.addEventListener("click", (e) => {
+			r.textContent = (0, R.default)("Create a new group"), r.style.margin = "auto", r.addEventListener("click", (e) => {
 				this.createNewGroup(t, this.options.defaultNewGroupName).then(({ group: e }) => {
-					new _e(this.element, t, e, this.onSelectGroup).render();
+					new ve(this.element, t, e, this.onSelectGroup).render();
 				}).catch((e) => {
-					this.element.appendChild(L(document, (0, z.default)(`Error creating a new group. (${e})`)));
+					this.element.appendChild(I(document, (0, R.default)(`Error creating a new group. (${e})`)));
 				});
 			}), e.appendChild(n), e.appendChild(r), this.element.innerHTML = "", this.element.appendChild(e);
 		}).catch((e) => {
-			this.element.appendChild(L(document, (0, z.default)(`Could find your groups. (${e})`)));
+			this.element.appendChild(I(document, (0, R.default)(`Could find your groups. (${e})`)));
 		});
 		return this.element.innerHTML = "", this.element.appendChild(e), this;
 	}
 	findAddressBook(e) {
 		return new Promise((t, n) => {
-			B.fetcher.nowOrWhenFetched(e, (r, i) => {
+			z.fetcher.nowOrWhenFetched(e, (r, i) => {
 				if (!r) return n(i);
-				let a = B.any(null, h.solid("forClass"), h.vcard("AddressBook"));
+				let a = z.any(null, h.solid("forClass"), h.vcard("AddressBook"));
 				if (!a) return n(/* @__PURE__ */ Error("no address book registered in the solid type index " + e));
-				let o = B.any(a, h.solid("instance"));
+				let o = z.any(a, h.solid("instance"));
 				if (!o) return n(/* @__PURE__ */ Error("incomplete address book registration"));
-				B.fetcher.load(o).then(function(e) {
+				z.fetcher.load(o).then(function(e) {
 					return t({ book: o });
 				}).catch(function(e) {
 					return n(/* @__PURE__ */ Error("Could not load address book " + e));
@@ -8090,15 +8091,15 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 		});
 	}
 	createNewGroup(e, r) {
-		let { groupIndex: i, groupContainer: a } = xe(e), o = n(`${a.uri}${te().slice(0, 8)}.ttl#this`), s = r || "Untitled Group", c = [o.doc(), i].map((n) => {
+		let { groupIndex: i, groupContainer: a } = Se(e), o = n(`${a.uri}${ne().slice(0, 8)}.ttl#this`), s = r || "Untitled Group", c = [o.doc(), i].map((n) => {
 			let r = t(o, h.rdf("type"), h.vcard("Group"), n), a = t(o, h.vcard("fn"), s, o.doc(), n), c = t(e, h.vcard("includesGroup"), o, n), l = n.equals(i) ? [
 				r,
 				a,
 				c
 			] : [r, a];
-			return be(n.uri, { toIns: l }).then(() => {
+			return xe(n.uri, { toIns: l }).then(() => {
 				l.forEach((e) => {
-					B.add(e);
+					z.add(e);
 				});
 			});
 		});
@@ -8109,7 +8110,7 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 	onSelectGroup(e) {
 		this.selectedgroup = e, this.groupPickedCb(e), this.render();
 	}
-}, he = class {
+}, ge = class {
 	constructor(e, t, n) {
 		this.element = e, this.book = t, this.onSelectGroup = n;
 	}
@@ -8118,16 +8119,16 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 			let t = document.createElement("div");
 			t.style.display = "flex", t.style.flexDirection = "column", e.forEach((e) => {
 				let n = document.createElement("button");
-				n.addEventListener("click", this.handleClickGroup(e)), new ge(n, e).render(), t.appendChild(n);
+				n.addEventListener("click", this.handleClickGroup(e)), new _e(n, e).render(), t.appendChild(n);
 			}), this.element.innerHTML = "", this.element.appendChild(t);
 		}).catch((e) => {
-			this.element.appendChild(L(document, (0, z.default)(`There was an error loading your groups. (${e})`)));
+			this.element.appendChild(I(document, (0, R.default)(`There was an error loading your groups. (${e})`)));
 		}), this;
 	}
 	loadGroups() {
 		return new Promise((e, t) => {
-			let { groupIndex: n } = xe(this.book);
-			B.fetcher.nowOrWhenFetched(n, (n, r) => n ? e(B.each(this.book, h.vcard("includesGroup"))) : t(r));
+			let { groupIndex: n } = Se(this.book);
+			z.fetcher.nowOrWhenFetched(n, (n, r) => n ? e(z.each(this.book, h.vcard("includesGroup"))) : t(r));
 		});
 	}
 	handleClickGroup(e) {
@@ -8135,15 +8136,15 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 			this.onSelectGroup(e);
 		};
 	}
-}, ge = class {
+}, _e = class {
 	constructor(e, t) {
 		this.element = e, this.group = t;
 	}
 	render() {
 		let e = document.createElement("div");
-		return e.textContent = (0, z.default)(ye(this.group, h.vcard("fn"), `[${this.group.value}]`)), this.element.innerHTML = "", this.element.appendChild(e), this;
+		return e.textContent = (0, R.default)(be(this.group, h.vcard("fn"), `[${this.group.value}]`)), this.element.innerHTML = "", this.element.appendChild(e), this;
 	}
-}, _e = class {
+}, ve = class {
 	constructor(e, t, n, r, i) {
 		this.element = e, this.book = t, this.group = n, this.onGroupChanged = (e, t, n) => {
 			i && i(e, t, n);
@@ -8152,120 +8153,115 @@ var z = /* @__PURE__ */ a(M()), B = m.store, me = class {
 	refresh() {}
 	render() {
 		let e = document.createElement("div");
-		e.style.maxWidth = "350px", e.style.minHeight = "200px", e.style.outline = "1px solid black", e.style.display = "flex", e.style.flexDirection = "column", I(e, (e) => {
+		e.style.maxWidth = "350px", e.style.minHeight = "200px", e.style.outline = "1px solid black", e.style.display = "flex", e.style.flexDirection = "column", F(e, (e) => {
 			e.forEach((e) => {
 				this.add(e).catch((e) => {
-					this.element.appendChild(L(document, (0, z.default)(`Could not add the given WebId. (${e})`)));
+					this.element.appendChild(I(document, (0, R.default)(`Could not add the given WebId. (${e})`)));
 				});
 			});
 		});
 		let t = document.createElement("input");
-		t.type = "text", t.value = ye(this.group, h.vcard("fn"), "Untitled Group"), t.addEventListener("change", (e) => {
+		t.type = "text", t.value = be(this.group, h.vcard("fn"), "Untitled Group"), t.addEventListener("change", (e) => {
 			this.setGroupName(e.target.value).catch((e) => {
-				this.element.appendChild(L(document, `Error changing group name. (${e})`));
+				this.element.appendChild(I(document, `Error changing group name. (${e})`));
 			});
 		});
 		let n = document.createElement("label");
-		if (n.textContent = (0, z.default)("Group Name:"), n.appendChild(t), e.appendChild(n), B.any(this.group, h.vcard("hasMember"))) B.match(this.group, h.vcard("hasMember")).forEach((t) => {
+		if (n.textContent = (0, R.default)("Group Name:"), n.appendChild(t), e.appendChild(n), z.any(this.group, h.vcard("hasMember"))) z.match(this.group, h.vcard("hasMember")).forEach((t) => {
 			let n = t.object, r = document.createElement("div");
-			new ve(r, n, this.handleRemove(n)).render(), e.appendChild(r);
+			new ye(r, n, this.handleRemove(n)).render(), e.appendChild(r);
 		});
 		else {
 			let t = document.createElement("p");
-			t.textContent = z.default`
+			t.textContent = R.default`
         To add someone to this group, drag and drop their WebID URL onto the box.
       `, e.appendChild(t);
 		}
 		let r = document.createElement("button");
-		return r.textContent = (0, z.default)("Done"), r.addEventListener("click", (e) => {
+		return r.textContent = (0, R.default)("Done"), r.addEventListener("click", (e) => {
 			this.doneBuildingCb(this.group);
 		}), e.appendChild(r), this.element.innerHTML = "", this.element.appendChild(e), this;
 	}
 	add(e) {
 		return new Promise((t, r) => {
-			B.fetcher.nowOrWhenFetched(e, (i, a) => {
+			z.fetcher.nowOrWhenFetched(e, (i, a) => {
 				if (!i) return this.onGroupChanged(a), r(a);
-				let o = n(e), s = B.any(o, h.rdf("type"));
+				let o = n(e), s = z.any(o, h.rdf("type"));
 				return !s || !s.equals(h.foaf("Person")) ? r(/* @__PURE__ */ Error(`Only people supported right now. (tried to add something of type ${s.value})`)) : t(o);
 			});
 		}).then((e) => {
 			let n = t(this.group, h.vcard("hasMember"), e);
-			return B.holdsStatement(n) ? e : be(this.group.doc().uri, { toIns: [n] }).then(() => {
-				n.why = this.group.doc(), B.add(n), this.onGroupChanged(null, "added", e), this.render();
+			return z.holdsStatement(n) ? e : xe(this.group.doc().uri, { toIns: [n] }).then(() => {
+				n.why = this.group.doc(), z.add(n), this.onGroupChanged(null, "added", e), this.render();
 			});
 		});
 	}
 	handleRemove(e) {
 		return (n) => {
 			let r = t(this.group, h.vcard("hasMember"), e);
-			return be(this.group.doc().uri, { toDel: [r] }).then(() => (B.remove(r), this.onGroupChanged(null, "removed", e), this.render(), !0)).catch((t) => {
-				let n = B.any(e, h.foaf("name")), r = n && n.value ? `Could not remove ${n.value}. (${t})` : `Could not remove ${e.value}. (${t})`;
+			return xe(this.group.doc().uri, { toDel: [r] }).then(() => (z.remove(r), this.onGroupChanged(null, "removed", e), this.render(), !0)).catch((t) => {
+				let n = z.any(e, h.foaf("name")), r = n && n.value ? `Could not remove ${n.value}. (${t})` : `Could not remove ${e.value}. (${t})`;
 				throw Error(r);
 			});
 		};
 	}
 	setGroupName(e) {
-		let { groupIndex: n } = xe(this.book), r = [this.group.doc(), n].map((n) => {
-			let r = B.match(this.group, h.vcard("fn"), null, n), i = t(this.group, h.vcard("fn"), u(e));
-			return be(n.value, {
+		let { groupIndex: n } = Se(this.book), r = [this.group.doc(), n].map((n) => {
+			let r = z.match(this.group, h.vcard("fn"), null, n), i = t(this.group, h.vcard("fn"), u(e));
+			return xe(n.value, {
 				toDel: r,
 				toIns: [i]
 			}).then((e) => {
-				B.removeStatements(r), i.why = n, B.add(i);
+				z.removeStatements(r), i.why = n, z.add(i);
 			});
 		});
 		return Promise.all(r);
 	}
-}, ve = class {
+}, ye = class {
 	constructor(e, t, n) {
 		this.webIdNode = t, this.element = e, this.handleRemove = n;
 	}
 	render() {
 		let e = document.createElement("div");
 		e.style.display = "flex";
-		let t = ye(this.webIdNode, h.foaf("img"), pe + "noun_15059.svg"), n = document.createElement("img");
-		n.src = (0, z.default)(t), n.width = "50", n.height = "50", n.style.margin = "5px";
-		let r = ye(this.webIdNode, h.foaf("name"), `[${this.webIdNode}]`), i = document.createElement("span");
-		i.innerHTML = (0, z.default)(r), i.style.flexGrow = "1", i.style.margin = "auto 0";
+		let t = be(this.webIdNode, h.foaf("img"), me + "noun_15059.svg"), n = document.createElement("img");
+		n.src = (0, R.default)(t), n.width = "50", n.height = "50", n.style.margin = "5px";
+		let r = be(this.webIdNode, h.foaf("name"), `[${this.webIdNode}]`), i = document.createElement("span");
+		i.innerHTML = (0, R.default)(r), i.style.flexGrow = "1", i.style.margin = "auto 0";
 		let a = document.createElement("button");
 		return a.textContent = "Remove", a.addEventListener("click", (e) => this.handleRemove().catch((e) => {
-			this.element.appendChild(L(document, (0, z.default)(`${e}`)));
+			this.element.appendChild(I(document, (0, R.default)(`${e}`)));
 		})), a.style.margin = "5px", e.appendChild(n), e.appendChild(i), e.appendChild(a), this.element.innerHTML = "", this.element.appendChild(e), this;
 	}
 };
-function ye(e, t, n) {
-	let r = B.any(e, t);
+function be(e, t, n) {
+	let r = z.any(e, t);
 	return r ? r.value : n;
 }
-function be(e, { toDel: t, toIns: n }) {
+function xe(e, { toDel: t, toIns: n }) {
 	return new Promise((e, r) => {
-		B.updater.update(t, n, (t, n, i) => {
+		z.updater.update(t, n, (t, n, i) => {
 			if (!n) return r(/* @__PURE__ */ Error(`PATCH failed for resource <${t}>: ${i}`));
 			e();
 		});
 	});
 }
-function xe(e) {
+function Se(e) {
 	return {
-		groupIndex: B.any(e, h.vcard("groupIndex")),
-		groupContainer: B.sym(e.dir().uri + "Group/")
+		groupIndex: z.any(e, h.vcard("groupIndex")),
+		groupContainer: z.sym(e.dir().uri + "Group/")
 	};
 }
 // src/lib/newperson.js
-var Se = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEzLjAxNTcgOS4yNzM2M0MxNC4yOTU0IDguMzQwMzEgMTUuMTI4OCA2LjgyOTg0IDE1LjEyODggNS4xMjgyQzE1LjEyODggMi4zMDA1MSAxMi44MjgzIDAgMTAuMDAwNiAwQzcuMTcyODkgMCA0Ljg3MjM4IDIuMzAwNTEgNC44NzIzOCA1LjEyODJDNC44NzIzOCA2LjgyOTg0IDUuNzA1NyA4LjM0MDMxIDYuOTg1NDcgOS4yNzM2M0MzLjgwNDIyIDEwLjQ5MSAxLjUzOTA2IDEzLjU3NTQgMS41MzkwNiAxNy4xNzk1QzEuNTM5MDYgMTguNzM0NyAyLjgwNDM0IDIwIDQuMzU5NTcgMjBIMTUuNjQxNkMxNy4xOTY4IDIwIDE4LjQ2MjEgMTguNzM0NyAxOC40NjIxIDE3LjE3OTVDMTguNDYyMSAxMy41NzU0IDE2LjE5NyAxMC40OTEgMTMuMDE1NyA5LjI3MzYzWk02LjQxMDg2IDUuMTI4MkM2LjQxMDg2IDMuMTQ4ODMgOC4wMjEyMSAxLjUzODQ4IDEwLjAwMDYgMS41Mzg0OEMxMS45OCAxLjUzODQ4IDEzLjU5MDMgMy4xNDg4MyAxMy41OTAzIDUuMTI4MkMxMy41OTAzIDcuMTA3NTggMTEuOTggOC43MTc5NyAxMC4wMDA2IDguNzE3OTdDOC4wMjEyMSA4LjcxNzk3IDYuNDEwODYgNy4xMDc1OCA2LjQxMDg2IDUuMTI4MlpNMTUuNjQxNiAxOC40NjE1SDQuMzU5NTdDMy42NTI2NiAxOC40NjE1IDMuMDc3NTQgMTcuODg2NCAzLjA3NzU0IDE3LjE3OTVDMy4wNzc1NCAxMy4zNjIgNi4xODMxNiAxMC4yNTY0IDEwLjAwMDYgMTAuMjU2NEMxMy44MTgxIDEwLjI1NjQgMTYuOTIzNyAxMy4zNjIgMTYuOTIzNyAxNy4xNzk1QzE2LjkyMzcgMTcuODg2NCAxNi4zNDg2IDE4LjQ2MTUgMTUuNjQxNiAxOC40NjE1WiIgZmlsbD0iIzMxNDE1OCIvPgo8L3N2Zz4K", Ce = (e, t, n) => {
+var Ce = "data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyMCAyMCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPHBhdGggZD0iTTEzLjAxNTcgOS4yNzM2M0MxNC4yOTU0IDguMzQwMzEgMTUuMTI4OCA2LjgyOTg0IDE1LjEyODggNS4xMjgyQzE1LjEyODggMi4zMDA1MSAxMi44MjgzIDAgMTAuMDAwNiAwQzcuMTcyODkgMCA0Ljg3MjM4IDIuMzAwNTEgNC44NzIzOCA1LjEyODJDNC44NzIzOCA2LjgyOTg0IDUuNzA1NyA4LjM0MDMxIDYuOTg1NDcgOS4yNzM2M0MzLjgwNDIyIDEwLjQ5MSAxLjUzOTA2IDEzLjU3NTQgMS41MzkwNiAxNy4xNzk1QzEuNTM5MDYgMTguNzM0NyAyLjgwNDM0IDIwIDQuMzU5NTcgMjBIMTUuNjQxNkMxNy4xOTY4IDIwIDE4LjQ2MjEgMTguNzM0NyAxOC40NjIxIDE3LjE3OTVDMTguNDYyMSAxMy41NzU0IDE2LjE5NyAxMC40OTEgMTMuMDE1NyA5LjI3MzYzWk02LjQxMDg2IDUuMTI4MkM2LjQxMDg2IDMuMTQ4ODMgOC4wMjEyMSAxLjUzODQ4IDEwLjAwMDYgMS41Mzg0OEMxMS45OCAxLjUzODQ4IDEzLjU5MDMgMy4xNDg4MyAxMy41OTAzIDUuMTI4MkMxMy41OTAzIDcuMTA3NTggMTEuOTggOC43MTc5NyAxMC4wMDA2IDguNzE3OTdDOC4wMjEyMSA4LjcxNzk3IDYuNDEwODYgNy4xMDc1OCA2LjQxMDg2IDUuMTI4MlpNMTUuNjQxNiAxOC40NjE1SDQuMzU5NTdDMy42NTI2NiAxOC40NjE1IDMuMDc3NTQgMTcuODg2NCAzLjA3NzU0IDE3LjE3OTVDMy4wNzc1NCAxMy4zNjIgNi4xODMxNiAxMC4yNTY0IDEwLjAwMDYgMTAuMjU2NEMxMy44MTgxIDEwLjI1NjQgMTYuOTIzNyAxMy4zNjIgMTYuOTIzNyAxNy4xNzk1QzE2LjkyMzcgMTcuODg2NCAxNi4zNDg2IDE4LjQ2MTUgMTUuNjQxNiAxOC40NjE1WiIgZmlsbD0iIzMxNDE1OCIvPgo8L3N2Zz4K", we = (e, t, n) => {
 	let r = e.createElement("tr");
 	return r.appendChild(e.createElement("td")).appendChild(t), r.subject = n, r;
-}, we = (e, t) => {
+}, Te = (e, t) => {
 	e.addEventListener("click", t);
-}, Te = (e, t, n) => {
+}, Ee = (e, t, n) => {
 	let r = t.appendChild(e.createElement("div"));
 	r.setAttribute("style", w.imageDivStyle), r.appendChild(n), n.setAttribute("draggable", "false");
-}, Ee = class extends HTMLElement {
-	constructor() {
-		super(), this.attachShadow({ mode: "open" }).innerHTML = "<style>:host { display: inline-flex; }</style><svg viewBox=\"0 0 24 24\" width=\"100%\" height=\"100%\" ><path fill=\"none\" stroke=\"currentColor\" stroke-linecap=\"round\" stroke-linejoin=\"round\" stroke-width=\"2\" d=\"M21 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h6m10 0l-9 9m3-9h6v6\"/></svg>";
-	}
 };
-customElements.get("icon-lucide-square-arrow-out-up-right") || customElements.define("icon-lucide-square-arrow-out-up-right", Ee);
 // src/widgets/buttons/iconLinks.ts
 function De(e, t, n) {
 	let r = e.createElement("a");
@@ -8282,7 +8278,7 @@ function De(e, t, n) {
 var Oe = (e, t, n) => {
 	let r = De(e, n);
 	t.appendChild(r).classList.add("HoverControlHide"), t.appendChild(e.createElement("br"));
-}, { iconBase: V } = R, ke = V + "noun_1180156.svg", Ae = V + "noun_1180158.svg";
+}, { iconBase: B } = L, ke = B + "noun_1180156.svg", Ae = B + "noun_1180158.svg";
 function je(e) {
 	let t = e && e.statusArea || e && e.div || null;
 	if (t) return t;
@@ -8296,7 +8292,7 @@ function je(e) {
 function Me(e, t) {
 	if (!t) return;
 	let n = je(e);
-	O("Complaint: " + t), n ? n.appendChild(L(e && e.dom || document, t)) : alert(t);
+	O("Complaint: " + t), n ? n.appendChild(I(e && e.dom || document, t)) : alert(t);
 }
 function Ne(e) {
 	for (; e.firstChild;) e.removeChild(e.firstChild);
@@ -8365,9 +8361,9 @@ var Ve = {
 	"solid:Pod": "noun_Cabinet_1434380.svg",
 	"vcard:Group": "noun_339237.svg",
 	"vcard:Organization": "noun_143899.svg",
-	"vcard:Individual": Se,
-	"schema:Person": Se,
-	"foaf:Person": Se,
+	"vcard:Individual": Ce,
+	"schema:Person": Ce,
+	"foaf:Person": Ce,
 	"foaf:Agent": "noun_98053.svg",
 	"acl:AuthenticatedAgent": "noun_99101.svg",
 	"prov:SoftwareAgent": "noun_Robot_849764.svg",
@@ -8392,11 +8388,11 @@ function He(e) {
 	return r < 0 ? t.slice(0) + "/" : t.slice(0, r + 1);
 }
 function Ue(e) {
-	let t = V;
+	let t = B;
 	return typeof e != "string" && e.uri ? e.uri.split("/").length === 4 && !e.uri.split("/")[1] && !e.uri.split("/")[3] ? t + "noun_15177.svg" : e.uri.startsWith("message:") || e.uri.startsWith("mid:") ? t + "noun_480183.svg" : e.uri.startsWith("mailto:") ? t + "noun_567486.svg" : e.uri.startsWith("https:") && e.uri.indexOf("#") < 0 ? He(e) + "favicon.ico" : null : t + "noun_10636_grey.svg";
 }
 function We(e) {
-	let t = E, n = V;
+	let t = E, n = B;
 	if (e.sameTerm(h.foaf("Agent")) || e.sameTerm(h.rdf("Resource"))) return n + "noun_98053.svg";
 	let r = t.any(e, h.sioc("avatar")) || t.any(e, h.foaf("img")) || t.any(e, h.vcard("logo")) || t.any(e, h.vcard("hasPhoto")) || t.any(e, h.vcard("photo")) || t.any(e, h.foaf("depiction"));
 	return r ? r.uri : null;
@@ -8410,13 +8406,13 @@ function Ge(e, t, n) {
 	if (o) return e.setAttribute("src", o), !0;
 	let s = r.findTypeURIs(t);
 	for (let t in s) if (n[t]) return e.setAttribute("src", n[t]), !1;
-	return e.setAttribute("src", V + "noun_10636_grey.svg"), !1;
+	return e.setAttribute("src", B + "noun_10636_grey.svg"), !1;
 }
 function Ke(e, t) {
 	let n = E, r = {};
 	for (let e in Ve) {
 		let t = e.split(":")[0], n = e.split(":")[1], i = h[t](n), a = Ve[e];
-		a.startsWith("data:") ? r[i.uri] = a : r[i.uri] = l(a, V);
+		a.startsWith("data:") ? r[i.uri] = a : r[i.uri] = l(a, B);
 	}
 	if (!Ge(e, t, r) && t.uri) {
 		if (!n.fetcher) throw Error("kb has no fetcher");
@@ -8427,7 +8423,7 @@ function Ke(e, t) {
 }
 function qe(e, t) {
 	let n = e.createElement("img");
-	if (n.style = w.iconStyle, n.setAttribute("src", V + (function(e) {
+	if (n.style = w.iconStyle, n.setAttribute("src", B + (function(e) {
 		if (!e.uri) return !1;
 		let t = e.uri.split("/");
 		return t.length === 3 || t.length === 4 && t[3] === "";
@@ -8453,16 +8449,16 @@ function Je(e, t, n, r, i) {
 	c.style.gridColumn = "1/2", c.style.gridRow = "1";
 	let l = e.createElement("div");
 	l.style.gridColumn = "1/2", l.style.gridRow = "2";
-	let u = W(e, a);
+	let u = H(e, a);
 	s.appendChild(u), u.style.gridColumn = "1", u.style.gridRow = "2";
 	let d = s.appendChild(e.createElement("button"));
 	d.style.cssText = w.buttonStyle, d.style.gridRow = "2", d.style.gridColumn = "2", d.textContent = "Cancel";
-	let f = U(e, R.iconBase + "noun_925021.svg", "Delete it");
+	let f = V(e, L.iconBase + "noun_925021.svg", "Delete it");
 	s.appendChild(f), f.style.gridRow = "1", f.style.gridColumn = "1";
 	let p = s.appendChild(e.createElement("button"));
 	return p.style.cssText = w.buttonStyle, p.style.gridRow = "1", p.style.gridColumn = "2", p.textContent = n, s.appendChild(p), f.addEventListener("click", o), p.addEventListener("click", o), d.addEventListener("click", a), s;
 }
-function H(e, t, n, r, i) {
+function Ye(e, t, n, r, i) {
 	function a() {
 		let n = "button:not([disabled]), a[href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex=\"-1\"])", a = [];
 		if (i) for (let e = t; e; e = e.parentElement) {
@@ -8494,14 +8490,14 @@ function H(e, t, n, r, i) {
 		let u = Je(e, l, c, r, o);
 		l.appendChild(u), i && (u.style.position = "static", u.style.top = "", Array.from(u.querySelectorAll("button")).find((e) => e.textContent === "Cancel")?.focus());
 	}
-	let o = V + "noun_2188_red.svg", s = e.createElement("img");
+	let o = B + "noun_2188_red.svg", s = e.createElement("img");
 	s.setAttribute("src", o), s.tabIndex = 0, s.setAttribute("role", "button"), s.setAttribute("style", w.smallButtonStyle), s.style.float = "right";
 	let c = "Remove this " + n;
 	return s.title = c, s.setAttribute("aria-label", c), s.classList.add("hoverControlHide"), s.addEventListener("click", a), s.addEventListener("keydown", (e) => {
 		(e.key === "Enter" || e.key === " ") && (e.preventDefault(), s.click());
 	}), t.classList.add("hoverControl"), t.appendChild(s), s.setAttribute("data-testid", "deleteButtonWithCheck"), s;
 }
-function U(e, t, n, r, i = {
+function V(e, t, n, r, i = {
 	buttonColor: "Primary",
 	needsBorder: !1
 }) {
@@ -8516,14 +8512,14 @@ function U(e, t, n, r, i = {
 	}, i.buttonColor === "Secondary" ? i.needsBorder ? a.setAttribute("style", w.secondaryButtonNoBorder) : a.setAttribute("style", w.secondaryButton) : i.needsBorder ? a.setAttribute("style", w.primaryButtonNoBorder) : a.setAttribute("style", w.primaryButton);
 	return r && a.addEventListener("click", r, !1), a;
 }
-function W(e, t) {
-	let n = U(e, ke, "Cancel", t);
+function H(e, t) {
+	let n = V(e, ke, "Cancel", t);
 	return n.firstChild && (n.firstChild.style.opacity = "0.3"), n;
 }
-function Ye(e, t) {
-	return U(e, Ae, "Continue", t);
+function Xe(e, t) {
+	return V(e, Ae, "Continue", t);
 }
-function Xe(e, t, n, r, i, a) {
+function Ze(e, t, n, r, i, a) {
 	return new Promise(function(t, o) {
 		let s = e.createElement("div");
 		r ||= h.foaf("name"), a ||= i ? T(i) : "  ";
@@ -8536,15 +8532,15 @@ function Xe(e, t, n, r, i, a) {
 		}
 		l.addEventListener("keyup", function(e) {
 			e.keyCode === 13 && u();
-		}, !1), s.appendChild(e.createElement("br")), s.appendChild(W(e, function(e) {
+		}, !1), s.appendChild(e.createElement("br")), s.appendChild(H(e, function(e) {
 			s.parentNode.removeChild(s), t(null);
-		})), s.appendChild(Ye(e, function(e) {
+		})), s.appendChild(Xe(e, function(e) {
 			u();
 		})), l.focus();
 	});
 }
-var Ze = Qe;
-function Qe(e, t, n, r) {
+var Qe = $e;
+function $e(e, t, n, r) {
 	let i = e.createElement("tr");
 	r ||= {};
 	let a = i.appendChild(e.createElement("td")), o = i.appendChild(e.createElement("td")), s = i.appendChild(e.createElement("td")), c = r.image || qe(e, n);
@@ -8564,25 +8560,25 @@ function Qe(e, t, n, r) {
 			n.setAttribute("style", "font-size: 90%; opacity: 0.8;"), typeof t == "string" ? n.textContent = t : n.appendChild(t);
 		}
 	}
-	return r.deleteFunction && H(e, s, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && (s.appendChild(De(e, n)).classList.add("HoverControlHide"), s.appendChild(e.createElement("br"))), r.draggable !== !1 && (c.setAttribute("draggable", "false"), ue(i, n))), i.subject = n, i;
-}
-function $e(e, t, n, r) {
-	let i = t.appendChild(e.createElement("div"));
-	n ? i.textContent = n : ze(i, r);
+	return r.deleteFunction && Ye(e, s, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && (s.appendChild(De(e, n)).classList.add("HoverControlHide"), s.appendChild(e.createElement("br"))), r.draggable !== !1 && (c.setAttribute("draggable", "false"), de(i, n))), i.subject = n, i;
 }
 function et(e, t, n, r) {
 	let i = t.appendChild(e.createElement("div"));
-	i.setAttribute("style", w.linkDivStyle), r.deleteFunction && H(e, i, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && Oe(e, i, n), ue(t, n));
+	n ? i.textContent = n : ze(i, r);
 }
-function tt(e, t, n) {
+function tt(e, t, n, r) {
+	let i = t.appendChild(e.createElement("div"));
+	i.setAttribute("style", w.linkDivStyle), r.deleteFunction && Ye(e, i, r.noun || "one", r.deleteFunction, r.confirmationContainer), n.uri && (r.link !== !1 && Oe(e, i, n), de(t, n));
+}
+function nt(e, t, n) {
 	let r = e.createElement("div");
-	return r.setAttribute("style", w.renderAsDivStyle), n ||= {}, Te(e, r, n.image || qe(e, t)), $e(e, r, n.title, t), et(e, r, t, n), n.clickable && n.onClickFunction && we(r, n.onClickFunction), n.wrapInATR ? Ce(e, r, t) : r;
+	return r.setAttribute("style", w.renderAsDivStyle), n ||= {}, Ee(e, r, n.image || qe(e, t)), et(e, r, n.title, t), tt(e, r, t, n), n.clickable && n.onClickFunction && Te(r, n.onClickFunction), n.wrapInATR ? we(e, r, t) : r;
 }
-function nt(e) {
+function rt(e) {
 	if (e.refresh) e.refresh();
-	else for (let t = 0; t < e.children.length; t++) nt(e.children[t]);
+	else for (let t = 0; t < e.children.length; t++) rt(e.children[t]);
 }
-function rt(e, r, i, a = {}) {
+function it(e, r, i, a = {}) {
 	let o = /* @__PURE__ */ new Set(), s = !!(a.renderSupportingInfo || a.renderNameSuffix), c = a.refreshOnDocumentLoad ?? !0, l = function(e) {
 		let n = b.updater;
 		if (!n) throw Error("kb has no updater");
@@ -8600,7 +8596,7 @@ function rt(e, r, i, a = {}) {
 		}
 		return g && (r.deleteFunction = function() {
 			return l(n);
-		}), Ze(e, v, t, r);
+		}), Qe(e, v, t, r);
 	}
 	let d = function() {
 		let e = b.each(r, v);
@@ -8619,7 +8615,7 @@ function rt(e, r, i, a = {}) {
 		});
 	}
 	function p(e) {
-		de(b.fetcher, e, a.uploadFolder?.uri, a.uploadFolder?.uri, function(e, n) {
+		fe(b.fetcher, e, a.uploadFolder?.uri, a.uploadFolder?.uri, function(e, n) {
 			let i = [t(r, v, b.sym(n), m)];
 			if (!b.updater) throw Error("kb has no updater");
 			b.updater.update([], i, function(e, t, n, r) {
@@ -8629,30 +8625,30 @@ function rt(e, r, i, a = {}) {
 	}
 	let m = a.doc || r.doc();
 	a.modify === void 0 && (a.modify = !0);
-	let g = a.modify, _ = a.promptIcon || V + "noun_748003.svg", v = a.predicate || h.wf("attachment"), y = a.noun || "attachment", b = E, x = i.appendChild(e.createElement("table"));
+	let g = a.modify, _ = a.promptIcon || B + "noun_748003.svg", v = a.predicate || h.wf("attachment"), y = a.noun || "attachment", b = E, x = i.appendChild(e.createElement("table"));
 	x.setAttribute("style", "margin-top: 1em; margin-bottom: 1em;");
 	let S = x.appendChild(e.createElement("tr")), w = S.appendChild(e.createElement("td")), T = S.appendChild(e.createElement("td")).appendChild(e.createElement("table"));
 	if (T.appendChild(e.createElement("tr")), x.refresh = d, d(), g) {
-		let t = U(e, _, "Drop attachments here");
+		let t = V(e, _, "Drop attachments here");
 		w.appendChild(t);
 		let n = a.uploadFolder ? p : null;
-		I(t, f, n);
+		F(t, f, n);
 		let r = t.querySelector("img");
-		if (r && I(r, f, n), I(w, f, n), a.uploadFolder) {
-			let t = bt(e, p);
+		if (r && F(r, f, n), F(w, f, n), a.uploadFolder) {
+			let t = xt(e, p);
 			w.appendChild(t);
 		}
 	}
 	return x;
 }
-function it(e) {
+function at(e) {
 	e.preventDefault(), e.stopPropagation();
 	let t = g(e).getAttribute("href");
 	if (!t) return O("openHrefInOutlineMode: No href found!\n");
 	let n = window.document;
 	n.outlineManager ? n.outlineManager.GotoSubject(E.sym(t), !0, void 0, !0, void 0) : window && window.panes && window.panes.getOutliner ? window.panes.getOutliner().GotoSubject(E.sym(t), !0, void 0, !0, void 0) : O("ERROR: Can't access outline manager in this config");
 }
-function at(e) {
+function ot(e) {
 	if (e.uri === void 0) return;
 	let t = e.uri;
 	if (t.slice(0, 7) !== "http://") return;
@@ -8666,7 +8662,7 @@ function at(e) {
 	}
 	return E.sym("http://tabulator.org/wiki/annnotation/" + t);
 }
-function ot() {
+function st() {
 	let e = {};
 	return E.statementsMatching(void 0, h.rdf("type"), void 0).forEach(function(t) {
 		t.object.value && (e[t.object.value] = !0);
@@ -8676,7 +8672,7 @@ function ot() {
 		t.value && (e[t.value] = !0);
 	}), e;
 }
-function st(e) {
+function ct(e) {
 	let t = {}, n = {}, r = {}, i = 0, a = 0, o = 0, s = e.predicateIndex;
 	for (let e in s) s[e][0].object.termType === "Literal" ? (n[e] = !0, a++) : (r[e] = !0, i++);
 	let c = e.each(void 0, h.rdf("type"), h.rdf("Property"));
@@ -8686,30 +8682,30 @@ function st(e) {
 	}
 	return t.op = r, t.dp = n, S(`propertyTriage: ${i} non-lit, ${a} literal. ${o} unknown.`), t;
 }
-function ct(e, t) {
+function lt(e, t) {
 	let n = e.createElement("button");
 	return n.setAttribute("type", "button"), n.textContent = "Goto " + T(t), n.addEventListener("click", function(n) {
 		e.outlineManager.GotoSubject(t, !0, void 0, !0, void 0);
 	}, !0), n;
 }
-function lt(e, t) {
+function ut(e, t) {
 	let n = e.createElement("button");
 	return n.setAttribute("type", "button"), n.textContent = "✕", n.addEventListener("click", function(e) {
 		t.parentNode.removeChild(t);
 	}, !0), n;
 }
-function ut(e, t, n, r, i, a, o, s, c) {
-	return dt(e.createElement("div"), e, t, n, r, i, a, o, s, c);
+function dt(e, t, n, r, i, a, o, s, c) {
+	return ft(e.createElement("div"), e, t, n, r, i, a, o, s, c);
 }
-function dt(e, t, n, r, i, a, o, s, c, l) {
+function ft(e, t, n, r, i, a, o, s, c, l) {
 	let u = "border: 0.1em solid #ddd; border-bottom: none; width: 95%; height: 2em; padding: 0.5em;", d = null;
 	e.innerHTML = "";
 	let f = function(e, o) {
 		let f, p, m = function() {
 			let e = a ? n.each(void 0, i, o) : n.each(o, i);
-			_.setAttribute("class", e.length === 0 ? "hideTillHover" : ""), p.setAttribute("src", s.connectIcon || V + "noun_25830.svg"), p.setAttribute("title", e.length ? e.length : "attach");
+			_.setAttribute("class", e.length === 0 ? "hideTillHover" : ""), p.setAttribute("src", s.connectIcon || B + "noun_25830.svg"), p.setAttribute("title", e.length ? e.length : "attach");
 		};
-		f = G.twoLine.widgetForClass(r)(t, o), f.setAttribute("style", u);
+		f = U.twoLine.widgetForClass(r)(t, o), f.setAttribute("style", u);
 		let h = t.createElement("div");
 		h.setAttribute("class", "hideTillHover"), h.setAttribute("style", "float:right; width:10%");
 		let g = t.createElement("a");
@@ -8727,19 +8723,19 @@ function dt(e, t, n, r, i, a, o, s, c, l) {
 	}
 	return e;
 }
-var G = {};
-function ft(e, t) {
+var U = {};
+function pt(e, t) {
 	let n = e.createElement("div");
 	return n.textContent = T(t), n;
 }
-function pt(e) {
-	let t = G.twoLine[e.uri], n = E;
+function mt(e) {
+	let t = U.twoLine[e.uri], n = E;
 	if (t) return t;
 	let r = n.findSuperClassesNT(e);
-	for (let e in r) if (t = G.twoLine[n.fromNT(e).uri], t) return t;
-	return G.twoLine[""];
+	for (let e in r) if (t = U.twoLine[n.fromNT(e).uri], t) return t;
+	return U.twoLine[""];
 }
-function mt(e, t) {
+function ht(e, t) {
 	let n = "", r = function(e) {
 		let r = E.any(t, h.qu(e));
 		return r || (n += "@@ No value for " + e + "! "), r ? y(r.value) : "?";
@@ -8756,7 +8752,7 @@ function mt(e, t) {
         <td><a href="${y(t.uri)}">${y(n)}</a></td>
       </tr>`), i;
 }
-function ht(e, t) {
+function gt(e, t) {
 	let n = function(e) {
 		let n = E.any(t, e);
 		return n ? y(n.value) : "?";
@@ -8770,19 +8766,19 @@ function ht(e, t) {
       <td>${n(h.cal("dtend"))}</td>
     </tr>`, r;
 }
-function gt(e, t) {
+function _t(e, t) {
 	let n = e.querySelectorAll("link");
 	for (let e = 0; e < n.length; e++) if ((n[e].getAttribute("rel") || "") === "stylesheet" && (n[e].getAttribute("href") || "") === t) return;
 	let r = e.createElement("link");
 	r.setAttribute("rel", "stylesheet"), r.setAttribute("type", "text/css"), r.setAttribute("href", t), e.getElementsByTagName("head")[0].appendChild(r);
 }
-function _t(e) {
-	return yt(e, "audio");
-}
 function vt(e) {
-	return yt(e, "video");
+	return bt(e, "audio");
 }
-function yt(e, t) {
+function yt(e) {
+	return bt(e, "video");
+}
+function bt(e, t) {
 	let n = {
 		audio: "http://purl.org/dc/dcmitype/Sound",
 		image: "http://purl.org/dc/dcmitype/Image",
@@ -8791,25 +8787,25 @@ function yt(e, t) {
 	for (let e in a) if (e.startsWith(o)) return !0;
 	return n[r] in a;
 }
-function bt(e, t) {
+function xt(e, t) {
 	let n = e.createElement("div"), r = n.appendChild(e.createElement("input"));
 	return r.setAttribute("type", "file"), r.setAttribute("multiple", "true"), r.addEventListener("change", (e) => {
 		O("File drop event: ", e), e.files ? t(e.files) : e.target && e.target.files ? t(e.target.files) : alert("Sorry no files .. internal error?");
-	}, !1), r.style = "display:none", I(n.appendChild(U(e, V + "noun_Upload_76574_000000.svg", "Upload files", (e) => {
+	}, !1), r.style = "display:none", F(n.appendChild(V(e, B + "noun_Upload_76574_000000.svg", "Upload files", (e) => {
 		r.click();
 	})), null, t), n;
 }
-G = {
+U = {
 	line: {},
 	twoLine: {
-		"": ft,
-		"http://www.w3.org/2000/10/swap/pim/qif#Transaction": mt,
-		"http://www.w3.org/ns/pim/trip#Trip": ht,
-		widgetForClass: pt
+		"": pt,
+		"http://www.w3.org/2000/10/swap/pim/qif#Transaction": ht,
+		"http://www.w3.org/ns/pim/trip#Trip": gt,
+		widgetForClass: mt
 	}
 };
 // src/widgets/forms/fieldParams.ts
-var xt = {
+var St = {
 	[h.ui("ColorField").uri]: {
 		size: 9,
 		type: "color",
@@ -8875,23 +8871,23 @@ var xt = {
 		element: "h3",
 		style: w.formHeadingStyle
 	}
-}, St = m.store, K = {};
-function Ct(e) {
-	let t = St, n = t.findTypeURIs(e), r = t.bottomTypeURIs(n), i = [];
+}, Ct = m.store, W = {};
+function G(e) {
+	let t = Ct, n = t.findTypeURIs(e), r = t.bottomTypeURIs(n), i = [];
 	for (let e in r) i.push(e);
 	return i[0];
 }
-function q(e, t) {
-	let n = Ct(t), r = K[n];
+function K(e, t) {
+	let n = G(t), r = W[n];
 	return v("paneUtils: Going to implement field " + t + " of type " + n), r || function(e, r) {
-		let i = L(e, "No handler for field " + t + " of type " + n);
+		let i = I(e, "No handler for field " + t + " of type " + n);
 		return r && r.appendChild(i), i;
 	};
 }
 // src/widgets/forms/formStyle.ts
 var wt = "https://www.w3.org/ns/css#";
 function Tt(e, t) {
-	let n = xt[Ct(t)] || {}, r = E.any(t, h.ui("style"));
+	let n = St[G(t)] || {}, r = E.any(t, h.ui("style"));
 	r ? r.termType === "Literal" ? r && e.setAttribute("style", r.value) : E.statementsMatching(r, null, null, t.doc()).forEach((t) => {
 		if (t.predicate.uri && t.predicate.uri.startsWith(wt)) {
 			let n = t.predicate.uri.slice(26);
@@ -8904,37 +8900,37 @@ function Tt(e, t) {
 	}) : n.style && e.setAttribute("style", n.style);
 }
 // src/widgets/forms/basic.ts
-var J = m.store;
+var q = m.store;
 function Et(e, t, n, r, i) {
 	n.style.display = "flex", n.style.flexDirection = "row";
 	let a = n.appendChild(e.createElement("div"));
 	a.style.width = b.formFieldNameBoxWidth;
 	let o = n.appendChild(e.createElement("div"));
-	return a.setAttribute("class", "formFieldName"), a.setAttribute("style", w.formFieldNameBoxStyle), o.setAttribute("class", "formFieldValue"), i ? a.appendChild(e.createTextNode(i)) : t.any(r, h.ui("property")) ? a.appendChild(Dt(e, t.any(r, h.ui("property")), r)) : (o.appendChild(L(e, "No property or label given for form field: " + r)), a.appendChild(e.createTextNode("???"))), o;
+	return a.setAttribute("class", "formFieldName"), a.setAttribute("style", w.formFieldNameBoxStyle), o.setAttribute("class", "formFieldValue"), i ? a.appendChild(e.createTextNode(i)) : t.any(r, h.ui("property")) ? a.appendChild(J(e, t.any(r, h.ui("property")), r)) : (o.appendChild(I(e, "No property or label given for form field: " + r)), a.appendChild(e.createTextNode("???"))), o;
 }
-function Dt(e, t, n) {
-	let r = J.any(n, h.ui("label"));
+function J(e, t, n) {
+	let r = q.any(n, h.ui("label"));
 	if (r ||= T(t, !0), t === void 0) return e.createTextNode("@@Internal error: undefined property");
 	let i = e.createElement("a");
 	return t.uri && i.setAttribute("href", t.uri), i.setAttribute("style", "color: #3B5998; text-decoration: none;"), i.textContent = r, i;
 }
-function Ot(e, t, n) {
-	let r = J.statementsMatching(e, t);
+function Dt(e, t, n) {
+	let r = q.statementsMatching(e, t);
 	if (r.length === 0) return n;
-	if (!J.updater) throw Error("Store has no updater");
-	return r.length > 0 && r[0].why.value && J.updater.editable(r[0].why.value, J) ? J.sym(r[0].why.value) : n;
+	if (!q.updater) throw Error("Store has no updater");
+	return r.length > 0 && r[0].why.value && q.updater.editable(r[0].why.value, q) ? q.sym(r[0].why.value) : n;
 }
 function Y(e, n, r, i, a, o, s) {
-	let c = J, l = a.doc ? a.doc() : null, u = e.createElement("div"), f = c.any(a, h.ui("property"));
-	if (n && n.appendChild(u), !f) return u.appendChild(L(e, "Error: No property given for text field: " + a));
-	let p = Et(e, c, u, a), m = c.anyJS(a, h.ui("suppressEmptyUneditable"), null, l), g = xt[Ct(a)];
+	let c = q, l = a.doc ? a.doc() : null, u = e.createElement("div"), f = c.any(a, h.ui("property"));
+	if (n && n.appendChild(u), !f) return u.appendChild(I(e, "Error: No property given for text field: " + a));
+	let p = Et(e, c, u, a), m = c.anyJS(a, h.ui("suppressEmptyUneditable"), null, l), g = St[G(a)];
 	g === void 0 && (g = { style: "" });
 	let _ = g.style || "", v = w.textInputStyle + _, y = e.createElement("input");
 	y.style = v, p.appendChild(y), y.setAttribute("type", g.type ? g.type : "text");
 	let x = (y.getAttribute("type") || "").toLowerCase(), S = x === "date" || x === "datetime-local", C = c.anyJS(a, h.ui("size")) || b.textInputSize || 20;
 	y.setAttribute("size", C);
 	let T = c.any(a, h.ui("maxLength"));
-	y.setAttribute("maxLength", T ? "" + T : b.basicMaxLength), o ||= Ot(i, f, o);
+	y.setAttribute("maxLength", T ? "" + T : b.basicMaxLength), o ||= Dt(i, f, o);
 	let E = c.any(i, f, void 0, o);
 	if (E ||= c.any(a, h.ui("default")), E && E.value && g.uriPrefix ? y.value = decodeURIComponent(E.value.replace(g.uriPrefix, "")).replace(/ /g, "") : E && 
 	/* istanbul ignore next */
@@ -8970,7 +8966,7 @@ function Y(e, n, r, i, a, o, s) {
 			});
 		}
 		m(a, p, function(t, n, i) {
-			n ? (r && (y.disabled = !1), y.setAttribute("style", v)) : u.appendChild(L(e, i)), s(n, i);
+			n ? (r && (y.disabled = !1), y.setAttribute("style", v)) : u.appendChild(I(e, i)), s(n, i);
 		});
 	}, !0), y.addEventListener("blur", function(e) {
 		if (S && y.dataset && y.dataset.deferredChange === "true") {
@@ -8981,24 +8977,24 @@ function Y(e, n, r, i, a, o, s) {
 	}, !0), u) : (y.readOnly = !0, y.style = w.textInputStyleUneditable + _, m && y.value === "" && (u.style.display = "none"), u);
 }
 // src/widgets/forms/autocomplete/language.ts
-var kt = /* @__PURE__ */ o({
-	addDefaults: () => jt,
+var Ot = /* @__PURE__ */ o({
+	addDefaults: () => At,
 	defaultPreferredLanguages: () => X,
-	filterByLanguage: () => Pt,
-	getPreferredLanguages: () => Nt,
-	getPreferredLanguagesFor: () => Mt,
-	languageCodeURIBase: () => At
-}), At = "https://www.w3.org/ns/iana/language-code/", X = [
+	filterByLanguage: () => Nt,
+	getPreferredLanguages: () => Mt,
+	getPreferredLanguagesFor: () => jt,
+	languageCodeURIBase: () => kt
+}), kt = "https://www.w3.org/ns/iana/language-code/", X = [
 	"en",
 	"fr",
 	"de",
 	"it",
 	"ar"
 ];
-function jt(e) {
+function At(e) {
 	return e ||= [], e.concat(X.filter((t) => !e.includes(t)));
 }
-async function Mt(e) {
+async function jt(e) {
 	let t = e.doc();
 	await E.fetcher?.load(t);
 	let n = E.any(e, h.schema("knowsLanguage"), null, t);
@@ -9011,26 +9007,26 @@ async function Mt(e) {
 			return;
 		}
 		if (!n.value.startsWith("https://www.w3.org/ns/iana/language-code/")) {
-			console.error(`What should be a language code ${n.value} does not start with ${At}`);
+			console.error(`What should be a language code ${n.value} does not start with ${kt}`);
 			return;
 		}
 		let i = n.value.slice(41);
 		r.push(i);
-	}), r.length > 0 ? (console.log(`     User knows languages with codes: "${r.join(",")}"`), jt(r)) : null;
+	}), r.length > 0 ? (console.log(`     User knows languages with codes: "${r.join(",")}"`), At(r)) : null;
 }
-async function Nt() {
+async function Mt() {
 	let e = await D.currentUser();
 	if (e) {
-		let t = await Mt(e);
+		let t = await jt(e);
 		if (t) return t;
 	}
 	if (typeof navigator < "u") {
-		if (navigator.languages) return jt(navigator.languages.map((e) => e.split("-")[0]));
-		if (navigator.language) return jt([navigator.language.split("-")[0]]);
+		if (navigator.languages) return At(navigator.languages.map((e) => e.split("-")[0]));
+		if (navigator.language) return At([navigator.language.split("-")[0]]);
 	}
 	return X;
 }
-function Pt(e, t) {
+function Nt(e, t) {
 	let n = {};
 	e.forEach((e) => {
 		let t = e.subject.value;
@@ -9049,31 +9045,31 @@ function Pt(e, t) {
 	return O(` Filter by language: ${e.length} -> ${i.length}`), i;
 }
 // src/widgets/forms/autocomplete/publicData.ts
-var Ft = /* @__PURE__ */ o({
+var Pt = /* @__PURE__ */ o({
 	AUTOCOMPLETE_LIMIT: () => 200,
-	ESCOResultToBindings: () => Yt,
-	bindingToTerm: () => qt,
-	dbPediaTypeMap: () => Ht,
-	dbpediaParameters: () => Vt,
-	escoParameters: () => Bt,
-	fetcherOptionsJsonPublicData: () => zt,
-	getDbpediaDetails: () => on,
-	getWikidataDetails: () => nn,
-	getWikidataDetailsOld: () => rn,
-	getWikidataLocation: () => an,
-	instituteDetailsWikidataQuery: () => Rt,
-	loadFromBindings: () => Jt,
-	loadPublicDataThing: () => tn,
-	queryESCODataByName: () => Xt,
-	queryPublicDataByName: () => Qt,
-	queryPublicDataConstruct: () => en,
-	queryPublicDataSelect: () => $t,
-	variableNameToPredicateMap: () => Kt,
-	wikidataClasses: () => Lt,
-	wikidataIncomingClassMap: () => Gt,
-	wikidataOutgoingClassMap: () => Ut,
-	wikidataParameters: () => Wt
-}), It = /\$\(subject\)/g, Lt = {
+	ESCOResultToBindings: () => Jt,
+	bindingToTerm: () => Kt,
+	dbPediaTypeMap: () => Vt,
+	dbpediaParameters: () => Bt,
+	escoParameters: () => zt,
+	fetcherOptionsJsonPublicData: () => Rt,
+	getDbpediaDetails: () => an,
+	getWikidataDetails: () => tn,
+	getWikidataDetailsOld: () => nn,
+	getWikidataLocation: () => rn,
+	instituteDetailsWikidataQuery: () => Lt,
+	loadFromBindings: () => qt,
+	loadPublicDataThing: () => en,
+	queryESCODataByName: () => Yt,
+	queryPublicDataByName: () => Zt,
+	queryPublicDataConstruct: () => $t,
+	queryPublicDataSelect: () => Qt,
+	variableNameToPredicateMap: () => Gt,
+	wikidataClasses: () => It,
+	wikidataIncomingClassMap: () => Wt,
+	wikidataOutgoingClassMap: () => Ht,
+	wikidataParameters: () => Ut
+}), Ft = /\$\(subject\)/g, It = {
 	Corporation: "http://www.wikidata.org/entity/Q6881511",
 	EducationalOrganization: "http://www.wikidata.org/entity/Q178706",
 	GovernmentOrganization: "http://www.wikidata.org/entity/Q327333",
@@ -9084,33 +9080,33 @@ var Ft = /* @__PURE__ */ o({
 	Project: "http://www.wikidata.org/entity/Q170584",
 	ResearchOrganization: "http://www.wikidata.org/entity/Q31855",
 	SportsOrganization: "http://www.wikidata.org/entity/Q4438121"
-}, Rt = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}", zt = {
+}, Lt = "prefix vcard: <http://www.w3.org/2006/vcard/ns#>\nCONSTRUCT\n{  wd:Q49108 vcard:fn ?itemLabel.\nwd:Q49108 rdf:type ?klass. ?klass rdfs:label ?klassLabel; rdfs:comment ?klassDescription .\nwd:Q49108 schema:logo ?logo;\n   schema:image ?image;\n   schema:logo  ?sealImage;\n   schema:subOrganization  ?subsidiary .\n      ?subsidiary rdfs:label ?subsidiaryLabel .\n ?supersidiary schema:subOrganization wd:Q49108 .\n      ?supersidiary rdfs:label ?supersidiaryLabel .\n  wd:Q49108 schema:location ?location .\n     ?location  schema:elevation  ?elevation .\n     ?location  wdt:P131  ?region .  ?region rdfs:label ?regionLabel .\n     ?location wdt:P625 ?coordinates .\n     ?location  schema:country  ?country . ?country rdfs:label ?countryLabel .\n}\nWHERE\n{  optional {wd:Q49108 rdfs:label ?itemLabel} .\n  optional {wd:Q49108 wdt:P154 ?logo .}\n  optional {wd:Q49108 wdt:P31 ?klass .}\n  optional {wd:Q49108 wdt:P158  ?sealImage .}\n  optional {wd:Q49108 wdt:P18 ?image .}\n\n  optional { wd:Q49108       wdt:P355 ?subsidiary . }\n  optional { ?supersidiary   wdt:P355 wd:Q49108. }\n\n  optional { wd:Q49108 wdt:P276 ?location .\n\n    optional { ?location  schema:eleveation  ?elevation }\n    optional { ?location  wdt:P131  ?region }\n    optional { ?location wdt:P625 ?coordinates }\n    optional {  ?location  wdt:P17  ?country }\n  }\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\". }\n}", Rt = {
 	credentials: "omit",
 	headers: new Headers({ Accept: "application/json" })
-}, Bt = {
+}, zt = {
 	label: "ESCO",
 	logo: E.sym("https://ec.europa.eu/esco/portal/static_resource2/images/logo/logo_en.gif"),
 	searchByNameURI: "https://ec.europa.eu/esco/api/search?language=$(language)&type=occupation&text=$(name)"
-}, Vt = {
+}, Bt = {
 	label: "DBPedia",
 	logo: E.sym("https://upload.wikimedia.org/wikipedia/commons/thumb/7/73/DBpediaLogo.svg/263px-DBpediaLogo.svg.png"),
 	searchByNameQuery: "select distinct ?subject, ?name where {\n    ?subject a $(targetClass); rdfs:label ?name\n    FILTER regex(?name, \"$(name)\", \"i\")\n  } LIMIT $(limit)",
 	endpoint: "https://dbpedia.org/sparql/"
-}, Ht = { AcademicInsitution: "http://umbel.org/umbel/rc/EducationalOrganization" }, Ut = {
+}, Vt = { AcademicInsitution: "http://umbel.org/umbel/rc/EducationalOrganization" }, Ht = {
 	AcademicInsitution: "http://www.wikidata.org/entity/Q4671277",
 	Enterprise: "http://www.wikidata.org/entity/Q6881511",
 	Business: "http://www.wikidata.org/entity/Q4830453",
 	NGO: "http://www.wikidata.org/entity/Q79913",
 	CharitableOrganization: "http://www.wikidata.org/entity/Q708676",
 	Insitute: "http://www.wikidata.org/entity/Q1664720"
-}, Wt = {
+}, Ut = {
 	label: "WikiData",
 	limit: 3e3,
 	logo: E.sym("https://www.wikimedia.org/static/images/project-logos/wikidatawiki.png"),
 	endpoint: "https://query.wikidata.org/sparql",
 	searchByNameQuery: "SELECT ?subject ?name\n  WHERE {\n    ?klass wdt:P279* $(targetClass) .\n    ?subject wdt:P31 ?klass .\n    ?subject rdfs:label ?name.\n    FILTER regex(?name, \"$(name)\", \"i\")\n  } LIMIT $(limit) ",
 	insitituteDetailsQuery: "CONSTRUCT\n{  wd:Q49108 schema:name ?itemLabel;\n             schema:logo ?logo;\n              schema:logo  ?sealImage;\n             schema:subOrganization  ?subsidiary .\n                 ?subsidiary schema:name ?subsidiaryLabel .\n}\nWHERE\n{\n   wd:Q49108 # rdfs:label ?itemLabel ;\n             wdt:P154 ?logo;\n              wdt:P158  ?sealImage ;\n             wdt:P355  ?subsidiary .\n          #  ?subsidiary rdfs:label ?subsidiaryLabel .\n\n  SERVICE wikibase:label { bd:serviceParam wikibase:language \"[AUTO_LANGUAGE], fr\". }\n}"
-}, Gt = {
+}, Wt = {
 	"http://www.wikidata.org/entity/Q15936437": h.schema("CollegeOrUniversity"),
 	"http://www.wikidata.org/entity/Q1664720": h.schema("EducationalOrganization"),
 	"http://www.wikidata.org/entity/Q43229": h.schema("Organization"),
@@ -9119,7 +9115,7 @@ var Ft = /* @__PURE__ */ o({
 	"http://www.wikidata.org/entity/Q327333": h.schema("GovernmentOrganization"),
 	"http://www.wikidata.org/entity/Q2221906": h.schema("Place"),
 	"http://www.wikidata.org/entity/Q167037": h.schema("Corporation")
-}, Kt = {
+}, Gt = {
 	targetClass: h.rdf("type"),
 	sealImage: h.schema("logo"),
 	shortName: h.foaf("nick"),
@@ -9131,13 +9127,13 @@ var Ft = /* @__PURE__ */ o({
 	lat: h.schema("latitude"),
 	long: h.schema("longitude")
 };
-function qt(e) {
+function Kt(e) {
 	let t = e.type.toLowerCase();
 	if (t === "uri" || t === "iri") return E.sym(e.value);
 	if (t === "literal") return e["xml:lang"] ? new d(e.value, e["xml:lang"]) : new d(e.value);
 	throw Error(`bindingToTerm: Unexpected type "${e.type}" in sparql binding}`);
 }
-function Jt(e, t, n, r, i = Kt) {
+function qt(e, t, n, r, i = Gt) {
 	let a = {};
 	O(`loadFromBindings:  subject: ${t}`), O(`                       doc: ${r}`), n.forEach((e) => {
 		for (let t in e) {
@@ -9152,7 +9148,7 @@ function Jt(e, t, n, r, i = Kt) {
 			if (s === "uri") l = e.sym(c);
 			else if (s === "literal") l = new d(c, o.language, o.datatype);
 			else throw Error(`loadFromBindings:  unexpected type: ${s}`);
-			if (n === "type") Gt[c] ? l = Gt[c] : k("Unmapped Wikidata Class: " + c);
+			if (n === "type") Wt[c] ? l = Wt[c] : k("Unmapped Wikidata Class: " + c);
 			else if (n === "coordinates") {
 				O("         @@@ hey a point: " + c);
 				let n = /.*\(([-0-9.-]*) ([-0-9.-]*)\)/.exec(c);
@@ -9167,7 +9163,7 @@ function Jt(e, t, n, r, i = Kt) {
 		});
 	}
 }
-function Yt(e) {
+function Jt(e) {
 	return e._embedded.results.map((e) => {
 		let t = e.title, n = e.uri;
 		return {
@@ -9182,50 +9178,50 @@ function Yt(e) {
 		};
 	});
 }
-async function Xt(e, t, n) {
+async function Yt(e, t, n) {
 	if (!n.searchByNameURI) throw Error("Missing queryTarget.searchByNameURI on queryESCODataByName");
 	let r = n.limit || 200, i = n.searchByNameURI.replace("$(name)", e).replace("$(limit)", "" + r).replace("$(targetClass)", t.toNT());
 	O("Querying ESCO data - uri: " + i);
-	let a = (await E.fetcher?.webOperation("GET", i, zt))?.responseText || "";
+	let a = (await E.fetcher?.webOperation("GET", i, Rt))?.responseText || "";
 	if (O("    Query result  text" + a.slice(0, 500) + "..."), a.length === 0) throw Error("Wot no text back from ESCO query " + i);
 	let o = JSON.parse(a);
-	return O("    ESCO Query result JSON" + JSON.stringify(o, null, 4).slice(0, 500) + "..."), Yt(o);
+	return O("    ESCO Query result JSON" + JSON.stringify(o, null, 4).slice(0, 500) + "..."), Jt(o);
 }
-function Zt(e) {
+function Xt(e) {
 	let t = e.indexOf("SPARQL-QUERY");
 	if (t < 0) return e;
 	k("  ### Fixing JSON with wikidata error code injection " + e.slice(t, t + 200));
 	let n = e.lastIndexOf("}, {");
 	return e.slice(0, n) + " } ] } } ";
 }
-async function Qt(e, t, n, r) {
+async function Zt(e, t, n, r) {
 	function i(n) {
 		let i = r.limit || 200;
 		return n.replace("$(name)", e).replace("$(limit)", "" + i).replace("$(language)", a).replace("$(targetClass)", t.toNT());
 	}
 	if (!t) throw Error("queryPublicDataByName: No class provided");
-	let a = (await Nt() || X)[0] || "en";
+	let a = (await Mt() || X)[0] || "en";
 	if (r.searchByNameQuery) {
 		let e = i(r.searchByNameQuery);
-		return O("Querying public data - sparql: " + e), $t(e, r);
+		return O("Querying public data - sparql: " + e), Qt(e, r);
 	}
 	if (r.searchByNameURI) {
 		let e = i(r.searchByNameURI), t;
 		try {
-			t = await E.fetcher?.webOperation("GET", e, zt);
+			t = await E.fetcher?.webOperation("GET", e, Rt);
 		} catch (t) {
 			throw Error(`Exception when trying to fetch ${e} \n ${t}`);
 		}
 		let n = t.responseText || "";
 		if (t.status !== 200) throw Error(`HTTP error status ${t.status} trying to fetch ${e} `);
 		if (O("    Query result  text" + n.slice(0, 500) + "..."), n.length === 0) throw Error("queryPublicDataByName: No text back from public data query " + e);
-		let a = Zt(n), o = JSON.parse(a);
-		if (O("    API Query result JSON" + JSON.stringify(o, null, 4).slice(0, 500) + "..."), o._embedded) return O("      Looks like ESCO"), Yt(o);
+		let a = Xt(n), o = JSON.parse(a);
+		if (O("    API Query result JSON" + JSON.stringify(o, null, 4).slice(0, 500) + "..."), o._embedded) return O("      Looks like ESCO"), Jt(o);
 		throw alert("Code me: unrecognized API return format"), Error(`*** Need to add code to parse unrecognized API JSON return\n${JSON.stringify(o, null, 4)}`);
 	}
 	throw Error("Query source must have either rest API or SPARQL endpoint.");
 }
-async function $t(e, t) {
+async function Qt(e, t) {
 	if (!t.endpoint) throw Error("Missing queryTarget.endpoint required for queryPublicDataSelect");
 	let n = new URL(t.endpoint);
 	n.searchParams.append("query", e);
@@ -9238,10 +9234,10 @@ async function $t(e, t) {
 		headers: i
 	}, o = (await E.fetcher?.webOperation("GET", r, a))?.responseText || "";
 	if (o.length === 0) throw Error("No text back from query " + r);
-	let s = Zt(o), c = JSON.parse(s);
+	let s = Xt(o), c = JSON.parse(s);
 	return O("    Query result JSON" + JSON.stringify(c, null, 4).slice(0, 100) + "..."), c.results.bindings;
 }
-async function en(e, t, n) {
+async function $t(e, t, n) {
 	if (O("queryPublicDataConstruct: sparql:", e), !n.endpoint) throw Error("Missing queryTarget.endpoint required for queryPublicDataConstruct");
 	let r = new URL(n.endpoint);
 	r.searchParams.append("query", e);
@@ -9256,9 +9252,9 @@ async function en(e, t, n) {
 	if (O("    queryPublicDataConstruct result text:" + (c.length > 500 ? c.slice(0, 200) + " ... " + c.slice(-200) : c)), c.length === 0) throw Error("queryPublicDataConstruct: No text back from construct query:" + i);
 	s(c, E, t.uri, "text/turtle");
 }
-async function tn(e, t, n) {
-	if (n.uri.startsWith("https://dbpedia.org/resource/")) return on(e, t, n);
-	if (n.uri.match(/^https?:\/\/www\.wikidata\.org\/entity\/.*/)) await nn(e, t, n);
+async function en(e, t, n) {
+	if (n.uri.startsWith("https://dbpedia.org/resource/")) return an(e, t, n);
+	if (n.uri.match(/^https?:\/\/www\.wikidata\.org\/entity\/.*/)) await tn(e, t, n);
 	else {
 		let t = n.uri.startsWith("http:") ? e.sym("https:" + n.uri.slice(5)) : n, r = new Headers();
 		return r.append("Accept", "text/turtle"), e.fetcher.load(t, {
@@ -9267,39 +9263,39 @@ async function tn(e, t, n) {
 		});
 	}
 }
+async function tn(e, t, n) {
+	await $t(Lt.replace(/wd:Q49108/g, n.toNT()), n, Ut), O("getWikidataDetails: loaded.", n);
+}
 async function nn(e, t, n) {
-	await en(Rt.replace(/wd:Q49108/g, n.toNT()), n, Wt), O("getWikidataDetails: loaded.", n);
+	qt(e, n, await Qt("select distinct *  where {\n  optional { $(subject)  wdt:P31  ?targetClass } # instance of\n  optional { $(subject)  wdt:P154  ?logo }\n  optional { $(subject)  wdt:P158  ?sealImage }\n# optional { $(subject)  wdt:P159  ?headquartersLocation }\n\noptional { $(subject)  wdt:P17  ?country }\noptional { $(subject)  wdt:P18  ?image }\noptional { $(subject)  wdt:P1813  ?shortName }\n\noptional { $(subject)  wdt:P355  ?subsidiary }\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(Ft, n.toNT()), Ut), n.doc());
 }
 async function rn(e, t, n) {
-	Jt(e, n, await $t("select distinct *  where {\n  optional { $(subject)  wdt:P31  ?targetClass } # instance of\n  optional { $(subject)  wdt:P154  ?logo }\n  optional { $(subject)  wdt:P158  ?sealImage }\n# optional { $(subject)  wdt:P159  ?headquartersLocation }\n\noptional { $(subject)  wdt:P17  ?country }\noptional { $(subject)  wdt:P18  ?image }\noptional { $(subject)  wdt:P1813  ?shortName }\n\noptional { $(subject)  wdt:P355  ?subsidiary }\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(It, n.toNT()), Wt), n.doc());
+	let r = "select distinct *  where {\n\n  $(subject) wdt:P276 ?location .\n\n  optional { ?location  wdt:P2044  ?elevation }\n  optional { ?location  wdt:P131  ?region }\n  optional { ?location wdt:P625 ?coordinates }\noptional {  ?location  wdt:P17  ?country }\n\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(Ft, n.toNT());
+	O(" location query sparql:" + r);
+	let i = await Qt(r, Ut);
+	O(" location query bindings:", i), qt(e, n, i, n.doc());
 }
 async function an(e, t, n) {
-	let r = "select distinct *  where {\n\n  $(subject) wdt:P276 ?location .\n\n  optional { ?location  wdt:P2044  ?elevation }\n  optional { ?location  wdt:P131  ?region }\n  optional { ?location wdt:P625 ?coordinates }\noptional {  ?location  wdt:P17  ?country }\n\n# SERVICE wikibase:label { bd:serviceParam wikibase:language \"fr,en,de,it\" }\n}".replace(It, n.toNT());
-	O(" location query sparql:" + r);
-	let i = await $t(r, Wt);
-	O(" location query bindings:", i), Jt(e, n, i, n.doc());
-}
-async function on(e, t, n) {
-	Jt(e, n, await $t(`select distinct ?city, ?state, ?country, ?homepage, ?logo, ?lat, ?long,  WHERE {
+	qt(e, n, await Qt(`select distinct ?city, ?state, ?country, ?homepage, ?logo, ?lat, ?long,  WHERE {
     OPTIONAL { <${n}> <http://dbpedia.org/ontology/city> ?city }
     OPTIONAL { ${n} <http://dbpedia.org/ontology/state> ?state }
     OPTIONAL { ${n} <http://dbpedia.org/ontology/country> ?country }
     OPTIONAL { ${n} foaf:homepage ?homepage }
     OPTIONAL { ${n} foaf:lat ?lat; foaf:long ?long }
     OPTIONAL { ${n} <http://dbpedia.org/ontology/country> ?country }
-   }`, Vt), n.doc()), O("Finished getDbpediaDetails.");
+   }`, Bt), n.doc()), O("Finished getDbpediaDetails.");
 }
 // src/widgets/forms/autocomplete/autocompletePicker.ts
-var sn = 4, cn = 20, ln = 40;
+var on = 4, sn = 20, cn = 40;
 function Z(e, t) {
 	e.style.display = t ? "" : "none";
 }
-async function un(e, t, n, r) {
+async function ln(e, t, n, r) {
 	function i(t) {
 		let n = A.appendChild(e.createElement("tr"));
 		O(t);
 		let r = Error(t);
-		n.appendChild(L(e, r, "pink")), w.setStyle(n, "autocompleteRowStyle"), n.style.padding = "1em";
+		n.appendChild(I(e, r, "pink")), w.setStyle(n, "autocompleteRowStyle"), n.style.padding = "1em";
 	}
 	function a(e, n) {
 		O("Auto complete: finish! " + e), e.termType === "Literal" && t.queryParams.objectURIBase && (e = E.sym(t.queryParams.objectURIBase.value + e.value)), u(), r(e, n);
@@ -9330,12 +9326,12 @@ async function un(e, t, n, r) {
 	async function f(e, n) {
 		let r;
 		try {
-			r = await Qt(e, g, n || X, t.queryParams);
+			r = await Zt(e, g, n || X, t.queryParams);
 		} catch (e) {
 			i("Error querying db of organizations: " + e), y = !1;
 			return;
 		}
-		return v = r.length < 200, S = v ? e : void 0, u(), Pt(r, n) || [];
+		return v = r.length < 200, S = v ? e : void 0, u(), Nt(r, n) || [];
 	}
 	function p(e, t) {
 		return (t || []).filter((t) => l(e, t.name.value));
@@ -9344,7 +9340,7 @@ async function un(e, t, n, r) {
 		function t(t) {
 			let n = e.createElement("tr");
 			w.setStyle(n, "autocompleteRowStyle"), n.setAttribute("style", "padding: 0.3em;"), n.style.color = x ? "#080" : "#088", n.textContent = t.name.value;
-			let r = qt(t.subject), i = qt(t.name);
+			let r = Kt(t.subject), i = Kt(t.name);
 			return n.addEventListener("click", async (e) => {
 				O("       click row textContent: " + n.textContent), O("       click name: " + i.value), r && i && o(r, i);
 			}), n;
@@ -9357,16 +9353,16 @@ async function un(e, t, n, r) {
 			return;
 		}
 		O(`Setting lock at "${M.value}"`), y = !0;
-		let r = await Nt(), i = M.value.trim().toLowerCase();
-		if (i.length < sn) u(), C = cn;
+		let r = await Mt(), i = M.value.trim().toLowerCase();
+		if (i.length < on) u(), C = sn;
 		else {
 			x && S && i.startsWith(S) || (O(`   Querying database at "${i}" cf last "${S}".`), _ = await f(i, r) || []);
 			let e = p(i, _);
-			v && e.length <= ln && (C = e.length), x = v && e.length <= C, O(` Filter:"${i}" lastBindings: ${_.length}, slimmed to ${e.length}; rows: ${C}, Enough? ${v}, All displayed? ${x}`);
+			v && e.length <= cn && (C = e.length), x = v && e.length <= C, O(` Filter:"${i}" lastBindings: ${_.length}, slimmed to ${e.length}; rows: ${C}, Enough? ${v}, All displayed? ${x}`);
 			let a = e.slice(0, C);
 			a.sort(n), u();
 			for (let e of a) A.appendChild(t(e));
-			e.length === 1 && o(qt(e[0].subject), qt(e[0].name));
+			e.length === 1 && o(Kt(e[0].subject), Kt(e[0].name));
 		}
 		y = !1;
 	}
@@ -9376,7 +9372,7 @@ async function un(e, t, n, r) {
 	let g = t.targetClass;
 	if (!g) throw Error("renderAutoComplete: missing targetClass");
 	n.acceptButton && n.acceptButton.addEventListener("click", s, !1), n.cancelButton && n.cancelButton.addEventListener("click", c, !1);
-	let _, v = !1, y = !1, x = !1, S, C = cn, T = e.createElement("div"), D, k, A = T.appendChild(e.createElement("table"));
+	let _, v = !1, y = !1, x = !1, S, C = sn, T = e.createElement("div"), D, k, A = T.appendChild(e.createElement("table"));
 	A.setAttribute("data-testid", "autocomplete-table"), A.setAttribute("style", "max-width: 30em; margin: 0.5em;");
 	let j = A.appendChild(e.createElement("tr"));
 	w.setStyle(j, "autocompleteRowStyle");
@@ -9390,20 +9386,20 @@ async function un(e, t, n, r) {
 	}, !1), M.addEventListener("input", d), T;
 }
 // src/widgets/forms/autocomplete/autocompleteBar.ts
-var dn = "Solid ID", fn = R.iconBase + "noun_34653_green.svg", pn = R.iconBase + "noun_Search_875351.svg", mn = R.iconBase + "noun_253504.svg";
-async function hn(e, t, n, r, i, a) {
+var un = "Solid ID", dn = L.iconBase + "noun_34653_green.svg", fn = L.iconBase + "noun_Search_875351.svg", pn = L.iconBase + "noun_253504.svg";
+async function mn(e, t, n, r, i, a) {
 	async function o(e, t) {
 		return r.permanent ? (Z(_, !0), Z(f, !1), Z(p, !1)) : c(), i(e, t);
 	}
 	async function s(n) {
-		let r = await Xe(e, E, S, h.vcard("url"), void 0, dn);
+		let r = await Ze(e, E, S, h.vcard("url"), void 0, un);
 		if (r) return i(t, r);
 	}
 	function c() {
 		x &&= (S.removeChild(x), void 0);
 	}
 	async function l() {
-		x = e.createElement("div"), x.setAttribute("style", "display: flex; flex-flow: wrap;"), x.appendChild(await un(e, r, b, o)), x.appendChild(f), x.appendChild(p), x.appendChild(_), x.appendChild(m), S.appendChild(x);
+		x = e.createElement("div"), x.setAttribute("style", "display: flex; flex-flow: wrap;"), x.appendChild(await ln(e, r, b, o)), x.appendChild(f), x.appendChild(p), x.appendChild(_), x.appendChild(m), S.appendChild(x);
 	}
 	async function u(e) {
 		x ? (S.removeChild(x), x = void 0) : await l();
@@ -9411,13 +9407,13 @@ async function hn(e, t, n, r, i, a) {
 	async function d(e) {
 		for (let n of e) await i(t, n);
 	}
-	let f = Ye(e);
+	let f = Xe(e);
 	f.setAttribute("data-testid", "accept-button");
-	let p = W(e);
+	let p = H(e);
 	p.setAttribute("data-testid", "cancel-button");
-	let m = e.createElement("div"), g = H(e, m, r.targetClass ? T(r.targetClass) : "item", a);
+	let m = e.createElement("div"), g = Ye(e, m, r.targetClass ? T(r.targetClass) : "item", a);
 	g.setAttribute("data-testid", "delete-button");
-	let _ = U(e, mn, "Edit", (e) => {
+	let _ = V(e, pn, "Edit", (e) => {
 		v = !v, y();
 	});
 	_.setAttribute("data-testid", "edit-button");
@@ -9431,10 +9427,10 @@ async function hn(e, t, n, r, i, a) {
 		editButton: _,
 		deleteButton: g
 	}, x, S = e.createElement("div");
-	return S.style.display = "flex", S.style.flexDirection = "row", (r.permanent || r.currentObject) && await l(), n.editable && (S.style.width = "100%", n.manualURIEntry && I(S.appendChild(U(e, fn, n.idNoun, s)), d, void 0), n.dbLookup && !r.currentObject && !r.permanent && S.appendChild(U(e, pn, n.idNoun, u))), y(), S;
+	return S.style.display = "flex", S.style.flexDirection = "row", (r.permanent || r.currentObject) && await l(), n.editable && (S.style.width = "100%", n.manualURIEntry && F(S.appendChild(V(e, dn, n.idNoun, s)), d, void 0), n.dbLookup && !r.currentObject && !r.permanent && S.appendChild(V(e, fn, n.idNoun, u))), y(), S;
 }
 // src/widgets/forms/autocomplete/autocompleteField.ts
-function gn(e, n, r, i, a, o, s) {
+function hn(e, n, r, i, a, o, s) {
 	async function c(n, r) {
 		if (!r) throw Error("autocompleteField:  No name set.");
 		let a = u.the(i, g, null, o);
@@ -9446,7 +9442,7 @@ function gn(e, n, r, i, a, o, s) {
 		try {
 			await u.updater?.updateMany(c, l);
 		} catch (t) {
-			s(!1, t), f.appendChild(L(e, "Autocomplete form data update error:" + t, null, t));
+			s(!1, t), f.appendChild(I(e, "Autocomplete form data update error:" + t, null, t));
 			return;
 		}
 		s(!0, "");
@@ -9454,7 +9450,7 @@ function gn(e, n, r, i, a, o, s) {
 	async function l(t, n) {
 		let r = u.the(i, g, null, o);
 		if (!r) {
-			s(!1, "NO data to elete"), f.appendChild(L(e, "Autocomplete delete: no old data!"));
+			s(!1, "NO data to elete"), f.appendChild(I(e, "Autocomplete delete: no old data!"));
 			return;
 		}
 		let a = u.statementsMatching(i, g, r, o).concat(u.statementsMatching(r, _, null, o)), c = [];
@@ -9462,7 +9458,7 @@ function gn(e, n, r, i, a, o, s) {
 			await u.updater?.updateMany(a, c);
 		} catch (t) {
 			let n = /* @__PURE__ */ Error("Autocomplete form data delete error:" + t);
-			s(!1, t), f.appendChild(L(e, n, null, t));
+			s(!1, t), f.appendChild(I(e, n, null, t));
 			return;
 		}
 		s(!0, "");
@@ -9475,9 +9471,9 @@ function gn(e, n, r, i, a, o, s) {
 	let m = e.createElement("div");
 	m.setAttribute("class", "formFieldValue"), f.appendChild(m);
 	let g = u.any(a, h.ui("property"));
-	if (!g) return f.appendChild(L(e, "Error: No property given for autocomplete field: " + a));
+	if (!g) return f.appendChild(I(e, "Error: No property given for autocomplete field: " + a));
 	let _ = u.any(a, h.ui("labelProperty")) || h.schema("name"), v = u.any(a, h.ui("dataSource"));
-	if (!v) return f.appendChild(L(e, "Error: No data source given for autocomplete field: " + a));
+	if (!v) return f.appendChild(I(e, "Error: No data source given for autocomplete field: " + a));
 	let y = {
 		label: u.anyJS(v, h.schema("name"), null, v.doc()),
 		logo: u.any(v, h.schema("logo"), null, v.doc())
@@ -9485,11 +9481,11 @@ function gn(e, n, r, i, a, o, s) {
 	b && (y.targetClass = b), y.objectURIBase = u.any(v, h.ui("objectURIBase"), null, v.doc()) || void 0;
 	let x = u.anyJS(v, h.ui("endpoint"), null, v.doc());
 	if (x) {
-		if (y.endpoint = x, y.searchByNameQuery = u.anyJS(v, h.ui("searchByNameQuery"), null, v.doc()), !y.searchByNameQuery) return f.appendChild(L(e, "Error: No searchByNameQuery given for endpoint data Source: " + a));
+		if (y.endpoint = x, y.searchByNameQuery = u.anyJS(v, h.ui("searchByNameQuery"), null, v.doc()), !y.searchByNameQuery) return f.appendChild(I(e, "Error: No searchByNameQuery given for endpoint data Source: " + a));
 		y.insitituteDetailsQuery = u.anyJS(v, h.ui("insitituteDetailsQuery"), null, v.doc());
 	} else {
 		let t = u.anyJS(v, h.ui("searchByNameURI"));
-		if (!t) return f.appendChild(L(e, "Error: No searchByNameURI OR sparql endpoint given for dataSource: " + v));
+		if (!t) return f.appendChild(I(e, "Error: No searchByNameURI OR sparql endpoint given for dataSource: " + v));
 		y.searchByNameURI = t;
 	}
 	let S = u.anyJS(a, h.ui("suppressEmptyUneditable"), null, d), C = u.updater?.editable(o.uri), T = {
@@ -9502,13 +9498,13 @@ function gn(e, n, r, i, a, o, s) {
 	if (D) T.currentObject = D, T.currentName = u.any(T.currentObject, _, null, o);
 	else if (D = u.any(a, h.ui("default")), D) T.currentObject = D, T.currentName = u.any(T.currentObject, _, null, o);
 	else if (S && !C) return f.style.display = "none", f;
-	return p.appendChild(Dt(e, g, a)), hn(e, i, {
+	return p.appendChild(J(e, g, a)), mn(e, i, {
 		editable: C,
 		dbLookup: !0
 	}, T, c, l).then((e) => {
 		m.appendChild(e);
 	}, (t) => {
-		m.appendChild(L(e, `Error rendering autocomplete ${a}: ${t}`, "#fee", t));
+		m.appendChild(I(e, `Error rendering autocomplete ${a}: ${t}`, "#fee", t));
 	}), f;
 }
 // src/lib/style_multiSelect.js
@@ -9534,7 +9530,7 @@ Q.setStyle = function(e, t) {
 	e.style = Q[t];
 };
 // src/widgets/multiSelect.js
-var _n = class {
+var gn = class {
 	_data;
 	_domElements;
 	_event = () => {};
@@ -9803,19 +9799,19 @@ var _n = class {
 			!t && this._domElements.optionsContainerList.insertAdjacentHTML("beforeend", e);
 		} else t && t.parentNode && t.parentNode.removeChild(t);
 	}
-}, vn = "✓", yn = "✕", bn = "-", xn = E;
-K[h.ui("AutocompleteField").uri] = gn;
-function Sn(e, t, n, r, i, a, o) {
+}, _n = "✓", vn = "✕", yn = "-", bn = E;
+W[h.ui("AutocompleteField").uri] = hn;
+function xn(e, t, n, r, i, a, o) {
 	let s = a.children;
 	for (let c = 0; c < o.length; c++) {
 		let l = o[c];
-		if (Ct(l) === h.ui("Options").uri) {
-			let o = q(e, l)(e, null, t, n, l, r, i);
+		if (G(l) === h.ui("Options").uri) {
+			let o = K(e, l)(e, null, t, n, l, r, i);
 			O("Refreshing Options field by replacing it."), a.insertBefore(o, s[c]), a.removeChild(s[c + 1]);
 		}
 	}
 }
-K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
+W[h.ui("Form").uri] = W[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	let s = e.createElement("div"), c = h.ui;
 	if (t && t.appendChild(s), !i) return;
 	let l = r.toNT() + "|" + i.toNT();
@@ -9823,28 +9819,28 @@ K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	let u = {};
 	for (let e in n) u[e] = 1;
 	u[l] = 1;
-	let d = i.doc ? i.doc() : null, f = xn.any(i, c("weight"), null, d), p = f ? Number(f.value) : 1;
-	if (p > 3 || p < 0) return s.appendChild(L(e, `Form Group weight ${p} should be 0-3`));
+	let d = i.doc ? i.doc() : null, f = bn.any(i, c("weight"), null, d), p = f ? Number(f.value) : 1;
+	if (p > 3 || p < 0) return s.appendChild(I(e, `Form Group weight ${p} should be 0-3`));
 	s.setAttribute("style", w.formGroupStyle[p]), s.style.display = "flex", s.style.flexDirection = "column", s.class = "form-weight-" + p;
-	let m = xn.any(i, c("parts"), null, d), g;
-	if (m ? g = m.elements : (m = xn.each(i, c("part"), null, d), g = An(m)), !m) return s.appendChild(L(e, "No parts to form! "));
+	let m = bn.any(i, c("parts"), null, d), g;
+	if (m ? g = m.elements : (m = bn.each(i, c("part"), null, d), g = kn(m)), !m) return s.appendChild(I(e, "No parts to form! "));
 	for (let t = 0; t < g.length; t++) {
-		let i = g[t], c = q(e, i);
+		let i = g[t], c = K(e, i);
 		s.appendChild(c(e, null, u, r, i, a, function(t, i) {
-			t && i && i.widget && i.widget === "select" && Sn(e, n, r, a, o, s, g), o(t, {
+			t && i && i.widget && i.widget === "select" && xn(e, n, r, a, o, s, g), o(t, {
 				widget: "group",
 				change: i
 			});
 		}));
 	}
 	return s;
-}, K[h.ui("Options").uri] = function(e, t, r, i, a, o, s) {
+}, W[h.ui("Options").uri] = function(e, t, r, i, a, o, s) {
 	let c = E, l = e.createElement("div"), u = a.doc ? a.doc() : null, d = h.ui;
 	t && t.appendChild(l);
 	let f = c.any(a, d("dependingOn"));
 	f ||= h.rdf("type");
 	let p = c.each(a, d("case"), null, u);
-	p || l.appendChild(L(e, "No cases to Options form. "));
+	p || l.appendChild(I(e, "No cases to Options form. "));
 	let m;
 	m = f.sameTerm(h.rdf("type")) ? Object.keys(c.findTypeURIs(i)).map((e) => n(e)) : c.each(i, f);
 	for (let t = 0; t < p.length; t++) {
@@ -9855,28 +9851,28 @@ K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		}
 		if (h) {
 			let t = c.the(n, d("use"));
-			if (t) En(e, l, r, i, t, o, s);
-			else return l.appendChild(L(e, "No \"use\" part for case in form " + a)), l;
+			if (t) Tn(e, l, r, i, t, o, s);
+			else return l.appendChild(I(e, "No \"use\" part for case in form " + a)), l;
 			break;
 		}
 	}
 	return l;
-}, K[h.ui("Multiple").uri] = function(n, r, i, a, o, s, l) {
+}, W[h.ui("Multiple").uri] = function(n, r, i, a, o, s, l) {
 	function u(e) {
 		return e.map((e) => e.toString().slice(-7)).join(", ");
 	}
 	async function d() {
 		let e = $(s);
-		if (C) ee(), P.elements.push(e), await te();
+		if (C) te(), P.elements.push(e), await ne();
 		else {
 			let r = D ? [t(e, w, a, s)] : [t(a, w, e, s)];
 			try {
 				await m.updater.update([], r);
 			} catch (e) {
 				let t = "Error adding to unordered multiple: " + e;
-				y.appendChild(L(n, t)), A(t);
+				y.appendChild(I(n, t)), A(t);
 			}
-			ne();
+			re();
 		}
 	}
 	function f(e) {
@@ -9884,13 +9880,13 @@ K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 			if (C) {
 				O("pre delete: " + u(P.elements));
 				for (let t = 0; t < P.elements.length; t++) if (P.elements[t].sameTerm(e)) {
-					P.elements.splice(t, 1), await te();
+					P.elements.splice(t, 1), await ne();
 					return;
 				}
 			} else if (m.holds(a, w, e, s)) {
 				let r = [t(a, w, e, s)];
 				m.updater.update(r, [], function(e, t, r) {
-					t ? N.removeChild(d) : N.appendChild(L(n, "Multiple: delete failed: " + r));
+					t ? N.removeChild(d) : N.appendChild(I(n, "Multiple: delete failed: " + r));
 				});
 			}
 		}
@@ -9911,58 +9907,58 @@ K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 				}
 				P.elements.splice(r, 2, P.elements[r + 1], P.elements[r]);
 			}
-			await te();
+			await ne();
 		}
 		function c(t, n) {
 			O(`Item done callback for item ${e.toString()}`), t || A("  Item done callback: Error: " + n), l(t, n);
 		}
 		v("Multiple: render object: " + e);
-		let d = q(n, M)(n, null, i, e, M, s, c);
-		if (d.subject = e, m.updater.editable(s.uri) && (H(n, d, k, r), C)) {
+		let d = K(n, M)(n, null, i, e, M, s, c);
+		if (d.subject = e, m.updater.editable(s.uri) && (Ye(n, d, k, r), C)) {
 			let e = n.createElement("div");
 			e.style.display = "grid", e.style.gridTemplateColumns = "auto 3em", e.style.gridTemplateRows = "50% 50%";
-			let t = U(n, R.iconBase + "noun_1369237.svg", "Move Up", async (e) => o(e, !0)), r = U(n, R.iconBase + "noun_1369241.svg", "Move Down", async (e) => o(e, !1)), i = n.createElement("div");
+			let t = V(n, L.iconBase + "noun_1369237.svg", "Move Up", async (e) => o(e, !0)), r = V(n, L.iconBase + "noun_1369241.svg", "Move Down", async (e) => o(e, !1)), i = n.createElement("div");
 			return i.appendChild(d), e.appendChild(i), e.appendChild(t), e.appendChild(r), t.style.gridColumn = 2, r.style.gridColumn = 2, t.style.gridRow = 1, r.style.padding = "0em", t.style.padding = "0em", r.style.gridRow = 2, i.style.gridColumn = 1, i.style.gridRowStart = "span 2", e;
 		}
 		return d;
 	}
-	let p = R.iconBase + "noun_19460_green.svg", m = E, g = o.doc ? o.doc() : null, y = n.createElement("div"), b = y, x = h.ui;
+	let p = L.iconBase + "noun_19460_green.svg", m = E, g = o.doc ? o.doc() : null, y = n.createElement("div"), b = y, x = h.ui;
 	r && r.appendChild(y);
 	let S = m.any(o, x("ordered")), C = S ? c.toJS(S) : !1, w = m.any(o, x("property")), D = m.anyJS(o, x("reverse"), null, g);
-	if (!w) return y.appendChild(L(n, "No property to multiple: " + o)), b;
+	if (!w) return y.appendChild(I(n, "No property to multiple: " + o)), b;
 	let k = m.any(o, x("label"));
 	k ||= T(w);
 	let j = m.any(o, x("min"));
 	j = j ? 0 + j.value : 0;
 	let M = m.any(o, x("part"));
-	if (!M) return y.appendChild(L(n, "No part to multiple: " + o)), b;
+	if (!M) return y.appendChild(I(n, "No part to multiple: " + o)), b;
 	let N = y.appendChild(n.createElement("div"));
 	N.style.display = "flex", N.style.flexDirection = "column";
-	let P, F;
-	if (F = D ? m.any(null, w, a, s) : m.any(a, w, null, s), C ? (P = D ? m.any(null, w, a, s) : m.any(a, w, null, s), F = P ? P.elements : []) : (F = D ? m.each(null, w, a, s) : m.each(a, w, null, s), P = null), m.updater.editable(s.uri)) {
+	let P, ee;
+	if (ee = D ? m.any(null, w, a, s) : m.any(a, w, null, s), C ? (P = D ? m.any(null, w, a, s) : m.any(a, w, null, s), ee = P ? P.elements : []) : (ee = D ? m.each(null, w, a, s) : m.each(a, w, null, s), P = null), m.updater.editable(s.uri)) {
 		let e = y.appendChild(n.createElement("div"));
 		e.style.padding = "0.5em";
 		let t = e.appendChild(n.createElement("img"));
 		t.setAttribute("src", p), t.setAttribute("style", "margin: 0.2em; width: 1.5em; height:1.5em"), t.title = "Click to add another " + k;
 		let r = n.createElement("span");
-		r.textContent = (F.length === 0 ? "Add another " : "Add ") + k, e.addEventListener("click", async (e) => {
+		r.textContent = (ee.length === 0 ? "Add another " : "Add ") + k, e.addEventListener("click", async (e) => {
 			await d();
 		}, !0), e.appendChild(r);
 	}
-	function ee() {
+	function te() {
 		P || (P = new e(), D ? m.add(P, w, a, s) : m.add(a, w, P, s));
 	}
-	async function te() {
-		O("save list: " + u(P.elements)), ee();
+	async function ne() {
+		O("save list: " + u(P.elements)), te();
 		try {
 			await m.fetcher.putBack(s);
 		} catch (e) {
-			y.appendChild(L(n, "Error trying to put back a list: " + e));
+			y.appendChild(I(n, "Error trying to put back a list: " + e));
 			return;
 		}
-		ne();
+		re();
 	}
-	function ne() {
+	function re() {
 		let e;
 		if (C) {
 			let t = D ? m.the(null, w, a, s) : m.the(a, w, null, s);
@@ -9970,63 +9966,63 @@ K[h.ui("Form").uri] = K[h.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		} else e = D ? m.each(null, w, a, s) : m.each(a, w, null, s), e.sort();
 		_(N, e, f);
 	}
-	N.refresh = ne, ne();
-	async function re() {
-		let e = j - F.length;
+	N.refresh = re, re();
+	async function ie() {
+		let e = j - ee.length;
 		if (e > 0) {
 			for (let t = 0; t < e; t++) O("Adding extra: min " + j), await d();
-			await te();
+			await ne();
 		}
 	}
-	return re().then(() => {
+	return ie().then(() => {
 		O(" Multiple render: async stuff ok");
 	}, (e) => {
 		A(" Multiple render: async stuff fails. #### ", e);
 	}), b;
-}, K[h.ui("PhoneField").uri] = Y, K[h.ui("EmailField").uri] = Y, K[h.ui("ColorField").uri] = Y, K[h.ui("DateField").uri] = Y, K[h.ui("DateTimeField").uri] = Y, K[h.ui("TimeField").uri] = Y, K[h.ui("NumericField").uri] = Y, K[h.ui("IntegerField").uri] = Y, K[h.ui("DecimalField").uri] = Y, K[h.ui("FloatField").uri] = Y, K[h.ui("TextField").uri] = Y, K[h.ui("SingleLineTextField").uri] = Y, K[h.ui("NamedNodeURIField").uri] = Y, K[h.ui("MultiLineTextField").uri] = function(e, t, n, r, i, a, o) {
+}, W[h.ui("PhoneField").uri] = Y, W[h.ui("EmailField").uri] = Y, W[h.ui("ColorField").uri] = Y, W[h.ui("DateField").uri] = Y, W[h.ui("DateTimeField").uri] = Y, W[h.ui("TimeField").uri] = Y, W[h.ui("NumericField").uri] = Y, W[h.ui("IntegerField").uri] = Y, W[h.ui("DecimalField").uri] = Y, W[h.ui("FloatField").uri] = Y, W[h.ui("TextField").uri] = Y, W[h.ui("SingleLineTextField").uri] = Y, W[h.ui("NamedNodeURIField").uri] = Y, W[h.ui("MultiLineTextField").uri] = function(e, t, n, r, i, a, o) {
 	let s = h.ui, c = E, l = i.doc ? i.doc() : null, u = c.any(i, s("property"));
-	if (!u) return L(e, "No property to text field: " + i);
+	if (!u) return I(e, "No property to text field: " + i);
 	let d = e.createElement("div");
 	d.style.display = "flex", d.style.flexDirection = "row";
 	let f = d.appendChild(e.createElement("div"));
 	f.style.width = b.formFieldNameBoxWidth;
 	let p = d.appendChild(e.createElement("div"));
-	f.appendChild(Dt(e, u, i)), a = Ot(r, u, a);
+	f.appendChild(J(e, u, i)), a = Dt(r, u, a);
 	let m = c.anyJS(r, u, null, a) || "", g = c.updater.editable(a.uri), _ = i && c.anyJS(i, h.ui("suppressEmptyUneditable"), null, l);
 	!g && _ && m === "" && (d.style.display = "none");
-	let v = Pn(e, c, r, u, a, o);
+	let v = Nn(e, c, r, u, a, o);
 	return p.appendChild(v), t && t.appendChild(d), d;
 };
-function Cn(e, n, r, i, a, o, s, c) {
+function Sn(e, n, r, i, a, o, s, c) {
 	let l = h.ui, u = E, d = u.any(a, l("property"));
 	if (!d) {
-		let t = L(e, "No property to boolean field: " + a);
+		let t = I(e, "No property to boolean field: " + a);
 		return n && n.appendChild(t), t;
 	}
 	let f = u.any(a, l("label"));
-	f ||= T(d, !0), o = Ot(i, d, o);
+	f ||= T(d, !0), o = Dt(i, d, o);
 	let p = u.any(i, d);
 	p === void 0 && (p = !1);
-	let m = t(i, d, !0, o), g = t(i, d, !1, o), _ = zn(e, u, f, g, m, a, o, c);
+	let m = t(i, d, !0, o), g = t(i, d, !1, o), _ = Rn(e, u, f, g, m, a, o, c);
 	return n && n.appendChild(_), _;
 }
-K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
-	return Cn(e, t, n, r, i, a, o, !1);
-}, K[h.ui("TristateField").uri] = function(e, t, n, r, i, a, o) {
-	return Cn(e, t, n, r, i, a, o, !0);
-}, K[h.ui("Classifier").uri] = function(e, t, n, r, i, a, o) {
+W[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
+	return Sn(e, t, n, r, i, a, o, !1);
+}, W[h.ui("TristateField").uri] = function(e, t, n, r, i, a, o) {
+	return Sn(e, t, n, r, i, a, o, !0);
+}, W[h.ui("Classifier").uri] = function(e, t, n, r, i, a, o) {
 	let s = E, c = h.ui, l = s.any(i, c("category"));
-	if (!l) return L(e, "No category for classifier: " + i);
+	if (!l) return I(e, "No category for classifier: " + i);
 	v("Classifier: dataDoc=" + a);
 	let u = function(e, t) {
 		return o(e || e, t);
 	}, d = e.createElement("div");
 	d.setAttribute("class", "classifierBox");
 	let f = e.createElement("div");
-	f.setAttribute("class", "formFieldName classifierBox-label"), f.appendChild(Dt(e, l, i)), d.appendChild(f);
+	f.setAttribute("class", "formFieldName classifierBox-label"), f.appendChild(J(e, l, i)), d.appendChild(f);
 	let p = e.createElement("div");
 	p.setAttribute("class", "formFieldValue classifierBox-selectBox");
-	let m = Rn(e, s, r, l, a, u);
+	let m = Ln(e, s, r, l, a, u);
 	if (m && m.querySelectorAll) {
 		let e = m.querySelectorAll("select");
 		e.length && !s.updater.editable(a.uri) && e.forEach((e) => {
@@ -10034,7 +10030,7 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 		});
 	}
 	return p.appendChild(m), d.appendChild(p), t && t.appendChild(d), d;
-}, K[h.ui("Choice").uri] = function(e, r, i, a, o, s, c) {
+}, W[h.ui("Choice").uri] = function(e, r, i, a, o, s, c) {
 	let l = h.ui, u = E, d = o.doc ? o.doc() : null, f, p = e.createElement("div");
 	p.setAttribute("class", "choiceBox"), r && r.appendChild(p);
 	let m = e.createElement("div");
@@ -10042,10 +10038,10 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 	let g = e.createElement("div");
 	g.setAttribute("class", "formFieldValue choiceBox-selectBox"), p.appendChild(g);
 	let _ = u.any(o, l("property"));
-	if (!_) return p.appendChild(L(e, "No property for Choice: " + o));
-	m.appendChild(Dt(e, _, o));
+	if (!_) return p.appendChild(I(e, "No property for Choice: " + o));
+	m.appendChild(J(e, _, o));
 	let v = u.any(o, l("from"));
-	if (!v) return L(e, "No 'from' for Choice: " + o);
+	if (!v) return I(e, "No 'from' for Choice: " + o);
 	let y = u.any(o, l("use")), b = {
 		form: o,
 		subForm: y,
@@ -10054,17 +10050,17 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 	function x(e) {
 		let t = [], n;
 		t = u.each(void 0, h.rdf("type"), v, d);
-		for (let n in Hn(u, v, e)) t.push(u.fromNT(n));
-		if (v.sameTerm(h.rdfs("Class"))) for (f in ot()) t.push(u.sym(f));
+		for (let n in Vn(u, v, e)) t.push(u.fromNT(n));
+		if (v.sameTerm(h.rdfs("Class"))) for (f in st()) t.push(u.sym(f));
 		else if (v.sameTerm(h.rdf("Property"))) {
-			for (f in n = st(u), n.op) t.push(u.fromNT(f));
+			for (f in n = ct(u), n.op) t.push(u.fromNT(f));
 			for (f in n.dp) t.push(u.fromNT(f));
 			b.disambiguate = !0;
 		} else if (v.sameTerm(h.owl("ObjectProperty"))) {
-			for (f in n = st(u), n.op) t.push(u.fromNT(f));
+			for (f in n = ct(u), n.op) t.push(u.fromNT(f));
 			b.disambiguate = !0;
 		} else if (v.sameTerm(h.owl("DatatypeProperty"))) {
-			for (f in n = st(u), n.dp) t.push(u.fromNT(f));
+			for (f in n = ct(u), n.dp) t.push(u.fromNT(f));
 			b.disambiguate = !0;
 		}
 		return t;
@@ -10075,8 +10071,8 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 	let C = u.each(o, l("search-full-store")).length ? null : s, w;
 	return g.refresh = function() {
 		let r = u.each(a, _, null, s).map((e) => e.value), i = x(C);
-		if (i.push(r), i = jn(i), w = Bn(e, g, u, a, _, i, r, v, b, s, c), g.innerHTML = "", g.appendChild(w), S) {
-			let i = new _n({
+		if (i.push(r), i = An(i), w = zn(e, g, u, a, _, i, r, v, b, s, c), g.innerHTML = "", g.appendChild(w), S) {
+			let i = new gn({
 				placeholder: w.selected,
 				select: w,
 				container: g,
@@ -10089,13 +10085,13 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 				})), i.action === "CLEAR_ALL_OPTIONS" && (r = []), i.action === "ADD_OPTION") {
 					if ((i.value + "").includes("Create new")) {
 						let i = $(s), o = [];
-						o.push(t(a, _, u.sym(i), s)), v && o.push(t(i, h.rdf("type"), u.sym(v), s)), y && wn(e, g, {}, n(i), y, s, function(t, n) {
+						o.push(t(a, _, u.sym(i), s)), v && o.push(t(i, h.rdf("type"), u.sym(v), s)), y && Cn(e, g, {}, n(i), y, s, function(t, n) {
 							t ? (u.updater.update([], o, function(t, n, r) {
-								n || g.appendChild(L(e, "Error updating select: " + r));
+								n || g.appendChild(I(e, "Error updating select: " + r));
 							}), r.push(i), c && c(t, {
 								widget: "select",
 								event: "new"
-							})) : g.appendChild(L(e, "Error updating data in field of select: " + n));
+							})) : g.appendChild(I(e, "Error updating data in field of select: " + n));
 						});
 					} else r.push(i.value);
 				}
@@ -10104,29 +10100,29 @@ K[h.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 		}
 	}, g.refresh(), w && w.refresh && w.refresh(), p;
 };
-function wn(e, t, n, r, i, a, o) {
-	q(e, i)(e, t, n, r, i, a, o);
+function Cn(e, t, n, r, i, a, o) {
+	K(e, i)(e, t, n, r, i, a, o);
 }
-K[h.ui("Comment").uri] = K[h.ui("Heading").uri] = function(e, t, n, r, i, a, o) {
+W[h.ui("Comment").uri] = W[h.ui("Heading").uri] = function(e, t, n, r, i, a, o) {
 	let s = h.ui, c = E, l = c.any(i, s("contents"));
 	l ||= "Error: No contents in comment field.";
-	let u = i.doc ? i.doc() : null, d = xt[Ct(i)] || {}, f = e.createElement("div");
+	let u = i.doc ? i.doc() : null, d = St[G(i)] || {}, f = e.createElement("div");
 	t && t.appendChild(f);
 	let p = f.appendChild(e.createElement(d.element));
 	p.textContent = l, Tt(p, i);
 	let m = c.anyJS(i, h.ui("suppressIfUneditable"), null, u), g = c.updater.editable(a.uri);
 	return m && !g && (f.style.display = "none"), f;
 };
-function Tn(e, t, n, r, i) {
+function wn(e, t, n, r, i) {
 	let a = e.createElement("button");
 	return a.setAttribute("type", "button"), a.innerHTML = "Edit " + T(h.ui("Form")), a.addEventListener("click", function(o) {
-		En(e, t, {}, n, h.ui("FormForm"), r, i).setAttribute("style", h.ui("FormForm").sameTerm(n) ? "background-color: #fee;" : "background-color: #ffffe7;"), a.parentNode.removeChild(a);
+		Tn(e, t, {}, n, h.ui("FormForm"), r, i).setAttribute("style", h.ui("FormForm").sameTerm(n) ? "background-color: #fee;" : "background-color: #ffffe7;"), a.parentNode.removeChild(a);
 	}, !0), a;
 }
-function En(e, t, n, r, i, a, o) {
-	return q(e, i)(e, t, n, r, i, a, o);
+function Tn(e, t, n, r, i, a, o) {
+	return K(e, i)(e, t, n, r, i, a, o);
 }
-function Dn(e, t) {
+function En(e, t) {
 	let n = e.each(void 0, h.rdf("range"), t);
 	[
 		h.rdfs("comment"),
@@ -10149,7 +10145,7 @@ function Dn(e, t) {
 	for (let t in i) a.push(e.sym(t));
 	return a;
 }
-function On(e, t, n) {
+function Dn(e, t, n) {
 	let r = [e.sym(t)];
 	for (; r.length > 0;) {
 		let t = r.shift(), i = e.each(t, n);
@@ -10159,18 +10155,18 @@ function On(e, t, n) {
 	}
 	return [];
 }
-function kn(e) {
+function On(e) {
 	let t = E;
 	v("formsFor: subject=" + e);
 	let n = t.findTypeURIs(e), r;
 	for (r in n) v("   type: " + r);
 	let i = t.bottomTypeURIs(n), a = [];
-	for (let e in i) v("candidatesFor: trying bottom type =" + e), a = a.concat(On(t, e, h.ui("creationForm"))), a = a.concat(On(t, e, h.ui("annotationForm")));
+	for (let e in i) v("candidatesFor: trying bottom type =" + e), a = a.concat(Dn(t, e, h.ui("creationForm"))), a = a.concat(Dn(t, e, h.ui("annotationForm")));
 	return a;
 }
-function An(e) {
+function kn(e) {
 	let t = e.map(function(e) {
-		return [xn.any(e, h.ui("sequence")) || 9999, e];
+		return [bn.any(e, h.ui("sequence")) || 9999, e];
 	});
 	return t.sort(function(e, t) {
 		return e[0] - t[0];
@@ -10178,7 +10174,7 @@ function An(e) {
 		return e[1];
 	});
 }
-function jn(e) {
+function An(e) {
 	let t = e.map(function(e) {
 		return [T(e).toLowerCase(), e];
 	});
@@ -10186,16 +10182,16 @@ function jn(e) {
 		return e[1];
 	});
 }
-function Mn(e, t, n, r, i, a, o, s) {
+function jn(e, t, n, r, i, a, o, s) {
 	let c = e.createElement("button");
 	return c.setAttribute("type", "button"), c.innerHTML = "New " + T(i), c.addEventListener("click", function(l) {
-		c.parentNode.appendChild(Nn(e, t, n, r, i, a, o, s));
+		c.parentNode.appendChild(Mn(e, t, n, r, i, a, o, s));
 	}, !1), c;
 }
-function Nn(e, n, r, i, a, o, s, c) {
+function Mn(e, n, r, i, a, o, s, c) {
 	let l = e.createElement("form");
 	if (!o) {
-		let t = On(n, a.uri, h.ui("creationForm"));
+		let t = Dn(n, a.uri, h.ui("creationForm"));
 		if (t.length === 0) {
 			let t = l.appendChild(e.createElement("p"));
 			t.textContent = "I am sorry, you need to provide information about a " + T(a) + " but I don't know enough information about those to ask you.";
@@ -10207,17 +10203,17 @@ function Nn(e, n, r, i, a, o, s, c) {
 		v("lists[0] is " + t[0]), o = t[0];
 	}
 	v("form is " + o), l.setAttribute("style", `border: 0.05em solid ${b.formBorderColor}; color: ${b.formBorderColor}`), l.innerHTML = "<h3>New " + T(a) + "</h3>";
-	let u = q(e, o), d = $(s), f = !1, p = function(o, u) {
+	let u = K(e, o), d = $(s), f = !1, p = function(o, u) {
 		if (!o) return c(o, u);
 		let p = [];
-		r && !n.holds(r, i, d, s) && p.push(t(r, i, d, s)), r && !n.holds(d, h.rdf("type"), a, s) && p.push(t(d, h.rdf("type"), a, s)), p.length ? n.updater.update([], p, m) : c(!0, u), f ||= l.appendChild(ct(e, d));
+		r && !n.holds(r, i, d, s) && p.push(t(r, i, d, s)), r && !n.holds(d, h.rdf("type"), a, s) && p.push(t(d, h.rdf("type"), a, s)), p.length ? n.updater.update([], p, m) : c(!0, u), f ||= l.appendChild(lt(e, d));
 	};
 	function m(e, t, n) {
 		return c(t, n);
 	}
-	return S("paneUtils Object is " + d), lt(e, u(e, l, {}, d, o, s, p)).setAttribute("style", "float: right;"), l.AJAR_subject = d, l;
+	return S("paneUtils Object is " + d), ut(e, u(e, l, {}, d, o, s, p)).setAttribute("style", "float: right;"), l.AJAR_subject = d, l;
 }
-function Pn(e, n, r, i, a, o) {
+function Nn(e, n, r, i, a, o) {
 	let s = e.createElement("div"), c = n.anyJS(r, i, null, a) || "", l = e.createElement("textarea");
 	s.appendChild(l), l.rows = c ? c.split("\n").length + 2 : 2, l.cols = 80, l.setAttribute("style", w.multilineTextInputStyle), c === null ? l.select() : l.value = c, s.refresh = function() {
 		let e = n.any(r, i, null, a);
@@ -10227,22 +10223,22 @@ function Pn(e, n, r, i, a, o) {
 		f.disabled = !0, f.setAttribute("style", "visibility: hidden; float: right;"), l.disabled = !0, l.style.color = b.textInputColorPending;
 		let u = n.statementsMatching(r, i, null, a), d = t(r, i, l.value, a);
 		n.updater.update(u, d, function(t, n, r) {
-			n ? (l.style.color = b.textInputColor, l.disabled = !1) : s.appendChild(L(e, "Error (while saving change to " + a.uri + "): " + r)), o && o(n, r);
+			n ? (l.style.color = b.textInputColor, l.disabled = !1) : s.appendChild(I(e, "Error (while saving change to " + a.uri + "): " + r)), o && o(n, r);
 		});
 	}
 	let d = n.updater.editable(a.uri), f;
-	return d ? (f = Ye(e, u), f.disabled = !0, f.style.visibility = "hidden", f.style.float = "right", s.appendChild(f), l.addEventListener("keyup", function(e) {
+	return d ? (f = Xe(e, u), f.disabled = !0, f.style.visibility = "hidden", f.style.float = "right", s.appendChild(f), l.addEventListener("keyup", function(e) {
 		l.style.color = "green", f && (f.disabled = !1, f.style.visibility = "");
 	}, !0), l.addEventListener("change", u, !0)) : (l.disabled = !0, l.style.backgroundColor = b.textInputBackgroundColorUneditable), s;
 }
-function Fn(e, n, r, i, a, o, s, c) {
+function Pn(e, n, r, i, a, o, s, c) {
 	v("Select list length now " + a.length);
 	let l = 0, u = {}, d = n.updater.editable(s.uri);
 	for (let e = 0; e < a.length; e++) {
 		let t = a[e];
 		t.uri || k(`makeSelectForClassifierOptions: option does not have an uri: ${t}, with predicate: ${i}`), !t.uri || t.uri in u || (u[t.uri] = !0, l++);
 	}
-	if (l === 0 && !o.mint) return L(e, "Can't do selector with no options, subject= " + r + " property = " + i + ".");
+	if (l === 0 && !o.mint) return I(e, "Can't do selector with no options, subject= " + r + " property = " + i + ".");
 	v("makeSelectForClassifierOptions: dataDoc=" + s);
 	let f, p = function() {
 		return f = {}, i.sameTerm(h.rdf("type")) ? f = n.findTypeURIs(r) : n.each(r, i, null, s).forEach(function(e) {
@@ -10259,7 +10255,7 @@ function Fn(e, n, r, i, a, o, s, c) {
 			let l = g.options[a];
 			if (l.selected && l.AJAR_mint) {
 				if (o.mintClass) {
-					let t = Nn(e, n, r, i, o.mintClass, null, s, function(e, t) {
+					let t = Mn(e, n, r, i, o.mintClass, null, s, function(e, t) {
 						e || c(e, t, { change: "new" });
 					});
 					g.parentNode.appendChild(t), m = t.AJAR_subject;
@@ -10278,8 +10274,8 @@ function Fn(e, n, r, i, a, o, s, c) {
 			});
 		}
 		S("makeSelectForClassifierOptions: data doc = " + s), n.updater.update(l, u, function(t, n, r) {
-			if (f = p(), n) g.disabled = !1, m && q(e, o.subForm)(e, g.parentNode, {}, m, o.subForm, s, _);
-			else return g.parentNode.appendChild(L(e, "Error updating data in select: " + r));
+			if (f = p(), n) g.disabled = !1, m && K(e, o.subForm)(e, g.parentNode, {}, m, o.subForm, s, _);
+			else return g.parentNode.appendChild(I(e, "Error updating data in select: " + r));
 			c && c(n, {
 				widget: "select",
 				event: "change"
@@ -10310,14 +10306,14 @@ function Fn(e, n, r, i, a, o, s, c) {
 	}
 	return d && g.addEventListener("change", m, !1), g;
 }
-function In(e, n, r, i, a, o, s, c) {
+function Fn(e, n, r, i, a, o, s, c) {
 	v("Select list length now " + a.length);
 	let l = 0, u = {}, d = n.updater.editable(s.uri);
 	for (let e = 0; e < a.length; e++) {
 		let t = a[e];
 		t.uri || k(`makeSelectForOptions: option does not have an uri: ${t}, with predicate: ${i}`), !t.uri || t.uri in u || (u[t.uri] = !0, l++);
 	}
-	if (l === 0) return L(e, "Can't do selector with no options, subject= " + r + " property = " + i + ".");
+	if (l === 0) return I(e, "Can't do selector with no options, subject= " + r + " property = " + i + ".");
 	v("makeSelectForOptions: dataDoc=" + s);
 	let f, p = function() {
 		return f = {}, i.sameTerm(h.rdf("type")) ? f = n.findTypeURIs(r) : n.each(r, i, null, s).forEach(function(e) {
@@ -10339,7 +10335,7 @@ function In(e, n, r, i, a, o, s, c) {
 		for (d = g.superSelect; d && d.currentURI;) u(n.sym(d.currentURI)), d = d.superSelect;
 		S("selectForOptions: data doc = " + s), n.updater.update(o, l, function(t, n, r) {
 			if (f = p(), n) g.disabled = !1;
-			else return g.parentNode.appendChild(L(e, "Error updating data in select: " + r));
+			else return g.parentNode.appendChild(I(e, "Error updating data in select: " + r));
 			c && c(n, {
 				widget: "select",
 				event: "change"
@@ -10366,25 +10362,25 @@ function In(e, n, r, i, a, o, s, c) {
 	}
 	return d && g.addEventListener("change", m, !1), g;
 }
-function Ln(e, t, n, r, i, a) {
+function In(e, t, n, r, i, a) {
 	let o = t.any(r, h.owl("disjointUnionOf")), s, c = !1;
-	return o ? s = o.elements : (s = t.each(void 0, h.rdfs("subClassOf"), r), c = !0), v("Select list length " + s.length), s.length === 0 ? L(e, "Can't do " + (c ? "multiple " : "") + "selector with no subclasses of category: " + r) : s.length === 1 ? L(e, "Can't do " + (c ? "multiple " : "") + "selector with only 1 subclass of category: " + r + ":" + s[1]) : Fn(e, t, n, h.rdf("type"), s, {
+	return o ? s = o.elements : (s = t.each(void 0, h.rdfs("subClassOf"), r), c = !0), v("Select list length " + s.length), s.length === 0 ? I(e, "Can't do " + (c ? "multiple " : "") + "selector with no subclasses of category: " + r) : s.length === 1 ? I(e, "Can't do " + (c ? "multiple " : "") + "selector with only 1 subclass of category: " + r + ":" + s[1]) : Pn(e, t, n, h.rdf("type"), s, {
 		multiple: c,
 		nullLabel: "* Select type *"
 	}, i, a);
 }
-function Rn(e, t, n, r, i, a) {
+function Ln(e, t, n, r, i, a) {
 	function o() {
-		c &&= (s.removeChild(c), null), u.currentURI && t.any(t.sym(u.currentURI), h.owl("disjointUnionOf")) && (c = Rn(e, t, n, t.sym(u.currentURI), i, a), u.subSelect = c.firstChild, u.subSelect.superSelect = u, s.appendChild(c));
+		c &&= (s.removeChild(c), null), u.currentURI && t.any(t.sym(u.currentURI), h.owl("disjointUnionOf")) && (c = Ln(e, t, n, t.sym(u.currentURI), i, a), u.subSelect = c.firstChild, u.subSelect.superSelect = u, s.appendChild(c));
 	}
 	let s = e.createElement("span"), c = null;
 	function l(e, t) {
 		e && o(), a(e, t);
 	}
-	let u = Ln(e, t, n, r, i, l);
+	let u = In(e, t, n, r, i, l);
 	return s.appendChild(u), o(), s;
 }
-function zn(e, t, n, r, i, a, o, s) {
+function Rn(e, t, n, r, i, a, o, s) {
 	let c = e.createElement("div"), l = Et(e, t, c, a, n), u = t.updater.editable(o.uri), d = e.createElement("button"), f = d;
 	d.style = w.checkboxInputStyle, l.appendChild(d);
 	function p(e) {
@@ -10401,7 +10397,7 @@ function zn(e, t, n, r, i, a, o, s) {
 		let n = m(i), o = n;
 		if (r.length) {
 			let l = m(r);
-			if (n && l) return c.appendChild(L(e, "Inconsistent data in dataDoc!\n" + i + " and\n" + r)), c;
+			if (n && l) return c.appendChild(I(e, "Inconsistent data in dataDoc!\n" + i + " and\n" + r)), c;
 			if (!n && !l) {
 				n = null;
 				let e = t.any(a, h.ui("default"));
@@ -10409,9 +10405,9 @@ function zn(e, t, n, r, i, a, o, s) {
 			}
 		}
 		d.state = n, d.textContent = {
-			true: vn,
-			false: s ? yn : " ",
-			null: bn
+			true: _n,
+			false: s ? vn : " ",
+			null: yn
 		}[o];
 	}
 	if (g(), !u) return c;
@@ -10422,7 +10418,7 @@ function zn(e, t, n, r, i, a, o, s) {
 		let a = !1, o = function() {
 			return !a && (a = !0, _ = !1, d.disabled = !1, !0);
 		}, l = function(t) {
-			f.style.color = "#000", f.style.backgroundColor = "#fee", c.appendChild(L(e, `Checkbox: Error updating dataDoc from ${d.state} to ${d.newState}:\n\n${t}`));
+			f.style.color = "#000", f.style.backgroundColor = "#fee", c.appendChild(I(e, `Checkbox: Error updating dataDoc from ${d.state} to ${d.newState}:\n\n${t}`));
 		};
 		f.style.color = "#bbb";
 		let u = d.state === !0 ? i : d.state === !1 ? r : [];
@@ -10432,9 +10428,9 @@ function zn(e, t, n, r, i, a, o, s) {
 		try {
 			let e = t.updater.update(u, p, function(e, n, r) {
 				o() && (n ? (f.style.color = "#000", d.state = d.newState, d.textContent = {
-					true: vn,
-					false: yn,
-					null: bn
+					true: _n,
+					false: vn,
+					null: yn
 				}[d.state]) : (u.why && t.holds(u.subject, u.predicate, u.object, u.why) && O(" @@@@@ weird if 409 - does hold statement"), l(r)));
 			});
 			e && typeof e.then == "function" && e.catch(function(e) {
@@ -10451,13 +10447,13 @@ function $(e) {
 	let t = /* @__PURE__ */ new Date();
 	return n(e.uri + "#id" + ("" + t.getTime()));
 }
-function Bn(e, r, i, a, o, s, c, l, u, d, f) {
+function zn(e, r, i, a, o, s, c, l, u, d, f) {
 	let p = {}, m = i.updater.editable(d.uri);
 	for (let e = 0; e < s.length; e++) {
 		let t = s[e];
 		!t.uri || t.uri in p || (p[t.uri] = !0);
 	}
-	if (Object.keys(p).length === 0 && !u.mint) return L(e, "Can't do selector with no options, subject= " + a + " property = " + o + ".");
+	if (Object.keys(p).length === 0 && !u.mint) return I(e, "Can't do selector with no options, subject= " + a + " property = " + o + ".");
 	v("makeSelectForChoice: dataDoc=" + d);
 	function g() {
 		let e = "--- choice ---";
@@ -10483,10 +10479,10 @@ function Bn(e, r, i, a, o, s, c, l, u, d, f) {
 		}, m = function(e) {
 			i.holds(a, o, e, d) || u.push(t(a, o, e, d)), l && !i.holds(e, h.rdf("type"), i.sym(l), d) && u.push(t(e, h.rdf("type"), i.sym(l), d));
 		}, g = i.each(a, o, null, d).map((e) => e.value);
-		for (let e of g) Vn(e, c) || p(n(e));
+		for (let e of g) Bn(e, c) || p(n(e));
 		for (let e of c) e in g || m(n(e));
 		i.updater.update(s, u, function(t, n, r) {
-			if (!n) return b.parentNode.appendChild(L(e, "Error updating data in select: " + r));
+			if (!n) return b.parentNode.appendChild(I(e, "Error updating data in select: " + r));
 			b.refresh(), f && f(n, {
 				widget: "select",
 				event: "change"
@@ -10499,38 +10495,38 @@ function Bn(e, r, i, a, o, s, c, l, u, d, f) {
 			let r = b.options[n];
 			if (r.selected && r.AJAR_mint) {
 				if (u.mintClass) {
-					let t = Nn(e, i, a, o, l, u.subForm, d, function(e, t) {
+					let t = Mn(e, i, a, o, l, u.subForm, d, function(e, t) {
 						e || f(e, t, { change: "new" });
 					});
 					b.parentNode.appendChild(t), p = t.AJAR_subject;
 				} else p = $(d);
 				s.push(t(a, o, i.sym(p), d)), l && s.push(t(p, h.rdf("type"), i.sym(l), d)), u.mintStatementsFun && (s = s.concat(u.mintStatementsFun(p))), b.currentURI = p;
 			}
-			r.AJAR_uri && (r.selected && Vn(r.AJAR_uri, c) && (b.currentURI = r.AJAR_uri), Vn(r.AJAR_uri, c) || r.removeAttribute("selected"), Vn(r.AJAR_uri, c) && r.setAttribute("selected", "true"));
+			r.AJAR_uri && (r.selected && Bn(r.AJAR_uri, c) && (b.currentURI = r.AJAR_uri), Bn(r.AJAR_uri, c) || r.removeAttribute("selected"), Bn(r.AJAR_uri, c) && r.setAttribute("selected", "true"));
 		}
-		S("selectForOptions: data doc = " + d), b.currentURI && u.subForm && !u.multiSelect && wn(e, r, {}, n(b.currentURI), u.subForm, d, function(t, n) {
+		S("selectForOptions: data doc = " + d), b.currentURI && u.subForm && !u.multiSelect && Cn(e, r, {}, n(b.currentURI), u.subForm, d, function(t, n) {
 			t ? (i.updater.update([], s, function(t, n, i) {
-				n || r.appendChild(L(e, "Error updating select: " + i));
+				n || r.appendChild(I(e, "Error updating select: " + i));
 			}), f && f(t, {
 				widget: "select",
 				event: "new"
-			})) : r.appendChild(L(e, "Error updating data in field of select: " + n));
+			})) : r.appendChild(I(e, "Error updating data in field of select: " + n));
 		}), b.disabled = !1;
 	};
 	function C(t) {
 		let n = e.createElement("option"), r = i.sym(t), a;
 		a = u.disambiguate ? x(r, !0) : T(r, !0), n.appendChild(e.createTextNode(a)), n.setAttribute("value", t);
 		let o = i.any(r, i.sym("http://www.w3.org/ns/ui#backgroundColor"));
-		return o && n.setAttribute("style", "background-color: " + o.value + "; "), n.AJAR_uri = t, Vn(r.value, c) && n.setAttribute("selected", "true"), n;
+		return o && n.setAttribute("style", "background-color: " + o.value + "; "), n.AJAR_uri = t, Bn(r.value, c) && n.setAttribute("selected", "true"), n;
 	}
 	return m && b.addEventListener("change", y, !1), b;
 }
-function Vn(e, t) {
+function Bn(e, t) {
 	let n = 0;
 	for (; n < t.length; n++) if (t[n] === e) return !0;
 	return !1;
 }
-function Hn(e, t, n) {
+function Vn(e, t, n) {
 	let r, i, a, o, s, c, l, u, d, f, p, m = {};
 	m[t.toNT()] = !0;
 	let h = {}, g = e.transitiveClosure(m, e.rdfFactory.namedNode("http://www.w3.org/2000/01/rdf-schema#subClassOf"), !0);
@@ -10545,88 +10541,88 @@ function Hn(e, t, n) {
 	return h;
 }
 // src/widgets/index.js
-var Un = /* @__PURE__ */ o({
-	Group: () => ge,
-	GroupBuilder: () => _e,
-	GroupPicker: () => he,
-	PeoplePicker: () => me,
-	Person: () => ve,
-	addStyleSheet: () => gt,
-	allClassURIs: () => ot,
-	appendForm: () => En,
-	askName: () => Xe,
-	attachmentList: () => rt,
+var Hn = /* @__PURE__ */ o({
+	Group: () => _e,
+	GroupBuilder: () => ve,
+	GroupPicker: () => ge,
+	PeoplePicker: () => he,
+	Person: () => ye,
+	addStyleSheet: () => _t,
+	allClassURIs: () => st,
+	appendForm: () => Tn,
+	askName: () => Ze,
+	attachmentList: () => it,
 	basicField: () => Y,
-	buildCheckboxForm: () => zn,
-	button: () => U,
-	cancelButton: () => W,
+	buildCheckboxForm: () => Rn,
+	button: () => V,
+	cancelButton: () => H,
 	clearElement: () => Ne,
 	complain: () => Me,
-	continueButton: () => Ye,
-	createLinkDiv: () => et,
+	continueButton: () => Xe,
+	createLinkDiv: () => tt,
 	createLinkForURI: () => Oe,
-	createNameDiv: () => $e,
-	defaultAnnotationStore: () => at,
-	deleteButtonWithCheck: () => H,
-	editFormButton: () => Tn,
-	errorMessageBlock: () => L,
+	createNameDiv: () => et,
+	defaultAnnotationStore: () => ot,
+	deleteButtonWithCheck: () => Ye,
+	editFormButton: () => wn,
+	errorMessageBlock: () => I,
 	extractLogURI: () => Pe,
 	faviconOrDefault: () => qe,
-	field: () => K,
-	fieldFunction: () => q,
-	fieldLabel: () => Dt,
-	fieldParams: () => xt,
-	fieldStore: () => Ot,
-	fileUploadButtonDiv: () => bt,
-	findClosest: () => On,
+	field: () => W,
+	fieldFunction: () => K,
+	fieldLabel: () => J,
+	fieldParams: () => St,
+	fieldStore: () => Dt,
+	fileUploadButtonDiv: () => xt,
+	findClosest: () => Dn,
 	findImage: () => We,
 	findImageFromURI: () => Ue,
 	formatDateTime: () => Ie,
-	formsFor: () => kn,
+	formsFor: () => On,
 	iconForClass: () => Ve,
 	imagesOf: () => Be,
-	index: () => G,
-	isAudio: () => _t,
-	isImage: () => yt,
-	isVideo: () => vt,
-	linkButton: () => ct,
+	index: () => U,
+	isAudio: () => vt,
+	isImage: () => bt,
+	isVideo: () => yt,
+	linkButton: () => lt,
 	linkIcon: () => De,
-	makeDescription: () => Pn,
-	makeDraggable: () => ue,
-	makeDropTarget: () => I,
-	makeSelectForCategory: () => Ln,
-	makeSelectForChoice: () => Bn,
-	makeSelectForClassifierOptions: () => Fn,
-	makeSelectForNestedCategory: () => Rn,
-	makeSelectForOptions: () => In,
-	mostSpecificClassURI: () => Ct,
-	newButton: () => Mn,
+	makeDescription: () => Nn,
+	makeDraggable: () => de,
+	makeDropTarget: () => F,
+	makeSelectForCategory: () => In,
+	makeSelectForChoice: () => zn,
+	makeSelectForClassifierOptions: () => Pn,
+	makeSelectForNestedCategory: () => Ln,
+	makeSelectForOptions: () => Fn,
+	mostSpecificClassURI: () => G,
+	newButton: () => jn,
 	newThing: () => $,
-	openHrefInOutlineMode: () => it,
-	personTR: () => Ze,
-	promptForNew: () => Nn,
-	propertiesForClass: () => Dn,
-	propertyTriage: () => st,
-	publicData: () => Ft,
-	refreshTree: () => nt,
-	removeButton: () => lt,
-	renderAsDiv: () => tt,
-	renderAsRow: () => Qe,
-	renderAutoComplete: () => un,
-	renderAutocompleteControl: () => hn,
+	openHrefInOutlineMode: () => at,
+	personTR: () => Qe,
+	promptForNew: () => Mn,
+	propertiesForClass: () => En,
+	propertyTriage: () => ct,
+	publicData: () => Pt,
+	refreshTree: () => rt,
+	removeButton: () => ut,
+	renderAsDiv: () => nt,
+	renderAsRow: () => $e,
+	renderAutoComplete: () => ln,
+	renderAutocompleteControl: () => mn,
 	renderNameValuePair: () => Et,
-	selectorPanel: () => ut,
-	selectorPanelRefresh: () => dt,
+	selectorPanel: () => dt,
+	selectorPanelRefresh: () => ft,
 	setImage: () => Ke,
 	setName: () => ze,
 	setVisible: () => Z,
 	shortDate: () => Fe,
 	shortTime: () => Re,
-	sortByLabel: () => jn,
-	sortBySequence: () => An,
+	sortByLabel: () => An,
+	sortBySequence: () => kn,
 	timestamp: () => Le,
-	uploadFiles: () => de
+	uploadFiles: () => fe
 });
-export { I as C, j as D, O as E, k as O, ue as S, A as T, nt as _, kt as a, R as b, W as c, Ye as d, H as f, Ze as g, it as h, $ as i, Ne as l, Ve as m, En as n, Xe as o, We as p, zn as r, U as s, Un as t, Me as u, Ke as v, de as w, L as x, Fe as y };
+export { F as C, j as D, O as E, k as O, de as S, A as T, rt as _, Ot as a, L as b, H as c, Xe as d, Ye as f, Qe as g, at as h, $ as i, Ne as l, Ve as m, Tn as n, Ze as o, We as p, Rn as r, V as s, Hn as t, Me as u, Ke as v, fe as w, I as x, Fe as y };
 
-//# sourceMappingURL=widgets-B1hBVhRL.js.map
+//# sourceMappingURL=widgets-C92ihtlF.js.map

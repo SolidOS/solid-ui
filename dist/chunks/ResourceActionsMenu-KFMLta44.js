@@ -2,6 +2,7 @@ import { c as e, g as t, i as n, o as r, p as i, u as a } from "./components-C8c
 import "./button-D6qO2idW.js";
 import "./menu-BNJU654v.js";
 import "./menu-item-nfPpH4dN.js";
+import "./square-arrow-out-up-right-DaALlpHo.js";
 import { t as o, y as s } from "./solidLogicSingleton.esm-Bvt7E7Vl.js";
 // ~icons/lucide/pencil
 var c = class extends HTMLElement {
@@ -47,24 +48,24 @@ var p = class extends HTMLElement {
 };
 customElements.get("icon-lucide-file") || customElements.define("icon-lucide-file", p);
 // src/components/resource-actions-menu/ResourceActionsMenu.styles.css
-var m = i`:host{& .file-explorer-header-more-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}& .ellipsisIcon{width:16px;height:16px}}`, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, M, N, te, P, F, I, L, R, z, B, V, H, U, W, G, K, q, J, Y;
-function X(e, t, n) {
-	ne(e, t), t.set(e, n);
+var m = i`:host{& .file-explorer-header-more-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}& .ellipsisIcon{width:16px;height:16px}}`, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, M, N, te, P, ne, F, I, L, R, z, B, V, H, U, W, G, K, q, J;
+function Y(e, t, n) {
+	re(e, t), t.set(e, n);
 }
-function ne(e, t) {
+function re(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function Z(e, t, n) {
-	return e.set(re(e, t), n), n;
+function X(e, t, n) {
+	return e.set(ie(e, t), n), n;
 }
-function Q(e, t) {
-	return e.get(re(e, t));
+function Z(e, t) {
+	return e.get(ie(e, t));
 }
-function re(e, t, n) {
+function ie(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function ie(e, t, n) {
+function Q(e, t, n) {
 	return (t = oe(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
@@ -221,72 +222,74 @@ function ue(e) {
 }
 k = [t("solid-ui-resource-actions-menu")];
 var $;
-new (J = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap(), Y = (A = n({ attribute: !1 }), ee = n({ type: String }), N = n({ attribute: !1 }), P = n({ attribute: !1 }), I = n({ type: Boolean }), R = n({ type: Boolean }), B = n({ type: Boolean }), H = n({ type: Boolean }), W = n({
+new (q = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap(), J = (A = n({ attribute: !1 }), ee = n({ type: String }), N = n({ attribute: !1 }), P = n({ attribute: !1 }), F = n({ type: Boolean }), L = n({ type: Boolean }), z = n({ type: Boolean }), V = n({ type: Boolean }), U = n({
 	type: Boolean,
 	attribute: "show-access-in-menu"
-}), K = n({ attribute: !1 }), "store"), g = class extends r {
+}), G = n({ attribute: !1 }), "store"), g = class extends r {
 	constructor(...e) {
-		super(...e), X(this, _, (D(this), j(this))), X(this, v, M(this)), X(this, y, te(this, void 0)), X(this, b, F(this, void 0)), X(this, x, L(this, !1)), X(this, S, z(this, !1)), X(this, C, V(this, !1)), X(this, w, U(this, !1)), X(this, T, G(this, !1)), X(this, E, q(this, []));
+		super(...e), Y(this, _, (D(this), j(this))), Y(this, v, M(this)), Y(this, y, te(this, void 0)), Y(this, b, ne(this, void 0)), Y(this, x, I(this, !1)), Y(this, S, R(this, !1)), Y(this, C, B(this, !1)), Y(this, w, H(this, !1)), Y(this, T, W(this, !1)), Y(this, E, K(this, [])), Q(this, "handleOpenInNewTab", () => {
+			this.subjectUri && window.open(this.subjectUri, "_blank", "noopener,noreferrer");
+		});
 	}
-	get [Y]() {
-		return Q(_, this);
+	get [J]() {
+		return Z(_, this);
 	}
 	set store(e) {
-		Z(_, this, e);
+		X(_, this, e);
 	}
 	get subjectUri() {
-		return Q(v, this);
+		return Z(v, this);
 	}
 	set subjectUri(e) {
-		Z(v, this, e);
+		X(v, this, e);
 	}
 	get handleAccessClick() {
-		return Q(y, this);
+		return Z(y, this);
 	}
 	set handleAccessClick(e) {
-		Z(y, this, e);
+		X(y, this, e);
 	}
 	get handleEditingClick() {
-		return Q(b, this);
+		return Z(b, this);
 	}
 	set handleEditingClick(e) {
-		Z(b, this, e);
+		X(b, this, e);
 	}
 	get paneSupportsEditing() {
-		return Q(x, this);
+		return Z(x, this);
 	}
 	set paneSupportsEditing(e) {
-		Z(x, this, e);
+		X(x, this, e);
 	}
 	get canEdit() {
-		return Q(S, this);
+		return Z(S, this);
 	}
 	set canEdit(e) {
-		Z(S, this, e);
+		X(S, this, e);
 	}
 	get canManageAccess() {
-		return Q(C, this);
+		return Z(C, this);
 	}
 	set canManageAccess(e) {
-		Z(C, this, e);
+		X(C, this, e);
 	}
 	get isMobile() {
-		return Q(w, this);
+		return Z(w, this);
 	}
 	set isMobile(e) {
-		Z(w, this, e);
+		X(w, this, e);
 	}
 	get showAccessInMenu() {
-		return Q(T, this);
+		return Z(T, this);
 	}
 	set showAccessInMenu(e) {
-		Z(T, this, e);
+		X(T, this, e);
 	}
 	get menuItems() {
-		return Q(E, this);
+		return Z(E, this);
 	}
 	set menuItems(e) {
-		Z(E, this, e);
+		X(E, this, e);
 	}
 	render() {
 		let t = !u(this.store, this.subjectUri) && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick, n = this.canManageAccess && !!this.handleAccessClick && (this.showAccessInMenu || this.isMobile), r = this.menuItems.filter((e) => typeof e.action == "function");
@@ -302,6 +305,12 @@ new (J = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
             ${e.label}
           </solid-ui-menu-item>
         `)}
+        ${this.subjectUri ? a`
+              <solid-ui-menu-item @solid-ui-select=${this.handleOpenInNewTab}>
+                <icon-lucide-square-arrow-out-up-right slot="left-icon"></icon-lucide-square-arrow-out-up-right>
+                Open in New Tab
+              </solid-ui-menu-item>
+            ` : e}
         ${t ? a`
               <solid-ui-menu-item @solid-ui-select=${this.handleEditingClick}>
                 <icon-lucide-pencil slot="left-icon"></icon-lucide-pencil>
@@ -317,7 +326,7 @@ new (J = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
       </solid-ui-menu>
     `;
 	}
-}, {e: [j, M, te, F, L, z, V, U, G, q, D], c: [$, O]} = ae(g, [
+}, {e: [j, M, te, ne, I, R, B, H, W, K, D], c: [$, O]} = ae(g, [
 	[
 		A,
 		1,
@@ -339,40 +348,40 @@ new (J = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 		"handleEditingClick"
 	],
 	[
-		I,
+		F,
 		1,
 		"paneSupportsEditing"
 	],
 	[
-		R,
+		L,
 		1,
 		"canEdit"
 	],
 	[
-		B,
+		z,
 		1,
 		"canManageAccess"
 	],
 	[
-		H,
+		V,
 		1,
 		"isMobile"
 	],
 	[
-		W,
+		U,
 		1,
 		"showAccessInMenu"
 	],
 	[
-		K,
+		G,
 		1,
 		"menuItems"
 	]
 ], k, 0, void 0, r), g), h = class extends ue {
 	constructor() {
-		super($), ie(this, "styles", m), O();
+		super($), Q(this, "styles", m), O();
 	}
-}, ie(h, J, void 0), h)();
+}, Q(h, q, void 0), h)();
 export { d as n, u as r, $ as t };
 
-//# sourceMappingURL=ResourceActionsMenu-Bx7YWY3E.js.map
+//# sourceMappingURL=ResourceActionsMenu-KFMLta44.js.map

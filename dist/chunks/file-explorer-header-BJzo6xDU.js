@@ -3,9 +3,9 @@ import { b as n, c as r, g as i, i as a, o, p as s, r as c, u as l } from "./com
 import { n as u, t as d } from "./context-BDrfQ9bN.js";
 import { n as f, t as p } from "./events-CXQHDCs2.js";
 import { t as m } from "./query-DjAOg-tk.js";
-import { n as h, r as g } from "./ResourceActionsMenu-Bx7YWY3E.js";
+import { n as h, r as g } from "./ResourceActionsMenu-KFMLta44.js";
 import { u as _ } from "./style-Dlw9-wPn.js";
-import { S as v } from "./widgets-B1hBVhRL.js";
+import { S as v } from "./widgets-C92ihtlF.js";
 import "./button-D6qO2idW.js";
 import "./globe-CsCgZcy5.js";
 // ~icons/lucide/share-2
@@ -959,4 +959,4 @@ new (ft = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q =
 var St = $;
 export { $ as n, St as t };
 
-//# sourceMappingURL=file-explorer-header-Djp_eFuT.js.map
+//# sourceMappingURL=file-explorer-header-BJzo6xDU.js.map

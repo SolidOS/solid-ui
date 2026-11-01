@@ -1,12 +1,12 @@
 import { y as e } from "./chunks/solidLogicSingleton.esm-Bvt7E7Vl.js";
 import { a as t, c as n, n as r, o as i, s as a, t as o } from "./chunks/auth-EK-iYNYZ.js";
 import { l as s, m as c, t as l } from "./chunks/style-Dlw9-wPn.js";
-import { a as u, b as d, t as f } from "./chunks/widgets-B1hBVhRL.js";
+import { a as u, b as d, t as f } from "./chunks/widgets-C92ihtlF.js";
 import "./components.js";
 import { _ as p, a as m, g as h, h as g, m as _, n as v, o as y, t as b, v as x, y as S } from "./chunks/components-C8c2Ucm5.js";
 import { n as C, t as w } from "./chunks/dialogs-BmtLjMzg.js";
 import { t as T } from "./chunks/show-dialog-DAmFslrf.js";
 import { n as E, t as D } from "./chunks/context-BDrfQ9bN.js";
 import { i as O, n as k, r as A, t as j } from "./chunks/events-CXQHDCs2.js";
-import { _ as M, a as N, b as P, c as F, d as I, f as L, g as R, h as z, i as B, l as V, m as H, n as U, o as W, p as G, r as K, s as q, t as J, u as Y, v as X, x as Z, y as Q } from "./chunks/src-akaVfkuf.js";
+import { _ as M, a as N, b as P, c as F, d as I, f as L, g as R, h as z, i as B, l as V, m as H, n as U, o as W, p as G, r as K, s as q, t as J, u as Y, v as X, x as Z, y as Q } from "./chunks/src-DUiDqw_e.js";
 export { n as Account, g as CloseDialogEvent, U as CodeEditor, t as DEFAULT_AUTH_CONTEXT, p as DEFAULT_DIALOG_CONTEXT, D as DEFAULT_FILE_EXPLORER_CONTEXT, o as DEFAULT_SIGNUP_URL, C as Dialog, m as DialogComponent, _ as DialogTrait, j as FILE_EXPLORER_BACK_EVENT, k as FILE_EXPLORER_MANAGE_ACCESS_EVENT, A as FILE_EXPLORER_OPEN_PANE_EVENT, b as FormControlComponent, v as FormControlTrait, a as NoopAuth, T as ShowDialogEvent, r as SolidAuth, y as WebComponent, Q as acl, P as aclControl, i as authContext, K as composeExplorer, X as create, W as createTypes, h as customElement, x as dialogContext, J as dom, E as fileExplorerContext, S as generateId, B as getPreferredPane, N as getRelevantPanes, d as icons, L as infiniteMessageArea, q as initFooter, F as initHeader, O as isExplorerEvent, u as language, c as log, Z as login, M as matrix, R as media, z as messageArea, e as ns, G as pad, H as participation, I as preferences, w as showDialog, l as style, Y as table, V as tabs, s as utils, f as widgets };

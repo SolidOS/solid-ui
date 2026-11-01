@@ -17,6 +17,7 @@ export default class ResourceActionsMenu extends WebComponent {
     accessor isMobile: boolean;
     accessor showAccessInMenu: boolean;
     accessor menuItems: ResourceActionMenuItem[];
+    private handleOpenInNewTab;
     render(): import('lit-html').TemplateResult<1>;
 }
 export {};
