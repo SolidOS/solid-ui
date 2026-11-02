@@ -54,6 +54,7 @@ describe('Index', () => {
       'pad',
       'participation',
       'preferences',
+      'preparePaneMenuItems',
       'showDialog',
       'style',
       'table',
