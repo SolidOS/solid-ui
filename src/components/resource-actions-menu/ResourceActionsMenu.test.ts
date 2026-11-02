@@ -92,4 +92,29 @@ describe('solid-ui-resource-actions-menu', () => {
     open.mockRestore()
     menu.remove()
   })
+
+  it('renders supplied pane actions and dispatches their event', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      subjectUri?: string
+      menuItems?: Array<{ label: string, action: (event: Event) => void }>
+      updateComplete: Promise<boolean>
+    }
+    const action = vi.fn()
+    menu.subjectUri = 'https://example.test/resource.ttl'
+    menu.menuItems = [{ label: 'View as Source', action }]
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const item = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(candidate => candidate.textContent?.includes('View as Source'))
+    expect(item).toBeTruthy()
+
+    const event = new CustomEvent('solid-ui-select', { bubbles: true, composed: true })
+    item?.dispatchEvent(event)
+    expect(action).toHaveBeenCalledOnce()
+    expect(action).toHaveBeenCalledWith(event)
+
+    menu.remove()
+  })
 })
