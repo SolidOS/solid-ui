@@ -8,7 +8,7 @@ import '~icons/lucide/pencil'
 import styles from './FileExplorerHeaderControls.styles.css'
 import '@/components/resource-actions-menu/ResourceActionsMenu'
 import { DEFAULT_FILE_EXPLORER_CONTEXT, fileExplorerContext } from '@/lib/file-explorer/context'
-import { FILE_EXPLORER_MANAGE_ACCESS_EVENT } from '@/lib/file-explorer/events'
+import { FILE_EXPLORER_OPEN_PANE_EVENT } from '@/lib/file-explorer/events'
 import { isContainerSubject } from '@/utils/podUtils'
 
 @customElement('solid-ui-file-explorer-header-controls')
@@ -75,10 +75,10 @@ export default class FileExplorerHeaderControls extends WebComponent {
     const subjectUri = this.fileExplorerContext.subjectUri
     if (!subjectUri) return
 
-    this.dispatchEvent(new CustomEvent(FILE_EXPLORER_MANAGE_ACCESS_EVENT, {
+    this.dispatchEvent(new CustomEvent(FILE_EXPLORER_OPEN_PANE_EVENT, {
       bubbles: true,
       composed: true,
-      detail: { subjectUri }
+      detail: { subjectUri, paneName: 'sharing' }
     }))
   }
 

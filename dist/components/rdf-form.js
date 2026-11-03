@@ -1,1 +1,1 @@
-export { n as RDFForm, t as default } from "../chunks/rdf-form-BkKDmFPD.js";
+export { n as RDFForm, t as default } from "../chunks/rdf-form-BhevRpHy.js";

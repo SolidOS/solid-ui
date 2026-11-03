@@ -7,7 +7,7 @@ import "../../_virtual/~icons/lucide/pencil.esm.js";
 import n from "./FileExplorerHeaderControls.styles.esm.js";
 import "../resource-actions-menu/ResourceActionsMenu.esm.js";
 import { DEFAULT_FILE_EXPLORER_CONTEXT as r, fileExplorerContext as i } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_MANAGE_ACCESS_EVENT as a } from "../../lib/file-explorer/events.esm.js";
+import { FILE_EXPLORER_OPEN_PANE_EVENT as a } from "../../lib/file-explorer/events.esm.js";
 import { isContainerSubject as o } from "../../utils/podUtils.esm.js";
 import { consume as s } from "@lit/context";
 import { html as c, nothing as l } from "lit";
@@ -199,7 +199,10 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 			e && this.dispatchEvent(new CustomEvent(a, {
 				bubbles: !0,
 				composed: !0,
-				detail: { subjectUri: e }
+				detail: {
+					subjectUri: e,
+					paneName: "sharing"
+				}
 			}));
 		});
 	}
