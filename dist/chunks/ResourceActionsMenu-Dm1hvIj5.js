@@ -1,7 +1,7 @@
 import { c as e, g as t, i as n, o as r, p as i, u as a } from "./components-CmnPlcEi.js";
 import "./button-DFgsOHBh.js";
 import "./menu-clQ0N3ba.js";
-import "./menu-item-Df4VM04X.js";
+import "./menu-item-DmQ4ZQQ2.js";
 import "./square-arrow-out-up-right-DaALlpHo.js";
 import { t as o, y as s } from "./solidLogicSingleton.esm-Bvt7E7Vl.js";
 // ~icons/lucide/pencil
@@ -384,4 +384,4 @@ new (q = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 }, Q(h, q, void 0), h)();
 export { d as n, u as r, $ as t };
 
-//# sourceMappingURL=ResourceActionsMenu-DT8lx1z7.js.map
+//# sourceMappingURL=ResourceActionsMenu-Dm1hvIj5.js.map

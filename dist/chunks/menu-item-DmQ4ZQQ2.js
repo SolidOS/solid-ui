@@ -1,7 +1,7 @@
 import { g as e, i as t, o as n, p as r, u as i } from "./components-CmnPlcEi.js";
 import { t as a } from "./query-DjAOg-tk.js";
 // src/components/menu-item/MenuItem.styles.css
-var o = r`:host{&>a,&>div{width:100%;color:var(--solid-ui-color-gray-600);font-weight:500;font-size:var(--solid-ui-font-size-md);border-radius:5px;justify-content:flex-start;align-items:center;gap:5px;padding:10px;display:flex;position:relative;&[data-selected]{background:var(--solid-ui-color-primary-selected)}}& ::slotted([slot=left-icon]),& ::slotted([slot=right-icon]){width:var(--solid-ui-font-size-xl);height:var(--solid-ui-font-size-xl)}& a:after{content:\"\";width:100%;height:100%;position:absolute;top:0;left:0}}`, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S;
+var o = r`:host{&>a,&>div{width:100%;color:var(--solid-ui-color-gray-600);font-weight:500;font-size:var(--solid-ui-font-size-md);border-radius:5px;justify-content:flex-start;align-items:center;gap:5px;padding:10px;display:flex;position:relative;&[data-selected]{background:var(--solid-ui-color-primary-selected)}}& ::slotted([slot=left-icon]),& ::slotted([slot=right-icon]){object-fit:contain;width:var(--solid-ui-font-size-xl)!important;height:var(--solid-ui-font-size-xl)!important}& a:after{content:\"\";width:100%;height:100%;position:absolute;top:0;left:0}}`, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S;
 function C(e, t, n) {
 	w(e, t), t.set(e, n);
 }
@@ -246,4 +246,4 @@ new (x = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 var I = F;
 export { F as n, I as t };
 
-//# sourceMappingURL=menu-item-Df4VM04X.js.map
+//# sourceMappingURL=menu-item-DmQ4ZQQ2.js.map

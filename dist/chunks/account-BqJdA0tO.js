@@ -4,7 +4,7 @@ import "./avatar-DHC_B7vJ.js";
 import "./button-DFgsOHBh.js";
 import "./login-button-BZH27kcX.js";
 import "./logout-button-CrTKHw_t.js";
-import "./menu-item-Df4VM04X.js";
+import "./menu-item-DmQ4ZQQ2.js";
 import "./menu-clQ0N3ba.js";
 import "./signup-button-yONuztWR.js";
 import "./chevron-down-CqUEolao.js";
@@ -286,4 +286,4 @@ new (w = (h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), T = 
 var z = R;
 export { R as n, z as t };
 
-//# sourceMappingURL=account-wYMvLpmb.js.map
+//# sourceMappingURL=account-BqJdA0tO.js.map
