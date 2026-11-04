@@ -19,8 +19,9 @@
     }
 
     ::slotted([slot="left-icon"]), ::slotted([slot="right-icon"]) {
-        width: var(--solid-ui-font-size-xl);
-        height: var(--solid-ui-font-size-xl);
+        width: var(--solid-ui-font-size-xl) !important;
+        height: var(--solid-ui-font-size-xl) !important;
+        object-fit: contain;
     }
 
     a::after {
