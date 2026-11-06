@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{B as t,P as n}from"./components-BJZpxEwH.js";import{n as r,t as i}from"./log-out-BkAa9N-q.js";var a,o,s,c,l;function u(){return(u=e((()=>{n(),i(),r(),a={title:`Solid/LogoutButton`},o={render:()=>t`<solid-ui-logout-button></solid-ui-logout-button>`},s={render:()=>t`
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{B as t,P as n}from"./components-BJZpxEwH.js";import{n as r,t as i}from"./log-out-CFfJHJQA.js";var a,o,s,c,l;function u(){return(u=e((()=>{n(),i(),r(),a={title:`Solid/LogoutButton`},o={render:()=>t`<solid-ui-logout-button></solid-ui-logout-button>`},s={render:()=>t`
     <solid-ui-logout-button>
         Sign Out
         <icon-lucide-log-out style="width: 16px; height: 16px;"></icon-lucide-log-out>

@@ -10,6 +10,7 @@ export default class FileExplorerHeader extends WebComponent {
         action: (event: Event) => void;
     }>;
     accessor paneIcon: PaneIcon;
+    accessor showBack: boolean;
     accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'canManageAccess' | 'aclUri'>;
     private handleBack;
     private getDefaultResponseMetadata;

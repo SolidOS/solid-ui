@@ -18,32 +18,32 @@ import { consume as u } from "@lit/context";
 import { html as d } from "lit";
 import { property as f, query as p, state as m } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeaderSummary.ts
-var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I, L, R, z;
-function B(e, t, n) {
-	V(e, t), t.set(e, n);
+var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I, L, R, z, B, V, H;
+function U(e, t, n) {
+	W(e, t), t.set(e, n);
 }
-function V(e, t) {
+function W(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function H(e, t, n) {
-	return e.set(W(e, t), n), n;
+function G(e, t, n) {
+	return e.set(q(e, t), n), n;
 }
-function U(e, t) {
-	return e.get(W(e, t));
+function K(e, t) {
+	return e.get(q(e, t));
 }
-function W(e, t, n) {
+function q(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function G(e, t, n) {
-	return (t = q(t)) in e ? Object.defineProperty(e, t, {
+function J(e, t, n) {
+	return (t = X(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function K(e, t, n, r, i, a) {
+function Y(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -66,13 +66,13 @@ function K(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: Y(function() {
+				get: Q(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || Y(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || Q(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -132,7 +132,7 @@ function K(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return X(t) === e;
+			return ee(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -146,7 +146,7 @@ function K(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : q(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : X(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -159,11 +159,11 @@ function K(e, t, n, r, i, a) {
 		}
 	};
 }
-function q(e) {
-	var t = J(e, "string");
+function X(e) {
+	var t = Z(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function J(e, t) {
+function Z(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -173,7 +173,7 @@ function J(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function Y(e, t, n) {
+function Q(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -183,60 +183,66 @@ function Y(e, t, n) {
 	} catch {}
 	return e;
 }
-function X(e) {
+function ee(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function Z(e) {
+function te(e) {
 	return e;
 }
-T = [n("solid-ui-file-explorer-header-summary")];
-var Q;
-new (R = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), z = (E = u({
+E = [n("solid-ui-file-explorer-header-summary")];
+var $;
+new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), H = (D = u({
 	context: a,
 	subscribe: !0
-}), O = f({ attribute: !1 }), A = f({ attribute: !1 }), M = f({ attribute: !1 }), P = m(), I = p("h1"), "_draggableSubjectUri"), g = class extends r {
+}), k = f({ attribute: !1 }), j = f({ attribute: !1 }), N = f({ type: Boolean }), F = f({ attribute: !1 }), L = m(), z = p("h1"), "_draggableSubjectUri"), g = class extends r {
 	constructor(...e) {
-		super(...e), G(this, z, void C(this)), G(this, "_paneIconGeneration", 0), B(this, _, D(this, i)), B(this, v, k(this)), B(this, y, j(this)), B(this, b, N(this, {
+		super(...e), J(this, H, void w(this)), J(this, "_paneIconGeneration", 0), U(this, _, O(this, i)), U(this, v, A(this)), U(this, y, M(this)), U(this, b, P(this, !0)), U(this, x, I(this, {
 			modified: void 0,
 			isPublic: !1
-		})), B(this, x, F(this, void 0)), B(this, S, L(this, null));
+		})), U(this, S, R(this, void 0)), U(this, C, B(this, null));
 	}
 	get fileExplorerContext() {
-		return U(_, this);
+		return K(_, this);
 	}
 	set fileExplorerContext(e) {
-		H(_, this, e);
+		G(_, this, e);
 	}
 	get paneIcon() {
-		return U(v, this);
+		return K(v, this);
 	}
 	set paneIcon(e) {
-		H(v, this, e);
+		G(v, this, e);
 	}
 	get onBackClick() {
-		return U(y, this);
+		return K(y, this);
 	}
 	set onBackClick(e) {
-		H(y, this, e);
+		G(y, this, e);
+	}
+	get showBack() {
+		return K(b, this);
+	}
+	set showBack(e) {
+		G(b, this, e);
 	}
 	get responseMetadata() {
-		return U(b, this);
+		return K(x, this);
 	}
 	set responseMetadata(e) {
-		H(b, this, e);
+		G(x, this, e);
 	}
 	get resolvedPaneIcon() {
-		return U(x, this);
+		return K(S, this);
 	}
 	set resolvedPaneIcon(e) {
-		H(x, this, e);
+		G(S, this, e);
 	}
 	get titleHeading() {
-		return U(S, this);
+		return K(C, this);
 	}
 	set titleHeading(e) {
-		H(S, this, e);
+		G(C, this, e);
 	}
 	formatModifiedDate(e) {
 		if (!e) return "";
@@ -299,14 +305,16 @@ new (R = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 		let t = this.fileExplorerContext?.subjectUri ? l(this.fileExplorerContext.subjectUri) : void 0, n = t ? e(t) : "", r = this.responseMetadata.isPublic, i = c(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri);
 		return d`
       <div class="file-explorer-header-summary">
-        <solid-ui-button
-          variant="ghost"
-          @click=${this.onBackClick}
-          title="Back"
-        >
-          <icon-lucide-arrow-left></icon-lucide-arrow-left>
-          <span class="sr-only">Back</span>
-        </solid-ui-button>
+        ${this.showBack ? d`
+            <solid-ui-button
+              variant="ghost"
+              @click=${this.onBackClick}
+              title="Back"
+            >
+              <icon-lucide-arrow-left></icon-lucide-arrow-left>
+              <span class="sr-only">Back</span>
+            </solid-ui-button>
+          ` : ""}
         <span class="pane-icon">
           ${this.resolvedPaneIcon ? d`<img src=${this.resolvedPaneIcon} alt="" />` : ""}
         </span>
@@ -315,42 +323,47 @@ new (R = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
       </div>
     `;
 	}
-}, {e: [D, k, j, N, F, L, C], c: [Q, w]} = K(g, [
+}, {e: [O, A, M, P, I, R, B, w], c: [$, T]} = Y(g, [
 	[
-		E,
+		D,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		O,
+		k,
 		1,
 		"paneIcon"
 	],
 	[
-		A,
+		j,
 		1,
 		"onBackClick"
 	],
 	[
-		M,
+		N,
+		1,
+		"showBack"
+	],
+	[
+		F,
 		1,
 		"responseMetadata"
 	],
 	[
-		P,
+		L,
 		1,
 		"resolvedPaneIcon"
 	],
 	[
-		I,
+		z,
 		1,
 		"titleHeading"
 	]
-], T, 0, void 0, r), g), h = class extends Z {
+], E, 0, void 0, r), g), h = class extends te {
 	constructor() {
-		super(Q), G(this, "styles", o), w();
+		super($), J(this, "styles", o), T();
 	}
-}, G(h, R, void 0), h)();
-export { Q as default };
+}, J(h, V, void 0), h)();
+export { $ as default };
 
 //# sourceMappingURL=FileExplorerHeaderSummary.esm.js.map

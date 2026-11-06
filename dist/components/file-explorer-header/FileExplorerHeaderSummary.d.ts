@@ -8,6 +8,7 @@ export default class FileExplorerHeaderSummary extends WebComponent {
     accessor fileExplorerContext: import('../../lib/file-explorer/context').FileExplorerContext;
     accessor paneIcon: PaneIcon | undefined;
     accessor onBackClick: (() => void) | undefined;
+    accessor showBack: boolean;
     accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic'>;
     accessor resolvedPaneIcon: string | undefined;
     private accessor titleHeading;

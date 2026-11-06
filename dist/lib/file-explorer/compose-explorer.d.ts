@@ -6,7 +6,7 @@ export type ExplorerComposition = {
     subjectUri: string;
     pane: PaneDefinition | undefined;
     relevantPanes: PaneDefinition[];
-    header?: Pick<FileExplorerHeader, 'paneIcon' | 'menuItems'>;
+    header?: Pick<FileExplorerHeader, 'paneIcon' | 'menuItems'> & Partial<Pick<FileExplorerHeader, 'showBack'>>;
     paneElement?: HTMLElement;
 };
 /**

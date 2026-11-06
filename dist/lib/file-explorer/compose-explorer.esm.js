@@ -4,7 +4,7 @@ function e(e, t) {
 	let n = e.querySelector(":scope > solid-ui-file-explorer-header");
 	if (t.header) {
 		let r = n || e.ownerDocument.createElement("solid-ui-file-explorer-header");
-		r.paneIcon = t.header.paneIcon, r.menuItems = t.header.menuItems, e.firstElementChild !== r && e.prepend(r);
+		r.paneIcon = t.header.paneIcon, r.menuItems = t.header.menuItems, r.showBack = t.header.showBack ?? !0, e.firstElementChild !== r && e.prepend(r);
 	} else n?.remove();
 	if (t.paneElement) {
 		let n = t.paneElement;

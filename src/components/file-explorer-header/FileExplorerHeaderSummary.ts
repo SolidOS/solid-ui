@@ -33,6 +33,9 @@ export default class FileExplorerHeaderSummary extends WebComponent {
   @property({ attribute: false })
   accessor onBackClick: (() => void) | undefined
 
+  @property({ type: Boolean })
+  accessor showBack = true
+
   @property({ attribute: false })
   accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic'> = {
     modified: undefined,
@@ -141,14 +144,18 @@ export default class FileExplorerHeaderSummary extends WebComponent {
 
     return html`
       <div class="file-explorer-header-summary">
-        <solid-ui-button
-          variant="ghost"
-          @click=${this.onBackClick}
-          title="Back"
-        >
-          <icon-lucide-arrow-left></icon-lucide-arrow-left>
-          <span class="sr-only">Back</span>
-        </solid-ui-button>
+        ${this.showBack
+          ? html`
+            <solid-ui-button
+              variant="ghost"
+              @click=${this.onBackClick}
+              title="Back"
+            >
+              <icon-lucide-arrow-left></icon-lucide-arrow-left>
+              <span class="sr-only">Back</span>
+            </solid-ui-button>
+          `
+          : ''}
         <span class="pane-icon">
           ${this.resolvedPaneIcon ? html`<img src=${this.resolvedPaneIcon} alt="" />` : ''}
         </span>

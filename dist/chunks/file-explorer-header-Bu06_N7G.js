@@ -30,32 +30,32 @@ var S = class extends HTMLElement {
 };
 customElements.get("icon-lucide-arrow-left") || customElements.define("icon-lucide-arrow-left", S);
 // src/components/file-explorer-header/FileExplorerHeaderSummary.styles.css
-var C = s`:host{& .file-explorer-header-summary{text-align:left;flex-wrap:wrap;flex:auto;justify-content:flex-start;align-items:center;gap:6px;min-width:0;display:flex}& h1{color:var(--solid-ui-color-gray-700,#364153);font-size:var(--solid-ui-font-size-xl,1.25rem);align-items:center;gap:8px;margin:0;font-weight:500;display:flex}& .resource-info{flex-direction:column;min-width:0;display:flex}& .container-info{flex-direction:row;gap:10px;min-width:0;display:flex}& .pane-icon{aspect-ratio:1;justify-content:center;align-items:center;width:40px;height:40px;padding:7.5px 7px 6.5px;display:flex}& .pane-icon img{object-fit:contain;width:100%;height:100%;display:block}& p{color:var(--solid-ui-gray-500,#6a7282);font-size:var(--solid-ui-font-size-xs,.75rem);align-items:center;gap:5px;font-weight:500;display:flex}& .public{color:var(--blue-400,#51a2ff);background:var(--blue-50,#eff6ff);border-radius:5px;justify-content:center;align-items:center;gap:3px;padding:2px 5px;display:flex}& icon-lucide-globe{stroke-width:1.021px;stroke:var(--blue-400,#51a2ff)}& .private{color:var(--yellow-600,#d08700);background:var(--yellow-100,#fef9c2);border-radius:5px;justify-content:center;align-items:center;gap:3px;padding:2px 5px;display:flex}& icon-lucide-lock-keyhole{stroke-width:1.021px;stroke:var(--yellow-600,#d08700)}& icon-lucide-globe,& icon-lucide-lock-keyhole{width:.875rem;height:.875rem}& .resource-date{font-size:inherit}& icon-lucide-arrow-left{width:1.125rem;height:1.125rem}@media (width<=600px){& .file-explorer-header-summary{gap:7px}& h1{font-size:14px}& .pane-icon{aspect-ratio:1;flex-shrink:0;width:18.2px;height:18.2px;padding:0}& p{font-size:14px}& .resource-date{font-size:10px}& .public,& .private{font-size:9px}& icon-lucide-arrow-left{aspect-ratio:5/6;flex-shrink:0;width:15px;height:18px}}}`, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, se, ce, le, ue, de, fe, pe, me, he, ge;
+var C = s`:host{& .file-explorer-header-summary{text-align:left;flex-wrap:wrap;flex:auto;justify-content:flex-start;align-items:center;gap:6px;min-width:0;display:flex}& h1{color:var(--solid-ui-color-gray-700,#364153);font-size:var(--solid-ui-font-size-xl,1.25rem);align-items:center;gap:8px;margin:0;font-weight:500;display:flex}& .resource-info{flex-direction:column;min-width:0;display:flex}& .container-info{flex-direction:row;gap:10px;min-width:0;display:flex}& .pane-icon{aspect-ratio:1;justify-content:center;align-items:center;width:40px;height:40px;padding:7.5px 7px 6.5px;display:flex}& .pane-icon img{object-fit:contain;width:100%;height:100%;display:block}& p{color:var(--solid-ui-gray-500,#6a7282);font-size:var(--solid-ui-font-size-xs,.75rem);align-items:center;gap:5px;font-weight:500;display:flex}& .public{color:var(--blue-400,#51a2ff);background:var(--blue-50,#eff6ff);border-radius:5px;justify-content:center;align-items:center;gap:3px;padding:2px 5px;display:flex}& icon-lucide-globe{stroke-width:1.021px;stroke:var(--blue-400,#51a2ff)}& .private{color:var(--yellow-600,#d08700);background:var(--yellow-100,#fef9c2);border-radius:5px;justify-content:center;align-items:center;gap:3px;padding:2px 5px;display:flex}& icon-lucide-lock-keyhole{stroke-width:1.021px;stroke:var(--yellow-600,#d08700)}& icon-lucide-globe,& icon-lucide-lock-keyhole{width:.875rem;height:.875rem}& .resource-date{font-size:inherit}& icon-lucide-arrow-left{width:1.125rem;height:1.125rem}@media (width<=600px){& .file-explorer-header-summary{gap:7px}& h1{font-size:14px}& .pane-icon{aspect-ratio:1;flex-shrink:0;width:18.2px;height:18.2px;padding:0}& p{font-size:14px}& .resource-date{font-size:10px}& .public,& .private{font-size:9px}& icon-lucide-arrow-left{aspect-ratio:5/6;flex-shrink:0;width:15px;height:18px}}}`, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, se, ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye;
 function M(e, t, n) {
-	_e(e, t), t.set(e, n);
+	be(e, t), t.set(e, n);
 }
-function _e(e, t) {
+function be(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
 function N(e, t, n) {
-	return e.set(ve(e, t), n), n;
+	return e.set(xe(e, t), n), n;
 }
 function P(e, t) {
-	return e.get(ve(e, t));
+	return e.get(xe(e, t));
 }
-function ve(e, t, n) {
+function xe(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
 function F(e, t, n) {
-	return (t = be(t)) in e ? Object.defineProperty(e, t, {
+	return (t = Ce(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function ye(e, t, n, r, i, a) {
+function Se(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -78,13 +78,13 @@ function ye(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: Se(function() {
+				get: Te(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || Se(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || Te(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -144,7 +144,7 @@ function ye(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return Ce(t) === e;
+			return Ee(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -158,7 +158,7 @@ function ye(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : be(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : Ce(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -171,11 +171,11 @@ function ye(e, t, n, r, i, a) {
 		}
 	};
 }
-function be(e) {
-	var t = xe(e, "string");
+function Ce(e) {
+	var t = we(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function xe(e, t) {
+function we(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -185,7 +185,7 @@ function xe(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function Se(e, t, n) {
+function Te(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -195,24 +195,24 @@ function Se(e, t, n) {
 	} catch {}
 	return e;
 }
-function Ce(e) {
+function Ee(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function we(e) {
+function De(e) {
 	return e;
 }
-ne = [i("solid-ui-file-explorer-header-summary")];
-var Te;
-new (he = (E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), ge = (re = n({
+re = [i("solid-ui-file-explorer-header-summary")];
+var Oe;
+new (ve = (E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), ee = /*#__PURE__*/ new WeakMap(), ye = (ie = n({
 	context: u,
 	subscribe: !0
-}), ae = a({ attribute: !1 }), se = a({ attribute: !1 }), le = a({ attribute: !1 }), de = c(), pe = m("h1"), "_draggableSubjectUri"), T = class extends o {
+}), oe = a({ attribute: !1 }), ce = a({ attribute: !1 }), ue = a({ type: Boolean }), fe = a({ attribute: !1 }), me = c(), ge = m("h1"), "_draggableSubjectUri"), T = class extends o {
 	constructor(...e) {
-		super(...e), F(this, ge, void ee(this)), F(this, "_paneIconGeneration", 0), M(this, E, ie(this, d)), M(this, D, oe(this)), M(this, O, ce(this)), M(this, k, ue(this, {
+		super(...e), F(this, ye, void te(this)), F(this, "_paneIconGeneration", 0), M(this, E, ae(this, d)), M(this, D, se(this)), M(this, O, le(this)), M(this, k, de(this, !0)), M(this, A, pe(this, {
 			modified: void 0,
 			isPublic: !1
-		})), M(this, A, fe(this, void 0)), M(this, j, me(this, null));
+		})), M(this, j, he(this, void 0)), M(this, ee, _e(this, null));
 	}
 	get fileExplorerContext() {
 		return P(E, this);
@@ -232,23 +232,29 @@ new (he = (E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O =
 	set onBackClick(e) {
 		N(O, this, e);
 	}
-	get responseMetadata() {
+	get showBack() {
 		return P(k, this);
 	}
-	set responseMetadata(e) {
+	set showBack(e) {
 		N(k, this, e);
 	}
-	get resolvedPaneIcon() {
+	get responseMetadata() {
 		return P(A, this);
 	}
-	set resolvedPaneIcon(e) {
+	set responseMetadata(e) {
 		N(A, this, e);
 	}
-	get titleHeading() {
+	get resolvedPaneIcon() {
 		return P(j, this);
 	}
-	set titleHeading(e) {
+	set resolvedPaneIcon(e) {
 		N(j, this, e);
+	}
+	get titleHeading() {
+		return P(ee, this);
+	}
+	set titleHeading(e) {
+		N(ee, this, e);
 	}
 	formatModifiedDate(e) {
 		if (!e) return "";
@@ -311,14 +317,16 @@ new (he = (E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O =
 		let t = this.fileExplorerContext?.subjectUri ? e(this.fileExplorerContext.subjectUri) : void 0, n = t ? _(t) : "", r = this.responseMetadata.isPublic, i = g(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri);
 		return l`
       <div class="file-explorer-header-summary">
-        <solid-ui-button
-          variant="ghost"
-          @click=${this.onBackClick}
-          title="Back"
-        >
-          <icon-lucide-arrow-left></icon-lucide-arrow-left>
-          <span class="sr-only">Back</span>
-        </solid-ui-button>
+        ${this.showBack ? l`
+            <solid-ui-button
+              variant="ghost"
+              @click=${this.onBackClick}
+              title="Back"
+            >
+              <icon-lucide-arrow-left></icon-lucide-arrow-left>
+              <span class="sr-only">Back</span>
+            </solid-ui-button>
+          ` : ""}
         <span class="pane-icon">
           ${this.resolvedPaneIcon ? l`<img src=${this.resolvedPaneIcon} alt="" />` : ""}
         </span>
@@ -327,69 +335,74 @@ new (he = (E = /*#__PURE__*/ new WeakMap(), D = /*#__PURE__*/ new WeakMap(), O =
       </div>
     `;
 	}
-}, {e: [ie, oe, ce, ue, fe, me, ee], c: [Te, te]} = ye(T, [
+}, {e: [ae, se, le, de, pe, he, _e, te], c: [Oe, ne]} = Se(T, [
 	[
-		re,
+		ie,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		ae,
+		oe,
 		1,
 		"paneIcon"
 	],
 	[
-		se,
+		ce,
 		1,
 		"onBackClick"
 	],
 	[
-		le,
+		ue,
+		1,
+		"showBack"
+	],
+	[
+		fe,
 		1,
 		"responseMetadata"
 	],
 	[
-		de,
+		me,
 		1,
 		"resolvedPaneIcon"
 	],
 	[
-		pe,
+		ge,
 		1,
 		"titleHeading"
 	]
-], ne, 0, void 0, o), T), w = class extends we {
+], re, 0, void 0, o), T), w = class extends De {
 	constructor() {
-		super(Te), F(this, "styles", C), te();
+		super(Oe), F(this, "styles", C), ne();
 	}
-}, F(w, he, void 0), w)();
+}, F(w, ve, void 0), w)();
 // src/components/file-explorer-header/FileExplorerHeaderControls.styles.css
-var Ee = s`:host{flex:0 auto;min-width:0;& div{text-align:right;flex:none;justify-content:flex-end;align-items:center;gap:6px;display:flex}& div>*{flex:0 auto}& .file-explorer-header-action-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}& .dirtyIndicator{color:#92400e;white-space:nowrap;background:#fffbeb;border:1px solid #f59e0b;border-radius:999px;align-items:center;padding:4px 8px;font-size:.72rem;font-weight:600;line-height:1;display:inline-flex}& icon-lucide-user-round-cog,& icon-lucide-pencil{width:16px;height:16px}@media (width<=900px){& div{padding-right:3px}}@media (width<=600px){& div{justify-content:flex-start;gap:5px}& .file-explorer-header-action-button{display:none}& icon-lucide-ellipsis-vertical{aspect-ratio:1;flex-shrink:0;width:15.36px;height:15.36px}}}`, De, Oe, I, L, R, z, B, ke, Ae, je, Me, Ne, Pe, Fe, Ie, Le, Re, ze, Be, Ve, He, Ue;
+var ke = s`:host{flex:0 auto;min-width:0;& div{text-align:right;flex:none;justify-content:flex-end;align-items:center;gap:6px;display:flex}& div>*{flex:0 auto}& .file-explorer-header-action-button{width:var(--solid-ui-clickable-area,42px);height:var(--solid-ui-clickable-area,42px);padding:0}& .dirtyIndicator{color:#92400e;white-space:nowrap;background:#fffbeb;border:1px solid #f59e0b;border-radius:999px;align-items:center;padding:4px 8px;font-size:.72rem;font-weight:600;line-height:1;display:inline-flex}& icon-lucide-user-round-cog,& icon-lucide-pencil{width:16px;height:16px}@media (width<=900px){& div{padding-right:3px}}@media (width<=600px){& div{justify-content:flex-start;gap:5px}& .file-explorer-header-action-button{display:none}& icon-lucide-ellipsis-vertical{aspect-ratio:1;flex-shrink:0;width:15.36px;height:15.36px}}}`, Ae, je, I, L, R, z, B, Me, Ne, Pe, Fe, Ie, Le, Re, ze, Be, Ve, He, Ue, We, Ge, Ke;
 function V(e, t, n) {
-	We(e, t), t.set(e, n);
+	qe(e, t), t.set(e, n);
 }
-function We(e, t) {
+function qe(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
 function H(e, t, n) {
-	return e.set(Ge(e, t), n), n;
+	return e.set(Je(e, t), n), n;
 }
 function U(e, t) {
-	return e.get(Ge(e, t));
+	return e.get(Je(e, t));
 }
-function Ge(e, t, n) {
+function Je(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
 function W(e, t, n) {
-	return (t = qe(t)) in e ? Object.defineProperty(e, t, {
+	return (t = Xe(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function Ke(e, t, n, r, i, a) {
+function Ye(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -412,13 +425,13 @@ function Ke(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: Ye(function() {
+				get: Qe(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || Ye(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || Qe(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -478,7 +491,7 @@ function Ke(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return Xe(t) === e;
+			return $e(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -492,7 +505,7 @@ function Ke(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : qe(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : Xe(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -505,11 +518,11 @@ function Ke(e, t, n, r, i, a) {
 		}
 	};
 }
-function qe(e) {
-	var t = Je(e, "string");
+function Xe(e) {
+	var t = Ze(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function Je(e, t) {
+function Ze(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -519,7 +532,7 @@ function Je(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function Ye(e, t, n) {
+function Qe(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -529,23 +542,23 @@ function Ye(e, t, n) {
 	} catch {}
 	return e;
 }
-function Xe(e) {
+function $e(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function Ze(e) {
+function et(e) {
 	return e;
 }
-je = [i("solid-ui-file-explorer-header-controls")];
-var Qe;
-new (He = (I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), Ue = (Me = n({
+Pe = [i("solid-ui-file-explorer-header-controls")];
+var tt;
+new (Ge = (I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), Ke = (Fe = n({
 	context: u,
 	subscribe: !0
-}), Pe = a({ attribute: !1 }), Ie = a({ type: Boolean }), Re = a({ type: Boolean }), Be = c(), "mobileMediaQuery"), Oe = class extends o {
+}), Le = a({ attribute: !1 }), ze = a({ type: Boolean }), Ve = a({ type: Boolean }), Ue = c(), "mobileMediaQuery"), je = class extends o {
 	constructor(...e) {
-		super(...e), W(this, Ue, void ke(this)), W(this, "mobileQuery", "(max-width: 600px)"), W(this, "handleMobileMediaChange", (e) => {
+		super(...e), W(this, Ke, void Me(this)), W(this, "mobileQuery", "(max-width: 600px)"), W(this, "handleMobileMediaChange", (e) => {
 			this.isMobile = e.matches;
-		}), V(this, I, Ne(this, d)), V(this, L, Fe(this, [])), V(this, R, Le(this, !1)), V(this, z, ze(this, !1)), V(this, B, Ve(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), W(this, "handleManageAccess", () => {
+		}), V(this, I, Ie(this, d)), V(this, L, Re(this, [])), V(this, R, Be(this, !1)), V(this, z, He(this, !1)), V(this, B, We(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), W(this, "handleManageAccess", () => {
 			let e = this.fileExplorerContext.subjectUri;
 			e && this.dispatchEvent(new CustomEvent(f, {
 				bubbles: !0,
@@ -636,64 +649,64 @@ new (He = (I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R =
       </div>
     `;
 	}
-}, {e: [Ne, Fe, Le, ze, Ve, ke], c: [Qe, Ae]} = Ke(Oe, [
+}, {e: [Ie, Re, Be, He, We, Me], c: [tt, Ne]} = Ye(je, [
 	[
-		Me,
+		Fe,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		Pe,
+		Le,
 		1,
 		"menuItems"
 	],
 	[
-		Ie,
+		ze,
 		1,
 		"canEdit"
 	],
 	[
-		Re,
+		Ve,
 		1,
 		"canManageAccess"
 	],
 	[
-		Be,
+		Ue,
 		1,
 		"isMobile"
 	]
-], je, 0, void 0, o), Oe), De = class extends Ze {
+], Pe, 0, void 0, o), je), Ae = class extends et {
 	constructor() {
-		super(Qe), W(this, "styles", Ee), Ae();
+		super(tt), W(this, "styles", ke), Ne();
 	}
-}, W(De, He, void 0), De)();
+}, W(Ae, Ge, void 0), Ae)();
 // src/components/file-explorer-header/FileExplorerHeader.ts
-var $e, et, G, K, q, J, tt, nt, rt, it, at, ot, st, ct, lt, ut, dt, ft, pt;
-function Y(e, t, n) {
-	mt(e, t), t.set(e, n);
+var nt, rt, G, K, q, J, Y, it, at, ot, st, ct, lt, ut, dt, ft, pt, mt, ht, gt, _t, vt;
+function X(e, t, n) {
+	yt(e, t), t.set(e, n);
 }
-function mt(e, t) {
+function yt(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function X(e, t, n) {
-	return e.set(ht(e, t), n), n;
+function Z(e, t, n) {
+	return e.set(bt(e, t), n), n;
 }
-function Z(e, t) {
-	return e.get(ht(e, t));
+function Q(e, t) {
+	return e.get(bt(e, t));
 }
-function ht(e, t, n) {
+function bt(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function Q(e, t, n) {
-	return (t = _t(t)) in e ? Object.defineProperty(e, t, {
+function $(e, t, n) {
+	return (t = St(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function gt(e, t, n, r, i, a) {
+function xt(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -716,13 +729,13 @@ function gt(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: yt(function() {
+				get: wt(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || yt(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || wt(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -782,7 +795,7 @@ function gt(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return bt(t) === e;
+			return Tt(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -796,7 +809,7 @@ function gt(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : _t(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : St(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -809,11 +822,11 @@ function gt(e, t, n, r, i, a) {
 		}
 	};
 }
-function _t(e) {
-	var t = vt(e, "string");
+function St(e) {
+	var t = Ct(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function vt(e, t) {
+function Ct(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -823,7 +836,7 @@ function vt(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function yt(e, t, n) {
+function wt(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -833,27 +846,27 @@ function yt(e, t, n) {
 	} catch {}
 	return e;
 }
-function bt(e) {
+function Tt(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function xt(e) {
+function Et(e) {
 	return e;
 }
-rt = [i("solid-ui-file-explorer-header")];
-var $;
-new (ft = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), pt = (it = n({
+ot = [i("solid-ui-file-explorer-header")];
+var Dt;
+new (_t = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), vt = (st = n({
 	context: u,
 	subscribe: !0
-}), ot = a({ attribute: !1 }), ct = a({ attribute: !1 }), ut = c(), "_loadedMetadataForUri"), et = class extends o {
+}), lt = a({ attribute: !1 }), dt = a({ attribute: !1 }), pt = a({ type: Boolean }), ht = c(), "_loadedMetadataForUri"), rt = class extends o {
 	constructor(...e) {
-		super(...e), Q(this, pt, void tt(this)), Q(this, "_metadataGeneration", 0), Y(this, G, at(this, d)), Y(this, K, st(this, [])), Y(this, q, lt(this, void 0)), Y(this, J, dt(this, {
+		super(...e), $(this, vt, void it(this)), $(this, "_metadataGeneration", 0), X(this, G, ct(this, d)), X(this, K, ut(this, [])), X(this, q, ft(this, void 0)), X(this, J, mt(this, !0)), X(this, Y, gt(this, {
 			modified: void 0,
 			isPublic: !1,
 			canEdit: !1,
 			canManageAccess: !1,
 			aclUri: void 0
-		})), Q(this, "handleBack", () => {
+		})), $(this, "handleBack", () => {
 			this.dispatchEvent(new CustomEvent(p, {
 				bubbles: !0,
 				composed: !0,
@@ -862,28 +875,34 @@ new (ft = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q =
 		});
 	}
 	get fileExplorerContext() {
-		return Z(G, this);
+		return Q(G, this);
 	}
 	set fileExplorerContext(e) {
-		X(G, this, e);
+		Z(G, this, e);
 	}
 	get menuItems() {
-		return Z(K, this);
+		return Q(K, this);
 	}
 	set menuItems(e) {
-		X(K, this, e);
+		Z(K, this, e);
 	}
 	get paneIcon() {
-		return Z(q, this);
+		return Q(q, this);
 	}
 	set paneIcon(e) {
-		X(q, this, e);
+		Z(q, this, e);
+	}
+	get showBack() {
+		return Q(J, this);
+	}
+	set showBack(e) {
+		Z(J, this, e);
 	}
 	get responseMetadata() {
-		return Z(J, this);
+		return Q(Y, this);
 	}
 	set responseMetadata(e) {
-		X(J, this, e);
+		Z(Y, this, e);
 	}
 	getDefaultResponseMetadata() {
 		return {
@@ -921,6 +940,7 @@ new (ft = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q =
       <header>
         <solid-ui-file-explorer-header-summary
           .paneIcon=${this.paneIcon}
+          .showBack=${this.showBack}
           .onBackClick=${this.handleBack}
           .responseMetadata=${this.responseMetadata}
         ></solid-ui-file-explorer-header-summary>
@@ -932,34 +952,39 @@ new (ft = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q =
       </header>
     `;
 	}
-}, {e: [at, st, lt, dt, tt], c: [$, nt]} = gt(et, [
+}, {e: [ct, ut, ft, mt, gt, it], c: [Dt, at]} = xt(rt, [
 	[
-		it,
+		st,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		ot,
+		lt,
 		1,
 		"menuItems"
 	],
 	[
-		ct,
+		dt,
 		1,
 		"paneIcon"
 	],
 	[
-		ut,
+		pt,
+		1,
+		"showBack"
+	],
+	[
+		ht,
 		1,
 		"responseMetadata"
 	]
-], rt, 0, void 0, o), et), $e = class extends xt {
+], ot, 0, void 0, o), rt), nt = class extends Et {
 	constructor() {
-		super($), Q(this, "styles", b), nt();
+		super(Dt), $(this, "styles", b), at();
 	}
-}, Q($e, ft, void 0), $e)();
+}, $(nt, _t, void 0), nt)();
 // src/components/file-explorer-header/index.ts
-var St = $;
-export { $ as n, St as t };
+var Ot = Dt;
+export { Dt as n, Ot as t };
 
-//# sourceMappingURL=file-explorer-header-iL81Vzxd.js.map
+//# sourceMappingURL=file-explorer-header-Bu06_N7G.js.map

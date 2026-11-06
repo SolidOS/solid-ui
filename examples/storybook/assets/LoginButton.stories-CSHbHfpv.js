@@ -1,4 +1,4 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{B as t,P as n}from"./components-BJZpxEwH.js";import{t as r}from"./LoginButton-mos7sKfO.js";import{t as i}from"./log-in-BgiRvlD1.js";var a,o,s,c,l;function u(){return(u=e((()=>{n(),i(),r(),a={title:`Solid/LoginButton`},o={render:()=>t`<solid-ui-login-button></solid-ui-login-button>`},s={render:()=>t`
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{B as t,P as n}from"./components-BJZpxEwH.js";import{t as r}from"./LoginButton-CvE1WCkp.js";import{t as i}from"./log-in-BgiRvlD1.js";var a,o,s,c,l;function u(){return(u=e((()=>{n(),i(),r(),a={title:`Solid/LoginButton`},o={render:()=>t`<solid-ui-login-button></solid-ui-login-button>`},s={render:()=>t`
     <solid-ui-login-button>
       Sign In
       <icon-lucide-log-in style="width: 16px; height: 16px;"></icon-lucide-log-in>

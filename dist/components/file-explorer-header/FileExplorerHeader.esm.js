@@ -15,32 +15,32 @@ import { consume as c } from "@lit/context";
 import { html as l } from "lit";
 import { property as u, state as d } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeader.ts
-var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A;
-function j(e, t, n) {
-	M(e, t), t.set(e, n);
+var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N;
+function P(e, t, n) {
+	F(e, t), t.set(e, n);
 }
-function M(e, t) {
+function F(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function N(e, t, n) {
-	return e.set(F(e, t), n), n;
+function I(e, t, n) {
+	return e.set(R(e, t), n), n;
 }
-function P(e, t) {
-	return e.get(F(e, t));
+function L(e, t) {
+	return e.get(R(e, t));
 }
-function F(e, t, n) {
+function R(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function I(e, t, n) {
-	return (t = R(t)) in e ? Object.defineProperty(e, t, {
+function z(e, t, n) {
+	return (t = V(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function L(e, t, n, r, i, a) {
+function B(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -63,13 +63,13 @@ function L(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: B(function() {
+				get: U(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || B(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || U(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -129,7 +129,7 @@ function L(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return V(t) === e;
+			return W(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -143,7 +143,7 @@ function L(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : R(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : V(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -156,11 +156,11 @@ function L(e, t, n, r, i, a) {
 		}
 	};
 }
-function R(e) {
-	var t = z(e, "string");
+function V(e) {
+	var t = H(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function z(e, t) {
+function H(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -170,7 +170,7 @@ function z(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function B(e, t, n) {
+function U(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -180,27 +180,27 @@ function B(e, t, n) {
 	} catch {}
 	return e;
 }
-function V(e) {
+function W(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function H(e) {
+function G(e) {
 	return e;
 }
-b = [e("solid-ui-file-explorer-header")];
-var U;
-new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), A = (x = c({
+x = [e("solid-ui-file-explorer-header")];
+var K;
+new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = c({
 	context: r,
 	subscribe: !0
-}), C = u({ attribute: !1 }), T = u({ attribute: !1 }), D = d(), "_loadedMetadataForUri"), p = class extends t {
+}), w = u({ attribute: !1 }), E = u({ attribute: !1 }), O = u({ type: Boolean }), A = d(), "_loadedMetadataForUri"), p = class extends t {
 	constructor(...e) {
-		super(...e), I(this, A, void v(this)), I(this, "_metadataGeneration", 0), j(this, m, S(this, n)), j(this, h, w(this, [])), j(this, g, E(this, void 0)), j(this, _, O(this, {
+		super(...e), z(this, N, void y(this)), z(this, "_metadataGeneration", 0), P(this, m, C(this, n)), P(this, h, T(this, [])), P(this, g, D(this, void 0)), P(this, _, k(this, !0)), P(this, v, j(this, {
 			modified: void 0,
 			isPublic: !1,
 			canEdit: !1,
 			canManageAccess: !1,
 			aclUri: void 0
-		})), I(this, "handleBack", () => {
+		})), z(this, "handleBack", () => {
 			this.dispatchEvent(new CustomEvent(i, {
 				bubbles: !0,
 				composed: !0,
@@ -209,28 +209,34 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		});
 	}
 	get fileExplorerContext() {
-		return P(m, this);
+		return L(m, this);
 	}
 	set fileExplorerContext(e) {
-		N(m, this, e);
+		I(m, this, e);
 	}
 	get menuItems() {
-		return P(h, this);
+		return L(h, this);
 	}
 	set menuItems(e) {
-		N(h, this, e);
+		I(h, this, e);
 	}
 	get paneIcon() {
-		return P(g, this);
+		return L(g, this);
 	}
 	set paneIcon(e) {
-		N(g, this, e);
+		I(g, this, e);
+	}
+	get showBack() {
+		return L(_, this);
+	}
+	set showBack(e) {
+		I(_, this, e);
 	}
 	get responseMetadata() {
-		return P(_, this);
+		return L(v, this);
 	}
 	set responseMetadata(e) {
-		N(_, this, e);
+		I(v, this, e);
 	}
 	getDefaultResponseMetadata() {
 		return {
@@ -268,6 +274,7 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
       <header>
         <solid-ui-file-explorer-header-summary
           .paneIcon=${this.paneIcon}
+          .showBack=${this.showBack}
           .onBackClick=${this.handleBack}
           .responseMetadata=${this.responseMetadata}
         ></solid-ui-file-explorer-header-summary>
@@ -279,32 +286,37 @@ new (k = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
       </header>
     `;
 	}
-}, {e: [S, w, E, O, v], c: [U, y]} = L(p, [
+}, {e: [C, T, D, k, j, y], c: [K, b]} = B(p, [
 	[
-		x,
+		S,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		C,
+		w,
 		1,
 		"menuItems"
 	],
 	[
-		T,
+		E,
 		1,
 		"paneIcon"
 	],
 	[
-		D,
+		O,
+		1,
+		"showBack"
+	],
+	[
+		A,
 		1,
 		"responseMetadata"
 	]
-], b, 0, void 0, t), p), f = class extends H {
+], x, 0, void 0, t), p), f = class extends G {
 	constructor() {
-		super(U), I(this, "styles", a), y();
+		super(K), z(this, "styles", a), b();
 	}
-}, I(f, k, void 0), f)();
-export { U as default };
+}, z(f, M, void 0), f)();
+export { K as default };
 
 //# sourceMappingURL=FileExplorerHeader.esm.js.map

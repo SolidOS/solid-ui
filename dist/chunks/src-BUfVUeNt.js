@@ -4969,7 +4969,7 @@ function ps(e, t) {
 	let n = e.querySelector(":scope > solid-ui-file-explorer-header");
 	if (t.header) {
 		let r = n || e.ownerDocument.createElement("solid-ui-file-explorer-header");
-		r.paneIcon = t.header.paneIcon, r.menuItems = t.header.menuItems, e.firstElementChild !== r && e.prepend(r);
+		r.paneIcon = t.header.paneIcon, r.menuItems = t.header.menuItems, r.showBack = t.header.showBack ?? !0, e.firstElementChild !== r && e.prepend(r);
 	} else n?.remove();
 	if (t.paneElement) {
 		let n = t.paneElement;
@@ -22303,4 +22303,4 @@ var uk = {
 }, fk = typeof window < "u" ? window.document : null;
 export { it as S, un as _, fs as a, Xt as b, ss as c, No as d, So as f, fn as g, Aa as h, ps as i, Jo as l, Ia as m, dk as n, ds as o, xo as p, hs as r, us as s, fk as t, Po as u, rn as v, Zt as x, en as y };
 
-//# sourceMappingURL=src-BIPN47WK.js.map
+//# sourceMappingURL=src-BUfVUeNt.js.map
