@@ -1,9 +1,10 @@
-import { beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { silenceDebugMessages } from '../helpers/debugger'
 import { AddAgentButtons } from '../../../src/acl/add-agent-buttons'
 import { instantiateAccessGroups } from '../helpers/instantiateAccessGroups'
 import { JSDOM } from 'jsdom'
 import { solidLogicSingleton } from 'solid-logic'
+import ns from '../../../src/lib/ns'
 
 const store = solidLogicSingleton.store
 
@@ -126,6 +127,64 @@ describe('When "Add Group" button is clicked', () => {
   })
   it('Bar now contains askName form', () => {
     expect(bar.childNodes[1].tagName).toEqual('DIV')
+  })
+})
+
+describe('Adding Everyone', () => {
+  let groupList: ReturnType<typeof instantiateAccessGroups>
+  let groups: HTMLElement
+  let button: HTMLButtonElement
+  let image: HTMLImageElement
+
+  beforeEach(() => {
+    groupList = instantiateAccessGroups(dom, store)
+    vi.spyOn(groupList.controller, 'isEditable', 'get').mockReturnValue(true)
+    vi.spyOn(groupList.controller, 'save').mockResolvedValue(undefined)
+    vi.spyOn(groupList.controller, 'render').mockReturnValue(dom.createElement('div'))
+    vi.spyOn(store.fetcher, 'load').mockRejectedValue(new Error('Unexpected RDF lookup'))
+    groups = groupList.render()
+    groups.querySelector<HTMLImageElement>('img[title="Add ..."]')!.click()
+    image = groups.querySelector<HTMLImageElement>('img[title="Add Everyone"]')!
+    button = image.parentElement as HTMLButtonElement
+  })
+
+  afterEach(() => {
+    vi.restoreAllMocks()
+  })
+
+  it.each(['text/uri-list', 'text/plain'])('drags Everyone directly to Editors using %s without fetching the icon', async format => {
+    const payload = new Map<string, string>([[format, image.src]])
+    const dataTransfer = {
+      types: [format],
+      setData: (type: string, value: string) => payload.set(type, value),
+      getData: (type: string) => payload.get(type) || ''
+    }
+    const dragStart = new dom.defaultView!.Event('dragstart', { bubbles: true })
+    Object.defineProperty(dragStart, 'dataTransfer', { value: dataTransfer })
+    button.dispatchEvent(dragStart)
+
+    expect(dataTransfer.getData(format)).toBe(ns.foaf('Agent').uri)
+    expect(button.draggable).toBe(true)
+    expect(image.draggable).toBe(false)
+
+    const editors = Array.from(groups.children).find(group =>
+      (group.firstElementChild as HTMLElement)?.innerText === 'Editors')!
+    const drop = new dom.defaultView!.Event('drop', { bubbles: true, cancelable: true })
+    Object.defineProperty(drop, 'dataTransfer', { value: dataTransfer })
+    editors.dispatchEvent(drop)
+
+    await vi.waitFor(() => expect(groupList.controller.save).toHaveBeenCalledOnce())
+    const editorModes = [ns.acl('Read').uri, ns.acl('Write').uri].join('\n')
+    expect(groupList.byCombo[editorModes]).toEqual([['agentClass', ns.foaf('Agent').uri]])
+    expect(store.fetcher.load).not.toHaveBeenCalled()
+  })
+
+  it('still adds Everyone as a Viewer when clicked', async () => {
+    button.click()
+
+    await vi.waitFor(() => expect(groupList.controller.save).toHaveBeenCalledOnce())
+    expect(groupList.byCombo[ns.acl('Read').uri]).toEqual([['agentClass', ns.foaf('Agent').uri]])
+    expect(store.fetcher.load).not.toHaveBeenCalled()
   })
 })
 

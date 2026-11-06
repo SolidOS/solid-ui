@@ -1,11 +1,11 @@
 import { y as e } from "./chunks/solidLogicSingleton.esm-Bvt7E7Vl.js";
-import { a as t, c as n, n as r, o as i, s as a, t as o } from "./chunks/auth-CCrvazv_.js";
+import { a as t, c as n, n as r, o as i, s as a, t as o } from "./chunks/auth-DpSqbLHr.js";
 import { l as s, m as c, t as l } from "./chunks/style-Dlw9-wPn.js";
 import { a as u, b as d, t as f } from "./chunks/widgets-C92ihtlF.js";
-import { S as p, _ as m, a as h, b as g, c as _, d as v, f as y, g as b, h as x, i as S, l as C, m as w, n as T, o as E, p as D, r as O, s as k, t as A, u as j, v as M, x as N, y as P } from "./chunks/src-BUfVUeNt.js";
-import { _ as F, a as I, g as L, h as R, m as z, n as B, o as V, t as H, v as U, y as W } from "./chunks/components-CmnPlcEi.js";
-import { n as G, t as K } from "./chunks/dialogs-DP4-6e8A.js";
+import { S as p, _ as m, a as h, b as g, c as _, d as v, f as y, g as b, h as x, i as S, l as C, m as w, n as T, o as E, p as D, r as O, s as k, t as A, u as j, v as M, x as N, y as P } from "./chunks/src-CesxD4I6.js";
+import { _ as F, a as I, g as L, h as R, m as z, n as B, o as V, t as H, v as U, y as W } from "./chunks/components-CVuqsI0R.js";
+import { n as G, t as K } from "./chunks/dialogs-gEIIeLi6.js";
 import { t as q } from "./chunks/show-dialog-DAmFslrf.js";
-import { n as J, t as Y } from "./chunks/context-Dr-MkMP6.js";
+import { n as J, t as Y } from "./chunks/context-0sxUfxf7.js";
 import { i as X, n as Z, r as Q, t as $ } from "./chunks/events-CXQHDCs2.js";
 export { n as Account, R as CloseDialogEvent, T as CodeEditor, t as DEFAULT_AUTH_CONTEXT, F as DEFAULT_DIALOG_CONTEXT, Y as DEFAULT_FILE_EXPLORER_CONTEXT, o as DEFAULT_SIGNUP_URL, G as Dialog, I as DialogComponent, z as DialogTrait, $ as FILE_EXPLORER_BACK_EVENT, Z as FILE_EXPLORER_MANAGE_ACCESS_EVENT, Q as FILE_EXPLORER_OPEN_PANE_EVENT, H as FormControlComponent, B as FormControlTrait, a as NoopAuth, q as ShowDialogEvent, r as SolidAuth, V as WebComponent, g as acl, N as aclControl, i as authContext, S as composeExplorer, P as create, k as createTypes, L as customElement, U as dialogContext, A as dom, J as fileExplorerContext, W as generateId, h as getPreferredPane, E as getRelevantPanes, d as icons, D as infiniteMessageArea, _ as initFooter, C as initHeader, X as isExplorerEvent, u as language, c as log, p as login, M as matrix, m as media, b as messageArea, e as ns, w as pad, x as participation, y as preferences, O as preparePaneMenuItems, K as showDialog, l as style, v as table, j as tabs, s as utils, f as widgets };

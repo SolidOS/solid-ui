@@ -3,12 +3,13 @@ import { label as t } from "../utils/label.esm.js";
 import { icons as n } from "../lib/iconBase.esm.js";
 import { ensureLoadedProfile as r } from "../login/login.esm.js";
 import i from "../lib/ns.esm.js";
+import { makeDraggable as a } from "../widgets/dragAndDrop.esm.js";
 import "../utils/index.esm.js";
-import { askName as a, button as o, cancelButton as s, continueButton as c, iconForClass as l, personTR as u } from "../widgets/buttons.esm.js";
+import { askName as o, button as s, cancelButton as c, continueButton as l, iconForClass as u, personTR as d } from "../widgets/buttons.esm.js";
 import "../widgets/index.esm.js";
-import { style as d } from "../lib/style.esm.js";
+import { style as f } from "../lib/style.esm.js";
 // src/acl/add-agent-buttons.ts
-var f = class {
+var p = class {
 	groupList;
 	rootElement;
 	barElement;
@@ -20,7 +21,7 @@ var f = class {
 		return this.rootElement.innerHTML = "", this.rootElement.appendChild(this.renderAddButton()), this.rootElement.appendChild(this.barElement), this.rootElement;
 	}
 	renderAddButton() {
-		return o(this.groupList.controller.dom, `${n.iconBase}noun_34653_green.svg`, "Add ...", () => {
+		return s(this.groupList.controller.dom, `${n.iconBase}noun_34653_green.svg`, "Add ...", () => {
 			this.toggleBar(), this.renderBar();
 		});
 	}
@@ -31,31 +32,32 @@ var f = class {
 		Array.from(this.barElement.children).filter((t) => t !== e).forEach((e) => this.barElement.removeChild(e));
 	}
 	renderPersonButton() {
-		return o(this.groupList.controller.dom, n.iconBase + l["vcard:Individual"], "Add Person", (e) => {
+		return s(this.groupList.controller.dom, n.iconBase + u["vcard:Individual"], "Add Person", (e) => {
 			this.renderSimplifiedBar(e.target), this.renderNameForm(i.vcard("Individual"), "person").then((e) => this.addPerson(e)).then(() => this.renderCleanup()).catch((e) => this.groupList.controller.renderStatus(e));
 		});
 	}
 	renderGroupButton() {
-		return o(this.groupList.controller.dom, n.iconBase + l["vcard:Group"], "Add Group", (e) => {
+		return s(this.groupList.controller.dom, n.iconBase + u["vcard:Group"], "Add Group", (e) => {
 			this.renderSimplifiedBar(e.target), this.renderNameForm(i.vcard("Group"), "group").then((e) => this.addGroup(e)).then(() => this.renderCleanup()).catch((e) => this.groupList.controller.renderStatus(e));
 		});
 	}
 	renderNameForm(e, t) {
-		return a(this.groupList.controller.dom, this.groupList.store, this.barElement, i.vcard("URI"), e, t);
+		return o(this.groupList.controller.dom, this.groupList.store, this.barElement, i.vcard("URI"), e, t);
 	}
 	renderPublicButton() {
-		return o(this.groupList.controller.dom, n.iconBase + l["foaf:Agent"], "Add Everyone", () => this.addAgent(i.foaf("Agent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding the general public to those who can read. Drag the globe to a different level to give them more access.")).then(() => this.renderCleanup()));
+		let e = s(this.groupList.controller.dom, n.iconBase + u["foaf:Agent"], "Add Everyone", () => this.addAgent(i.foaf("Agent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding the general public to those who can read. Drag the globe to a different level to give them more access.")).then(() => this.renderCleanup()));
+		return e.querySelector("img")?.setAttribute("draggable", "false"), a(e, i.foaf("Agent")), e;
 	}
 	renderAuthenticatedAgentButton() {
-		return o(this.groupList.controller.dom, `${n.iconBase}noun_99101.svg`, "Anyone logged In", () => this.addAgent(i.acl("AuthenticatedAgent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.")).then(() => this.renderCleanup()));
+		return s(this.groupList.controller.dom, `${n.iconBase}noun_99101.svg`, "Anyone logged In", () => this.addAgent(i.acl("AuthenticatedAgent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding anyone logged in to those who can read. Drag the ID icon to a different level to give them more access.")).then(() => this.renderCleanup()));
 	}
 	renderBotButton() {
-		return o(this.groupList.controller.dom, n.iconBase + "noun_Robot_849764.svg", "A Software Agent (bot)", (e) => {
+		return s(this.groupList.controller.dom, n.iconBase + "noun_Robot_849764.svg", "A Software Agent (bot)", (e) => {
 			this.renderSimplifiedBar(e.target), this.renderNameForm(i.schema("Application"), "bot").then((e) => this.addBot(e)).then(() => this.renderCleanup());
 		});
 	}
 	renderAppsButton() {
-		return o(this.groupList.controller.dom, `${n.iconBase}noun_15177.svg`, "A Web App (origin)", (e) => {
+		return s(this.groupList.controller.dom, `${n.iconBase}noun_15177.svg`, "A Web App (origin)", (e) => {
 			this.renderSimplifiedBar(e.target);
 			let t = {
 				div: this.barElement,
@@ -72,9 +74,9 @@ var f = class {
 		let e = this.groupList.controller.context.session.paneRegistry.byName("trustedApplications");
 		if (e) {
 			let t = e.render(null, this.groupList.controller.context);
-			t.setAttribute("style", d.trustedAppController);
-			let n = s(this.groupList.controller.dom, () => this.renderCleanup());
-			n.setAttribute("style", d.trustedAppCancelButton), t.insertBefore(n, t.firstChild), this.barElement.appendChild(t);
+			t.setAttribute("style", f.trustedAppController);
+			let n = c(this.groupList.controller.dom, () => this.renderCleanup());
+			n.setAttribute("style", f.trustedAppCancelButton), t.insertBefore(n, t.firstChild), this.barElement.appendChild(t);
 		}
 	}
 	async renderAppsTable(e) {
@@ -82,13 +84,13 @@ var f = class {
 		let n = this.groupList.store.each(e.me, i.acl("trustedApp")), a = n.flatMap((e) => this.groupList.store.each(e, i.acl("origin")));
 		return this.barElement.appendChild(this.groupList.controller.dom.createElement("p")).textContent = `You have ${a.length} selected web apps.`, new Promise((e, r) => {
 			let a = this.barElement.appendChild(this.groupList.controller.dom.createElement("table"));
-			a.setAttribute("style", d.trustedAppAddApplicationsTable), n.forEach((n) => {
+			a.setAttribute("style", f.trustedAppAddApplicationsTable), n.forEach((n) => {
 				let o = this.groupList.store.any(n, i.acl("origin"));
 				o || r(/* @__PURE__ */ Error(`Unable to pick app: ${n.value}`));
-				let s = u(this.groupList.controller.dom, i.acl("origin"), o, {}), l = this.groupList.controller.dom.createElement("table"), d = l.appendChild(this.groupList.controller.dom.createElement("tr"));
-				d.appendChild(this.groupList.controller.dom.createElement("td")).appendChild(s);
-				let f = d.appendChild(this.groupList.controller.dom.createElement("td"));
-				f.textContent = `Give access to ${this.groupList.controller.noun} ${t(this.groupList.controller.subject)}?`, d.appendChild(this.groupList.controller.dom.createElement("td")).appendChild(c(this.groupList.controller.dom, () => e(o.value))), a.appendChild(l);
+				let s = d(this.groupList.controller.dom, i.acl("origin"), o, {}), c = this.groupList.controller.dom.createElement("table"), u = c.appendChild(this.groupList.controller.dom.createElement("tr"));
+				u.appendChild(this.groupList.controller.dom.createElement("td")).appendChild(s);
+				let f = u.appendChild(this.groupList.controller.dom.createElement("td"));
+				f.textContent = `Give access to ${this.groupList.controller.noun} ${t(this.groupList.controller.subject)}?`, u.appendChild(this.groupList.controller.dom.createElement("td")).appendChild(l(this.groupList.controller.dom, () => e(o.value))), a.appendChild(c);
 			});
 		});
 	}
@@ -123,6 +125,6 @@ var f = class {
 		this.isExpanded = !this.isExpanded;
 	}
 };
-export { f as AddAgentButtons };
+export { p as AddAgentButtons };
 
 //# sourceMappingURL=add-agent-buttons.esm.js.map
