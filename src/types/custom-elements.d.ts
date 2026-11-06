@@ -1,3 +1,4 @@
+import type AccessControlModal from '../components/access-control-modal/AccessControlModal'
 import type Account from '../components/account/Account'
 import type Avatar from '../components/avatar/Avatar'
 import type Button from '../components/button/Button'
@@ -9,6 +10,9 @@ import type DialogFooter from '../components/dialog-footer/DialogFooter'
 import type DialogHeader from '../components/dialog-header/DialogHeader'
 import type DialogProvider from '../components/dialog-provider/DialogProvider'
 import type DialogsRoot from '../components/dialogs-root/DialogsRoot'
+import type ErrorState from '../components/error-state/ErrorState'
+import type FileExplorerHeader from '../components/file-explorer-header/FileExplorerHeader'
+import type FileExplorerProvider from '../components/file-explorer-provider/FileExplorerProvider'
 import type Guard from '../components/guard/Guard'
 import type Input from '../components/input/Input'
 import type LoginButton from '../components/login-button/LoginButton'
@@ -21,6 +25,7 @@ import type PhotoCaptureModal from '../components/photo-capture-modal/PhotoCaptu
 import type Provider from '../components/provider/Provider'
 import type RDFForm from '../components/rdf-form/RDFForm'
 import type RDFInput from '../components/rdf-input/RDFInput'
+import type ResourceActionsMenu from '../components/resource-actions-menu/ResourceActionsMenu'
 import type Select from '../components/select/Select'
 import type SelectOption from '../components/select-option/SelectOption'
 import type SignupButton from '../components/signup-button/SignupButton'
@@ -28,6 +33,7 @@ import type SolidEmblem from '../components/solid-emblem/SolidEmblem'
 
 declare global {
   interface HTMLElementTagNameMap {
+    'solid-ui-access-control-modal': AccessControlModal
     'solid-ui-account': Account
     'solid-ui-avatar': Avatar
     'solid-ui-button': Button
@@ -39,6 +45,9 @@ declare global {
     'solid-ui-dialog-header': DialogHeader
     'solid-ui-dialog-provider': DialogProvider
     'solid-ui-dialogs-root': DialogsRoot
+    'solid-ui-error-state': ErrorState
+    'solid-ui-file-explorer-header': FileExplorerHeader
+    'solid-ui-file-explorer-provider': FileExplorerProvider
     'solid-ui-guard': Guard
     'solid-ui-input': Input
     'solid-ui-login-button': LoginButton
@@ -51,6 +60,7 @@ declare global {
     'solid-ui-provider': Provider
     'solid-ui-rdf-form': RDFForm
     'solid-ui-rdf-input': RDFInput
+    'solid-ui-resource-actions-menu': ResourceActionsMenu
     'solid-ui-select': Select
     'solid-ui-select-option': SelectOption
     'solid-ui-signup-button': SignupButton

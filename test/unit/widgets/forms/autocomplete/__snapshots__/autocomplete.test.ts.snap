@@ -99,10 +99,13 @@ exports[`autocompleteField > clicking on row of greenn table then accecpt button
           class="hoverControl"
         >
           <img
+            aria-label="Remove this Q6881511"
             class="hoverControlHide"
             data-testid="delete-button"
+            role="button"
             src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            tabindex="0"
             title="Remove this Q6881511"
           />
         </div>
@@ -190,10 +193,13 @@ exports[`autocompleteField > creates a autocomplete field 1`] = `
           class="hoverControl"
         >
           <img
+            aria-label="Remove this Q6881511"
             class="hoverControlHide"
             data-testid="delete-button"
+            role="button"
             src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            tabindex="0"
             title="Remove this Q6881511"
           />
         </div>
@@ -316,10 +322,13 @@ exports[`autocompleteField > typing more search term till unique selects the who
           class="hoverControl"
         >
           <img
+            aria-label="Remove this Q6881511"
             class="hoverControlHide"
             data-testid="delete-button"
+            role="button"
             src="https://solidos.github.io/solid-ui/src/icons/noun_2188_red.svg"
             style="margin: 0.2em; width: 1em; height: 1em; float: right;"
+            tabindex="0"
             title="Remove this Q6881511"
           />
         </div>

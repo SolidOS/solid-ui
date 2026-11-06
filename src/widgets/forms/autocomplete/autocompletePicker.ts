@@ -157,11 +157,11 @@ export async function renderAutoComplete (dom: HTMLDocument,
     }
     clearList()
     const slimmed = filterByLanguage(bindings, languagePrefs)
-    return slimmed
+    return slimmed || []
   }
 
   function filterByName (filter, bindings) {
-    return bindings.filter(binding => nameMatch(filter, binding.name.value))
+    return (bindings || []).filter(binding => nameMatch(filter, binding.name.value))
   }
 
   async function refreshList () {
@@ -205,7 +205,7 @@ export async function renderAutoComplete (dom: HTMLDocument,
     } else {
       if (!allDisplayed || !lastFilter || !filter.startsWith(lastFilter)) {
         debug.log(`   Querying database at "${filter}" cf last "${lastFilter}".`)
-        lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) // freesh query
+        lastBindings = await loadBindingsAndFilterByLanguage(filter, languagePrefs) || [] // freesh query
       }
       // Trim table as search gets tighter:
       const slimmed = filterByName(filter, lastBindings)

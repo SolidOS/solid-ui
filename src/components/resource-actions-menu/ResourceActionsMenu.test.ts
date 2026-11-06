@@ -1,0 +1,120 @@
+import { describe, expect, it, vi } from 'vitest'
+import './ResourceActionsMenu.ts'
+
+describe('solid-ui-resource-actions-menu', () => {
+  it('does not duplicate the desktop file header access action in the menu', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      handleAccessClick?: () => void
+      canManageAccess?: boolean
+      subjectUri?: string
+      updateComplete: Promise<boolean>
+    }
+    const handleAccessClick = vi.fn()
+    menu.subjectUri = 'https://example.test/resource.ttl'
+    menu.handleAccessClick = handleAccessClick
+    menu.canManageAccess = true
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const accessItem = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(item => item.textContent?.includes('Manage Access'))
+    expect(accessItem).toBeUndefined()
+
+    menu.remove()
+  })
+
+  it('does not render Manage Access without the capability', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      handleAccessClick?: () => void
+      subjectUri?: string
+      showAccessInMenu?: boolean
+      updateComplete: Promise<boolean>
+    }
+    menu.subjectUri = 'https://example.test/resource.ttl'
+    menu.handleAccessClick = vi.fn()
+    menu.showAccessInMenu = true
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    expect(menu.shadowRoot?.textContent).not.toContain('Manage Access')
+    menu.remove()
+  })
+
+  it('shows Manage Access when the containing view explicitly enables it', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      handleAccessClick?: () => void
+      subjectUri?: string
+      showAccessInMenu?: boolean
+      canManageAccess?: boolean
+      updateComplete: Promise<boolean>
+    }
+    const handleAccessClick = vi.fn()
+    menu.subjectUri = 'https://example.test/resource.ttl'
+    menu.handleAccessClick = handleAccessClick
+    menu.showAccessInMenu = true
+    menu.canManageAccess = true
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const accessItem = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(item => item.textContent?.includes('Manage Access'))
+    expect(accessItem).toBeTruthy()
+
+    accessItem?.dispatchEvent(new CustomEvent('solid-ui-select', { bubbles: true, composed: true }))
+    expect(handleAccessClick).toHaveBeenCalledOnce()
+
+    menu.remove()
+  })
+
+  it('opens the resource URI, including its fragment, in a new tab', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      subjectUri?: string
+      updateComplete: Promise<boolean>
+    }
+    const subjectUri = 'https://example.test/resource.ttl#subject'
+    const open = vi.spyOn(window, 'open').mockReturnValue(null)
+    menu.subjectUri = subjectUri
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const item = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(item => item.textContent?.includes('Open in New Tab'))
+    expect(item).toBeTruthy()
+
+    item?.dispatchEvent(new CustomEvent('solid-ui-select', { bubbles: true, composed: true }))
+    expect(open).toHaveBeenCalledOnce()
+    expect(open).toHaveBeenCalledWith(subjectUri, '_blank', 'noopener,noreferrer')
+
+    open.mockRestore()
+    menu.remove()
+  })
+
+  it('renders supplied pane actions and dispatches their event', async () => {
+    const menu = document.createElement('solid-ui-resource-actions-menu') as HTMLElement & {
+      subjectUri?: string
+      menuItems?: Array<{ label: string, action: (event: Event) => void }>
+      updateComplete: Promise<boolean>
+    }
+    const action = vi.fn()
+    menu.subjectUri = 'https://example.test/resource.ttl'
+    menu.menuItems = [{ label: 'View as Source', action }]
+
+    document.body.appendChild(menu)
+    await menu.updateComplete
+
+    const item = Array.from(menu.shadowRoot?.querySelectorAll('solid-ui-menu-item') || [])
+      .find(candidate => candidate.textContent?.includes('View as Source'))
+    expect(item).toBeTruthy()
+
+    const event = new CustomEvent('solid-ui-select', { bubbles: true, composed: true })
+    item?.dispatchEvent(event)
+    expect(action).toHaveBeenCalledOnce()
+    expect(action).toHaveBeenCalledWith(event)
+
+    menu.remove()
+  })
+})

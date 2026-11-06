@@ -23,7 +23,15 @@ jobs:
       matrix:
         node-version: [22, 24]
     steps:
+      # The update-deps job commits the updated package.json/package-lock.json to the head
+      # branch, but `needs` only orders the jobs: without an explicit ref the default
+      # checkout uses the SHA of the triggering event, so the build (and the artifact that
+      # later gets published) would still carry the pre-update dependencies.
+      # Build the branch that received the commit (PR head branch, or the pushed branch);
+      # fork PRs keep the default commit, as the updater deliberately does not commit there.
       - uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'pull_request' && (github.event.pull_request.head.repo.fork && github.sha || github.head_ref) || github.ref_name }}
       - name: Use Node.js ${{ matrix.node-version }}
         uses: actions/setup-node@v6
         with:
