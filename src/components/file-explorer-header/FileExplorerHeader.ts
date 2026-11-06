@@ -31,6 +31,9 @@ export default class FileExplorerHeader extends WebComponent {
   @property({ attribute: false })
   accessor paneIcon: PaneIcon = undefined as unknown as PaneIcon
 
+  @property({ type: Boolean })
+  accessor showBack = true
+
   @state()
   accessor responseMetadata: Pick<FileExplorerResourceMetadata, 'modified' | 'isPublic' | 'canEdit' | 'canManageAccess' | 'aclUri'> = {
     modified: undefined,
@@ -95,6 +98,7 @@ export default class FileExplorerHeader extends WebComponent {
       <header>
         <solid-ui-file-explorer-header-summary
           .paneIcon=${this.paneIcon}
+          .showBack=${this.showBack}
           .onBackClick=${this.handleBack}
           .responseMetadata=${this.responseMetadata}
         ></solid-ui-file-explorer-header-summary>

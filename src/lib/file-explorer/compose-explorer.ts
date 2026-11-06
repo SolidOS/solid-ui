@@ -7,7 +7,7 @@ export type ExplorerComposition = {
   subjectUri: string
   pane: PaneDefinition | undefined
   relevantPanes: PaneDefinition[]
-  header?: Pick<FileExplorerHeader, 'paneIcon' | 'menuItems'>
+  header?: Pick<FileExplorerHeader, 'paneIcon' | 'menuItems'> & Partial<Pick<FileExplorerHeader, 'showBack'>>
   paneElement?: HTMLElement
 }
 
@@ -32,6 +32,7 @@ export function composeExplorer (
       provider.ownerDocument.createElement('solid-ui-file-explorer-header')
     header.paneIcon = composition.header.paneIcon
     header.menuItems = composition.header.menuItems
+    header.showBack = composition.header.showBack ?? true
     if (provider.firstElementChild !== header) provider.prepend(header)
   } else {
     currentHeader?.remove()

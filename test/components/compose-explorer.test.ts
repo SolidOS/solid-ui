@@ -57,6 +57,16 @@ describe('explorer composition', () => {
     expect(provider.children).toHaveLength(2)
   })
 
+  it('hides the back control when the composition is a direct resource view', () => {
+    const provider = document.createElement('solid-ui-file-explorer-provider')
+    composeExplorer(provider, {
+      ...composition,
+      header: { paneIcon: '', menuItems: [], showBack: false }
+    })
+
+    expect(provider.querySelector('solid-ui-file-explorer-header')?.showBack).toBe(false)
+  })
+
   it('hides and restores only the outer header without touching nested explorers', () => {
     const outer = document.createElement('solid-ui-file-explorer-provider')
     const inner = document.createElement('solid-ui-file-explorer-provider')
