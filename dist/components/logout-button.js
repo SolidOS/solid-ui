@@ -1,1 +1,1 @@
-export { n as LogoutButton, t as default } from "../chunks/logout-button-BPCVudGH.js";
+export { n as LogoutButton, t as default } from "../chunks/logout-button-Vrn0nLVQ.js";
