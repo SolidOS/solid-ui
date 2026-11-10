@@ -17,17 +17,24 @@ var w = class {
 	_view = null;
 	_languageCompartment = null;
 	_editableCompartment = null;
+	_readOnlyCompartment = null;
+	_accessibilityCompartment = null;
 	_onDirtyChange;
 	_isDirty = !1;
-	async initialize(o, p = "", m = "text/turtle", h = "dark", g) {
-		this._view && this._view.destroy(), this._languageCompartment = new e(), this._editableCompartment = new e(), this._onDirtyChange = g, this._isDirty = !1;
-		let _ = await this._getLanguageExtension(m), v = t.create({
+	async initialize(o, p = "", m = "text/turtle", h = "dark", g, _) {
+		this._view && this._view.destroy(), this._languageCompartment = new e(), this._editableCompartment = new e(), this._readOnlyCompartment = new e(), this._accessibilityCompartment = new e(), this._onDirtyChange = g, this._isDirty = !1;
+		let v = await this._getLanguageExtension(m), x = t.create({
 			doc: p,
 			extensions: [
 				h === "dark" ? y : b,
 				n.theme({ "&": { minHeight: "6lh" } }),
-				this._languageCompartment.of(_),
+				this._languageCompartment.of(v),
 				this._editableCompartment.of(n.editable.of(!0)),
+				this._readOnlyCompartment.of(t.readOnly.of(!1)),
+				this._accessibilityCompartment.of(n.contentAttributes.of({
+					..._?.label ? { "aria-label": _.label } : {},
+					..._?.description ? { "aria-description": _.description } : {}
+				})),
 				c(s, { fallback: !0 }),
 				a(),
 				u(),
@@ -44,7 +51,7 @@ var w = class {
 			]
 		});
 		this._view = new n({
-			state: v,
+			state: x,
 			parent: o
 		});
 	}
@@ -66,8 +73,14 @@ var w = class {
 	}
 	setReadOnly(e) {
 		if (!this._view) return;
-		let t = this._editableCompartment;
-		t && this._view.dispatch({ effects: t.reconfigure(n.editable.of(!e)) });
+		let r = this._editableCompartment, i = this._readOnlyCompartment;
+		r && i && this._view.dispatch({ effects: [r.reconfigure(n.editable.of(!e)), i.reconfigure(t.readOnly.of(e))] });
+	}
+	setAccessibility(e) {
+		this._view && this._accessibilityCompartment && this._view.dispatch({ effects: this._accessibilityCompartment.reconfigure(n.contentAttributes.of({
+			...e.label ? { "aria-label": e.label } : {},
+			...e.description ? { "aria-description": e.description } : {}
+		})) });
 	}
 	focusEditor() {
 		this._view?.focus();

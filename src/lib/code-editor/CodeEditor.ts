@@ -18,16 +18,27 @@ export class CodeEditor {
   private _view: EditorView | null = null
   private _languageCompartment: Compartment | null = null
   private _editableCompartment: Compartment | null = null
+  private _readOnlyCompartment: Compartment | null = null
+  private _accessibilityCompartment: Compartment | null = null
   private _onDirtyChange?: (dirty: boolean) => void
   private _isDirty = false
 
-  async initialize (container: HTMLElement, initialDoc = '', contentType: string = 'text/turtle', theme: ThemeMode = 'dark', onDirtyChange?: (dirty: boolean) => void) {
+  async initialize (
+    container: HTMLElement,
+    initialDoc = '',
+    contentType: string = 'text/turtle',
+    theme: ThemeMode = 'dark',
+    onDirtyChange?: (dirty: boolean) => void,
+    accessibility?: { label?: string, description?: string }
+  ) {
     if (this._view) {
       this._view.destroy()
     }
 
     this._languageCompartment = new Compartment()
     this._editableCompartment = new Compartment()
+    this._readOnlyCompartment = new Compartment()
+    this._accessibilityCompartment = new Compartment()
     this._onDirtyChange = onDirtyChange
     this._isDirty = false
     const languageExtension = await this._getLanguageExtension(contentType)
@@ -43,6 +54,11 @@ export class CodeEditor {
         }),
         this._languageCompartment.of(languageExtension),
         this._editableCompartment.of(EditorView.editable.of(true)),
+        this._readOnlyCompartment.of(EditorState.readOnly.of(false)),
+        this._accessibilityCompartment.of(EditorView.contentAttributes.of({
+          ...(accessibility?.label ? { 'aria-label': accessibility.label } : {}),
+          ...(accessibility?.description ? { 'aria-description': accessibility.description } : {})
+        })),
         syntaxHighlighting(defaultHighlightStyle, { fallback: true }),
         lineNumbers(),
         history(),
@@ -94,9 +110,23 @@ export class CodeEditor {
   setReadOnly (readOnly: boolean) {
     if (!this._view) return
     const editableCompartment = this._editableCompartment
-    if (!editableCompartment) return
+    const readOnlyCompartment = this._readOnlyCompartment
+    if (!editableCompartment || !readOnlyCompartment) return
     this._view.dispatch({
-      effects: editableCompartment.reconfigure(EditorView.editable.of(!readOnly))
+      effects: [
+        editableCompartment.reconfigure(EditorView.editable.of(!readOnly)),
+        readOnlyCompartment.reconfigure(EditorState.readOnly.of(readOnly))
+      ]
+    })
+  }
+
+  setAccessibility (accessibility: { label?: string, description?: string }) {
+    if (!this._view || !this._accessibilityCompartment) return
+    this._view.dispatch({
+      effects: this._accessibilityCompartment.reconfigure(EditorView.contentAttributes.of({
+        ...(accessibility.label ? { 'aria-label': accessibility.label } : {}),
+        ...(accessibility.description ? { 'aria-description': accessibility.description } : {})
+      }))
     })
   }
 

@@ -1,1 +1,1 @@
-{"version":3,"file":"index.esm.js","names":["RDFForm","RDFForm","_RDFForm","rdf_form_default"],"sources":["../../../src/components/rdf-form/index.ts"],"sourcesContent":["import RDFForm from './RDFForm'\n\nexport { RDFForm }\nexport default RDFForm\n"],"mappings":";;AAGA,IAAAG,IAAeH"}
+{"version":3,"file":"index.esm.js","names":["RDFForm","_RDFForm","rdf_form_default"],"sources":["../../../src/components/rdf-form/index.ts"],"sourcesContent":["import RDFForm from './RDFForm'\n\nexport { RDFForm }\nexport default RDFForm\n"],"mappings":";;AAGA,IAAAE,IAAeF"}

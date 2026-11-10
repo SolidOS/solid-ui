@@ -22214,17 +22214,24 @@ var uk = {
 	_view = null;
 	_languageCompartment = null;
 	_editableCompartment = null;
+	_readOnlyCompartment = null;
+	_accessibilityCompartment = null;
 	_onDirtyChange;
 	_isDirty = !1;
-	async initialize(e, t = "", n = "text/turtle", r = "dark", i) {
-		this._view && this._view.destroy(), this._languageCompartment = new fc(), this._editableCompartment = new fc(), this._onDirtyChange = i, this._isDirty = !1;
-		let a = await this._getLanguageExtension(n), o = Uc.create({
+	async initialize(e, t = "", n = "text/turtle", r = "dark", i, a) {
+		this._view && this._view.destroy(), this._languageCompartment = new fc(), this._editableCompartment = new fc(), this._readOnlyCompartment = new fc(), this._accessibilityCompartment = new fc(), this._onDirtyChange = i, this._isDirty = !1;
+		let o = await this._getLanguageExtension(n), s = Uc.create({
 			doc: t,
 			extensions: [
 				r === "dark" ? zO : FO,
 				W.theme({ "&": { minHeight: "6lh" } }),
-				this._languageCompartment.of(a),
+				this._languageCompartment.of(o),
 				this._editableCompartment.of(W.editable.of(!0)),
+				this._readOnlyCompartment.of(Uc.readOnly.of(!1)),
+				this._accessibilityCompartment.of(W.contentAttributes.of({
+					...a?.label ? { "aria-label": a.label } : {},
+					...a?.description ? { "aria-description": a.description } : {}
+				})),
 				z_(H_, { fallback: !0 }),
 				wh(),
 				Nv(),
@@ -22241,7 +22248,7 @@ var uk = {
 			]
 		});
 		this._view = new W({
-			state: o,
+			state: s,
 			parent: e
 		});
 	}
@@ -22263,8 +22270,14 @@ var uk = {
 	}
 	setReadOnly(e) {
 		if (!this._view) return;
-		let t = this._editableCompartment;
-		t && this._view.dispatch({ effects: t.reconfigure(W.editable.of(!e)) });
+		let t = this._editableCompartment, n = this._readOnlyCompartment;
+		t && n && this._view.dispatch({ effects: [t.reconfigure(W.editable.of(!e)), n.reconfigure(Uc.readOnly.of(e))] });
+	}
+	setAccessibility(e) {
+		this._view && this._accessibilityCompartment && this._view.dispatch({ effects: this._accessibilityCompartment.reconfigure(W.contentAttributes.of({
+			...e.label ? { "aria-label": e.label } : {},
+			...e.description ? { "aria-description": e.description } : {}
+		})) });
 	}
 	focusEditor() {
 		this._view?.focus();
@@ -22304,4 +22317,4 @@ var uk = {
 }, fk = typeof window < "u" ? window.document : null;
 export { rt as S, ln as _, ds as a, Yt as b, os as c, Mo as d, xo as f, dn as g, ka as h, fs as i, qo as l, Fa as m, dk as n, us as o, bo as p, ms as r, ls as s, fk as t, No as u, nn as v, Xt as x, $t as y };
 
-//# sourceMappingURL=src-CiHeLI_K.js.map
+//# sourceMappingURL=src-BGSmDsh3.js.map
