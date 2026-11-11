@@ -111,7 +111,7 @@ export class AddAgentButtons {
     const button = widgets.button(
       this.groupList.controller.dom,
       icons.iconBase + widgets.iconForClass['foaf:Agent'],
-      'Add Everyone',
+      'Add Everyone: anyone on the web, including people who are not logged in',
       () => this.addAgent(ns.foaf('Agent').uri)
         .then(() => this.groupList.controller.renderTemporaryStatus('Adding the general public to those who can read. Drag the globe to a different level to give them more access.'))
         .then(() => this.renderCleanup()))
