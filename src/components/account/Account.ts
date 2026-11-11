@@ -80,7 +80,12 @@ export default class Account extends WebComponent {
 
     return html`
         <solid-ui-menu placement="bottom-end">
-            <button type="button" slot="trigger">
+            <button
+                type="button"
+                slot="trigger"
+                title=${this.auth.account.webId}
+                aria-label=${`Account: ${this.auth.account.webId}`}
+            >
                 <solid-ui-avatar></solid-ui-avatar>
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>
             </button>

@@ -239,30 +239,30 @@ describe('CodeEditor', () => {
   })
 
   it('updates the accessible description when editor mode changes', async () => {
-      const editor = new CodeEditor()
-      const container = document.createElement('div')
-      document.body.appendChild(container)
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
 
-      await editor.initialize(container, 'content', 'text/plain', 'dark', undefined, {
-        label: 'Source editor for https://pod.example/file.txt',
-        description: 'Read-only source content.'
-      })
-      editor.setAccessibility({
-        label: 'Source editor for https://pod.example/file.txt',
-        description: 'Editable source content.'
-      })
+    await editor.initialize(container, 'content', 'text/plain', 'dark', undefined, {
+      label: 'Source editor for https://pod.example/file.txt',
+      description: 'Read-only source content.'
+    })
+    editor.setAccessibility({
+      label: 'Source editor for https://pod.example/file.txt',
+      description: 'Editable source content.'
+    })
 
-      expect(createdViews[0].dispatch).toHaveBeenLastCalledWith({
-        effects: {
-          type: 'reconfigure',
+    expect(createdViews[0].dispatch).toHaveBeenLastCalledWith({
+      effects: {
+        type: 'reconfigure',
+        value: {
+          type: 'contentAttributes',
           value: {
-            type: 'contentAttributes',
-            value: {
-              'aria-label': 'Source editor for https://pod.example/file.txt',
-              'aria-description': 'Editable source content.'
-            }
+            'aria-label': 'Source editor for https://pod.example/file.txt',
+            'aria-description': 'Editable source content.'
           }
         }
+      }
     })
   })
 })
