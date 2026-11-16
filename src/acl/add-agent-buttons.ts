@@ -108,13 +108,17 @@ export class AddAgentButtons {
   }
 
   private renderPublicButton (): HTMLElement {
-    return widgets.button(
+    const button = widgets.button(
       this.groupList.controller.dom,
       icons.iconBase + widgets.iconForClass['foaf:Agent'],
       'Add Everyone',
       () => this.addAgent(ns.foaf('Agent').uri)
         .then(() => this.groupList.controller.renderTemporaryStatus('Adding the general public to those who can read. Drag the globe to a different level to give them more access.'))
         .then(() => this.renderCleanup()))
+    // Drag the ACL agent class, not the globe image's URL.
+    button.querySelector('img')?.setAttribute('draggable', 'false')
+    widgets.makeDraggable(button, ns.foaf('Agent'))
+    return button
   }
 
   private renderAuthenticatedAgentButton (): HTMLElement {

@@ -1,0 +1,117 @@
+:host {
+  h2 {
+    color: var(--solid-ui-color-gray-900, #101828);
+    font-size: var(--solid-ui-font-size-md, 1rem);
+    font-weight: 600;
+  }
+
+  .access-grants-general {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 0 10px;
+    align-self: stretch;
+
+    solid-ui-combobox,
+    solid-ui-input {
+      --solid-ui-input-border-color: var(--solid-ui-color-slate-200, #E2E8F0);
+    }
+
+    .access-grants-general-header {
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      align-self: stretch;
+
+      .access-grants-copy-link-button-label {
+        font-size: var(--solid-ui-font-size-xs, .75rem);
+        font-weight: 500;
+      }
+
+      .access-grants-copy-link-button icon-lucide-link {
+        width: 12px;
+        height: 12px;
+        aspect-ratio: 1/1;
+      }
+    }
+
+    .access-grants-general-share {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      align-self: stretch;
+
+      .access-grants-general-share-content {
+        display: flex;
+        flex-direction: row;
+        align-items: flex-start;
+        gap: 10px;
+        flex: 1 0 0;
+
+        .access-grants-general-share-icon {
+          display: flex;
+          width: 30px;
+          height: 30px;
+          padding: 5px;
+          justify-content: center;
+          align-items: center;
+          aspect-ratio: 1/1;
+          border-radius: 50px;
+          background: var(--solid-ui-color-violet-50, #F5F3FF);
+        }
+
+        .access-grants-general-share-icon-inner {
+          display: flex;
+          width: 20px;
+          height: 20px;
+          padding: 1.25px;
+          justify-content: center;
+          align-items: center;
+          flex-shrink: 0;
+          aspect-ratio: 1/1;
+
+          icon-lucide-globe {
+            width: 17.5px;
+            height: 17.5px;
+            flex-shrink: 0;
+            aspect-ratio: 1/1;
+          }
+        }
+
+        .access-grants-general-share-text {
+          flex: 1 1 auto;
+          min-width: 0;
+
+          .access-grants-general-share-text-title {
+            color: var(--solid-ui-color-gray-900, #101828);
+            font-size: var(--solid-ui-font-size-sm, .875rem);
+            font-weight: 600;
+          }
+
+          .access-grants-general-share-text-description {
+            color: var(--solid-ui-color-gray-700, #364153);
+            font-size: var(--solid-ui-font-size-sm, .875rem);
+          }
+        }
+      }
+    }
+  }
+
+  .access-role-select--general {
+    width: 120px;
+    min-width: 120px;
+    flex: 0 0 120px;
+    font-size: var(--solid-ui-font-size-xs, .75rem);
+    font-weight: 500;
+  }
+
+  .access-role-select--compact {
+    display: block;
+    max-width: 100%;
+    --solid-ui-input-border-color: transparent;
+    margin-top: 0;
+  }
+}

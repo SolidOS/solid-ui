@@ -12,7 +12,10 @@ vi.mock('@codemirror/state', () => {
   }
 
   const EditorState = {
-    create: vi.fn((config) => ({ ...config }))
+    create: vi.fn((config) => ({ ...config })),
+    readOnly: {
+      of: vi.fn((value) => ({ type: 'readOnly', value }))
+    }
   }
 
   return { Compartment, EditorState }
@@ -47,6 +50,9 @@ vi.mock('@codemirror/view', () => {
   EditorView.editable = {
     of: vi.fn((value) => ({ type: 'editable', value }))
   }
+  EditorView.contentAttributes = {
+    of: vi.fn((value) => ({ type: 'contentAttributes', value }))
+  }
   EditorView.theme = vi.fn((spec, options) => ({ type: 'theme', spec, options }))
   EditorView.lineWrapping = { type: 'lineWrapping' }
   EditorView.updateListener = {
@@ -79,7 +85,8 @@ vi.mock('@codemirror/language', () => ({
 vi.mock('@codemirror/commands', () => ({
   defaultKeymap: [{ key: 'default' }],
   history: vi.fn(() => ({ type: 'history' })),
-  historyKeymap: [{ key: 'history' }]
+  historyKeymap: [{ key: 'history' }],
+  indentWithTab: { key: 'Tab', run: vi.fn() }
 }))
 
 vi.mock('@codemirror/lang-css', () => ({
@@ -161,7 +168,10 @@ describe('CodeEditor', () => {
 
     editor.setReadOnly(true)
     expect(view.dispatch).toHaveBeenLastCalledWith({
-      effects: { type: 'reconfigure', value: { type: 'editable', value: false } }
+      effects: [
+        { type: 'reconfigure', value: { type: 'editable', value: false } },
+        { type: 'reconfigure', value: { type: 'readOnly', value: true } }
+      ]
     })
 
     editor.focusEditor()
@@ -186,5 +196,73 @@ describe('CodeEditor', () => {
 
     expect(onDirtyChange).toHaveBeenCalledTimes(1)
     expect(onDirtyChange).toHaveBeenCalledWith(true)
+  })
+
+  it('keeps Tab in the editor for indentation', async () => {
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    await editor.initialize(container, 'first', 'text/plain')
+
+    const keymapExtension = createdViews[0].state.extensions.find(
+      extension => extension.type === 'keymap'
+    )
+    expect(keymapExtension.value[0]).toMatchObject({ key: 'Tab' })
+  })
+
+  it('exposes an accessible name and description on the editing surface', async () => {
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    await editor.initialize(
+      container,
+      'generated content',
+      'text/n3',
+      'dark',
+      undefined,
+      {
+        label: 'Generated N3 for https://pod.example/card',
+        description: 'Generated N3 serialization. This content is read-only.'
+      }
+    )
+
+    const attributes = createdViews[0].state.extensions.find(
+      extension => extension.type === 'compartment-of' &&
+        extension.value.type === 'contentAttributes'
+    ).value
+    expect(attributes.value).toEqual({
+      'aria-label': 'Generated N3 for https://pod.example/card',
+      'aria-description': 'Generated N3 serialization. This content is read-only.'
+    })
+  })
+
+  it('updates the accessible description when editor mode changes', async () => {
+    const editor = new CodeEditor()
+    const container = document.createElement('div')
+    document.body.appendChild(container)
+
+    await editor.initialize(container, 'content', 'text/plain', 'dark', undefined, {
+      label: 'Source editor for https://pod.example/file.txt',
+      description: 'Read-only source content.'
+    })
+    editor.setAccessibility({
+      label: 'Source editor for https://pod.example/file.txt',
+      description: 'Editable source content.'
+    })
+
+    expect(createdViews[0].dispatch).toHaveBeenLastCalledWith({
+      effects: {
+        type: 'reconfigure',
+        value: {
+          type: 'contentAttributes',
+          value: {
+            'aria-label': 'Source editor for https://pod.example/file.txt',
+            'aria-description': 'Editable source content.'
+          }
+        }
+      }
+    })
   })
 })
