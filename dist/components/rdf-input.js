@@ -1,1 +1,1 @@
-export { n as RDFInput, t as default } from "../chunks/rdf-input-DfTBeaCB.js";
+export { n as RDFInput, t as default } from "../chunks/rdf-input-DRkRluNN.js";
