@@ -61,7 +61,7 @@ describe('AgentButtons', () => {
 const barButtons = [
   'Add Person',
   'Add Group',
-  'Add Everyone',
+  'Add Everyone: anyone on the web, including people who are not logged in',
   'Anyone logged In',
   'A Software Agent (bot)',
   'A Web App (origin)'
@@ -144,7 +144,7 @@ describe('Adding Everyone', () => {
     vi.spyOn(store.fetcher, 'load').mockRejectedValue(new Error('Unexpected RDF lookup'))
     groups = groupList.render()
     groups.querySelector<HTMLImageElement>('img[title="Add ..."]')!.click()
-    image = groups.querySelector<HTMLImageElement>('img[title="Add Everyone"]')!
+    image = groups.querySelector<HTMLImageElement>('img[title^="Add Everyone"]')!
     button = image.parentElement as HTMLButtonElement
   })
 
