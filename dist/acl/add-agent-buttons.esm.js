@@ -45,7 +45,7 @@ var p = class {
 		return o(this.groupList.controller.dom, this.groupList.store, this.barElement, i.vcard("URI"), e, t);
 	}
 	renderPublicButton() {
-		let e = s(this.groupList.controller.dom, n.iconBase + u["foaf:Agent"], "Add Everyone", () => this.addAgent(i.foaf("Agent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding the general public to those who can read. Drag the globe to a different level to give them more access.")).then(() => this.renderCleanup()));
+		let e = s(this.groupList.controller.dom, n.iconBase + u["foaf:Agent"], "Add Everyone: anyone on the web, including people who are not logged in", () => this.addAgent(i.foaf("Agent").uri).then(() => this.groupList.controller.renderTemporaryStatus("Adding the general public to those who can read. Drag the globe to a different level to give them more access.")).then(() => this.renderCleanup()));
 		return e.querySelector("img")?.setAttribute("draggable", "false"), a(e, i.foaf("Agent")), e;
 	}
 	renderAuthenticatedAgentButton() {
