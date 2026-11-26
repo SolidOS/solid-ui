@@ -1,16 +1,15 @@
 import { customElement, DialogComponent } from '@/lib/components'
-import { html } from 'lit'
+import { html, nothing } from 'lit'
 import type { PropertyValues } from 'lit'
 import { property, state } from 'lit/decorators.js'
 import { label } from '@/utils/label'
 import * as debug from '@/lib/debug'
-import { Authenticated, Public, analyzeContainerAccessScope, filterAuthorizationsByContainerScope, solidLogicSingleton, type ACLContext, type AccessRole, type Authorization, type ContainerAccessScope, type ContainerAccessScopeResult } from 'solid-logic'
+import { Authenticated, Public, classifyAuthorizationScope, solidLogicSingleton, type ACLContext, type AccessRole, type Authorization, type ContainerAccessScope } from 'solid-logic'
 import { sym } from 'rdflib'
 
 import '~icons/lucide/circle-x'
 import '~icons/lucide/folder'
 import '~icons/lucide/folder-open'
-import '~icons/lucide/x'
 import '@/components/dialog'
 import '@/components/dialog-content'
 import '@/components/dialog-footer'
@@ -22,7 +21,7 @@ import './AccessControlGeneralAccess'
 import './AccessControlErrors'
 
 import styles from './AccessControlModal.styles.css'
-import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessSaveError, AccessSaveScope, InputAccessControlError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
+import type { AccessChange, AccessControlError, AccessGrantDraft, AccessGrantRoleChangedEvent, AccessGrantScopeChangedEvent, AccessGrantViewModel, AccessSaveError, AccessSaveScope, AdvancedSharingChangedEvent, InputAccessControlError, PendingAccessGrant, PendingGrantRemovedEvent, RoleChangedEvent, TargetInputEvent, TargetSelectedEvent } from './types'
 import { createAccessGrantDrafts, getAccessGrantIds, getAccessGrantViewModels, getAuthenticatedAccessRole, getAuthorizationSubjectLabel, getChangedAccessGrants, getPublicAccessRole, getSharedAuthorization } from './accessGrantDrafts'
 import { accessPrincipalOptionsProvider, resolveAccessTarget } from './accessTargetResolver'
 import { applyAccessChanges } from './applyAccessChanges'
@@ -50,7 +49,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   private accessor principalInputValue: string = ''
 
   @state()
-  private accessor addAccessRoleValue: AccessRole = 'Viewer'
+  private accessor addAccessRoleValue: AccessRole = 'No Access'
 
   @state()
   private accessor authenticatedAccessRoleValue: AccessRole = 'No Access'
@@ -82,15 +81,11 @@ export default class AccessControlModal extends DialogComponent<void> {
   @state()
   private accessor accessContextError = ''
 
-  // Intentionally has no opener this release: scope selectors and reset are deferred.
-  @state()
-  private accessor advancedSharingOpen = false
-
   @state()
   private accessor containerScope: ContainerAccessScope = 'folder+contents'
 
   @state()
-  private accessor containerScopeAnalysis: ContainerAccessScopeResult | undefined
+  private accessor advancedSharingOpen = false
 
   @state()
   private accessor protectedTarget = false
@@ -129,10 +124,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     super.willUpdate(changedProperties)
 
     if (changedProperties.has('accessGrants')) {
-      const scopedAccessGrants = this.getScopedAccessGrants()
-      this.accessGrantDrafts = createAccessGrantDrafts(scopedAccessGrants)
-      this.authenticatedAccessRoleValue = getAuthenticatedAccessRole(scopedAccessGrants)
-      this.publicAccessRoleValue = getPublicAccessRole(scopedAccessGrants)
+      this.refreshScopedAccessGrantDrafts()
     }
   }
 
@@ -140,6 +132,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     super.updated(changedProperties)
 
     if (changedProperties.has('subjectUri')) {
+      this.advancedSharingOpen = false
       this.loadAccessContext().catch(error => {
         debug.error('Failed to load access control context', error)
       })
@@ -152,17 +145,14 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
 
     if (changedProperties.has('accessContext' as keyof AccessControlModal) && !changedProperties.has('subjectUri')) {
-      this.refreshContainerScopeAnalysis()
+      this.refreshContainerScopeState()
     }
   }
 
-  private refreshContainerScopeAnalysis () {
+  private refreshContainerScopeState () {
     if (this.isContainer() && this.accessContext) {
-      this.containerScopeAnalysis = analyzeContainerAccessScope(this.accessContext)
-      this.containerScope = this.containerScopeAnalysis.primaryScope
+      this.containerScope = 'folder+contents'
       this.refreshScopedAccessGrantDrafts()
-    } else {
-      this.containerScopeAnalysis = undefined
     }
   }
 
@@ -170,8 +160,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     const requestVersion = ++this.accessGrantLabelRequestVersion
     const sourceAccessGrants = this.accessGrants
     const subjectUri = this.subjectUri
-    const scope = this.getSelectedContainerScope()
-    const grants = this.getScopedAccessGrants(scope)
+    const grants = this.getScopedAccessGrants()
     if (!grants.length) {
       this.accessGrantDrafts = []
       return
@@ -193,7 +182,7 @@ export default class AccessControlModal extends DialogComponent<void> {
       requestVersion === this.accessGrantLabelRequestVersion &&
       this.accessGrants === sourceAccessGrants &&
       this.subjectUri === subjectUri &&
-      this.getSelectedContainerScope() === scope
+      this.getScopedAccessGrants() === grants
     ) {
       const labelsById = new Map(getAccessGrantIds(grants).map((id, index) => [id, labels[index]]))
       this.accessGrantDrafts = this.accessGrantDrafts.map(draft => ({
@@ -243,7 +232,7 @@ export default class AccessControlModal extends DialogComponent<void> {
         // This covers both inherited permissions and direct ACLs.
         this.accessGrants = this.accessContext.authorizations
       }
-      this.refreshContainerScopeAnalysis()
+      this.refreshContainerScopeState()
       this.protectedTarget = solidLogicSingleton.acl.isProtectedResource(subjectUri)
       if (this.protectedTarget) {
         this.refreshScopedAccessGrantDrafts()
@@ -307,21 +296,24 @@ export default class AccessControlModal extends DialogComponent<void> {
 
   private renderSharingInformation () {
     if (!this.accessContext) {
-      return html``
+      return nothing
     }
 
-    const isCustomSharing = !this.accessContext.inherited
-    const inheritedContainer = this.accessContext?.effectiveContainer
+    const inheritedContainer = this.accessContext.effectiveContainer
     const inheritedContainerLabel = inheritedContainer
       ? label(sym(inheritedContainer)).trim()
       : ''
     const defaultContainer = inheritedContainerLabel && inheritedContainerLabel !== inheritedContainer
-      ? html`<strong>${inheritedContainerLabel}</strong> (${inheritedContainer})`
-      : html`<strong>${inheritedContainer ?? 'the parent container'}</strong>`
+      ? html`<span class="access-control-sharing-state-emphasis">${inheritedContainerLabel}</span> (${inheritedContainer})`
+      : html`<span class="access-control-sharing-state-emphasis">${inheritedContainer ?? 'the parent container'}</span>`
+
     return html`
       <div class="access-control-sharing-state-panel">
-        ${isCustomSharing
-          ? html`
+        ${this.accessContext.inherited
+          ? inheritedContainer
+            ? html`<p>This resource inherits sharing settings from ${defaultContainer}.</p>`
+            : html`<p>This resource inherits sharing settings, but no inherited default is available.</p>`
+          : html`
             <div class="access-control-sharing-state-custom-row">
               <p>This resource has its own sharing settings.</p>
               ${!this.protectedTarget
@@ -329,38 +321,19 @@ export default class AccessControlModal extends DialogComponent<void> {
                   <solid-ui-button
                     type="button"
                     variant="tertiary"
-                    aria-label="Reset custom sharing to default"
+                    aria-label="Reset sharing"
                     @click=${this.onResetToDefault}
                   >
-                    Reset to default
+                    Reset
                   </solid-ui-button>
                 `
-                : html``}
+                : nothing}
             </div>
-          `
-          : inheritedContainer
-            ? html`<p>This resource inherits sharing settings from ${defaultContainer}.</p>`
-            : html`<p>This resource inherits sharing settings, but no inherited default is available.</p>`}
+          `}
         ${this.protectedTarget
-          ? html`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be reset here.</p>`
-          : html``}
+          ? html`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be changed here.</p>`
+          : nothing}
       </div>
-    `
-  }
-
-  private renderSharingState () {
-    if (!this.accessContext || !this.advancedSharingOpen) {
-      return html``
-    }
-
-    return html`
-      <section
-        class="access-control-sharing-state"
-        aria-labelledby="access-control-advanced-sharing-heading"
-      >
-        ${this.renderSharingInformation()}
-        ${this.renderAdvancedSharing()}
-      </section>
     `
   }
 
@@ -368,8 +341,10 @@ export default class AccessControlModal extends DialogComponent<void> {
     return this.containerScope
   }
 
-  private hasMixedContainerPolicy (): boolean {
-    return this.isContainer() && this.containerScopeAnalysis?.mixed === true
+  private shouldShowContainerScope (): boolean {
+    const hasSpecificScope = this.getSharedAccessViewModels()
+      .some(entry => entry.scope !== undefined && entry.scope !== 'folder+contents')
+    return this.isContainer() && !this.protectedTarget && (hasSpecificScope || this.advancedSharingOpen)
   }
 
   private renderAccessContextState () {
@@ -394,112 +369,58 @@ export default class AccessControlModal extends DialogComponent<void> {
       return html`<p role="status">Access settings are not ready yet.</p>`
     }
 
-    return html``
+    return nothing
   }
 
-  private renderMixedContainerWarning () {
-    if (!this.hasMixedContainerPolicy()) {
-      return html``
-    }
-
-    return html`
-      <div class="access-control-mixed-policy-warning" role="alert">
-        <strong>This container has different access settings for the folder and its contents.</strong>
-        <span>Changing this mixed policy is an advanced feature. You can still change access for the folder or its contents separately below.</span>
-      </div>
-    `
-  }
-
-  private getScopedAccessGrants (scope = this.getSelectedContainerScope()): Authorization[] {
+  private getScopedAccessGrants (): Authorization[] {
     const grants = this.accessGrants ?? []
-    if (!this.isContainer() || !this.subjectUri || this.protectedTarget) {
-      return grants
-    }
-    return filterAuthorizationsByContainerScope(this.subjectUri, grants, scope, this.accessContext?.inherited ?? false)
+    return grants
   }
 
   private refreshScopedAccessGrantDrafts () {
-    const scopedAccessGrants = this.getScopedAccessGrants()
-    this.accessGrantDrafts = createAccessGrantDrafts(scopedAccessGrants)
-    this.authenticatedAccessRoleValue = getAuthenticatedAccessRole(scopedAccessGrants)
-    this.publicAccessRoleValue = getPublicAccessRole(scopedAccessGrants)
+    const accessGrants = this.getScopedAccessGrants()
+    const drafts = createAccessGrantDrafts(accessGrants)
+    this.accessGrantDrafts = drafts.map((draft, index) => {
+      const scope = this.isContainer() && this.subjectUri
+        ? classifyAuthorizationScope(this.subjectUri, accessGrants[index], this.accessContext?.inherited ?? false) ?? 'folder+contents'
+        : undefined
+      return { ...draft, scope, initialScope: scope }
+    })
+    if (
+      this.isContainer() &&
+      this.accessContext &&
+      this.accessGrantDrafts.some(draft => draft.scope !== undefined && draft.scope !== 'folder+contents')
+    ) {
+      this.advancedSharingOpen = true
+    }
+    this.authenticatedAccessRoleValue = getAuthenticatedAccessRole(accessGrants)
+    this.publicAccessRoleValue = getPublicAccessRole(accessGrants)
   }
 
-  private selectContainerScope (scope: 'folder+contents' | 'contents' | 'folder') {
-    this.containerScope = scope
-    this.refreshScopedAccessGrantDrafts()
-  }
+  private getSharedAccessViewModels (): AccessGrantViewModel[] {
+    const pendingViewModels: AccessGrantViewModel[] = this.pendingAccessGrants
+      .filter(grant => grant.role !== 'No Access')
+      .map(grant => ({
+        id: `pending:${grant.subjectType}:${grant.subjectValue}`,
+        authorization: {
+          agent: grant.subjectType === 'agent' ? [grant.subjectValue] : [],
+          agentGroup: grant.subjectType === 'agentGroup' ? [grant.subjectValue] : [],
+          agentClass: [],
+          origin: grant.subjectType === 'origin' ? [grant.subjectValue] : [],
+          mode: []
+        },
+        role: grant.role,
+        initialRole: grant.role,
+        initialScope: grant.scope,
+        scope: grant.scope ?? 'folder+contents',
+        subjectLabel: grant.label,
+        subjects: [{
+          type: grant.subjectType,
+          iri: grant.subjectValue
+        }]
+      }))
 
-  private renderAdvancedSharing () {
-    if (!this.advancedSharingOpen) return html``
-
-    return html`
-      <section
-        id="access-control-advanced-sharing"
-        class="access-control-advanced-sharing"
-        role="group"
-        aria-labelledby="access-control-advanced-sharing-heading"
-        aria-describedby="access-control-advanced-sharing-description"
-      >
-        <h2 id="access-control-advanced-sharing-heading">Advanced sharing</h2>
-        <p id="access-control-advanced-sharing-description">
-          <span class="access-control-advanced-sharing-description-line">Use this option when the folder and its contents have different access requirements.</span>
-          <span class="access-control-advanced-sharing-description-line">Choose which access settings to edit.</span>
-          <span class="access-control-advanced-sharing-description-line">Save Changes applies your current edits only to that scope.</span>
-        </p>
-        ${this.isContainer()
-          ? html`
-            <button
-              type="button"
-              class="access-control-same-access-toggle"
-              role="switch"
-              aria-checked=${this.containerScope === 'folder+contents' ? 'true' : 'false'}
-              @click=${() => {
-                const checked = this.containerScope !== 'folder+contents'
-                this.selectContainerScope(checked
-                  ? 'folder+contents'
-                  : this.containerScope === 'contents' ? 'contents' : 'folder')
-              }}
-            >
-              <span class="access-control-switch-track" aria-hidden="true">
-                <span class="access-control-switch-thumb"></span>
-              </span>
-              <span>Use the same access for this folder and its contents</span>
-            </button>
-            <div class="access-control-advanced-sharing-options">
-              <solid-ui-button
-                type="button"
-                variant=${this.containerScope === 'folder' ? 'primary' : 'secondary'}
-                aria-pressed=${this.containerScope === 'folder' ? 'true' : 'false'}
-                @click=${() => { this.selectContainerScope('folder') }}
-              >
-                Folder Only
-              </solid-ui-button>
-              <solid-ui-button
-                type="button"
-                variant=${this.containerScope === 'contents' ? 'primary' : 'secondary'}
-                aria-pressed=${this.containerScope === 'contents' ? 'true' : 'false'}
-                @click=${() => { this.selectContainerScope('contents') }}
-              >
-                Contents Only
-              </solid-ui-button>
-            </div>
-          `
-          : html``}
-        <div class="access-control-advanced-sharing-actions">
-          <solid-ui-button
-            type="button"
-            variant="ghost"
-            aria-label="Close advanced sharing"
-            title="Close advanced sharing"
-            @click=${this.closeAdvancedSharing}
-          >
-            <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
-            <span class="sr-only">Close</span>
-          </solid-ui-button>
-        </div>
-      </section>
-    `
+    return [...getAccessGrantViewModels(this.accessGrantDrafts), ...pendingViewModels]
   }
 
   protected render () {
@@ -510,38 +431,43 @@ export default class AccessControlModal extends DialogComponent<void> {
         <form @submit=${this.onSubmit}>
           <solid-ui-dialog-content>
             ${this.renderAccessContextState()}
-            ${this.renderMixedContainerWarning()}
           <solid-ui-access-control-add-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
+              .disabled=${!this.canMutate()}
               .principalInputValue=${this.principalInputValue}
               .addAccessRoleValue=${this.addAccessRoleValue}
               .pendingAccessGrants=${this.pendingAccessGrants}
+              .showAdvancedToggle=${this.isContainer() && !this.protectedTarget}
+              .advancedSharingOpen=${this.advancedSharingOpen}
               .inputError=${this.inputError}
               .asyncOptionsProvider=${accessPrincipalOptionsProvider}
               @target-input=${this.onPrincipalInput}
               @target-selected=${this.onPrincipalSelect}
               @role-changed=${this.onAddAccessRoleInput}
               @pending-grant-removed=${this.onPendingGrantRemoved}
+              @advanced-sharing-changed=${this.onAdvancedSharingChanged}
             ></solid-ui-access-control-add-access>
             <solid-ui-access-control-shared-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
-              .accessGrantViewModels=${getAccessGrantViewModels(this.accessGrantDrafts)}
+              .disabled=${!this.canMutate()}
+              .accessGrantViewModels=${this.getSharedAccessViewModels()}
+              .showContainerScope=${this.shouldShowContainerScope()}
+              .advancedSharingOpen=${this.advancedSharingOpen}
               @access-grant-role-changed=${this.onAccessGrantRoleInput}
+              @access-grant-scope-changed=${this.onAccessGrantScopeInput}
             ></solid-ui-access-control-shared-access>
             <solid-ui-access-control-general-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
+              .disabled=${!this.canMutate()}
               .subjectUri=${this.subjectUri}
               .authenticatedAccessRoleValue=${this.authenticatedAccessRoleValue}
               .publicAccessRoleValue=${this.publicAccessRoleValue}
               @authenticated-role-changed=${this.onAuthenticatedAccessRoleInput}
               @public-role-changed=${this.onPublicAccessRoleInput}
             ></solid-ui-access-control-general-access>
+            ${this.renderSharingInformation()}
             <solid-ui-access-control-errors
               .errors=${this.saveErrors}
               .successfulChangesRefreshed=${this.successfulChangesRefreshed}
               @close=${this.onCancelClick}
             ></solid-ui-access-control-errors>
-            ${this.renderSharingState()}
           </solid-ui-dialog-content>
 
           <solid-ui-dialog-footer>
@@ -553,7 +479,7 @@ export default class AccessControlModal extends DialogComponent<void> {
                 Cancel
               </solid-ui-button>
               <solid-ui-button
-                ?disabled=${!this.canMutate() || !this.hasUnsavedChanges() || this.submitting || this.saveErrors.length > 0 || this.hasMixedContainerPolicy()}
+                ?disabled=${!this.canMutate() || !this.hasUnsavedChanges() || this.submitting || this.saveErrors.length > 0}
                 ?loading=${this.submitting}
                 type="button"
                 @click=${this.onSaveClick}
@@ -570,7 +496,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   private async onSubmit (e: Event) {
     e.preventDefault()
 
-    if (this.submitting || this.hasMixedContainerPolicy()) {
+    if (this.submitting) {
       return
     }
 
@@ -582,7 +508,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async onSaveClick () {
-    if (this.submitting || this.hasMixedContainerPolicy()) {
+    if (this.submitting) {
       return
     }
 
@@ -608,12 +534,8 @@ export default class AccessControlModal extends DialogComponent<void> {
     this.close()
   }
 
-  private closeAdvancedSharing () {
-    this.advancedSharingOpen = false
-  }
-
   private async onResetToDefault () {
-    if (!this.subjectUri || !this.canMutate() || !this.accessContext || this.accessContext.inherited || this.submitting || this.hasMixedContainerPolicy()) return
+    if (!this.subjectUri || !this.canMutate() || !this.accessContext || this.accessContext.inherited || this.submitting) return
 
     this.submitting = true
     this.errors = this.errors.filter(error => error.action === 'input')
@@ -637,8 +559,30 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
   }
 
+  private onAdvancedSharingChanged (event: AdvancedSharingChangedEvent) {
+    this.advancedSharingOpen = event.detail.open
+  }
+
+  private onAccessGrantScopeInput (event: AccessGrantScopeChangedEvent) {
+    if (!this.canMutate()) return
+    if (event.detail.id.startsWith('pending:')) {
+      const pendingId = event.detail.id.slice('pending:'.length)
+      this.pendingAccessGrants = this.pendingAccessGrants.map(grant => {
+        const grantId = `${grant.subjectType}:${grant.subjectValue}`
+        return grantId === pendingId ? { ...grant, scope: event.detail.scope } : grant
+      })
+      return
+    }
+
+    this.accessGrantDrafts = this.accessGrantDrafts.map(draft =>
+      draft.id === event.detail.id
+        ? { ...draft, scope: event.detail.scope }
+        : draft
+    )
+  }
+
   private async saveAccessChanges (scope: AccessSaveScope = 'file') {
-    if (this.submitting || !this.canMutate() || this.hasMixedContainerPolicy()) {
+    if (this.submitting || !this.canMutate()) {
       return
     }
 
@@ -715,13 +659,13 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private onPrincipalInput (event: TargetInputEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
     this.principalInputValue = event.detail.value
     this.clearInputError()
   }
 
   private onPrincipalSelect (event: TargetSelectedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
     this.queuePendingPrincipal(event.detail.value, this.addAccessRoleValue, event.detail.label, undefined, event.detail.targetKind)
   }
 
@@ -754,26 +698,61 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private onAddAccessRoleInput (event: RoleChangedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
-    this.addAccessRoleValue = event.detail.role
-    this.pendingAccessGrants = this.pendingAccessGrants.map(grant => ({
-      ...grant,
-      role: event.detail.role
+    if (!this.canMutate()) return
+    const role = event.detail.role
+    if (role === 'No Access' || !this.pendingAccessGrants.length) {
+      this.addAccessRoleValue = role
+      return
+    }
+
+    const newDrafts: AccessGrantDraft[] = this.pendingAccessGrants.map(grant => ({
+      id: `pending:${grant.subjectType}:${grant.subjectValue}`,
+      authorization: {
+        agent: grant.subjectType === 'agent' ? [grant.subjectValue] : [],
+        agentGroup: grant.subjectType === 'agentGroup' ? [grant.subjectValue] : [],
+        agentClass: [],
+        origin: grant.subjectType === 'origin' ? [grant.subjectValue] : [],
+        mode: []
+      },
+      role,
+      initialRole: 'No Access',
+      initialScope: grant.scope,
+      scope: grant.scope ?? 'folder+contents',
+      subjectLabel: grant.label,
+      subjects: [{
+        type: grant.subjectType,
+        iri: grant.subjectValue
+      }]
     }))
+
+    this.accessGrantDrafts = [...this.accessGrantDrafts, ...newDrafts]
+    this.pendingAccessGrants = []
+    this.addAccessRoleValue = 'No Access'
   }
 
   private onAuthenticatedAccessRoleInput (event: RoleChangedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
     this.authenticatedAccessRoleValue = event.detail.role
   }
 
   private onPublicAccessRoleInput (event: RoleChangedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
     this.publicAccessRoleValue = event.detail.role
   }
 
   private onAccessGrantRoleInput (event: AccessGrantRoleChangedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
+    if (event.detail.id.startsWith('pending:')) {
+      const pendingId = event.detail.id.slice('pending:'.length)
+      this.pendingAccessGrants = this.pendingAccessGrants.map(grant => {
+        const grantId = `${grant.subjectType}:${grant.subjectValue}`
+        return grantId === pendingId
+          ? { ...grant, role: event.detail.role }
+          : grant
+      })
+      this.addAccessRoleValue = event.detail.role
+      return
+    }
     this.accessGrantDrafts = this.accessGrantDrafts.map(draft =>
       draft.id === event.detail.id
         ? { ...draft, role: event.detail.role }
@@ -782,7 +761,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private onPendingGrantRemoved (event: PendingGrantRemovedEvent) {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) return
+    if (!this.canMutate()) return
     this.pendingAccessGrants = this.pendingAccessGrants.filter((_, pendingIndex) => pendingIndex !== event.detail.index)
   }
 
@@ -796,7 +775,7 @@ export default class AccessControlModal extends DialogComponent<void> {
   }
 
   private async commitPrincipalFromInput (): Promise<boolean> {
-    if (!this.canMutate() || this.hasMixedContainerPolicy()) {
+    if (!this.canMutate()) {
       return false
     }
 
@@ -885,6 +864,7 @@ export default class AccessControlModal extends DialogComponent<void> {
           subjectValue: resolvedTarget.subjectValue,
           role,
           label: resolvedTarget.label,
+          scope: this.isContainer() && !this.protectedTarget ? this.containerScope : undefined,
           targetKind: targetKind ?? resolvedTarget.targetKind
         }
       }

@@ -1,7 +1,7 @@
 import { customElement, WebComponent } from '@/lib/components'
-import { html } from 'lit'
+import { html, nothing } from 'lit'
 import { property, state } from 'lit/decorators.js'
-import { ACCESS_ROLES, type AccessRole } from 'solid-logic'
+import { ACCESS_ROLES, type AccessRole, type ContainerAccessScope } from 'solid-logic'
 import { findImage } from '@/widgets'
 import type { ComboboxChangeEvent } from '@/components/combobox'
 import { sym } from 'rdflib'
@@ -11,7 +11,7 @@ import '@/components/combobox-option'
 import '~icons/lucide/globe'
 
 import styles from './AccessControlSharedAccess.styles.css'
-import type { AccessGrantRoleChangedDetail, AccessGrantViewModel } from './types'
+import type { AccessGrantRoleChangedDetail, AccessGrantScopeChangedDetail, AccessGrantViewModel } from './types'
 
 @customElement('solid-ui-access-control-shared-access')
 export default class AccessControlSharedAccess extends WebComponent {
@@ -22,6 +22,12 @@ export default class AccessControlSharedAccess extends WebComponent {
 
   @property({ type: Boolean })
   accessor disabled = false
+
+  @property({ type: Boolean })
+  accessor showContainerScope = false
+
+  @property({ type: Boolean })
+  accessor advancedSharingOpen = false
 
   @state()
   private accessor searchValue = ''
@@ -37,7 +43,8 @@ export default class AccessControlSharedAccess extends WebComponent {
       return
     }
 
-    this.searchValue = option.label
+    const selectedLabel = option.label.trim()
+    this.searchValue = selectedLabel
   }
 
   private onAccessGrantRoleChange (id: string, event: ComboboxChangeEvent) {
@@ -61,6 +68,19 @@ export default class AccessControlSharedAccess extends WebComponent {
     }))
   }
 
+  private onAccessGrantScopeChange (id: string, event: ComboboxChangeEvent) {
+    const value = event.detail.option.value
+    if (value !== 'folder+contents' && value !== 'folder' && value !== 'contents') {
+      return
+    }
+
+    this.dispatchEvent(new CustomEvent<AccessGrantScopeChangedDetail>('access-grant-scope-changed', {
+      detail: { id, scope: value as ContainerAccessScope },
+      bubbles: true,
+      composed: true
+    }))
+  }
+
   private getFilteredAccessGrants () {
     const query = this.searchValue.trim().toLowerCase()
 
@@ -78,7 +98,23 @@ export default class AccessControlSharedAccess extends WebComponent {
       <li>
         ${this.renderAuthorizationBadge(entry.authorization, entry.subjectLabel)}
         <h3>${entry.subjectLabel}</h3>
-        ${this.renderAuthorizationRole(entry.role, entry.id)}
+        ${this.showContainerScope && (this.advancedSharingOpen || entry.scope !== 'folder+contents')
+          ? html`
+            <solid-ui-combobox
+              class="access-scope-select access-scope-select--compact"
+              label="Applies To"
+              .srOnlyLabel=${true}
+              .disabled=${this.disabled}
+              .value=${entry.scope ?? 'folder+contents'}
+              @change=${(event: ComboboxChangeEvent) => this.onAccessGrantScopeChange(entry.id, event)}
+            >
+              <solid-ui-combobox-option value="folder+contents">Folder And Contents</solid-ui-combobox-option>
+              <solid-ui-combobox-option value="folder">Folder Only</solid-ui-combobox-option>
+              <solid-ui-combobox-option value="contents">Container Only</solid-ui-combobox-option>
+            </solid-ui-combobox>
+          `
+          : nothing}
+        ${this.renderAuthorizationRole(entry.role, entry.id, entry.subjectLabel)}
       </li>
     `
   }
@@ -149,10 +185,12 @@ export default class AccessControlSharedAccess extends WebComponent {
     return (initials || value.slice(0, maxWords)).toUpperCase()
   }
 
-  private renderAuthorizationRole (role: AccessRole, id: string) {
+  private renderAuthorizationRole (role: AccessRole, id: string, subjectLabel: string) {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-grants-role access-grants-role--editable ${role === 'Owner' ? 'access-grants-role--owner' : ''}"
+        label="Access role for ${subjectLabel}"
+        .srOnlyLabel=${true}
         .disabled=${this.disabled}
         .value=${role}
         @change=${(event: ComboboxChangeEvent) => this.onAccessGrantRoleChange(id, event)}

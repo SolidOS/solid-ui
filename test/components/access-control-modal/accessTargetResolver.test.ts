@@ -60,7 +60,10 @@ describe('access-control target resolver', () => {
       const options = await accessPrincipalOptionsProvider('trusted')
 
       expect(loadProfileSpy).toHaveBeenCalledWith(me)
-      expect(directorySearchSpy).toHaveBeenCalled()
+      expect(directorySearchSpy).toHaveBeenCalledWith({
+        query: 'trusted',
+        sources: ['contacts', 'friends', 'groups']
+      })
       expect(options).toHaveLength(1)
       expect(options[0]).toEqual(expect.objectContaining({
         label: 'Trusted app: https://trusted.example.test',

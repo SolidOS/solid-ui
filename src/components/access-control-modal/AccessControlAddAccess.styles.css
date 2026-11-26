@@ -15,9 +15,65 @@
       line-height: 1.5;
     }
 
-    .access-grants-form-main {
+    .access-grants-form-heading {
       display: flex;
       align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      width: 100%;
+    }
+
+    .access-control-advanced-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      flex: 0 0 auto;
+      min-height: 42px;
+      padding: 8px 0;
+      border: 0;
+      background: transparent;
+      color: var(--solid-ui-color-gray-600, #4A5565);
+      cursor: pointer;
+      font: inherit;
+
+      &:focus-visible {
+        outline: var(--focus-indicator-width, 2px) solid var(--solid-ui-color-primary, #7C4DFF);
+        outline-offset: 2px;
+      }
+    }
+
+    .access-control-switch-track {
+      display: inline-flex;
+      align-items: center;
+      width: 28px;
+      height: 16px;
+      padding: 2px;
+      border-radius: 999px;
+      background: var(--solid-ui-color-gray-300, #D1D5DC);
+      transition: background-color 120ms ease;
+    }
+
+    .access-control-switch-thumb {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--solid-ui-color-white, #FFF);
+      transition: transform 120ms ease;
+    }
+
+    .access-control-advanced-toggle[aria-checked='true'] {
+      .access-control-switch-track {
+      background: var(--solid-ui-color-primary, #6D28D9);
+      }
+
+      .access-control-switch-thumb {
+        transform: translateX(12px);
+      }
+    }
+
+    .access-grants-form-main {
+      display: flex;
+      align-items: flex-start;
       gap: 10px;
       align-self: stretch;
 
@@ -36,6 +92,7 @@
         solid-ui-combobox {
           width: 100%;
           --solid-ui-input-border-color: var(--solid-ui-color-slate-200, #E2E8F0);
+          --solid-ui-combobox-option-icon-size: 13px;
         }
 
         .access-principal-error {
@@ -95,12 +152,7 @@
     }
   }
 
-  .access-grants-directory-entry {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    line-height: 1;
-  }
+
 
   .access-role-select {
     display: block;
@@ -114,4 +166,5 @@
   .access-role-select--top {
     margin-top: 0;
   }
+
 }
