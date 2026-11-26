@@ -70,7 +70,13 @@ export default class ResourceActionsMenu extends WebComponent {
     const actionableMenuItems = this.menuItems.filter((item): item is ActionableResourceActionMenuItem => typeof item.action === 'function')
     return html`
       <solid-ui-menu>
-        <solid-ui-button slot="trigger" class="file-explorer-header-more-button" variant="ghost" title="More options">
+        <solid-ui-button
+          slot="trigger"
+          class="file-explorer-header-more-button"
+          variant="ghost"
+          title="More options"
+          aria-label="More options"
+        >
           <icon-lucide-ellipsis-vertical slot="icon" class="ellipsisIcon"></icon-lucide-ellipsis-vertical>
           <span class="sr-only">More options</span>
         </solid-ui-button>
