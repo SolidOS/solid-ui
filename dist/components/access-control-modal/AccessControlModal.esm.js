@@ -378,7 +378,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		else try {
 			let n = await S.acl.findEffectiveAcl(t);
 			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
-			this.accessContext = n, this.accessContextSubjectUri = t, this.accessContext?.inherited && !this.accessGrants?.length && (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeAnalysis(), this.protectedTarget = S.acl.isProtectedResource(t), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
+			this.accessContext = n, this.accessContextSubjectUri = t, this.accessGrants?.length || (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeAnalysis(), this.protectedTarget = S.acl.isProtectedResource(t), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
 		} catch (n) {
 			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
 			this.accessContextError = n instanceof Error && n.message.trim() ? n.message : "Unable to load access settings for this resource.", r("Failed to load access control context", n);

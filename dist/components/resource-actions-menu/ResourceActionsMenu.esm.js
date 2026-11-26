@@ -261,7 +261,13 @@ new (H = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		let e = !r(this.store, this.subjectUri) && this.isMobile && this.paneSupportsEditing && this.canEdit && !!this.handleEditingClick, t = this.canManageAccess && !!this.handleAccessClick && (this.showAccessInMenu || this.isMobile), n = this.menuItems.filter((e) => typeof e.action == "function");
 		return i`
       <solid-ui-menu>
-        <solid-ui-button slot="trigger" class="file-explorer-header-more-button" variant="ghost" title="More options">
+        <solid-ui-button
+          slot="trigger"
+          class="file-explorer-header-more-button"
+          variant="ghost"
+          title="More options"
+          aria-label="More options"
+        >
           <icon-lucide-ellipsis-vertical slot="icon" class="ellipsisIcon"></icon-lucide-ellipsis-vertical>
           <span class="sr-only">More options</span>
         </solid-ui-button>

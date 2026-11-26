@@ -8,6 +8,7 @@ export default class Button extends WebComponent {
     accessor type: string;
     accessor disabled: boolean | undefined;
     accessor loading: boolean;
+    accessor ariaLabel: string;
     render(): import('lit-html').TemplateResult<1>;
     private onIconSlotChange;
     private onClick;

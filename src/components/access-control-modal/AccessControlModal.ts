@@ -238,9 +238,9 @@ export default class AccessControlModal extends DialogComponent<void> {
 
       this.accessContext = accessContext
       this.accessContextSubjectUri = subjectUri
-      if (this.accessContext?.inherited && !(this.accessGrants?.length)) {
-        // findAccessGrants only reports ACLs attached directly to the resource.
-        // Inherited permissions are the effective grants users need to review.
+      if (!(this.accessGrants?.length)) {
+        // Use effective authorizations when the caller did not provide a grant list.
+        // This covers both inherited permissions and direct ACLs.
         this.accessGrants = this.accessContext.authorizations
       }
       this.refreshContainerScopeAnalysis()

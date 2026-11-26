@@ -6,32 +6,32 @@ import n from "./Button.styles.esm.js";
 import { html as r, nothing as i } from "lit";
 import { property as a } from "lit/decorators.js";
 // src/components/button/Button.ts
-var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w;
-function T(e, t, n) {
-	E(e, t), t.set(e, n);
+var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D;
+function O(e, t, n) {
+	k(e, t), t.set(e, n);
 }
-function E(e, t) {
+function k(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function D(e, t, n) {
-	return e.set(k(e, t), n), n;
+function A(e, t, n) {
+	return e.set(M(e, t), n), n;
 }
-function O(e, t) {
-	return e.get(k(e, t));
+function j(e, t) {
+	return e.get(M(e, t));
 }
-function k(e, t, n) {
+function M(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function A(e, t, n) {
-	return (t = M(t)) in e ? Object.defineProperty(e, t, {
+function N(e, t, n) {
+	return (t = F(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function j(e, t, n, r, i, a) {
+function P(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -54,13 +54,13 @@ function j(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: P(function() {
+				get: L(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || P(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || L(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -120,7 +120,7 @@ function j(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return F(t) === e;
+			return R(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -134,7 +134,7 @@ function j(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : M(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : F(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -147,11 +147,11 @@ function j(e, t, n, r, i, a) {
 		}
 	};
 }
-function M(e) {
-	var t = N(e, "string");
+function F(e) {
+	var t = I(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function N(e, t) {
+function I(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -161,7 +161,7 @@ function N(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function P(e, t, n) {
+function L(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -171,60 +171,71 @@ function P(e, t, n) {
 	} catch {}
 	return e;
 }
-function F(e) {
+function R(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function I(e) {
+function z(e) {
 	return e;
 }
-var L = [
+var B = [
 	"primary",
 	"secondary",
 	"tertiary",
 	"outline",
 	"ghost"
 ];
-m = [e("solid-ui-button")];
-var R;
-new (C = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), w = (h = a({
+h = [e("solid-ui-button")];
+var V;
+new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), D = (g = a({
 	type: String,
 	reflect: !0
-}), _ = a({
+}), v = a({
 	type: String,
 	reflect: !0
-}), y = a({ type: Boolean }), x = a({ type: Boolean }), "variant"), s = class extends t {
+}), b = a({ type: Boolean }), S = a({ type: Boolean }), w = a({ attribute: "aria-label" }), "variant"), s = class extends t {
 	constructor(...e) {
-		super(...e), T(this, c, (f(this), g(this, "primary"))), T(this, l, v(this, "button")), T(this, u, b(this, void 0)), T(this, d, S(this, !1));
+		super(...e), O(this, c, (p(this), _(this, "primary"))), O(this, l, y(this, "button")), O(this, u, x(this, void 0)), O(this, d, C(this, !1)), O(this, f, T(this, ""));
 	}
-	get [w]() {
-		return O(c, this);
+	get [D]() {
+		return j(c, this);
 	}
 	set variant(e) {
-		D(c, this, e);
+		A(c, this, e);
 	}
 	get type() {
-		return O(l, this);
+		return j(l, this);
 	}
 	set type(e) {
-		D(l, this, e);
+		A(l, this, e);
 	}
 	get disabled() {
-		return O(u, this);
+		return j(u, this);
 	}
 	set disabled(e) {
-		D(u, this, e);
+		A(u, this, e);
 	}
 	get loading() {
-		return O(d, this);
+		return j(d, this);
 	}
 	set loading(e) {
-		D(d, this, e);
+		A(d, this, e);
+	}
+	get ariaLabel() {
+		return j(f, this);
+	}
+	set ariaLabel(e) {
+		A(f, this, e);
 	}
 	render() {
 		let e = this.disabled ?? this.loading;
 		return r`
-        <button type=${this.type} ?disabled=${e} @click=${this.onClick}>
+        <button
+            type=${this.type}
+            ?disabled=${e}
+            aria-label=${this.ariaLabel || i}
+            @click=${this.onClick}
+        >
             ${this.loading ? r`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : i}
             <slot name="left-icon"></slot>
             <slot @slotchange=${this.onIconSlotChange} name="icon"></slot>
@@ -245,32 +256,37 @@ new (C = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 			case "reset": this.getInternals().form?.reset();
 		}
 	}
-}, {e: [g, v, b, S, f], c: [R, p]} = j(s, [
+}, {e: [_, y, x, C, T, p], c: [V, m]} = P(s, [
 	[
-		h,
+		g,
 		1,
 		"variant"
 	],
 	[
-		_,
+		v,
 		1,
 		"type"
 	],
 	[
-		y,
+		b,
 		1,
 		"disabled"
 	],
 	[
-		x,
+		S,
 		1,
 		"loading"
+	],
+	[
+		w,
+		1,
+		"ariaLabel"
 	]
-], m, 0, void 0, t), s), o = class extends I {
+], h, 0, void 0, t), s), o = class extends z {
 	constructor() {
-		super(R), A(this, "styles", n), A(this, "formAssociated", !0), p();
+		super(V), N(this, "styles", n), N(this, "formAssociated", !0), m();
 	}
-}, A(o, C, void 0), o)();
-export { L as BUTTON_VARIANTS, R as default };
+}, N(o, E, void 0), o)();
+export { B as BUTTON_VARIANTS, V as default };
 
 //# sourceMappingURL=Button.esm.js.map

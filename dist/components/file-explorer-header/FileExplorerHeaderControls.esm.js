@@ -1,44 +1,46 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { showDialog as n } from "../../lib/dialogs/helpers.esm.js";
+import "../../lib/dialogs/index.esm.js";
 import "../button/index.esm.js";
+import r from "../access-control-modal/index.esm.js";
 import "../../_virtual/~icons/lucide/user-round-cog.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
-import n from "./FileExplorerHeaderControls.styles.esm.js";
+import i from "./FileExplorerHeaderControls.styles.esm.js";
 import "../resource-actions-menu/ResourceActionsMenu.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as r, fileExplorerContext as i } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_OPEN_PANE_EVENT as a } from "../../lib/file-explorer/events.esm.js";
-import { isContainerSubject as o } from "../../utils/podUtils.esm.js";
-import { consume as s } from "@lit/context";
-import { html as c, nothing as l } from "lit";
-import { property as u, state as d } from "lit/decorators.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as a, fileExplorerContext as o } from "../../lib/file-explorer/context.esm.js";
+import { isContainerSubject as s } from "../../utils/podUtils.esm.js";
+import { consume as c } from "@lit/context";
+import { html as l, nothing as u } from "lit";
+import { property as d, state as f } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeaderControls.ts
-var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N;
-function P(e, t, n) {
-	F(e, t), t.set(e, n);
+var p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P;
+function F(e, t, n) {
+	I(e, t), t.set(e, n);
 }
-function F(e, t) {
+function I(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function I(e, t, n) {
-	return e.set(R(e, t), n), n;
+function L(e, t, n) {
+	return e.set(z(e, t), n), n;
 }
-function L(e, t) {
-	return e.get(R(e, t));
+function R(e, t) {
+	return e.get(z(e, t));
 }
-function R(e, t, n) {
+function z(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function z(e, t, n) {
-	return (t = V(t)) in e ? Object.defineProperty(e, t, {
+function B(e, t, n) {
+	return (t = H(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function B(e, t, n, r, i, a) {
+function V(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -61,13 +63,13 @@ function B(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: U(function() {
+				get: W(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || U(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || W(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -127,7 +129,7 @@ function B(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return W(t) === e;
+			return G(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -141,7 +143,7 @@ function B(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : V(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : H(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -154,11 +156,11 @@ function B(e, t, n, r, i, a) {
 		}
 	};
 }
-function V(e) {
-	var t = H(e, "string");
+function H(e) {
+	var t = U(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function H(e, t) {
+function U(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -168,7 +170,7 @@ function H(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function U(e, t, n) {
+function W(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -178,63 +180,56 @@ function U(e, t, n) {
 	} catch {}
 	return e;
 }
-function W(e) {
+function G(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function G(e) {
+function K(e) {
 	return e;
 }
-x = [e("solid-ui-file-explorer-header-controls")];
-var K;
-new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = s({
-	context: i,
+S = [e("solid-ui-file-explorer-header-controls")];
+var q;
+new (N = (h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), P = (C = c({
+	context: o,
 	subscribe: !0
-}), w = u({ attribute: !1 }), E = u({ type: Boolean }), O = u({ type: Boolean }), A = d(), "mobileMediaQuery"), p = class extends t {
+}), T = d({ attribute: !1 }), D = d({ type: Boolean }), k = d({ type: Boolean }), j = f(), "mobileMediaQuery"), m = class extends t {
 	constructor(...e) {
-		super(...e), z(this, N, void y(this)), z(this, "mobileQuery", "(max-width: 600px)"), z(this, "handleMobileMediaChange", (e) => {
+		super(...e), B(this, P, void b(this)), B(this, "mobileQuery", "(max-width: 600px)"), B(this, "handleMobileMediaChange", (e) => {
 			this.isMobile = e.matches;
-		}), P(this, m, C(this, r)), P(this, h, T(this, [])), P(this, g, D(this, !1)), P(this, _, k(this, !1)), P(this, v, j(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), z(this, "handleManageAccess", () => {
+		}), F(this, h, w(this, a)), F(this, g, E(this, [])), F(this, _, O(this, !1)), F(this, v, A(this, !1)), F(this, y, M(this, typeof window < "u" && typeof window.matchMedia == "function" && window.matchMedia("(max-width: 600px)").matches)), B(this, "handleManageAccess", () => {
 			let e = this.fileExplorerContext.subjectUri;
-			e && this.dispatchEvent(new CustomEvent(a, {
-				bubbles: !0,
-				composed: !0,
-				detail: {
-					subjectUri: e,
-					paneName: "sharing"
-				}
-			}));
+			e && n(r, { props: { subjectUri: e } });
 		});
 	}
 	get fileExplorerContext() {
-		return L(m, this);
+		return R(h, this);
 	}
 	set fileExplorerContext(e) {
-		I(m, this, e);
+		L(h, this, e);
 	}
 	get menuItems() {
-		return L(h, this);
+		return R(g, this);
 	}
 	set menuItems(e) {
-		I(h, this, e);
+		L(g, this, e);
 	}
 	get canEdit() {
-		return L(g, this);
+		return R(_, this);
 	}
 	set canEdit(e) {
-		I(g, this, e);
+		L(_, this, e);
 	}
 	get canManageAccess() {
-		return L(_, this);
+		return R(v, this);
 	}
 	set canManageAccess(e) {
-		I(_, this, e);
+		L(v, this, e);
 	}
 	get isMobile() {
-		return L(v, this);
+		return R(y, this);
 	}
 	set isMobile(e) {
-		I(v, this, e);
+		L(y, this, e);
 	}
 	connectedCallback() {
 		super.connectedCallback(), typeof window < "u" && typeof window.matchMedia == "function" && (this.mobileMediaQuery = window.matchMedia(this.mobileQuery), this.isMobile = this.mobileMediaQuery.matches, this.mobileMediaQuery.addEventListener("change", this.handleMobileMediaChange));
@@ -246,31 +241,36 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		return this.canEdit ? "Edit" : "No Access";
 	}
 	renderDirtyIndicator() {
-		return this.fileExplorerContext.isDirty ? c`<span class="dirtyIndicator" title="This file has unsaved changes">Unsaved</span>` : l;
+		return this.fileExplorerContext.isDirty ? l`<span class="dirtyIndicator" title="This file has unsaved changes">Unsaved</span>` : u;
 	}
 	render() {
-		let e = o(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
-		return c`
+		let e = s(this.fileExplorerContext.store, this.fileExplorerContext.subjectUri), t = this.fileExplorerContext.canEdit;
+		return l`
       <div>
         ${this.renderDirtyIndicator()}
-        ${!e && !this.isMobile && this.canManageAccess ? c`
-              <solid-ui-button class="file-explorer-header-action-button" variant="ghost" title="Manage Access" @click=${this.handleManageAccess}>
+        ${!e && !this.isMobile && this.canManageAccess ? l`
+              <solid-ui-button
+                class="file-explorer-header-action-button"
+                variant="ghost"
+                title="Manage Access"
+                @click=${this.handleManageAccess}
+              >
                 <icon-lucide-user-round-cog slot="icon"></icon-lucide-user-round-cog>
                 <span class="sr-only">Manage access</span>
               </solid-ui-button>
-              ${t ? c`
-                    <solid-ui-button
-                      class="file-explorer-header-action-button"
-                      variant="ghost"
-                      title=${this.getEditTooltip()}
-                      ?disabled=${!this.canEdit}
-                      @click=${this.fileExplorerContext.beginEditing}
-                    >
-                      <icon-lucide-pencil slot="icon"></icon-lucide-pencil>
-                      <span class="sr-only">Edit</span>
-                    </solid-ui-button>
-                  ` : l}
-            ` : l}
+              ${t ? l`
+              <solid-ui-button
+                class="file-explorer-header-action-button"
+                variant="ghost"
+                title=${this.getEditTooltip()}
+                ?disabled=${!this.canEdit}
+                @click=${this.fileExplorerContext.beginEditing}
+              >
+                <icon-lucide-pencil slot="icon"></icon-lucide-pencil>
+                <span class="sr-only">Edit</span>
+              </solid-ui-button>
+                  ` : u}
+            ` : u}
         <solid-ui-resource-actions-menu
           .store=${this.fileExplorerContext.store}
           .handleAccessClick=${this.handleManageAccess}
@@ -285,37 +285,37 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
       </div>
     `;
 	}
-}, {e: [C, T, D, k, j, y], c: [K, b]} = B(p, [
+}, {e: [w, E, O, A, M, b], c: [q, x]} = V(m, [
 	[
-		S,
+		C,
 		1,
 		"fileExplorerContext"
 	],
 	[
-		w,
+		T,
 		1,
 		"menuItems"
 	],
 	[
-		E,
+		D,
 		1,
 		"canEdit"
 	],
 	[
-		O,
+		k,
 		1,
 		"canManageAccess"
 	],
 	[
-		A,
+		j,
 		1,
 		"isMobile"
 	]
-], x, 0, void 0, t), p), f = class extends G {
+], S, 0, void 0, t), m), p = class extends K {
 	constructor() {
-		super(K), z(this, "styles", n), b();
+		super(q), B(this, "styles", i), x();
 	}
-}, z(f, M, void 0), f)();
-export { K as default };
+}, B(p, N, void 0), p)();
+export { q as default };
 
 //# sourceMappingURL=FileExplorerHeaderControls.esm.js.map
