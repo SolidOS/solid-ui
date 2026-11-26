@@ -4,6 +4,7 @@ import { defineAsyncComboboxOptionsProvider } from './Combobox'
 import '@/components/combobox-option'
 
 import './Combobox'
+import '~icons/lucide/user-round'
 
 const pokemonProvider = defineAsyncComboboxOptionsProvider(async (query) => {
   const response = await fetch('https://beta.pokeapi.co/graphql/v1beta', {
@@ -92,6 +93,18 @@ export const AsyncWithHtml = {
     label: 'Who is the best Disney character?',
     asyncHtmlOptions: true,
   },
+}
+
+export const WithOptionIcons = {
+  render: () => html`
+    <solid-ui-combobox
+      label="Choose a person"
+      .asyncOptionsProvider=${defineAsyncComboboxOptionsProvider(async () => [
+        { value: 'alice', label: 'Alice', icon: html`<icon-lucide-user-round></icon-lucide-user-round>` },
+        { value: 'bob', label: 'Bob' }
+      ])}
+    ></solid-ui-combobox>
+  `
 }
 
 export default meta
