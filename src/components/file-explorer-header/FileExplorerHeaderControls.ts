@@ -1,14 +1,15 @@
 import { customElement, WebComponent } from '@/lib/components'
+import { showDialog } from '@/lib/dialogs'
 import { property, state } from 'lit/decorators.js'
 import { consume } from '@lit/context'
 import { html, nothing } from 'lit'
 import '@/components/button'
+import AccessControlModal from '@/components/access-control-modal'
 import '~icons/lucide/user-round-cog'
 import '~icons/lucide/pencil'
 import styles from './FileExplorerHeaderControls.styles.css'
 import '@/components/resource-actions-menu/ResourceActionsMenu'
 import { DEFAULT_FILE_EXPLORER_CONTEXT, fileExplorerContext } from '@/lib/file-explorer/context'
-import { FILE_EXPLORER_OPEN_PANE_EVENT } from '@/lib/file-explorer/events'
 import { isContainerSubject } from '@/utils/podUtils'
 
 @customElement('solid-ui-file-explorer-header-controls')
@@ -75,11 +76,9 @@ export default class FileExplorerHeaderControls extends WebComponent {
     const subjectUri = this.fileExplorerContext.subjectUri
     if (!subjectUri) return
 
-    this.dispatchEvent(new CustomEvent(FILE_EXPLORER_OPEN_PANE_EVENT, {
-      bubbles: true,
-      composed: true,
-      detail: { subjectUri, paneName: 'sharing' }
-    }))
+    showDialog(AccessControlModal, {
+      props: { subjectUri }
+    })
   }
 
   private renderDirtyIndicator () {
@@ -97,22 +96,27 @@ export default class FileExplorerHeaderControls extends WebComponent {
         ${this.renderDirtyIndicator()}
         ${!isContainerResource && !this.isMobile && this.canManageAccess
           ? html`
-              <solid-ui-button class="file-explorer-header-action-button" variant="ghost" title="Manage Access" @click=${this.handleManageAccess}>
+              <solid-ui-button
+                class="file-explorer-header-action-button"
+                variant="ghost"
+                title="Manage Access"
+                @click=${this.handleManageAccess}
+              >
                 <icon-lucide-user-round-cog slot="icon"></icon-lucide-user-round-cog>
                 <span class="sr-only">Manage access</span>
               </solid-ui-button>
               ${supportsEditing
                 ? html`
-                    <solid-ui-button
-                      class="file-explorer-header-action-button"
-                      variant="ghost"
-                      title=${this.getEditTooltip()}
-                      ?disabled=${!this.canEdit}
-                      @click=${this.fileExplorerContext.beginEditing}
-                    >
-                      <icon-lucide-pencil slot="icon"></icon-lucide-pencil>
-                      <span class="sr-only">Edit</span>
-                    </solid-ui-button>
+              <solid-ui-button
+                class="file-explorer-header-action-button"
+                variant="ghost"
+                title=${this.getEditTooltip()}
+                ?disabled=${!this.canEdit}
+                @click=${this.fileExplorerContext.beginEditing}
+              >
+                <icon-lucide-pencil slot="icon"></icon-lucide-pencil>
+                <span class="sr-only">Edit</span>
+              </solid-ui-button>
                   `
                 : nothing}
             `

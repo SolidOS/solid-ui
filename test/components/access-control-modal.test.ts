@@ -1745,6 +1745,52 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
+  it('shows direct ACL authorizations when no grants are passed to the modal', async () => {
+    const directAuthorization = {
+      agent: ['https://alice.example.com/profile/card.ttl#me'],
+      agentGroup: [],
+      agentClass: [],
+      origin: [],
+      mode: ['Read']
+    }
+    const authenticatedAuthorization = {
+      agent: [],
+      agentGroup: [],
+      agentClass: ['http://www.w3.org/ns/auth/acl#AuthenticatedAgent'],
+      origin: [],
+      mode: ['Read']
+    }
+    const publicAuthorization = {
+      agent: [],
+      agentGroup: [],
+      agentClass: ['http://xmlns.com/foaf/0.1/Agent'],
+      origin: [],
+      mode: ['Read']
+    }
+    findEffectiveAcl.mockResolvedValueOnce({
+      inherited: false,
+      authorizations: [directAuthorization, authenticatedAuthorization, publicAuthorization]
+    })
+
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/file.ttl'
+    document.body.appendChild(element)
+    await vi.waitFor(() => {
+      expect(element.accessGrants).toEqual([
+        directAuthorization,
+        authenticatedAuthorization,
+        publicAuthorization
+      ])
+    })
+
+    expect(element.authenticatedAccessRoleValue).not.toBe('No Access')
+    expect(element.publicAccessRoleValue).not.toBe('No Access')
+    const sharedAccess = element.shadowRoot.querySelector('solid-ui-access-control-shared-access')
+    await sharedAccess.updateComplete
+    expect(sharedAccess.shadowRoot.textContent).toContain('card.ttl')
+    document.body.removeChild(element)
+  })
+
   it('reports reset errors without changing the custom state', async () => {
     resetToDefault.mockRejectedValueOnce(new Error('reset failed'))
     const element = document.createElement('solid-ui-access-control-modal') as any

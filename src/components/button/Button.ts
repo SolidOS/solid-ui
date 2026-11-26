@@ -26,11 +26,19 @@ export default class Button extends WebComponent {
   @property({ type: Boolean })
   accessor loading = false
 
+  @property({ attribute: 'aria-label' })
+  accessor ariaLabel = ''
+
   render () {
     const disabled = this.disabled ?? this.loading
 
     return html`
-        <button type=${this.type} ?disabled=${disabled} @click=${this.onClick}>
+        <button
+            type=${this.type}
+            ?disabled=${disabled}
+            aria-label=${this.ariaLabel || nothing}
+            @click=${this.onClick}
+        >
             ${this.loading ? html`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : nothing}
             <slot name="left-icon"></slot>
             <slot @slotchange=${this.onIconSlotChange} name="icon"></slot>
