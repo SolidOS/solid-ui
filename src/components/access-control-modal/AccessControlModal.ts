@@ -753,7 +753,14 @@ export default class AccessControlModal extends DialogComponent<void> {
       }]
     }))
 
-    this.accessGrantDrafts = [...this.accessGrantDrafts, ...newDrafts]
+    const draftsById = new Map<string, AccessGrantDraft>(
+      this.accessGrantDrafts.map(draft => [draft.id, draft])
+    )
+    for (const draft of newDrafts) {
+      const existing = draftsById.get(draft.id)
+      draftsById.set(draft.id, existing ? { ...existing, role: draft.role } : draft)
+    }
+    this.accessGrantDrafts = [...draftsById.values()]
     this.pendingAccessGrants = []
     this.addAccessRoleValue = 'No Access'
   }
