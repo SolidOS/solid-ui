@@ -603,6 +603,17 @@ export default class AccessControlModal extends DialogComponent<void> {
       return
     }
 
+    const unassignedGrant = this.pendingAccessGrants.find(grant => grant.role === 'No Access')
+    if (unassignedGrant) {
+      this.setInputError({
+        action: 'input',
+        targetUri: unassignedGrant.subjectValue,
+        label: unassignedGrant.label,
+        message: 'Choose an access role for the pending additions before saving.'
+      })
+      return
+    }
+
     const changedAccessGrants = getChangedAccessGrants(this.accessGrantDrafts)
     const generalAccessChanges = this.getGeneralAccessChanges()
 
