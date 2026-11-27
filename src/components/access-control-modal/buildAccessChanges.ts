@@ -16,14 +16,17 @@ export function buildAccessChanges ({
     ...pendingAccessGrants.map(grant => ({
       subject: { type: grant.subjectType, iri: grant.subjectValue },
       role: grant.role,
-      label: grant.label
+      label: grant.label,
+      scope: grant.scope
     })),
     ...generalAccessChanges,
-    ...changedAccessGrants.flatMap(({ subjects, role }) =>
+    ...changedAccessGrants.flatMap(({ subjects, role, scope, initialScope }) =>
       subjects.map(subject => ({
         subject,
         role,
-        label: getAccessSubjectLabel(subject)
+        label: getAccessSubjectLabel(subject),
+        scope,
+        previousScope: initialScope !== scope ? initialScope : undefined
       }))
     )
   ]

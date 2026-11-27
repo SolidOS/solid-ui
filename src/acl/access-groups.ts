@@ -18,10 +18,10 @@ const ACL = ns.acl
 
 const COLLOQUIAL = {
   13: 'Owners',
-  9: 'Owners (write locked)',
+  9: 'Admins',
   5: 'Editors',
-  3: 'Posters',
-  2: 'Submitters',
+  3: 'Commenters',
+  2: 'Appenders',
   1: 'Viewers'
 }
 
@@ -50,7 +50,7 @@ export interface AccessGroupsOptions {
 }
 
 /**
- * Renders the table of Owners, Editors, Posters, Submitters, Viewers
+ * Renders the table of Owners, Admins, Editors, Commenters, Appenders, Viewers
  * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 export class AccessGroups {

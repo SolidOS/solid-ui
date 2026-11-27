@@ -1,7 +1,7 @@
 import { defineAsyncComboboxOptionsProvider, type AsyncComboboxOptionsProvider, type ComboboxOptionData } from '@/components/combobox'
-import { directoryEntryOptionTemplate } from './AccessControlAddAccess'
+import { directoryEntryOptionIcon } from './AccessControlAddAccess'
 import { label } from '@/utils/label'
-import { DEFAULT_DIRECTORY_SOURCES, solidLogicSingleton, type AccessControlSubjectKind, type DirectoryEntry } from 'solid-logic'
+import { solidLogicSingleton, type AccessControlSubjectKind, type DirectoryEntry, type DirectorySource } from 'solid-logic'
 import { sym } from 'rdflib'
 import { html } from 'lit'
 import ns from '@/lib/ns'
@@ -18,6 +18,8 @@ export type ResolvedAccessTarget = {
 type AccessTargetOption = ComboboxOptionData & {
   targetKind?: 'origin' | 'trustedApp'
 }
+
+const ACCESS_DIRECTORY_SOURCES: DirectorySource[] = ['contacts', 'friends', 'groups']
 
 async function classifyAccessTarget (principal: string) {
   const normalizedOrigin = normalizeOriginInput(principal)
@@ -83,7 +85,7 @@ function directoryEntryToOption (entry: DirectoryEntry, labelValue: string): Com
   return {
     label: labelValue,
     value: entry.uri,
-    template: directoryEntryOptionTemplate({ ...entry, label: labelValue })
+    icon: directoryEntryOptionIcon(entry)
   }
 }
 
@@ -94,7 +96,7 @@ async function getPreferredAccessPrincipalOptions (query: string): Promise<Acces
       label: `Use origin ${normalizedOrigin}`,
       value: normalizedOrigin,
       targetKind: 'origin',
-      template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${normalizedOrigin}</span></span>`
+      icon: html`<icon-lucide-globe></icon-lucide-globe>`
     }]
   }
 
@@ -107,7 +109,7 @@ async function getPreferredAccessPrincipalOptions (query: string): Promise<Acces
       label: `Use origin ${new URL(query).origin}`,
       value: new URL(query).origin,
       targetKind: 'origin',
-      template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${new URL(query).origin}</span></span>`
+      icon: html`<icon-lucide-globe></icon-lucide-globe>`
     }]
   }
 
@@ -131,7 +133,7 @@ async function getTrustedAppOptions (query: string): Promise<AccessTargetOption[
         label: `Trusted app: ${normalizedOrigin}`,
         value: normalizedOrigin,
         targetKind: 'trustedApp' as const,
-        template: html`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Trusted app: ${normalizedOrigin}</span></span>`
+        icon: html`<icon-lucide-globe></icon-lucide-globe>`
       }]
     })
   } catch {
@@ -174,7 +176,7 @@ export const accessPrincipalOptionsProvider: AsyncComboboxOptionsProvider =
     try {
       entries = await solidLogicSingleton.directory.search({
         query,
-        sources: DEFAULT_DIRECTORY_SOURCES
+        sources: ACCESS_DIRECTORY_SOURCES
       })
     } catch (error) {
       if (!preferredOptions.length && !trustedAppOptions.length) {

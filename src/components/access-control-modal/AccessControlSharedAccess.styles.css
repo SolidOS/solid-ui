@@ -19,8 +19,8 @@
 
     .access-grants-search-input {
       flex: 0 0 auto;
-      width: 12ch;
-      min-width: 12ch;
+      width: var(--access-role-select-width, 129px);
+      min-width: var(--access-role-select-width, 129px);
       --solid-ui-input-border-color: transparent;
       color: var(--solid-ui-color-zinc-500, #71717B);
       font-size: var(--solid-ui-font-size-sm, .875rem);
@@ -133,6 +133,15 @@
       .access-grants-role--editable {
         max-width: 100%;
       }
+
+      .access-scope-select--compact {
+        width: 170px;
+        min-width: 170px;
+        flex: 0 0 170px;
+        max-width: 100%;
+        --solid-ui-input-border-color: transparent;
+        font-size: var(--solid-ui-font-size-xs, .75rem);
+      }
     }
   }
 
@@ -149,5 +158,9 @@
     width: 110px;
     min-width: 110px;
     flex: 0 0 110px;
+  }
+
+  .access-scope-select--compact {
+    margin-top: 0;
   }
 }
