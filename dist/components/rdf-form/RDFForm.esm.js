@@ -1,14 +1,14 @@
+import { property as e, state as t } from "lit/decorators.js";
+import { html as n } from "lit/html.js";
+import { consume as r } from "@lit/context";
 import "../../lib/components/index.esm.js";
-import { customElement as e } from "../../lib/components/decorators.esm.js";
-import t from "../../lib/components/web-component/WebComponent.esm.js";
-import n from "../../lib/ns.esm.js";
-import { fetchData as r, findForm as i, sortBySequence as a } from "../../lib/forms/rdfFormsHelper.esm.js";
+import { customElement as i } from "../../lib/components/decorators.esm.js";
+import a from "../../lib/components/web-component/WebComponent.esm.js";
+import o from "../../lib/ns.esm.js";
+import { fetchData as s, findForm as c, sortBySequence as l } from "../../lib/forms/rdfFormsHelper.esm.js";
+import { sym as u } from "rdflib";
 import "../rdf-input/index.esm.js";
-import { DEFAULT_STORE as o, storeContext as s } from "../../lib/forms/store/StoreContext.esm.js";
-import { sym as c } from "rdflib";
-import { consume as l } from "@lit/context";
-import { property as u, state as d } from "lit/decorators.js";
-import { html as f } from "lit/html.js";
+import { DEFAULT_STORE as d, storeContext as f } from "../../lib/forms/store/StoreContext.esm.js";
 // src/components/rdf-form/RDFForm.ts
 var p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
 function M(e, t, n) {
@@ -184,14 +184,14 @@ var H = {
 		return e || null;
 	}
 }, U = (e) => e?.href ?? "";
-g = [e("solid-ui-rdf-form")];
+g = [i("solid-ui-rdf-form")];
 var W, G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), X = /*#__PURE__*/ new WeakMap(), Z = /*#__PURE__*/ new WeakMap();
-j = (_ = l({
-	context: s,
+j = (_ = r({
+	context: f,
 	subscribe: !0
-}), y = u({ attribute: !1 }), x = d(), C = d(), T = d(), D = u({ converter: H }), k = u({ converter: H }), "storeContext"), p = class extends t {
+}), y = e({ attribute: !1 }), x = t(), C = t(), T = t(), D = e({ converter: H }), k = e({ converter: H }), "storeContext"), p = class extends a {
 	constructor(...e) {
-		super(...e), M(this, G, (m(this), v(this, o))), M(this, K, b(this, null)), M(this, q, S(this, !0)), M(this, J, w(this, 0)), M(this, Y, E(this, !1)), M(this, X, O(this, null)), M(this, Z, A(this, null));
+		super(...e), M(this, G, (m(this), v(this, d))), M(this, K, b(this, null)), M(this, q, S(this, !0)), M(this, J, w(this, 0)), M(this, Y, E(this, !1)), M(this, X, O(this, null)), M(this, Z, A(this, null));
 	}
 	get [j]() {
 		return F(G, this);
@@ -239,21 +239,21 @@ j = (_ = l({
 		P(Z, this, e);
 	}
 	render() {
-		if (!this._documentsLoaded) return f``;
+		if (!this._documentsLoaded) return n``;
 		let e = this.currentStore, t = U(this.subjectUrl);
 		t && e.updater?.editable(t) !== void 0 && e.updater?.editable(t) !== !1 && (this.entireDataIsReadonly = !1);
-		let r = i(this.currentStore, U(this.formUrl));
+		let r = c(this.currentStore, U(this.formUrl));
 		if (!r) throw Error("No ui:Form found in " + U(this.formUrl));
-		let o = c(U(this.formUrl)), s = e.each(r, n.ui("parts"), null, o), l = (a(e, s) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((t) => {
-			let r = e.each(t, n.rdf("type"), null, o)[0], i = r ? r.value || String(r) : t.value || String(t), a = i.lastIndexOf("#");
+		let i = u(U(this.formUrl)), a = e.each(r, o.ui("parts"), null, i), s = (l(e, a) || []).flatMap((e) => e && typeof e == "object" && "elements" in e && Array.isArray(e.elements) ? e.elements : [e]).map((t) => {
+			let n = e.each(t, o.rdf("type"), null, i)[0], r = n ? n.value || String(n) : t.value || String(t), a = r.lastIndexOf("#");
 			return {
 				value: t,
-				fieldValue: a >= 0 ? i.slice(a + 1) : i
+				fieldValue: a >= 0 ? r.slice(a + 1) : r
 			};
 		});
-		return f`
+		return n`
       <form>
-        ${l.map((e) => {
+        ${s.map((e) => {
 			switch (e.fieldValue) {
 				case "PhoneField":
 				case "EmailField":
@@ -267,24 +267,24 @@ j = (_ = l({
 				case "FloatField":
 				case "TextField":
 				case "SingleLineTextField":
-				case "NamedNodeURIField": return f` <solid-ui-rdf-input 
-                  .formSubject=${c(e.value)} 
-                  .dataSubject=${c(t)}
+				case "NamedNodeURIField": return n` <solid-ui-rdf-input 
+                  .formSubject=${u(e.value)} 
+                  .dataSubject=${u(t)}
                   .storeVersion=${this._loadVersion}
                   .readonly=${this.entireDataIsReadonly}
                 ></solid-ui-rdf-input>
                 <br>`;
-				case "MultiLineTextField": return f`<input .rdf=${e}></input>`;
-				case "BooleanField": return f`<input .rdf=${e}></input>`;
-				case "TristateField": return f`<input .rdf=${e}></input>`;
-				case "Classifier": return f`<input .rdf=${e}></input>`;
-				case "Choice": return f`<input .rdf=${e}></input>`;
-				case "Multiple": return f`<input .rdf=${e}></input>`;
-				case "Options": return f`<input .rdf=${e}></input>`;
-				case "AutocompleteField": return f`<input .rdf=${e}></input>`;
+				case "MultiLineTextField": return n`<input .rdf=${e}></input>`;
+				case "BooleanField": return n`<input .rdf=${e}></input>`;
+				case "TristateField": return n`<input .rdf=${e}></input>`;
+				case "Classifier": return n`<input .rdf=${e}></input>`;
+				case "Choice": return n`<input .rdf=${e}></input>`;
+				case "Multiple": return n`<input .rdf=${e}></input>`;
+				case "Options": return n`<input .rdf=${e}></input>`;
+				case "AutocompleteField": return n`<input .rdf=${e}></input>`;
 				case "Comment":
-				case "Heading": return f`<input .rdf=${e}></input>`;
-				default: return f`<div>Unknown part type: ${e}</div>`;
+				case "Heading": return n`<input .rdf=${e}></input>`;
+				default: return n`<div>Unknown part type: ${e}</div>`;
 			}
 		})}
       </form>
@@ -296,7 +296,7 @@ j = (_ = l({
 	async loadDocumentsIfNeeded() {
 		let e = this.currentStore, t = U(this.formUrl), n = U(this.subjectUrl);
 		if (t && n) try {
-			await r(e, t), await r(e, n), this._loadVersion += 1, this._documentsLoaded = !0;
+			await s(e, t), await s(e, n), this._loadVersion += 1, this._documentsLoaded = !0;
 		} catch (e) {
 			console.error("Failed to load RDF documents", e);
 		}
@@ -337,7 +337,7 @@ j = (_ = l({
 		1,
 		"subjectUrl"
 	]
-], g, 0, void 0, t), h();
+], g, 0, void 0, a), h();
 export { W as default };
 
 //# sourceMappingURL=RDFForm.esm.js.map

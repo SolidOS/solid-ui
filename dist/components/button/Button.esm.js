@@ -1,10 +1,10 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as n, nothing as r } from "lit";
+import { property as i } from "lit/decorators.js";
 import "../../_virtual/~icons/svg-spinners/180-ring.esm.js";
-import n from "./Button.styles.esm.js";
-import { html as r, nothing as i } from "lit";
-import { property as a } from "lit/decorators.js";
+import a from "./Button.styles.css.esm.js";
 // src/components/button/Button.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D;
 function O(e, t, n) {
@@ -187,13 +187,13 @@ var B = [
 ];
 h = [e("solid-ui-button")];
 var V;
-new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), D = (g = a({
+new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), D = (g = i({
 	type: String,
 	reflect: !0
-}), v = a({
+}), v = i({
 	type: String,
 	reflect: !0
-}), b = a({ type: Boolean }), S = a({ type: Boolean }), w = a({ attribute: "aria-label" }), "variant"), s = class extends t {
+}), b = i({ type: Boolean }), S = i({ type: Boolean }), w = i({ attribute: "aria-label" }), "variant"), s = class extends t {
 	constructor(...e) {
 		super(...e), O(this, c, (p(this), _(this, "primary"))), O(this, l, y(this, "button")), O(this, u, x(this, void 0)), O(this, d, C(this, !1)), O(this, f, T(this, ""));
 	}
@@ -229,14 +229,14 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 	}
 	render() {
 		let e = this.disabled ?? this.loading;
-		return r`
+		return n`
         <button
             type=${this.type}
             ?disabled=${e}
-            aria-label=${this.ariaLabel || i}
+            aria-label=${this.ariaLabel || r}
             @click=${this.onClick}
         >
-            ${this.loading ? r`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : i}
+            ${this.loading ? n`<icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>` : r}
             <slot name="left-icon"></slot>
             <slot @slotchange=${this.onIconSlotChange} name="icon"></slot>
             <slot></slot>
@@ -284,7 +284,7 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 	]
 ], h, 0, void 0, t), s), o = class extends z {
 	constructor() {
-		super(V), N(this, "styles", n), N(this, "formAssociated", !0), m();
+		super(V), N(this, "styles", a), N(this, "formAssociated", !0), m();
 	}
 }, N(o, E, void 0), o)();
 export { B as BUTTON_VARIANTS, V as default };

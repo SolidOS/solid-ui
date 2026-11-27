@@ -1,11 +1,11 @@
 import { label as e } from "../../utils/label.esm.js";
-import { sym as t } from "rdflib";
-import { Authenticated as n, Public as r, solidLogicSingleton as i } from "solid-logic";
+import { Authenticated as t, Public as n, solidLogicSingleton as r } from "solid-logic";
+import { sym as i } from "rdflib";
 // src/components/access-control-modal/accessGrantDrafts.ts
 function a(e) {
 	return {
 		...e,
-		agentClass: e.agentClass.filter((e) => e !== n.iri && e !== r.iri)
+		agentClass: e.agentClass.filter((e) => e !== t.iri && e !== n.iri)
 	};
 }
 function o(e) {
@@ -41,17 +41,17 @@ function c(e) {
 		return t.set(n, r + 1), r === 0 ? n : `${n}#${r}`;
 	});
 }
-function l(n) {
-	let r = [
-		...n.agent,
-		...n.agentGroup,
-		...n.agentClass,
-		...n.origin
+function l(t) {
+	let n = [
+		...t.agent,
+		...t.agentGroup,
+		...t.agentClass,
+		...t.origin
 	];
-	return r.length ? r.map((n) => e(t(n))).join(", ") : "Unknown access holder";
+	return n.length ? n.map((t) => e(i(t))).join(", ") : "Unknown access holder";
 }
 function u(e) {
-	return i.acl.roleFromModes(e.mode);
+	return r.acl.roleFromModes(e.mode);
 }
 function d(e) {
 	let t = a(e);
@@ -78,22 +78,24 @@ function p(e) {
 	});
 }
 function m(e) {
-	return p(e).filter(({ role: e, initialRole: t, subjects: n }) => e !== t && n.length > 0).map(({ authorization: e, subjects: t, role: n }) => ({
+	return p(e).filter(({ role: e, initialRole: t, scope: n, initialScope: r, subjects: i }) => (e !== t || n !== r) && i.length > 0).map(({ authorization: e, subjects: t, role: n, scope: r, initialScope: i }) => ({
 		authorization: e,
 		subjects: t,
-		role: n
+		role: n,
+		scope: r,
+		initialScope: i
 	}));
 }
 function h(e) {
-	let t = e.filter((e) => e.agentClass.includes(n.iri)).flatMap((e) => e.mode);
-	return t.length ? i.acl.roleFromModes(t) : "No Access";
+	let n = e.filter((e) => e.agentClass.includes(t.iri)).flatMap((e) => e.mode);
+	return n.length ? r.acl.roleFromModes(n) : "No Access";
 }
 function g(e) {
-	let t = e.filter((e) => e.agentClass.includes(r.iri)).flatMap((e) => e.mode);
-	return t.length ? i.acl.publicRoleFromModes(t) : "No Access";
+	let t = e.filter((e) => e.agentClass.includes(n.iri)).flatMap((e) => e.mode);
+	return t.length ? r.acl.publicRoleFromModes(t) : "No Access";
 }
-function _(i) {
-	return i.iri === n.iri ? "Authenticated users" : i.iri === r.iri ? "Public" : e(t(i.iri)).trim() || i.iri;
+function _(r) {
+	return r.iri === t.iri ? "Authenticated users" : r.iri === n.iri ? "Public" : e(i(r.iri)).trim() || r.iri;
 }
 export { d as createAccessGrantDraft, f as createAccessGrantDrafts, s as getAccessGrantId, c as getAccessGrantIds, p as getAccessGrantViewModels, _ as getAccessSubjectLabel, h as getAuthenticatedAccessRole, u as getAuthorizationRole, o as getAuthorizationSubjectEntries, l as getAuthorizationSubjectLabel, m as getChangedAccessGrants, g as getPublicAccessRole, a as getSharedAuthorization };
 

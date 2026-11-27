@@ -1,11 +1,11 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
+import { html as n } from "lit";
+import { property as r } from "lit/decorators.js";
 import "../../lib/components/index.esm.js";
-import { showDialog as n } from "../../lib/dialogs/helpers.esm.js";
+import { showDialog as i } from "../../lib/dialogs/helpers.esm.js";
 import "../../lib/dialogs/index.esm.js";
-import r from "../photo-capture-modal/index.esm.js";
-import { html as i } from "lit";
-import { property as a } from "lit/decorators.js";
+import a from "../photo-capture-modal/index.esm.js";
 // src/components/photo-capture/PhotoCapture.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I;
 function ee(e, t, n) {
@@ -178,51 +178,51 @@ function oe(e) {
 }
 l = [e("solid-ui-photo-capture")];
 var se, V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap(), X = /*#__PURE__*/ new WeakMap(), Z = /*#__PURE__*/ new WeakMap(), Q = /*#__PURE__*/ new WeakMap(), $ = /*#__PURE__*/ new WeakMap();
-I = (u = a({
+I = (u = r({
 	type: String,
 	reflect: !0
-}), f = a({
+}), f = r({
 	type: String,
 	reflect: !0
-}), m = a({
+}), m = r({
 	type: String,
 	attribute: "capture-label",
 	reflect: !0
-}), g = a({
+}), g = r({
 	type: String,
 	attribute: "confirm-label",
 	reflect: !0
-}), v = a({
+}), v = r({
 	type: String,
 	attribute: "retake-label",
 	reflect: !0
-}), b = a({
+}), b = r({
 	type: String,
 	attribute: "cancel-label",
 	reflect: !0
-}), S = a({
+}), S = r({
 	type: String,
 	attribute: "facing-mode",
 	reflect: !0
-}), w = a({
+}), w = r({
 	type: String,
 	reflect: !0
-}), E = a({
+}), E = r({
 	type: String,
 	attribute: "capture-format",
 	reflect: !0
-}), O = a({
+}), O = r({
 	type: Number,
 	attribute: "capture-quality"
-}), A = a({
+}), A = r({
 	type: Boolean,
 	attribute: "show-cancel-button",
 	reflect: !0
-}), M = a({
+}), M = r({
 	type: String,
 	attribute: "file-name-prefix",
 	reflect: !0
-}), P = a({ attribute: !1 }), "label"), o = class extends t {
+}), P = r({ attribute: !1 }), "label"), o = class extends t {
 	constructor(...e) {
 		super(...e), L(this, V, (s(this), d(this, "Take Photo"))), L(this, H, p(this, "Take a photo")), L(this, U, h(this, "Take Photo")), L(this, W, _(this, "Use Photo")), L(this, G, y(this, "Retake")), L(this, K, x(this, "Cancel")), L(this, q, C(this, "user")), L(this, J, T(this, "")), L(this, Y, D(this, "image/png")), L(this, X, k(this, void 0)), L(this, Z, j(this, !0)), L(this, Q, N(this, "")), L(this, $, F(this, void 0)), ee(this, "controlElement", null);
 	}
@@ -305,14 +305,14 @@ I = (u = a({
 		R($, this, e);
 	}
 	render() {
-		return i`
+		return n`
         <slot name="trigger" @click=${this.onClick}>
             <solid-ui-button ?disabled="${this.disabled}">${this.label}</solid-ui-button>
         </slot>
     `;
 	}
 	onClick() {
-		n(r, {
+		i(a, {
 			props: {
 				name: this.name,
 				heading: this.heading,

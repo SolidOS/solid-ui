@@ -1,31 +1,36 @@
 import "../combobox/index.esm.js";
-import { directoryEntryOptionTemplate as e } from "./AccessControlAddAccess.esm.js";
+import { directoryEntryOptionIcon as e } from "./AccessControlAddAccess.esm.js";
 import { defineAsyncComboboxOptionsProvider as t } from "../combobox/Combobox.esm.js";
 import { label as n } from "../../utils/label.esm.js";
-import r from "../../lib/ns.esm.js";
+import { solidLogicSingleton as r } from "solid-logic";
+import { sym as i } from "rdflib";
+import { html as a } from "lit";
+import o from "../../lib/ns.esm.js";
 import "../../_virtual/~icons/lucide/globe.esm.js";
-import { dedupeByKey as i, dedupeComboboxOptions as a, isAbsoluteHttpUri as o, isOriginUrl as s, normalizeOriginInput as c } from "./helpers.esm.js";
-import { sym as l } from "rdflib";
-import { DEFAULT_DIRECTORY_SOURCES as u, solidLogicSingleton as d } from "solid-logic";
-import { html as f } from "lit";
+import { dedupeByKey as s, dedupeComboboxOptions as c, isAbsoluteHttpUri as l, isOriginUrl as u, normalizeOriginInput as d } from "./helpers.esm.js";
 // src/components/access-control-modal/accessTargetResolver.ts
+var f = [
+	"contacts",
+	"friends",
+	"groups"
+];
 async function p(e) {
-	let t = c(e);
+	let t = d(e);
 	return t ? {
 		kind: "origin",
 		subjectValue: t
-	} : s(e) ? {
+	} : u(e) ? {
 		kind: "origin",
 		subjectValue: new URL(e).origin
-	} : await d.acl.classifyAccessControlSubject(e);
+	} : await r.acl.classifyAccessControlSubject(e);
 }
 async function m(e, t) {
 	if (!e || e.kind === "origin") return e?.subjectValue;
-	let r = l(e.subjectValue);
-	await d.store.fetcher.load(r.doc());
-	let i = t?.trim() || n(r).trim();
-	if (!i || i === e.subjectValue) throw Error("The access target has no usable display label.");
-	return i;
+	let a = i(e.subjectValue);
+	await r.store.fetcher.load(a.doc());
+	let o = t?.trim() || n(a).trim();
+	if (!o || o === e.subjectValue) throw Error("The access target has no usable display label.");
+	return o;
 }
 async function h(e, t) {
 	let n = await p(e);
@@ -49,45 +54,42 @@ function _(t, n) {
 	return {
 		label: n,
 		value: t.uri,
-		template: e({
-			...t,
-			label: n
-		})
+		icon: e(t)
 	};
 }
 async function v(e) {
-	let t = c(e);
+	let t = d(e);
 	if (t) return [{
 		label: `Use origin ${t}`,
 		value: t,
 		targetKind: "origin",
-		template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${t}</span></span>`
+		icon: a`<icon-lucide-globe></icon-lucide-globe>`
 	}];
-	if (!o(e)) return [];
-	if (s(e)) return [{
+	if (!l(e)) return [];
+	if (u(e)) return [{
 		label: `Use origin ${new URL(e).origin}`,
 		value: new URL(e).origin,
 		targetKind: "origin",
-		template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Use origin ${new URL(e).origin}</span></span>`
+		icon: a`<icon-lucide-globe></icon-lucide-globe>`
 	}];
 	let n = await g(e);
-	return a(n ? [n] : []);
+	return c(n ? [n] : []);
 }
 async function y(e) {
 	try {
-		let t = d.authn.currentUser();
+		let t = r.authn.currentUser();
 		if (!t) return [];
-		await d.profile.loadProfile(t);
-		let n = d.store;
-		return n.each(t, r.acl("trustedApp")).flatMap((t) => {
-			let i = n.any(t, r.acl("origin"));
-			if (!i || !s(i.value)) return [];
-			let a = new URL(i.value).origin;
-			return e && !`${a} trusted app`.toLowerCase().includes(e.toLowerCase()) ? [] : [{
-				label: `Trusted app: ${a}`,
-				value: a,
+		await r.profile.loadProfile(t);
+		let n = r.store;
+		return n.each(t, o.acl("trustedApp")).flatMap((t) => {
+			let r = n.any(t, o.acl("origin"));
+			if (!r || !u(r.value)) return [];
+			let i = new URL(r.value).origin;
+			return e && !`${i} trusted app`.toLowerCase().includes(e.toLowerCase()) ? [] : [{
+				label: `Trusted app: ${i}`,
+				value: i,
 				targetKind: "trustedApp",
-				template: f`<span class="access-grants-directory-entry"><icon-lucide-globe style="width: 13px; height: 13px; flex: 0 0 13px;"></icon-lucide-globe><span>Trusted app: ${a}</span></span>`
+				icon: a`<icon-lucide-globe></icon-lucide-globe>`
 			}];
 		});
 	} catch {
@@ -102,10 +104,10 @@ function b(e) {
 	}];
 }
 var x = t(async (e) => {
-	let t = e.trim(), n = await v(t), r = await y(t);
-	if (t.length < 2) return i([
+	let t = e.trim(), n = await v(t), i = await y(t);
+	if (t.length < 2) return s([
 		...n,
-		...r,
+		...i,
 		...b(n)
 	], (e) => {
 		let t = e;
@@ -113,12 +115,12 @@ var x = t(async (e) => {
 	});
 	let a = [];
 	try {
-		a = await d.directory.search({
+		a = await r.directory.search({
 			query: t,
-			sources: u
+			sources: f
 		});
 	} catch (e) {
-		if (!n.length && !r.length) throw e;
+		if (!n.length && !i.length) throw e;
 	}
 	let o = (await Promise.all(a.map(async (e) => {
 		try {
@@ -131,9 +133,9 @@ var x = t(async (e) => {
 			return;
 		}
 	}))).filter((e) => e !== void 0).map(({ entry: e, label: t }) => _(e, t));
-	return i([
+	return s([
 		...n,
-		...r,
+		...i,
 		...o
 	], (e) => {
 		let t = e;

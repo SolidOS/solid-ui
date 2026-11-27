@@ -1,8 +1,9 @@
 import { WebComponent } from '../../lib/components';
+import { PropertyValues } from 'lit';
 import { AccessRole, DirectoryEntry } from 'solid-logic';
 import { AsyncComboboxOptionsProvider } from '../combobox';
 import { PendingAccessGrant } from './types';
-export declare function directoryEntryOptionTemplate(entry: DirectoryEntry): import('lit-html').TemplateResult<1>;
+export declare function directoryEntryOptionIcon(entry: DirectoryEntry): import('lit-html').TemplateResult<1> | undefined;
 export default class AccessControlAddAccess extends WebComponent {
     static styles: import('lit').CSSResult;
     accessor principalInputValue: string;
@@ -11,6 +12,11 @@ export default class AccessControlAddAccess extends WebComponent {
     accessor inputError: string;
     accessor disabled: boolean;
     accessor asyncOptionsProvider: AsyncComboboxOptionsProvider | null;
+    accessor showAdvancedToggle: boolean;
+    accessor advancedSharingOpen: boolean;
+    private accessor roleCombobox;
+    protected updated(changedProperties: PropertyValues<this>): void;
+    private onAdvancedSharingToggle;
     private onPrincipalInput;
     private onPrincipalSelect;
     private onRoleChange;

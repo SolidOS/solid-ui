@@ -1,17 +1,17 @@
 import e from "../lib/ns.esm.js";
 import { label as t } from "../utils/label.esm.js";
+import { ACL_LINK as n, solidLogicSingleton as r } from "solid-logic";
 import "../utils/index.esm.js";
-import { log as n } from "../lib/debug.esm.js";
-import { graph as r, serialize as i, st as a, sym as o } from "rdflib";
-import { ACL_LINK as s, solidLogicSingleton as c } from "solid-logic";
+import { log as i } from "../lib/debug.esm.js";
+import { graph as a, serialize as o, st as s, sym as c } from "rdflib";
 // src/acl/acl.ts
-var l = c.store;
-function u(t, n, i, s) {
-	let c = e.acl, u = t.uri.slice(-1) === "/", d = l.each(void 0, c("default"), i, s).concat(l.each(void 0, c("defaultForNew"), i, s)).reduce((n, r) => n.concat(l.statementsMatching(r, e.rdf("type"), c("Authorization"), s)).concat(l.statementsMatching(r, c("agent"), void 0, s)).concat(l.statementsMatching(r, c("agentClass"), void 0, s)).concat(l.statementsMatching(r, c("agentGroup"), void 0, s)).concat(l.statementsMatching(r, c("origin"), void 0, s)).concat(l.statementsMatching(r, c("originClass"), void 0, s)).concat(l.statementsMatching(r, c("mode"), void 0, s)).concat(a(r, c("accessTo"), t, s)).concat(u ? a(r, c("default"), t, s) : []), []), f = r();
-	return d.forEach((e) => f.add(p(e.subject), p(e.predicate), p(e.object), o(n.uri))), f;
+var l = r.store;
+function u(t, n, r, i) {
+	let o = e.acl, u = t.uri.slice(-1) === "/", d = l.each(void 0, o("default"), r, i).concat(l.each(void 0, o("defaultForNew"), r, i)).reduce((n, r) => n.concat(l.statementsMatching(r, e.rdf("type"), o("Authorization"), i)).concat(l.statementsMatching(r, o("agent"), void 0, i)).concat(l.statementsMatching(r, o("agentClass"), void 0, i)).concat(l.statementsMatching(r, o("agentGroup"), void 0, i)).concat(l.statementsMatching(r, o("origin"), void 0, i)).concat(l.statementsMatching(r, o("originClass"), void 0, i)).concat(l.statementsMatching(r, o("mode"), void 0, i)).concat(s(r, o("accessTo"), t, i)).concat(u ? s(r, o("default"), t, i) : []), []), f = a();
+	return d.forEach((e) => f.add(p(e.subject), p(e.predicate), p(e.object), c(n.uri))), f;
 	function p(e) {
-		let t = s.uri.length;
-		return o(e.uri.slice(0, t) === s.uri ? n.uri + e.uri.slice(t) : e.uri);
+		let t = i.uri.length;
+		return c(e.uri.slice(0, t) === i.uri ? n.uri + e.uri.slice(t) : e.uri);
 	}
 }
 function d(t, n, r = l, i = !1) {
@@ -123,105 +123,105 @@ function y(n) {
 			return e.split("#")[1][0];
 		}).join("");
 		r += a + ":";
-		let s = n[i];
-		for (let n = 0; n < s.length; n++) {
-			let i = s[n][0], a = o(s[n][1]);
-			r += i === "agent" ? "@" : "", r += a.sameTerm(e.foaf("Agent")) ? "*" : t(a), n < s.length - 1 && (r += ",");
+		let o = n[i];
+		for (let n = 0; n < o.length; n++) {
+			let i = o[n][0], a = c(o[n][1]);
+			r += i === "agent" ? "@" : "", r += a.sameTerm(e.foaf("Agent")) ? "*" : t(a), n < o.length - 1 && (r += ",");
 		}
 		r += ";";
 	}
 	return "{" + r.slice(0, -1) + "}";
 }
 function b(e, t, n) {
-	let a = r();
-	return g(a, e, t, n), i(n, a, n.uri, "text/turtle") || "";
+	let r = a();
+	return g(r, e, t, n), o(n, r, n.uri, "text/turtle") || "";
 }
 function x(e, t, n, r, i) {
 	return S(e, t, h(n), r, i);
 }
-function S(e, t, n, i, a) {
-	let o = r();
-	_(o, t, n, i, !0), e.updater?.put(i, o.statementsMatching(void 0, void 0, void 0, i), "text/turtle", function(r, o, s) {
-		o ? (e.fetcher?.unload(i), _(e, t, n, i, !0), e.fetcher.requested[i.uri] = "done", a(o)) : a(o, s);
+function S(e, t, n, r, i) {
+	let o = a();
+	_(o, t, n, r, !0), e.updater?.put(r, o.statementsMatching(void 0, void 0, void 0, r), "text/turtle", function(a, o, s) {
+		o ? (e.fetcher?.unload(r), _(e, t, n, r, !0), e.fetcher.requested[r.uri] = "done", i(o)) : i(o, s);
 	});
 }
 function C(t, n, r) {
 	let i = l.each(void 0, e.vcard("hasMember"), t);
 	i ? w(t, i, n, r) : (n("This card is in no groups"), r(!0));
 }
-function w(e, r, i, a) {
-	i ||= n;
+function w(e, n, r, a) {
+	r ||= i;
 	let o = e.doc();
-	E(o, function(n, s, c, u, p, h) {
-		if (!n || !p || !h) return a(!1, u);
+	E(o, function(i, s, c, u, p, h) {
+		if (!i || !p || !h) return a(!1, u);
 		let g = s ? d(c, u) : d(p, h);
-		m(r, function(n, r) {
-			if (!n) return a(!1, r);
-			f(r, g) ? i("Nice - same ACL. no change " + t(e) + " " + o) : (i("Group ACLs differ for " + t(e) + " " + o), x(l, c, r, u, a));
+		m(n, function(n, i) {
+			if (!n) return a(!1, i);
+			f(i, g) ? r("Nice - same ACL. no change " + t(e) + " " + o) : (r("Group ACLs differ for " + t(e) + " " + o), x(l, c, i, u, a));
 		});
 	});
 }
-function T(e, t, n) {
-	let r = l.any(e, s);
+function T(e, t, r) {
+	let i = l.any(e, n);
 	if (!l.fetcher) throw Error("Store has no fetcher");
-	r ? l.fetcher.webOperation("PUT", r.value, {
+	i ? l.fetcher.webOperation("PUT", i.value, {
 		data: t,
 		contentType: "text/turtle"
 	}).then((e) => {
-		n(e.ok, e.error || "");
-	}) : l.fetcher.nowOrWhenFetched(e, void 0, function(r, i) {
-		if (!r) return n(r, "Gettting headers for ACL: " + i);
-		let a = l.any(e, s);
-		if (!a) n(!1, "No Link rel=ACL header for " + e);
+		r(e.ok, e.error || "");
+	}) : l.fetcher.nowOrWhenFetched(e, void 0, function(i, a) {
+		if (!i) return r(i, "Gettting headers for ACL: " + a);
+		let o = l.any(e, n);
+		if (!o) r(!1, "No Link rel=ACL header for " + e);
 		else {
 			if (!l.fetcher) throw Error("Store has no fetcher");
-			l.fetcher.webOperation("PUT", a.value, {
+			l.fetcher.webOperation("PUT", o.value, {
 				data: t,
 				contentType: "text/turtle"
 			}).then((e) => {
-				n(e.ok, e.error || "");
+				r(e.ok, e.error || "");
 			});
 		}
 	});
 }
 function E(t, n) {
-	D(t, function(r, i, a, s) {
-		let c = e.acl;
-		if (!r) return n(!1, !1, i, s);
+	D(t, function(r, i, a, o) {
+		let s = e.acl;
+		if (!r) return n(!1, !1, i, o);
 		let u = function(e) {
 			e.slice(-1) === "/" && (e = e.slice(0, -1));
 			let r = e.lastIndexOf("/");
 			if (e.indexOf("/", e.indexOf("//") + 2) > r) return n(!1, !0, 404, "Found no ACL resource");
 			e = e.slice(0, r + 1);
-			let i = o(e);
-			D(i, function(r, o, s) {
-				return r ? o === 403 ? n(!1, !0, o, `( default ACL file FORBIDDEN. Stop.${e})`) : o === 404 ? u(e) : o === 200 ? l.each(void 0, c("default"), l.sym(e), s).concat(l.each(void 0, c("defaultForNew"), l.sym(e), s)).length ? n(!0, !1, t, a, l.sym(e), s) : u(e) : n(!1, !0, o, `Error status '${o}' searching for default for ${i}`) : n(!1, !0, o, `( No ACL pointer ${e} ${o})${s}`);
+			let i = c(e);
+			D(i, function(r, o, c) {
+				return r ? o === 403 ? n(!1, !0, o, `( default ACL file FORBIDDEN. Stop.${e})`) : o === 404 ? u(e) : o === 200 ? l.each(void 0, s("default"), l.sym(e), c).concat(l.each(void 0, s("defaultForNew"), l.sym(e), c)).length ? n(!0, !1, t, a, l.sym(e), c) : u(e) : n(!1, !0, o, `Error status '${o}' searching for default for ${i}`) : n(!1, !0, o, `( No ACL pointer ${e} ${o})${c}`);
 			});
 		};
-		if (!r) return n(!1, !1, i, `Error accessing Access Control information for ${t}) ${s}`);
+		if (!r) return n(!1, !1, i, `Error accessing Access Control information for ${t}) ${o}`);
 		if (i === 404) u(t.uri);
-		else if (i === 403) return n(!1, !1, i, `(Sharing not available to you)${s}`);
-		else if (i !== 200) return n(!1, !1, i, `Error ${i} accessing Access Control information for ${t}: ${s}`);
+		else if (i === 403) return n(!1, !1, i, `(Sharing not available to you)${o}`);
+		else if (i !== 200) return n(!1, !1, i, `Error ${i} accessing Access Control information for ${t}: ${o}`);
 		else return n(!0, !0, t, a);
 	});
 }
 function D(e, t) {
 	if (!l.fetcher) throw Error("kb has no fetcher");
-	l.fetcher.nowOrWhenFetched(e, void 0, function(n, r) {
-		if (!n) return t(n, `Can't get headers to find ACL for ${e}: ${r}`);
-		let i = l.any(e, s);
-		if (!i) t(!1, 900, `No Link rel=ACL header for ${e}`);
+	l.fetcher.nowOrWhenFetched(e, void 0, function(r, i) {
+		if (!r) return t(r, `Can't get headers to find ACL for ${e}: ${i}`);
+		let a = l.any(e, n);
+		if (!a) t(!1, 900, `No Link rel=ACL header for ${e}`);
 		else {
 			if (!l.fetcher) throw Error("kb has no fetcher");
-			if (l.fetcher.nonexistent[i.value]) return t(!0, 404, i, `ACL file ${i} does not exist.`);
-			l.fetcher.nowOrWhenFetched(i, void 0, function(e, n, r) {
-				e ? t(!0, 200, i) : t(!0, r.status, i, `Can't read Access Control File ${i}: ${n}`);
+			if (l.fetcher.nonexistent[a.value]) return t(!0, 404, a, `ACL file ${a} does not exist.`);
+			l.fetcher.nowOrWhenFetched(a, void 0, function(e, n, r) {
+				e ? t(!0, 200, a) : t(!0, r.status, a, `Can't read Access Control File ${a}: ${n}`);
 			});
 		}
 	});
 }
 async function O(e) {
-	return new Promise((t, n) => E(o(e), (r, i, a, o, s) => r ? t(i ? a : s) : n(/* @__PURE__ */ Error(`Error loading ${e}`))));
+	return new Promise((t, n) => E(c(e), (r, i, a, o, s) => r ? t(i ? a : s) : n(/* @__PURE__ */ Error(`Error loading ${e}`))));
 }
 export { v as ACLToString, h as ACLbyCombination, p as ACLunion, u as adoptACLDefault, y as comboToString, w as fixIndividualACL, C as fixIndividualCardACL, D as getACL, E as getACLorDefault, O as getProspectiveHolder, m as loadUnionACL, g as makeACLGraph, _ as makeACLGraphbyCombo, b as makeACLString, x as putACLObject, S as putACLbyCombo, d as readACL, f as sameACL, T as setACL };
 

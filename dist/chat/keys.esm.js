@@ -1,47 +1,47 @@
 import { log as e } from "../lib/debug.esm.js";
-import t from "../lib/ns.esm.js";
-import { getExistingPrivateKey as n, getExistingPublicKey as r, privKeyUrl as i, pubKeyUrl as a } from "../utils/keyHelpers/accessData.esm.js";
-import { keyAclBody as o, keyContainerAclBody as s, setAcl as c } from "../utils/keyHelpers/acl.esm.js";
-import * as l from "rdflib";
-import { store as u } from "solid-logic";
-import { schnorr as d } from "@noble/curves/secp256k1.js";
-import { bytesToHex as f, hexToBytes as p } from "@noble/hashes/utils.js";
+import { schnorr as t } from "@noble/curves/secp256k1.js";
+import { bytesToHex as n, hexToBytes as r } from "@noble/hashes/utils.js";
+import i from "../lib/ns.esm.js";
+import { store as a } from "solid-logic";
+import * as o from "rdflib";
+import { getExistingPrivateKey as s, getExistingPublicKey as c, privKeyUrl as l, pubKeyUrl as u } from "../utils/keyHelpers/accessData.esm.js";
+import { keyAclBody as d, keyContainerAclBody as f, setAcl as p } from "../utils/keyHelpers/acl.esm.js";
 // src/chat/keys.ts
 function m() {
-	return f(d.utils.randomSecretKey());
+	return n(t.utils.randomSecretKey());
 }
 function h(e) {
-	return f(d.getPublicKey(p(e)));
+	return n(t.getPublicKey(r(e)));
 }
 async function g(e) {
-	await u.fetcher.load(e);
-	let n = await a(e);
+	await a.fetcher.load(e);
+	let t = await u(e);
 	try {
-		return await u.fetcher.load(n), u.any(e, t.solid("publicKey"))?.value;
+		return await a.fetcher.load(t), a.any(e, i.solid("publicKey"))?.value;
 	} catch {
 		return;
 	}
 }
-async function _(o) {
-	await u.fetcher.load(o);
-	let d = await a(o), f = await i(o), p = await r(o, d), g = await n(o, f), _ = !0;
-	if (g && p !== h(g) && confirm("This is strange the publicKey is not valid for\n" + o?.uri + "'shall we repair keeping the private key ?") && (_ = !1), !g || !p || !_) {
-		let n = [], r = [];
-		if (g || (g = m(), r = [l.st(o, t.solid("privateKey"), l.literal(g), u.sym(f))], await y(f, [], r, o.uri)), !p || !_) {
-			n = [], p && (n = [l.st(o, t.solid("publicKey"), l.lit(p), u.sym(d))], e("delete invalid publicKey " + n));
-			let i = h(g);
-			r = [l.st(o, t.solid("publicKey"), l.literal(i), u.sym(d))], await y(d, n, r);
+async function _(t) {
+	await a.fetcher.load(t);
+	let n = await u(t), r = await l(t), d = await c(t, n), g = await s(t, r), _ = !0;
+	if (g && d !== h(g) && confirm("This is strange the publicKey is not valid for\n" + t?.uri + "'shall we repair keeping the private key ?") && (_ = !1), !g || !d || !_) {
+		let s = [], c = [];
+		if (g || (g = m(), c = [o.st(t, i.solid("privateKey"), o.literal(g), a.sym(r))], await y(r, [], c, t.uri)), !d || !_) {
+			s = [], d && (s = [o.st(t, i.solid("publicKey"), o.lit(d), a.sym(n))], e("delete invalid publicKey " + s));
+			let r = h(g);
+			c = [o.st(t, i.solid("publicKey"), o.literal(r), a.sym(n))], await y(n, s, c);
 		}
-		let i = f.substring(0, f.lastIndexOf("/") + 1);
-		await c(i, s(o.uri));
+		let l = r.substring(0, r.lastIndexOf("/") + 1);
+		await p(l, f(t.uri));
 	}
 	return g;
 }
 var v = async (t) => {
-	await u.fetcher.load(t);
-	let n = u.any(u.sym(t), u.sym("http://www.iana.org/assignments/link-relations/acl"));
+	await a.fetcher.load(t);
+	let n = a.any(a.sym(t), a.sym("http://www.iana.org/assignments/link-relations/acl"));
 	if (n) try {
-		let t = await u.fetcher.webOperation("DELETE", n.value);
+		let t = await a.fetcher.webOperation("DELETE", n.value);
 		e("delete keyAcl" + n.value + " " + t.status);
 	} catch (t) {
 		if (t.response.status !== 404) throw Error(t);
@@ -49,9 +49,9 @@ var v = async (t) => {
 	}
 };
 async function y(e, t, n, r = "") {
-	await v(e), await u.updater.updateMany(t, n);
-	let i = o(e, r);
-	await c(e, i);
+	await v(e), await a.updater.updateMany(t, n);
+	let i = d(e, r);
+	await p(e, i);
 }
 export { m as generatePrivateKey, h as generatePublicKey, _ as getPrivateKey, g as getPublicKey };
 

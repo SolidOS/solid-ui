@@ -1,19 +1,19 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
+import { sym as n } from "rdflib";
+import { solidLogicSingleton as r } from "solid-logic";
 import "../../lib/components/index.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as n, fileExplorerContext as r } from "../../lib/file-explorer/context.esm.js";
-import { FILE_EXPLORER_BACK_EVENT as i } from "../../lib/file-explorer/events.esm.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as i, fileExplorerContext as a } from "../../lib/file-explorer/context.esm.js";
+import { FILE_EXPLORER_BACK_EVENT as o } from "../../lib/file-explorer/events.esm.js";
+import { property as s, state as c } from "lit/decorators.js";
+import { consume as l } from "@lit/context";
+import { html as u } from "lit";
 import "../../_virtual/~icons/lucide/share-2.esm.js";
 import "../../_virtual/~icons/lucide/pencil.esm.js";
 import "../../_virtual/~icons/lucide/ellipsis-vertical.esm.js";
-import a from "./FileExplorerHeader.styles.esm.js";
+import d from "./FileExplorerHeader.styles.css.esm.js";
 import "./FileExplorerHeaderSummary.esm.js";
 import "./FileExplorerHeaderControls.esm.js";
-import { sym as o } from "rdflib";
-import { solidLogicSingleton as s } from "solid-logic";
-import { consume as c } from "@lit/context";
-import { html as l } from "lit";
-import { property as u, state as d } from "lit/decorators.js";
 // src/components/file-explorer-header/FileExplorerHeader.ts
 var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N;
 function P(e, t, n) {
@@ -189,19 +189,19 @@ function G(e) {
 }
 x = [e("solid-ui-file-explorer-header")];
 var K;
-new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = c({
-	context: r,
+new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), N = (S = l({
+	context: a,
 	subscribe: !0
-}), w = u({ attribute: !1 }), E = u({ attribute: !1 }), O = u({ type: Boolean }), A = d(), "_loadedMetadataForUri"), p = class extends t {
+}), w = s({ attribute: !1 }), E = s({ attribute: !1 }), O = s({ type: Boolean }), A = c(), "_loadedMetadataForUri"), p = class extends t {
 	constructor(...e) {
-		super(...e), z(this, N, void y(this)), z(this, "_metadataGeneration", 0), P(this, m, C(this, n)), P(this, h, T(this, [])), P(this, g, D(this, void 0)), P(this, _, k(this, !0)), P(this, v, j(this, {
+		super(...e), z(this, N, void y(this)), z(this, "_metadataGeneration", 0), P(this, m, C(this, i)), P(this, h, T(this, [])), P(this, g, D(this, void 0)), P(this, _, k(this, !0)), P(this, v, j(this, {
 			modified: void 0,
 			isPublic: !1,
 			canEdit: !1,
 			canManageAccess: !1,
 			aclUri: void 0
 		})), z(this, "handleBack", () => {
-			this.dispatchEvent(new CustomEvent(i, {
+			this.dispatchEvent(new CustomEvent(o, {
 				bubbles: !0,
 				composed: !0,
 				detail: { subjectUri: this.fileExplorerContext.subjectUri }
@@ -257,20 +257,20 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 	}
 	async loadResponseMetadata(e, t) {
 		try {
-			let n = await s.resource.fetchMetadata(o(e));
+			let i = await r.resource.fetchMetadata(n(e));
 			t === this._metadataGeneration && this.fileExplorerContext.subjectUri === e && (this.responseMetadata = {
-				modified: n.modified,
-				isPublic: n.access.isPublic,
-				canEdit: n.access.canEdit,
-				canManageAccess: n.access.canManageAccess,
-				aclUri: n.aclUri
+				modified: i.modified,
+				isPublic: i.access.isPublic,
+				canEdit: i.access.canEdit,
+				canManageAccess: i.access.canManageAccess,
+				aclUri: i.aclUri
 			});
 		} catch (n) {
 			t === this._metadataGeneration && this.fileExplorerContext.subjectUri === e && (this.responseMetadata = this.getDefaultResponseMetadata(), console.warn("Failed to load response metadata", n));
 		}
 	}
 	render() {
-		return l`
+		return u`
       <header>
         <solid-ui-file-explorer-header-summary
           .paneIcon=${this.paneIcon}
@@ -314,7 +314,7 @@ new (M = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 	]
 ], x, 0, void 0, t), p), f = class extends G {
 	constructor() {
-		super(K), z(this, "styles", a), b();
+		super(K), z(this, "styles", d), b();
 	}
 }, z(f, M, void 0), f)();
 export { K as default };

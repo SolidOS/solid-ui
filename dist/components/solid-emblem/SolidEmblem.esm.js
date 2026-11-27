@@ -1,9 +1,9 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as n } from "lit";
 import "../../_virtual/~icons/app/solid-emblem.esm.js";
-import n from "./SolidEmblem.styles.esm.js";
-import { html as r } from "lit";
+import r from "./SolidEmblem.styles.css.esm.js";
 // src/components/solid-emblem/SolidEmblem.ts
 var i, a, o, s, c;
 function l(e, t, n) {
@@ -165,11 +165,11 @@ s = [e("solid-ui-solid-emblem")];
 var g;
 new (c = (a = class extends t {
 	render() {
-		return r`<icon-app-solid-emblem></icon-app-solid-emblem>`;
+		return n`<icon-app-solid-emblem></icon-app-solid-emblem>`;
 	}
 }, [g, o] = u(a, [], s, 0, void 0, t).c, a), i = class extends h {
 	constructor() {
-		super(g), l(this, "styles", n), o();
+		super(g), l(this, "styles", r), o();
 	}
 }, l(i, c, void 0), i)();
 export { g as default };

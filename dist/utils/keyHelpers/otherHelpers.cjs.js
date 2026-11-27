@@ -1,2 +1,2 @@
-const e=require("../../lib/ns.cjs.js");let t=require("solid-logic");var n=n=>{let r=t.store.any(n,e.default.space(`preferencesFile`),null,n.doc())?.value;if(r=r?.split(`/`).slice(0,-2).join(`/`),!r)throw Error(`prefererencesFile is expected to exist in ${n}`);return r};exports.getRootIfPreferencesExist=n;
+let e=require("solid-logic");const t=require("../../lib/ns.cjs.js");var n=n=>{let r=e.store.any(n,t.space(`preferencesFile`),null,n.doc())?.value;if(r=r?.split(`/`).slice(0,-2).join(`/`),!r)throw Error(`prefererencesFile is expected to exist in ${n}`);return r};exports.getRootIfPreferencesExist=n;
 //# sourceMappingURL=otherHelpers.cjs.js.map

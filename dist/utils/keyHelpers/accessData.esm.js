@@ -1,12 +1,12 @@
 import { error as e, log as t } from "../../lib/debug.esm.js";
-import n from "../../lib/ns.esm.js";
-import { getRootIfPreferencesExist as r } from "./otherHelpers.esm.js";
-import { store as i } from "solid-logic";
+import { store as n } from "solid-logic";
+import r from "../../lib/ns.esm.js";
+import { getRootIfPreferencesExist as i } from "./otherHelpers.esm.js";
 // src/utils/keyHelpers/accessData.ts
 var a = (t) => {
 	let n;
 	try {
-		n = `${r(t)}/profile/keys/publicKey.ttl`;
+		n = `${i(t)}/profile/keys/publicKey.ttl`;
 	} catch (t) {
 		e(t);
 	}
@@ -14,7 +14,7 @@ var a = (t) => {
 }, o = (t) => {
 	let n;
 	try {
-		n = `${r(t)}/settings/keys/privateKey.ttl`;
+		n = `${i(t)}/settings/keys/privateKey.ttl`;
 	} catch (t) {
 		e(t);
 	}
@@ -26,24 +26,24 @@ async function s(e, t) {
 async function c(e, t) {
 	return await l(e, t, "privateKey");
 }
-async function l(e, r, a) {
+async function l(e, i, a) {
 	try {
-		return await i.fetcher.load(r), i.any(e, n.solid(a))?.value;
+		return await n.fetcher.load(i), n.any(e, r.solid(a))?.value;
 	} catch (e) {
 		if (e.response.status === 404) {
-			t("createIfNotExists: doc does NOT exist, will create... " + r);
+			t("createIfNotExists: doc does NOT exist, will create... " + i);
 			try {
-				await i.fetcher.webOperation("PUT", r, {
+				await n.fetcher.webOperation("PUT", i, {
 					data: "",
 					contentType: "text/turtle"
 				});
 			} catch (e) {
-				throw t("createIfNotExists doc FAILED: " + r + ": " + e), e;
+				throw t("createIfNotExists doc FAILED: " + i + ": " + e), e;
 			}
-			delete i.fetcher.requested[r];
+			delete n.fetcher.requested[i];
 			return;
 		}
-		throw t("createIfNotExists doc FAILED: " + r + ": " + e), e;
+		throw t("createIfNotExists doc FAILED: " + i + ": " + e), e;
 	}
 }
 export { c as getExistingPrivateKey, s as getExistingPublicKey, l as getKeyIfExists, o as privKeyUrl, a as pubKeyUrl };

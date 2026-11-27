@@ -1,13 +1,13 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/dialog-component/DialogComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as n, nothing as r } from "lit";
+import { property as i, state as a } from "lit/decorators.js";
 import "../button/index.esm.js";
 import "../dialog/index.esm.js";
 import "../dialog-content/index.esm.js";
 import "../dialog-footer/index.esm.js";
-import n from "./PhotoCaptureModal.styles.esm.js";
-import { html as r, nothing as i } from "lit";
-import { property as a, state as o } from "lit/decorators.js";
+import o from "./PhotoCaptureModal.styles.css.esm.js";
 // src/components/photo-capture-modal/PhotoCaptureModal.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, M, ie, ae, N, P, F, I, L, R, z, B, V, H, U, W, G, K, q, J, oe, se, ce, le, ue, de, fe, pe, me, he;
 function Y(e, t, n) {
@@ -183,48 +183,48 @@ function Ce(e) {
 }
 O = [e("solid-ui-photo-capture-modal")];
 var $;
-new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), he = (k = a({
+new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), T = /*#__PURE__*/ new WeakMap(), he = (k = i({
 	type: String,
 	reflect: !0
-}), j = a({
+}), j = i({
 	type: String,
 	reflect: !0
-}), te = a({
+}), te = i({
 	type: String,
 	reflect: !0
-}), re = a({
+}), re = i({
 	type: String,
 	reflect: !0
-}), ie = a({
+}), ie = i({
 	type: String,
 	reflect: !0
-}), N = a({
+}), N = i({
 	type: String,
 	attribute: "cancel-label",
 	reflect: !0
-}), F = a({
+}), F = i({
 	type: String,
 	attribute: "file-name-prefix",
 	reflect: !0
-}), L = a({ attribute: !1 }), z = a({
+}), L = i({ attribute: !1 }), z = i({
 	type: String,
 	reflect: !0
-}), V = a({
+}), V = i({
 	type: String,
 	attribute: "capture-format",
 	reflect: !0
-}), U = a({
+}), U = i({
 	type: Number,
 	attribute: "capture-quality"
-}), G = a({
+}), G = i({
 	type: Boolean,
 	attribute: "show-cancel-button",
 	reflect: !0
-}), q = a({
+}), q = i({
 	type: String,
 	attribute: "facing-mode",
 	reflect: !0
-}), oe = o(), ce = o(), ue = o(), fe = o(), "name"), c = class extends t {
+}), oe = a(), ce = a(), ue = a(), fe = a(), "name"), c = class extends t {
 	constructor(...e) {
 		super(...e), Y(this, l, (E(this), A(this, ""))), Y(this, u, ee(this, "Take a photo")), Y(this, d, ne(this, "Take Photo")), Y(this, f, M(this, "Use Photo")), Y(this, p, ae(this, "Retake")), Y(this, m, P(this, "Cancel")), Y(this, h, I(this, "")), Y(this, g, R(this, void 0)), Y(this, _, B(this, "")), Y(this, v, H(this, "image/png")), Y(this, y, W(this, void 0)), Y(this, b, K(this, !0)), Y(this, x, J(this, "user")), Y(this, S, se(this, "")), Y(this, C, le(this, "")), Y(this, w, de(this, !1)), Y(this, T, pe(this, null)), Q(this, "stream", null);
 	}
@@ -350,19 +350,19 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 		}
 	}
 	render() {
-		return r`
+		return n`
         <solid-ui-dialog title=${this.heading}>
             <solid-ui-dialog-content>
                 ${this.renderViewport()}
                 ${this.renderStatus()}
             </solid-ui-dialog-content>
             <solid-ui-dialog-footer>
-                ${this.showCancelButton ? r`<solid-ui-button variant="secondary" @click=${() => this.close()}>${this.cancelLabel}</solid-ui-button>` : i}
+                ${this.showCancelButton ? n`<solid-ui-button variant="secondary" @click=${() => this.close()}>${this.cancelLabel}</solid-ui-button>` : r}
 
-                ${this.value ? r`
+                ${this.value ? n`
                     <solid-ui-button @click=${this.onRetake}>${this.retakeLabel}</solid-ui-button>
                     <solid-ui-button @click=${this.onConfirm}>${this.confirmLabel}</solid-ui-button>
-                  ` : r`
+                  ` : n`
                     <solid-ui-button
                         ?disabled=${this.startingPreview || !this.stream}
                         @click=${this.onCapture}
@@ -375,11 +375,11 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
     `;
 	}
 	renderViewport() {
-		let e = this.previewUrl ? r`<img src="${this.previewUrl}" alt="Captured photo preview" />` : r`<video autoplay playsinline muted></video>`;
-		return r`<div class="viewport">${e}</div>`;
+		let e = this.previewUrl ? n`<img src="${this.previewUrl}" alt="Captured photo preview" />` : n`<video autoplay playsinline muted></video>`;
+		return n`<div class="viewport">${e}</div>`;
 	}
 	renderStatus() {
-		return this.errorMessage ? r`<div class="status error">${this.errorMessage}</div>` : this.startingPreview ? r`<div class="status">Opening camera…</div>` : this.value ? r`<div class="status">Review the photo before confirming it.</div>` : r`<div class="status">Preview the camera and take a photo when ready.</div>`;
+		return this.errorMessage ? n`<div class="status error">${this.errorMessage}</div>` : this.startingPreview ? n`<div class="status">Opening camera…</div>` : this.value ? n`<div class="status">Review the photo before confirming it.</div>` : n`<div class="status">Preview the camera and take a photo when ready.</div>`;
 	}
 	onRetake() {
 		this.clearValue(), this.queuePreviewStart();
@@ -548,7 +548,7 @@ new (me = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d =
 	]
 ], O, 0, void 0, t), c), s = class extends Ce {
 	constructor() {
-		super($), Q(this, "styles", n), D();
+		super($), Q(this, "styles", o), D();
 	}
 }, Q(s, me, void 0), s)();
 export { $ as default };

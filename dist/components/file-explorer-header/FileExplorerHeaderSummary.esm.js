@@ -1,22 +1,22 @@
 import { label as e } from "../../utils/label.esm.js";
+import { sym as t } from "rdflib";
 import "../../lib/components/index.esm.js";
-import { makeDraggable as t } from "../../widgets/dragAndDrop.esm.js";
+import { makeDraggable as n } from "../../widgets/dragAndDrop.esm.js";
 import "../../utils/index.esm.js";
-import { customElement as n } from "../../lib/components/decorators.esm.js";
-import r from "../../lib/components/web-component/WebComponent.esm.js";
+import { customElement as r } from "../../lib/components/decorators.esm.js";
+import i from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../widgets/index.esm.js";
-import { DEFAULT_FILE_EXPLORER_CONTEXT as i, fileExplorerContext as a } from "../../lib/file-explorer/context.esm.js";
+import { DEFAULT_FILE_EXPLORER_CONTEXT as a, fileExplorerContext as o } from "../../lib/file-explorer/context.esm.js";
 import "../button/index.esm.js";
+import { property as s, query as c, state as l } from "lit/decorators.js";
+import { html as u } from "lit";
+import { consume as d } from "@lit/context";
 import "../../_virtual/~icons/lucide/globe.esm.js";
 import "../../_virtual/~icons/lucide/lock-keyhole.esm.js";
 import "../../_virtual/~icons/lucide/arrow-left.esm.js";
 import "../../_virtual/~icons/lucide/folder.esm.js";
-import o from "./FileExplorerHeaderSummary.styles.esm.js";
-import { getContainerItemCount as s, isContainerSubject as c } from "../../utils/podUtils.esm.js";
-import { sym as l } from "rdflib";
-import { consume as u } from "@lit/context";
-import { html as d } from "lit";
-import { property as f, query as p, state as m } from "lit/decorators.js";
+import f from "./FileExplorerHeaderSummary.styles.css.esm.js";
+import { getContainerItemCount as p, isContainerSubject as m } from "../../utils/podUtils.esm.js";
 // src/components/file-explorer-header/FileExplorerHeaderSummary.ts
 var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I, L, R, z, B, V, H;
 function U(e, t, n) {
@@ -190,14 +190,14 @@ function ee(e) {
 function te(e) {
 	return e;
 }
-E = [n("solid-ui-file-explorer-header-summary")];
+E = [r("solid-ui-file-explorer-header-summary")];
 var $;
-new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), H = (D = u({
-	context: a,
+new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), H = (D = d({
+	context: o,
 	subscribe: !0
-}), k = f({ attribute: !1 }), j = f({ attribute: !1 }), N = f({ type: Boolean }), F = f({ attribute: !1 }), L = m(), z = p("h1"), "_draggableSubjectUri"), g = class extends r {
+}), k = s({ attribute: !1 }), j = s({ attribute: !1 }), N = s({ type: Boolean }), F = s({ attribute: !1 }), L = l(), z = c("h1"), "_draggableSubjectUri"), g = class extends i {
 	constructor(...e) {
-		super(...e), J(this, H, void w(this)), J(this, "_paneIconGeneration", 0), U(this, _, O(this, i)), U(this, v, A(this)), U(this, y, M(this)), U(this, b, P(this, !0)), U(this, x, I(this, {
+		super(...e), J(this, H, void w(this)), J(this, "_paneIconGeneration", 0), U(this, _, O(this, a)), U(this, v, A(this)), U(this, y, M(this)), U(this, b, P(this, !0)), U(this, x, I(this, {
 			modified: void 0,
 			isPublic: !1
 		})), U(this, S, R(this, void 0)), U(this, C, B(this, null));
@@ -265,7 +265,7 @@ new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 		}
 	}
 	updated() {
-		this.titleHeading && this.fileExplorerContext?.subjectUri && this._draggableSubjectUri !== this.fileExplorerContext.subjectUri && (t(this.titleHeading, l(this.fileExplorerContext.subjectUri)), this._draggableSubjectUri = this.fileExplorerContext.subjectUri);
+		this.titleHeading && this.fileExplorerContext?.subjectUri && this._draggableSubjectUri !== this.fileExplorerContext.subjectUri && (n(this.titleHeading, t(this.fileExplorerContext.subjectUri)), this._draggableSubjectUri = this.fileExplorerContext.subjectUri);
 	}
 	async resolvePaneIcon(e, t) {
 		try {
@@ -277,35 +277,35 @@ new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 		}
 	}
 	renderContainerResourceHeader(e, t) {
-		let n = s(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri) ?? 0;
-		return d`
+		let n = p(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri) ?? 0;
+		return u`
       <div class="container-info">
         <h1>
           <span>${e}</span>
         </h1>
         <p>
         ${n} items
-          ${t ? d`<span class="public"><icon-lucide-globe aria-hidden="true"></icon-lucide-globe><span class="sr-only">Public</span></span>` : d`<span class="private"><icon-lucide-lock-keyhole aria-hidden="true"></icon-lucide-lock-keyhole><span class="sr-only">Private</span></span>`}
+          ${t ? u`<span class="public"><icon-lucide-globe aria-hidden="true"></icon-lucide-globe><span class="sr-only">Public</span></span>` : u`<span class="private"><icon-lucide-lock-keyhole aria-hidden="true"></icon-lucide-lock-keyhole><span class="sr-only">Private</span></span>`}
         </p>
       </div>
     `;
 	}
 	renderResourceHeader(e, t) {
 		let n = this.formatModifiedDate(this.responseMetadata.modified);
-		return d`
+		return u`
         <div class="resource-info">
           <h1>
             <span>${e}</span>
           </h1>
-          <p><span class="resource-date">${n}</span> ${t ? d`<span class="public"><icon-lucide-globe></icon-lucide-globe> Public</span>` : d`<span class="private"><icon-lucide-lock-keyhole></icon-lucide-lock-keyhole> Private</span>`}</p>
+          <p><span class="resource-date">${n}</span> ${t ? u`<span class="public"><icon-lucide-globe></icon-lucide-globe> Public</span>` : u`<span class="private"><icon-lucide-lock-keyhole></icon-lucide-lock-keyhole> Private</span>`}</p>
         </div>
     `;
 	}
 	render() {
-		let t = this.fileExplorerContext?.subjectUri ? l(this.fileExplorerContext.subjectUri) : void 0, n = t ? e(t) : "", r = this.responseMetadata.isPublic, i = c(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri);
-		return d`
+		let n = this.fileExplorerContext?.subjectUri ? t(this.fileExplorerContext.subjectUri) : void 0, r = n ? e(n) : "", i = this.responseMetadata.isPublic, a = m(this.fileExplorerContext?.store, this.fileExplorerContext?.subjectUri);
+		return u`
       <div class="file-explorer-header-summary">
-        ${this.showBack ? d`
+        ${this.showBack ? u`
             <solid-ui-button
               variant="ghost"
               @click=${this.onBackClick}
@@ -316,9 +316,9 @@ new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
             </solid-ui-button>
           ` : ""}
         <span class="pane-icon">
-          ${this.resolvedPaneIcon ? d`<img src=${this.resolvedPaneIcon} alt="" />` : ""}
+          ${this.resolvedPaneIcon ? u`<img src=${this.resolvedPaneIcon} alt="" />` : ""}
         </span>
-        ${i ? this.renderContainerResourceHeader(n, r) : this.renderResourceHeader(n, r)}
+        ${a ? this.renderContainerResourceHeader(r, i) : this.renderResourceHeader(r, i)}
       </div>
       </div>
     `;
@@ -359,9 +359,9 @@ new (V = (_ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = 
 		1,
 		"titleHeading"
 	]
-], E, 0, void 0, r), g), h = class extends te {
+], E, 0, void 0, i), g), h = class extends te {
 	constructor() {
-		super($), J(this, "styles", o), T();
+		super($), J(this, "styles", f), T();
 	}
 }, J(h, V, void 0), h)();
 export { $ as default };

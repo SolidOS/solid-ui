@@ -1,12 +1,12 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as n, nothing as r } from "lit";
+import { property as i } from "lit/decorators.js";
 import "../button/index.esm.js";
 import "../../_virtual/~icons/lucide/triangle-alert.esm.js";
 import "../../_virtual/~icons/lucide/x.esm.js";
-import n from "./ErrorState.styles.esm.js";
-import { html as r, nothing as i } from "lit";
-import { property as a } from "lit/decorators.js";
+import a from "./ErrorState.styles.css.esm.js";
 // src/components/error-state/ErrorState.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v;
 function y(e, t, n) {
@@ -182,7 +182,7 @@ function A(e) {
 }
 f = [e("solid-ui-error-state")];
 var j;
-new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = (p = a({ type: String }), h = a({ type: String }), "title"), s = class extends t {
+new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = (p = i({ type: String }), h = i({ type: String }), "title"), s = class extends t {
 	constructor(...e) {
 		super(...e), y(this, c, (u(this), m(this, ""))), y(this, l, g(this, ""));
 	}
@@ -199,7 +199,7 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
 		x(l, this, e);
 	}
 	render() {
-		return r`
+		return n`
       <section role="alert">
         <solid-ui-button class="close-button" variant="ghost" @click=${this.onClose}>
           <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
@@ -209,8 +209,8 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
           <icon-lucide-triangle-alert aria-hidden="true"></icon-lucide-triangle-alert>
         </div>
         <div class="content">
-          ${this.title ? r`<h2>${this.title}</h2>` : i}
-          ${this.message ? r`<p>${this.message}</p>` : i}
+          ${this.title ? n`<h2>${this.title}</h2>` : r}
+          ${this.message ? n`<p>${this.message}</p>` : r}
           <slot></slot>
         </div>
       </section>
@@ -232,7 +232,7 @@ new (_ = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), v = 
 	"message"
 ]], f, 0, void 0, t), s), o = class extends A {
 	constructor() {
-		super(j), w(this, "styles", n), d();
+		super(j), w(this, "styles", a), d();
 	}
 }, w(o, _, void 0), o)();
 export { j as default };

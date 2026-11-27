@@ -17,6 +17,7 @@ export type ComboboxOptionData = {
   value: FormControlValue;
   label: string;
   template?: TemplateResult;
+  icon?: TemplateResult;
   selectable?: boolean;
 }
 
@@ -104,7 +105,7 @@ export default class Combobox extends FormControlComponent {
       const options = this.getFilteredOptions()
       const option = options.find((option) => option.selectable !== false && option.value === this.value) ??
         this.optionsFallback?.find((option) => option.value === this.value)
-      const optionLabel = option?.selectable !== false && option?.label
+      const optionLabel = option?.selectable !== false && option?.label?.trim()
 
       this.updateDisplayValue(optionLabel || this.value)
 
@@ -183,7 +184,14 @@ export default class Combobox extends FormControlComponent {
                   data-active=${index === this.activeIndex || nothing}
                   @mousemove=${() => this.setActiveIndex(index)}
                 >
-                  ${option.template ?? option.label}
+                  ${option.icon
+                    ? html`
+                      <span class="option-content">
+                        <span class="option-icon" aria-hidden="true">${option.icon}</span>
+                        <span>${option.template ?? option.label}</span>
+                      </span>
+                    `
+                    : option.template ?? option.label}
                 </div>`
               : html`<div class="non-selectable-option">${option.template ?? option.label}</div>`
           })}
@@ -360,18 +368,17 @@ export default class Combobox extends FormControlComponent {
   }
 
   private selectOption (option: ComboboxOptionData) {
-    const previousValue = this.value
-
     this._selectedOption = option
 
     this.hide()
+    const displayLabel = option.label.trim()
+    this.updateDisplayValue(displayLabel)
+    if (this.controlElement) {
+      this.controlElement.value = displayLabel
+    }
     this.controlTrait.setValue(option.value)
     this.controlElement?.focus({ preventScroll: true })
     this.dispatchEvent(new CustomEvent('change', { bubbles: true, composed: true, detail: { option } }))
-
-    if (previousValue === this.value) {
-      this.updateDisplayValue(option.label)
-    }
   }
 
   private scrollActiveOptionIntoView () {

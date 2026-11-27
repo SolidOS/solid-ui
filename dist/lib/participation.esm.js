@@ -1,15 +1,15 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
 import { log as t, warn as n } from "./debug.esm.js";
-import r from "./ns.esm.js";
+import { st as r } from "rdflib";
+import i from "./ns.esm.js";
 import "../widgets/index.esm.js";
-import { syncTableToArray as i } from "../utils/index.esm.js";
-import { lightColorHash as a } from "./pad.esm.js";
-import { errorMessageBlock as o } from "../widgets/error.esm.js";
-import { personTR as s } from "../widgets/buttons.esm.js";
-import { newThing as c } from "../widgets/forms.esm.js";
-import { style as l } from "./style.esm.js";
-import u from "./styleConstants.esm.js";
-import { st as d } from "rdflib";
+import { syncTableToArray as a } from "../utils/index.esm.js";
+import { lightColorHash as o } from "./pad.esm.js";
+import { errorMessageBlock as s } from "../widgets/error.esm.js";
+import { personTR as c } from "../widgets/buttons.esm.js";
+import { newThing as l } from "../widgets/forms.esm.js";
+import { style as u } from "./style.esm.js";
+import d from "./styleConstants.esm.js";
 import { authn as f, solidLogicSingleton as p } from "solid-logic";
 // src/lib/participation.ts
 var m = /* @__PURE__ */ e({
@@ -18,86 +18,86 @@ var m = /* @__PURE__ */ e({
 	recordParticipation: () => v,
 	renderParticipants: () => g
 }), h = p.store;
-function g(e, n, a, o, c, d) {
-	n.setAttribute("style", l.participantsStyle);
+function g(e, n, r, o, s, l) {
+	n.setAttribute("style", u.participantsStyle);
 	let f = function(t) {
-		let i = h.any(t, r.wf("participant")), a;
-		if (!i) return a = e.createElement("tr"), a.textContent = "???", a;
-		let o = h.anyValue(t, r.ui("backgroundColor")) || u.participationDefaultBackground, c = e.createElement("div");
-		c.setAttribute("style", l.participantsBlock), c.style.backgroundColor = o, a = s(e, null, i, d), n.appendChild(a);
+		let r = h.any(t, i.wf("participant")), a;
+		if (!r) return a = e.createElement("tr"), a.textContent = "???", a;
+		let o = h.anyValue(t, i.ui("backgroundColor")) || d.participationDefaultBackground, s = e.createElement("div");
+		s.setAttribute("style", u.participantsBlock), s.style.backgroundColor = o, a = c(e, null, r, l), n.appendChild(a);
 		let f = e.createElement("td");
-		return f.setAttribute("style", l.personTableTD), f.appendChild(c), a.insertBefore(f, a.firstChild), a;
+		return f.setAttribute("style", u.personTableTD), f.appendChild(s), a.insertBefore(f, a.firstChild), a;
 	}, p = function() {
-		let e = h.each(o, r.wf("participation")).map(function(e) {
-			return t("in participants"), [h.anyValue(e, r.cal("dtstart")) || "9999-12-31", e];
+		let e = h.each(o, i.wf("participation")).map(function(e) {
+			return t("in participants"), [h.anyValue(e, i.cal("dtstart")) || "9999-12-31", e];
 		});
 		e.sort();
-		let a = e.map(function(e) {
+		let r = e.map(function(e) {
 			return e[1];
 		});
-		i(n, a, f);
+		a(n, r, f);
 	};
 	return n.refresh = p, p(), n;
 }
-function _(e, t, i) {
-	return new Promise(function(o, s) {
-		if (!i) throw Error("No user id");
-		let l = h.each(e, r.wf("participation")).filter(function(e) {
-			return h.holds(e, r.wf("participant"), i);
+function _(e, t, a) {
+	return new Promise(function(s, c) {
+		if (!a) throw Error("No user id");
+		let u = h.each(e, i.wf("participation")).filter(function(e) {
+			return h.holds(e, i.wf("participant"), a);
 		});
-		if (l.length > 1) {
+		if (u.length > 1) {
 			let e = [];
-			for (let t of l) {
-				let n = h.anyValue(t, r.cal("dtstart"));
+			for (let t of u) {
+				let n = h.anyValue(t, i.cal("dtstart"));
 				n && e.push([n, t]);
 			}
-			e.sort(), n("Multiple participation objects, picking earliest, in " + t), o(e[0][1]);
+			e.sort(), n("Multiple participation objects, picking earliest, in " + t), s(e[0][1]);
 		}
-		if (l.length) o(l[0]);
+		if (u.length) s(u[0]);
 		else {
-			let n = c(t), l = [
-				d(e, r.wf("participation"), n, t),
-				d(n, r.wf("participant"), i, t),
-				d(n, r.cal("dtstart"), /* @__PURE__ */ new Date(), t),
-				d(n, r.ui("backgroundColor"), a(i), t)
+			let n = l(t), u = [
+				r(e, i.wf("participation"), n, t),
+				r(n, i.wf("participant"), a, t),
+				r(n, i.cal("dtstart"), /* @__PURE__ */ new Date(), t),
+				r(n, i.ui("backgroundColor"), o(a), t)
 			];
-			h.updater.update([], l, function(e, t, r) {
-				t ? o(n) : s(/* @__PURE__ */ Error("Error recording your participation: " + r));
-			}), o(n);
+			h.updater.update([], u, function(e, t, r) {
+				t ? s(n) : c(/* @__PURE__ */ Error("Error recording your participation: " + r));
+			}), s(n);
 		}
 	});
 }
-function v(e, n, i) {
-	let o = f.currentUser();
-	if (!o) return;
-	let s = h.each(e, r.wf("participation")).filter(function(e) {
-		return h.holds(e, r.wf("participant"), o);
+function v(e, n, a) {
+	let s = f.currentUser();
+	if (!s) return;
+	let c = h.each(e, i.wf("participation")).filter(function(e) {
+		return h.holds(e, i.wf("participant"), s);
 	});
-	if (s.length > 1) throw Error("Multiple records of your participation");
-	if (s.length) return s[0];
+	if (c.length > 1) throw Error("Multiple records of your participation");
+	if (c.length) return c[0];
 	{
-		if (!h.updater.editable(n)) return t("Not recording participation, as no write access as " + o + " to " + n), null;
-		let s = c(n), l = [
-			d(e, r.wf("participation"), s, n),
-			d(s, r.wf("participant"), o, n),
-			d(s, r.cal("dtstart"), /* @__PURE__ */ new Date(), n),
-			d(s, r.ui("backgroundColor"), a(o), n)
+		if (!h.updater.editable(n)) return t("Not recording participation, as no write access as " + s + " to " + n), null;
+		let c = l(n), u = [
+			r(e, i.wf("participation"), c, n),
+			r(c, i.wf("participant"), s, n),
+			r(c, i.cal("dtstart"), /* @__PURE__ */ new Date(), n),
+			r(c, i.ui("backgroundColor"), o(s), n)
 		];
-		return h.updater.update([], l, function(e, t, n) {
+		return h.updater.update([], u, function(e, t, n) {
 			if (!t) throw Error("Error recording your participation: " + n);
-			i && i.refresh && i.refresh();
-		}), s;
+			a && a.refresh && a.refresh();
+		}), c;
 	}
 }
 function y(e, t, n, r, i, a) {
-	let s = e.createElement("table");
-	t.appendChild(s), g(e, s, n, r, i, a);
+	let o = e.createElement("table");
+	t.appendChild(o), g(e, o, n, r, i, a);
 	try {
-		v(r, n, s);
+		v(r, n, o);
 	} catch (n) {
-		t.appendChild(o(e, "Error recording your participation: " + n));
+		t.appendChild(s(e, "Error recording your participation: " + n));
 	}
-	return s;
+	return o;
 }
 export { y as manageParticipation, _ as participationObject, m as participation_exports, v as recordParticipation, g as renderParticipants };
 

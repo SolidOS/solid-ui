@@ -1,2 +1,2 @@
-function e(e){return e==null||e===``}exports.isEmptyValue=e;
+exports.isEmptyValue=function(e){return e==null||e===``};
 //# sourceMappingURL=values.cjs.js.map

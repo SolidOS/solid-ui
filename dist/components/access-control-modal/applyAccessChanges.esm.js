@@ -1,23 +1,33 @@
 import { PUBLIC_ACCESS_ROLES as e, Public as t, solidLogicSingleton as n } from "solid-logic";
 // src/components/access-control-modal/applyAccessChanges.ts
 async function r(e, t, r = {}) {
-	let a = [], o = r.containerScope ?? "file";
-	for (let { subject: r, label: s, role: c } of t) try {
-		let t = o === "folder+contents" ? n.acl.planGrantContainerAndContents : o === "container" ? n.acl.planGrantContainer : o === "contents" ? n.acl.planGrantContainerContents : n.acl.planGrant, a = c === "No Access" ? await (o === "contents" ? n.acl.planRevokeContainerContents(e, r) : n.acl.planRevoke(e, r)) : await t(e, r, i(r, c));
-		await n.acl.applyPlan(a);
-	} catch (e) {
-		a.push({
-			action: c === "No Access" ? "revoke" : "grant",
-			targetUri: r.iri,
-			label: s,
-			role: c,
-			scope: o,
-			message: e instanceof Error ? e.message : "Unable to apply access change."
-		});
+	let o = [], s = r.containerScope ?? "file", c = new URL(e).pathname.endsWith("/");
+	for (let { subject: r, label: l, role: u, scope: d, previousScope: f } of t) {
+		let t = i(c ? d ?? s : "file"), p = c && f ? i(f) : "file";
+		try {
+			if (f && p !== t) {
+				let i = p === "contents" || p === "folder+contents" && t === "container" ? await n.acl.planRevokeContainerContents(e, r) : await n.acl.planRevoke(e, r);
+				await n.acl.applyPlan(i);
+			}
+			let i = t === "folder+contents" ? n.acl.planGrantContainerAndContents : t === "container" ? n.acl.planGrantContainer : t === "contents" ? n.acl.planGrantContainerContents : n.acl.planGrant, o = u === "No Access" ? await (t === "contents" ? n.acl.planRevokeContainerContents(e, r) : n.acl.planRevoke(e, r)) : await i(e, r, a(r, u));
+			await n.acl.applyPlan(o);
+		} catch (e) {
+			o.push({
+				action: u === "No Access" ? "revoke" : "grant",
+				targetUri: r.iri,
+				label: l,
+				role: u,
+				scope: t,
+				message: e instanceof Error ? e.message : "Unable to apply access change."
+			});
+		}
 	}
-	return a;
+	return o;
 }
-function i(r, i) {
+function i(e) {
+	return e === "folder" ? "container" : e;
+}
+function a(r, i) {
 	if (r.type === "agentClass" && r.iri === t.iri) {
 		let t = e.find((e) => e === i);
 		if (!t) throw Error(`Public access does not support the ${i} role.`);

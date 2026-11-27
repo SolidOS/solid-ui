@@ -38,10 +38,7 @@ var t = class {
 						}
 					},
 					some: function(e) {
-						for (let t = 0; t < this.list.length; t++) {
-							let n = this.list[t];
-							if (e(n, t)) return !0;
-						}
+						for (let t = 0; t < this.list.length; t++) if (e(this.list[t], t)) return !0;
 						return !1;
 					}
 				}

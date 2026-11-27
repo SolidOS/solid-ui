@@ -1,9 +1,9 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import n from "./Input.styles.esm.js";
-import { html as r } from "lit";
-import { property as i, query as a } from "lit/decorators.js";
+import { html as n } from "lit";
+import { property as r, query as i } from "lit/decorators.js";
+import a from "./Input.styles.css.esm.js";
 // src/components/input/Input.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D;
 function O(e, t, n) {
@@ -179,19 +179,19 @@ function z(e) {
 }
 h = [e("solid-ui-input")];
 var B;
-new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), D = (g = i({
+new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), D = (g = r({
 	type: String,
 	reflect: !0
-}), v = i({
+}), v = r({
 	type: String,
 	reflect: !0
-}), b = i({
+}), b = r({
 	type: Boolean,
 	reflect: !0
-}), S = i({
+}), S = r({
 	type: Boolean,
 	reflect: !0
-}), w = a("input"), "type"), s = class extends t {
+}), w = i("input"), "type"), s = class extends t {
 	constructor(...e) {
 		super(...e), O(this, c, (p(this), _(this, "text"))), O(this, l, y(this, "")), O(this, u, x(this, !1)), O(this, d, C(this, !1)), O(this, f, T(this, null));
 	}
@@ -226,7 +226,7 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 		A(f, this, e);
 	}
 	render() {
-		return r`
+		return n`
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
@@ -280,7 +280,7 @@ new (E = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 	]
 ], h, 0, void 0, t), s), o = class extends z {
 	constructor() {
-		super(B), N(this, "styles", n), m();
+		super(B), N(this, "styles", a), m();
 	}
 }, N(o, E, void 0), o)();
 export { B as default };

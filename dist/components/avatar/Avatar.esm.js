@@ -2,11 +2,11 @@ import { DEFAULT_AUTH_CONTEXT as e, authContext as t } from "../../lib/auth/cont
 import { customElement as n } from "../../lib/components/decorators.esm.js";
 import r from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { consume as i } from "@lit/context";
+import { html as a } from "lit";
 import "../../lib/auth/index.esm.js";
 import "../../_virtual/~icons/lucide/circle-user.esm.js";
-import i from "./Avatar.styles.esm.js";
-import { consume as a } from "@lit/context";
-import { html as o } from "lit";
+import o from "./Avatar.styles.css.esm.js";
 // src/components/avatar/Avatar.ts
 var s, c, l, u, d, f, p, m, h, g;
 function _(e, t, n) {
@@ -182,7 +182,7 @@ function O(e) {
 }
 f = [n("solid-ui-avatar")];
 var k;
-new (h = (l = /*#__PURE__*/ new WeakMap(), g = (p = a({
+new (h = (l = /*#__PURE__*/ new WeakMap(), g = (p = i({
 	context: t,
 	subscribe: !0
 }), "auth"), c = class extends r {
@@ -204,9 +204,9 @@ new (h = (l = /*#__PURE__*/ new WeakMap(), g = (p = a({
 		super.disconnectedCallback(), this.unsubscribeSessionUpdated?.();
 	}
 	render() {
-		return this.auth.account?.avatarUrl ? o`
+		return this.auth.account?.avatarUrl ? a`
         <img src="${this.auth.account?.avatarUrl}" alt="" />
-    ` : o`
+    ` : a`
           <icon-lucide-circle-user></icon-lucide-circle-user>
       `;
 	}
@@ -216,7 +216,7 @@ new (h = (l = /*#__PURE__*/ new WeakMap(), g = (p = a({
 	"auth"
 ]], f, 0, void 0, r), c), s = class extends O {
 	constructor() {
-		super(k), S(this, "styles", i), S(this, "states", { fallback: (e) => !e.auth.account?.avatarUrl }), d();
+		super(k), S(this, "styles", o), S(this, "states", { fallback: (e) => !e.auth.account?.avatarUrl }), d();
 	}
 }, S(s, h, void 0), s)();
 export { k as default };

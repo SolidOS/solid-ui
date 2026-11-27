@@ -5,8 +5,8 @@ function t(t) {
 }
 t.prototype.listen = function() {
 	return new Promise(function(e, t) {
-		let n = window.addEventListener ? "addEventListener" : "attachEvent", r = window[n];
-		r(n === "attachEvent" ? "onmessage" : "message", function(n) {
+		let n = window.addEventListener ? "addEventListener" : "attachEvent";
+		(0, window[n])(n === "attachEvent" ? "onmessage" : "message", function(n) {
 			let r = n.data;
 			if (r.slice(0, 5) === "User:") {
 				let n = r.slice(5, r.length);

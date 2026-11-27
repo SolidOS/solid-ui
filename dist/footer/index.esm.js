@@ -1,23 +1,23 @@
-import { style as e } from "../lib/style.esm.js";
-import { getName as t, getPod as n, getPodOwner as r } from "../utils/headerFooterHelpers.esm.js";
-import { authSession as i, authn as a } from "solid-logic";
+import { authSession as e, authn as t } from "solid-logic";
+import { style as n } from "../lib/style.esm.js";
+import { getName as r, getPod as i, getPodOwner as a } from "../utils/headerFooterHelpers.esm.js";
 // src/footer/index.ts
 var o = "https://solidproject.org", s = "solidproject.org";
-async function c(e, t) {
-	let a = document.getElementById("PageFooter");
-	if (!a) return;
-	let o = n(), s = await r(o, e);
-	return l(a, e, o, s, t), i.events.on("login", () => l(a, e, o, s, t)), i.events.on("logout", () => l(a, e, o, s, t)), a;
+async function c(t, n) {
+	let r = document.getElementById("PageFooter");
+	if (!r) return;
+	let o = i(), s = await a(o, t);
+	return l(r, t, o, s, n), e.events.on("login", () => l(r, t, o, s, n)), e.events.on("logout", () => l(r, t, o, s, n)), r;
 }
-async function l(e, t, n, r, i) {
-	let o = a.currentUser();
-	return e.innerHTML = "", e.appendChild(await u(t, o, n, r, i)), e;
+async function l(e, n, r, i, a) {
+	let o = t.currentUser();
+	return e.innerHTML = "", e.appendChild(await u(n, o, r, i, a)), e;
 }
-function u(n, r, i, a, c) {
+function u(e, t, i, a, c) {
 	let l = document.createElement("div");
-	l.setAttribute("style", e.footer);
+	l.setAttribute("style", n.footer);
 	let u = document.createElement("a");
-	if (u.href = c && c.solidProjectUrl ? c.solidProjectUrl : o, u.innerText = c && c.solidProjectName ? c.solidProjectName : s, !i || !a || r && r.equals(a)) {
+	if (u.href = c && c.solidProjectUrl ? c.solidProjectUrl : o, u.innerText = c && c.solidProjectName ? c.solidProjectName : s, !i || !a || t && t.equals(a)) {
 		let e = document.createElement("span");
 		return e.innerText = "Powered by ", l.appendChild(e), l.appendChild(u), l;
 	}
@@ -28,7 +28,7 @@ function u(n, r, i, a, c) {
 	let p = document.createElement("span");
 	p.innerText = " controlled by ";
 	let m = document.createElement("a");
-	m.href = a.uri, m.innerText = t(n, a);
+	m.href = a.uri, m.innerText = r(e, a);
 	let h = document.createElement("span");
 	h.innerText = ". For more info, check out ";
 	let g = document.createElement("span");

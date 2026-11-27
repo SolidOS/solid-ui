@@ -1,6 +1,9 @@
 import { DEFAULT_AUTH_CONTEXT as e, authContext as t } from "../../lib/auth/context.esm.js";
 import { customElement as n } from "../../lib/components/decorators.esm.js";
 import r from "../../lib/components/web-component/WebComponent.esm.js";
+import { consume as i } from "@lit/context";
+import { html as a, nothing as o } from "lit";
+import { property as s } from "lit/decorators.js";
 import "../../lib/components/index.esm.js";
 import "../../lib/auth/index.esm.js";
 import "../avatar/index.esm.js";
@@ -15,10 +18,7 @@ import "../../_virtual/~icons/lucide/log-in.esm.js";
 import "../../_virtual/~icons/lucide/log-out.esm.js";
 import "../../_virtual/~icons/lucide/user.esm.js";
 import "../../_virtual/~icons/svg-spinners/180-ring.esm.js";
-import i from "./Account.styles.esm.js";
-import { consume as a } from "@lit/context";
-import { html as o, nothing as s } from "lit";
-import { property as c } from "lit/decorators.js";
+import c from "./Account.styles.css.esm.js";
 // src/components/account/Account.ts
 var l, u, d, f, p, m, h, g, _, v, y, b, x;
 function S(e, t, n) {
@@ -194,7 +194,7 @@ function N(e) {
 }
 h = [n("solid-ui-account")];
 var P;
-new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = (g = c({ type: Array }), v = a({
+new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = (g = s({ type: Array }), v = i({
 	context: t,
 	subscribe: !0
 }), "menuItems"), u = class extends r {
@@ -220,15 +220,15 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 		super.disconnectedCallback(), this.unsubscribeSessionUpdated?.();
 	}
 	render() {
-		return this.auth.initialized ? this.auth.account ? o`
+		return this.auth.initialized ? this.auth.account ? a`
         <solid-ui-menu placement="bottom-end">
             <button type="button" slot="trigger">
                 <solid-ui-avatar></solid-ui-avatar>
                 <icon-lucide-chevron-down slot="right-icon"></icon-lucide-chevron-down>
             </button>
 
-            ${this.menuItems.map((e) => o`
-                <solid-ui-menu-item .href=${e.href ?? s} ?selected=${e.selected} @solid-ui-select=${() => e.onSelected?.()}>
+            ${this.menuItems.map((e) => a`
+                <solid-ui-menu-item .href=${e.href ?? o} ?selected=${e.selected} @solid-ui-select=${() => e.onSelected?.()}>
                     ${e.label}
                 </solid-ui-menu-item>
             `)}
@@ -239,7 +239,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
                 </solid-ui-menu-item>
             </solid-ui-logout-button>
         </solid-ui-menu>
-    ` : o`
+    ` : a`
         <solid-ui-login-button>
             <solid-ui-button slot="trigger">
                 <icon-lucide-user slot="left-icon"></icon-lucide-user>
@@ -252,7 +252,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
                 Sign Up
             </solid-ui-button>
         </solid-ui-signup-button>
-      ` : o`
+      ` : a`
         <icon-svg-spinners-180-ring></icon-svg-spinners-180-ring>
       `;
 	}
@@ -266,7 +266,7 @@ new (b = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), x = 
 	"auth"
 ]], h, 0, void 0, r), u), l = class extends N {
 	constructor() {
-		super(P), D(this, "styles", i), D(this, "states", {
+		super(P), D(this, "styles", c), D(this, "states", {
 			initializing: (e) => !e.auth.initialized,
 			loggedIn: (e) => !!e.auth.account
 		}), m();

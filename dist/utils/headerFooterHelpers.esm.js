@@ -1,41 +1,41 @@
-import e from "../lib/ns.esm.js";
-import { parse as t, sym as n } from "rdflib";
+import { parse as e, sym as t } from "rdflib";
+import n from "../lib/ns.esm.js";
 // src/utils/headerFooterHelpers.ts
 function r() {
-	let { origin: e, pathname: t } = document.location, r = document.body?.dataset?.appShell === "databrowser", i = t.split("/").filter(Boolean), a = i[i.length - 1] || "", o = /\.[^/]+$/.test(a);
-	return r && i.length > 0 && !o ? n(`${e}/${i[0]}/`) : n(e).site();
+	let { origin: e, pathname: n } = document.location, r = document.body?.dataset?.appShell === "databrowser", i = n.split("/").filter(Boolean), a = i[i.length - 1] || "", o = /\.[^/]+$/.test(a);
+	return r && i.length > 0 && !o ? t(`${e}/${i[0]}/`) : t(e).site();
 }
 async function i(r, i) {
 	try {
-		if (!i.any(r, null, e.ldp("Container"), r)) {
-			let e = (await i.fetcher.webOperation("GET", r.uri, i.fetcher.initFetchOptions(r.uri, { headers: { accept: "text/turtle" } }))).responseText;
-			t(e, i, r.uri, "text/turtle");
+		if (!i.any(r, null, n.ldp("Container"), r)) {
+			let t = (await i.fetcher.webOperation("GET", r.uri, i.fetcher.initFetchOptions(r.uri, { headers: { accept: "text/turtle" } }))).responseText;
+			e(t, i, r.uri, "text/turtle");
 		}
 	} catch (e) {
 		return console.error("Error loading pod " + r + ": " + e), null;
 	}
-	if (!i.holds(r, e.rdf("type"), e.space("Storage"), r)) return console.warn("Pod  " + r + " does not declare itself as a space:Storage"), null;
-	let a = i.any(r, e.solid("owner"), null, r) || i.any(null, e.space("storage"), r, r);
+	if (!i.holds(r, n.rdf("type"), n.space("Storage"), r)) return console.warn("Pod  " + r + " does not declare itself as a space:Storage"), null;
+	let a = i.any(r, n.solid("owner"), null, r) || i.any(null, n.space("storage"), r, r);
 	if (a) {
 		try {
 			await i.fetcher.load(a.doc());
 		} catch {
 			return console.warn("Unable to load profile of pod owner " + a), null;
 		}
-		return i.holds(a, e.space("storage"), r, a.doc()) || console.warn(`Pod owner ${a} does NOT list pod ${r} as their storage`), a;
+		return i.holds(a, n.space("storage"), r, a.doc()) || console.warn(`Pod owner ${a} does NOT list pod ${r} as their storage`), a;
 	}
 	{
-		let t = n(`${r.uri}profile/card#me`);
+		let e = t(`${r.uri}profile/card#me`);
 		try {
-			await i.fetcher.load(t);
+			await i.fetcher.load(e);
 		} catch {
 			return console.error("Ooops. Guessed wrong pod owner webid {$guess} : can't load it."), null;
 		}
-		return i.holds(t, e.space("storage"), r, t.doc()) ? (console.warn("Using guessed pod owner webid but it links back."), t) : null;
+		return i.holds(e, n.space("storage"), r, e.doc()) ? (console.warn("Using guessed pod owner webid but it links back."), e) : null;
 	}
 }
-function a(t, n) {
-	return t.anyValue(n, e.vcard("fn"), null, n.doc()) || t.anyValue(n, e.foaf("name"), null, n.doc()) || n.uri;
+function a(e, t) {
+	return e.anyValue(t, n.vcard("fn"), null, t.doc()) || e.anyValue(t, n.foaf("name"), null, t.doc()) || t.uri;
 }
 function o(e, t, n = {}) {
 	let r, i, a, o = null, s = 0, c = function() {

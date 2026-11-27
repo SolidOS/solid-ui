@@ -1,12 +1,12 @@
 import e from "../../lib/ns.esm.js";
-import { fieldParams as t } from "./fieldParams.esm.js";
-import { mostSpecificClassURI as n } from "./fieldFunction.esm.js";
-import { store as r } from "solid-logic";
+import { store as t } from "solid-logic";
+import { fieldParams as n } from "./fieldParams.esm.js";
+import { mostSpecificClassURI as r } from "./fieldFunction.esm.js";
 // src/widgets/forms/formStyle.ts
 var i = "https://www.w3.org/ns/css#";
 function a(a, o) {
-	let s = n(o), c = t[s] || {}, l = r.any(o, e.ui("style"));
-	l ? l.termType === "Literal" ? l && a.setAttribute("style", l.value) : r.statementsMatching(l, null, null, o.doc()).forEach((e) => {
+	let s = r(o), c = n[s] || {}, l = t.any(o, e.ui("style"));
+	l ? l.termType === "Literal" ? l && a.setAttribute("style", l.value) : t.statementsMatching(l, null, null, o.doc()).forEach((e) => {
 		if (e.predicate.uri && e.predicate.uri.startsWith(i)) {
 			let t = e.predicate.uri.slice(26);
 			try {

@@ -1,7 +1,7 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import n from "./DialogFooter.styles.esm.js";
+import n from "./DialogFooter.styles.css.esm.js";
 // src/components/dialog-footer/DialogFooter.ts
 var r, i, a, o, s;
 function c(e, t, n) {

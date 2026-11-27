@@ -1,5 +1,5 @@
-import e from "./WebComponent.styles.esm.js";
-import { LitElement as t, html as n } from "lit";
+import { LitElement as e, html as t } from "lit";
+import n from "./WebComponent.styles.css.esm.js";
 // src/lib/components/web-component/WebComponent.ts
 function r(e, t, n) {
 	return (t = i(t)) in e ? Object.defineProperty(e, t, {
@@ -23,13 +23,13 @@ function a(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-var o = Symbol("WebComponentMetadata"), s = class extends t {
+var o = Symbol("WebComponentMetadata"), s = class extends e {
 	constructor(...e) {
 		super(...e), r(this, o, void 0), r(this, "internals", void 0), r(this, "globalListeners", []), r(this, "traits", []);
 	}
-	static finalizeStyles(t) {
-		let n = super.finalizeStyles(t);
-		return [e, ...n];
+	static finalizeStyles(e) {
+		let t = super.finalizeStyles(e);
+		return [n, ...t];
 	}
 	disconnectedCallback() {
 		super.disconnectedCallback();
@@ -57,7 +57,7 @@ var o = Symbol("WebComponentMetadata"), s = class extends t {
 		this.globalListeners.push([e, t]), window.addEventListener(e, t);
 	}
 	render() {
-		return n`<slot></slot>`;
+		return t`<slot></slot>`;
 	}
 	getInternals() {
 		return this.internals ??= this.attachInternals(), this.internals;

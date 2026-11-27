@@ -2,7 +2,11 @@ import { DEFAULT_AUTH_CONTEXT as e, authContext as t } from "../../lib/auth/cont
 import { customElement as n } from "../../lib/components/decorators.esm.js";
 import r from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as i, nothing as a } from "lit";
+import { consume as o } from "@lit/context";
+import { property as s, query as c, state as l } from "lit/decorators.js";
 import "../../lib/auth/index.esm.js";
+import { getSuggestedIssuers as u } from "solid-logic";
 import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import "../dialog/index.esm.js";
 import "../dialog-content/index.esm.js";
@@ -10,11 +14,7 @@ import "../dialog-footer/index.esm.js";
 import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
-import i from "./LoginModal.styles.esm.js";
-import { getSuggestedIssuers as a } from "solid-logic";
-import { consume as o } from "@lit/context";
-import { html as s, nothing as c } from "lit";
-import { property as l, query as u, state as d } from "lit/decorators.js";
+import d from "./LoginModal.styles.css.esm.js";
 // src/components/login-modal/LoginModal.ts
 var f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, M, N, P, F, I;
 function L(e, t, n) {
@@ -190,13 +190,13 @@ function J(e) {
 }
 S = [n("solid-ui-login-modal")];
 var Y;
-new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), I = (C = l({
+new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), I = (C = s({
 	type: String,
 	reflect: !0
-}), T = d(), D = d(), k = d(), j = o({
+}), T = l(), D = l(), k = l(), j = o({
 	context: t,
 	subscribe: !0
-}), N = u("solid-ui-dialog"), "issuerUrl"), p = class extends r {
+}), N = c("solid-ui-dialog"), "issuerUrl"), p = class extends r {
 	constructor(...t) {
 		super(...t), L(this, m, (b(this), w(this, ""))), L(this, h, E(this, "")), L(this, g, O(this, !1)), L(this, _, A(this, !1)), L(this, v, M(this, e)), L(this, y, P(this, null));
 	}
@@ -237,19 +237,19 @@ new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 		z(y, this, e);
 	}
 	connectedCallback() {
-		super.connectedCallback(), this.issuerInputValue = typeof localStorage < "u" && localStorage.getItem("loginIssuer") || this.issuerUrl || a()[0]?.uri || "";
+		super.connectedCallback(), this.issuerInputValue = typeof localStorage < "u" && localStorage.getItem("loginIssuer") || this.issuerUrl || u()[0]?.uri || "";
 	}
 	render() {
-		let e = a();
-		return s`
+		let e = u();
+		return i`
         <solid-ui-dialog title="Select an identity provider">
             <form @submit=${this.onSubmit}>
                 <solid-ui-dialog-content>
                     <solid-ui-combobox label="Solid Identity Provider" .value=${this.issuerInputValue} @input=${this.onIssuerInputChange}>
-                        ${e.map((e) => s`<solid-ui-combobox-option value="${e.uri}">${e.name}</solid-ui-combobox-option>`)}
+                        ${e.map((e) => i`<solid-ui-combobox-option value="${e.uri}">${e.name}</solid-ui-combobox-option>`)}
                     </solid-ui-combobox>
 
-                    ${this.failed ? s`<p class="error-message">Something went wrong</p>` : c}
+                    ${this.failed ? i`<p class="error-message">Something went wrong</p>` : a}
                 </solid-ui-dialog-content>
 
                 <solid-ui-dialog-footer>
@@ -319,7 +319,7 @@ new (F = (m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = 
 	]
 ], S, 0, void 0, r), p), f = class extends J {
 	constructor() {
-		super(Y), H(this, "styles", i), x();
+		super(Y), H(this, "styles", d), x();
 	}
 }, H(f, F, void 0), f)();
 export { Y as default };

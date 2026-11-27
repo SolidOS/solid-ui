@@ -86,6 +86,8 @@ export default class AccessControlGeneralAccess extends WebComponent {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated"
+        label="Access role for logged-in users"
+        .srOnlyLabel=${true}
         .disabled=${this.disabled}
         .value=${this.authenticatedAccessRoleValue}
         @change=${this.onAuthenticatedRoleChange}
@@ -99,6 +101,8 @@ export default class AccessControlGeneralAccess extends WebComponent {
     return html`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public"
+        label="Access role for anyone with the link"
+        .srOnlyLabel=${true}
         .disabled=${this.disabled}
         .value=${this.publicAccessRoleValue}
         @change=${this.onPublicRoleChange}

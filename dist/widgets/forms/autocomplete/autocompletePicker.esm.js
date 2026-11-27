@@ -3,9 +3,9 @@ import { style as t } from "../../../lib/style.esm.js";
 import n from "../../../lib/styleConstants.esm.js";
 import { errorMessageBlock as r } from "../../error.esm.js";
 import "../../index.esm.js";
-import { bindingToTerm as i, queryPublicDataByName as a } from "./publicData.esm.js";
-import { defaultPreferredLanguages as o, filterByLanguage as s, getPreferredLanguages as c } from "./language.esm.js";
-import { store as l } from "solid-logic";
+import { store as i } from "solid-logic";
+import { bindingToTerm as a, queryPublicDataByName as o } from "./publicData.esm.js";
+import { defaultPreferredLanguages as s, filterByLanguage as c, getPreferredLanguages as l } from "./language.esm.js";
 // src/widgets/forms/autocomplete/autocompletePicker.ts
 var u = 4, d = 20, f = 40;
 function p(e, t) {
@@ -19,7 +19,7 @@ async function m(m, h, g, _) {
 		i.appendChild(r(m, a, "pink")), t.setStyle(i, "autocompleteRowStyle"), i.style.padding = "1em";
 	}
 	function y(t, n) {
-		e("Auto complete: finish! " + t), t.termType === "Literal" && h.queryParams.objectURIBase && (t = l.sym(h.queryParams.objectURIBase.value + t.value)), w(), _(t, n);
+		e("Auto complete: finish! " + t), t.termType === "Literal" && h.queryParams.objectURIBase && (t = i.sym(h.queryParams.objectURIBase.value + t.value)), w(), _(t, n);
 	}
 	async function b(t, n) {
 		g.acceptButton ? (g.acceptButton.disbaled = !1, p(g.acceptButton, !0), H.value = n.value, R = n, z = t, e("Auto complete: name: " + n), e("Auto complete: waiting for accept " + t), w()) : (p(g.cancelButton, !0), y(t, n));
@@ -47,12 +47,12 @@ async function m(m, h, g, _) {
 	async function E(e, t) {
 		let n;
 		try {
-			n = await a(e, A, t || o, h.queryParams);
+			n = await o(e, A, t || s, h.queryParams);
 		} catch (e) {
 			v("Error querying db of organizations: " + e), N = !1;
 			return;
 		}
-		return M = n.length < 200, F = M ? e : void 0, w(), s(n, t) || [];
+		return M = n.length < 200, F = M ? e : void 0, w(), c(n, t) || [];
 	}
 	function D(e, t) {
 		return (t || []).filter((t) => C(e, t.name.value));
@@ -61,9 +61,9 @@ async function m(m, h, g, _) {
 		function n(n) {
 			let r = m.createElement("tr");
 			t.setStyle(r, "autocompleteRowStyle"), r.setAttribute("style", "padding: 0.3em;"), r.style.color = P ? "#080" : "#088", r.textContent = n.name.value;
-			let a = i(n.subject), o = i(n.name);
+			let i = a(n.subject), o = a(n.name);
 			return r.addEventListener("click", async (t) => {
-				e("       click row textContent: " + r.textContent), e("       click name: " + o.value), a && o && b(a, o);
+				e("       click row textContent: " + r.textContent), e("       click name: " + o.value), i && o && b(i, o);
 			}), r;
 		}
 		function r(e, t) {
@@ -74,16 +74,16 @@ async function m(m, h, g, _) {
 			return;
 		}
 		e(`Setting lock at "${H.value}"`), N = !0;
-		let a = await c(), o = H.value.trim().toLowerCase();
+		let i = await l(), o = H.value.trim().toLowerCase();
 		if (o.length < u) w(), I = d;
 		else {
-			P && F && o.startsWith(F) || (e(`   Querying database at "${o}" cf last "${F}".`), j = await E(o, a) || []);
+			P && F && o.startsWith(F) || (e(`   Querying database at "${o}" cf last "${F}".`), j = await E(o, i) || []);
 			let t = D(o, j);
 			M && t.length <= f && (I = t.length), P = M && t.length <= I, e(` Filter:"${o}" lastBindings: ${j.length}, slimmed to ${t.length}; rows: ${I}, Enough? ${M}, All displayed? ${P}`);
 			let s = t.slice(0, I);
 			s.sort(r), w();
 			for (let e of s) B.appendChild(n(e));
-			t.length === 1 && b(i(t[0].subject), i(t[0].name));
+			t.length === 1 && b(a(t[0].subject), a(t[0].name));
 		}
 		N = !1;
 	}

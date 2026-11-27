@@ -1,2 +1,2 @@
-const e=require("../_virtual/_rolldown/runtime.cjs.js");let t=require("solid-namespace");t=e.__toESM(t);let n=require("rdflib");n=e.__toESM(n);var r=(0,t.default)(n);exports.default=r;
+const e=require("../_virtual/_rolldown/runtime.cjs.js");let t=require("solid-namespace"),n=require("rdflib");t=e.__toESM(t),n=e.__toESM(n);var r=(0,t.default)(n);module.exports=r;
 //# sourceMappingURL=ns.cjs.js.map

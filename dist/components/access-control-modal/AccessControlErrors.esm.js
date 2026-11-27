@@ -1,10 +1,10 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
+import { html as n } from "lit";
+import { property as r } from "lit/decorators.js";
 import "../error-state/index.esm.js";
-import n from "./AccessControlErrors.styles.esm.js";
-import { html as r } from "lit";
-import { property as i } from "lit/decorators.js";
+import i from "./AccessControlErrors.styles.css.esm.js";
 // src/components/access-control-modal/AccessControlErrors.ts
 var a, o, s, c, l, u, d, f, p, m, h, g, _;
 function v(e, t, n) {
@@ -180,7 +180,7 @@ function k(e) {
 }
 d = [e("solid-ui-access-control-errors")];
 var A;
-new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = (f = i({ attribute: !1 }), m = i({ attribute: !1 }), "errors"), o = class extends t {
+new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = (f = r({ attribute: !1 }), m = r({ attribute: !1 }), "errors"), o = class extends t {
 	constructor(...e) {
 		super(...e), v(this, s, (l(this), p(this, []))), v(this, c, h(this, !0));
 	}
@@ -206,14 +206,14 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
 		return e === "folder+contents" ? "folder and contents" : e === "container" ? "folder" : e === "contents" ? "contents" : "resource";
 	}
 	render() {
-		return this.errors.length ? r`
+		return this.errors.length ? n`
       <solid-ui-error-state
         title="Some access changes could not be saved"
         message=${this.successfulChangesRefreshed ? "Any successful changes are shown above. The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again." : "Some changes may have been saved, but we could not refresh the Shared with list. The list below shows only the changes that failed. Close this dialog and reopen it if you want to try again."}
         @close=${this.onClose}
       >
         <ul class="access-control-save-errors">
-          ${this.errors.map((e) => r`
+          ${this.errors.map((e) => n`
             <li>
               <span class="access-control-save-error-label">${e.label}</span>
               <span class="access-control-save-error-detail">
@@ -224,7 +224,7 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
           `)}
         </ul>
       </solid-ui-error-state>
-    ` : r``;
+    ` : n``;
 	}
 }, {e: [p, h, l], c: [A, u]} = w(o, [[
 	f,
@@ -236,7 +236,7 @@ new (g = (s = /*#__PURE__*/ new WeakMap(), c = /*#__PURE__*/ new WeakMap(), _ = 
 	"successfulChangesRefreshed"
 ]], d, 0, void 0, t), o), a = class extends k {
 	constructor() {
-		super(A), C(this, "styles", n), u();
+		super(A), C(this, "styles", i), u();
 	}
 }, C(a, g, void 0), a)();
 export { A as default };

@@ -12,13 +12,13 @@ import C from "../lib/styleConstants.esm.js";
 import { icons as w } from "../lib/iconBase.esm.js";
 import { debug as T, info as E } from "../lib/log.esm.js";
 import D from "../lib/ns.esm.js";
-import { labelWithOntology as O, syncTableToArrayReOrdered as ee } from "../utils/index.esm.js";
-import { IconicMultiSelect as k } from "./multiSelect.esm.js";
+import * as O from "rdflib";
+import { store as k } from "solid-logic";
+import { labelWithOntology as A, syncTableToArrayReOrdered as ee } from "../utils/index.esm.js";
+import { IconicMultiSelect as j } from "./multiSelect.esm.js";
 import "./index.esm.js";
-import * as A from "rdflib";
-import { store as j } from "solid-logic";
 // src/widgets/forms.js
-var M = "✓", N = "✕", P = "-", F = j;
+var M = "✓", N = "✕", P = "-", F = k;
 l[D.ui("AutocompleteField").uri] = x;
 function I(e, t, n, r, i, a, o) {
 	let s = a.children;
@@ -54,14 +54,14 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	}
 	return s;
 }, l[D.ui("Options").uri] = function(e, t, n, r, i, a, o) {
-	let s = j, c = e.createElement("div"), l = i.doc ? i.doc() : null, u = D.ui;
+	let s = k, c = e.createElement("div"), l = i.doc ? i.doc() : null, u = D.ui;
 	t && t.appendChild(c);
 	let d = s.any(i, u("dependingOn"));
 	d ||= D.rdf("type");
 	let f = s.each(i, u("case"), null, l);
 	f || c.appendChild(g(e, "No cases to Options form. "));
 	let p;
-	p = d.sameTerm(D.rdf("type")) ? Object.keys(s.findTypeURIs(r)).map((e) => A.sym(e)) : s.each(r, d);
+	p = d.sameTerm(D.rdf("type")) ? Object.keys(s.findTypeURIs(r)).map((e) => O.sym(e)) : s.each(r, d);
 	for (let t = 0; t < f.length; t++) {
 		let d = f[t], m = s.each(d, u("for"), null, l), h = !1;
 		for (let e = 0; e < m.length; e++) for (let t of p) {
@@ -84,7 +84,7 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		let t = Z(s);
 		if (E) R(), I.elements.push(t), await z();
 		else {
-			let n = k ? [A.st(t, O, a, s)] : [A.st(a, O, t, s)];
+			let n = j ? [O.st(t, A, a, s)] : [O.st(a, A, t, s)];
 			try {
 				await v.updater.update([], n);
 			} catch (t) {
@@ -102,8 +102,8 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 					I.elements.splice(e, 1), await z();
 					return;
 				}
-			} else if (v.holds(a, O, n, s)) {
-				let t = [A.st(a, O, n, s)];
+			} else if (v.holds(a, A, n, s)) {
+				let t = [O.st(a, A, n, s)];
 				v.updater.update(t, [], function(t, n, r) {
 					n ? F.removeChild(h) : F.appendChild(g(e, "Multiple: delete failed: " + r));
 				});
@@ -141,12 +141,12 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		}
 		return h;
 	}
-	let _ = w.iconBase + "noun_19460_green.svg", v = j, y = o.doc ? o.doc() : null, b = e.createElement("div"), x = b, S = D.ui;
+	let _ = w.iconBase + "noun_19460_green.svg", v = k, y = o.doc ? o.doc() : null, b = e.createElement("div"), x = b, S = D.ui;
 	n && n.appendChild(b);
-	let C = v.any(o, S("ordered")), E = C ? A.Node.toJS(C) : !1, O = v.any(o, S("property")), k = v.anyJS(o, S("reverse"), null, y);
-	if (!O) return b.appendChild(g(e, "No property to multiple: " + o)), x;
+	let C = v.any(o, S("ordered")), E = C ? O.Node.toJS(C) : !1, A = v.any(o, S("property")), j = v.anyJS(o, S("reverse"), null, y);
+	if (!A) return b.appendChild(g(e, "No property to multiple: " + o)), x;
 	let M = v.any(o, S("label"));
-	M ||= c(O);
+	M ||= c(A);
 	let N = v.any(o, S("min"));
 	N = N ? 0 + N.value : 0;
 	let P = v.any(o, S("part"));
@@ -154,7 +154,7 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	let F = b.appendChild(e.createElement("div"));
 	F.style.display = "flex", F.style.flexDirection = "column";
 	let I, L;
-	if (L = k ? v.any(null, O, a, s) : v.any(a, O, null, s), E ? (I = k ? v.any(null, O, a, s) : v.any(a, O, null, s), L = I ? I.elements : []) : (L = k ? v.each(null, O, a, s) : v.each(a, O, null, s), I = null), v.updater.editable(s.uri)) {
+	if (L = j ? v.any(null, A, a, s) : v.any(a, A, null, s), E ? (I = j ? v.any(null, A, a, s) : v.any(a, A, null, s), L = I ? I.elements : []) : (L = j ? v.each(null, A, a, s) : v.each(a, A, null, s), I = null), v.updater.editable(s.uri)) {
 		let t = b.appendChild(e.createElement("div"));
 		t.style.padding = "0.5em";
 		let n = t.appendChild(e.createElement("img"));
@@ -165,7 +165,7 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		}, !0), t.appendChild(r);
 	}
 	function R() {
-		I || (I = new A.Collection(), k ? v.add(I, O, a, s) : v.add(a, O, I, s));
+		I || (I = new O.Collection(), j ? v.add(I, A, a, s) : v.add(a, A, I, s));
 	}
 	async function z() {
 		m("save list: " + d(I.elements)), R();
@@ -180,9 +180,9 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	function B() {
 		let e;
 		if (E) {
-			let t = k ? v.the(null, O, a, s) : v.the(a, O, null, s);
+			let t = j ? v.the(null, A, a, s) : v.the(a, A, null, s);
 			e = t ? t.elements : [];
-		} else e = k ? v.each(null, O, a, s) : v.each(a, O, null, s), e.sort();
+		} else e = j ? v.each(null, A, a, s) : v.each(a, A, null, s), e.sort();
 		ee(F, e, h);
 	}
 	F.refresh = B, B();
@@ -199,7 +199,7 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 		p(" Multiple render: async stuff fails. #### ", e);
 	}), x;
 }, l[D.ui("PhoneField").uri] = _, l[D.ui("EmailField").uri] = _, l[D.ui("ColorField").uri] = _, l[D.ui("DateField").uri] = _, l[D.ui("DateTimeField").uri] = _, l[D.ui("TimeField").uri] = _, l[D.ui("NumericField").uri] = _, l[D.ui("IntegerField").uri] = _, l[D.ui("DecimalField").uri] = _, l[D.ui("FloatField").uri] = _, l[D.ui("TextField").uri] = _, l[D.ui("SingleLineTextField").uri] = _, l[D.ui("NamedNodeURIField").uri] = _, l[D.ui("MultiLineTextField").uri] = function(e, t, n, r, i, a, o) {
-	let s = D.ui, c = j, l = i.doc ? i.doc() : null, u = c.any(i, s("property"));
+	let s = D.ui, c = k, l = i.doc ? i.doc() : null, u = c.any(i, s("property"));
 	if (!u) return g(e, "No property to text field: " + i);
 	let d = e.createElement("div");
 	d.style.display = "flex", d.style.flexDirection = "row";
@@ -213,7 +213,7 @@ l[D.ui("Form").uri] = l[D.ui("Group").uri] = function(e, t, n, r, i, a, o) {
 	return p.appendChild(b), t && t.appendChild(d), d;
 };
 function L(e, t, n, r, i, a, o, s) {
-	let l = D.ui, u = j, d = u.any(i, l("property"));
+	let l = D.ui, u = k, d = u.any(i, l("property"));
 	if (!d) {
 		let n = g(e, "No property to boolean field: " + i);
 		return t && t.appendChild(n), n;
@@ -222,7 +222,7 @@ function L(e, t, n, r, i, a, o, s) {
 	f ||= c(d, !0), a = y(r, d, a);
 	let p = u.any(r, d);
 	p === void 0 && (p = !1);
-	let m = A.st(r, d, !0, a), h = A.st(r, d, !1, a), _ = X(e, u, f, h, m, i, a, s);
+	let m = O.st(r, d, !0, a), h = O.st(r, d, !1, a), _ = X(e, u, f, h, m, i, a, s);
 	return t && t.appendChild(_), _;
 }
 l[D.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
@@ -230,7 +230,7 @@ l[D.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 }, l[D.ui("TristateField").uri] = function(e, t, n, r, i, a, o) {
 	return L(e, t, n, r, i, a, o, !0);
 }, l[D.ui("Classifier").uri] = function(e, t, n, r, i, a, o) {
-	let s = j, c = D.ui, l = s.any(i, c("category"));
+	let s = k, c = D.ui, l = s.any(i, c("category"));
 	if (!l) return g(e, "No category for classifier: " + i);
 	T("Classifier: dataDoc=" + a);
 	let u = function(e, t) {
@@ -250,7 +250,7 @@ l[D.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 	}
 	return p.appendChild(m), d.appendChild(p), t && t.appendChild(d), d;
 }, l[D.ui("Choice").uri] = function(t, n, r, i, o, s, c) {
-	let l = D.ui, u = j, d = o.doc ? o.doc() : null, f, p = t.createElement("div");
+	let l = D.ui, u = k, d = o.doc ? o.doc() : null, f, p = t.createElement("div");
 	p.setAttribute("class", "choiceBox"), n && n.appendChild(p);
 	let m = t.createElement("div");
 	m.setAttribute("class", "formFieldName choiceBox-label"), p.appendChild(m);
@@ -291,7 +291,7 @@ l[D.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 	return h.refresh = function() {
 		let e = u.each(i, _, null, s).map((e) => e.value), n = S(w);
 		if (n.push(e), n = W(n), T = Q(t, h, u, i, _, n, e, y, x, s, c), h.innerHTML = "", h.appendChild(T), C) {
-			let n = new k({
+			let n = new j({
 				placeholder: T.selected,
 				select: T,
 				container: h,
@@ -304,7 +304,7 @@ l[D.ui("BooleanField").uri] = function(e, t, n, r, i, a, o) {
 				})), n.action === "CLEAR_ALL_OPTIONS" && (e = []), n.action === "ADD_OPTION") {
 					if ((n.value + "").includes("Create new")) {
 						let n = Z(s), r = [];
-						r.push(A.st(i, _, u.sym(n), s)), y && r.push(A.st(n, D.rdf("type"), u.sym(y), s)), b && R(t, h, {}, A.sym(n), b, s, function(i, a) {
+						r.push(O.st(i, _, u.sym(n), s)), y && r.push(O.st(n, D.rdf("type"), u.sym(y), s)), b && R(t, h, {}, O.sym(n), b, s, function(i, a) {
 							i ? (u.updater.update([], r, function(e, n, r) {
 								n || h.appendChild(g(t, "Error updating select: " + r));
 							}), e.push(n), c && c(i, {
@@ -323,7 +323,7 @@ function R(e, t, n, r, i, a, o) {
 	u(e, i)(e, t, n, r, i, a, o);
 }
 l[D.ui("Comment").uri] = l[D.ui("Heading").uri] = function(e, t, n, r, i, a, o) {
-	let c = D.ui, l = j, u = l.any(i, c("contents"));
+	let c = D.ui, l = k, u = l.any(i, c("contents"));
 	u ||= "Error: No contents in comment field.";
 	let p = i.doc ? i.doc() : null, m = d(i), h = s[m] || {}, g = e.createElement("div");
 	t && t.appendChild(g);
@@ -375,7 +375,7 @@ function H(e, t, n) {
 	return [];
 }
 function te(e) {
-	let t = j;
+	let t = k;
 	T("formsFor: subject=" + e);
 	let n = t.findTypeURIs(e), r;
 	for (r in n) T("   type: " + r);
@@ -425,7 +425,7 @@ function G(e, t, n, r, a, s, l, d) {
 	let p = u(e, s), m = Z(l), h = !1, g = function(o, s) {
 		if (!o) return d(o, s);
 		let c = [];
-		n && !t.holds(n, r, m, l) && c.push(A.st(n, r, m, l)), n && !t.holds(m, D.rdf("type"), a, l) && c.push(A.st(m, D.rdf("type"), a, l)), c.length ? t.updater.update([], c, _) : d(!0, s), h ||= f.appendChild(i(e, m));
+		n && !t.holds(n, r, m, l) && c.push(O.st(n, r, m, l)), n && !t.holds(m, D.rdf("type"), a, l) && c.push(O.st(m, D.rdf("type"), a, l)), c.length ? t.updater.update([], c, _) : d(!0, s), h ||= f.appendChild(i(e, m));
 	};
 	function _(e, t, n) {
 		return d(t, n);
@@ -442,7 +442,7 @@ function K(e, t, r, i, a, o) {
 	};
 	function u(n) {
 		f.disabled = !0, f.setAttribute("style", "visibility: hidden; float: right;"), l.disabled = !0, l.style.color = C.textInputColorPending;
-		let c = t.statementsMatching(r, i, null, a), u = A.st(r, i, l.value, a);
+		let c = t.statementsMatching(r, i, null, a), u = O.st(r, i, l.value, a);
 		t.updater.update(c, u, function(t, n, r) {
 			n ? (l.style.color = C.textInputColor, l.disabled = !1) : s.appendChild(g(e, "Error (while saving change to " + a.uri + "): " + r)), o && o(n, r);
 		});
@@ -470,7 +470,7 @@ function q(e, t, n, r, i, a, o, s) {
 	let _ = function(i) {
 		v.disabled = !0;
 		let c = [], l = [], d = function(e) {
-			t.holds(n, r, e, o) && c.push(A.st(n, r, e, o));
+			t.holds(n, r, e, o) && c.push(O.st(n, r, e, o));
 		}, f;
 		for (let i = 0; i < v.options.length; i++) {
 			let c = v.options[i];
@@ -481,9 +481,9 @@ function q(e, t, n, r, i, a, o, s) {
 					});
 					v.parentNode.appendChild(i), f = i.AJAR_subject;
 				} else f = Z(o);
-				l.push(A.st(n, r, f, o)), a.mintStatementsFun && (l = l.concat(a.mintStatementsFun(f)));
+				l.push(O.st(n, r, f, o)), a.mintStatementsFun && (l = l.concat(a.mintStatementsFun(f)));
 			}
-			c.AJAR_uri && (c.selected && !(c.AJAR_uri in p) && l.push(A.st(n, r, t.sym(c.AJAR_uri), o)), !c.selected && c.AJAR_uri in p && d(t.sym(c.AJAR_uri)), c.selected && (v.currentURI = c.AJAR_uri));
+			c.AJAR_uri && (c.selected && !(c.AJAR_uri in p) && l.push(O.st(n, r, t.sym(c.AJAR_uri), o)), !c.selected && c.AJAR_uri in p && d(t.sym(c.AJAR_uri)), c.selected && (v.currentURI = c.AJAR_uri));
 		}
 		let h = v.subSelect;
 		for (; h && h.currentURI;) d(t.sym(h.currentURI)), h = h.subSelect;
@@ -513,7 +513,7 @@ function q(e, t, n, r, i, a, o, s) {
 	};
 	for (let n in d) {
 		let r = t.sym(n), i = e.createElement("option");
-		a.disambiguate ? i.appendChild(e.createTextNode(O(r, !0))) : i.appendChild(e.createTextNode(c(r, !0)));
+		a.disambiguate ? i.appendChild(e.createTextNode(A(r, !0))) : i.appendChild(e.createTextNode(c(r, !0)));
 		let o = t.any(r, t.sym("http://www.w3.org/ns/ui#backgroundColor"));
 		o && i.setAttribute("style", "background-color: " + o.value + "; "), i.AJAR_uri = n, n in p && (i.setAttribute("selected", "true"), v.currentURI = n), v.appendChild(i);
 	}
@@ -545,11 +545,11 @@ function re(e, t, n, r, i, a, o, s) {
 	let m = function(i) {
 		_.disabled = !0;
 		let a = [], c = [], l = function(e) {
-			t.holds(n, r, e, o) && a.push(A.st(n, r, e, o));
+			t.holds(n, r, e, o) && a.push(O.st(n, r, e, o));
 		};
 		for (let e = 0; e < _.options.length; e++) {
 			let i = _.options[e];
-			i.AJAR_uri && (i.selected && !(i.AJAR_uri in f) && c.push(A.st(n, r, t.sym(i.AJAR_uri), o)), !i.selected && i.AJAR_uri in f && l(t.sym(i.AJAR_uri)), i.selected && (_.currentURI = i.AJAR_uri));
+			i.AJAR_uri && (i.selected && !(i.AJAR_uri in f) && c.push(O.st(n, r, t.sym(i.AJAR_uri), o)), !i.selected && i.AJAR_uri in f && l(t.sym(i.AJAR_uri)), i.selected && (_.currentURI = i.AJAR_uri));
 		}
 		let u = _.subSelect;
 		for (; u && u.currentURI;) l(t.sym(u.currentURI)), u = u.subSelect;
@@ -573,7 +573,7 @@ function re(e, t, n, r, i, a, o, s) {
 	};
 	for (let n in u) {
 		let r = t.sym(n), i = e.createElement("option");
-		a.disambiguate ? i.appendChild(e.createTextNode(O(r, !0))) : i.appendChild(e.createTextNode(c(r, !0)));
+		a.disambiguate ? i.appendChild(e.createTextNode(A(r, !0))) : i.appendChild(e.createTextNode(c(r, !0)));
 		let o = t.any(r, t.sym("http://www.w3.org/ns/ui#backgroundColor"));
 		o && i.setAttribute("style", "background-color: " + o.value + "; "), i.AJAR_uri = n, n in f && (i.setAttribute("selected", "true"), _.currentURI = n), _.appendChild(i);
 	}
@@ -666,7 +666,7 @@ function X(e, t, n, r, i, a, o, s) {
 }
 function Z(e) {
 	let t = /* @__PURE__ */ new Date();
-	return A.sym(e.uri + "#id" + ("" + t.getTime()));
+	return O.sym(e.uri + "#id" + t.getTime());
 }
 function Q(e, t, n, r, i, a, o, s, l, u, d) {
 	let f = {}, p = n.updater.editable(u.uri);
@@ -696,12 +696,12 @@ function Q(e, t, n, r, i, a, o, s, l, u, d) {
 	v.children.length === 0 && v.insertBefore(h(), v.firstChild), v.update = function(t) {
 		o = t;
 		let a = [], c = [], l = function(e) {
-			n.holds(r, i, e, u) && a.push(A.st(r, i, e, u));
+			n.holds(r, i, e, u) && a.push(O.st(r, i, e, u));
 		}, f = function(e) {
-			n.holds(r, i, e, u) || c.push(A.st(r, i, e, u)), s && !n.holds(e, D.rdf("type"), n.sym(s), u) && c.push(A.st(e, D.rdf("type"), n.sym(s), u));
+			n.holds(r, i, e, u) || c.push(O.st(r, i, e, u)), s && !n.holds(e, D.rdf("type"), n.sym(s), u) && c.push(O.st(e, D.rdf("type"), n.sym(s), u));
 		}, p = n.each(r, i, null, u).map((e) => e.value);
-		for (let e of p) $(e, o) || l(A.sym(e));
-		for (let e of o) e in p || f(A.sym(e));
+		for (let e of p) $(e, o) || l(O.sym(e));
+		for (let e of o) e in p || f(O.sym(e));
 		n.updater.update(a, c, function(t, n, r) {
 			if (!n) return v.parentNode.appendChild(g(e, "Error updating data in select: " + r));
 			v.refresh(), d && d(n, {
@@ -721,11 +721,11 @@ function Q(e, t, n, r, i, a, o, s, l, u, d) {
 					});
 					v.parentNode.appendChild(t), c = t.AJAR_subject;
 				} else c = Z(u);
-				a.push(A.st(r, i, n.sym(c), u)), s && a.push(A.st(c, D.rdf("type"), n.sym(s), u)), l.mintStatementsFun && (a = a.concat(l.mintStatementsFun(c))), v.currentURI = c;
+				a.push(O.st(r, i, n.sym(c), u)), s && a.push(O.st(c, D.rdf("type"), n.sym(s), u)), l.mintStatementsFun && (a = a.concat(l.mintStatementsFun(c))), v.currentURI = c;
 			}
 			f.AJAR_uri && (f.selected && $(f.AJAR_uri, o) && (v.currentURI = f.AJAR_uri), $(f.AJAR_uri, o) || f.removeAttribute("selected"), $(f.AJAR_uri, o) && f.setAttribute("selected", "true"));
 		}
-		E("selectForOptions: data doc = " + u), v.currentURI && l.subForm && !l.multiSelect && R(e, t, {}, A.sym(v.currentURI), l.subForm, u, function(r, i) {
+		E("selectForOptions: data doc = " + u), v.currentURI && l.subForm && !l.multiSelect && R(e, t, {}, O.sym(v.currentURI), l.subForm, u, function(r, i) {
 			r ? (n.updater.update([], a, function(n, r, i) {
 				r || t.appendChild(g(e, "Error updating select: " + i));
 			}), d && d(r, {
@@ -736,7 +736,7 @@ function Q(e, t, n, r, i, a, o, s, l, u, d) {
 	};
 	function y(t) {
 		let r = e.createElement("option"), i = n.sym(t), a;
-		a = l.disambiguate ? O(i, !0) : c(i, !0), r.appendChild(e.createTextNode(a)), r.setAttribute("value", t);
+		a = l.disambiguate ? A(i, !0) : c(i, !0), r.appendChild(e.createTextNode(a)), r.setAttribute("value", t);
 		let s = n.any(i, n.sym("http://www.w3.org/ns/ui#backgroundColor"));
 		return s && r.setAttribute("style", "background-color: " + s.value + "; "), r.AJAR_uri = t, $(i.value, o) && r.setAttribute("selected", "true"), r;
 	}

@@ -1,2 +1,2 @@
-const e=require("./NoopStore.cjs.js");let t=require("@lit/context");var n=new e.default,r=(0,t.createContext)(Symbol(`storeContext`));exports.DEFAULT_STORE=n,exports.storeContext=r;
+let e=require("@lit/context");var t=new(require("./NoopStore.cjs.js")),n=(0,e.createContext)(Symbol(`storeContext`));exports.DEFAULT_STORE=t,exports.storeContext=n;
 //# sourceMappingURL=StoreContext.cjs.js.map

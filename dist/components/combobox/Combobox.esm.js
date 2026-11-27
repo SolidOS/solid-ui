@@ -1,14 +1,14 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import { debounce as n } from "../../lib/timing.esm.js";
+import { Task as n } from "@lit/task";
+import { html as r, nothing as i } from "lit";
+import { property as a, query as o, state as s } from "lit/decorators.js";
+import { debounce as c } from "../../lib/timing.esm.js";
 import "../../_virtual/~icons/lucide/chevron-down.esm.js";
 import "../../_virtual/~icons/svg-spinners/3-dots-fade.esm.js";
-import r from "./Combobox.styles.esm.js";
-import { html as i, nothing as a } from "lit";
-import { property as o, query as s, state as c } from "lit/decorators.js";
-import { Task as l } from "@lit/task";
 import "@awesome.me/webawesome/dist/components/popup/popup.js";
+import l from "./Combobox.styles.css.esm.js";
 // src/components/combobox/Combobox.ts
 var u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j, ee, te, ne, re, ie, ae, oe, M, N, P, F, I, L, R, z, B, V, H, U, W, G, K, se, ce;
 function q(e, t, n) {
@@ -188,26 +188,26 @@ function ge(e) {
 }
 D = [e("solid-ui-combobox")];
 var $;
-new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), ce = (O = o({
+new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), g = /*#__PURE__*/ new WeakMap(), _ = /*#__PURE__*/ new WeakMap(), v = /*#__PURE__*/ new WeakMap(), y = /*#__PURE__*/ new WeakMap(), b = /*#__PURE__*/ new WeakMap(), x = /*#__PURE__*/ new WeakMap(), S = /*#__PURE__*/ new WeakMap(), C = /*#__PURE__*/ new WeakMap(), w = /*#__PURE__*/ new WeakMap(), ce = (O = a({
 	type: Boolean,
 	reflect: !0,
 	attribute: "select-only"
-}), A = o({
+}), A = a({
 	type: String,
 	attribute: "async-options-url"
-}), ee = o({
+}), ee = a({
 	type: String,
 	attribute: "async-options-results-field"
-}), ne = o({
+}), ne = a({
 	type: String,
 	attribute: "async-options-label-field"
-}), ie = o({
+}), ie = a({
 	type: String,
 	attribute: "async-options-value-field"
-}), oe = o({ type: Function }), N = o({ type: Array }), F = s("input"), L = o({
+}), oe = a({ type: Function }), N = a({ type: Array }), F = o("input"), L = a({
 	type: Boolean,
 	reflect: !0
-}), z = c(), V = c(), U = c(), G = c(), "selectOnly"), d = class extends t {
+}), z = s(), V = s(), U = s(), G = s(), "selectOnly"), d = class extends t {
 	get [ce]() {
 		return Y(f, this);
 	}
@@ -287,7 +287,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		J(w, this, e);
 	}
 	constructor() {
-		super(), q(this, f, (T(this), k(this, !1))), q(this, p, j(this, "")), q(this, m, te(this, "")), q(this, h, re(this, "")), q(this, g, ae(this, "")), q(this, _, M(this, null)), q(this, v, P(this, null)), q(this, y, I(this, null)), q(this, b, R(this, !1)), q(this, x, B(this, "")), q(this, S, H(this, "")), q(this, C, W(this, !1)), q(this, w, K(this, -1)), X(this, "openListenersAttached", !1), X(this, "updateDebouncedFilter", n(300, (e) => this.filter = e)), X(this, "asyncOptionsTask", void 0), X(this, "_selectedOption", void 0), X(this, "listboxId", void 0), X(this, "handleDocumentFocusIn", (e) => {
+		super(), q(this, f, (T(this), k(this, !1))), q(this, p, j(this, "")), q(this, m, te(this, "")), q(this, h, re(this, "")), q(this, g, ae(this, "")), q(this, _, M(this, null)), q(this, v, P(this, null)), q(this, y, I(this, null)), q(this, b, R(this, !1)), q(this, x, B(this, "")), q(this, S, H(this, "")), q(this, C, W(this, !1)), q(this, w, K(this, -1)), X(this, "openListenersAttached", !1), X(this, "updateDebouncedFilter", c(300, (e) => this.filter = e)), X(this, "asyncOptionsTask", void 0), X(this, "_selectedOption", void 0), X(this, "listboxId", void 0), X(this, "handleDocumentFocusIn", (e) => {
 			e.composedPath().includes(this) || this.hide();
 		}), X(this, "handleDocumentMouseDown", (e) => {
 			e.composedPath().includes(this) || this.hide();
@@ -301,13 +301,13 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 	}
 	willUpdate(e) {
 		if (super.willUpdate(e), (e.has("asyncOptionsUrl") || e.has("asyncOptionsProvider")) && this.updateAsyncOptionsTask(), e.has("value")) {
-			let e = this.getFilteredOptions(), t = e.find((e) => e.selectable !== !1 && e.value === this.value) ?? this.optionsFallback?.find((e) => e.value === this.value), n = t?.selectable !== !1 && t?.label;
+			let e = this.getFilteredOptions(), t = e.find((e) => e.selectable !== !1 && e.value === this.value) ?? this.optionsFallback?.find((e) => e.value === this.value), n = t?.selectable !== !1 && t?.label?.trim();
 			this.updateDisplayValue(n || this.value), this.open && (this.activeIndex = this.getInitialActiveIndex(e)), this._selectedOption && this._selectedOption.value !== this.value && (this._selectedOption = void 0);
 		}
 	}
 	render() {
 		let e = this.getFilteredOptions(), t = (this.open && this.activeIndex >= 0 ? e[this.activeIndex] : void 0) === void 0 ? void 0 : this.getOptionId(this.activeIndex), n = this.placeholder || "Combobox";
-		return i`
+		return r`
       ${this.controlTrait.renderLabel()}
       <wa-popup
         placement="bottom"
@@ -329,10 +329,10 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
             aria-haspopup="listbox"
             aria-expanded=${this.open ? "true" : "false"}
             aria-controls=${this.listboxId}
-            aria-activedescendant=${t ?? a}
-            aria-labelledby=${this.label ? this.controlTrait.labelId : a}
-            aria-label=${this.label ? a : n}
-            aria-required=${this.required ? "true" : a}
+            aria-activedescendant=${t ?? i}
+            aria-labelledby=${this.label ? this.controlTrait.labelId : i}
+            aria-label=${this.label ? i : n}
+            aria-required=${this.required ? "true" : i}
             autocomplete="off"
             spellcheck="false"
             ?disabled=${this.disabled}
@@ -350,19 +350,24 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
           class="listbox"
           role="listbox"
           aria-orientation="vertical"
-          aria-labelledby=${this.label ? this.controlTrait.labelId : a}
-          aria-label=${this.label ? a : n}
+          aria-labelledby=${this.label ? this.controlTrait.labelId : i}
+          aria-label=${this.label ? i : n}
           ?hidden=${!this.open}
           @mousedown=${this.onListboxMouseDown}
         >
-          ${e.map((e, t) => e.selectable === !1 ? i`<div class="non-selectable-option">${e.template ?? e.label}</div>` : i`<div
+          ${e.map((e, t) => e.selectable === !1 ? r`<div class="non-selectable-option">${e.template ?? e.label}</div>` : r`<div
                   id=${this.getOptionId(t)}
                   role="option"
                   aria-selected=${e.value === this.value ? "true" : "false"}
-                  data-active=${t === this.activeIndex || a}
+                  data-active=${t === this.activeIndex || i}
                   @mousemove=${() => this.setActiveIndex(t)}
                 >
-                  ${e.template ?? e.label}
+                  ${e.icon ? r`
+                      <span class="option-content">
+                        <span class="option-icon" aria-hidden="true">${e.icon}</span>
+                        <span>${e.template ?? e.label}</span>
+                      </span>
+                    ` : e.template ?? e.label}
                 </div>`)}
         </div>
       </wa-popup>
@@ -375,7 +380,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 			pending: () => [{
 				value: "",
 				label: "Loading...",
-				template: i`<icon-svg-spinners-3-dots-fade></icon-svg-spinners-3-dots-fade>`,
+				template: r`<icon-svg-spinners-3-dots-fade></icon-svg-spinners-3-dots-fade>`,
 				selectable: !1
 			}],
 			error: (e) => {
@@ -383,7 +388,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 				return [{
 					value: "",
 					label: n,
-					template: i`<span class="message message--${t ? "error" : "info"}">${n}</span>`,
+					template: r`<span class="message message--${t ? "error" : "info"}">${n}</span>`,
 					selectable: !1
 				}];
 			}
@@ -416,7 +421,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		}
 	}
 	updateAsyncOptionsTask() {
-		!this.asyncOptionsUrl && !this.asyncOptionsProvider ? this.asyncOptionsTask = void 0 : this.asyncOptionsTask ??= new l(this, async ([e]) => {
+		!this.asyncOptionsUrl && !this.asyncOptionsProvider ? this.asyncOptionsTask = void 0 : this.asyncOptionsTask ??= new n(this, async ([e]) => {
 			if (this.asyncOptionsProvider) {
 				let t = await this.asyncOptionsProvider(e);
 				if (t.length === 0) throw new Q("No results found");
@@ -440,12 +445,13 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 		this.open && (this.filter = "", this.open = !1, this.activeIndex = -1, this.removeOpenListeners(), this.updateDebouncedFilter.cancel());
 	}
 	selectOption(e) {
-		let t = this.value;
-		this._selectedOption = e, this.hide(), this.controlTrait.setValue(e.value), this.controlElement?.focus({ preventScroll: !0 }), this.dispatchEvent(new CustomEvent("change", {
+		this._selectedOption = e, this.hide();
+		let t = e.label.trim();
+		this.updateDisplayValue(t), this.controlElement && (this.controlElement.value = t), this.controlTrait.setValue(e.value), this.controlElement?.focus({ preventScroll: !0 }), this.dispatchEvent(new CustomEvent("change", {
 			bubbles: !0,
 			composed: !0,
 			detail: { option: e }
-		})), t === this.value && this.updateDisplayValue(e.label);
+		}));
 	}
 	scrollActiveOptionIntoView() {
 		this.activeIndex < 0 || this.shadowRoot?.querySelector(`#${this.getOptionId(this.activeIndex)}`)?.scrollIntoView({ block: "nearest" });
@@ -570,7 +576,7 @@ new (se = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m =
 	]
 ], D, 0, void 0, t), d), u = class extends he {
 	constructor() {
-		super($), X(this, "styles", r), E();
+		super($), X(this, "styles", l), E();
 	}
 }, X(u, se, void 0), u)();
 export { $ as default, ge as defineAsyncComboboxOptionsProvider };

@@ -4,57 +4,57 @@ import { icons as i } from "../lib/iconBase.esm.js";
 import { media as a } from "../media/index.esm.js";
 import o from "../lib/ns.esm.js";
 import { pad_exports as s } from "../lib/pad.esm.js";
-import { style as c } from "../lib/style.esm.js";
-import { utils_exports as l } from "../utils/index.esm.js";
-import { widgets_exports as u } from "../widgets/index.esm.js";
-import { findAppInstances as d } from "../login/login.esm.js";
-import * as f from "rdflib";
-import { authn as p, createTypeIndexLogic as m, store as h } from "solid-logic";
+import * as c from "rdflib";
+import { style as l } from "../lib/style.esm.js";
+import { utils_exports as u } from "../utils/index.esm.js";
+import { widgets_exports as d } from "../widgets/index.esm.js";
+import { authn as f, createTypeIndexLogic as p, store as m } from "solid-logic";
+import { findAppInstances as h } from "../login/login.esm.js";
 // src/chat/bookmarks.js
 var g = {
 	icons: i,
 	ns: o,
 	media: a,
 	pad: s,
-	style: c,
-	utils: l,
-	widgets: u
-}, _ = f.Namespace("http://www.w3.org/2002/01/bookmark#"), v = "noun_45961.svg", y = r, b = window.document || null;
+	style: l,
+	utils: u,
+	widgets: d
+}, _ = c.Namespace("http://www.w3.org/2002/01/bookmark#"), v = "noun_45961.svg", y = r, b = window.document || null;
 function x(e, t) {
 	return new Promise(function(n, r) {
-		h.updater.update(e, t, function(e, t, i) {
+		m.updater.update(e, t, function(e, t, i) {
 			t ? n() : r(Error(i));
 		});
 	});
 }
 async function S(e) {
 	let r = _("Bookmark");
-	if (await d(e, r, !0), e.instances && e.instances.length > 0) e.bookmarkDocument = e.instances[0], e.instances.length > 1 && n("More than one bookmark file! " + e.instances);
+	if (await h(e, r, !0), e.instances && e.instances.length > 0) e.bookmarkDocument = e.instances[0], e.instances.length > 1 && n("More than one bookmark file! " + e.instances);
 	else if (e.publicProfile) {
-		let i = f.sym(e.publicProfile.dir().uri + "bookmarks.ttl");
+		let i = c.sym(e.publicProfile.dir().uri + "bookmarks.ttl");
 		try {
-			t("Creating new bookmark file " + i), await h.fetcher.createIfNotExists(i);
+			t("Creating new bookmark file " + i), await m.fetcher.createIfNotExists(i);
 		} catch (t) {
 			return n("Can't make fresh bookmark file:" + t), e;
 		}
-		await m.registerInTypeIndex(i, e.index, r), e.bookmarkDocument = i;
+		await p.registerInTypeIndex(i, e.index, r), e.bookmarkDocument = i;
 	} else n("You seem to have no bookmark file, nor even a profile file!");
 	return e;
 }
 async function C(e, t) {
-	let r = "", i = p.currentUser();
+	let r = "", i = f.currentUser();
 	if (!i) throw Error("Must be logged on to add Bookmark");
-	r = y(h.any(t, o.foaf("maker"))) + ": " + h.anyValue(t, o.sioc("content")).slice(0, 80);
-	let a = e.bookmarkDocument, s = g.widgets.newThing(a, r), c = [
-		f.st(a, g.ns.dct("references"), s, a),
-		f.st(s, g.ns.rdf("type"), _("Bookmark"), a),
-		f.st(s, g.ns.dct("created"), /* @__PURE__ */ new Date(), a),
-		f.st(s, _("recalls"), t, a),
-		f.st(s, g.ns.foaf("maker"), i, a),
-		f.st(s, g.ns.dct("title"), r, a)
+	r = y(m.any(t, o.foaf("maker"))) + ": " + m.anyValue(t, o.sioc("content")).slice(0, 80);
+	let a = e.bookmarkDocument, s = g.widgets.newThing(a, r), l = [
+		c.st(a, g.ns.dct("references"), s, a),
+		c.st(s, g.ns.rdf("type"), _("Bookmark"), a),
+		c.st(s, g.ns.dct("created"), /* @__PURE__ */ new Date(), a),
+		c.st(s, _("recalls"), t, a),
+		c.st(s, g.ns.foaf("maker"), i, a),
+		c.st(s, g.ns.dct("title"), r, a)
 	];
 	try {
-		await x([], c);
+		await x([], l);
 	} catch (e) {
 		let t = "Making bookmark: " + e;
 		return n(t), null;
@@ -62,12 +62,12 @@ async function C(e, t) {
 	return s;
 }
 async function w(r, i, a) {
-	await h.fetcher.load(r.bookmarkDocument);
-	let o = h.each(null, _("recalls"), i, r.bookmarkDocument);
+	await m.fetcher.load(r.bookmarkDocument);
+	let o = m.each(null, _("recalls"), i, r.bookmarkDocument);
 	if (o.length) {
 		if (!confirm("Delete bookmark on this?" + o.length)) return;
 		for (let r = 0; r < o.length; r++) try {
-			await x(h.connectedStatements(o[r]), []), a.style.backgroundColor = "white", t("Bookmark deleted: " + o[r]);
+			await x(m.connectedStatements(o[r]), []), a.style.backgroundColor = "white", t("Bookmark deleted: " + o[r]);
 		} catch (t) {
 			e("Cant delete bookmark:" + t), n("Cannot delete bookmark:" + t);
 		}
@@ -78,8 +78,8 @@ async function w(r, i, a) {
 }
 async function T(e, t) {
 	async function n(t) {
-		await h.fetcher.load(e.bookmarkDocument);
-		let n = h.any(null, _("recalls"), t.target, e.bookmarkDocument);
+		await m.fetcher.load(e.bookmarkDocument);
+		let n = m.any(null, _("recalls"), t.target, e.bookmarkDocument);
 		t.style = g.style.buttonStyle, n && (t.style.backgroundColor = "yellow");
 	}
 	let r;

@@ -1,12 +1,12 @@
 import { log_exports as e } from "../lib/log.esm.js";
-import t from "../lib/ns.esm.js";
-import * as n from "rdflib";
-import { store as r } from "solid-logic";
+import { store as t } from "solid-logic";
+import n from "../lib/ns.esm.js";
+import * as r from "rdflib";
 // src/utils/label.ts
 var i = {
 	log: e,
-	ns: t,
-	rdf: n
+	ns: n,
+	rdf: r
 };
 function a(e, t = !1) {
 	function n(e) {
@@ -43,7 +43,7 @@ function o(e, t) {
 	return e.slice(n) === t ? e.slice(0, n) : e;
 }
 function s(e) {
-	return r.any(e, i.ns.ui("label")) || r.any(e, i.ns.link("message")) || r.any(e, i.ns.vcard("fn")) || r.any(e, i.ns.foaf("name")) || r.any(e, i.ns.dct("title")) || r.any(e, i.ns.dc("title")) || r.any(e, i.ns.rss("title")) || r.any(e, i.ns.contact("fullName")) || r.any(e, r.sym("http://www.w3.org/2001/04/roadmap/org#name")) || r.any(e, i.ns.cal("summary")) || r.any(e, i.ns.foaf("nick")) || r.any(e, i.ns.as("name")) || r.any(e, i.ns.schema("name")) || r.any(e, i.ns.rdfs("label")) || r.any(e, r.sym("http://www.w3.org/2004/02/skos/core#prefLabel"));
+	return t.any(e, i.ns.ui("label")) || t.any(e, i.ns.link("message")) || t.any(e, i.ns.vcard("fn")) || t.any(e, i.ns.foaf("name")) || t.any(e, i.ns.dct("title")) || t.any(e, i.ns.dc("title")) || t.any(e, i.ns.rss("title")) || t.any(e, i.ns.contact("fullName")) || t.any(e, t.sym("http://www.w3.org/2001/04/roadmap/org#name")) || t.any(e, i.ns.cal("summary")) || t.any(e, i.ns.foaf("nick")) || t.any(e, i.ns.as("name")) || t.any(e, i.ns.schema("name")) || t.any(e, i.ns.rdfs("label")) || t.any(e, t.sym("http://www.w3.org/2004/02/skos/core#prefLabel"));
 }
 export { a as label };
 

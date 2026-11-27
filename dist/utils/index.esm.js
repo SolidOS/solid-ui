@@ -1,9 +1,9 @@
 import { __exportAll as e } from "../_virtual/_rolldown/runtime.esm.js";
 import { log_exports as t } from "../lib/log.esm.js";
-import n from "../lib/ns.esm.js";
-import { label as r } from "./label.esm.js";
+import { store as n } from "solid-logic";
+import r from "../lib/ns.esm.js";
 import * as i from "rdflib";
-import { store as a } from "solid-logic";
+import { label as a } from "./label.esm.js";
 // src/utils/index.js
 var o = /* @__PURE__ */ e({
 	AJARImage: () => D,
@@ -23,7 +23,7 @@ var o = /* @__PURE__ */ e({
 	getTerm: () => S,
 	hashColor: () => p,
 	include: () => C,
-	label: () => r,
+	label: () => a,
 	labelForXML: () => M,
 	labelWithOntology: () => A,
 	newVariableName: () => l,
@@ -37,7 +37,7 @@ var o = /* @__PURE__ */ e({
 	syncTableToArrayReOrdered: () => g
 }), s = {
 	log: t,
-	ns: n,
+	ns: r,
 	rdf: i
 }, c = 0;
 function l() {
@@ -62,7 +62,7 @@ function p(e) {
 		return e.split("").reduce(function(e, t) {
 			return e = (e << 5) - e + t.charCodeAt(0), e & e;
 		}, 0);
-	}(e) & 16777215 | 12632256).toString(16);
+	}(e) & 0xffffff | 0xc0c0c0).toString(16);
 }
 function m() {
 	return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function(e) {
@@ -157,15 +157,15 @@ function x(e, t) {
 	s.log.debug("getAbout: No about found");
 }
 function S(e) {
-	let t = e.parentNode, n = t ? t.AJAR_statement : void 0;
-	switch (n ? e.className : "") {
+	let t = e.parentNode, r = t ? t.AJAR_statement : void 0;
+	switch (r ? e.className : "") {
 		case "pred":
-		case "pred selected": return n.predicate;
+		case "pred selected": return r.predicate;
 		case "obj":
-		case "obj selected": return t.AJAR_inverse ? n.subject : n.object;
+		case "obj selected": return t.AJAR_inverse ? r.subject : r.object;
 		case "":
-		case "selected": return x(a, e);
-		case "undetermined selected": return e.nextSibling ? n.predicate : t.AJAR_inverse ? n.subject : n.object;
+		case "selected": return x(n, e);
+		case "undetermined selected": return e.nextSibling ? r.predicate : t.AJAR_inverse ? r.subject : r.object;
 	}
 }
 function C(e, t) {
@@ -235,25 +235,25 @@ function k(e) {
 	} else return e.uri + "!?";
 }
 function A(e, t) {
-	let n = a.findTypeURIs(e);
-	return n[s.ns.rdf("Predicate").uri] || n[s.ns.rdfs("Class").uri] ? r(e, t) + " (" + k(e) + ")" : r(e, t);
+	let r = n.findTypeURIs(e);
+	return r[s.ns.rdf("Predicate").uri] || r[s.ns.rdfs("Class").uri] ? a(e, t) + " (" + k(e) + ")" : a(e, t);
 }
 function j(e) {
 	return e.replace(/&/g, "&amp;").replace(/</g, "&lt;");
 }
 function M(e) {
-	return j(r(e));
+	return j(a(e));
 }
 function N(e, t) {
 	return j(P(e, t));
 }
 function P(e, t) {
-	let n = r(e);
+	let r = a(e);
 	if (t) {
-		let t = a.any(e, s.ns.owl("inverseOf")) || a.any(void 0, s.ns.owl("inverseOf"), e);
-		return t ? r(t) : n === "type" ? "..." : "is " + n + " of";
+		let t = n.any(e, s.ns.owl("inverseOf")) || n.any(void 0, s.ns.owl("inverseOf"), e);
+		return t ? a(t) : r === "type" ? "..." : "is " + r + " of";
 	}
-	return n;
+	return r;
 }
 function F(e, t) {
 	let n = e.predicate.compareTerm(t.predicate);
@@ -269,6 +269,6 @@ function L(e) {
 	else if (t.previousSibling && t.previousSibling.nodeName === "TR") t = t.previousSibling;
 	else return s.log.error("Could not find predParent"), e;
 }
-export { D as AJARImage, F as RDFComparePredicateObject, I as RDFComparePredicateSubject, w as addLoadEvent, b as ancestor, f as beep, u as clearVariableNames, v as emptyNode, j as escapeForXML, T as findPos, m as genUuid, x as getAbout, E as getEyeFocus, y as getTarget, S as getTerm, p as hashColor, C as include, r as label, M as labelForXML, A as labelWithOntology, l as newVariableName, k as ontologyLabel, L as predParentOf, P as predicateLabel, N as predicateLabelForXML, O as shortName, _ as stackString, h as syncTableToArray, g as syncTableToArrayReOrdered, o as utils_exports };
+export { D as AJARImage, F as RDFComparePredicateObject, I as RDFComparePredicateSubject, w as addLoadEvent, b as ancestor, f as beep, u as clearVariableNames, v as emptyNode, j as escapeForXML, T as findPos, m as genUuid, x as getAbout, E as getEyeFocus, y as getTarget, S as getTerm, p as hashColor, C as include, a as label, M as labelForXML, A as labelWithOntology, l as newVariableName, k as ontologyLabel, L as predParentOf, P as predicateLabel, N as predicateLabelForXML, O as shortName, _ as stackString, h as syncTableToArray, g as syncTableToArrayReOrdered, o as utils_exports };
 
 //# sourceMappingURL=index.esm.js.map

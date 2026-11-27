@@ -1,9 +1,9 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import n from "./MenuItem.styles.esm.js";
-import { html as r } from "lit";
-import { property as i, query as a } from "lit/decorators.js";
+import { property as n, query as r } from "lit/decorators.js";
+import { html as i } from "lit";
+import a from "./MenuItem.styles.css.esm.js";
 // src/components/menu-item/MenuItem.ts
 var o, s, c, l, u, d, f, p, m, h, g, _, v, y, b, x;
 function S(e, t, n) {
@@ -179,13 +179,13 @@ function N(e) {
 }
 p = [e("solid-ui-menu-item")];
 var P;
-new (b = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), x = (m = i({
+new (b = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), x = (m = n({
 	type: String,
 	reflect: !0
-}), g = i({
+}), g = n({
 	type: Boolean,
 	reflect: !0
-}), v = a("a"), "href"), s = class extends t {
+}), v = r("a"), "href"), s = class extends t {
 	constructor(...e) {
 		super(...e), S(this, c, (d(this), h(this))), S(this, l, _(this, !1)), S(this, u, y(this, null));
 	}
@@ -208,13 +208,13 @@ new (b = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 		w(u, this, e);
 	}
 	render() {
-		return this.href ? r`
+		return this.href ? i`
         <a href="${this.href}" target="_blank" rel="noopener noreferrer" ?data-selected=${this.selected}>
             <slot name="left-icon"></slot>
             <slot></slot>
             <slot name="right-icon"></slot>
         </a>
-      ` : r`
+      ` : i`
         <div ?data-selected=${this.selected}>
             <slot name="left-icon"></slot>
             <slot></slot>
@@ -243,7 +243,7 @@ new (b = (c = /*#__PURE__*/ new WeakMap(), l = /*#__PURE__*/ new WeakMap(), u = 
 	]
 ], p, 0, void 0, t), s), o = class extends N {
 	constructor() {
-		super(P), D(this, "styles", n), f();
+		super(P), D(this, "styles", a), f();
 	}
 }, D(o, b, void 0), o)();
 export { P as default };

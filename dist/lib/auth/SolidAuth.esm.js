@@ -1,13 +1,13 @@
 import e from "./Account.esm.js";
 import t from "../ns.esm.js";
 import { showDialog as n } from "../dialogs/helpers.esm.js";
+import { authSession as r, authn as i, reloadOnIdentityReplaced as a, solidLogicSingleton as o } from "solid-logic";
 import "../dialogs/index.esm.js";
-import r from "../../components/login-modal/index.esm.js";
-import { authSession as i, authn as a, reloadOnIdentityReplaced as o, solidLogicSingleton as s } from "solid-logic";
+import s from "../../components/login-modal/index.esm.js";
 // src/lib/auth/SolidAuth.ts
 var c = "https://solidproject.org/get_a_pod";
 function l(e) {
-	let n = s.store, r = n.sym(e), i = n.any(r, t.sioc("avatar")) || n.any(r, t.foaf("img")) || n.any(r, t.vcard("logo")) || n.any(r, t.vcard("hasPhoto")) || n.any(r, t.vcard("photo")) || n.any(r, t.foaf("depiction"));
+	let n = o.store, r = n.sym(e), i = n.any(r, t.sioc("avatar")) || n.any(r, t.foaf("img")) || n.any(r, t.vcard("logo")) || n.any(r, t.vcard("hasPhoto")) || n.any(r, t.vcard("photo")) || n.any(r, t.foaf("depiction"));
 	return i ? i.value : void 0;
 }
 var u = class {
@@ -19,47 +19,47 @@ var u = class {
 		this.signupUrl = e;
 	}
 	async initialize() {
-		i.events.on("sessionRestore", () => {
-			s.store.updater.flagAuthorizationMetadata();
-		}), o(i.events, () => {
-			i.info?.isLoggedIn && window.location.reload();
-		}), await a.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
+		r.events.on("sessionRestore", () => {
+			o.store.updater.flagAuthorizationMetadata();
+		}), a(r.events, () => {
+			r.info?.isLoggedIn && window.location.reload();
+		}), await i.checkUser(), this._initialized = !0, this.listeners.forEach((e) => e());
 	}
 	async loadProfile() {
-		!this.profileLoaded && this.account && (this.profileLoaded = !0, await s.profile.loadMe(), this.listeners.forEach((e) => e()));
+		!this.profileLoaded && this.account && (this.profileLoaded = !0, await o.profile.loadMe(), this.listeners.forEach((e) => e()));
 	}
 	get initialized() {
 		return this._initialized;
 	}
 	get account() {
-		let t = i.webId ?? i.info?.webId;
-		if (!(i.isActive ?? i.info?.isLoggedIn ?? !!t) || !t) return null;
+		let t = r.webId ?? r.info?.webId;
+		if (!(r.isActive ?? r.info?.isLoggedIn ?? !!t) || !t) return null;
 		let n = l(t);
 		return new e(t, n);
 	}
 	async login(e) {
 		if (!e) {
-			n(r);
+			n(s);
 			return;
 		}
-		s.store.updater.flagAuthorizationMetadata();
+		o.store.updater.flagAuthorizationMetadata();
 		let t = new URL(window.location.href).hash;
 		t && window.localStorage.setItem("preLoginRedirectHash", t), window.localStorage.setItem("loginIssuer", e);
-		let a = new URL(window.location.href);
-		a.hash = "", await i.login(e, a.href);
+		let i = new URL(window.location.href);
+		i.hash = "", await r.login(e, i.href);
 	}
 	async signup() {
 		window.open(this.signupUrl, "_blank", "noopener,noreferrer");
 	}
 	async logout() {
-		await i.logout();
+		await r.logout();
 	}
 	onSessionUpdated(e) {
-		let t = i, n = () => {
+		let t = r, n = () => {
 			e();
 		};
-		return this.listeners.push(n), typeof t.addEventListener == "function" ? t.addEventListener("sessionStateChange", n) : (i.events.on("login", n), i.events.on("logout", n), i.events.on("sessionRestore", n)), () => {
-			this.listeners = this.listeners.filter((e) => e !== n), typeof t.removeEventListener == "function" ? t.removeEventListener("sessionStateChange", n) : (i.events.off("login", n), i.events.off("logout", n), i.events.off("sessionRestore", n));
+		return this.listeners.push(n), typeof t.addEventListener == "function" ? t.addEventListener("sessionStateChange", n) : (r.events.on("login", n), r.events.on("logout", n), r.events.on("sessionRestore", n)), () => {
+			this.listeners = this.listeners.filter((e) => e !== n), typeof t.removeEventListener == "function" ? t.removeEventListener("sessionStateChange", n) : (r.events.off("login", n), r.events.off("logout", n), r.events.off("sessionRestore", n));
 		};
 	}
 };

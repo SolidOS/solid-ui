@@ -1,2 +1,2 @@
-const e=require("./NoopAuth.cjs.js");let t=require("@lit/context");var n=new e.default,r=(0,t.createContext)(Symbol(`auth`));exports.DEFAULT_AUTH_CONTEXT=n,exports.authContext=r;
+let e=require("@lit/context");var t=new(require("./NoopAuth.cjs.js")),n=(0,e.createContext)(Symbol(`auth`));exports.DEFAULT_AUTH_CONTEXT=t,exports.authContext=n;
 //# sourceMappingURL=context.cjs.js.map

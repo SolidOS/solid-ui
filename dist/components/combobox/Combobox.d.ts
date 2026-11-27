@@ -4,6 +4,7 @@ export type ComboboxOptionData = {
     value: FormControlValue;
     label: string;
     template?: TemplateResult;
+    icon?: TemplateResult;
     selectable?: boolean;
 };
 export type ComboboxChangeEvent = CustomEvent<{

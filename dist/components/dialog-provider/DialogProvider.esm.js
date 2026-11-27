@@ -1,9 +1,9 @@
 import "../../lib/components/index.esm.js";
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
-import { dialogContext as n } from "../../lib/dialogs/context.esm.js";
-import { provide as r } from "@lit/context";
-import { property as i } from "lit/decorators.js";
+import { provide as n } from "@lit/context";
+import { property as r } from "lit/decorators.js";
+import { dialogContext as i } from "../../lib/dialogs/context.esm.js";
 // src/components/dialog-provider/DialogProvider.ts
 var a, o, s, c, l, u, d, f, p;
 function m(e, t, n) {
@@ -168,10 +168,10 @@ function C(e) {
 }
 c = [e("solid-ui-dialog-provider")];
 var w, T = /*#__PURE__*/ new WeakMap(), E = /*#__PURE__*/ new WeakMap();
-p = (l = i({
+p = (l = r({
 	type: String,
 	reflect: !0
-}), d = r({ context: n }), "dialogId"), a = class extends t {
+}), d = n({ context: i }), "dialogId"), a = class extends t {
 	constructor(...e) {
 		super(...e), m(this, T, (o(this), u(this))), m(this, E, f(this, { id: "" }));
 	}

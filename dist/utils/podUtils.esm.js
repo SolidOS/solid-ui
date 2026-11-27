@@ -1,19 +1,19 @@
-import e from "../lib/ns.esm.js";
-import "./webIdUtils.esm.js";
+import { solidLogicSingleton as e } from "solid-logic";
+import t from "../lib/ns.esm.js";
 import "rdflib";
-import { solidLogicSingleton as t } from "solid-logic";
+import "./webIdUtils.esm.js";
 // src/utils/podUtils.ts
-function n(t, n) {
-	if (!t || !n) return !1;
-	let r = t.sym(n), i = t.findTypeURIs(r);
-	return !!(i[e.ldp("Container").uri] || i[e.ldp("BasicContainer").uri] || r.uri.endsWith("/"));
+function n(e, n) {
+	if (!e || !n) return !1;
+	let r = e.sym(n), i = e.findTypeURIs(r);
+	return !!(i[t.ldp("Container").uri] || i[t.ldp("BasicContainer").uri] || r.uri.endsWith("/"));
 }
 function r(n, r) {
 	if (!n || !r) return 0;
 	let i = n.sym(r), a = /* @__PURE__ */ new Set();
-	for (let r of n.each(i, e.ldp("contains"))) if (r.termType === "NamedNode") {
-		let e = r;
-		t.resource.isHiddenFile(e) || a.add(e.uri);
+	for (let r of n.each(i, t.ldp("contains"))) if (r.termType === "NamedNode") {
+		let t = r;
+		e.resource.isHiddenFile(t) || a.add(t.uri);
 	}
 	return a.size;
 }

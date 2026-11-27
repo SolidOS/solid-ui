@@ -1,2 +1,2 @@
-var e=class{get store(){throw Error(`Cannot use RDF forms without a store`)}};exports.default=e;
+var e=class{get store(){throw Error(`Cannot use RDF forms without a store`)}};module.exports=e;
 //# sourceMappingURL=NoopStore.cjs.js.map

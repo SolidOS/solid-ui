@@ -1,4 +1,4 @@
-import { PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton } from 'solid-logic'
+import { PUBLIC_ACCESS_ROLES, Public, solidLogicSingleton, type ContainerAccessScope } from 'solid-logic'
 import type { AccessChange, AccessSaveError, AccessSaveScope } from './types'
 
 export async function applyAccessChanges (
@@ -8,18 +8,32 @@ export async function applyAccessChanges (
 ): Promise<AccessSaveError[]> {
   const errors: AccessSaveError[] = []
   const scope = options.containerScope ?? 'file'
+  const isContainer = new URL(subjectUri).pathname.endsWith('/')
 
-  for (const { subject, label, role } of accessChanges) {
+  for (const { subject, label, role, scope: changeScope, previousScope } of accessChanges) {
+    const selectedScope = isContainer ? (changeScope ?? scope) : 'file'
+    const saveScope = toAccessSaveScope(selectedScope)
+    const previousSaveScope = isContainer && previousScope
+      ? toAccessSaveScope(previousScope)
+      : 'file'
     try {
-      const grantPlanner = scope === 'folder+contents'
+      if (previousScope && previousSaveScope !== saveScope) {
+        const previousPlan = previousSaveScope === 'contents' || (
+          previousSaveScope === 'folder+contents' && saveScope === 'container'
+        )
+          ? await solidLogicSingleton.acl.planRevokeContainerContents(subjectUri, subject)
+          : await solidLogicSingleton.acl.planRevoke(subjectUri, subject)
+        await solidLogicSingleton.acl.applyPlan(previousPlan)
+      }
+      const grantPlanner = saveScope === 'folder+contents'
         ? solidLogicSingleton.acl.planGrantContainerAndContents
-        : scope === 'container'
+        : saveScope === 'container'
           ? solidLogicSingleton.acl.planGrantContainer
-          : scope === 'contents'
+          : saveScope === 'contents'
             ? solidLogicSingleton.acl.planGrantContainerContents
             : solidLogicSingleton.acl.planGrant
       const plan = role === 'No Access'
-        ? await (scope === 'contents'
+        ? await (saveScope === 'contents'
           ? solidLogicSingleton.acl.planRevokeContainerContents(subjectUri, subject)
           : solidLogicSingleton.acl.planRevoke(subjectUri, subject))
         : await grantPlanner(subjectUri, subject, getModes(subject, role))
@@ -31,7 +45,7 @@ export async function applyAccessChanges (
         targetUri: subject.iri,
         label,
         role,
-        scope,
+        scope: saveScope,
         message: error instanceof Error
           ? error.message
           : 'Unable to apply access change.'
@@ -40,6 +54,10 @@ export async function applyAccessChanges (
   }
 
   return errors
+}
+
+function toAccessSaveScope (scope: ContainerAccessScope | AccessSaveScope): AccessSaveScope {
+  return scope === 'folder' ? 'container' : scope
 }
 
 function getModes (subject: AccessChange['subject'], role: AccessChange['role']) {

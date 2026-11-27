@@ -1,2 +1,2 @@
-const e=require("./events/show-dialog.cjs.js"),t=require("./Dialog.cjs.js");function n(n,r){let i=new n;Object.assign(i,r?.props);let a=new t.default(i,r);return document.dispatchEvent(new e.ShowDialogEvent(a)),a.element}exports.showDialog=n;
+const e=require("./events/show-dialog.cjs.js"),t=require("./Dialog.cjs.js");exports.showDialog=function(n,r){let i=new n;Object.assign(i,r?.props);let a=new t(i,r);return document.dispatchEvent(new e.ShowDialogEvent(a)),a.element};
 //# sourceMappingURL=helpers.cjs.js.map

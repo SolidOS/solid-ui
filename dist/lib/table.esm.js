@@ -1,22 +1,22 @@
 import { log as e } from "./debug.esm.js";
 import { icons as t } from "./iconBase.esm.js";
 import { label as n } from "../utils/label.esm.js";
-import { log_exports as r } from "./log.esm.js";
-import i from "./ns.esm.js";
-import { getTarget as a, utils_exports as o } from "../utils/index.esm.js";
-import { widgets_exports as s } from "../widgets/index.esm.js";
-import * as c from "rdflib";
-import { store as l } from "solid-logic";
+import { store as r } from "solid-logic";
+import { log_exports as i } from "./log.esm.js";
+import a from "./ns.esm.js";
+import * as o from "rdflib";
+import { getTarget as s, utils_exports as c } from "../utils/index.esm.js";
+import { widgets_exports as l } from "../widgets/index.esm.js";
 // src/lib/table.js
 var u = {
 	icons: t,
-	log: r,
-	ns: i,
-	utils: o,
-	widgets: s
+	log: i,
+	ns: a,
+	utils: c,
+	widgets: l
 };
-function d(t, r) {
-	let i = r.sourceDocument, o = r.tableClass, s = r.query, d = u.ns, f = l, p = {}, ee = {
+function d(t, i) {
+	let a = i.sourceDocument, c = i.tableClass, l = i.query, d = u.ns, f = r, p = {}, ee = {
 		"http://www.w3.org/2002/07/owl#sameAs": !0,
 		"http://www.w3.org/1999/02/22-rdf-syntax-ns#type": !0
 	}, m = {
@@ -42,17 +42,17 @@ function d(t, r) {
 	}, ne = {
 		"http://xmlns.com/foaf/0.1/Image": !0,
 		"http://purl.org/dc/terms/Image": !0
-	}, h = r.keyVariable || "?_row", g = 0, _, v, y, b, x = null, S = null, C = t.createElement("div");
+	}, h = i.keyVariable || "?_row", g = 0, _, v, y, b, x = null, S = null, C = t.createElement("div");
 	C.className = "tableViewPane", C.appendChild(re());
 	let w = t.createElement("div");
 	C.appendChild(w), C.refresh = function() {
 		Z(T.query, T.logicalRows, T.columns, T);
 	};
 	let T;
-	if (s) T = $(s), w.appendChild(T);
+	if (l) T = $(l), w.appendChild(T);
 	else {
 		let e = I();
-		_ = e[0], v = e[1], o || y.appendChild(le(_, v)), S = Ce(v), E(S || _);
+		_ = e[0], v = e[1], c || y.appendChild(le(_, v)), S = Ce(v), E(S || _);
 	}
 	return C;
 	function re() {
@@ -80,7 +80,7 @@ function d(t, r) {
 		}
 	}
 	function se(e) {
-		let t = new c.Query(), n = f.variable(h.slice(1));
+		let t = new o.Query(), n = f.variable(h.slice(1));
 		return ie(t, e), ae(t, n, e), oe(t, n, e), t;
 	}
 	function E(e) {
@@ -132,7 +132,7 @@ function d(t, r) {
 		}, this.addUse = function() {
 			this.useCount += 1;
 		}, this.getHints = function() {
-			return r && r.hints && this.variable && r.hints[this.variable.toNT()] ? r.hints[this.variable.toNT()] : {};
+			return i && i.hints && this.variable && i.hints[this.variable.toNT()] ? i.hints[this.variable.toNT()] : {};
 		}, this.getLabel = function() {
 			return this.getHints().label ? this.getHints().label : this.predicate ? this.predicate.sameTerm(d.rdf("type")) && this.superClass ? n(this.superClass, !0) : n(this.predicate) : this.variable ? this.variable.toString() : "unlabeled column?";
 		}, this.setPredicate = function(e, t, n) {
@@ -210,7 +210,7 @@ function d(t, r) {
 		return t.uri in e ? n = e[t.uri] : (n = new O(t), e[t.uri] = n), n;
 	}
 	function N() {
-		let e = {}, t = f.statementsMatching(void 0, u.ns.rdf("type"), o, i), n = {};
+		let e = {}, t = f.statementsMatching(void 0, u.ns.rdf("type"), c, a), n = {};
 		for (let r = 0; r < t.length; ++r) {
 			let i = t[r].object;
 			if (i.termType !== "NamedNode") continue;
@@ -220,7 +220,7 @@ function d(t, r) {
 		return [n, e];
 	}
 	function P(e, t) {
-		let n = f.statementsMatching(e, void 0, void 0, i), r = {};
+		let n = f.statementsMatching(e, void 0, void 0, a), r = {};
 		for (let e = 0; e < n.length; ++e) {
 			let i = n[e].predicate;
 			if (i.uri in ee) continue;
@@ -242,8 +242,8 @@ function d(t, r) {
 		let e, t, n = N();
 		e = n[0], t = n[1];
 		for (let n in e) {
-			let r = e[n], i = t[n];
-			F(i, r);
+			let r = e[n];
+			F(t[n], r);
 		}
 		return [new O(null), A(t)];
 	}
@@ -294,10 +294,7 @@ function d(t, r) {
 		n ? r.style.display = "" : r.style.display = "none";
 	}
 	function V(e, t) {
-		for (let n = 0; n < e.length; ++n) {
-			let r = e[n];
-			B(r, t);
-		}
+		for (let n = 0; n < e.length; ++n) B(e[n], t);
 	}
 	function H(e, t, r) {
 		function i(e) {
@@ -397,12 +394,12 @@ function d(t, r) {
 	}
 	function K(n, r, i) {
 		i ||= {};
-		let o = t.createElement("a"), s = i.linkFunction;
-		return o.setAttribute("href", n), o.appendChild(t.createTextNode(r)), s ? o.addEventListener("click", function(t) {
+		let a = t.createElement("a"), o = i.linkFunction;
+		return a.setAttribute("href", n), a.appendChild(t.createTextNode(r)), o ? a.addEventListener("click", function(t) {
 			t.preventDefault(), t.stopPropagation();
-			let n = a(t).getAttribute("href");
-			n || e("No href found \n"), s(n);
-		}, !0) : o.addEventListener("click", u.widgets.openHrefInOutlineMode, !0), o;
+			let n = s(t).getAttribute("href");
+			n || e("No href found \n"), o(n);
+		}, !0) : a.addEventListener("click", u.widgets.openHrefInOutlineMode, !0), a;
 	}
 	function ve(e, t) {
 		let r = !1;
@@ -413,7 +410,7 @@ function d(t, r) {
 		return n.setAttribute("src", e.uri), n.style.height = "40px", n;
 	}
 	function q(e) {
-		return r && r.hints && e.variable && r.hints[e.variable.toNT()] ? r.hints[e.variable.toNT()] : {};
+		return i && i.hints && e.variable && i.hints[e.variable.toNT()] ? i.hints[e.variable.toNT()] : {};
 	}
 	function J(e, n) {
 		let r = q(n), i = r.cellFormat;
@@ -480,34 +477,34 @@ function d(t, r) {
 			return e._subject_id = t, ++g, t;
 		}
 	}
-	function Z(n, i, a, o) {
+	function Z(n, r, a, o) {
 		n.running = !0;
 		let s = Date.now(), c = t.createElement("tr");
 		o.appendChild(c), c.textContent = "Loading ...";
-		for (let e = 0; e < i.length; e++) i[e].original = !0, i[e].originalValues || (i[e].originalValues = i[e].values), i[e].values = {};
+		for (let e = 0; e < r.length; e++) r[e].original = !0, r[e].originalValues || (r[e].originalValues = r[e].values), r[e].values = {};
 		f.query(n, function(e) {
 			if (!n.running) return;
 			c.textContent += ".";
-			let r = null, s = null, l;
-			if (h in e && (s = e[h], l = X(s), l in p && (r = p[l])), !r) {
+			let i = null, s = null, l;
+			if (h in e && (s = e[h], l = X(s), l in p && (i = p[l])), !i) {
 				let e = t.createElement("tr");
-				o.appendChild(e), r = {
+				o.appendChild(e), i = {
 					_htmlRow: e,
 					_subject: s,
 					values: {}
-				}, i.push(r), s && (p[l] = r);
+				}, r.push(i), s && (p[l] = i);
 			}
-			delete r.original, xe(r, a, e);
+			delete i.original, xe(i, a, e);
 		}, void 0, function() {
 			c && c.parentNode && c.parentNode.removeChild && (c.parentNode.removeChild(c), c = null);
 			let t = Date.now() - s;
-			e("Query done: " + i.length + " rows, " + t + "ms");
-			for (let t = i.length - 1; t >= 0; t--) if (i[t].original) {
-				e("   deleting row " + i[t]._subject);
-				let n = i[t]._htmlRow;
-				n.parentNode.removeChild(n), delete p[X(i[t]._subject)], i.splice(t, 1);
+			e("Query done: " + r.length + " rows, " + t + "ms");
+			for (let t = r.length - 1; t >= 0; t--) if (r[t].original) {
+				e("   deleting row " + r[t]._subject);
+				let n = r[t]._htmlRow;
+				n.parentNode.removeChild(n), delete p[X(r[t]._subject)], r.splice(t, 1);
 			}
-			r.sortBy && H(i, fe(a, r.sortBy), r.sortReverse), r.onDone && r.onDone(C);
+			i.sortBy && H(r, fe(a, i.sortBy), i.sortReverse), i.onDone && i.onDone(C);
 		});
 	}
 	function Q(e, t) {
@@ -536,7 +533,7 @@ function d(t, r) {
 	}
 	function $(e, n) {
 		let r;
-		r = s ? Se(e) : n.getColumns();
+		r = l ? Se(e) : n.getColumns();
 		let i = [], a = t.createElement("table");
 		return a.appendChild(z(r, n)), a.appendChild(_e(i, r)), a.logicalRows = i, a.columns = r, a.query = e, Z(e, i, r, a), a;
 	}

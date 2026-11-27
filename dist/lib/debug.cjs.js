@@ -1,2 +1,2 @@
-function e(...e){console.log(...e)}function t(...e){console.warn(...e)}function n(...e){console.error(...e)}function r(...e){console.trace(...e)}exports.error=n,exports.log=e,exports.trace=r,exports.warn=t;
+exports.error=function(...e){console.error(...e)},exports.log=function(...e){console.log(...e)},exports.trace=function(...e){console.trace(...e)},exports.warn=function(...e){console.warn(...e)};
 //# sourceMappingURL=debug.cjs.js.map

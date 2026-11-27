@@ -92,8 +92,15 @@ export function getAccessGrantViewModels (drafts: AccessGrantDraft[]): AccessGra
 
 export function getChangedAccessGrants (drafts: AccessGrantDraft[]): ChangedAccessGrant[] {
   return getAccessGrantViewModels(drafts)
-    .filter(({ role, initialRole, subjects }) => role !== initialRole && subjects.length > 0)
-    .map(({ authorization, subjects, role }) => ({ authorization, subjects, role }))
+    .filter(({ role, initialRole, scope, initialScope, subjects }) =>
+      (role !== initialRole || scope !== initialScope) && subjects.length > 0)
+    .map(({ authorization, subjects, role, scope, initialScope }) => ({
+      authorization,
+      subjects,
+      role,
+      scope,
+      initialScope
+    }))
 }
 
 export function getAuthenticatedAccessRole (accessGrants: AccessAuthorization[]): AccessRole {

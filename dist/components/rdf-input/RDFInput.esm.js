@@ -1,18 +1,18 @@
-import e from "../../lib/ns.esm.js";
-import { label as t } from "../../utils/label.esm.js";
+import { property as e, state as t } from "lit/decorators.js";
+import { html as n } from "lit/html.js";
+import r from "../../lib/ns.esm.js";
+import { label as i } from "../../utils/label.esm.js";
 import "../../lib/components/index.esm.js";
-import { generateId as n } from "../../lib/components/ids.esm.js";
-import { customElement as r } from "../../lib/components/decorators.esm.js";
-import i from "../../lib/components/web-component/WebComponent.esm.js";
+import { generateId as a } from "../../lib/components/ids.esm.js";
+import { customElement as o } from "../../lib/components/decorators.esm.js";
+import s from "../../lib/components/web-component/WebComponent.esm.js";
+import { Literal as c, st as l } from "rdflib";
 import "../../utils/index.esm.js";
-import { mostSpecificClassURI as a } from "../../lib/forms/rdfFormsHelper.esm.js";
-import { fieldParams as o } from "../../lib/forms/fieldParams.esm.js";
-import { DEFAULT_STORE as s, storeContext as c } from "../../lib/forms/store/StoreContext.esm.js";
+import { mostSpecificClassURI as u } from "../../lib/forms/rdfFormsHelper.esm.js";
+import { fieldParams as d } from "../../lib/forms/fieldParams.esm.js";
+import { DEFAULT_STORE as f, storeContext as p } from "../../lib/forms/store/StoreContext.esm.js";
+import { consume as m } from "@lit/context";
 import "../input/index.esm.js";
-import { Literal as l, st as u } from "rdflib";
-import { consume as d } from "@lit/context";
-import { property as f, state as p } from "lit/decorators.js";
-import { html as m } from "lit/html.js";
 // src/components/rdf-input/RDFInput.ts
 var h, g, _, v, y, b, x, S, C, w, T, E, D, O, k, A, j;
 function M(e, t, n) {
@@ -183,21 +183,21 @@ function H(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-v = [r("solid-ui-rdf-input")];
+v = [o("solid-ui-rdf-input")];
 var U, W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q = /*#__PURE__*/ new WeakMap(), J = /*#__PURE__*/ new WeakMap(), Y = /*#__PURE__*/ new WeakMap();
-j = (y = d({
-	context: c,
+j = (y = m({
+	context: p,
 	subscribe: !0
-}), x = f({
+}), x = e({
 	attribute: !1,
 	type: Object
-}), C = f({
+}), C = e({
 	attribute: !1,
 	type: Object
-}), T = f({ type: Number }), D = p(), k = f({
+}), T = e({ type: Number }), D = t(), k = e({
 	type: Boolean,
 	reflect: !0
-}), "storeContext"), h = class extends i {
+}), "storeContext"), h = class extends s {
 	get [j]() {
 		return I(W, this);
 	}
@@ -235,18 +235,18 @@ j = (y = d({
 		F(Y, this, e);
 	}
 	constructor() {
-		super(), N(this, W, (g(this), b(this, s))), N(this, G, S(this, null)), N(this, K, w(this, null)), N(this, q, E(this, 0)), N(this, J, O(this, null)), M(this, "_updateInFlight", !1), M(this, "_pendingUpdateValue", null), N(this, Y, A(this, !0)), this.id = n();
+		super(), N(this, W, (g(this), b(this, f))), N(this, G, S(this, null)), N(this, K, w(this, null)), N(this, q, E(this, 0)), N(this, J, O(this, null)), M(this, "_updateInFlight", !1), M(this, "_pendingUpdateValue", null), N(this, Y, A(this, !0)), this.id = a();
 	}
 	render() {
-		let t = this.getDocument(this.formSubject), n = this.getFormProperty(this.formSubject, e.ui("property"), t), r = this.getInputLabel(this.formSubject, n, t), i = this.getReadOnly(this.readonly, this.formSubject, t), s = this.formSubject ? a(this.storeContext.store, this.formSubject) : void 0, c = s ? o[s] ?? {} : {}, l = c.type ?? "text", u = this.getSelectedTerm(this.dataSubject, n, this.formSubject, c), d = i ? "" : this.defaultInputValue(c), f = this._updateInFlight || this._pendingUpdateValue !== null ? this.localInputValue ?? "" : this.termToInputValue(u);
-		return m`
+		let e = this.getDocument(this.formSubject), t = this.getFormProperty(this.formSubject, r.ui("property"), e), i = this.getInputLabel(this.formSubject, t, e), a = this.getReadOnly(this.readonly, this.formSubject, e), o = this.formSubject ? u(this.storeContext.store, this.formSubject) : void 0, s = o ? d[o] ?? {} : {}, c = s.type ?? "text", l = this.getSelectedTerm(this.dataSubject, t, this.formSubject, s), f = a ? "" : this.defaultInputValue(s), p = this._updateInFlight || this._pendingUpdateValue !== null ? this.localInputValue ?? "" : this.termToInputValue(l);
+		return n`
       <solid-ui-input
-        label="${r}"
+        label="${i}"
         name="name-${this.id}"
-        .value=${f}
-        .placeholder=${d}
-        type="${l}"
-        ?readonly=${i}
+        .value=${p}
+        .placeholder=${f}
+        type="${c}"
+        ?readonly=${a}
         @input=${this.updateData}
       ></solid-ui-input>`;
 	}
@@ -256,17 +256,17 @@ j = (y = d({
 	getFormProperty(e, t, n) {
 		if (e) return this.storeContext.store.any(e, t, null, n);
 	}
-	getInputLabel(n, r, i) {
-		if (!n) return "";
-		let a = this.storeContext.store.any(n, e.ui("label"), null, i), o = r ? t(r, !0) : "";
+	getInputLabel(e, t, n) {
+		if (!e) return "";
+		let a = this.storeContext.store.any(e, r.ui("label"), null, n), o = t ? i(t, !0) : "";
 		return a ? a.value : o;
 	}
-	getReadOnly(t, n, r) {
-		return n && t === !1 ? !!this.storeContext.store.anyJS(n, e.ui("suppressEmptyUneditable"), null, r) : t;
+	getReadOnly(e, t, n) {
+		return t && e === !1 ? !!this.storeContext.store.anyJS(t, r.ui("suppressEmptyUneditable"), null, n) : e;
 	}
-	getSelectedTerm(t, n, r, i) {
-		let a = r ? this.storeContext.store.any(r, e.ui("default")) : void 0;
-		return !n || !t ? a : this.storeContext.store.any(t, n) || a;
+	getSelectedTerm(e, t, n, i) {
+		let a = n ? this.storeContext.store.any(n, r.ui("default")) : void 0;
+		return !t || !e ? a : this.storeContext.store.any(e, t) || a;
 	}
 	termToInputValue(e) {
 		if (!e || !("value" in e) || !e.value) return "";
@@ -285,25 +285,25 @@ j = (y = d({
 	}
 	async runPendingUpdate() {
 		if (this._pendingUpdateValue === null) return;
-		let t = this._pendingUpdateValue;
+		let e = this._pendingUpdateValue;
 		this._pendingUpdateValue = null, this._updateInFlight = !0;
-		let n = this.getFormProperty(this.formSubject, e.ui("property"), this.getDocument(this.formSubject));
-		if (!n || !this.dataSubject) {
+		let t = this.getFormProperty(this.formSubject, r.ui("property"), this.getDocument(this.formSubject));
+		if (!t || !this.dataSubject) {
 			this._updateInFlight = !1, this.localInputValue = "";
 			return;
 		}
-		let r = this.getDocument(this.dataSubject);
-		if (r && this.storeContext.store.updater?.editable(r) === !1) {
+		let n = this.getDocument(this.dataSubject);
+		if (n && this.storeContext.store.updater?.editable(n) === !1) {
 			this._updateInFlight = !1;
 			return;
 		}
-		let i = this.storeContext.store.statementsMatching(this.dataSubject, n), s = [];
-		if (t) {
-			let r, c = this.formSubject ? a(this.storeContext.store, this.formSubject) : void 0, d = c ? o[c] ?? {} : {};
-			d.namedNode ? r = this.storeContext.store.sym(t) : d.defaultInputValue ? (r = encodeURIComponent(t.replace(/ /g, "")), r = this.storeContext.store.sym(d.defaultInputValue + r)) : r = d.dt ? new l(t.trim(), void 0, e.xsd(d.dt)) : new l(t), s = i.map((e) => u(e.subject, e.predicate, r, e.why)), s.length === 0 && (s = [u(this.dataSubject, n, r, this.getDocument(this.dataSubject))]);
+		let i = this.storeContext.store.statementsMatching(this.dataSubject, t), a = [];
+		if (e) {
+			let n, o = this.formSubject ? u(this.storeContext.store, this.formSubject) : void 0, s = o ? d[o] ?? {} : {};
+			s.namedNode ? n = this.storeContext.store.sym(e) : s.defaultInputValue ? (n = encodeURIComponent(e.replace(/ /g, "")), n = this.storeContext.store.sym(s.defaultInputValue + n)) : n = s.dt ? new c(e.trim(), void 0, r.xsd(s.dt)) : new c(e), a = i.map((e) => l(e.subject, e.predicate, n, e.why)), a.length === 0 && (a = [l(this.dataSubject, t, n, this.getDocument(this.dataSubject))]);
 		}
 		try {
-			await this.storeContext.store.updater.updateMany(i, s), this.storeVersion += 1;
+			await this.storeContext.store.updater.updateMany(i, a), this.storeVersion += 1;
 		} catch (e) {
 			console.error("RDFInput update failed", e);
 		} finally {
@@ -342,7 +342,7 @@ j = (y = d({
 		1,
 		"readonly"
 	]
-], v, 0, void 0, i), _();
+], v, 0, void 0, s), _();
 export { U as default };
 
 //# sourceMappingURL=RDFInput.esm.js.map

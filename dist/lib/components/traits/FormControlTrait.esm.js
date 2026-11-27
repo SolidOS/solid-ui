@@ -1,6 +1,6 @@
 import { generateId as e } from "../ids.esm.js";
-import "../index.esm.js";
 import { html as t, nothing as n } from "lit";
+import "../index.esm.js";
 // src/lib/components/traits/FormControlTrait.ts
 function r(e, t, n) {
 	return (t = i(t)) in e ? Object.defineProperty(e, t, {

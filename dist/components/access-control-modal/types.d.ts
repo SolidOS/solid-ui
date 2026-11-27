@@ -1,4 +1,4 @@
-import { AccessControlSubjectKind, AccessMode, AccessRole, AccessSubject, Authorization } from 'solid-logic';
+import { AccessControlSubjectKind, AccessMode, AccessRole, AccessSubject, Authorization, ContainerAccessScope } from 'solid-logic';
 export type AccessAuthorization = Omit<Pick<Authorization, 'agent' | 'agentGroup' | 'agentClass' | 'origin' | 'mode'>, 'mode'> & {
     id?: string;
     mode: readonly AccessMode[];
@@ -21,6 +21,19 @@ export type TargetInputEvent = CustomEvent<TargetInputDetail>;
 export type TargetSelectedEvent = CustomEvent<TargetSelectedDetail>;
 export type RoleChangedEvent = CustomEvent<RoleChangedDetail>;
 export type PendingGrantRemovedEvent = CustomEvent<PendingGrantRemovedDetail>;
+export type ContainerScopeChangedDetail = {
+    scope: ContainerAccessScope;
+};
+export type ContainerScopeChangedEvent = CustomEvent<ContainerScopeChangedDetail>;
+export type AdvancedSharingChangedDetail = {
+    open: boolean;
+};
+export type AdvancedSharingChangedEvent = CustomEvent<AdvancedSharingChangedDetail>;
+export type AccessGrantScopeChangedDetail = {
+    id: string;
+    scope: ContainerAccessScope;
+};
+export type AccessGrantScopeChangedEvent = CustomEvent<AccessGrantScopeChangedDetail>;
 export type AccessGrantRoleChangedDetail = {
     id: string;
     role: AccessRole;
@@ -31,6 +44,7 @@ export type PendingAccessGrant = {
     subjectValue: string;
     role: AccessRole;
     label: string;
+    scope?: ContainerAccessScope;
     targetKind?: 'origin' | 'trustedApp';
 };
 export type AccessGrantEntry = {
@@ -41,13 +55,17 @@ export type AccessGrantEntry = {
 };
 export type AccessGrantViewModel = AccessGrantEntry & {
     initialRole: AccessRole;
+    initialScope?: ContainerAccessScope;
     subjects: AccessSubject[];
+    scope?: ContainerAccessScope;
 };
 export type AccessGrantDraft = AccessGrantViewModel;
 export type ChangedAccessGrant = {
     authorization: AccessAuthorization;
     subjects: AccessSubject[];
     role: AccessRole;
+    scope?: ContainerAccessScope;
+    initialScope?: ContainerAccessScope;
 };
 export type AuthorizationSubjectSet = {
     type: AccessControlSubjectKind;
@@ -57,6 +75,8 @@ export type AccessChange = {
     subject: AccessSubject;
     role: AccessRole;
     label: string;
+    scope?: ContainerAccessScope;
+    previousScope?: ContainerAccessScope;
 };
 export type AccessSaveScope = 'folder+contents' | 'container' | 'contents' | 'file';
 export type InputAccessControlError = {

@@ -45,5 +45,8 @@ export declare const AsyncWithHtml: {
         asyncHtmlOptions: boolean;
     };
 };
+export declare const WithOptionIcons: {
+    render: () => import('lit-html').TemplateResult<1>;
+};
 export default meta;
 //# sourceMappingURL=Combobox.stories.d.ts.map

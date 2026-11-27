@@ -1,11 +1,11 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import n from "./Menu.styles.esm.js";
-import { html as r } from "lit";
-import { property as i, query as a, state as o } from "lit/decorators.js";
+import { html as n } from "lit";
+import { property as r, query as i, state as a } from "lit/decorators.js";
 import "@awesome.me/webawesome/dist/components/dropdown/dropdown.js";
 import "@awesome.me/webawesome/dist/components/dropdown-item/dropdown-item.js";
+import o from "./Menu.styles.css.esm.js";
 // src/components/menu/Menu.ts
 var s, c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T;
 function E(e, t, n) {
@@ -181,13 +181,13 @@ function L(e) {
 }
 h = [e("solid-ui-menu")];
 var R;
-new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), T = (g = i({
+new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), T = (g = r({
 	type: String,
 	reflect: !0
-}), v = i({
+}), v = r({
 	type: Number,
 	reflect: !0
-}), b = a("wa-dropdown"), S = o(), "placement"), c = class extends t {
+}), b = i("wa-dropdown"), S = a(), "placement"), c = class extends t {
 	constructor(...e) {
 		super(...e), E(this, l, (p(this), _(this, "bottom-start"))), E(this, u, y(this, 5)), E(this, d, x(this, null)), E(this, f, C(this, [])), j(this, "observer", new MutationObserver(() => this.syncItems()));
 	}
@@ -222,7 +222,7 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 		super.disconnectedCallback(), this.observer.disconnect();
 	}
 	render() {
-		return r`
+		return n`
       <wa-dropdown
         placement=${this.placement}
         distance=${this.distance}
@@ -230,7 +230,7 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
       >
         <slot name="trigger" slot="trigger"></slot>
 
-        ${this.items.map((e) => r`<wa-dropdown-item @click=${this.onItemClick}>
+        ${this.items.map((e) => n`<wa-dropdown-item @click=${this.onItemClick}>
                 <slot name=${e.slot}></slot>
             </wa-dropdown-item>`)}
       </wa-dropdown>
@@ -286,7 +286,7 @@ new (w = (l = /*#__PURE__*/ new WeakMap(), u = /*#__PURE__*/ new WeakMap(), d = 
 	]
 ], h, 0, void 0, t), c), s = class extends L {
 	constructor() {
-		super(R), j(this, "styles", n), m();
+		super(R), j(this, "styles", o), m();
 	}
 }, j(s, w, void 0), s)();
 export { R as default };

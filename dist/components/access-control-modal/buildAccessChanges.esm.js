@@ -8,13 +8,16 @@ function t({ pendingAccessGrants: t, generalAccessChanges: n, changedAccessGrant
 				iri: e.subjectValue
 			},
 			role: e.role,
-			label: e.label
+			label: e.label,
+			scope: e.scope
 		})),
 		...n,
-		...r.flatMap(({ subjects: t, role: n }) => t.map((t) => ({
+		...r.flatMap(({ subjects: t, role: n, scope: r, initialScope: i }) => t.map((t) => ({
 			subject: t,
 			role: n,
-			label: e(t)
+			label: e(t),
+			scope: r,
+			previousScope: i === r ? void 0 : i
 		})))
 	];
 }

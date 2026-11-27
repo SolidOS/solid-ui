@@ -1,7 +1,7 @@
 import e from "../web-component/WebComponent.esm.js";
 import "../web-component/index.esm.js";
-import t from "../traits/FormControlTrait.esm.js";
-import { property as n } from "lit/decorators.js";
+import { property as t } from "lit/decorators.js";
+import n from "../traits/FormControlTrait.esm.js";
 // src/lib/components/form-control-component/FormControlComponent.ts
 var r, i, a, o, s, c, l, u, d, f, p, m, h, g, _, v, y;
 function b(e, t, n) {
@@ -173,23 +173,23 @@ function A(e) {
 	return e;
 }
 var j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap();
-y = (a = n({
+y = (a = t({
 	type: String,
 	reflect: !0
-}), s = n({
+}), s = t({
 	type: Boolean,
 	reflect: !0,
 	attribute: "sr-only-label"
-}), l = n({
+}), l = t({
 	type: String,
 	reflect: !0
-}), d = n(), p = n({
+}), d = t(), p = t({
 	type: String,
 	reflect: !0
-}), h = n({
+}), h = t({
 	type: Boolean,
 	reflect: !0
-}), _ = n({
+}), _ = t({
 	type: Boolean,
 	reflect: !0
 }), "formAssociated");
@@ -237,7 +237,7 @@ var R = class extends e {
 		C(L, this, e);
 	}
 	constructor() {
-		super(), b(this, j, (i(this), o(this, ""))), b(this, M, c(this, !1)), b(this, N, u(this, "")), b(this, P, f(this, null)), b(this, F, m(this, "")), b(this, I, g(this, !1)), b(this, L, v(this, !1)), S(this, "controlTrait", void 0), this.controlTrait = this.addTrait(new t(this, {
+		super(), b(this, j, (i(this), o(this, ""))), b(this, M, c(this, !1)), b(this, N, u(this, "")), b(this, P, f(this, null)), b(this, F, m(this, "")), b(this, I, g(this, !1)), b(this, L, v(this, !1)), S(this, "controlTrait", void 0), this.controlTrait = this.addTrait(new n(this, {
 			getControlElement: () => this.controlElement,
 			getInternals: () => this.getInternals()
 		}));

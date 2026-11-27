@@ -1,15 +1,15 @@
 import "../../lib/components/index.esm.js";
 import { customElement as e } from "../../lib/components/decorators.esm.js";
-import { DEFAULT_DIALOG_CONTEXT as t, dialogContext as n } from "../../lib/dialogs/context.esm.js";
-import r from "../../lib/components/web-component/WebComponent.esm.js";
-import i from "../../lib/components/traits/DialogTrait.esm.js";
+import { consume as t } from "@lit/context";
+import { html as n, nothing as r } from "lit";
+import { property as i, query as a } from "lit/decorators.js";
+import { DEFAULT_DIALOG_CONTEXT as o, dialogContext as s } from "../../lib/dialogs/context.esm.js";
+import c from "../../lib/components/web-component/WebComponent.esm.js";
+import l from "../../lib/components/traits/DialogTrait.esm.js";
 import "../../_virtual/~icons/lucide/x.esm.js";
 import "../dialog-header/index.esm.js";
 import "../button/index.esm.js";
-import a from "./Dialog.styles.esm.js";
-import { consume as o } from "@lit/context";
-import { html as s, nothing as c } from "lit";
-import { property as l, query as u } from "lit/decorators.js";
+import u from "./Dialog.styles.css.esm.js";
 // src/components/dialog/Dialog.ts
 var d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E;
 function D(e, t, n) {
@@ -185,13 +185,13 @@ function R(e) {
 }
 v = [e("solid-ui-dialog")];
 var z;
-new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), E = (y = l({
+new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = /*#__PURE__*/ new WeakMap(), E = (y = i({
 	type: String,
 	reflect: !0
-}), x = u("dialog"), C = o({
-	context: n,
+}), x = a("dialog"), C = t({
+	context: s,
 	subscribe: !0
-}), "title"), f = class extends r {
+}), "title"), f = class extends c {
 	get [E]() {
 		return A(p, this);
 	}
@@ -211,7 +211,7 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		k(h, this, e);
 	}
 	constructor() {
-		super(), D(this, p, (g(this), b(this, ""))), D(this, m, S(this, null)), D(this, h, w(this, t)), M(this, "dialogTrait", void 0), this.dialogTrait = this.addTrait(new i(this, { getContext: () => this.context }));
+		super(), D(this, p, (g(this), b(this, ""))), D(this, m, S(this, null)), D(this, h, w(this, o)), M(this, "dialogTrait", void 0), this.dialogTrait = this.addTrait(new l(this, { getContext: () => this.context }));
 	}
 	close(e) {
 		this.dialogTrait.close(e);
@@ -220,7 +220,7 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		this.nativeDialog && (typeof this.nativeDialog.showModal == "function" ? this.nativeDialog.showModal() : typeof this.nativeDialog.show == "function" ? this.nativeDialog.show() : this.nativeDialog.setAttribute("open", ""), this.nativeDialog.addEventListener("close", () => this.close()));
 	}
 	render() {
-		let e = this.title ? s`
+		let e = this.title ? n`
         <solid-ui-dialog-header>
             <h1>${this.title}</h1>
 
@@ -229,8 +229,8 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
                 <icon-lucide-x slot="icon"></icon-lucide-x>
             </solid-ui-button>
         </solid-ui-dialog-header>
-        ` : c;
-		return s`
+        ` : r;
+		return n`
         <dialog>
             <slot name="header">${e}</slot>
             <slot></slot>
@@ -254,9 +254,9 @@ new (T = (p = /*#__PURE__*/ new WeakMap(), m = /*#__PURE__*/ new WeakMap(), h = 
 		1,
 		"context"
 	]
-], v, 0, void 0, r), f), d = class extends R {
+], v, 0, void 0, c), f), d = class extends R {
 	constructor() {
-		super(z), M(this, "styles", a), _();
+		super(z), M(this, "styles", u), _();
 	}
 }, M(d, T, void 0), d)();
 export { z as default };

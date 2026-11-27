@@ -1,12 +1,16 @@
 import "../../lib/components/index.esm.js";
-import { label as e } from "../../utils/label.esm.js";
-import { customElement as t } from "../../lib/components/decorators.esm.js";
-import n from "../../lib/components/dialog-component/DialogComponent.esm.js";
-import { error as r } from "../../lib/debug.esm.js";
+import { html as e, nothing as t } from "lit";
+import { property as n, state as r } from "lit/decorators.js";
+import { label as i } from "../../utils/label.esm.js";
+import { customElement as a } from "../../lib/components/decorators.esm.js";
+import o from "../../lib/components/dialog-component/DialogComponent.esm.js";
+import { error as s } from "../../lib/debug.esm.js";
+import { Authenticated as c, Public as l, classifyAuthorizationScope as u, solidLogicSingleton as d } from "solid-logic";
+import { sym as f } from "rdflib";
 import "../../_virtual/~icons/lucide/circle-x.esm.js";
 import "../../_virtual/~icons/lucide/folder.esm.js";
 import "../../_virtual/~icons/lucide/folder-open.esm.js";
-import "../../_virtual/~icons/lucide/x.esm.js";
+import "../../_virtual/~icons/lucide/lock-keyhole.esm.js";
 import "../dialog/index.esm.js";
 import "../dialog-content/index.esm.js";
 import "../dialog-footer/index.esm.js";
@@ -16,42 +20,38 @@ import "../combobox-option/index.esm.js";
 import "./AccessControlSharedAccess.esm.js";
 import "./AccessControlGeneralAccess.esm.js";
 import "./AccessControlErrors.esm.js";
-import i from "./AccessControlModal.styles.esm.js";
-import { createAccessGrantDrafts as a, getAccessGrantIds as o, getAccessGrantViewModels as s, getAuthenticatedAccessRole as c, getAuthorizationSubjectLabel as l, getChangedAccessGrants as u, getPublicAccessRole as d, getSharedAuthorization as f } from "./accessGrantDrafts.esm.js";
-import { accessPrincipalOptionsProvider as p, resolveAccessTarget as m } from "./accessTargetResolver.esm.js";
-import { applyAccessChanges as h } from "./applyAccessChanges.esm.js";
-import { buildAccessChanges as g } from "./buildAccessChanges.esm.js";
-import { sym as _ } from "rdflib";
-import { Authenticated as v, Public as y, analyzeContainerAccessScope as b, filterAuthorizationsByContainerScope as x, solidLogicSingleton as S } from "solid-logic";
-import { html as C } from "lit";
-import { property as w, state as T } from "lit/decorators.js";
+import p from "./AccessControlModal.styles.css.esm.js";
+import { createAccessGrantDrafts as m, getAccessGrantIds as h, getAccessGrantViewModels as g, getAuthenticatedAccessRole as _, getAuthorizationSubjectLabel as v, getChangedAccessGrants as y, getPublicAccessRole as b, getSharedAuthorization as x } from "./accessGrantDrafts.esm.js";
+import { accessPrincipalOptionsProvider as S, resolveAccessTarget as C } from "./accessTargetResolver.esm.js";
+import { applyAccessChanges as w } from "./applyAccessChanges.esm.js";
+import { buildAccessChanges as T } from "./buildAccessChanges.esm.js";
 // src/components/access-control-modal/AccessControlModal.ts
-var E, D, O, k, A, j, M, N, P, F, I, L, R, z, B, V, H, U, W, G, ee, te, ne, re, ie, ae, oe, K, q, se, ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, Te, Ee, De, Oe, ke, Ae, je, Me, Ne, Pe, Fe, J, Ie, Le;
-function Y(e, t, n) {
-	Re(e, t), t.set(e, n);
+var E, D, O, k, A, j, M, N, P, F, I, L, R, z, B, V, H, U, W, ee, te, ne, re, ie, ae, oe, G, K, q, se, ce, le, ue, de, fe, pe, me, he, ge, _e, ve, ye, be, xe, Se, Ce, we, Te, Ee, De, Oe, ke, Ae, je, Me, Ne, Pe, Fe;
+function J(e, t, n) {
+	Ie(e, t), t.set(e, n);
 }
-function Re(e, t) {
+function Ie(e, t) {
 	if (t.has(e)) throw TypeError("Cannot initialize the same private elements twice on an object");
 }
-function X(e, t, n) {
-	return e.set(ze(e, t), n), n;
+function Y(e, t, n) {
+	return e.set(Le(e, t), n), n;
 }
-function Z(e, t) {
-	return e.get(ze(e, t));
+function X(e, t) {
+	return e.get(Le(e, t));
 }
-function ze(e, t, n) {
+function Le(e, t, n) {
 	if (typeof e == "function" ? e === t : e.has(t)) return arguments.length < 3 ? t : n;
 	throw TypeError("Private element is not present on this object");
 }
-function Q(e, t, n) {
-	return (t = Ve(t)) in e ? Object.defineProperty(e, t, {
+function Z(e, t, n) {
+	return (t = Q(t)) in e ? Object.defineProperty(e, t, {
 		value: n,
 		enumerable: !0,
 		configurable: !0,
 		writable: !0
 	}) : e[t] = n, e;
 }
-function Be(e, t, n, r, i, a) {
+function Re(e, t, n, r, i, a) {
 	function o(e, t, n) {
 		return function(r, i) {
 			return n && n(r), e[t].call(r, i);
@@ -74,13 +74,13 @@ function Be(e, t, n, r, i, a) {
 			n || Array.isArray(_) || (_ = [_]);
 			var b = {}, x = [], S = i === 3 ? "get" : i === 4 || p ? "set" : "value";
 			d ? (f || p ? b = {
-				get: Ue(function() {
+				get: Be(function() {
 					return v(this);
 				}, r, "get"),
 				set: function(e) {
 					t[4](this, e);
 				}
-			} : b[S] = v, f || Ue(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
+			} : b[S] = v, f || Be(b[S], r, i === 2 ? "" : S)) : f || (b = Object.getOwnPropertyDescriptor(e, r));
 		}
 		for (var C = e, w = _.length - 1; w >= 0; w -= n ? 2 : 1) {
 			var T = _[w], E = n ? _[w - 1] : void 0, D = {}, O = {
@@ -140,7 +140,7 @@ function Be(e, t, n, r, i, a) {
 	if (arguments.length >= 6) var d = a[Symbol.metadata || Symbol.for("Symbol.metadata")];
 	var f = Object.create(d ?? null), p = function(e, t, n, r) {
 		var i, a, o = [], c = function(t) {
-			return We(t) === e;
+			return Ve(t) === e;
 		}, u = /* @__PURE__ */ new Map();
 		function d(e) {
 			e && o.push(s.bind(null, e));
@@ -154,7 +154,7 @@ function Be(e, t, n, r, i, a) {
 					if (!0 === x || x === 3 && m !== 4 || x === 4 && m !== 3) throw Error("Attempted to decorate a public method/accessor that has the same name as a previously decorated public method/accessor. This is not currently supported by the decorators plugin. Property name was: " + h);
 					u.set(b, !(m > 2) || m);
 				}
-				l(v ? e : e.prototype, p, _, g ? "#" + h : Ve(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
+				l(v ? e : e.prototype, p, _, g ? "#" + h : Q(h), m, r, v ? a ||= [] : i ||= [], o, v, g, y, m === 1, v && g ? c : n);
 			}
 		}
 		return d(i), d(a), o;
@@ -167,11 +167,11 @@ function Be(e, t, n, r, i, a) {
 		}
 	};
 }
-function Ve(e) {
-	var t = He(e, "string");
+function Q(e) {
+	var t = ze(e, "string");
 	return typeof t == "symbol" ? t : t + "";
 }
-function He(e, t) {
+function ze(e, t) {
 	if (typeof e != "object" || !e) return e;
 	var n;
 	if (typeof Symbol < "u" && (n = e[Symbol.toPrimitive]) !== void 0) {
@@ -181,7 +181,7 @@ function He(e, t) {
 	}
 	return (t === "string" ? String : Number)(e);
 }
-function Ue(e, t, n) {
+function Be(e, t, n) {
 	typeof t == "symbol" && (t = (t = t.description) ? "[" + t + "]" : "");
 	try {
 		Object.defineProperty(e, "name", {
@@ -191,129 +191,123 @@ function Ue(e, t, n) {
 	} catch {}
 	return e;
 }
-function We(e) {
+function Ve(e) {
 	if (Object(e) !== e) throw TypeError("right-hand side of 'in' should be an object, got " + (e === null ? "null" : typeof e));
 	return e;
 }
-function Ge(e) {
+function He(e) {
 	return e;
 }
-function Ke(e) {
+function Ue(e) {
 	return e != null;
 }
-ne = [t("solid-ui-access-control-modal")];
+ne = [a("solid-ui-access-control-modal")];
 var $;
-new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), G = /*#__PURE__*/ new WeakMap(), Le = (re = w({ attribute: !1 }), ae = w({ attribute: !1 }), K = T(), se = T(), le = T(), de = T(), pe = T(), he = T(), _e = T(), ye = T(), xe = T(), Ce = T(), Te = T(), De = T(), ke = T(), je = T(), Ne = T(), Fe = T(), "subjectUri"), D = class extends n {
+new (Pe = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j = /*#__PURE__*/ new WeakMap(), M = /*#__PURE__*/ new WeakMap(), N = /*#__PURE__*/ new WeakMap(), P = /*#__PURE__*/ new WeakMap(), F = /*#__PURE__*/ new WeakMap(), I = /*#__PURE__*/ new WeakMap(), L = /*#__PURE__*/ new WeakMap(), R = /*#__PURE__*/ new WeakMap(), z = /*#__PURE__*/ new WeakMap(), B = /*#__PURE__*/ new WeakMap(), V = /*#__PURE__*/ new WeakMap(), H = /*#__PURE__*/ new WeakMap(), U = /*#__PURE__*/ new WeakMap(), W = /*#__PURE__*/ new WeakMap(), Fe = (re = n({ attribute: !1 }), ae = n({ attribute: !1 }), G = r(), q = r(), ce = r(), ue = r(), fe = r(), me = r(), ge = r(), ve = r(), be = r(), Se = r(), we = r(), Ee = r(), Oe = r(), Ae = r(), Me = r(), "subjectUri"), D = class extends o {
 	constructor(...e) {
-		super(...e), Y(this, O, (ee(this), ie(this, void 0))), Y(this, k, oe(this, void 0)), Y(this, A, q(this, "")), Y(this, j, ce(this, "Viewer")), Y(this, M, ue(this, "No Access")), Y(this, N, fe(this, "No Access")), Y(this, P, me(this, !1)), Y(this, F, ge(this, [])), Y(this, I, ve(this, [])), Y(this, L, be(this, [])), Y(this, R, Se(this, !0)), Y(this, z, we(this)), Y(this, B, Ee(this, !1)), Y(this, V, Oe(this, "")), Y(this, H, Ae(this, !1)), Y(this, U, Me(this, "folder+contents")), Y(this, W, Pe(this)), Y(this, G, J(this, !1)), Q(this, "accessGrantLabelRequestVersion", 0), Q(this, "accessContextRequestVersion", 0), Q(this, "accessContextSubjectUri", void 0);
+		super(...e), J(this, O, (ee(this), ie(this, void 0))), J(this, k, oe(this, void 0)), J(this, A, K(this, "")), J(this, j, se(this, "No Access")), J(this, M, le(this, "No Access")), J(this, N, de(this, "No Access")), J(this, P, pe(this, !1)), J(this, F, he(this, [])), J(this, I, _e(this, [])), J(this, L, ye(this, [])), J(this, R, xe(this, !0)), J(this, z, Ce(this)), J(this, B, Te(this, !1)), J(this, V, De(this, "")), J(this, H, ke(this, "folder+contents")), J(this, U, je(this, !1)), J(this, W, Ne(this, !1)), Z(this, "accessGrantLabelRequestVersion", 0), Z(this, "accessContextRequestVersion", 0), Z(this, "accessContextSubjectUri", void 0);
 	}
-	get [Le]() {
-		return Z(O, this);
+	get [Fe]() {
+		return X(O, this);
 	}
 	set subjectUri(e) {
-		X(O, this, e);
+		Y(O, this, e);
 	}
 	get accessGrants() {
-		return Z(k, this);
+		return X(k, this);
 	}
 	set accessGrants(e) {
-		X(k, this, e);
+		Y(k, this, e);
 	}
 	get principalInputValue() {
-		return Z(A, this);
+		return X(A, this);
 	}
 	set principalInputValue(e) {
-		X(A, this, e);
+		Y(A, this, e);
 	}
 	get addAccessRoleValue() {
-		return Z(j, this);
+		return X(j, this);
 	}
 	set addAccessRoleValue(e) {
-		X(j, this, e);
+		Y(j, this, e);
 	}
 	get authenticatedAccessRoleValue() {
-		return Z(M, this);
+		return X(M, this);
 	}
 	set authenticatedAccessRoleValue(e) {
-		X(M, this, e);
+		Y(M, this, e);
 	}
 	get publicAccessRoleValue() {
-		return Z(N, this);
+		return X(N, this);
 	}
 	set publicAccessRoleValue(e) {
-		X(N, this, e);
+		Y(N, this, e);
 	}
 	get submitting() {
-		return Z(P, this);
+		return X(P, this);
 	}
 	set submitting(e) {
-		X(P, this, e);
+		Y(P, this, e);
 	}
 	get pendingAccessGrants() {
-		return Z(F, this);
+		return X(F, this);
 	}
 	set pendingAccessGrants(e) {
-		X(F, this, e);
+		Y(F, this, e);
 	}
 	get accessGrantDrafts() {
-		return Z(I, this);
+		return X(I, this);
 	}
 	set accessGrantDrafts(e) {
-		X(I, this, e);
+		Y(I, this, e);
 	}
 	get errors() {
-		return Z(L, this);
+		return X(L, this);
 	}
 	set errors(e) {
-		X(L, this, e);
+		Y(L, this, e);
 	}
 	get successfulChangesRefreshed() {
-		return Z(R, this);
+		return X(R, this);
 	}
 	set successfulChangesRefreshed(e) {
-		X(R, this, e);
+		Y(R, this, e);
 	}
 	get accessContext() {
-		return Z(z, this);
+		return X(z, this);
 	}
 	set accessContext(e) {
-		X(z, this, e);
+		Y(z, this, e);
 	}
 	get accessContextLoading() {
-		return Z(B, this);
+		return X(B, this);
 	}
 	set accessContextLoading(e) {
-		X(B, this, e);
+		Y(B, this, e);
 	}
 	get accessContextError() {
-		return Z(V, this);
+		return X(V, this);
 	}
 	set accessContextError(e) {
-		X(V, this, e);
-	}
-	get advancedSharingOpen() {
-		return Z(H, this);
-	}
-	set advancedSharingOpen(e) {
-		X(H, this, e);
+		Y(V, this, e);
 	}
 	get containerScope() {
-		return Z(U, this);
+		return X(H, this);
 	}
 	set containerScope(e) {
-		X(U, this, e);
+		Y(H, this, e);
 	}
-	get containerScopeAnalysis() {
-		return Z(W, this);
+	get advancedSharingOpen() {
+		return X(U, this);
 	}
-	set containerScopeAnalysis(e) {
-		X(W, this, e);
+	set advancedSharingOpen(e) {
+		Y(U, this, e);
 	}
 	get protectedTarget() {
-		return Z(G, this);
+		return X(W, this);
 	}
 	set protectedTarget(e) {
-		X(G, this, e);
+		Y(W, this, e);
 	}
 	disconnectedCallback() {
 		this.accessGrantLabelRequestVersion++, this.accessContextRequestVersion++, this.errors = [], super.disconnectedCallback();
@@ -331,34 +325,31 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		this.errors = this.errors.filter((e) => e.action !== "input");
 	}
 	willUpdate(e) {
-		if (super.willUpdate(e), e.has("accessGrants")) {
-			let e = this.getScopedAccessGrants();
-			this.accessGrantDrafts = a(e), this.authenticatedAccessRoleValue = c(e), this.publicAccessRoleValue = d(e);
-		}
+		super.willUpdate(e), e.has("accessGrants") && this.refreshScopedAccessGrantDrafts();
 	}
 	updated(e) {
-		super.updated(e), e.has("subjectUri") && this.loadAccessContext().catch((e) => {
-			r("Failed to load access control context", e);
-		}), e.has("accessGrants") && this.refreshAccessGrantLabels().catch((e) => {
-			r("Failed to refresh access grant labels", e);
-		}), e.has("accessContext") && !e.has("subjectUri") && this.refreshContainerScopeAnalysis();
+		super.updated(e), e.has("subjectUri") && (this.advancedSharingOpen = !1, this.loadAccessContext().catch((e) => {
+			s("Failed to load access control context", e);
+		})), e.has("accessGrants") && this.refreshAccessGrantLabels().catch((e) => {
+			s("Failed to refresh access grant labels", e);
+		}), e.has("accessContext") && !e.has("subjectUri") && this.refreshContainerScopeState();
 	}
-	refreshContainerScopeAnalysis() {
-		this.isContainer() && this.accessContext ? (this.containerScopeAnalysis = b(this.accessContext), this.containerScope = this.containerScopeAnalysis.primaryScope, this.refreshScopedAccessGrantDrafts()) : this.containerScopeAnalysis = void 0;
+	refreshContainerScopeState() {
+		this.isContainer() && this.accessContext && (this.containerScope = "folder+contents", this.refreshScopedAccessGrantDrafts());
 	}
 	async refreshAccessGrantLabels() {
-		let e = ++this.accessGrantLabelRequestVersion, t = this.accessGrants, n = this.subjectUri, r = this.getSelectedContainerScope(), i = this.getScopedAccessGrants(r);
-		if (!i.length) {
+		let e = ++this.accessGrantLabelRequestVersion, t = this.accessGrants, n = this.subjectUri, r = this.getScopedAccessGrants();
+		if (!r.length) {
 			this.accessGrantDrafts = [];
 			return;
 		}
-		let a = await Promise.all(i.map(async (e) => (await Promise.all(e.agentGroup.map(async (e) => {
+		let i = await Promise.all(r.map(async (e) => (await Promise.all(e.agentGroup.map(async (e) => {
 			try {
-				await S.store.fetcher.load(_(e).doc());
+				await d.store.fetcher.load(f(e).doc());
 			} catch {}
-		})), l(f(e)))));
-		if (e === this.accessGrantLabelRequestVersion && this.accessGrants === t && this.subjectUri === n && this.getSelectedContainerScope() === r) {
-			let e = new Map(o(i).map((e, t) => [e, a[t]]));
+		})), v(x(e)))));
+		if (e === this.accessGrantLabelRequestVersion && this.accessGrants === t && this.subjectUri === n && this.getScopedAccessGrants() === r) {
+			let e = new Map(h(r).map((e, t) => [e, i[t]]));
 			this.accessGrantDrafts = this.accessGrantDrafts.map((t) => ({
 				...t,
 				subjectLabel: e.get(t.id) ?? t.subjectLabel
@@ -366,8 +357,8 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		}
 	}
 	getDialogTitle() {
-		let t = this.subjectUri ? _(this.subjectUri) : void 0, n = t ? e(t).trim() : "";
-		return !n || n === "this resource" ? "Manage Access of \"this resource\"" : `Manage Access of "${n}"`;
+		let e = this.subjectUri ? f(this.subjectUri) : void 0, t = e ? i(e).trim() : "";
+		return !t || t === "this resource" ? "Manage Access of \"this resource\"" : `Manage Access of "${t}"`;
 	}
 	isContainer() {
 		return !!(this.subjectUri && new URL(this.subjectUri).pathname.endsWith("/"));
@@ -376,12 +367,12 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		let e = ++this.accessContextRequestVersion, t = this.subjectUri;
 		if (this.accessContext = void 0, this.accessContextSubjectUri = void 0, this.accessContextError = "", this.accessContextLoading = !!t, !t) this.accessContextLoading = !1;
 		else try {
-			let n = await S.acl.findEffectiveAcl(t);
+			let n = await d.acl.findEffectiveAcl(t);
 			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
-			this.accessContext = n, this.accessContextSubjectUri = t, this.accessGrants?.length || (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeAnalysis(), this.protectedTarget = S.acl.isProtectedResource(t), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
+			this.accessContext = n, this.accessContextSubjectUri = t, this.accessGrants?.length || (this.accessGrants = this.accessContext.authorizations), this.refreshContainerScopeState(), this.protectedTarget = d.acl.isProtectedResource(t), this.protectedTarget && this.refreshScopedAccessGrantDrafts();
 		} catch (n) {
 			if (e !== this.accessContextRequestVersion || this.subjectUri !== t) return;
-			this.accessContextError = n instanceof Error && n.message.trim() ? n.message : "Unable to load access settings for this resource.", r("Failed to load access control context", n);
+			this.accessContextError = n instanceof Error && n.message.trim() ? n.message : "Unable to load access settings for this resource.", s("Failed to load access control context", n);
 		} finally {
 			e === this.accessContextRequestVersion && this.subjectUri === t && (this.accessContextLoading = !1);
 		}
@@ -395,49 +386,46 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 	async retryAccessContext() {
 		await this.loadAccessContext();
 	}
-	renderSharingInformation() {
-		if (!this.accessContext) return C``;
-		let t = !this.accessContext.inherited, n = this.accessContext?.effectiveContainer, r = n ? e(_(n)).trim() : "", i = r && r !== n ? C`<strong>${r}</strong> (${n})` : C`<strong>${n ?? "the parent container"}</strong>`;
-		return C`
-      <div class="access-control-sharing-state-panel">
-        ${t ? C`
-            <div class="access-control-sharing-state-custom-row">
-              <p>This resource has its own sharing settings.</p>
-              ${this.protectedTarget ? C`` : C`
-                  <solid-ui-button
-                    type="button"
-                    variant="tertiary"
-                    aria-label="Reset custom sharing to default"
-                    @click=${this.onResetToDefault}
-                  >
-                    Reset to default
-                  </solid-ui-button>
-                `}
-            </div>
-          ` : n ? C`<p>This resource inherits sharing settings from ${i}.</p>` : C`<p>This resource inherits sharing settings, but no inherited default is available.</p>`}
-        ${this.protectedTarget ? C`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be reset here.</p>` : C``}
-      </div>
-    `;
+	getInheritedContainerDisplayName(e) {
+		let t = f(e), n = d.resource.isStorageRoot(t), r = d.authn.currentUser(), a = (r ? d.profile.findStorage(r) : null)?.toString() === t.toString();
+		return n || a ? "your main storage" : i(t);
 	}
-	renderSharingState() {
-		return !this.accessContext || !this.advancedSharingOpen ? C`` : C`
-      <section
-        class="access-control-sharing-state"
-        aria-labelledby="access-control-advanced-sharing-heading"
-      >
-        ${this.renderSharingInformation()}
-        ${this.renderAdvancedSharing()}
-      </section>
+	renderSharingInformation() {
+		if (!this.accessContext) return t;
+		let n = this.accessContext.effectiveContainer, r = n ? this.getInheritedContainerDisplayName(n) : "the parent container.";
+		return e`
+      <div class="access-control-sharing-state-panel">
+        <icon-lucide-lock-keyhole class="access-control-sharing-state-icon" aria-hidden="true"></icon-lucide-lock-keyhole>
+        <div class="access-control-sharing-state-message">
+          ${this.accessContext.inherited ? n ? e`<p>Permissions on this resource come from <span class="access-control-sharing-state-emphasis">${r}</span>.</p>` : e`<p>Permissions on this resource come from a parent folder, but no sharing rules are in place.</p>` : e`
+              <div class="access-control-sharing-state-custom-row">
+                <p>This resource has explicitly defined sharing permissions.</p>
+                ${this.protectedTarget ? t : e`
+                    <solid-ui-button
+                      type="button"
+                      variant="tertiary"
+                      aria-label="Reset sharing"
+                      @click=${this.onResetToDefault}
+                    >
+                      Reset
+                    </solid-ui-button>
+                  `}
+              </div>
+            `}
+          ${this.protectedTarget ? e`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be changed here.</p>` : t}
+        </div>
+      </div>
     `;
 	}
 	getSelectedContainerScope() {
 		return this.containerScope;
 	}
-	hasMixedContainerPolicy() {
-		return this.isContainer() && this.containerScopeAnalysis?.mixed === !0;
+	shouldShowContainerScope() {
+		let e = this.getSharedAccessViewModels().some((e) => e.scope !== void 0 && e.scope !== "folder+contents");
+		return this.isContainer() && !this.protectedTarget && (e || this.advancedSharingOpen);
 	}
 	renderAccessContextState() {
-		return this.accessContextLoading ? C`<p role="status">Loading access settings...</p>` : this.accessContextError ? C`
+		return this.accessContextLoading ? e`<p role="status">Loading access settings...</p>` : this.accessContextError ? e`
         <solid-ui-error-state
           title="Could not load access settings"
           message=${this.accessContextError}
@@ -446,135 +434,88 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
             Retry
           </solid-ui-button>
         </solid-ui-error-state>
-      ` : this.accessContext ? C`` : C`<p role="status">Access settings are not ready yet.</p>`;
+      ` : this.accessContext ? t : e`<p role="status">Access settings are not ready yet.</p>`;
 	}
-	renderMixedContainerWarning() {
-		return this.hasMixedContainerPolicy() ? C`
-      <div class="access-control-mixed-policy-warning" role="alert">
-        <strong>This container has different access settings for the folder and its contents.</strong>
-        <span>Changing this mixed policy is an advanced feature. You can still change access for the folder or its contents separately below.</span>
-      </div>
-    ` : C``;
-	}
-	getScopedAccessGrants(e = this.getSelectedContainerScope()) {
-		let t = this.accessGrants ?? [];
-		return !this.isContainer() || !this.subjectUri || this.protectedTarget ? t : x(this.subjectUri, t, e, this.accessContext?.inherited ?? !1);
+	getScopedAccessGrants() {
+		return this.accessGrants ?? [];
 	}
 	refreshScopedAccessGrantDrafts() {
-		let e = this.getScopedAccessGrants();
-		this.accessGrantDrafts = a(e), this.authenticatedAccessRoleValue = c(e), this.publicAccessRoleValue = d(e);
+		let e = this.getScopedAccessGrants(), t = m(e);
+		this.accessGrantDrafts = t.map((t, n) => {
+			let r = this.isContainer() && this.subjectUri ? u(this.subjectUri, e[n], this.accessContext?.inherited ?? !1) ?? "folder+contents" : void 0;
+			return {
+				...t,
+				scope: r,
+				initialScope: r
+			};
+		}), this.isContainer() && this.accessContext && this.accessGrantDrafts.some((e) => e.scope !== void 0 && e.scope !== "folder+contents") && (this.advancedSharingOpen = !0), this.authenticatedAccessRoleValue = _(e), this.publicAccessRoleValue = b(e);
 	}
-	selectContainerScope(e) {
-		this.containerScope = e, this.refreshScopedAccessGrantDrafts();
-	}
-	renderAdvancedSharing() {
-		return this.advancedSharingOpen ? C`
-      <section
-        id="access-control-advanced-sharing"
-        class="access-control-advanced-sharing"
-        role="group"
-        aria-labelledby="access-control-advanced-sharing-heading"
-        aria-describedby="access-control-advanced-sharing-description"
-      >
-        <h2 id="access-control-advanced-sharing-heading">Advanced sharing</h2>
-        <p id="access-control-advanced-sharing-description">
-          <span class="access-control-advanced-sharing-description-line">Use this option when the folder and its contents have different access requirements.</span>
-          <span class="access-control-advanced-sharing-description-line">Choose which access settings to edit.</span>
-          <span class="access-control-advanced-sharing-description-line">Save Changes applies your current edits only to that scope.</span>
-        </p>
-        ${this.isContainer() ? C`
-            <button
-              type="button"
-              class="access-control-same-access-toggle"
-              role="switch"
-              aria-checked=${this.containerScope === "folder+contents" ? "true" : "false"}
-              @click=${() => {
-			let e = this.containerScope !== "folder+contents";
-			this.selectContainerScope(e ? "folder+contents" : this.containerScope === "contents" ? "contents" : "folder");
-		}}
-            >
-              <span class="access-control-switch-track" aria-hidden="true">
-                <span class="access-control-switch-thumb"></span>
-              </span>
-              <span>Use the same access for this folder and its contents</span>
-            </button>
-            <div class="access-control-advanced-sharing-options">
-              <solid-ui-button
-                type="button"
-                variant=${this.containerScope === "folder" ? "primary" : "secondary"}
-                aria-pressed=${this.containerScope === "folder" ? "true" : "false"}
-                @click=${() => {
-			this.selectContainerScope("folder");
-		}}
-              >
-                Folder Only
-              </solid-ui-button>
-              <solid-ui-button
-                type="button"
-                variant=${this.containerScope === "contents" ? "primary" : "secondary"}
-                aria-pressed=${this.containerScope === "contents" ? "true" : "false"}
-                @click=${() => {
-			this.selectContainerScope("contents");
-		}}
-              >
-                Contents Only
-              </solid-ui-button>
-            </div>
-          ` : C``}
-        <div class="access-control-advanced-sharing-actions">
-          <solid-ui-button
-            type="button"
-            variant="ghost"
-            aria-label="Close advanced sharing"
-            title="Close advanced sharing"
-            @click=${this.closeAdvancedSharing}
-          >
-            <icon-lucide-x slot="icon" aria-hidden="true"></icon-lucide-x>
-            <span class="sr-only">Close</span>
-          </solid-ui-button>
-        </div>
-      </section>
-    ` : C``;
+	getSharedAccessViewModels() {
+		let e = this.pendingAccessGrants.filter((e) => e.role !== "No Access").map((e) => ({
+			id: `pending:${e.subjectType}:${e.subjectValue}`,
+			authorization: {
+				agent: e.subjectType === "agent" ? [e.subjectValue] : [],
+				agentGroup: e.subjectType === "agentGroup" ? [e.subjectValue] : [],
+				agentClass: [],
+				origin: e.subjectType === "origin" ? [e.subjectValue] : [],
+				mode: []
+			},
+			role: e.role,
+			initialRole: e.role,
+			initialScope: e.scope,
+			scope: e.scope ?? "folder+contents",
+			subjectLabel: e.label,
+			subjects: [{
+				type: e.subjectType,
+				iri: e.subjectValue
+			}]
+		}));
+		return [...g(this.accessGrantDrafts), ...e];
 	}
 	render() {
-		let e = this.getDialogTitle();
-		return C`
-      <solid-ui-dialog title=${e}>
+		let t = this.getDialogTitle();
+		return e`
+      <solid-ui-dialog title=${t}>
         <form @submit=${this.onSubmit}>
           <solid-ui-dialog-content>
             ${this.renderAccessContextState()}
-            ${this.renderMixedContainerWarning()}
           <solid-ui-access-control-add-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
+              .disabled=${!this.canMutate()}
               .principalInputValue=${this.principalInputValue}
               .addAccessRoleValue=${this.addAccessRoleValue}
               .pendingAccessGrants=${this.pendingAccessGrants}
+              .showAdvancedToggle=${this.isContainer() && !this.protectedTarget}
+              .advancedSharingOpen=${this.advancedSharingOpen}
               .inputError=${this.inputError}
-              .asyncOptionsProvider=${p}
+              .asyncOptionsProvider=${S}
               @target-input=${this.onPrincipalInput}
               @target-selected=${this.onPrincipalSelect}
               @role-changed=${this.onAddAccessRoleInput}
               @pending-grant-removed=${this.onPendingGrantRemoved}
+              @advanced-sharing-changed=${this.onAdvancedSharingChanged}
             ></solid-ui-access-control-add-access>
             <solid-ui-access-control-shared-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
-              .accessGrantViewModels=${s(this.accessGrantDrafts)}
+              .disabled=${!this.canMutate()}
+              .accessGrantViewModels=${this.getSharedAccessViewModels()}
+              .showContainerScope=${this.shouldShowContainerScope()}
+              .advancedSharingOpen=${this.advancedSharingOpen}
               @access-grant-role-changed=${this.onAccessGrantRoleInput}
+              @access-grant-scope-changed=${this.onAccessGrantScopeInput}
             ></solid-ui-access-control-shared-access>
             <solid-ui-access-control-general-access
-              .disabled=${!this.canMutate() || this.hasMixedContainerPolicy()}
+              .disabled=${!this.canMutate()}
               .subjectUri=${this.subjectUri}
               .authenticatedAccessRoleValue=${this.authenticatedAccessRoleValue}
               .publicAccessRoleValue=${this.publicAccessRoleValue}
               @authenticated-role-changed=${this.onAuthenticatedAccessRoleInput}
               @public-role-changed=${this.onPublicAccessRoleInput}
             ></solid-ui-access-control-general-access>
+            ${this.renderSharingInformation()}
             <solid-ui-access-control-errors
               .errors=${this.saveErrors}
               .successfulChangesRefreshed=${this.successfulChangesRefreshed}
               @close=${this.onCancelClick}
             ></solid-ui-access-control-errors>
-            ${this.renderSharingState()}
           </solid-ui-dialog-content>
 
           <solid-ui-dialog-footer>
@@ -586,7 +527,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
                 Cancel
               </solid-ui-button>
               <solid-ui-button
-                ?disabled=${!this.canMutate() || !this.hasUnsavedChanges() || this.submitting || this.saveErrors.length > 0 || this.hasMixedContainerPolicy()}
+                ?disabled=${!this.canMutate() || !this.hasUnsavedChanges() || this.submitting || this.saveErrors.length > 0}
                 ?loading=${this.submitting}
                 type="button"
                 @click=${this.onSaveClick}
@@ -600,25 +541,22 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
     `;
 	}
 	async onSubmit(e) {
-		e.preventDefault(), this.submitting || this.hasMixedContainerPolicy() || (!this.isConnected || await this.ensureAccessContext()) && await this.commitPrincipalFromInputSafely();
+		e.preventDefault(), this.submitting || (!this.isConnected || await this.ensureAccessContext()) && await this.commitPrincipalFromInputSafely();
 	}
 	async onSaveClick() {
-		if (this.submitting || this.hasMixedContainerPolicy() || this.isConnected && !await this.ensureAccessContext() || this.principalInputValue.trim() && !await this.commitPrincipalFromInputSafely()) return;
+		if (this.submitting || this.isConnected && !await this.ensureAccessContext() || this.principalInputValue.trim() && !await this.commitPrincipalFromInputSafely()) return;
 		let e = this.isContainer() && !this.protectedTarget ? this.getSelectedContainerScope() : "file";
 		await this.saveAccessChanges(e === "folder" ? "container" : e);
 	}
 	onCancelClick() {
 		this.close();
 	}
-	closeAdvancedSharing() {
-		this.advancedSharingOpen = !1;
-	}
 	async onResetToDefault() {
-		if (this.subjectUri && this.canMutate() && this.accessContext && !this.accessContext.inherited && !this.submitting && !this.hasMixedContainerPolicy()) {
+		if (this.subjectUri && this.canMutate() && this.accessContext && !this.accessContext.inherited && !this.submitting) {
 			this.submitting = !0, this.errors = this.errors.filter((e) => e.action === "input");
 			try {
-				await S.acl.resetToDefault(this.subjectUri), await this.loadAccessContext();
-				let e = await S.acl.findAccessGrants(this.subjectUri);
+				await d.acl.resetToDefault(this.subjectUri), await this.loadAccessContext();
+				let e = await d.acl.findAccessGrants(this.subjectUri);
 				this.accessGrants = this.accessContext?.inherited ? this.accessContext.authorizations : e;
 			} catch (e) {
 				this.errors = [...this.errors, {
@@ -626,36 +564,63 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 					targetUri: this.subjectUri,
 					label: "Custom sharing",
 					message: e instanceof Error ? e.message : "Unable to reset sharing."
-				}], r("Failed to reset access control", e);
+				}], s("Failed to reset access control", e);
 			} finally {
 				this.submitting = !1;
 			}
 		}
 	}
+	onAdvancedSharingChanged(e) {
+		this.advancedSharingOpen = e.detail.open;
+	}
+	onAccessGrantScopeInput(e) {
+		if (this.canMutate()) {
+			if (e.detail.id.startsWith("pending:")) {
+				let t = e.detail.id.slice(8);
+				this.pendingAccessGrants = this.pendingAccessGrants.map((n) => `${n.subjectType}:${n.subjectValue}` === t ? {
+					...n,
+					scope: e.detail.scope
+				} : n);
+			} else this.accessGrantDrafts = this.accessGrantDrafts.map((t) => t.id === e.detail.id ? {
+				...t,
+				scope: e.detail.scope
+			} : t);
+		}
+	}
 	async saveAccessChanges(e = "file") {
-		if (this.submitting || !this.canMutate() || this.hasMixedContainerPolicy()) return;
-		let t = u(this.accessGrantDrafts), n = this.getGeneralAccessChanges();
-		if ((this.pendingAccessGrants.length || t.length || n.length) && this.subjectUri) {
+		if (this.submitting || !this.canMutate()) return;
+		let t = this.pendingAccessGrants.find((e) => e.role === "No Access");
+		if (t) {
+			this.setInputError({
+				action: "input",
+				targetUri: t.subjectValue,
+				label: t.label,
+				message: "Choose an access role for the pending additions before saving."
+			});
+			return;
+		}
+		let n = y(this.accessGrantDrafts), r = this.getGeneralAccessChanges();
+		if ((this.pendingAccessGrants.length || n.length || r.length) && this.subjectUri) {
 			this.submitting = !0, this.errors = this.errors.filter((e) => e.action === "input"), this.successfulChangesRefreshed = !0;
 			try {
-				let i = g({
+				let t = T({
 					pendingAccessGrants: this.pendingAccessGrants,
-					generalAccessChanges: n,
-					changedAccessGrants: t
-				}), a = await h(this.subjectUri, i, { containerScope: e });
-				if (a.length) {
-					this.errors = [...this.errors, ...a], this.principalInputValue = "", this.pendingAccessGrants = [];
+					generalAccessChanges: r,
+					changedAccessGrants: n
+				}), i = await w(this.subjectUri, t, { containerScope: e });
+				if (i.length) {
+					this.errors = [...this.errors, ...i], this.principalInputValue = "", this.pendingAccessGrants = [];
 					try {
-						this.accessGrants = await S.acl.findAccessGrants(this.subjectUri);
+						this.accessGrants = await d.acl.findAccessGrants(this.subjectUri);
 					} catch (e) {
 						this.successfulChangesRefreshed = !1, this.errors = [...this.errors, {
 							action: "save",
 							targetUri: this.subjectUri,
 							label: "Shared with list",
 							message: e instanceof Error ? e.message : "Unable to refresh the access list."
-						}], r("Failed to refresh access grants after save errors", e);
+						}], s("Failed to refresh access grants after save errors", e);
 					}
-					r("Failed to save some access changes", a);
+					s("Failed to save some access changes", i);
 					return;
 				}
 				this.principalInputValue = "", this.pendingAccessGrants = [], this.close();
@@ -672,50 +637,87 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		}
 	}
 	onPrincipalInput(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.principalInputValue = e.detail.value, this.clearInputError());
+		this.canMutate() && (this.principalInputValue = e.detail.value, this.clearInputError());
 	}
 	onPrincipalSelect(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && this.queuePendingPrincipal(e.detail.value, this.addAccessRoleValue, e.detail.label, void 0, e.detail.targetKind);
+		this.canMutate() && this.queuePendingPrincipal(e.detail.value, this.addAccessRoleValue, e.detail.label, void 0, e.detail.targetKind);
 	}
 	getGeneralAccessChanges() {
 		if (!this.subjectUri) return [];
-		let e = this.getScopedAccessGrants(), t = c(e), n = d(e);
+		let e = this.getScopedAccessGrants(), t = _(e), n = b(e);
 		return [this.authenticatedAccessRoleValue === t ? void 0 : {
-			subject: v,
+			subject: c,
 			role: this.authenticatedAccessRoleValue,
 			label: "Authenticated users"
 		}, this.publicAccessRoleValue === n ? void 0 : {
-			subject: y,
+			subject: l,
 			role: this.publicAccessRoleValue,
 			label: "Public"
-		}].filter(Ke);
+		}].filter(Ue);
 	}
 	onAddAccessRoleInput(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.addAccessRoleValue = e.detail.role, this.pendingAccessGrants = this.pendingAccessGrants.map((t) => ({
-			...t,
-			role: e.detail.role
-		})));
+		if (!this.canMutate()) return;
+		let t = e.detail.role;
+		if (t === "No Access" || !this.pendingAccessGrants.length) {
+			this.addAccessRoleValue = t;
+			return;
+		}
+		let n = this.pendingAccessGrants.map((e) => ({
+			id: `staged:${e.subjectType}:${e.subjectValue}`,
+			authorization: {
+				agent: e.subjectType === "agent" ? [e.subjectValue] : [],
+				agentGroup: e.subjectType === "agentGroup" ? [e.subjectValue] : [],
+				agentClass: [],
+				origin: e.subjectType === "origin" ? [e.subjectValue] : [],
+				mode: []
+			},
+			role: t,
+			initialRole: "No Access",
+			initialScope: e.scope,
+			scope: e.scope ?? "folder+contents",
+			subjectLabel: e.label,
+			subjects: [{
+				type: e.subjectType,
+				iri: e.subjectValue
+			}]
+		})), r = new Map(this.accessGrantDrafts.map((e) => [e.id, e]));
+		for (let e of n) {
+			let t = r.get(e.id);
+			r.set(e.id, t ? {
+				...t,
+				role: e.role
+			} : e);
+		}
+		this.accessGrantDrafts = [...r.values()], this.pendingAccessGrants = [], this.addAccessRoleValue = "No Access";
 	}
 	onAuthenticatedAccessRoleInput(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.authenticatedAccessRoleValue = e.detail.role);
+		this.canMutate() && (this.authenticatedAccessRoleValue = e.detail.role);
 	}
 	onPublicAccessRoleInput(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.publicAccessRoleValue = e.detail.role);
+		this.canMutate() && (this.publicAccessRoleValue = e.detail.role);
 	}
 	onAccessGrantRoleInput(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.accessGrantDrafts = this.accessGrantDrafts.map((t) => t.id === e.detail.id ? {
-			...t,
-			role: e.detail.role
-		} : t));
+		if (this.canMutate()) {
+			if (e.detail.id.startsWith("pending:")) {
+				let t = e.detail.id.slice(8);
+				this.pendingAccessGrants = this.pendingAccessGrants.map((n) => `${n.subjectType}:${n.subjectValue}` === t ? {
+					...n,
+					role: e.detail.role
+				} : n), this.addAccessRoleValue = e.detail.role;
+			} else this.accessGrantDrafts = this.accessGrantDrafts.map((t) => t.id === e.detail.id ? {
+				...t,
+				role: e.detail.role
+			} : t);
+		}
 	}
 	onPendingGrantRemoved(e) {
-		this.canMutate() && !this.hasMixedContainerPolicy() && (this.pendingAccessGrants = this.pendingAccessGrants.filter((t, n) => n !== e.detail.index));
+		this.canMutate() && (this.pendingAccessGrants = this.pendingAccessGrants.filter((t, n) => n !== e.detail.index));
 	}
 	hasUnsavedChanges() {
-		return !!(this.pendingAccessGrants.length || this.principalInputValue.trim() || u(this.accessGrantDrafts).length || this.getGeneralAccessChanges().length);
+		return !!(this.pendingAccessGrants.length || this.principalInputValue.trim() || y(this.accessGrantDrafts).length || this.getGeneralAccessChanges().length);
 	}
 	async commitPrincipalFromInput() {
-		if (!this.canMutate() || this.hasMixedContainerPolicy()) return !1;
+		if (!this.canMutate()) return !1;
 		let e = this.principalInputValue.trim();
 		return e ? this.queuePendingPrincipal(e, this.addAccessRoleValue, void 0, e) : !1;
 	}
@@ -729,23 +731,24 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 				label: "Access target",
 				targetUri: this.principalInputValue.trim(),
 				message: "We could not verify this access target. Check the value and try again."
-			}), r("Failed to commit pending access grants", t), !1) : (r("Ignored stale access-target validation error", t), !1);
+			}), s("Failed to commit pending access grants", t), !1) : (s("Ignored stale access-target validation error", t), !1);
 		}
 	}
-	async queuePendingPrincipal(e, t = this.addAccessRoleValue, n, i, a) {
-		let o = i ?? this.principalInputValue.trim(), s = await this.createPendingAccessGrant(e, t, n, a);
-		if ("error" in s) return this.principalInputValue.trim() === o && this.setInputError(s.error), r("Failed to add access grant:", s.error.message), !1;
-		let c = [...this.pendingAccessGrants, s.grant];
-		return this.pendingAccessGrants = this.dedupePendingAccessGrants(c), this.principalInputValue.trim() === o && (this.clearInputError(), this.principalInputValue = ""), !0;
+	async queuePendingPrincipal(e, t = this.addAccessRoleValue, n, r, i) {
+		let a = r ?? this.principalInputValue.trim(), o = await this.createPendingAccessGrant(e, t, n, i);
+		if ("error" in o) return this.principalInputValue.trim() === a && this.setInputError(o.error), s("Failed to add access grant:", o.error.message), !1;
+		let c = [...this.pendingAccessGrants, o.grant];
+		return this.pendingAccessGrants = this.dedupePendingAccessGrants(c), this.principalInputValue.trim() === a && (this.clearInputError(), this.principalInputValue = ""), !0;
 	}
 	async createPendingAccessGrant(e, t = this.addAccessRoleValue, n, r) {
 		try {
-			let i = e.trim(), a = await m(i, n);
+			let i = e.trim(), a = await C(i, n);
 			return a ? { grant: {
 				subjectType: a.subjectType,
 				subjectValue: a.subjectValue,
 				role: t,
 				label: a.label,
+				scope: this.isContainer() && !this.protectedTarget ? this.containerScope : void 0,
 				targetKind: r ?? a.targetKind
 			} } : { error: {
 				action: "input",
@@ -767,7 +770,7 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		for (let n of e) t.set(`${n.subjectType}:${n.subjectValue}`, n);
 		return [...t.values()];
 	}
-}, {e: [ie, oe, q, ce, ue, fe, me, ge, ve, be, Se, we, Ee, Oe, Ae, Me, Pe, J, ee], c: [$, te]} = Be(D, [
+}, {e: [ie, oe, K, se, le, de, pe, he, _e, ye, xe, Ce, Te, De, ke, je, Ne, ee], c: [$, te]} = Re(D, [
 	[
 		re,
 		1,
@@ -779,90 +782,85 @@ new (Ie = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 		"accessGrants"
 	],
 	[
-		K,
+		G,
 		1,
 		"principalInputValue"
 	],
 	[
-		se,
+		q,
 		1,
 		"addAccessRoleValue"
 	],
 	[
-		le,
+		ce,
 		1,
 		"authenticatedAccessRoleValue"
 	],
 	[
-		de,
+		ue,
 		1,
 		"publicAccessRoleValue"
 	],
 	[
-		pe,
+		fe,
 		1,
 		"submitting"
 	],
 	[
-		he,
+		me,
 		1,
 		"pendingAccessGrants"
 	],
 	[
-		_e,
+		ge,
 		1,
 		"accessGrantDrafts"
 	],
 	[
-		ye,
+		ve,
 		1,
 		"errors"
 	],
 	[
-		xe,
+		be,
 		1,
 		"successfulChangesRefreshed"
 	],
 	[
-		Ce,
+		Se,
 		1,
 		"accessContext"
 	],
 	[
-		Te,
+		we,
 		1,
 		"accessContextLoading"
 	],
 	[
-		De,
+		Ee,
 		1,
 		"accessContextError"
 	],
 	[
-		ke,
-		1,
-		"advancedSharingOpen"
-	],
-	[
-		je,
+		Oe,
 		1,
 		"containerScope"
 	],
 	[
-		Ne,
+		Ae,
 		1,
-		"containerScopeAnalysis"
+		"advancedSharingOpen"
 	],
 	[
-		Fe,
+		Me,
 		1,
 		"protectedTarget"
 	]
-], ne, 0, void 0, n), D), E = class extends Ge {
+], ne, 0, void 0, o), D), E = class extends He {
 	constructor() {
-		super($), Q(this, "styles", i), te();
+		super($), Z(this, "styles", p), te();
 	}
-}, Q(E, Ie, void 0), E)();
+}, Z(E, Pe, void 0), E)();
 export { $ as default };
 
 //# sourceMappingURL=AccessControlModal.esm.js.map

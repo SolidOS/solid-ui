@@ -8,7 +8,7 @@ export interface AccessGroupsOptions {
     defaults?: boolean;
 }
 /**
- * Renders the table of Owners, Editors, Posters, Submitters, Viewers
+ * Renders the table of Owners, Admins, Editors, Commenters, Appenders, Viewers
  * for https://github.com/solidos/userguide/blob/main/views/sharing/userguide.md
  */
 export declare class AccessGroups {

@@ -1,11 +1,11 @@
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/form-control-component/FormControlComponent.esm.js";
 import "../../lib/components/index.esm.js";
-import { isEmptyValue as n } from "../../lib/values.esm.js";
+import { html as n, nothing as r } from "lit";
+import { property as i, query as a, state as o } from "lit/decorators.js";
+import { isEmptyValue as s } from "../../lib/values.esm.js";
 import "../../_virtual/~icons/lucide/chevron-down.esm.js";
-import r from "./Select.styles.esm.js";
-import { html as i, nothing as a } from "lit";
-import { property as o, query as s, state as c } from "lit/decorators.js";
+import c from "./Select.styles.css.esm.js";
 // src/components/select/Select.ts
 var l, u, d, f, p, m, h, g, _, v, y, b, x, S;
 function C(e, t, n) {
@@ -181,7 +181,7 @@ function P(e) {
 }
 h = [e("solid-ui-select")];
 var F;
-new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = (g = o({ type: Array }), _ = s("select"), y = c(), "options"), u = class extends t {
+new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = (g = i({ type: Array }), _ = a("select"), y = o(), "options"), u = class extends t {
 	constructor(...e) {
 		super(...e), C(this, d, (p(this), v(this, null))), C(this, f, b(this, null));
 	}
@@ -209,8 +209,8 @@ new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = 
 		T(f, this, e);
 	}
 	render() {
-		let e = this.options.some((e) => n(e.value)) ? a : i`<option disabled value="" ?selected=${!this.value}>Select an option</option>`;
-		return i`
+		let e = this.options.some((e) => s(e.value)) ? r : n`<option disabled value="" ?selected=${!this.value}>Select an option</option>`;
+		return n`
       ${this.controlTrait.renderLabel()}
 
       <div class="input-wrapper">
@@ -221,7 +221,7 @@ new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = 
           @change=${this.onChange}
         >
           ${e}
-          ${this.options.map((e) => i`<option
+          ${this.options.map((e) => n`<option
                 .value=${e.value}
                 ?selected=${e.value === this.value}
               >
@@ -258,7 +258,7 @@ new (x = (d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), S = 
 	]
 ], h, 0, void 0, t), u), l = class extends P {
 	constructor() {
-		super(F), O(this, "styles", r), m();
+		super(F), O(this, "styles", c), m();
 	}
 }, O(l, x, void 0), l)();
 export { F as default };

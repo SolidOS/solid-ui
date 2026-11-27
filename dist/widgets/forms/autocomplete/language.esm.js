@@ -1,7 +1,7 @@
 import { __exportAll as e } from "../../../_virtual/_rolldown/runtime.esm.js";
 import { log as t } from "../../../lib/debug.esm.js";
-import n from "../../../lib/ns.esm.js";
-import { authn as r, store as i } from "solid-logic";
+import { authn as n, store as r } from "solid-logic";
+import i from "../../../lib/ns.esm.js";
 // src/widgets/forms/autocomplete/language.ts
 var a = /* @__PURE__ */ e({
 	addDefaults: () => c,
@@ -22,26 +22,26 @@ function c(e) {
 }
 async function l(e) {
 	let t = e.doc();
-	await i.fetcher?.load(t);
-	let r = i.any(e, n.schema("knowsLanguage"), null, t);
-	if (!r) return s;
+	await r.fetcher?.load(t);
+	let n = r.any(e, i.schema("knowsLanguage"), null, t);
+	if (!n) return s;
 	let a = [];
-	return r.elements.forEach((e) => {
-		let r = i.any(e, n.solid("publicId"), null, t);
-		if (!r) {
+	return n.elements.forEach((e) => {
+		let n = r.any(e, i.solid("publicId"), null, t);
+		if (!n) {
 			console.warn("getPreferredLanguages: No publiID of language.");
 			return;
 		}
-		if (!r.value.startsWith("https://www.w3.org/ns/iana/language-code/")) {
-			console.error(`What should be a language code ${r.value} does not start with ${o}`);
+		if (!n.value.startsWith("https://www.w3.org/ns/iana/language-code/")) {
+			console.error(`What should be a language code ${n.value} does not start with ${o}`);
 			return;
 		}
-		let s = r.value.slice(41);
+		let s = n.value.slice(41);
 		a.push(s);
 	}), a.length > 0 ? (console.log(`     User knows languages with codes: "${a.join(",")}"`), c(a)) : null;
 }
 async function u() {
-	let e = await r.currentUser();
+	let e = await n.currentUser();
 	if (e) {
 		let t = await l(e);
 		if (t) return t;

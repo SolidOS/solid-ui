@@ -4,10 +4,13 @@ export default class AccessControlSharedAccess extends WebComponent {
     static styles: import('lit').CSSResult;
     accessor accessGrantViewModels: AccessGrantViewModel[];
     accessor disabled: boolean;
+    accessor showContainerScope: boolean;
+    accessor advancedSharingOpen: boolean;
     private accessor searchValue;
     private onSearchInput;
     private onSearchSelect;
     private onAccessGrantRoleChange;
+    private onAccessGrantScopeChange;
     private getFilteredAccessGrants;
     private renderAccessGrant;
     private renderAuthorizationBadge;

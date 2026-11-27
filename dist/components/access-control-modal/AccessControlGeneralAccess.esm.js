@@ -1,16 +1,16 @@
 import "../../lib/components/index.esm.js";
 import { customElement as e } from "../../lib/components/decorators.esm.js";
 import t from "../../lib/components/web-component/WebComponent.esm.js";
-import { error as n } from "../../lib/debug.esm.js";
+import { html as n } from "lit";
+import { property as r } from "lit/decorators.js";
+import { ACCESS_ROLES as i, PUBLIC_ACCESS_ROLES as a } from "solid-logic";
+import { error as o } from "../../lib/debug.esm.js";
 import "../../_virtual/~icons/lucide/link.esm.js";
 import "../../_virtual/~icons/lucide/globe.esm.js";
 import "../button/index.esm.js";
 import "../combobox/index.esm.js";
 import "../combobox-option/index.esm.js";
-import r from "./AccessControlGeneralAccess.styles.esm.js";
-import { ACCESS_ROLES as i, PUBLIC_ACCESS_ROLES as a } from "solid-logic";
-import { html as o } from "lit";
-import { property as s } from "lit/decorators.js";
+import s from "./AccessControlGeneralAccess.styles.css.esm.js";
 // src/components/access-control-modal/AccessControlGeneralAccess.ts
 var c, l, u, d, f, p, m, h, g, _, v, y, b, x, S, C, w, T, E;
 function D(e, t, n) {
@@ -186,7 +186,7 @@ function R(e) {
 }
 g = [e("solid-ui-access-control-general-access")];
 var z;
-new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), E = (_ = s({ attribute: !1 }), y = s({ attribute: !1 }), x = s({ attribute: !1 }), C = s({ type: Boolean }), "subjectUri"), l = class extends t {
+new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), E = (_ = r({ attribute: !1 }), y = r({ attribute: !1 }), x = r({ attribute: !1 }), C = r({ type: Boolean }), "subjectUri"), l = class extends t {
 	constructor(...e) {
 		super(...e), D(this, u, (m(this), v(this, void 0))), D(this, d, b(this, "No Access")), D(this, f, S(this, "No Access")), D(this, p, w(this, !1));
 	}
@@ -234,23 +234,25 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 		if (e.preventDefault(), this.subjectUri) try {
 			await navigator.clipboard.writeText(this.subjectUri);
 		} catch (e) {
-			n("Failed to copy resource link", e);
+			o("Failed to copy resource link", e);
 		}
 	}
 	renderAuthenticatedRoleOptions() {
-		return i.map((e) => o`
+		return i.map((e) => n`
       <solid-ui-combobox-option value=${e}>${e}</solid-ui-combobox-option>
     `);
 	}
 	renderPublicRoleOptions() {
-		return a.map((e) => o`
+		return a.map((e) => n`
       <solid-ui-combobox-option value=${e}>${e}</solid-ui-combobox-option>
     `);
 	}
 	renderAuthenticatedModeSelector() {
-		return o`
+		return n`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--authenticated"
+        label="Access role for logged-in users"
+        .srOnlyLabel=${!0}
         .disabled=${this.disabled}
         .value=${this.authenticatedAccessRoleValue}
         @change=${this.onAuthenticatedRoleChange}
@@ -260,9 +262,11 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
     `;
 	}
 	renderPublicModeSelector() {
-		return o`
+		return n`
       <solid-ui-combobox
         class="access-role-select access-role-select--compact access-role-select--general access-grants-role access-grants-role--editable access-role-select--public"
+        label="Access role for anyone with the link"
+        .srOnlyLabel=${!0}
         .disabled=${this.disabled}
         .value=${this.publicAccessRoleValue}
         @change=${this.onPublicRoleChange}
@@ -272,7 +276,7 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
     `;
 	}
 	renderGeneralAccessIcon() {
-		return o`
+		return n`
       <div class="access-grants-general-share-icon">
         <div class="access-grants-general-share-icon-inner">
           <icon-lucide-globe class="access-grants-general-share-icon-image"></icon-lucide-globe>
@@ -281,7 +285,7 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
     `;
 	}
 	renderGeneralShareRow(e) {
-		return o`
+		return n`
       <div class="access-grants-general-share">
         <div class="access-grants-general-share-content">
           ${this.renderGeneralAccessIcon()}
@@ -295,7 +299,7 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
     `;
 	}
 	render() {
-		return o`
+		return n`
       <section class="access-grants-general" aria-labelledby="general-access-heading">
         <div class="access-grants-general-header">
           <h2 id="general-access-heading">General Access</h2>
@@ -344,7 +348,7 @@ new (T = (u = /*#__PURE__*/ new WeakMap(), d = /*#__PURE__*/ new WeakMap(), f = 
 	]
 ], g, 0, void 0, t), l), c = class extends R {
 	constructor() {
-		super(z), M(this, "styles", r), h();
+		super(z), M(this, "styles", s), h();
 	}
 }, M(c, T, void 0), c)();
 export { z as default };

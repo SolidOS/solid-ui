@@ -78,6 +78,24 @@
             border-radius: 5px;
         }
 
+        .option-content {
+            display: flex;
+            align-items: center;
+            gap: var(--solid-ui-combobox-option-icon-gap, 8px);
+        }
+
+        .option-icon {
+            display: inline-flex;
+            width: var(--solid-ui-combobox-option-icon-size, 1rem);
+            height: var(--solid-ui-combobox-option-icon-size, 1rem);
+            flex: 0 0 var(--solid-ui-combobox-option-icon-size, 1rem);
+
+            > * {
+                width: 100%;
+                height: 100%;
+            }
+        }
+
         [role="option"] {
             cursor: pointer;
 
