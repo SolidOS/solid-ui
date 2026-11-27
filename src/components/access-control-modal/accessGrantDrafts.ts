@@ -93,7 +93,9 @@ export function getAccessGrantViewModels (drafts: AccessGrantDraft[]): AccessGra
 export function getChangedAccessGrants (drafts: AccessGrantDraft[]): ChangedAccessGrant[] {
   return getAccessGrantViewModels(drafts)
     .filter(({ role, initialRole, scope, initialScope, subjects }) =>
-      (role !== initialRole || scope !== initialScope) && subjects.length > 0)
+      !(role === 'No Access' && initialRole === 'No Access') &&
+      (role !== initialRole || scope !== initialScope) &&
+      subjects.length > 0)
     .map(({ authorization, subjects, role, scope, initialScope }) => ({
       authorization,
       subjects,

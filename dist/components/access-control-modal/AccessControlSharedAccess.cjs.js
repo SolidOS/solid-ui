@@ -34,7 +34,7 @@ const e=require("../../widgets/buttons.cjs.js");require("../../lib/components/in
         ${this.renderGrantRoleOptions()}
       </solid-ui-combobox>
     `}renderGrantRoleOptions(){return a.ACCESS_ROLES.map(e=>r.html`
-      <solid-ui-combobox-option value=${e}>${e===`No Access`?`Remove`:e}</solid-ui-combobox-option>
+      <solid-ui-combobox-option value=${e}>${e}</solid-ui-combobox-option>
     `)}render(){let e=this.getFilteredAccessGrants();return r.html`
       <section aria-labelledby="access-grants-heading">
         <div class="access-grants-header">

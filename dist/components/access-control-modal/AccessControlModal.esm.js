@@ -462,7 +462,7 @@ new (Pe = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 			},
 			role: e.role,
 			initialRole: e.role,
-			initialScope: e.scope,
+			initialScope: void 0,
 			scope: e.scope ?? "folder+contents",
 			subjectLabel: e.label,
 			subjects: [{
@@ -673,7 +673,7 @@ new (Pe = (O = /*#__PURE__*/ new WeakMap(), k = /*#__PURE__*/ new WeakMap(), A =
 			},
 			role: t,
 			initialRole: "No Access",
-			initialScope: e.scope,
+			initialScope: void 0,
 			scope: e.scope ?? "folder+contents",
 			subjectLabel: e.label,
 			subjects: [{

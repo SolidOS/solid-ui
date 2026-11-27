@@ -340,7 +340,7 @@ new (A = (f = /*#__PURE__*/ new WeakMap(), p = /*#__PURE__*/ new WeakMap(), m = 
 	}
 	renderGrantRoleOptions() {
 		return s.map((e) => r`
-      <solid-ui-combobox-option value=${e}>${e === "No Access" ? "Remove" : e}</solid-ui-combobox-option>
+      <solid-ui-combobox-option value=${e}>${e}</solid-ui-combobox-option>
     `);
 	}
 	render() {

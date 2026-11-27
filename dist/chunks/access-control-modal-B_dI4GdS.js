@@ -374,7 +374,7 @@ new (he = (k = /*#__PURE__*/ new WeakMap(), A = /*#__PURE__*/ new WeakMap(), j =
 	}
 	renderGrantRoleOptions() {
 		return f.map((e) => s`
-      <solid-ui-combobox-option value=${e}>${e === "No Access" ? "Remove" : e}</solid-ui-combobox-option>
+      <solid-ui-combobox-option value=${e}>${e}</solid-ui-combobox-option>
     `);
 	}
 	render() {
@@ -1098,7 +1098,7 @@ function Bt(e) {
 	});
 }
 function Vt(e) {
-	return Bt(e).filter(({ role: e, initialRole: t, scope: n, initialScope: r, subjects: i }) => (e !== t || n !== r) && i.length > 0).map(({ authorization: e, subjects: t, role: n, scope: r, initialScope: i }) => ({
+	return Bt(e).filter(({ role: e, initialRole: t, scope: n, initialScope: r, subjects: i }) => (e !== "No Access" || t !== "No Access") && (e !== t || n !== r) && i.length > 0).map(({ authorization: e, subjects: t, role: n, scope: r, initialScope: i }) => ({
 		authorization: e,
 		subjects: t,
 		role: n,
@@ -2221,7 +2221,7 @@ new ($r = (er = /*#__PURE__*/ new WeakMap(), tr = /*#__PURE__*/ new WeakMap(), n
 			},
 			role: e.role,
 			initialRole: e.role,
-			initialScope: e.scope,
+			initialScope: void 0,
 			scope: e.scope ?? "folder+contents",
 			subjectLabel: e.label,
 			subjects: [{
@@ -2432,7 +2432,7 @@ new ($r = (er = /*#__PURE__*/ new WeakMap(), tr = /*#__PURE__*/ new WeakMap(), n
 			},
 			role: t,
 			initialRole: "No Access",
-			initialScope: e.scope,
+			initialScope: void 0,
 			scope: e.scope ?? "folder+contents",
 			subjectLabel: e.label,
 			subjects: [{
@@ -2624,4 +2624,4 @@ new ($r = (er = /*#__PURE__*/ new WeakMap(), tr = /*#__PURE__*/ new WeakMap(), n
 var di = ui;
 export { ui as n, di as t };
 
-//# sourceMappingURL=access-control-modal-DZG3Uoa8.js.map
+//# sourceMappingURL=access-control-modal-B_dI4GdS.js.map

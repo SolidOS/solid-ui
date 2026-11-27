@@ -78,7 +78,7 @@ function p(e) {
 	});
 }
 function m(e) {
-	return p(e).filter(({ role: e, initialRole: t, scope: n, initialScope: r, subjects: i }) => (e !== t || n !== r) && i.length > 0).map(({ authorization: e, subjects: t, role: n, scope: r, initialScope: i }) => ({
+	return p(e).filter(({ role: e, initialRole: t, scope: n, initialScope: r, subjects: i }) => (e !== "No Access" || t !== "No Access") && (e !== t || n !== r) && i.length > 0).map(({ authorization: e, subjects: t, role: n, scope: r, initialScope: i }) => ({
 		authorization: e,
 		subjects: t,
 		role: n,

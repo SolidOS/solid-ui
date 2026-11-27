@@ -7,7 +7,7 @@ import { n as m, r as h } from "./ResourceActionsMenu-DX-aOYul.js";
 import { u as g } from "./style-CuYGj-Cj.js";
 import { S as _ } from "./widgets-1XsPS-SN.js";
 import "./button-Cop1MAff.js";
-import { t as v } from "./access-control-modal-DZG3Uoa8.js";
+import { t as v } from "./access-control-modal-B_dI4GdS.js";
 import { t as y } from "./dialogs-DrjXBAEy.js";
 // ~icons/lucide/share-2
 var b = class extends HTMLElement {
@@ -979,4 +979,4 @@ new (_t = (G = /*#__PURE__*/ new WeakMap(), K = /*#__PURE__*/ new WeakMap(), q =
 var Ot = Dt;
 export { Dt as n, Ot as t };
 
-//# sourceMappingURL=file-explorer-header-B5iYS4pR.js.map
+//# sourceMappingURL=file-explorer-header-r1-sfmxG.js.map
