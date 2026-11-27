@@ -202,7 +202,7 @@ export default class AccessControlSharedAccess extends WebComponent {
 
   private renderGrantRoleOptions () {
     return ACCESS_ROLES.map(role => html`
-      <solid-ui-combobox-option value=${role}>${role === 'No Access' ? 'Remove' : role}</solid-ui-combobox-option>
+      <solid-ui-combobox-option value=${role}>${role}</solid-ui-combobox-option>
     `)
   }
 

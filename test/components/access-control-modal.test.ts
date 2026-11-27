@@ -984,7 +984,7 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
-  it('shows remove for no access in grant rows', async () => {
+  it('shows no access for revoking a grant in shared access rows', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.accessGrants = [{
       agent: ['https://alice.example.com/profile/card.ttl#me'],
@@ -1002,8 +1002,8 @@ describe('AccessControlModal submit', () => {
     const grantRoleSelect = sharedAccess.shadowRoot.querySelector('solid-ui-combobox.access-grants-role--editable')
     const grantOptions = [...grantRoleSelect.querySelectorAll('solid-ui-combobox-option')].map((option: Element) => option.textContent?.trim())
 
-    expect(grantOptions).toContain('Remove')
-    expect(grantOptions).not.toContain('No Access')
+    expect(grantOptions).toContain('No Access')
+    expect(grantOptions).not.toContain('Remove')
 
     document.body.removeChild(element)
   })

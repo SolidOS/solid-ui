@@ -428,7 +428,7 @@ export default class AccessControlModal extends DialogComponent<void> {
         },
         role: grant.role,
         initialRole: grant.role,
-        initialScope: grant.scope,
+        initialScope: undefined,
         scope: grant.scope ?? 'folder+contents',
         subjectLabel: grant.label,
         subjects: [{
@@ -744,7 +744,7 @@ export default class AccessControlModal extends DialogComponent<void> {
       },
       role,
       initialRole: 'No Access',
-      initialScope: grant.scope,
+      initialScope: undefined,
       scope: grant.scope ?? 'folder+contents',
       subjectLabel: grant.label,
       subjects: [{

@@ -45,4 +45,44 @@ describe('buildAccessChanges', () => {
       }
     ])
   })
+
+  it('keeps separate changes for the same subject when their scopes differ', () => {
+    const subject = { type: 'agent' as const, iri: 'https://alice.example/profile#me' }
+
+    expect(buildAccessChanges({
+      pendingAccessGrants: [],
+      generalAccessChanges: [],
+      changedAccessGrants: [
+        {
+          authorization: { agent: [subject.iri], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[] },
+          subjects: [subject],
+          role: 'Viewer',
+          scope: 'folder',
+          initialScope: 'folder+contents'
+        },
+        {
+          authorization: { agent: [subject.iri], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] as AccessMode[] },
+          subjects: [subject],
+          role: 'Editor',
+          scope: 'contents',
+          initialScope: undefined
+        }
+      ]
+    })).toEqual([
+      {
+        subject,
+        role: 'Viewer',
+        label: 'profile',
+        scope: 'folder',
+        previousScope: 'folder+contents'
+      },
+      {
+        subject,
+        role: 'Editor',
+        label: 'profile',
+        scope: 'contents',
+        previousScope: undefined
+      }
+    ])
+  })
 })
