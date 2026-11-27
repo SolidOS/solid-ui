@@ -130,4 +130,25 @@ describe('access-control grant drafts', () => {
       role: 'Editor'
     }])
   })
+
+  it('ignores a staged grant returned to No Access', () => {
+    const stagedGrant = {
+      id: 'agent:https://alice.example/profile#me',
+      authorization: {
+        agent: ['https://alice.example/profile#me'],
+        agentGroup: [],
+        agentClass: [],
+        origin: [],
+        mode: [] as AccessMode[]
+      },
+      role: 'No Access' as const,
+      initialRole: 'No Access' as const,
+      initialScope: undefined,
+      scope: 'folder' as const,
+      subjectLabel: 'Alice',
+      subjects: [{ type: 'agent' as const, iri: 'https://alice.example/profile#me' }]
+    }
+
+    expect(getChangedAccessGrants([stagedGrant])).toEqual([])
+  })
 })
