@@ -465,15 +465,23 @@ describe('AccessControlModal submit', () => {
     expect(element.saveErrors).toEqual([])
   })
 
-  it('revokes a queued no-access grant instead of granting empty modes', async () => {
+  it('revokes an existing grant instead of granting empty modes', async () => {
     planRevoke.mockResolvedValue({ target: 'https://example.com/resource.ttl.acl', deletes: [], inserts: [] })
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
-    element.pendingAccessGrants = [{
-      subjectType: 'agent',
-      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+    element.accessGrantDrafts = [{
+      id: 'agent:https://alice.example.com/profile/card.ttl#me',
+      authorization: {
+        agent: ['https://alice.example.com/profile/card.ttl#me'],
+        agentGroup: [],
+        agentClass: [],
+        origin: [],
+        mode: ['Read']
+      },
       role: 'No Access',
-      label: 'Alice'
+      initialRole: 'Viewer',
+      subjectLabel: 'Alice',
+      subjects: [{ type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' }]
     }]
 
     await element.onSaveClick()
@@ -484,27 +492,42 @@ describe('AccessControlModal submit', () => {
       { type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' }
     )
     expect(applyPlan).toHaveBeenCalledTimes(1)
-    expect(element.pendingAccessGrants).toEqual([])
   })
 
   it('describes revoke failures as removing access', async () => {
     planRevoke.mockRejectedValue(new Error('revoke failed'))
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/resource.ttl'
-    element.pendingAccessGrants = [{
-      subjectType: 'agent',
-      subjectValue: 'https://alice.example.com/profile/card.ttl#me',
+    element.accessContext = {
+      inherited: false,
+      resource: element.subjectUri,
+      effectiveContainer: undefined,
+      authorizations: []
+    }
+    element.accessContextSubjectUri = element.subjectUri
+    element.accessGrantDrafts = [{
+      id: 'agent:https://alice.example.com/profile/card.ttl#me',
+      authorization: {
+        agent: ['https://alice.example.com/profile/card.ttl#me'],
+        agentGroup: [],
+        agentClass: [],
+        origin: [],
+        mode: ['Read']
+      },
       role: 'No Access',
-      label: 'Alice'
+      initialRole: 'Viewer',
+      subjectLabel: 'Alice',
+      subjects: [{ type: 'agent', iri: 'https://alice.example.com/profile/card.ttl#me' }]
     }]
     document.body.appendChild(element)
 
-    await element.onSaveClick()
+    await element.saveAccessChanges('file')
     await element.updateComplete
 
-    const errors = element.shadowRoot.querySelector('solid-ui-access-control-errors')
-    await errors.updateComplete
-    expect(errors.shadowRoot.querySelector('li').textContent).toContain('Could not remove access')
+    expect(element.saveErrors[0]).toMatchObject({
+      action: 'revoke',
+      message: 'revoke failed'
+    })
     document.body.removeChild(element)
   })
 
@@ -1562,7 +1585,7 @@ describe('AccessControlModal submit', () => {
     expect((scopeSelect as any).srOnlyLabel).toBe(true)
     expect(scopeSelect.textContent).toContain('Folder And Contents')
     expect(scopeSelect.textContent).toContain('Folder Only')
-    expect(scopeSelect.textContent).toContain('Container Only')
+    expect(scopeSelect.textContent).toContain('Contents Only')
 
     sharedAccess.dispatchEvent(new CustomEvent('access-grant-scope-changed', {
       bubbles: true,
@@ -1981,7 +2004,7 @@ describe('AccessControlModal submit', () => {
     document.body.removeChild(element)
   })
 
-  it.skip('resets custom sharing and refreshes context and grants', async () => {
+  it('resets custom sharing and refreshes context and grants', async () => {
     findEffectiveAcl
       .mockResolvedValueOnce({ inherited: true, authorizations: [{ agent: ['https://example.com/owner#me'], agentGroup: [], agentClass: [], origin: [], mode: ['Read'] }] })
     findAccessGrants.mockResolvedValueOnce([])
