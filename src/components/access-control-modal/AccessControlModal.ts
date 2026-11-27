@@ -734,7 +734,7 @@ export default class AccessControlModal extends DialogComponent<void> {
     }
 
     const newDrafts: AccessGrantDraft[] = this.pendingAccessGrants.map(grant => ({
-      id: `pending:${grant.subjectType}:${grant.subjectValue}`,
+      id: `staged:${grant.subjectType}:${grant.subjectValue}`,
       authorization: {
         agent: grant.subjectType === 'agent' ? [grant.subjectValue] : [],
         agentGroup: grant.subjectType === 'agentGroup' ? [grant.subjectValue] : [],
