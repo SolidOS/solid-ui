@@ -110,7 +110,7 @@ export default class AccessControlSharedAccess extends WebComponent {
             >
               <solid-ui-combobox-option value="folder+contents">Folder And Contents</solid-ui-combobox-option>
               <solid-ui-combobox-option value="folder">Folder Only</solid-ui-combobox-option>
-              <solid-ui-combobox-option value="contents">Container Only</solid-ui-combobox-option>
+              <solid-ui-combobox-option value="contents">Contents Only</solid-ui-combobox-option>
             </solid-ui-combobox>
           `
           : nothing}
