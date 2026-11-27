@@ -18,6 +18,9 @@ const findAccessGrants = vi.fn()
 const findEffectiveAcl = vi.fn()
 const resetToDefault = vi.fn()
 const isProtectedResource = vi.fn()
+const isStorageRoot = vi.fn()
+const currentUser = vi.fn()
+const findStorage = vi.fn()
 const load = vi.fn()
 
 vi.mock('@/components/combobox', () => ({
@@ -58,7 +61,16 @@ vi.mock('solid-logic', async (importOriginal) => {
       },
       resource: {
         ...actual.solidLogicSingleton.resource,
-        isWebId: vi.fn(() => true)
+        isWebId: vi.fn(() => true),
+        isStorageRoot
+      },
+      authn: {
+        ...actual.solidLogicSingleton.authn,
+        currentUser
+      },
+      profile: {
+        ...actual.solidLogicSingleton.profile,
+        findStorage
       }
     }
   }
@@ -79,6 +91,9 @@ describe('AccessControlModal submit', () => {
     findEffectiveAcl.mockReset()
     resetToDefault.mockReset()
     isProtectedResource.mockReset()
+    isStorageRoot.mockReset()
+    currentUser.mockReset()
+    findStorage.mockReset()
     load.mockReset()
     classifyAccessControlSubject.mockImplementation(async (principal: string) => ({
       kind: 'agent' as const,
@@ -1321,6 +1336,28 @@ describe('AccessControlModal submit', () => {
     )
   })
 
+  it('always saves non-container resources with file access scope', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    element.subjectUri = 'https://example.com/folder/myfile.js'
+    element.pendingAccessGrants = [{
+      subjectType: 'agent',
+      subjectValue: 'https://example.com/alice#me',
+      role: 'Editor',
+      label: 'Alice'
+    }]
+
+    await element.saveAccessChanges('folder+contents')
+
+    expect(planGrant).toHaveBeenCalledWith(
+      element.subjectUri,
+      { type: 'agent', iri: 'https://example.com/alice#me' },
+      ['Read', 'Write']
+    )
+    expect(planGrantContainer).not.toHaveBeenCalled()
+    expect(planGrantContainerContents).not.toHaveBeenCalled()
+    expect(planGrantContainerAndContents).not.toHaveBeenCalled()
+  })
+
   it('uses the common container-and-contents scope by default', async () => {
     const element = document.createElement('solid-ui-access-control-modal') as any
     element.subjectUri = 'https://example.com/folder/'
@@ -1849,6 +1886,50 @@ describe('AccessControlModal submit', () => {
     expect(sharingState?.textContent).toContain('no inherited default is available')
     expect(sharingState?.textContent).not.toContain('sharing from')
     expect(sharingState?.textContent).not.toContain('Reset to default')
+    document.body.removeChild(element)
+  })
+
+  it.each([
+    ['https://example.com/sharon/', 'your main storage'],
+    ['https://example.com/sharon/Documents/', 'Documents']
+  ])('shows only the inherited container name for %s', async (effectiveContainer, expectedName) => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    isStorageRoot.mockReturnValue(effectiveContainer.endsWith('/sharon/'))
+    element.subjectUri = 'https://example.com/sharon/file.ttl'
+    element.accessContext = {
+      inherited: true,
+      effectiveContainer,
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const sharingState = element.shadowRoot.querySelector('.access-control-sharing-state-panel')
+    expect(sharingState?.textContent).toContain(`Permissions on this resource come from ${expectedName}.`)
+    expect(sharingState?.textContent).not.toContain(effectiveContainer)
+
+    document.body.removeChild(element)
+  })
+
+  it('recognizes the authenticated profile storage when storage metadata is not loaded', async () => {
+    const element = document.createElement('solid-ui-access-control-modal') as any
+    const user = sym('https://example.com/profile/card#me')
+    isStorageRoot.mockReturnValue(false)
+    currentUser.mockReturnValue(user)
+    findStorage.mockReturnValue(sym('https://example.com/sharon/'))
+    element.subjectUri = 'https://example.com/sharon/file.ttl'
+    element.accessContext = {
+      inherited: true,
+      effectiveContainer: 'https://example.com/sharon/',
+      authorizations: []
+    }
+    document.body.appendChild(element)
+    await element.updateComplete
+
+    const sharingState = element.shadowRoot.querySelector('.access-control-sharing-state-panel')
+    expect(sharingState?.textContent).toContain('Permissions on this resource come from your main storage.')
+    expect(sharingState?.textContent).not.toContain('https://example.com/sharon/')
+
     document.body.removeChild(element)
   })
 

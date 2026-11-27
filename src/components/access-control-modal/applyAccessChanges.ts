@@ -8,14 +8,18 @@ export async function applyAccessChanges (
 ): Promise<AccessSaveError[]> {
   const errors: AccessSaveError[] = []
   const scope = options.containerScope ?? 'file'
+  const isContainer = subjectUri.endsWith('/')
 
   for (const { subject, label, role, scope: changeScope, previousScope } of accessChanges) {
-    const selectedScope = changeScope ?? scope
+    const selectedScope = isContainer ? (changeScope ?? scope) : 'file'
     const saveScope = toAccessSaveScope(selectedScope)
+    const previousSaveScope = isContainer && previousScope
+      ? toAccessSaveScope(previousScope)
+      : 'file'
     try {
-      if (previousScope && toAccessSaveScope(previousScope) !== saveScope) {
-        const previousPlan = previousScope === 'contents' || (
-          previousScope === 'folder+contents' && saveScope === 'container'
+      if (previousScope && previousSaveScope !== saveScope) {
+        const previousPlan = previousSaveScope === 'contents' || (
+          previousSaveScope === 'folder+contents' && saveScope === 'container'
         )
           ? await solidLogicSingleton.acl.planRevokeContainerContents(subjectUri, subject)
           : await solidLogicSingleton.acl.planRevoke(subjectUri, subject)

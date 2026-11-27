@@ -23,6 +23,7 @@
     box-sizing: border-box;
     min-width: 0;
     max-width: 100%;
+    font-size: var(--solid-ui-font-size-sm, .875rem);
     border: 1px solid var(--solid-ui-color-slate-200, #E2E8F0);
     border-radius: 5px;
     background: var(--solid-ui-color-white, #FFF);
@@ -31,7 +32,21 @@
 
   .access-control-sharing-state-panel {
     display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
     gap: 10px;
+
+    .access-control-sharing-state-icon {
+      width: 16px;
+      height: 16px;
+      margin-top: 2px;
+      color: var(--solid-ui-color-gray-600, #4A5565);
+    }
+
+    .access-control-sharing-state-message {
+      display: grid;
+      gap: 10px;
+      min-width: 0;
+    }
 
     p {
       min-width: 0;

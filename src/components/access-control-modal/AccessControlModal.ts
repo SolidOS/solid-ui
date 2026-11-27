@@ -10,6 +10,7 @@ import { sym } from 'rdflib'
 import '~icons/lucide/circle-x'
 import '~icons/lucide/folder'
 import '~icons/lucide/folder-open'
+import '~icons/lucide/lock-keyhole'
 import '@/components/dialog'
 import '@/components/dialog-content'
 import '@/components/dialog-footer'
@@ -294,45 +295,61 @@ export default class AccessControlModal extends DialogComponent<void> {
     await this.loadAccessContext()
   }
 
+  private getInheritedContainerDisplayName (containerUri: string): string {
+    const container = sym(containerUri)
+    const isStorageRoot = solidLogicSingleton.resource.isStorageRoot(container)
+    const currentUser = solidLogicSingleton.authn.currentUser()
+    const profileStorage = currentUser
+      ? solidLogicSingleton.profile.findStorage(currentUser)
+      : null
+    const isProfileStorageRoot = profileStorage?.toString() === container.toString()
+
+    if (isStorageRoot || isProfileStorageRoot) {
+      return 'your main storage'
+    }
+
+    return label(container)
+  }
+
   private renderSharingInformation () {
     if (!this.accessContext) {
       return nothing
     }
 
     const inheritedContainer = this.accessContext.effectiveContainer
-    const inheritedContainerLabel = inheritedContainer
-      ? label(sym(inheritedContainer)).trim()
-      : ''
-    const defaultContainer = inheritedContainerLabel && inheritedContainerLabel !== inheritedContainer
-      ? html`<span class="access-control-sharing-state-emphasis">${inheritedContainerLabel}</span> (${inheritedContainer})`
-      : html`<span class="access-control-sharing-state-emphasis">${inheritedContainer ?? 'the parent container'}</span>`
+    const defaultContainer = inheritedContainer
+      ? this.getInheritedContainerDisplayName(inheritedContainer)
+      : 'the parent container.'
 
     return html`
       <div class="access-control-sharing-state-panel">
-        ${this.accessContext.inherited
-          ? inheritedContainer
-            ? html`<p>This resource inherits sharing settings from ${defaultContainer}.</p>`
-            : html`<p>This resource inherits sharing settings, but no inherited default is available.</p>`
-          : html`
-            <div class="access-control-sharing-state-custom-row">
-              <p>This resource has its own sharing settings.</p>
-              ${!this.protectedTarget
-                ? html`
-                  <solid-ui-button
-                    type="button"
-                    variant="tertiary"
-                    aria-label="Reset sharing"
-                    @click=${this.onResetToDefault}
-                  >
-                    Reset
-                  </solid-ui-button>
-                `
-                : nothing}
-            </div>
-          `}
-        ${this.protectedTarget
-          ? html`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be changed here.</p>`
-          : nothing}
+        <icon-lucide-lock-keyhole class="access-control-sharing-state-icon" aria-hidden="true"></icon-lucide-lock-keyhole>
+        <div class="access-control-sharing-state-message">
+          ${this.accessContext.inherited
+            ? inheritedContainer
+              ? html`<p>Permissions on this resource come from <span class="access-control-sharing-state-emphasis">${defaultContainer}</span>.</p>`
+              : html`<p>Permissions on this resource come from a parent folder, but no sharing rules are in place.</p>`
+            : html`
+              <div class="access-control-sharing-state-custom-row">
+                <p>This resource has explicitly defined sharing permissions.</p>
+                ${!this.protectedTarget
+                  ? html`
+                    <solid-ui-button
+                      type="button"
+                      variant="tertiary"
+                      aria-label="Reset sharing"
+                      @click=${this.onResetToDefault}
+                    >
+                      Reset
+                    </solid-ui-button>
+                  `
+                  : nothing}
+              </div>
+            `}
+          ${this.protectedTarget
+            ? html`<p class="access-control-sharing-state-protected-message">This is a protected storage resource. Its primary access-control settings cannot be changed here.</p>`
+            : nothing}
+        </div>
       </div>
     `
   }
