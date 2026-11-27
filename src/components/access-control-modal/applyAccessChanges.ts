@@ -8,7 +8,7 @@ export async function applyAccessChanges (
 ): Promise<AccessSaveError[]> {
   const errors: AccessSaveError[] = []
   const scope = options.containerScope ?? 'file'
-  const isContainer = subjectUri.endsWith('/')
+  const isContainer = new URL(subjectUri).pathname.endsWith('/')
 
   for (const { subject, label, role, scope: changeScope, previousScope } of accessChanges) {
     const selectedScope = isContainer ? (changeScope ?? scope) : 'file'
